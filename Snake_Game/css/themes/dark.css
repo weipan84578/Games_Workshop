@@ -1,0 +1,44 @@
+/* themes/dark.css */
+.theme-dark {
+    background-color: #1a1a2e;
+    color: #eaeaea;
+}
+
+.theme-dark #canvas-wrapper {
+    background-color: #16213e;
+    border: 2px solid #0f3460;
+}
+
+.theme-dark .game-title {
+    color: #00d4aa;
+    text-shadow: 0 0 10px rgba(0, 212, 170, 0.5);
+}
+
+.theme-dark .btn {
+    background-color: #00d4aa;
+    color: #1a1a2e;
+}
+
+.theme-dark .btn:hover {
+    background-color: #00f2c3;
+    box-shadow: 0 0 15px rgba(0, 212, 170, 0.4);
+}
+
+.theme-dark .btn-sm {
+    background-color: #0f3460;
+    color: #eaeaea;
+    border: 1px solid #00d4aa;
+}
+
+.theme-dark .btn-sm:hover {
+    background-color: #16213e;
+}
+
+.theme-dark .stat-item {
+    color: #00d4aa;
+}
+
+.theme-dark #new-record-msg {
+    color: #ffd700;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}

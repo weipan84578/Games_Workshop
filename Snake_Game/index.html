@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐍 經典貪食蛇 - Snake Game</title>
+    <meta name="description" content="一款流暢、現代且支援觸控的 Web 版貪食蛇遊戲。">
+    <meta property="og:title" content="🐍 經典貪食蛇 - Snake Game">
+    <meta property="og:description" content="挑戰高分，體驗多種遊戲模式！">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/themes/dark.css" id="theme-link">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@500;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="theme-dark">
+    <div id="game-container">
+        <!-- 主選單 UI -->
+        <div id="main-menu" class="ui-screen active">
+            <h1 class="game-title">
+                <span>S</span><span>N</span><span>A</span><span>K</span><span>E</span>
+            </h1>
+            <div class="best-score">最高分: <span id="global-best-score">0</span></div>
+            <div class="menu-buttons">
+                <button id="start-btn" class="btn">開始遊戲</button>
+                <button id="mode-btn" class="btn">選擇模式</button>
+                <button id="settings-btn" class="btn">設定</button>
+                <button id="leaderboard-btn" class="btn">排行榜</button>
+            </div>
+        </div>
+
+        <!-- 遊戲畫面 UI -->
+        <div id="game-screen" class="ui-screen">
+            <header class="game-header">
+                <div class="stat-item">分數: <span id="current-score">0</span></div>
+                <div class="stat-item">最高: <span id="best-score">0</span></div>
+                <div class="stat-item" id="timer-container">⏱ <span id="timer">--s</span></div>
+            </header>
+            <div id="time-bar-container" class="hidden">
+                <div id="time-bar"></div>
+            </div>
+            <div class="game-info">
+                <span id="game-mode-display">模式: 經典</span>
+                <span id="game-difficulty-display">難度: 普通</span>
+            </div>
+            
+            <div id="canvas-wrapper">
+                <canvas id="game-canvas"></canvas>
+                <!-- 暫停畫面 -->
+                <div id="pause-screen" class="ui-overlay hidden">
+                    <h2>暫停中</h2>
+                    <div class="overlay-buttons">
+                        <button id="resume-btn" class="btn">繼續</button>
+                        <button id="restart-btn" class="btn">重新開始</button>
+                        <button id="quit-btn" class="btn">返回選單</button>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="game-footer">
+                <button id="footer-pause-btn" class="btn-sm">暫停</button>
+                <button id="footer-restart-btn" class="btn-sm">重新開始</button>
+            </footer>
+        </div>
+
+        <!-- 模式選擇畫面 -->
+        <div id="mode-selection" class="ui-screen">
+            <h2 class="screen-title">選擇模式</h2>
+            <div class="mode-options">
+                <div class="mode-card" data-mode="classic">
+                    <h3>經典模式</h3>
+                    <p>吃到撞死為止，最純粹的挑戰。</p>
+                </div>
+                <div class="mode-card" data-mode="timeattack">
+                    <h3>限時模式</h3>
+                    <p>60秒衝刺，吃食物延長時間！</p>
+                </div>
+                <div class="mode-card" data-mode="obstacle">
+                    <h3>障礙物模式</h3>
+                    <p>小心牆壁！關卡難度隨得分遞增。</p>
+                </div>
+            </div>
+            <div class="difficulty-selection">
+                <label>難度：</label>
+                <select id="difficulty-select">
+                    <option value="easy">簡單</option>
+                    <option value="normal" selected>普通</option>
+                    <option value="hard">困難</option>
+                </select>
+            </div>
+            <button id="mode-back-btn" class="btn">返回</button>
+        </div>
+
+        <!-- 設定畫面 -->
+        <div id="settings-screen" class="ui-screen">
+            <h2 class="screen-title">設定</h2>
+            <div class="settings-list">
+                <div class="setting-item">
+                    <span>音效</span>
+                    <input type="checkbox" id="sound-toggle" checked>
+                </div>
+                <div class="setting-item">
+                    <span>格線顯示</span>
+                    <input type="checkbox" id="grid-toggle" checked>
+                </div>
+                <div class="setting-item">
+                    <span>邊界模式</span>
+                    <select id="border-mode-select">
+                        <option value="wall">撞牆死亡</option>
+                        <option value="wrap">穿越邊界</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <span>主題</span>
+                    <select id="theme-select">
+                        <option value="dark">深色 (預設)</option>
+                        <option value="light">淺色</option>
+                        <option value="neon">霓虹</option>
+                    </select>
+                </div>
+            </div>
+            <button id="settings-back-btn" class="btn">返回</button>
+        </div>
+
+        <!-- 排行榜畫面 -->
+        <div id="leaderboard-screen" class="ui-screen">
+            <h2 class="screen-title">排行榜</h2>
+            <div class="leaderboard-tabs">
+                <button class="tab-btn active" data-tab="classic">經典</button>
+                <button class="tab-btn" data-tab="timeattack">限時</button>
+                <button class="tab-btn" data-tab="obstacle">障礙物</button>
+            </div>
+            <div class="leaderboard-container">
+                <table id="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>排名</th>
+                            <th>分數</th>
+                            <th>日期</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <!-- 動態生成 -->
+                    </tbody>
+                </table>
+            </div>
+            <button id="leaderboard-back-btn" class="btn">返回</button>
+        </div>
+
+        <!-- 遊戲結束畫面 -->
+        <div id="game-over-screen" class="ui-screen">
+            <h2 id="game-over-title">GAME OVER</h2>
+            <div class="final-stats">
+                <p>最終分數: <span id="final-score">0</span></p>
+                <p>等級: <span id="final-level">1</span></p>
+                <div id="new-record-msg" class="hidden">🎉 破紀錄啦！</div>
+            </div>
+            <div class="menu-buttons">
+                <button id="play-again-btn" class="btn">再玩一次</button>
+                <button id="end-leaderboard-btn" class="btn">查看排行榜</button>
+                <button id="back-to-menu-btn" class="btn">返回選單</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 核心腳本 -->
+    <script src="js/utils.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/snake.js"></script>
+    <script src="js/food.js"></script>
+    <script src="js/renderer.js"></script>
+    <script src="js/input.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

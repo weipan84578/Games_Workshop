@@ -1,0 +1,39 @@
+/* themes/neon.css */
+.theme-neon {
+    background-color: #0d0d0d;
+    color: #ffffff;
+}
+
+.theme-neon #canvas-wrapper {
+    background-color: #000000;
+    border: 2px solid #39ff14;
+    box-shadow: 0 0 20px #39ff14;
+}
+
+.theme-neon .game-title {
+    color: #39ff14;
+    text-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14;
+}
+
+.theme-neon .btn {
+    background-color: transparent;
+    color: #00ffff;
+    border: 2px solid #00ffff;
+    text-shadow: 0 0 5px #00ffff;
+    box-shadow: 0 0 10px #00ffff;
+}
+
+.theme-neon .btn:hover {
+    background-color: #00ffff;
+    color: #000;
+}
+
+.theme-neon .stat-item {
+    color: #ff00ff;
+    text-shadow: 0 0 5px #ff00ff;
+}
+
+.theme-neon .mode-card.active {
+    border-color: #39ff14;
+    box-shadow: 0 0 10px #39ff14;
+}

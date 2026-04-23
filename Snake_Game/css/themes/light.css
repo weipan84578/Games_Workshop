@@ -1,0 +1,48 @@
+/* themes/light.css */
+.theme-light {
+    background-color: #f0f2f5;
+    color: #1a1a2e;
+}
+
+.theme-light #canvas-wrapper {
+    background-color: #ffffff;
+    border: 2px solid #d1d9e6;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.theme-light .game-title {
+    color: #007a60;
+}
+
+.theme-light .btn {
+    background-color: #007a60;
+    color: #ffffff;
+}
+
+.theme-light .btn:hover {
+    background-color: #005f4a;
+}
+
+.theme-light .btn-sm {
+    background-color: #e4e6eb;
+    color: #1a1a2e;
+    border: 1px solid #007a60;
+}
+
+.theme-light .mode-card {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.theme-light .setting-item {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.theme-light .tab-btn {
+    background: rgba(0, 0, 0, 0.1);
+    color: #1a1a2e;
+}
+
+.theme-light .tab-btn.active {
+    background: #007a60;
+    color: white;
+}
