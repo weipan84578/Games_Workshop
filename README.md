@@ -1,2 +1,4 @@
-#Snake_Game
-貪食蛇
+### Snake\_Game
+
+* 貪食蛇
+
