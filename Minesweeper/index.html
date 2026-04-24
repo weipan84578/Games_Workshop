@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>踩地雷小遊戲</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/board.css">
+</head>
+<body>
+    <!-- 主選單畫面 -->
+    <div id="menu-screen" class="screen active">
+        <div class="menu-container">
+            <h1 class="game-logo">踩地雷</h1>
+            <p class="game-subtitle">經典益智遊戲</p>
+            <div class="menu-buttons">
+                <button id="start-game-btn" class="menu-btn primary">開始遊戲</button>
+                <button id="open-history-btn" class="menu-btn">對局排行榜</button>
+                <button id="open-settings-btn" class="menu-btn">遊戲設定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 遊戲畫面 -->
+    <div id="game-screen" class="screen">
+        <div id="game-container">
+            <header>
+                <div class="nav-bar">
+                    <button id="back-to-menu-btn" class="icon-btn">🏠</button>
+                    <div class="difficulty-control">
+                        <select id="difficulty-select">
+                            <option value="easy">初級 (Easy)</option>
+                            <option value="medium" selected>中級 (Medium)</option>
+                            <option value="expert">高級 (Expert)</option>
+                            <option value="custom">自訂 (Custom)</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="status-bar">
+                    <div class="status-box">
+                        <span class="status-icon">💣</span>
+                        <div id="mine-count" class="digital-display">000</div>
+                    </div>
+                    <button id="reset-btn">😊</button>
+                    <div class="status-box">
+                        <span class="status-icon">⏱️</span>
+                        <div id="timer" class="digital-display">000</div>
+                    </div>
+                </div>
+            </header>
+            <main>
+                <div id="game-board"></div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 排行榜畫面 -->
+    <div id="history-screen" class="screen">
+        <div class="history-container">
+            <h2>對局排行榜</h2>
+            <div id="history-list" class="history-list"></div>
+            <button id="history-back-btn" class="menu-btn">回到主選單</button>
+        </div>
+    </div>
+
+    <!-- 設定畫面 -->
+    <div id="settings-screen" class="screen">
+        <div class="settings-container">
+            <h2>遊戲設定</h2>
+            <div class="setting-item">
+                <span>音效</span>
+                <label class="switch">
+                    <input type="checkbox" id="sound-toggle" checked>
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            <div class="setting-item">
+                <span>深色模式</span>
+                <label class="switch">
+                    <input type="checkbox" id="dark-mode-toggle">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+            <div class="setting-item danger-zone">
+                <span>危險區域</span>
+                <button id="clear-data-btn" class="menu-btn danger">清除所有紀錄</button>
+            </div>
+            <button id="settings-back-btn" class="menu-btn">回到主選單</button>
+        </div>
+    </div>
+
+    <!-- 結算視窗 -->
+    <div id="result-modal" class="modal">
+        <div class="modal-content">
+            <h2 id="result-title">遊戲結束</h2>
+            <div class="result-stats">
+                <div class="stat">
+                    <span>消耗時間</span>
+                    <b id="result-time">0 秒</b>
+                </div>
+                <div class="stat">
+                    <span>個人最佳</span>
+                    <b id="result-best">-- 秒</b>
+                </div>
+            </div>
+            <button id="result-close-btn" class="menu-btn primary">再玩一局</button>
+        </div>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/timer.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/board.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            new window.Board();
+        });
+    </script>
+</body>
+</html>

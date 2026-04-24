@@ -1,0 +1,118 @@
+#game-board {
+    display: grid;
+    gap: 2px;
+    background-color: #d1d5db; /* border color between cells */
+    border: 2px solid #d1d5db;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.cell {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: 1rem;
+    box-sizing: border-box;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.1s, transform 0.1s;
+    background-color: #f3f4f6; /* default covered */
+}
+
+/* 3D effect for covered cells */
+.cell.covered {
+    background-color: #e5e7eb;
+    box-shadow: inset 2px 2px 0px rgba(255,255,255,0.7), inset -2px -2px 0px rgba(0,0,0,0.15);
+}
+
+.cell.covered:hover {
+    background-color: #d1d5db;
+}
+
+.cell.focused {
+    outline: 2px solid var(--primary);
+    outline-offset: -2px;
+    z-index: 10;
+}
+
+.cell.revealed {
+    background-color: #ffffff;
+    box-shadow: inset 1px 1px 2px rgba(0,0,0,0.05);
+}
+
+.cell.flagged {
+    background-color: #e5e7eb;
+    box-shadow: inset 2px 2px 0px rgba(255,255,255,0.7), inset -2px -2px 0px rgba(0,0,0,0.15);
+}
+.cell.flagged::after {
+    content: '🚩';
+    font-size: 1.1em;
+}
+
+.cell.questioned {
+    background-color: #e5e7eb;
+    box-shadow: inset 2px 2px 0px rgba(255,255,255,0.7), inset -2px -2px 0px rgba(0,0,0,0.15);
+    color: #6b7280;
+}
+.cell.questioned::after {
+    content: '❓';
+    font-size: 1.1em;
+}
+
+.cell.exploded {
+    background-color: #ef4444;
+    color: white;
+}
+
+.cell.exploded::after {
+    content: '💥';
+    font-size: 1.2em;
+}
+
+.cell.revealed.is-mine::after {
+    content: '💣';
+    font-size: 1.1em;
+}
+
+.cell.wrong-flag {
+    background-color: #fca5a5;
+}
+
+.cell.wrong-flag::after {
+    content: '❌';
+    font-size: 1.1em;
+}
+
+/* Modern Number Colors */
+.cell[data-mines="1"] { color: #2563eb; } /* Blue */
+.cell[data-mines="2"] { color: #16a34a; } /* Green */
+.cell[data-mines="3"] { color: #dc2626; } /* Red */
+.cell[data-mines="4"] { color: #4f46e5; } /* Indigo */
+.cell[data-mines="5"] { color: #9333ea; } /* Purple */
+.cell[data-mines="6"] { color: #0891b2; } /* Cyan */
+.cell[data-mines="7"] { color: #1f2937; } /* Dark Gray */
+.cell[data-mines="8"] { color: #000000; } /* Black */
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    #game-container {
+        padding: 1rem;
+        border-radius: 0;
+        box-shadow: none;
+        min-height: 100vh;
+        width: 100vw;
+    }
+    
+    #game-board {
+        width: 100% !important;
+        height: auto !important;
+    }
+    
+    .cell {
+        aspect-ratio: 1 / 1;
+        font-size: 1.1rem; /* Slightly larger on mobile */
+    }
+}

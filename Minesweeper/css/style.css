@@ -1,0 +1,396 @@
+:root {
+    --bg-main: #f3f4f6;
+    --bg-board: #ffffff;
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --text-main: #1f2937;
+    --text-muted: #6b7280;
+    --border-color: #d1d5db;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-full: 9999px;
+    --digital-bg: #111827;
+    --digital-text: #ef4444;
+}
+
+body.dark-mode {
+    --bg-main: #111827;
+    --bg-board: #1f2937;
+    --text-main: #f9fafb;
+    --text-muted: #9ca3af;
+    --border-color: #374151;
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
+
+body {
+    background-color: var(--bg-main);
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    color: var(--text-main);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.screen {
+    display: none;
+    min-height: 100vh;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* 主選單樣式 */
+.menu-container {
+    text-align: center;
+    background: var(--bg-board);
+    padding: 3rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    max-width: 400px;
+    width: 90%;
+}
+
+.game-logo {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--primary);
+    margin: 0;
+    letter-spacing: 2px;
+}
+
+.game-subtitle {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+}
+
+.menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.menu-btn {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-board);
+    color: var(--text-main);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.menu-btn.primary {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.menu-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.menu-btn.primary:hover {
+    background: var(--primary-hover);
+}
+
+.best-scores-preview {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* 遊戲畫面導航 */
+.nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: var(--radius-md);
+    transition: background 0.2s;
+}
+
+.icon-btn:hover {
+    background: var(--bg-main);
+}
+
+/* 設定畫面與排行榜樣式 */
+.settings-container, .history-container {
+    background: var(--bg-board);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    width: 90%;
+    max-width: 500px;
+}
+
+.history-list {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 2rem;
+    padding-right: 0.5rem;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background: var(--bg-main);
+    border-radius: var(--radius-md);
+    margin-bottom: 0.75rem;
+    border-left: 5px solid #ccc;
+}
+
+.history-item.win {
+    border-left-color: #22c55e;
+}
+
+.history-item.loss {
+    border-left-color: #ef4444;
+}
+
+.hist-status {
+    font-weight: 800;
+    width: 50px;
+    font-size: 0.8rem;
+}
+
+.history-item.win .hist-status { color: #22c55e; }
+.history-item.loss .hist-status { color: #ef4444; }
+
+.hist-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.hist-diff {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.hist-time {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.hist-date {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-align: right;
+}
+
+.no-data {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-muted);
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.setting-item:last-of-type {
+    margin-bottom: 2rem;
+}
+
+/* Toggle Switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* 結算視窗 */
+.setting-item.danger-zone {
+    margin-top: 1rem;
+    padding-top: 1.5rem;
+    border-top: 2px dashed var(--border-color);
+    border-bottom: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.setting-item.danger-zone span {
+    color: #ef4444;
+    font-weight: 700;
+}
+
+.menu-btn.danger {
+    background: #fee2e2;
+    color: #ef4444;
+    border-color: #fca5a5;
+    width: 100%;
+}
+
+.menu-btn.danger:hover {
+    background: #ef4444;
+    color: white;
+    border-color: #ef4444;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background-color: var(--bg-board);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    max-width: 320px;
+    width: 80%;
+}
+
+.result-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.stat {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.1rem;
+}
+
+/* 複用原本的遊戲容器樣式並優化 */
+#game-container {
+    background-color: var(--bg-board);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 95vw;
+}
+
+#status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-main);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.digital-display {
+    background-color: var(--digital-bg);
+    color: var(--digital-text);
+    font-family: 'Courier New', monospace;
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+#reset-btn {
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.8rem;
+    background: var(--bg-board);
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+select {
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    background: var(--bg-board);
+    color: var(--text-main);
+}
