@@ -46,8 +46,8 @@
 .menu-btn {
   background: var(--btn-default);
   color: var(--text-primary);
-  font-size: 12px;
-  padding: 14px 20px;
+  font-size: 13px;
+  padding: 16px 24px;
   border: 2px solid var(--border-panel);
   border-radius: 4px;
   text-align: center;
@@ -67,12 +67,12 @@
 }
 
 .menu-footer {
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-  color: var(--text-secondary); font-size: 9px;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  color: var(--text-secondary); font-size: 11px;
 }
 
 .high-score-display { color: var(--accent-gold); }
 
 #menu-highscore { color: #fff; }
 
-.copyright { color: #555; font-size: 7px; }
+.copyright { color: #555; font-size: 8px; }

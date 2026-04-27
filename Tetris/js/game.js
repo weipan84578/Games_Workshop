@@ -215,6 +215,7 @@ class Game {
 
     if (cleared.length > 0) {
       this.waitingClear = true;
+      this.current = null; // locked onto board; prevent double-draw during clear anim
       this.renderer.startClearAnim(cleared, () => {
         this.waitingClear = false;
         const wasbtb = this.scoring.btb;

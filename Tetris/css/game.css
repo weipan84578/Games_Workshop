@@ -15,23 +15,23 @@
 /* Side panels */
 .side-panel {
   display: flex; flex-direction: column;
-  gap: 16px; width: 140px; padding: 8px;
+  gap: 16px; width: 160px; padding: 8px;
 }
 
 .panel-section {
   display: flex; flex-direction: column;
-  align-items: center; gap: 6px;
+  align-items: center; gap: 8px;
 }
 
 .panel-label {
-  font-size: 8px; color: var(--text-secondary);
+  font-size: 10px; color: var(--text-secondary);
   letter-spacing: 2px;
 }
 
 .panel-value {
-  font-size: 14px; color: var(--text-primary);
+  font-size: 18px; color: var(--text-primary);
   letter-spacing: 1px;
-  min-width: 80px; text-align: center;
+  min-width: 90px; text-align: center;
 }
 
 #hold-canvas, #next-canvas-1 {
@@ -84,8 +84,8 @@
 .game-btn {
   background: var(--btn-default);
   color: var(--text-primary);
-  font-size: 9px;
-  padding: 8px 16px;
+  font-size: 11px;
+  padding: 10px 20px;
   border: 2px solid var(--border-panel);
   border-radius: 4px;
   transition: background 0.15s;
@@ -121,14 +121,14 @@
 }
 
 .mobile-btn:active { background: rgba(68, 68, 170, 0.9); }
-.mobile-btn-sm { width: 72px; font-size: 9px; }
-.mobile-btn-lg { width: 136px; font-size: 9px; letter-spacing: 1px; }
+.mobile-btn-sm { width: 72px; font-size: 10px; }
+.mobile-btn-lg { width: 136px; font-size: 10px; letter-spacing: 1px; }
 
 /* Floating text effects */
 .float-text {
   position: absolute;
   font-family: 'Press Start 2P', monospace;
-  font-size: 11px;
+  font-size: 13px;
   pointer-events: none;
   animation: floatUp 1.5s ease-out forwards;
   left: 50%; transform: translateX(-50%);

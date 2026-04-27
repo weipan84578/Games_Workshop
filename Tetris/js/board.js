@@ -14,7 +14,9 @@ class Board {
 
   // row 0 = top visible row; buffer rows: row -2, -1
   getCell(row, col) {
-    return this.grid[row + BUFFER]?.[col] ?? 'BORDER';
+    const idx = row + BUFFER;
+    if (idx < 0 || idx >= this.grid.length) return 'BORDER';
+    return this.grid[idx][col]; // null = empty, color string = filled
   }
 
   setCell(row, col, color) {
