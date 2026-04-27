@@ -1,0 +1,185 @@
+#screen-game {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px;
+}
+
+.game-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+/* Side panels */
+.side-panel {
+  display: flex; flex-direction: column;
+  gap: 16px; width: 140px; padding: 8px;
+}
+
+.panel-section {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 6px;
+}
+
+.panel-label {
+  font-size: 8px; color: var(--text-secondary);
+  letter-spacing: 2px;
+}
+
+.panel-value {
+  font-size: 14px; color: var(--text-primary);
+  letter-spacing: 1px;
+  min-width: 80px; text-align: center;
+}
+
+#hold-canvas, #next-canvas-1 {
+  background: var(--bg-panel);
+  border: 2px solid var(--border-panel);
+  border-radius: 4px;
+}
+
+#next-canvas-2, #next-canvas-3 {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-panel);
+  border-radius: 4px;
+}
+
+/* Game board */
+.game-board-wrapper {
+  position: relative;
+  border: 2px solid var(--border-panel);
+  border-radius: 4px;
+  line-height: 0;
+  box-shadow: 0 0 20px #0000ff44;
+}
+
+#game-canvas {
+  width: 320px; height: 640px;
+  border-radius: 2px;
+}
+
+#effect-overlay {
+  position: absolute; inset: 0;
+  pointer-events: none; overflow: hidden;
+  border-radius: 2px;
+}
+
+.center-message {
+  position: absolute; top: 40%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 13px; text-align: center;
+  pointer-events: none; white-space: nowrap;
+  opacity: 0; transition: opacity 0.3s;
+}
+
+.center-message.show { opacity: 1; }
+
+/* Bottom bar */
+.game-bottom-bar {
+  display: flex; gap: 16px;
+}
+
+.game-btn {
+  background: var(--btn-default);
+  color: var(--text-primary);
+  font-size: 9px;
+  padding: 8px 16px;
+  border: 2px solid var(--border-panel);
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+
+.game-btn:hover { background: var(--btn-hover); }
+
+/* Mobile controls */
+.mobile-controls {
+  display: none;
+  flex-direction: column; gap: 8px;
+  padding: 8px; width: 100%;
+  max-width: 360px;
+}
+
+.mobile-row {
+  display: flex; justify-content: center; gap: 8px;
+}
+
+.mobile-spacer { width: 64px; }
+
+.mobile-btn {
+  width: 64px; height: 56px;
+  background: rgba(42, 42, 106, 0.7);
+  color: #fff;
+  font-size: 16px;
+  border: 2px solid rgba(100, 100, 200, 0.5);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  touch-action: none;
+  transition: background 0.1s;
+  min-width: 48px; min-height: 48px;
+}
+
+.mobile-btn:active { background: rgba(68, 68, 170, 0.9); }
+.mobile-btn-sm { width: 72px; font-size: 9px; }
+.mobile-btn-lg { width: 136px; font-size: 9px; letter-spacing: 1px; }
+
+/* Floating text effects */
+.float-text {
+  position: absolute;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  pointer-events: none;
+  animation: floatUp 1.5s ease-out forwards;
+  left: 50%; transform: translateX(-50%);
+  white-space: nowrap;
+  text-shadow: 0 0 8px currentColor;
+}
+
+@keyframes floatUp {
+  0%   { opacity: 1; transform: translateX(-50%) translateY(0); }
+  60%  { opacity: 1; }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-60px); }
+}
+
+/* Board border flash */
+@keyframes borderFlash {
+  0%, 100% { box-shadow: 0 0 20px #0000ff44; }
+  50% { box-shadow: 0 0 30px #ffffff, 0 0 60px #ffffff; }
+}
+
+.game-board-wrapper.flash { animation: borderFlash 0.2s ease-in-out 3; }
+
+/* Hard drop trail */
+.drop-trail {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.4;
+  animation: trailFade 0.2s ease-out forwards;
+}
+
+@keyframes trailFade {
+  to { opacity: 0; }
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+  :root { --cell-size: 24px; }
+  #game-canvas { width: 240px; height: 480px; }
+  .game-layout { gap: 6px; }
+  .side-panel { width: 100px; }
+  .panel-value { font-size: 11px; }
+  .mobile-controls { display: flex; }
+  .game-bottom-bar { display: none; }
+
+  #screen-game {
+    justify-content: flex-start;
+    padding-top: 4px;
+    overflow-y: auto;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  :root { --cell-size: 28px; }
+  #game-canvas { width: 280px; height: 560px; }
+}

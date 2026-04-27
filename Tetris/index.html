@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TETRIS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/menu.css">
+  <link rel="stylesheet" href="css/game.css">
+  <link rel="stylesheet" href="css/modal.css">
+</head>
+<body>
+  <noscript><p style="color:white;text-align:center;margin-top:2em;">請啟用 JavaScript 以遊玩此遊戲。</p></noscript>
+
+  <!-- MAIN MENU -->
+  <div id="screen-menu" class="screen active">
+    <canvas id="menu-bg-canvas"></canvas>
+    <div class="menu-content">
+      <h1 class="game-title">TETRIS</h1>
+      <div class="menu-buttons">
+        <button class="menu-btn" id="btn-start">▶ 開始遊戲</button>
+        <button class="menu-btn" id="btn-settings-menu">設定</button>
+        <button class="menu-btn" id="btn-highscores">排行榜</button>
+        <button class="menu-btn" id="btn-help">操作說明</button>
+      </div>
+      <div class="menu-footer">
+        <div class="high-score-display">最高分：<span id="menu-highscore">0</span></div>
+        <div class="copyright">© 2026 Tetris Web</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div id="screen-game" class="screen">
+    <div class="game-layout">
+      <!-- Left Panel -->
+      <div class="side-panel left-panel">
+        <div class="panel-section">
+          <div class="panel-label">HOLD</div>
+          <canvas id="hold-canvas" width="120" height="120"></canvas>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">SCORE</div>
+          <div class="panel-value" id="score-display">000000</div>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">LINES</div>
+          <div class="panel-value" id="lines-display">0</div>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">COMBO</div>
+          <div class="panel-value" id="combo-display">-</div>
+        </div>
+      </div>
+
+      <!-- Game Board -->
+      <div class="game-board-wrapper">
+        <canvas id="game-canvas" width="320" height="640"></canvas>
+        <div id="effect-overlay"></div>
+        <div id="center-message" class="center-message"></div>
+      </div>
+
+      <!-- Right Panel -->
+      <div class="side-panel right-panel">
+        <div class="panel-section">
+          <div class="panel-label">NEXT</div>
+          <canvas id="next-canvas-1" width="120" height="120"></canvas>
+          <canvas id="next-canvas-2" width="80" height="80"></canvas>
+          <canvas id="next-canvas-3" width="80" height="80"></canvas>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">LEVEL</div>
+          <div class="panel-value" id="level-display">1</div>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">TIME</div>
+          <div class="panel-value" id="time-display">00:00</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom buttons -->
+    <div class="game-bottom-bar">
+      <button class="game-btn" id="btn-pause">PAUSE</button>
+      <button class="game-btn" id="btn-restart">RESTART</button>
+    </div>
+
+    <!-- Mobile controls -->
+    <div class="mobile-controls" id="mobile-controls">
+      <div class="mobile-row">
+        <div class="mobile-spacer"></div>
+        <button class="mobile-btn" id="m-rotate">↑</button>
+        <div class="mobile-spacer"></div>
+      </div>
+      <div class="mobile-row">
+        <button class="mobile-btn" id="m-left">←</button>
+        <button class="mobile-btn" id="m-down">↓</button>
+        <button class="mobile-btn" id="m-right">→</button>
+      </div>
+      <div class="mobile-row">
+        <button class="mobile-btn mobile-btn-sm" id="m-hold">HOLD</button>
+        <button class="mobile-btn mobile-btn-lg" id="m-hard-drop">DROP</button>
+        <button class="mobile-btn mobile-btn-sm" id="m-pause">⏸</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAUSE MODAL -->
+  <div id="modal-pause" class="modal hidden">
+    <div class="modal-box">
+      <h2 class="modal-title">PAUSED</h2>
+      <div class="modal-divider"></div>
+      <button class="modal-btn" id="btn-resume">▶ 繼續遊戲</button>
+      <button class="modal-btn" id="btn-restart-pause">↺ 重新開始</button>
+      <button class="modal-btn" id="btn-settings-pause">設定</button>
+      <button class="modal-btn" id="btn-menu-pause">✕ 主選單</button>
+    </div>
+  </div>
+
+  <!-- GAME OVER MODAL -->
+  <div id="modal-gameover" class="modal hidden">
+    <div class="modal-box">
+      <h2 class="modal-title">GAME OVER</h2>
+      <div class="modal-divider"></div>
+      <div class="result-grid">
+        <span class="result-label">分數</span><span class="result-value" id="go-score">0</span>
+        <span class="result-label">消除行數</span><span class="result-value" id="go-lines">0</span>
+        <span class="result-label">關卡</span><span class="result-value" id="go-level">0</span>
+        <span class="result-label">遊玩時間</span><span class="result-value" id="go-time">00:00</span>
+        <span class="result-label">最高分</span><span class="result-value" id="go-highscore">0</span>
+      </div>
+      <div id="new-record-badge" class="new-record hidden">★ NEW RECORD!</div>
+      <button class="modal-btn" id="btn-play-again">↺ 再玩一次</button>
+      <button class="modal-btn" id="btn-menu-gameover">⌂ 主選單</button>
+    </div>
+  </div>
+
+  <!-- HIGH SCORES SCREEN -->
+  <div id="screen-highscores" class="screen">
+    <div class="info-panel">
+      <h2 class="panel-title">排行榜</h2>
+      <div class="hs-divider"></div>
+      <table class="hs-table">
+        <thead>
+          <tr><th>#</th><th>分數</th><th>行數</th><th>關卡</th><th>時間</th></tr>
+        </thead>
+        <tbody id="hs-tbody"></tbody>
+      </table>
+      <button class="modal-btn back-btn" id="btn-hs-back">返回</button>
+    </div>
+  </div>
+
+  <!-- SETTINGS SCREEN -->
+  <div id="screen-settings" class="screen">
+    <div class="info-panel">
+      <h2 class="panel-title">設定</h2>
+      <div class="hs-divider"></div>
+      <div class="settings-grid">
+        <label class="settings-label">BGM 音量</label>
+        <div class="settings-control">
+          <input type="range" id="set-bgm-vol" min="0" max="100" value="60">
+          <span id="set-bgm-vol-val">60%</span>
+        </div>
+
+        <label class="settings-label">音效音量</label>
+        <div class="settings-control">
+          <input type="range" id="set-sfx-vol" min="0" max="100" value="80">
+          <span id="set-sfx-vol-val">80%</span>
+        </div>
+
+        <label class="settings-label">背景音樂</label>
+        <div class="settings-control">
+          <button class="toggle-btn" id="set-bgm-toggle">● ON</button>
+        </div>
+
+        <label class="settings-label">音效</label>
+        <div class="settings-control">
+          <button class="toggle-btn" id="set-sfx-toggle">● ON</button>
+        </div>
+
+        <label class="settings-label">Ghost Piece</label>
+        <div class="settings-control">
+          <button class="toggle-btn" id="set-ghost-toggle">● ON</button>
+        </div>
+
+        <label class="settings-label">DAS 延遲</label>
+        <div class="settings-control">
+          <input type="range" id="set-das" min="50" max="300" value="167">
+          <span id="set-das-val">167ms</span>
+        </div>
+
+        <label class="settings-label">ARR 速率</label>
+        <div class="settings-control">
+          <input type="range" id="set-arr" min="0" max="100" value="33">
+          <span id="set-arr-val">33ms</span>
+        </div>
+
+        <label class="settings-label">清除最高分</label>
+        <div class="settings-control">
+          <button class="danger-btn" id="set-clear-scores">清除</button>
+        </div>
+      </div>
+      <button class="modal-btn back-btn" id="btn-settings-save">儲存並返回</button>
+    </div>
+  </div>
+
+  <!-- HELP SCREEN -->
+  <div id="screen-help" class="screen">
+    <div class="info-panel help-panel">
+      <h2 class="panel-title">操作說明</h2>
+      <div class="hs-divider"></div>
+      <div class="help-grid">
+        <div class="help-key">← / A</div><div class="help-desc">向左移動</div>
+        <div class="help-key">→ / D</div><div class="help-desc">向右移動</div>
+        <div class="help-key">↓ / S</div><div class="help-desc">軟落（加速）</div>
+        <div class="help-key">↑ / W / X</div><div class="help-desc">順時針旋轉</div>
+        <div class="help-key">Z / Ctrl</div><div class="help-desc">逆時針旋轉</div>
+        <div class="help-key">Space</div><div class="help-desc">硬落（立即落底）</div>
+        <div class="help-key">C / Shift</div><div class="help-desc">Hold 暫存方塊</div>
+        <div class="help-key">P / Esc</div><div class="help-desc">暫停 / 繼續</div>
+        <div class="help-key">R</div><div class="help-desc">重新開始</div>
+      </div>
+      <div class="hs-divider"></div>
+      <div class="help-section-title">計分系統</div>
+      <div class="help-grid">
+        <div class="help-key">Single</div><div class="help-desc">100 × 關卡</div>
+        <div class="help-key">Double</div><div class="help-desc">300 × 關卡</div>
+        <div class="help-key">Triple</div><div class="help-desc">500 × 關卡</div>
+        <div class="help-key">Tetris</div><div class="help-desc">800 × 關卡</div>
+        <div class="help-key">T-Spin</div><div class="help-desc">3× 加成</div>
+        <div class="help-key">Back-to-Back</div><div class="help-desc">1.5× 加成</div>
+      </div>
+      <button class="modal-btn back-btn" id="btn-help-back">返回</button>
+    </div>
+  </div>
+
+  <script src="js/storage.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/tetromino.js"></script>
+  <script src="js/board.js"></script>
+  <script src="js/scoring.js"></script>
+  <script src="js/effects.js"></script>
+  <script src="js/renderer.js"></script>
+  <script src="js/input.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
