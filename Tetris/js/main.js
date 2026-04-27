@@ -189,8 +189,14 @@ document.addEventListener('visibilitychange', () => {
   if (document.hidden && game && !game.paused && !game.over) game.togglePause();
 });
 
-// First interaction: init audio
-const initAudio = () => { Audio.init(); Audio.resume(); };
+// First interaction: init audio and start menu BGM
+// Note: click bubbles button → document, so button handlers fire before this.
+// If a game was started by the button handler, game != null and we skip menu BGM.
+const initAudio = () => {
+  Audio.init();
+  Audio.resume();
+  if (!game) Audio.startBGM(false);
+};
 document.addEventListener('keydown', initAudio, { once: true });
 document.addEventListener('click', initAudio, { once: true });
 document.addEventListener('touchstart', initAudio, { once: true });

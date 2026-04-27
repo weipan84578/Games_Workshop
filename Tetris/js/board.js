@@ -41,14 +41,22 @@ class Board {
   // Returns array of cleared row indices (in display coords)
   clearLines() {
     const cleared = [];
-    for (let r = ROWS - 1; r >= -BUFFER; r--) {
-      const row = this.grid[r + BUFFER];
-      if (row.every(c => c !== null)) cleared.push(r);
+    const newGrid = [];
+
+    for (let i = 0; i < this.grid.length; i++) {
+      if (this.grid[i].every(c => c !== null)) {
+        cleared.push(i - BUFFER); // display row index
+      } else {
+        newGrid.push(this.grid[i]);
+      }
     }
-    for (const r of cleared) {
-      this.grid.splice(r + BUFFER, 1);
-      this.grid.unshift(new Array(COLS).fill(null));
+
+    // Prepend empty rows to replace cleared rows (atomically, no index-shift bug)
+    while (newGrid.length < this.grid.length) {
+      newGrid.unshift(new Array(COLS).fill(null));
     }
+
+    this.grid = newGrid;
     return cleared;
   }
 
