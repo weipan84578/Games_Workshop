@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2048</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- HOME SCREEN -->
+  <div id="screen-home" class="screen active">
+    <div class="home-container">
+      <h1 class="logo">2048</h1>
+      <p class="subtitle">Slide &amp; Merge</p>
+      <div class="best-card">
+        <span class="best-label">最高紀錄</span>
+        <span id="home-best-score">0</span>
+      </div>
+      <div class="home-buttons">
+        <button class="btn btn-primary" id="btn-new-game">開始遊戲</button>
+        <button class="btn btn-secondary" id="btn-continue" disabled>繼續遊戲</button>
+        <button class="btn btn-secondary" id="btn-settings">設定</button>
+        <button class="btn btn-secondary" id="btn-leaderboard">排行榜</button>
+        <button class="btn btn-secondary" id="btn-howto">說明</button>
+      </div>
+      <div class="home-footer">
+        <span class="version">v1.0.0</span>
+        <button class="icon-btn" id="btn-mute-home" title="靜音">🔊</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME SCREEN -->
+  <div id="screen-game" class="screen">
+    <div class="game-container">
+      <div class="game-header">
+        <button class="icon-btn" id="btn-back">←</button>
+        <div class="scores-area">
+          <div class="score-box">
+            <span class="score-label">分數</span>
+            <span id="score">0</span>
+          </div>
+          <div class="score-box">
+            <span class="score-label">最高</span>
+            <span id="best-score">0</span>
+          </div>
+          <div class="score-box" id="moves-box">
+            <span class="score-label">步數</span>
+            <span id="moves">0</span>
+          </div>
+          <div class="score-box" id="timer-box" style="display:none">
+            <span class="score-label">時間</span>
+            <span id="timer">0:00</span>
+          </div>
+        </div>
+        <div class="game-actions">
+          <button class="icon-btn" id="btn-undo" title="復原 (Z)">↩</button>
+          <button class="icon-btn" id="btn-restart" title="重新開始 (R)">↺</button>
+          <button class="icon-btn" id="btn-pause" title="暫停 (P)">⏸</button>
+          <button class="icon-btn" id="btn-mute-game" title="靜音 (M)">🔊</button>
+        </div>
+      </div>
+
+      <div id="board-wrapper">
+        <div id="board"></div>
+        <div id="score-floats"></div>
+      </div>
+
+      <div class="dir-buttons">
+        <button class="dir-btn" data-dir="up">▲</button>
+        <div class="dir-row">
+          <button class="dir-btn" data-dir="left">◀</button>
+          <button class="dir-btn" data-dir="down">▼</button>
+          <button class="dir-btn" data-dir="right">▶</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS SCREEN -->
+  <div id="screen-settings" class="screen">
+    <div class="page-container">
+      <div class="page-header">
+        <button class="icon-btn" id="btn-settings-back">←</button>
+        <h2>設定</h2>
+      </div>
+      <div class="settings-body">
+        <section class="settings-section">
+          <h3>遊戲設定</h3>
+          <div class="setting-row">
+            <label>棋盤大小</label>
+            <select id="set-size">
+              <option value="3">3×3</option>
+              <option value="4" selected>4×4</option>
+              <option value="5">5×5</option>
+              <option value="6">6×6</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <label>勝利目標</label>
+            <select id="set-goal">
+              <option value="512">512</option>
+              <option value="1024">1024</option>
+              <option value="2048" selected>2048</option>
+              <option value="4096">4096</option>
+              <option value="8192">8192</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <label>復原次數</label>
+            <select id="set-undo">
+              <option value="0">0次</option>
+              <option value="1" selected>1次</option>
+              <option value="3">3次</option>
+              <option value="99">無限</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <label>達成後繼續</label>
+            <input type="checkbox" id="set-continue" checked />
+          </div>
+          <div class="setting-row">
+            <label>顯示計時器</label>
+            <input type="checkbox" id="set-timer" />
+          </div>
+          <div class="setting-row">
+            <label>動畫速度</label>
+            <select id="set-anim">
+              <option value="slow">慢</option>
+              <option value="normal" selected>標準</option>
+              <option value="fast">快</option>
+              <option value="none">無動畫</option>
+            </select>
+          </div>
+        </section>
+
+        <section class="settings-section">
+          <h3>視覺設定</h3>
+          <div class="setting-row">
+            <label>主題配色</label>
+            <select id="set-theme">
+              <option value="classic" selected>經典（米黃）</option>
+              <option value="dark">深色模式</option>
+              <option value="ocean">海洋藍</option>
+              <option value="forest">森林綠</option>
+            </select>
+          </div>
+          <div class="setting-row">
+            <label>方塊圓角 (px)</label>
+            <input type="range" id="set-radius" min="0" max="20" value="6" />
+            <span id="radius-val">6</span>
+          </div>
+          <div class="setting-row">
+            <label>顯示網格線</label>
+            <input type="checkbox" id="set-grid" />
+          </div>
+          <div class="setting-row">
+            <label>高對比模式</label>
+            <input type="checkbox" id="set-contrast" />
+          </div>
+        </section>
+
+        <section class="settings-section">
+          <h3>音效設定</h3>
+          <div class="setting-row">
+            <label>主音量</label>
+            <input type="range" id="set-vol-master" min="0" max="100" value="80" />
+            <span id="vol-master-val">80</span>
+          </div>
+          <div class="setting-row">
+            <label>音效音量</label>
+            <input type="range" id="set-vol-sfx" min="0" max="100" value="70" />
+            <span id="vol-sfx-val">70</span>
+          </div>
+          <div class="setting-row">
+            <label>BGM 音量</label>
+            <input type="range" id="set-vol-bgm" min="0" max="100" value="40" />
+            <span id="vol-bgm-val">40</span>
+          </div>
+          <div class="setting-row">
+            <label>BGM 曲目</label>
+            <select id="set-bgm-track">
+              <option value="ambient">環境音</option>
+              <option value="electronic" selected>輕電子</option>
+              <option value="piano">鋼琴</option>
+              <option value="none">靜音</option>
+            </select>
+          </div>
+        </section>
+
+        <div class="settings-footer">
+          <button class="btn btn-danger" id="btn-reset-settings">恢復預設</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEADERBOARD SCREEN -->
+  <div id="screen-leaderboard" class="screen">
+    <div class="page-container">
+      <div class="page-header">
+        <button class="icon-btn" id="btn-lb-back">←</button>
+        <h2>排行榜</h2>
+      </div>
+      <div class="lb-body">
+        <div id="lb-stats" class="lb-stats"></div>
+        <div id="lb-list" class="lb-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW TO SCREEN -->
+  <div id="screen-howto" class="screen">
+    <div class="page-container">
+      <div class="page-header">
+        <button class="icon-btn" id="btn-howto-back">←</button>
+        <h2>說明</h2>
+      </div>
+      <div class="howto-body">
+        <p>使用方向鍵 <strong>↑↓←→</strong> 或 <strong>WASD</strong> 滑動方塊。</p>
+        <p>相同數值的方塊碰撞後會合併，目標是拼出 <strong>2048</strong>！</p>
+        <h3>快捷鍵</h3>
+        <table class="hotkey-table">
+          <tr><td>R</td><td>重新開始</td></tr>
+          <tr><td>Z</td><td>復原一步</td></tr>
+          <tr><td>P</td><td>暫停</td></tr>
+          <tr><td>M</td><td>靜音切換</td></tr>
+        </table>
+        <h3>觸控操作</h3>
+        <p>在遊戲區域滑動手指（最小位移 30px）即可操控方向。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAUSE OVERLAY -->
+  <div id="overlay-pause" class="overlay hidden">
+    <div class="overlay-box">
+      <h2>遊戲暫停</h2>
+      <button class="btn btn-primary" id="btn-resume">繼續遊戲</button>
+      <button class="btn btn-secondary" id="btn-pause-restart">重新開始</button>
+      <button class="btn btn-secondary" id="btn-pause-home">回主畫面</button>
+    </div>
+  </div>
+
+  <!-- WIN OVERLAY -->
+  <div id="overlay-win" class="overlay hidden">
+    <div class="overlay-box">
+      <h2>🎉 你達成了！</h2>
+      <p id="win-msg"></p>
+      <button class="btn btn-primary" id="btn-win-continue">繼續挑戰</button>
+      <button class="btn btn-secondary" id="btn-win-restart">重新開始</button>
+      <button class="btn btn-secondary" id="btn-win-home">回主畫面</button>
+    </div>
+  </div>
+
+  <!-- GAMEOVER OVERLAY -->
+  <div id="overlay-gameover" class="overlay hidden">
+    <div class="overlay-box">
+      <h2>遊戲結束</h2>
+      <p id="gameover-msg"></p>
+      <button class="btn btn-primary" id="btn-go-restart">再玩一次</button>
+      <button class="btn btn-secondary" id="btn-go-home">回主畫面</button>
+    </div>
+  </div>
+
+  <!-- CONFIRM DIALOG -->
+  <div id="overlay-confirm" class="overlay hidden">
+    <div class="overlay-box">
+      <p id="confirm-msg">確定要重置設定嗎？</p>
+      <button class="btn btn-danger" id="btn-confirm-ok">確定</button>
+      <button class="btn btn-secondary" id="btn-confirm-cancel">取消</button>
+    </div>
+  </div>
+
+  <div id="confetti-container"></div>
+
+  <script src="src/store/settings.js"></script>
+  <script src="src/store/scores.js"></script>
+  <script src="src/audio/engine.js"></script>
+  <script src="src/core/game.js"></script>
+  <script src="src/ui/animation.js"></script>
+  <script src="src/ui/renderer.js"></script>
+  <script src="src/utils/input.js"></script>
+  <script src="src/screens/home.js"></script>
+  <script src="src/screens/settings.js"></script>
+  <script src="src/screens/leaderboard.js"></script>
+  <script src="src/screens/game.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
