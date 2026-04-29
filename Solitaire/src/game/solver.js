@@ -1,6 +1,6 @@
 import { canMoveToTableau, canMoveToFoundation, getMovableCards } from './rules.js';
 
-export function findHint(state, freeEmpty = false) {
+export function findHint(state, opts = {}) {
   const { tableaus, foundations, waste, stock } = state;
 
   // Priority 1: Move to foundation
@@ -26,13 +26,13 @@ export function findHint(state, freeEmpty = false) {
   // Priority 2: Tableau moves that reveal face-down cards
   for (let from = 0; from < 7; from++) {
     const pile = tableaus[from];
-    const movable = getMovableCards(tableaus, from);
+    const movable = getMovableCards(tableaus, from, opts);
     if (movable.length === 0) continue;
     const wouldReveal = pile.length > movable.length && !pile[pile.length - movable.length - 1].faceUp;
     if (!wouldReveal) continue;
     for (let to = 0; to < 7; to++) {
       if (from === to) continue;
-      if (canMoveToTableau(movable[0], tableaus[to], freeEmpty)) {
+      if (canMoveToTableau(movable[0], tableaus[to], opts)) {
         return { type: 'move', from: `tableau_${from}`, to: `tableau_${to}`, cards: movable };
       }
     }
@@ -40,11 +40,11 @@ export function findHint(state, freeEmpty = false) {
 
   // Priority 3: Any tableau-to-tableau
   for (let from = 0; from < 7; from++) {
-    const movable = getMovableCards(tableaus, from);
+    const movable = getMovableCards(tableaus, from, opts);
     if (movable.length === 0) continue;
     for (let to = 0; to < 7; to++) {
       if (from === to) continue;
-      if (canMoveToTableau(movable[0], tableaus[to], freeEmpty)) {
+      if (canMoveToTableau(movable[0], tableaus[to], opts)) {
         if (tableaus[from].length === movable.length && tableaus[to].length === 0) continue;
         return { type: 'move', from: `tableau_${from}`, to: `tableau_${to}`, cards: movable };
       }
@@ -55,7 +55,7 @@ export function findHint(state, freeEmpty = false) {
   if (waste.length > 0) {
     const card = waste[waste.length - 1];
     for (let t = 0; t < 7; t++) {
-      if (canMoveToTableau(card, tableaus[t], freeEmpty)) {
+      if (canMoveToTableau(card, tableaus[t], opts)) {
         return { type: 'move', from: 'waste', to: `tableau_${t}`, cards: [card] };
       }
     }

@@ -3,6 +3,7 @@ const DEFAULTS = {
   unlimitedDraw: true,
   foundationMovable: true,
   freeEmpty: false,
+  stackMode: 'alt-color',
   theme: 'classic',
   cardBack: 'blue-diamond',
   tableColor: '#1a6b3c',

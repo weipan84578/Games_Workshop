@@ -14,6 +14,12 @@ import { init as audioInit, playSFX, playBGM, stopBGM, setBGMVolume, setSFXVolum
 import { TRACKS } from './audio/tracks.js';
 import { initFloatingCards } from './router.js';
 
+// ─── Move Options Helper ──────────────────────────────────────────────────────
+function moveOpts() {
+  const s = getSettings();
+  return { freeEmpty: s.freeEmpty, stackMode: s.stackMode };
+}
+
 // ─── UI State ────────────────────────────────────────────────────────────────
 let selected = null;   // { pile, cardIndex, cards }
 let timerInterval = null;
@@ -203,7 +209,7 @@ function executeMove(fromPile, cards, toPile, skipHistory = false) {
     triggerWin();
   } else {
     const canRecycle = s.stock.length === 0 && s.waste.length > 0 && getSettings().unlimitedDraw;
-    if (!hasAnyMove(s, getSettings().freeEmpty) && !s.canAutoComplete && !canRecycle) {
+    if (!hasAnyMove(s, moveOpts()) && !s.canAutoComplete && !canRecycle) {
       setTimeout(() => showModal('modal-no-moves'), 300);
     }
   }
@@ -281,7 +287,7 @@ function handleCardClick(e) {
       const state = getState();
       if (pileEl.classList.contains('pile-tableau')) {
         const ti = parseInt(pileEl.dataset.tableau);
-        if (canMoveToTableau(selected.cards[0], state.tableaus[ti], getSettings().freeEmpty)) {
+        if (canMoveToTableau(selected.cards[0], state.tableaus[ti], moveOpts())) {
           executeMove(selected.pile, selected.cards, `tableau_${ti}`);
           playSFX(TRACKS.sfx.place);
         } else {
@@ -335,7 +341,7 @@ function handleCardClick(e) {
       const ti = parseInt(pile.split('_')[1]);
       const col = state.tableaus[ti];
       const topCard = col[col.length - 1];
-      if (topCard && topCard.faceUp && canMoveToTableau(selected.cards[0], col, getSettings().freeEmpty)) {
+      if (topCard && topCard.faceUp && canMoveToTableau(selected.cards[0], col, moveOpts())) {
         executeMove(selected.pile, selected.cards, `tableau_${ti}`);
         return;
       }
@@ -361,7 +367,7 @@ function handleCardClick(e) {
     }
   } else if (pile && pile.startsWith('tableau_')) {
     const ti = parseInt(pile.split('_')[1]);
-    const movable = getMovableCards(state.tableaus, ti);
+    const movable = getMovableCards(state.tableaus, ti, moveOpts());
     const col = state.tableaus[ti];
     if (movable.length > 0 && cardIdx >= col.length - movable.length) {
       const cardsFromIdx = col.slice(cardIdx);
@@ -446,7 +452,7 @@ function doUndo() {
 // ─── Hint ─────────────────────────────────────────────────────────────────────
 function doHint() {
   const state = getState();
-  const hint = findHint(state, getSettings().freeEmpty);
+  const hint = findHint(state, moveOpts());
   if (!hint) { showToast('找不到可用的提示', 'warning'); return; }
 
   const s = JSON.parse(JSON.stringify(state));
@@ -551,7 +557,7 @@ function initDragDrop() {
       }
     } else if (pile.startsWith('tableau_')) {
       const ti = parseInt(pile.split('_')[1]);
-      const movable = getMovableCards(state.tableaus, ti);
+      const movable = getMovableCards(state.tableaus, ti, moveOpts());
       const col = state.tableaus[ti];
       if (movable.length > 0 && cardIdx >= col.length - movable.length) {
         dragCards = col.slice(cardIdx);
@@ -621,7 +627,7 @@ function initDragDrop() {
 
     for (let t = 0; t < 7; t++) {
       if (drag.fromPile === `tableau_${t}`) continue;
-      if (canMoveToTableau(card, state.tableaus[t], getSettings().freeEmpty)) {
+      if (canMoveToTableau(card, state.tableaus[t], moveOpts())) {
         document.getElementById(`tableau-${t}`)?.classList.add('pile-highlight');
       }
     }
@@ -664,7 +670,7 @@ function initDragDrop() {
         if (drag.fromPile === `tableau_${t}`) continue;
         const tEl = document.getElementById(`tableau-${t}`);
         if (tEl && isOverElement(e, tEl)) {
-          if (canMoveToTableau(card, state.tableaus[t], getSettings().freeEmpty)) {
+          if (canMoveToTableau(card, state.tableaus[t], moveOpts())) {
             executeMove(drag.fromPile, drag.cards, `tableau_${t}`);
             moved = true;
             break;
@@ -981,6 +987,9 @@ function bindSettingsEvents() {
   document.getElementById('unlimited-draw').addEventListener('change', e => updateSetting('unlimitedDraw', e.target.checked));
   document.getElementById('foundation-movable').addEventListener('change', e => updateSetting('foundationMovable', e.target.checked));
   document.getElementById('free-empty').addEventListener('change', e => updateSetting('freeEmpty', e.target.checked));
+  document.querySelectorAll('input[name="stackMode"]').forEach(r => {
+    r.addEventListener('change', e => updateSetting('stackMode', e.target.value));
+  });
   document.getElementById('auto-foundation').addEventListener('change', e => updateSetting('autoFoundation', e.target.checked));
   document.getElementById('show-moves').addEventListener('change', e => {
     updateSetting('showMoves', e.target.checked);
@@ -1085,6 +1094,8 @@ function loadSettingsUI() {
   document.getElementById('unlimited-draw').checked = s.unlimitedDraw;
   document.getElementById('foundation-movable').checked = s.foundationMovable;
   document.getElementById('free-empty').checked = s.freeEmpty;
+  const sr = document.querySelector(`input[name="stackMode"][value="${s.stackMode}"]`);
+  if (sr) sr.checked = true;
   document.getElementById('auto-foundation').checked = s.autoFoundation;
   document.getElementById('show-moves').checked = s.showMoves;
 
