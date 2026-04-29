@@ -1,15 +1,20 @@
-### Snake_Game
+### Snake\_Game
 
-- 貪食蛇
+* 貪食蛇
 
 ### Minesweeper
 
-- 踩地雷
+* 踩地雷
 
 ### Tetris
 
-- 俄羅斯方塊
+* 俄羅斯方塊
 
 ### 2048
 
-- 2048
+* 2048
+
+### Solitaire
+
+* 撲克牌接龍 (npm run preview)
+
