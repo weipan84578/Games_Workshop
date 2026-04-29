@@ -1,0 +1,35 @@
+/* Retro / 8-bit Theme */
+:root {
+  --color-table: #2d1b00;
+  --color-modal-bg: #3d2400;
+  --color-toolbar: rgba(0, 0, 0, 0.5);
+  --color-primary: #b07000;
+  --color-primary-hover: #e09000;
+  --color-pile-border: rgba(255, 180, 0, 0.3);
+  --color-card-back: #4a1000;
+  --font-ui: 'Press Start 2P', monospace;
+}
+.menu-title {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: clamp(1.4rem, 4vw, 2.8rem) !important;
+  letter-spacing: 0.05em !important;
+  background: linear-gradient(135deg, #ff6b00 0%, #ffd000 50%, #ff6b00 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  image-rendering: pixelated;
+}
+.menu-subtitle { color: #ff6b00 !important; }
+.toolbar-logo { font-family: 'Press Start 2P', monospace !important; font-size: 0.7rem !important; color: #ffd000 !important; letter-spacing: 0.08em !important; }
+.settings-group-title { color: #ffd000 !important; }
+#leaderboard-table th { color: #ffd000 !important; }
+.toggle-switch input:checked + .toggle-slider { background: #ffd000 !important; }
+.radio-option input[type="radio"] { accent-color: #ffd000; }
+.card-rank { font-family: 'Press Start 2P', monospace !important; font-size: calc(var(--card-width) * 0.13) !important; }
+.card-center-sym { font-family: monospace; }
+.btn {
+  border-radius: 0 !important;
+  border: 2px solid rgba(255,180,0,0.5) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

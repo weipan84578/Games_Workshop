@@ -1,0 +1,8 @@
+/* Classic Theme - Green Felt Table */
+:root {
+  --color-table: #1a6b3c;
+  --color-modal-bg: #1b5e30;
+  --color-toolbar: rgba(0, 0, 0, 0.28);
+  --color-primary: #2e7d32;
+  --color-primary-hover: #43a047;
+}

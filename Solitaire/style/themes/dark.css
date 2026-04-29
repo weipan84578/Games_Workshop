@@ -1,0 +1,21 @@
+/* Dark Theme - Deep Navy */
+:root {
+  --color-table: #121827;
+  --color-modal-bg: #1a2333;
+  --color-toolbar: rgba(0, 0, 0, 0.4);
+  --color-primary: #1565c0;
+  --color-primary-hover: #1976d2;
+  --color-pile-border: rgba(100, 149, 237, 0.3);
+  --color-card-back: #1a237e;
+}
+#screen-menu .menu-title {
+  background: linear-gradient(135deg, #82b1ff 0%, #448aff 50%, #b388ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.settings-group-title, .toolbar-logo { color: #82b1ff !important; }
+#leaderboard-table th { color: #82b1ff !important; }
+.toggle-switch input:checked + .toggle-slider { background: #448aff !important; }
+.radio-option input[type="radio"] { accent-color: #448aff; }
+.text-input:focus { border-color: #448aff !important; }

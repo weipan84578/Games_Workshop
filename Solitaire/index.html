@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Solitaire 接龍</title>
+  <link rel="stylesheet" href="style/base.css">
+  <link rel="stylesheet" href="style/layout.css">
+  <link rel="stylesheet" href="style/components.css">
+  <link rel="stylesheet" href="style/screens/menu.css">
+  <link rel="stylesheet" href="style/screens/game.css">
+  <link rel="stylesheet" href="style/screens/settings.css">
+  <link rel="stylesheet" href="style/screens/leaderboard.css">
+  <link rel="stylesheet" href="style/themes/themes.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+<div id="app">
+
+  <!-- ══════════════════ SCREEN: MENU ══════════════════ -->
+  <div id="screen-menu" class="screen active">
+    <div class="menu-bg">
+      <div id="floating-cards-container"></div>
+    </div>
+    <div class="menu-content">
+      <div class="menu-title-wrap">
+        <h1 class="menu-title">SOLITAIRE</h1>
+        <p class="menu-subtitle">♠ ♥ ♦ ♣</p>
+      </div>
+      <nav class="menu-buttons">
+        <button id="btn-new-game" class="btn btn-primary btn-menu">
+          <span class="btn-icon-left">🎮</span> 新遊戲
+        </button>
+        <button id="btn-continue" class="btn btn-primary btn-menu" style="display:none">
+          <span class="btn-icon-left">▶</span> 繼續遊戲
+        </button>
+        <button id="btn-leaderboard" class="btn btn-secondary btn-menu">
+          <span class="btn-icon-left">🏆</span> 排行榜
+        </button>
+        <button id="btn-settings-menu" class="btn btn-secondary btn-menu">
+          <span class="btn-icon-left">⚙️</span> 設定
+        </button>
+      </nav>
+      <p class="menu-footer">版本 v1.0.0 &nbsp;|&nbsp; © 2026</p>
+    </div>
+  </div>
+
+  <!-- ══════════════════ SCREEN: GAME ══════════════════ -->
+  <div id="screen-game" class="screen">
+    <div id="toolbar">
+      <div class="toolbar-left">
+        <button id="btn-pause" class="btn-icon" aria-label="選單">☰</button>
+      </div>
+      <div class="toolbar-center">
+        <span class="toolbar-logo">♠ SOLITAIRE</span>
+      </div>
+      <div class="toolbar-right">
+        <span id="timer-display" class="toolbar-stat">
+          <span class="stat-icon">⏱</span>
+          <span id="timer-value">00:00</span>
+        </span>
+        <span id="score-display" class="toolbar-stat">
+          <span class="stat-icon">★</span>
+          <span id="score-value">0</span>
+        </span>
+        <span id="moves-display" class="toolbar-stat">
+          <span class="stat-icon">↕</span>
+          <span id="moves-value">0</span>
+        </span>
+        <button id="btn-undo" class="btn-icon" aria-label="悔棋" title="悔棋 (Ctrl+Z)">↩</button>
+        <button id="btn-hint" class="btn-icon" aria-label="提示" title="提示 (H)">💡</button>
+      </div>
+    </div>
+
+    <div id="game-board">
+      <div id="top-row">
+        <div id="stock-waste-area">
+          <div id="stock" class="pile pile-stock" aria-label="牌堆"></div>
+          <div id="waste" class="pile pile-waste" aria-label="廢牌堆"></div>
+        </div>
+        <div id="foundation-area">
+          <div id="foundation-0" class="pile pile-foundation" data-foundation="0" aria-label="♠ 完成區"></div>
+          <div id="foundation-1" class="pile pile-foundation" data-foundation="1" aria-label="♥ 完成區"></div>
+          <div id="foundation-2" class="pile pile-foundation" data-foundation="2" aria-label="♦ 完成區"></div>
+          <div id="foundation-3" class="pile pile-foundation" data-foundation="3" aria-label="♣ 完成區"></div>
+        </div>
+      </div>
+
+      <div id="tableau-area">
+        <div id="tableau-0" class="pile pile-tableau" data-tableau="0"></div>
+        <div id="tableau-1" class="pile pile-tableau" data-tableau="1"></div>
+        <div id="tableau-2" class="pile pile-tableau" data-tableau="2"></div>
+        <div id="tableau-3" class="pile pile-tableau" data-tableau="3"></div>
+        <div id="tableau-4" class="pile pile-tableau" data-tableau="4"></div>
+        <div id="tableau-5" class="pile pile-tableau" data-tableau="5"></div>
+        <div id="tableau-6" class="pile pile-tableau" data-tableau="6"></div>
+      </div>
+    </div>
+
+    <div id="auto-complete-bar" style="display:none">
+      <button id="btn-auto-complete" class="btn btn-primary">✨ 自動完成</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════ SCREEN: SETTINGS ══════════════════ -->
+  <div id="screen-settings" class="screen">
+    <div class="screen-header">
+      <button id="btn-back-settings" class="btn-icon btn-back" aria-label="返回">←</button>
+      <h2>⚙️ 設定</h2>
+    </div>
+    <div class="settings-content">
+      <div class="settings-group">
+        <h3 class="settings-group-title">遊戲設定</h3>
+        <div class="settings-item">
+          <span class="settings-label">抽牌模式</span>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="drawMode" value="1" id="draw-mode-1">Draw-1</label>
+            <label class="radio-option"><input type="radio" name="drawMode" value="3" id="draw-mode-3">Draw-3</label>
+          </div>
+        </div>
+        <div class="settings-item">
+          <span class="settings-label">
+            牌堆無限循環
+            <small class="settings-hint">（關閉則抽完後無法循環）</small>
+          </span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="unlimited-draw">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="settings-item">
+          <span class="settings-label">完成區可移回</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="foundation-movable">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="settings-item">
+          <span class="settings-label">
+            空白處可放任意牌
+            <small class="settings-hint">（關閉則空白處只能放 K）</small>
+          </span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="free-empty">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="settings-item">
+          <span class="settings-label">自動移至完成區</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="auto-foundation">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="settings-item">
+          <span class="settings-label">顯示移牌次數</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="show-moves">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <h3 class="settings-group-title">外觀設定</h3>
+        <div class="settings-item">
+          <span class="settings-label">主題</span>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="theme" value="classic" id="theme-classic">Classic</label>
+            <label class="radio-option"><input type="radio" name="theme" value="dark" id="theme-dark">Dark</label>
+            <label class="radio-option"><input type="radio" name="theme" value="retro" id="theme-retro">Retro</label>
+          </div>
+        </div>
+        <div class="settings-item settings-item-col">
+          <span class="settings-label">牌背圖案</span>
+          <div class="card-back-selector">
+            <div class="card-back-option" data-back="blue-diamond">
+              <div class="card-back-preview back-blue-diamond"></div>
+              <span>藍色</span>
+            </div>
+            <div class="card-back-option" data-back="red-diamond">
+              <div class="card-back-preview back-red-diamond"></div>
+              <span>紅色</span>
+            </div>
+            <div class="card-back-option" data-back="green-stripe">
+              <div class="card-back-preview back-green-stripe"></div>
+              <span>綠條</span>
+            </div>
+            <div class="card-back-option" data-back="dark-pattern">
+              <div class="card-back-preview back-dark-pattern"></div>
+              <span>深色</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <h3 class="settings-group-title">音效設定</h3>
+        <div class="settings-item">
+          <span class="settings-label">背景音樂</span>
+          <div class="slider-control">
+            <input type="range" id="bgm-volume" min="0" max="100" step="5">
+            <span id="bgm-volume-value">70%</span>
+          </div>
+        </div>
+        <div class="settings-item">
+          <span class="settings-label">音效效果</span>
+          <div class="slider-control">
+            <input type="range" id="sfx-volume" min="0" max="100" step="5">
+            <span id="sfx-volume-value">80%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-group">
+        <h3 class="settings-group-title">其他</h3>
+        <div class="settings-item">
+          <span class="settings-label">動畫速度</span>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="animSpeed" value="fast" id="anim-fast">快</label>
+            <label class="radio-option"><input type="radio" name="animSpeed" value="normal" id="anim-normal">正常</label>
+            <label class="radio-option"><input type="radio" name="animSpeed" value="slow" id="anim-slow">慢</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-footer">
+        <button id="btn-reset-settings" class="btn btn-danger">恢復預設值</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ SCREEN: LEADERBOARD ══════════════════ -->
+  <div id="screen-leaderboard" class="screen">
+    <div class="screen-header">
+      <button id="btn-back-leaderboard" class="btn-icon btn-back" aria-label="返回">←</button>
+      <h2>🏆 排行榜</h2>
+    </div>
+    <div class="leaderboard-controls">
+      <label>
+        模式：
+        <select id="leaderboard-mode-filter">
+          <option value="1">Draw-1</option>
+          <option value="3">Draw-3</option>
+        </select>
+      </label>
+      <label>
+        排序：
+        <select id="leaderboard-sort">
+          <option value="score">分數</option>
+          <option value="time">時間</option>
+          <option value="date">日期</option>
+        </select>
+      </label>
+    </div>
+    <div class="leaderboard-table-wrapper">
+      <table id="leaderboard-table">
+        <thead>
+          <tr>
+            <th>排名</th>
+            <th>名稱</th>
+            <th>分數</th>
+            <th>時間</th>
+            <th>日期</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboard-body"></tbody>
+      </table>
+      <p id="leaderboard-empty" style="display:none">尚無紀錄，快來挑戰吧！</p>
+    </div>
+    <div class="leaderboard-footer">
+      <button id="btn-clear-leaderboard" class="btn btn-danger">清除紀錄</button>
+    </div>
+  </div>
+
+  <!-- ══════════════════ MODALS ══════════════════ -->
+  <div id="modal-overlay" class="modal-overlay" style="display:none"></div>
+
+  <div id="modal-new-game" class="modal" style="display:none">
+    <div class="modal-content">
+      <h3 class="modal-title">🎮 新遊戲</h3>
+      <div class="modal-body">
+        <div class="settings-item">
+          <span class="settings-label">抽牌模式</span>
+          <div class="radio-group radio-group-col">
+            <label class="radio-option">
+              <input type="radio" name="ng-drawMode" value="1" id="ng-draw-1" checked>
+              <span>Draw-1 <small>（每次翻 1 張，適合新手）</small></span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="ng-drawMode" value="3" id="ng-draw-3">
+              <span>Draw-3 <small>（每次翻 3 張，挑戰模式）</small></span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-start-game" class="btn btn-primary">開始遊戲</button>
+        <button id="btn-cancel-new-game" class="btn btn-secondary">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-pause" class="modal" style="display:none">
+    <div class="modal-content">
+      <h3 class="modal-title">⏸ 暫停</h3>
+      <div class="modal-body modal-menu-list">
+        <button id="btn-resume" class="btn btn-primary btn-full">▶ 繼續遊戲</button>
+        <button id="btn-restart" class="btn btn-secondary btn-full">🔄 重新開始</button>
+        <button id="btn-save-game" class="btn btn-secondary btn-full">💾 儲存遊戲</button>
+        <button id="btn-settings-pause" class="btn btn-secondary btn-full">⚙️ 設定</button>
+        <button id="btn-home" class="btn btn-secondary btn-full">🏠 回主畫面</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-win" class="modal" style="display:none">
+    <div class="modal-content win-modal">
+      <h3 class="modal-title win-title">🎉 恭喜完成！🎉</h3>
+      <div class="modal-body">
+        <div class="win-stars" id="win-stars">⭐⭐⭐</div>
+        <div class="win-stats">
+          <div class="win-stat-row">
+            <span class="win-stat-label">最終分數</span>
+            <span id="win-score" class="win-stat-value">0 分</span>
+          </div>
+          <div class="win-stat-row">
+            <span class="win-stat-label">完成時間</span>
+            <span id="win-time" class="win-stat-value">0 分 0 秒</span>
+          </div>
+          <div class="win-stat-row">
+            <span class="win-stat-label">移牌次數</span>
+            <span id="win-moves" class="win-stat-value">0 次</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-save-record" class="btn btn-primary">🏆 儲存紀錄</button>
+        <button id="btn-play-again" class="btn btn-secondary">🔄 再玩一次</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-no-moves" class="modal" style="display:none">
+    <div class="modal-content">
+      <h3 class="modal-title">😔 沒有可用的移動了</h3>
+      <p style="text-align:center; padding: 0.5rem 0; color: var(--color-text-secondary)">要悔棋還是重新開始？</p>
+      <div class="modal-footer">
+        <button id="btn-undo-no-moves" class="btn btn-primary">↩ 悔棋</button>
+        <button id="btn-restart-no-moves" class="btn btn-secondary">🔄 重新開始</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-save-record" class="modal" style="display:none">
+    <div class="modal-content">
+      <h3 class="modal-title">🏆 儲存紀錄</h3>
+      <div class="modal-body">
+        <label class="input-label" for="player-name-input">你的名稱：</label>
+        <input type="text" id="player-name-input" class="text-input" maxlength="20" placeholder="請輸入名稱" autofocus>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-confirm-save-record" class="btn btn-primary">確認儲存</button>
+        <button id="btn-cancel-save-record" class="btn btn-secondary">取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast-container" aria-live="polite"></div>
+
+  <!-- Drag Ghost -->
+  <div id="drag-ghost"></div>
+
+  <!-- Confetti -->
+  <div id="confetti-container"></div>
+
+</div>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

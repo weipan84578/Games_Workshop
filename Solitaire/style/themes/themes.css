@@ -1,0 +1,72 @@
+/* ─── Classic ─────────────────────────────────────────────────── */
+[data-theme="classic"] {
+  --color-table: #1a6b3c;
+  --color-modal-bg: #1b5e30;
+  --color-toolbar: rgba(0,0,0,0.28);
+  --color-primary: #2e7d32;
+  --color-primary-hover: #43a047;
+}
+
+/* ─── Dark ────────────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --color-table: #121827;
+  --color-modal-bg: #1a2333;
+  --color-toolbar: rgba(0,0,0,0.4);
+  --color-primary: #1565c0;
+  --color-primary-hover: #1976d2;
+  --color-pile-border: rgba(100,149,237,0.3);
+  --color-card-back: #1a237e;
+}
+[data-theme="dark"] #screen-menu .menu-title {
+  background: linear-gradient(135deg, #82b1ff 0%, #448aff 50%, #b388ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+[data-theme="dark"] .settings-group-title,
+[data-theme="dark"] .toolbar-logo { color: #82b1ff !important; }
+[data-theme="dark"] #leaderboard-table th { color: #82b1ff !important; }
+[data-theme="dark"] .toggle-switch input:checked + .toggle-slider { background: #448aff !important; }
+[data-theme="dark"] .radio-option input[type="radio"] { accent-color: #448aff; }
+[data-theme="dark"] .text-input:focus { border-color: #448aff !important; }
+
+/* ─── Retro ───────────────────────────────────────────────────── */
+[data-theme="retro"] {
+  --color-table: #2d1b00;
+  --color-modal-bg: #3d2400;
+  --color-toolbar: rgba(0,0,0,0.5);
+  --color-primary: #b07000;
+  --color-primary-hover: #e09000;
+  --color-pile-border: rgba(255,180,0,0.3);
+  --color-card-back: #4a1000;
+  --font-ui: 'Press Start 2P', monospace;
+}
+[data-theme="retro"] .menu-title {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: clamp(1.4rem, 4vw, 2.8rem) !important;
+  letter-spacing: 0.05em !important;
+  background: linear-gradient(135deg, #ff6b00 0%, #ffd000 50%, #ff6b00 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+}
+[data-theme="retro"] .menu-subtitle { color: #ff6b00 !important; }
+[data-theme="retro"] .toolbar-logo {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: 0.7rem !important;
+  color: #ffd000 !important;
+}
+[data-theme="retro"] .settings-group-title { color: #ffd000 !important; }
+[data-theme="retro"] #leaderboard-table th { color: #ffd000 !important; }
+[data-theme="retro"] .toggle-switch input:checked + .toggle-slider { background: #ffd000 !important; }
+[data-theme="retro"] .radio-option input[type="radio"] { accent-color: #ffd000; }
+[data-theme="retro"] .card-rank {
+  font-family: 'Press Start 2P', monospace !important;
+  font-size: calc(var(--card-width) * 0.13) !important;
+}
+[data-theme="retro"] .btn {
+  border-radius: 0 !important;
+  border: 2px solid rgba(255,180,0,0.5) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

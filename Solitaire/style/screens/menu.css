@@ -1,0 +1,90 @@
+#screen-menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.menu-bg {
+  position: absolute; inset: 0;
+  background: var(--color-table);
+  overflow: hidden;
+}
+
+#floating-cards-container {
+  position: absolute; inset: 0;
+  overflow: hidden;
+}
+.floating-card {
+  position: absolute;
+  width: 60px; height: 84px;
+  border-radius: 6px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.1);
+  opacity: 0.12;
+  animation: floatDown linear infinite;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem;
+  pointer-events: none;
+}
+@keyframes floatDown {
+  0%   { transform: translateY(-120px) rotate(0deg); opacity: 0.12; }
+  10%  { opacity: 0.12; }
+  90%  { opacity: 0.12; }
+  100% { transform: translateY(110vh) rotate(25deg); opacity: 0; }
+}
+
+.menu-content {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 2rem;
+  animation: menuEnter 0.7s ease-out both;
+}
+@keyframes menuEnter {
+  from { opacity: 0; transform: translateY(-24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.menu-title-wrap { text-align: center; }
+
+.menu-title {
+  font-family: var(--font-title);
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  background: linear-gradient(135deg, #ffd54f 0%, #ffab00 40%, #fff9c4 70%, #ffd54f 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+}
+
+.menu-subtitle {
+  font-size: 1.5rem;
+  letter-spacing: 0.5em;
+  color: rgba(255,255,255,0.5);
+  margin-top: 0.25rem;
+}
+
+.menu-buttons {
+  display: flex; flex-direction: column; align-items: center; gap: 0.7rem;
+}
+.menu-buttons .btn {
+  animation: btnSlideIn 0.5s ease-out both;
+}
+.menu-buttons .btn:nth-child(1) { animation-delay: 0.1s; }
+.menu-buttons .btn:nth-child(2) { animation-delay: 0.2s; }
+.menu-buttons .btn:nth-child(3) { animation-delay: 0.3s; }
+.menu-buttons .btn:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes btnSlideIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.menu-footer {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.05em;
+}

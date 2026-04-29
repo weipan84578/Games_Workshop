@@ -1,0 +1,88 @@
+#screen-game {
+  background: var(--color-table);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── Toolbar ── */
+#toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  height: var(--toolbar-height);
+  padding: 0 0.75rem;
+  background: var(--color-toolbar);
+  border-bottom: 1px solid var(--color-toolbar-border);
+  flex-shrink: 0;
+  gap: 0.5rem;
+}
+.toolbar-left, .toolbar-right {
+  display: flex; align-items: center; gap: 0.25rem;
+}
+.toolbar-center { flex: 1; display: flex; justify-content: center; }
+.toolbar-logo {
+  font-family: var(--font-title);
+  font-size: 1.15rem; font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #ffd54f;
+}
+.toolbar-stat {
+  display: flex; align-items: center; gap: 0.3rem;
+  font-size: 0.9rem; font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  background: rgba(0,0,0,0.2);
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.stat-icon { font-size: 0.85rem; opacity: 0.8; }
+
+/* ── Game Board ── */
+#game-board {
+  flex: 1; overflow-y: auto; overflow-x: hidden;
+  padding: 12px 10px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+#game-board::-webkit-scrollbar { width: 4px; }
+#game-board::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+
+/* ── Top Row ── */
+#top-row {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  gap: 8px;
+}
+#stock-waste-area {
+  display: flex; gap: 8px; align-items: flex-start;
+}
+#foundation-area {
+  display: flex; gap: 8px; align-items: flex-start;
+}
+
+/* Waste Draw-3 offset */
+#waste { overflow: visible; }
+
+/* ── Tableau ── */
+#tableau-area {
+  display: flex; gap: 8px; align-items: flex-start;
+  min-height: calc(var(--card-height) + 160px);
+}
+.pile-tableau {
+  flex: 1;
+  min-width: var(--card-width);
+  max-width: var(--card-width);
+}
+
+/* ── Auto-complete bar ── */
+#auto-complete-bar {
+  padding: 0.6rem 1rem;
+  display: flex; justify-content: center;
+  background: rgba(0,0,0,0.15);
+  flex-shrink: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 599px) {
+  #game-board { padding: 8px 6px; gap: 8px; }
+  #top-row { gap: 5px; }
+  #stock-waste-area, #foundation-area { gap: 5px; }
+  #tableau-area { gap: 4px; }
+  .toolbar-logo { display: none; }
+  .toolbar-stat { font-size: 0.8rem; padding: 0.2rem 0.4rem; }
+}
