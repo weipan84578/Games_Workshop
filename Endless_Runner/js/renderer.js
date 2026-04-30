@@ -130,10 +130,13 @@
         resize: function() {
             var c      = this.canvas;
             var aspect = 16 / 9;
-            var vw     = window.innerWidth;
-            var vh     = window.innerHeight;
+            // visualViewport gives the truly visible area on mobile
+            // (accounts for iOS URL bar, Android nav bar, on-screen keyboard, etc.)
+            var vp = window.visualViewport;
+            var vw = Math.floor(vp ? vp.width  : window.innerWidth);
+            var vh = Math.floor(vp ? vp.height : window.innerHeight);
 
-            // CSS display size: fill the viewport while maintaining 16:9
+            // CSS display size: fill the visible viewport while maintaining 16:9
             var dispW, dispH;
             if (vw / vh > aspect) {
                 dispH = vh;

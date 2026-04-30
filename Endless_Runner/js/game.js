@@ -102,9 +102,12 @@
             ER.Renderer.init(document.getElementById('gameCanvas'));
             ER.Input.init(ER.Renderer.canvas);
 
-            window.addEventListener('resize', function() {
-                ER.Renderer.resize();
-            });
+            var onResize = function() { ER.Renderer.resize(); };
+            window.addEventListener('resize', onResize);
+            // visualViewport fires when iOS URL bar shows/hides or keyboard appears
+            if (window.visualViewport) {
+                window.visualViewport.addEventListener('resize', onResize);
+            }
 
             this.gotoScene('main');
             requestAnimationFrame(function(ts) { ER.Game.loop(ts); });
