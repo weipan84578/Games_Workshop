@@ -6,19 +6,18 @@ html, body {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    overscroll-behavior: none;   /* prevents iOS/Android rubber-band bounce */
+    overscroll-behavior: none;
+    background: #050510;
 }
 
 body {
-    background: #050510;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     font-family: 'Press Start 2P', monospace;
 }
 
+/* Fixed overlay that always covers the full visible viewport */
 #game-container {
-    position: relative;
+    position: fixed;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -27,20 +26,36 @@ body {
 
 #gameCanvas {
     display: block;
+
+    /*
+     * Responsive 16:9 sizing — pure CSS, no JS intervention.
+     *
+     * width:  the smaller of (full viewport width) vs (the width that would
+     *         exactly fill the viewport height at 16:9)
+     * height: the smaller of (full viewport height) vs (the height that would
+     *         exactly fill the viewport width at 9:16)
+     *
+     * Together these keep the canvas at 16:9 and as large as possible without
+     * overflowing either dimension.
+     *
+     * Two declarations per property: vh/vw for broad support,
+     * dvh/dvw for modern browsers that track the dynamic viewport
+     * (iOS URL bar show/hide, Android nav bar, etc.)
+     */
+    width:  min(100vw,  calc(100vh  * 16 / 9));
+    height: min(100vh,  calc(100vw  *  9 / 16));
+    width:  min(100dvw, calc(100dvh * 16 / 9));   /* override if dvh/dvw supported */
+    height: min(100dvh, calc(100dvw *  9 / 16));
+
     cursor: pointer;
-    touch-action: none;           /* prevents scroll/zoom while touching canvas */
+    touch-action: none;
     user-select: none;
     -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
-    /* Safety: JS sets explicit size, CSS prevents any overflow */
-    max-width: 100vw;
-    max-height: 100vh;
-    max-height: 100dvh;           /* dynamic viewport height (hides URL-bar gaps) */
 }
 
 #ui-overlay {
     position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    inset: 0;
     pointer-events: none;
 }
