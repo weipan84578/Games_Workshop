@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="Endless Runner - A cyberpunk endless running game">
+    <title>ENDLESS RUN</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="gameCanvas" role="img" aria-label="Endless Runner Game"></canvas>
+        <div id="ui-overlay" aria-live="polite" aria-atomic="true"></div>
+    </div>
+
+    <!-- Utils -->
+    <script src="js/utils/math.js"></script>
+    <script src="js/utils/storage.js"></script>
+    <script src="js/utils/input.js"></script>
+
+    <!-- Audio -->
+    <script src="js/audio/synth.js"></script>
+    <script src="js/audio/audioManager.js"></script>
+
+    <!-- Physics -->
+    <script src="js/physics.js"></script>
+
+    <!-- Renderer -->
+    <script src="js/renderer.js"></script>
+
+    <!-- Entities -->
+    <script src="js/entities/particle.js"></script>
+    <script src="js/entities/coin.js"></script>
+    <script src="js/entities/obstacle.js"></script>
+    <script src="js/entities/player.js"></script>
+
+    <!-- UI -->
+    <script src="js/ui/ui.js"></script>
+    <script src="js/ui/hud.js"></script>
+
+    <!-- Scenes -->
+    <script src="js/scenes/mainMenu.js"></script>
+    <script src="js/scenes/settings.js"></script>
+    <script src="js/scenes/pauseScene.js"></script>
+    <script src="js/scenes/gameOver.js"></script>
+    <script src="js/scenes/gameScene.js"></script>
+
+    <!-- Game core -->
+    <script src="js/game.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
