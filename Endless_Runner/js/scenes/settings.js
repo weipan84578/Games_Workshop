@@ -1,49 +1,73 @@
 (function(ER) {
-    var _tempSettings = null;
-    var _sliders = {};
+    var _tempSettings  = null;
+    var _sliders       = {};
     var _btnSave;
+    var _draggingSlider = null;
     var _qualityOptions = ['high', 'medium', 'low'];
     var _qualityLabels  = ['HIGH', 'MED', 'LOW'];
     var _layout = {};
-
-    // Button geometry for option rows
-    var QUAL_BTN_W  = 130, QUAL_BTN_H  = 52, QUAL_GAP  = 16;
-    var SPEED_BTN_W =  88, SPEED_BTN_H = 52, SPEED_GAP = 10;
 
     ER.Settings = {
         enter: function() {
             var data = ER.Storage.load();
             _tempSettings = JSON.parse(JSON.stringify(data.settings));
             if (!_tempSettings.speedPreset) _tempSettings.speedPreset = 'normal';
+            _draggingSlider = null;
 
             var cw = ER.Renderer.canvas.width;
             var ch = ER.Renderer.canvas.height;
             var mx = cw / 2;
 
-            // Modal dimensions — fill ~80% of the canvas
-            var mw = Math.min(560, cw - 60);
-            var mh = Math.min(520, ch - 60);
+            // Modal dimensions — slightly taller to fit all rows comfortably
+            var mw   = Math.min(560, cw - 60);
+            var mh   = Math.min(560, ch - 40);
             var mTop = Math.floor(ch / 2 - mh / 2);
-            var sw   = mw - 80;   // slider width
+            var sw   = mw - 80;
 
+            // Adaptive button heights (scale down for small modals, clamp min for touch)
+            var qualBtnH = Math.max(32, Math.min(52, Math.round(mh * 0.093)));
+            var spdBtnH  = qualBtnH;
+            var saveBtnH = Math.max(36, Math.min(52, Math.round(mh * 0.093)));
+
+            // Adaptive button widths — scale to fit within slider width
+            var qualBtnW = 130, qualGap = 16;
+            var spdBtnW  =  88, spdGap  = 10;
+
+            var totalQ = 3 * qualBtnW + 2 * qualGap;
+            if (totalQ > sw) {
+                var qs = sw / totalQ;
+                qualBtnW = Math.floor(qualBtnW * qs);
+                qualGap  = Math.max(4, Math.floor(qualGap * qs));
+            }
+            var totalS = 5 * spdBtnW + 4 * spdGap;
+            if (totalS > sw) {
+                var ss2 = sw / totalS;
+                spdBtnW = Math.floor(spdBtnW * ss2);
+                spdGap  = Math.max(3, Math.floor(spdGap * ss2));
+            }
+
+            // Proportional Y positions — scale naturally with modal height
             _layout = {
                 mx: mx, mTop: mTop, mw: mw, mh: mh,
                 sliderX: mx - sw / 2, sliderW: sw,
-                titleY:  mTop + 42,
-                bgmY:    mTop + 105,
-                sfxY:    mTop + 190,
-                qualLY:  mTop + 272,
-                qualY:   mTop + 308,
-                spdLY:   mTop + 372,
-                spdY:    mTop + 410,
-                spdInfoY:mTop + 442,
-                saveY:   mTop + 480
+                titleY:   mTop + Math.round(mh * 0.075),
+                bgmY:     mTop + Math.round(mh * 0.196),
+                sfxY:     mTop + Math.round(mh * 0.357),
+                qualLY:   mTop + Math.round(mh * 0.500),
+                qualY:    mTop + Math.round(mh * 0.571),
+                spdLY:    mTop + Math.round(mh * 0.679),
+                spdY:     mTop + Math.round(mh * 0.750),
+                spdInfoY: mTop + Math.round(mh * 0.839),
+                saveY:    mTop + Math.round(mh * 0.893),
+                qualBtnW: qualBtnW, qualBtnH: qualBtnH, qualGap: qualGap,
+                spdBtnW:  spdBtnW,  spdBtnH:  spdBtnH,  spdGap:  spdGap,
+                saveBtnH: saveBtnH
             };
 
             _sliders.bgm = { x: _layout.sliderX, y: _layout.bgmY, w: sw };
             _sliders.sfx = { x: _layout.sliderX, y: _layout.sfxY, w: sw };
 
-            _btnSave = new ER.UI.Button(mx - 140, _layout.saveY, 280, 52, '✓  SAVE & BACK', {
+            _btnSave = new ER.UI.Button(mx - 140, _layout.saveY, 280, saveBtnH, '✓  SAVE & BACK', {
                 bg: '#FF6B35', border: '#FF8855', textColor: '#FFF', fontSize: 12
             });
         },
@@ -54,18 +78,18 @@
 
         /* ── Draw a row of toggle buttons ─────────────────────────── */
         _drawOptionRow: function(ctx, options, labels, activeKey, rowCY, btnW, btnH, gap, useChinese) {
-            var mx    = _layout.mx;
-            var total = options.length;
+            var mx     = _layout.mx;
+            var total  = options.length;
             var totalW = total * btnW + (total - 1) * gap;
             var startX = mx - totalW / 2;
             var halfH  = btnH / 2;
+            var fSize  = Math.max(9, Math.round(btnH * 0.27));
 
             options.forEach(function(key, i) {
                 var bx     = startX + i * (btnW + gap);
                 var active = activeKey === key;
 
                 ctx.save();
-                // Button fill
                 ctx.fillStyle   = active ? '#FF6B35' : 'rgba(15,15,50,0.9)';
                 ctx.strokeStyle = active ? '#FF9966' : '#4A4A8A';
                 ctx.lineWidth   = active ? 2.5 : 1.5;
@@ -78,15 +102,13 @@
                 ctx.stroke();
                 ctx.shadowBlur = 0;
 
-                // Label text
-                ctx.fillStyle     = active ? '#FFFFFF' : '#8888BB';
-                ctx.textAlign     = 'center';
-                ctx.textBaseline  = 'middle';
+                ctx.fillStyle    = active ? '#FFFFFF' : '#8888BB';
+                ctx.textAlign    = 'center';
+                ctx.textBaseline = 'middle';
                 if (useChinese) {
-                    // Chinese labels: use system sans-serif for proper rendering
-                    ctx.font = 'bold 14px sans-serif';
+                    ctx.font = 'bold ' + fSize + 'px sans-serif';
                 } else {
-                    ctx.font = "bold 11px 'Press Start 2P', monospace";
+                    ctx.font = 'bold ' + fSize + "px 'Press Start 2P', monospace";
                 }
                 ctx.fillText(labels[i], bx + btnW / 2, rowCY);
                 ctx.restore();
@@ -110,10 +132,49 @@
         },
 
         update: function(dt) {
+            var L     = _layout;
+            var ptr   = ER.Input.pointerPos;
             var click = ER.Input.clickPos;
+
+            // Clear drag state when pointer is released
+            if (!ptr) _draggingSlider = null;
+
+            // ── Slider drag (runs every frame while pointer is held) ──
+            if (ptr) {
+                var px = ptr.x, py = ptr.y;
+
+                // Detect which slider is being grabbed (only when not already dragging)
+                if (_draggingSlider === null) {
+                    var sl = _sliders.bgm;
+                    if (py >= sl.y - 28 && py <= sl.y + 28 &&
+                        px >= sl.x - 16 && px <= sl.x + sl.w + 16) {
+                        _draggingSlider = 'bgm';
+                    }
+                    var ss = _sliders.sfx;
+                    if (py >= ss.y - 28 && py <= ss.y + 28 &&
+                        px >= ss.x - 16 && px <= ss.x + ss.w + 16) {
+                        _draggingSlider = 'sfx';
+                    }
+                }
+
+                if (_draggingSlider === 'bgm') {
+                    _tempSettings.volBGM = this._getSliderVal(_sliders.bgm, px);
+                    ER.Audio.setVolume('bgm', _tempSettings.volBGM);
+                } else if (_draggingSlider === 'sfx') {
+                    _tempSettings.volSFX = this._getSliderVal(_sliders.sfx, px);
+                    ER.Audio.setVolume('sfx', _tempSettings.volSFX);
+                }
+
+                // While a slider is active, absorb the click so buttons don't fire
+                if (_draggingSlider !== null) {
+                    ER.Input.clearClick();
+                    return;
+                }
+            }
+
+            // ── Button clicks ─────────────────────────────────────────
             if (!click) return;
             var cx = click.x, cy = click.y;
-            var L = _layout;
 
             // Save button
             if (_btnSave.isHit(cx, cy)) {
@@ -127,29 +188,15 @@
                 return;
             }
 
-            // BGM slider
-            var sl = _sliders.bgm;
-            if (cy >= sl.y - 20 && cy <= sl.y + 20 &&
-                cx >= sl.x - 12 && cx <= sl.x + sl.w + 12) {
-                _tempSettings.volBGM = this._getSliderVal(sl, cx);
-                ER.Audio.setVolume('bgm', _tempSettings.volBGM);
-            }
-
-            // SFX slider
-            var ss = _sliders.sfx;
-            if (cy >= ss.y - 20 && cy <= ss.y + 20 &&
-                cx >= ss.x - 12 && cx <= ss.x + ss.w + 12) {
-                _tempSettings.volSFX = this._getSliderVal(ss, cx);
-                ER.Audio.setVolume('sfx', _tempSettings.volSFX);
-            }
-
             // Quality buttons
-            var qHit = this._hitOptionRow(cx, cy, _qualityOptions, L.qualY, QUAL_BTN_W, QUAL_BTN_H, QUAL_GAP);
+            var qHit = this._hitOptionRow(cx, cy, _qualityOptions, L.qualY,
+                L.qualBtnW, L.qualBtnH, L.qualGap);
             if (qHit) { _tempSettings.quality = qHit; ER.Audio.playSFX('btnClick'); }
 
             // Speed preset buttons
             var speedKeys = ER.Physics.SPEED_PRESET_ORDER;
-            var sHit = this._hitOptionRow(cx, cy, speedKeys, L.spdY, SPEED_BTN_W, SPEED_BTN_H, SPEED_GAP);
+            var sHit = this._hitOptionRow(cx, cy, speedKeys, L.spdY,
+                L.spdBtnW, L.spdBtnH, L.spdGap);
             if (sHit) { _tempSettings.speedPreset = sHit; ER.Audio.playSFX('btnClick'); }
 
             ER.Input.clearClick();
@@ -192,7 +239,7 @@
             });
             this._drawOptionRow(ctx, _qualityOptions, _qualityLabels,
                 _tempSettings.quality, L.qualY,
-                QUAL_BTN_W, QUAL_BTN_H, QUAL_GAP, false);
+                L.qualBtnW, L.qualBtnH, L.qualGap, false);
 
             // ── Speed section ─────────────────────────────────────
             ER.UI.drawText(ctx, 'SPEED', L.mx, L.spdLY, {
@@ -204,14 +251,16 @@
             });
             this._drawOptionRow(ctx, speedKeys, speedLabels,
                 _tempSettings.speedPreset, L.spdY,
-                SPEED_BTN_W, SPEED_BTN_H, SPEED_GAP, true);
+                L.spdBtnW, L.spdBtnH, L.spdGap, true);
 
-            // Speed info hint below buttons
+            // ── Speed info hint ───────────────────────────────────
             var cfg = ER.Physics.SPEED_PRESET[_tempSettings.speedPreset];
             if (cfg) {
                 ctx.save();
                 ctx.fillStyle    = '#FF6B35';
-                ctx.font         = "12px 'Orbitron', monospace";
+                ctx.shadowColor  = '#FF6B35';
+                ctx.shadowBlur   = 8;
+                ctx.font         = "bold 16px 'Orbitron', sans-serif";
                 ctx.textAlign    = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText(

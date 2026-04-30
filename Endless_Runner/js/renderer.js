@@ -128,16 +128,29 @@
         },
 
         resize: function() {
-            var c = this.canvas;
-            var ratio = window.devicePixelRatio || 1;
-            var w = Math.min(window.innerWidth, 1280);
-            var h = Math.min(window.innerHeight, 720);
-            // Maintain 16:9 aspect
-            var aspect = 16/9;
-            if (w / h > aspect) w = Math.floor(h * aspect);
-            else h = Math.floor(w / aspect);
-            c.width = w; c.height = h;
-            c.style.width = w + 'px'; c.style.height = h + 'px';
+            var c      = this.canvas;
+            var aspect = 16 / 9;
+            var vw     = window.innerWidth;
+            var vh     = window.innerHeight;
+
+            // CSS display size: fill the viewport while maintaining 16:9
+            var dispW, dispH;
+            if (vw / vh > aspect) {
+                dispH = vh;
+                dispW = Math.round(vh * aspect);
+            } else {
+                dispW = vw;
+                dispH = Math.round(vw / aspect);
+            }
+
+            // Buffer pixel size: cap at 1280×720 for performance
+            var bufW = Math.min(dispW, 1280);
+            var bufH = Math.min(dispH, 720);
+
+            c.width  = bufW;
+            c.height = bufH;
+            c.style.width  = dispW + 'px';
+            c.style.height = dispH + 'px';
             _bgBuilt = false;
         },
 
