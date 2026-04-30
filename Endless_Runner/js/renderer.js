@@ -130,22 +130,33 @@
         resize: function() {
             var c      = this.canvas;
             var aspect = 16 / 9;
-            var vp     = window.visualViewport;
-            var vw     = Math.floor(vp ? vp.width  : window.innerWidth);
-            var vh     = Math.floor(vp ? vp.height : window.innerHeight);
+            // visualViewport gives the truly visible area on mobile
+            // (correctly excludes iOS URL bar, Android nav bar, on-screen keyboard)
+            var vp = window.visualViewport;
+            var vw = Math.floor(vp ? vp.width  : window.innerWidth);
+            var vh = Math.floor(vp ? vp.height : window.innerHeight);
 
-            // Set pixel buffer resolution only (CSS handles display sizing).
-            // Maintain 16:9, cap at 1280×720 for performance.
-            var bufW = Math.min(vw, 1280);
-            var bufH = Math.min(vh, 720);
-            if (bufW / bufH > aspect) bufW = Math.round(bufH * aspect);
-            else                      bufH = Math.round(bufW / aspect);
+            // CSS display size: fill the visible viewport maintaining 16:9
+            var dispW, dispH;
+            if (vw / vh > aspect) {
+                dispH = vh;
+                dispW = Math.round(vh * aspect);
+            } else {
+                dispW = vw;
+                dispH = Math.round(vw / aspect);
+            }
+
+            // Buffer: cap at 1280×720 for performance
+            var bufW = Math.min(dispW, 1280);
+            var bufH = Math.min(dispH, 720);
 
             c.width  = bufW;
             c.height = bufH;
-            // Clear any previously-set inline dimensions so CSS min() rules apply
-            c.style.width  = '';
-            c.style.height = '';
+            // Set inline style so the canvas displays at the correct viewport-fitted size.
+            // Inline style must be used — without it the canvas renders at its raw
+            // buffer pixel size (e.g. 960px wide) and overflows on small screens.
+            c.style.width  = dispW + 'px';
+            c.style.height = dispH + 'px';
             _bgBuilt = false;
         },
 
