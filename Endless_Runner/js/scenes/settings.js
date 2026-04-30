@@ -14,61 +14,42 @@
             if (!_tempSettings.speedPreset) _tempSettings.speedPreset = 'normal';
             _draggingSlider = null;
 
-            var cw = ER.Renderer.canvas.width;
-            var ch = ER.Renderer.canvas.height;
+            this.layout(ER.Renderer.canvas.width, ER.Renderer.canvas.height);
+        },
+
+        layout: function(cw, ch) {
             var mx = cw / 2;
+            var my = ch / 2;
 
-            // Modal dimensions — slightly taller to fit all rows comfortably
-            var mw   = Math.min(560, cw - 60);
-            var mh   = Math.min(560, ch - 40);
-            var mTop = Math.floor(ch / 2 - mh / 2);
-            var sw   = mw - 80;
+            // Increased modal height to 620 for better spacing
+            var mw   = 700;
+            var mh   = 620;
+            var mTop = my - mh / 2;
+            var sw   = 520;
 
-            // Adaptive button heights (scale down for small modals, clamp min for touch)
-            var qualBtnH = Math.max(32, Math.min(52, Math.round(mh * 0.093)));
-            var spdBtnH  = qualBtnH;
-            var saveBtnH = Math.max(36, Math.min(52, Math.round(mh * 0.093)));
-
-            // Adaptive button widths — scale to fit within slider width
-            var qualBtnW = 130, qualGap = 16;
-            var spdBtnW  =  88, spdGap  = 10;
-
-            var totalQ = 3 * qualBtnW + 2 * qualGap;
-            if (totalQ > sw) {
-                var qs = sw / totalQ;
-                qualBtnW = Math.floor(qualBtnW * qs);
-                qualGap  = Math.max(4, Math.floor(qualGap * qs));
-            }
-            var totalS = 5 * spdBtnW + 4 * spdGap;
-            if (totalS > sw) {
-                var ss2 = sw / totalS;
-                spdBtnW = Math.floor(spdBtnW * ss2);
-                spdGap  = Math.max(3, Math.floor(spdGap * ss2));
-            }
-
-            // Proportional Y positions — scale naturally with modal height
             _layout = {
                 mx: mx, mTop: mTop, mw: mw, mh: mh,
                 sliderX: mx - sw / 2, sliderW: sw,
-                titleY:   mTop + Math.round(mh * 0.075),
-                bgmY:     mTop + Math.round(mh * 0.196),
-                sfxY:     mTop + Math.round(mh * 0.357),
-                qualLY:   mTop + Math.round(mh * 0.500),
-                qualY:    mTop + Math.round(mh * 0.571),
-                spdLY:    mTop + Math.round(mh * 0.679),
-                spdY:     mTop + Math.round(mh * 0.750),
-                spdInfoY: mTop + Math.round(mh * 0.839),
-                saveY:    mTop + Math.round(mh * 0.893),
-                qualBtnW: qualBtnW, qualBtnH: qualBtnH, qualGap: qualGap,
-                spdBtnW:  spdBtnW,  spdBtnH:  spdBtnH,  spdGap:  spdGap,
-                saveBtnH: saveBtnH
+                titleY:   mTop + 50,
+                bgmY:     mTop + 130,   // BGM Slider
+                sfxY:     mTop + 230,   // SFX Slider
+                qualLY:   mTop + 320,   // Quality Label
+                qualY:    mTop + 375,   // Quality Buttons
+                spdLY:    mTop + 445,   // Speed Label
+                spdY:     mTop + 495,   // Speed Buttons
+                spdInfoY: mTop + 550,   // Speed Info Text
+                saveY:    mTop + 600,   // Save Button Position
+                qualBtnW: 140, qualBtnH: 48, qualGap: 16,
+                spdBtnW:  92,  spdBtnH: 44,  spdGap: 10,
+                saveBtnH: 56
             };
 
             _sliders.bgm = { x: _layout.sliderX, y: _layout.bgmY, w: sw };
             _sliders.sfx = { x: _layout.sliderX, y: _layout.sfxY, w: sw };
 
-            _btnSave = new ER.UI.Button(mx - 140, _layout.saveY, 280, saveBtnH, '✓  SAVE & BACK', {
-                bg: '#FF6B35', border: '#FF8855', textColor: '#FFF', fontSize: 12
+            // Position Save button at the very bottom area of the modal
+            _btnSave = new ER.UI.Button(mx - 160, mTop + mh - 80, 320, 56, '✓ SAVE & BACK', {
+                bg: '#FF6B35', border: '#FF8855', textColor: '#FFF', fontSize: 14
             });
         },
 

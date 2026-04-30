@@ -1,64 +1,68 @@
 (function(ER) {
     ER.HUD = {
         draw: function(ctx, cw, ch, state) {
+            // HUD uses LOGICAL resolution
+            cw = ER.Renderer.LOGICAL_WIDTH;
+            ch = ER.Renderer.LOGICAL_HEIGHT;
+
             var score = state.score || 0;
             var best = state.bestScore || 0;
             var lives = state.lives != null ? state.lives : 3;
             var speed = state.speed || 5;
-            var gameTime = state.gameTime || 0;
 
             ctx.save();
-
             // HUD background bar
-            var grd = ctx.createLinearGradient(0, 0, 0, 44);
+            var grd = ctx.createLinearGradient(0, 0, 0, 60);
             grd.addColorStop(0, 'rgba(5,5,20,0.85)');
             grd.addColorStop(1, 'rgba(5,5,20,0)');
             ctx.fillStyle = grd;
-            ctx.fillRect(0, 0, cw, 44);
+            ctx.fillRect(0, 0, cw, 60);
 
             // Score
             ctx.fillStyle = '#FF6B35';
             ctx.shadowColor = '#FF6B35';
             ctx.shadowBlur = 6;
-            ctx.font = "bold 13px 'Orbitron', monospace";
+            ctx.font = "bold 18px 'Orbitron', monospace";
             ctx.textAlign = 'left';
             ctx.textBaseline = 'middle';
-            ctx.fillText('SCORE', 16, 16);
+            ctx.fillText('SCORE', 24, 20);
             ctx.fillStyle = '#FFFFFF';
             ctx.shadowBlur = 0;
-            ctx.font = "bold 16px 'Orbitron', monospace";
-            ctx.fillText(String(score).padStart(6, '0'), 16, 31);
-
-            // Lives
-            var heartX = 200;
+            ctx.font = "bold 24px 'Orbitron', monospace";
+            var scoreStr = String(score).padStart(6, '0');
+            ctx.fillText(scoreStr, 24, 42);
+            
+            // Lives - fixed position after score in logical space
+            var heartX = 260;
             for (var i = 0; i < 3; i++) {
-                this._drawHeart(ctx, heartX + i * 26, 22, i < lives);
+                this._drawHeart(ctx, heartX + i * 32, 30, i < lives);
             }
 
             // Best score (center)
+            var bestX = cw / 2;
             ctx.fillStyle = '#FFD700';
-            ctx.font = "bold 11px 'Orbitron', monospace";
+            ctx.font = "bold 16px 'Orbitron', monospace";
             ctx.textAlign = 'center';
-            ctx.fillText('BEST', cw/2, 14);
+            ctx.fillText('BEST', bestX, 18);
             ctx.fillStyle = '#FFD700';
             ctx.shadowColor = '#FFD700';
             ctx.shadowBlur = 4;
-            ctx.font = "bold 14px 'Orbitron', monospace";
-            ctx.fillText(String(best).padStart(6, '0'), cw/2, 30);
+            ctx.font = "bold 20px 'Orbitron', monospace";
+            ctx.fillText(String(best).padStart(6, '0'), bestX, 40);
             ctx.shadowBlur = 0;
 
             // Speed indicator
             var speedMult = (speed / ER.Physics.INITIAL_SPEED).toFixed(1);
             ctx.fillStyle = '#00D4FF';
-            ctx.font = "9px 'Press Start 2P', monospace";
+            ctx.font = "14px 'Press Start 2P', monospace";
             ctx.textAlign = 'right';
-            ctx.fillText('x' + speedMult, cw - 50, 30);
+            ctx.fillText('x' + speedMult, cw - 70, 40);
 
             // Pause button
             ctx.fillStyle = '#F0F0FF';
-            ctx.font = "16px sans-serif";
+            ctx.font = "24px sans-serif";
             ctx.textAlign = 'right';
-            ctx.fillText('⏸', cw - 16, 22);
+            ctx.fillText('⏸', cw - 24, 30);
 
             ctx.restore();
 

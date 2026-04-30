@@ -121,6 +121,12 @@
     }
 
     ER.Renderer = {
+        canvas: null,
+        ctx: null,
+        // Fixed logical resolution for internal game logic
+        LOGICAL_WIDTH: 1280,
+        LOGICAL_HEIGHT: 720,
+
         init: function(canvas) {
             this.canvas = canvas;
             this.ctx = canvas.getContext('2d');
@@ -129,14 +135,13 @@
 
         resize: function() {
             var c      = this.canvas;
-            var aspect = 16 / 9;
-            // visualViewport gives the truly visible area on mobile
-            // (correctly excludes iOS URL bar, Android nav bar, on-screen keyboard)
+            var aspect = this.LOGICAL_WIDTH / this.LOGICAL_HEIGHT;
+            
             var vp = window.visualViewport;
             var vw = Math.floor(vp ? vp.width  : window.innerWidth);
             var vh = Math.floor(vp ? vp.height : window.innerHeight);
 
-            // CSS display size: fill the visible viewport maintaining 16:9
+            // CSS display size: fill the visible viewport maintaining aspect ratio
             var dispW, dispH;
             if (vw / vh > aspect) {
                 dispH = vh;
@@ -146,21 +151,29 @@
                 dispH = Math.round(vw / aspect);
             }
 
-            // Buffer: cap at 1280×720 for performance
-            var bufW = Math.min(dispW, 1280);
-            var bufH = Math.min(dispH, 720);
+            // Buffer size: match actual pixels for sharpness (DPI aware)
+            var dpr = window.devicePixelRatio || 1;
+            c.width  = this.LOGICAL_WIDTH * dpr;
+            c.height = this.LOGICAL_HEIGHT * dpr;
 
-            c.width  = bufW;
-            c.height = bufH;
-            // Set inline style so the canvas displays at the correct viewport-fitted size.
-            // Inline style must be used — without it the canvas renders at its raw
-            // buffer pixel size (e.g. 960px wide) and overflows on small screens.
+            // Set display size via CSS
             c.style.width  = dispW + 'px';
             c.style.height = dispH + 'px';
+
+            // Scale context so we can use logical coordinates (0-1280, 0-720)
+            this.ctx.resetTransform();
+            this.ctx.scale(dpr, dpr);
+
             _bgBuilt = false;
+
+            // Notify current scene to re-layout UI using logical dimensions
+            if (ER.Game && ER.Game.getCurrentScene()) {
+                var scene = ER.Game.getCurrentScene();
+                if (scene.layout) scene.layout(this.LOGICAL_WIDTH, this.LOGICAL_HEIGHT);
+            }
         },
 
-        getGroundY: function() { return Math.floor(this.canvas.height * 0.75); },
+        getGroundY: function() { return Math.floor(this.LOGICAL_HEIGHT * 0.75); },
 
         update: function(dt, worldSpeed) {
             if (!_bgBuilt) buildOrRebuild(this.canvas.width, this.canvas.height);

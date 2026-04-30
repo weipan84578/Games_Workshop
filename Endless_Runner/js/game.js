@@ -64,6 +64,10 @@
             if (_scene && _scene.enter) _scene.enter();
         },
 
+        getCurrentScene: function() {
+            return _scene;
+        },
+
         startGame: function() {
             this.state.worldX = 0;
             this.gotoScene('game');
@@ -81,6 +85,9 @@
             var bgmType = this.state.gameTime >= 120 ? 'fast' : 'game';
             ER.Audio.playBGM(bgmType);
             _scene = ER.GameScene;
+            if (_scene && _scene.layout) {
+                _scene.layout(ER.Renderer.canvas.width, ER.Renderer.canvas.height);
+            }
         },
 
         loop: function(timestamp) {
@@ -102,11 +109,16 @@
             ER.Renderer.init(document.getElementById('gameCanvas'));
             ER.Input.init(ER.Renderer.canvas);
 
-            var onResize = function() { ER.Renderer.resize(); };
+            var onResize = function() { 
+                ER.Renderer.resize(); 
+            };
             window.addEventListener('resize', onResize);
+            window.addEventListener('orientationchange', onResize);
+            
             // visualViewport fires when iOS URL bar shows/hides or keyboard appears
             if (window.visualViewport) {
                 window.visualViewport.addEventListener('resize', onResize);
+                window.visualViewport.addEventListener('scroll', onResize);
             }
 
             this.gotoScene('main');

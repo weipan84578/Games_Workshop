@@ -50,6 +50,14 @@
             ER.Audio.playBGM('game');
         },
 
+        layout: function(cw, ch) {
+            var groundY = ER.Renderer.getGroundY();
+            // Update ground levels for active entities
+            if (ER.Player) ER.Player._groundY = groundY;
+            if (ER.ObstacleManager) ER.ObstacleManager._groundY = groundY;
+            if (ER.CoinManager) ER.CoinManager._groundY = groundY;
+        },
+
         update: function(dt) {
             var gs = ER.Game.state;
             var cw = ER.Renderer.canvas.width;
@@ -208,7 +216,7 @@
         },
 
         draw: function(ctx) {
-            var cw = ER.Renderer.canvas.width, ch = ER.Renderer.canvas.height;
+            var cw = ER.Renderer.LOGICAL_WIDTH, ch = ER.Renderer.LOGICAL_HEIGHT;
             var gs = ER.Game.state;
 
             // Background layers

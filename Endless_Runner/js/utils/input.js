@@ -20,8 +20,8 @@
             canvas.addEventListener('mousedown', function(e) {
                 var r = canvas.getBoundingClientRect();
                 var pos = {
-                    x: (e.clientX - r.left) * (canvas.width / r.width),
-                    y: (e.clientY - r.top)  * (canvas.height / r.height)
+                    x: (e.clientX - r.left) * (ER.Renderer.LOGICAL_WIDTH / r.width),
+                    y: (e.clientY - r.top)  * (ER.Renderer.LOGICAL_HEIGHT / r.height)
                 };
                 self.clickPos   = pos;
                 self.pointerPos = { x: pos.x, y: pos.y };
@@ -31,8 +31,8 @@
                 if (!self._jumpDown) return;
                 var r = canvas.getBoundingClientRect();
                 self.pointerPos = {
-                    x: (e.clientX - r.left) * (canvas.width / r.width),
-                    y: (e.clientY - r.top)  * (canvas.height / r.height)
+                    x: (e.clientX - r.left) * (ER.Renderer.LOGICAL_WIDTH / r.width),
+                    y: (e.clientY - r.top)  * (ER.Renderer.LOGICAL_HEIGHT / r.height)
                 };
             });
             canvas.addEventListener('mouseup', function() {
@@ -44,8 +44,8 @@
                 e.preventDefault();
                 var r = canvas.getBoundingClientRect(), t = e.touches[0];
                 var pos = {
-                    x: (t.clientX - r.left) * (canvas.width / r.width),
-                    y: (t.clientY - r.top)  * (canvas.height / r.height)
+                    x: (t.clientX - r.left) * (ER.Renderer.LOGICAL_WIDTH / r.width),
+                    y: (t.clientY - r.top)  * (ER.Renderer.LOGICAL_HEIGHT / r.height)
                 };
                 self.clickPos   = pos;
                 self.pointerPos = { x: pos.x, y: pos.y };
@@ -55,8 +55,8 @@
                 e.preventDefault();
                 var r = canvas.getBoundingClientRect(), t = e.touches[0];
                 self.pointerPos = {
-                    x: (t.clientX - r.left) * (canvas.width / r.width),
-                    y: (t.clientY - r.top)  * (canvas.height / r.height)
+                    x: (t.clientX - r.left) * (ER.Renderer.LOGICAL_WIDTH / r.width),
+                    y: (t.clientY - r.top)  * (ER.Renderer.LOGICAL_HEIGHT / r.height)
                 };
             }, { passive: false });
             canvas.addEventListener('touchend', function(e) {
