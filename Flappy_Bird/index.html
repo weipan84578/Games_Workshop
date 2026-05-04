@@ -1,0 +1,1190 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#87CEEB">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta property="og:title" content="Flappy Bird">
+  <meta property="og:description" content="HTML5 Canvas Flappy Bird web game">
+  <title>Flappy Bird</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --sky-top: #87CEEB;
+      --sky-bottom: #4FC3F7;
+      --ground: #DEB887;
+      --ground-dark: #8B6914;
+      --pipe-green: #4CAF50;
+      --pipe-dark: #388E3C;
+      --pipe-light: #81C784;
+      --btn-primary: #FFC107;
+      --btn-primary-hover: #FFB300;
+      --btn-text: #5D4037;
+      --overlay-bg: rgba(0, 0, 0, 0.52);
+      --panel-bg: rgba(255, 255, 255, 0.92);
+      --score-text: #FFFFFF;
+      --score-shadow: #000000;
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #263238;
+      color: #5D4037;
+      font-family: Nunito, "Arial Rounded MT Bold", sans-serif;
+      touch-action: none;
+      user-select: none;
+    }
+
+    body.dark {
+      --sky-top: #1a2a3a;
+      --sky-bottom: #0d1b2a;
+      --panel-bg: rgba(32, 43, 54, 0.94);
+      color: #F7F2DE;
+    }
+
+    .game-container {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+      background: linear-gradient(var(--sky-top), var(--sky-bottom));
+    }
+
+    #gameCanvas {
+      width: min(100vw, 66.6667vh);
+      height: min(150vw, 100vh);
+      max-width: 100vw;
+      max-height: 100vh;
+      display: block;
+      background: var(--sky-top);
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.14);
+    }
+
+    .screen {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(18px, 5vw, 36px);
+      background: var(--overlay-bg);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .screen.active { display: flex; }
+    #game-ui.active { display: block; }
+    #game-ui { pointer-events: none; background: transparent; padding: 0; }
+
+    .panel {
+      width: min(92vw, 390px);
+      max-height: min(88vh, 680px);
+      overflow: auto;
+      border: 4px solid rgba(93, 64, 55, 0.65);
+      border-radius: 8px;
+      background: var(--panel-bg);
+      padding: clamp(18px, 5vw, 28px);
+      text-align: center;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.28);
+    }
+
+    h1,
+    h2 {
+      margin: 0;
+      color: #FFF8DC;
+      font-family: "Fredoka One", Impact, fantasy;
+      line-height: 1;
+      text-shadow: 4px 4px 0 #5D4037, 0 5px 16px rgba(0, 0, 0, 0.22);
+      letter-spacing: 0;
+    }
+
+    h1 { font-size: clamp(48px, 12vw, 72px); }
+    h2 {
+      margin-bottom: 24px;
+      color: #FFC107;
+      font-size: clamp(32px, 8vw, 48px);
+    }
+
+    .loading-title {
+      color: #FFFFFF;
+      font-size: clamp(36px, 10vw, 56px);
+    }
+
+    .bird-logo {
+      width: 118px;
+      height: 84px;
+      margin: 0 auto 16px;
+      animation: floatBird 1s infinite alternate ease-in-out;
+    }
+
+    .title-box {
+      margin: 14px 0 26px;
+      padding: 12px;
+      border: 4px solid #5D4037;
+      border-radius: 8px;
+      background: #FFD54F;
+    }
+
+    .title-box h1 {
+      color: #FFFFFF;
+      font-size: clamp(43px, 11vw, 64px);
+    }
+
+    .btn {
+      width: 100%;
+      min-height: 52px;
+      margin: 10px 0;
+      border: 4px solid #5D4037;
+      border-radius: 8px;
+      background: var(--btn-primary);
+      color: var(--btn-text);
+      cursor: pointer;
+      font-family: Nunito, sans-serif;
+      font-size: clamp(24px, 6vw, 36px);
+      font-weight: 900;
+      box-shadow: 0 6px 0 #B28704;
+      transition: transform 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .btn:hover { background: var(--btn-primary-hover); }
+    .btn:active {
+      transform: translateY(5px);
+      box-shadow: 0 1px 0 #B28704;
+    }
+
+    .btn.primary { animation: pulse 0.8s infinite alternate ease-in-out; }
+    .btn.small {
+      min-height: 46px;
+      font-size: clamp(20px, 5vw, 28px);
+    }
+
+    .icon-row {
+      position: absolute;
+      top: max(14px, env(safe-area-inset-top));
+      right: 14px;
+      z-index: 8;
+      display: flex;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      width: 60px;
+      height: 60px;
+      border: 4px solid #5D4037;
+      border-radius: 8px;
+      background: #FFF8DC;
+      color: #5D4037;
+      cursor: pointer;
+      font-size: 30px;
+      font-weight: 900;
+      box-shadow: 0 5px 0 rgba(93, 64, 55, 0.45);
+      pointer-events: auto;
+    }
+
+    .best {
+      margin-top: 18px;
+      color: inherit;
+      font-size: clamp(26px, 6.5vw, 36px);
+      font-weight: 900;
+    }
+
+    .loading-bar {
+      width: min(72vw, 320px);
+      height: 28px;
+      margin: 24px auto 14px;
+      overflow: hidden;
+      border: 4px solid #5D4037;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.55);
+    }
+
+    .loading-fill {
+      width: 0%;
+      height: 100%;
+      background: repeating-linear-gradient(45deg, #FFC107 0 12px, #FFB300 12px 24px);
+      transition: width 0.12s linear;
+    }
+
+    .loading-text {
+      color: #FFFFFF;
+      font-size: 22px;
+      font-weight: 900;
+      text-shadow: 2px 2px 0 #5D4037;
+    }
+
+    .setting-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin: 18px 0;
+      text-align: left;
+      font-size: clamp(22px, 5.5vw, 32px);
+      font-weight: 900;
+    }
+
+    .setting-row label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: #FFC107;
+    }
+
+    .swatches,
+    .segmented {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    .segmented { grid-template-columns: repeat(3, 1fr); }
+
+    .swatch,
+    .seg {
+      min-height: 48px;
+      border: 3px solid rgba(93, 64, 55, 0.6);
+      border-radius: 8px;
+      cursor: pointer;
+      background: #FFF8DC;
+      color: #5D4037;
+      font-weight: 900;
+    }
+
+    .swatch.active,
+    .seg.active {
+      outline: 4px solid #FFC107;
+      outline-offset: 2px;
+    }
+
+    .toggle {
+      width: 74px;
+      height: 38px;
+      border: 3px solid #5D4037;
+      border-radius: 999px;
+      background: #B0BEC5;
+      cursor: pointer;
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .toggle::before {
+      content: "";
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      transition: transform 0.18s ease;
+    }
+
+    .toggle.active {
+      background: #4CAF50;
+    }
+
+    .toggle.active::before {
+      transform: translateX(34px);
+    }
+
+    .score-list {
+      display: grid;
+      gap: 10px;
+      margin: 0 0 22px;
+      padding: 0;
+      list-style: none;
+      font-size: clamp(24px, 6vw, 36px);
+      font-weight: 900;
+      text-align: left;
+    }
+
+    .score-list li {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 2px dashed rgba(93, 64, 55, 0.35);
+      padding: 6px 2px;
+    }
+
+    .hud-score {
+      position: absolute;
+      top: max(24px, env(safe-area-inset-top));
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--score-text);
+      font-family: "Press Start 2P", monospace;
+      font-size: clamp(38px, 11vw, 72px);
+      line-height: 1;
+      text-shadow: 4px 4px 0 var(--score-shadow);
+      pointer-events: none;
+    }
+
+    .pause-btn {
+      position: absolute;
+      top: max(18px, env(safe-area-inset-top));
+      right: 18px;
+      pointer-events: auto;
+    }
+
+    .gameover-title {
+      color: #FF7043;
+      font-size: clamp(46px, 13vw, 80px);
+      animation: shake 0.05s 6 linear;
+    }
+
+    .result {
+      margin: 18px 0;
+      font-size: clamp(28px, 6.5vw, 48px);
+      font-weight: 900;
+    }
+
+    .result strong {
+      color: #FFC107;
+      font-size: clamp(32px, 7vw, 52px);
+      text-shadow: 2px 2px 0 #5D4037;
+    }
+
+    .new-best {
+      display: none;
+      margin: 8px 0 18px;
+      color: #FF9800;
+      font-size: clamp(22px, 5vw, 32px);
+      font-weight: 900;
+      animation: flashGold 0.3s 4 alternate;
+    }
+
+    .new-best.active { display: block; }
+
+    @keyframes floatBird {
+      from { transform: translateY(-10px); }
+      to { transform: translateY(10px); }
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.05); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes shake {
+      from { transform: translateX(-5px); }
+      to { transform: translateX(5px); }
+    }
+
+    @keyframes flashGold {
+      from { color: #FFD700; }
+      to { color: #FF8C00; }
+    }
+
+    @media (max-height: 580px) {
+      .panel { padding: 14px; }
+      .btn { min-height: 46px; margin: 7px 0; }
+      .bird-logo { width: 88px; height: 62px; margin-bottom: 8px; }
+      .title-box { margin: 8px 0 14px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="game-container" aria-label="Flappy Bird game">
+    <canvas id="gameCanvas" width="400" height="600" aria-label="Game canvas"></canvas>
+
+    <section id="loading-screen" class="screen active">
+      <div>
+        <svg class="bird-logo" viewBox="0 0 118 84" aria-hidden="true">
+          <ellipse cx="54" cy="42" rx="35" ry="26" fill="#FFD700" stroke="#5D4037" stroke-width="5"/>
+          <circle cx="76" cy="30" r="11" fill="#FFF8DC" stroke="#5D4037" stroke-width="4"/>
+          <circle cx="79" cy="30" r="4" fill="#212121"/>
+          <path d="M89 39 L113 48 L89 57 Z" fill="#FF8C00" stroke="#5D4037" stroke-width="4"/>
+          <path d="M28 44 C10 34 12 60 30 56" fill="#FFF8DC" stroke="#5D4037" stroke-width="5"/>
+        </svg>
+        <h1 class="loading-title">FLAPPY BIRD</h1>
+        <div class="loading-bar"><div id="loading-fill" class="loading-fill"></div></div>
+        <div id="loading-text" class="loading-text">Loading... 0%</div>
+      </div>
+    </section>
+
+    <section id="main-menu" class="screen">
+      <div class="icon-row">
+        <button id="open-settings" class="icon-btn" type="button" title="設定">⚙</button>
+        <button id="open-leaderboard" class="icon-btn" type="button" title="排行榜">★</button>
+      </div>
+      <div class="panel">
+        <svg class="bird-logo" viewBox="0 0 118 84" aria-hidden="true">
+          <ellipse cx="54" cy="42" rx="35" ry="26" fill="#FFD700" stroke="#5D4037" stroke-width="5"/>
+          <circle cx="76" cy="30" r="11" fill="#FFF8DC" stroke="#5D4037" stroke-width="4"/>
+          <circle cx="79" cy="30" r="4" fill="#212121"/>
+          <path d="M89 39 L113 48 L89 57 Z" fill="#FF8C00" stroke="#5D4037" stroke-width="4"/>
+          <path d="M28 44 C10 34 12 60 30 56" fill="#FFF8DC" stroke="#5D4037" stroke-width="5"/>
+        </svg>
+        <div class="title-box"><h1>FLAPPY BIRD</h1></div>
+        <button id="start-game" class="btn primary" type="button">▶ 開始遊戲</button>
+        <div class="best">最高分：<span id="menu-best">0</span></div>
+      </div>
+    </section>
+
+    <section id="settings-screen" class="screen">
+      <div class="panel">
+        <h2>設定</h2>
+        <div class="setting-row">
+          <label for="sfx-volume">音效音量 <span id="sfx-volume-label">70%</span></label>
+          <input id="sfx-volume" type="range" min="0" max="100" value="70">
+        </div>
+        <div class="setting-row">
+          <label for="bgm-volume">背景音樂 <span id="bgm-volume-label">50%</span></label>
+          <input id="bgm-volume" type="range" min="0" max="100" value="50">
+        </div>
+        <div class="setting-row">
+          <div>小鳥顏色</div>
+          <div id="bird-swatches" class="swatches"></div>
+        </div>
+        <div class="setting-row">
+          <div>難度</div>
+          <div class="segmented">
+            <button class="seg" type="button" data-difficulty="easy">簡單</button>
+            <button class="seg" type="button" data-difficulty="normal">普通</button>
+            <button class="seg" type="button" data-difficulty="hard">困難</button>
+          </div>
+        </div>
+        <div class="setting-row">
+          <label>夜間模式 <button id="dark-toggle" class="toggle" type="button" aria-label="夜間模式"></button></label>
+          <label>震動回饋 <button id="vibration-toggle" class="toggle" type="button" aria-label="震動回饋"></button></label>
+        </div>
+        <button id="settings-back" class="btn small" type="button">返回</button>
+      </div>
+    </section>
+
+    <section id="leaderboard-screen" class="screen">
+      <div class="panel">
+        <h2>★ 排行榜</h2>
+        <ol id="score-list" class="score-list"></ol>
+        <button id="clear-scores" class="btn small" type="button">清除紀錄</button>
+        <button id="leaderboard-back" class="btn small" type="button">返回</button>
+      </div>
+    </section>
+
+    <section id="game-ui" class="screen">
+      <div id="hud-score" class="hud-score">0</div>
+      <button id="pause-game" class="icon-btn pause-btn" type="button" title="暫停">Ⅱ</button>
+    </section>
+
+    <section id="gameover-screen" class="screen">
+      <div class="panel">
+        <h2 class="gameover-title">GAME OVER</h2>
+        <div class="result">本次分數：<strong id="final-score">0</strong></div>
+        <div class="result">最高分：<strong id="best-score">0</strong></div>
+        <div id="new-best" class="new-best">新的最高分！</div>
+        <button id="restart-game" class="btn" type="button">↻ 重玩</button>
+        <button id="gameover-menu" class="btn small" type="button">主選單</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const canvas = document.getElementById('gameCanvas');
+      const ctx = canvas.getContext('2d');
+      const screens = {
+        loading: document.getElementById('loading-screen'),
+        menu: document.getElementById('main-menu'),
+        settings: document.getElementById('settings-screen'),
+        leaderboard: document.getElementById('leaderboard-screen'),
+        ui: document.getElementById('game-ui'),
+        gameover: document.getElementById('gameover-screen')
+      };
+
+      const birdPalettes = {
+        yellow: ['#FFD700', '#FFF8DC', '#FF8C00'],
+        red: ['#FF4444', '#FFE0E0', '#CC0000'],
+        blue: ['#4488FF', '#E0EEFF', '#0044CC'],
+        green: ['#44CC44', '#E0FFE0', '#006600'],
+        purple: ['#AA44FF', '#EEE0FF', '#660099']
+      };
+
+      const difficultyMap = {
+        easy: { gap: 160, speed: 2, gravity: 0.28, spawn: 118 },
+        normal: { gap: 130, speed: 3, gravity: 0.35, spawn: 104 },
+        hard: { gap: 100, speed: 4, gravity: 0.42, spawn: 90 }
+      };
+
+      class StorageManager {
+        constructor() {
+          this.defaults = {
+            sfxVolume: 0.7,
+            bgmVolume: 0.5,
+            birdColor: 'yellow',
+            difficulty: 'normal',
+            darkMode: false,
+            vibration: true
+          };
+        }
+
+        save(key, value) {
+          try { localStorage.setItem(key, JSON.stringify(value)); } catch (_) {}
+        }
+
+        load(key, defaultValue) {
+          try {
+            const raw = localStorage.getItem(key);
+            return raw === null ? defaultValue : JSON.parse(raw);
+          } catch (_) {
+            return defaultValue;
+          }
+        }
+
+        getSettings() {
+          return { ...this.defaults, ...this.load('flappybird_settings', {}) };
+        }
+
+        saveSettings(settings) {
+          this.save('flappybird_settings', settings);
+        }
+
+        getScores() {
+          return this.load('flappybird_scores', []).filter(Number.isFinite).slice(0, 10);
+        }
+
+        getBestScore() {
+          return Number(this.load('flappybird_best', 0)) || 0;
+        }
+
+        addScore(score) {
+          const scores = this.getScores().concat(score).sort((a, b) => b - a).slice(0, 10);
+          this.save('flappybird_scores', scores);
+          this.save('flappybird_best', Math.max(this.getBestScore(), score));
+          return scores;
+        }
+
+        clearScores() {
+          this.save('flappybird_scores', []);
+          this.save('flappybird_best', 0);
+        }
+      }
+
+      class AudioEngine {
+        constructor(settings) {
+          this.settings = settings;
+          this.ctx = null;
+          this.master = null;
+          this.bgmGain = null;
+          this.sfxGain = null;
+          this.bgmTimer = null;
+          this.noteIndex = 0;
+          this.notes = [523, 587, 659, 698, 784, 880, 988, 1047];
+        }
+
+        init() {
+          if (this.ctx) return;
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContext) return;
+          this.ctx = new AudioContext();
+          this.master = this.ctx.createGain();
+          this.bgmGain = this.ctx.createGain();
+          this.sfxGain = this.ctx.createGain();
+          this.bgmGain.gain.value = this.settings.bgmVolume;
+          this.sfxGain.gain.value = this.settings.sfxVolume;
+          this.bgmGain.connect(this.master);
+          this.sfxGain.connect(this.master);
+          this.master.connect(this.ctx.destination);
+        }
+
+        resume() {
+          this.init();
+          if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+        }
+
+        setBGMVolume(value) {
+          this.settings.bgmVolume = value;
+          if (this.bgmGain) this.bgmGain.gain.value = value;
+        }
+
+        setSFXVolume(value) {
+          this.settings.sfxVolume = value;
+          if (this.sfxGain) this.sfxGain.gain.value = value;
+        }
+
+        tone(freq, duration, type = 'sine', gain = 0.2, target = this.sfxGain, when = 0) {
+          if (!this.ctx || !target) return;
+          const start = this.ctx.currentTime + when;
+          const osc = this.ctx.createOscillator();
+          const amp = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, start);
+          amp.gain.setValueAtTime(0.0001, start);
+          amp.gain.exponentialRampToValueAtTime(Math.max(0.0001, gain), start + 0.015);
+          amp.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+          osc.connect(amp);
+          amp.connect(target);
+          osc.start(start);
+          osc.stop(start + duration + 0.03);
+        }
+
+        noise(duration, gain = 0.25) {
+          if (!this.ctx || !this.sfxGain) return;
+          const length = Math.floor(this.ctx.sampleRate * duration);
+          const buffer = this.ctx.createBuffer(1, length, this.ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < length; i += 1) data[i] = Math.random() * 2 - 1;
+          const source = this.ctx.createBufferSource();
+          const amp = this.ctx.createGain();
+          amp.gain.value = gain;
+          source.buffer = buffer;
+          source.connect(amp);
+          amp.connect(this.sfxGain);
+          source.start();
+        }
+
+        playBGM() {
+          this.resume();
+          if (!this.ctx || this.bgmTimer) return;
+          this.bgmTimer = setInterval(() => {
+            const note = this.notes[this.noteIndex % this.notes.length];
+            this.tone(note, 0.18, 'square', 0.08, this.bgmGain);
+            this.noteIndex += (this.noteIndex % 7 === 0) ? 2 : 1;
+          }, 500);
+        }
+
+        stopBGM() {
+          if (this.bgmTimer) clearInterval(this.bgmTimer);
+          this.bgmTimer = null;
+        }
+
+        playSFX(id) {
+          this.resume();
+          if (!this.ctx) return;
+          if (id === 'flap') this.tone(880, 0.08, 'sine', 0.25);
+          if (id === 'score') {
+            this.tone(800, 0.07, 'square', 0.2);
+            this.tone(1200, 0.08, 'square', 0.16, this.sfxGain, 0.06);
+          }
+          if (id === 'milestone') [523, 659, 784].forEach((n, i) => this.tone(n, 0.1, 'square', 0.2, this.sfxGain, i * 0.08));
+          if (id === 'hit') {
+            this.noise(0.18, 0.22);
+            this.tone(220, 0.3, 'sawtooth', 0.18);
+          }
+          if (id === 'die') {
+            [440, 330, 220, 110].forEach((n, i) => this.tone(n, 0.15, 'triangle', 0.18, this.sfxGain, i * 0.1));
+          }
+          if (id === 'highscore') [660, 880, 990, 1320].forEach((n, i) => this.tone(n, 0.12, 'square', 0.2, this.sfxGain, i * 0.08));
+          if (id === 'button') this.tone(600, 0.05, 'sine', 0.18);
+          if (id === 'swoosh') this.tone(330, 0.18, 'triangle', 0.12);
+        }
+      }
+
+      class SceneManager {
+        show(ids) {
+          Object.values(screens).forEach(screen => screen.classList.remove('active'));
+          ids.forEach(id => screens[id].classList.add('active'));
+        }
+      }
+
+      class GameEngine {
+        constructor(storage, audio, scene) {
+          this.storage = storage;
+          this.audio = audio;
+          this.scene = scene;
+          this.state = 'IDLE';
+          this.score = 0;
+          this.bestBeforeRun = 0;
+          this.pipes = [];
+          this.clouds = [];
+          this.groundOffset = 0;
+          this.spawnTimer = 0;
+          this.shake = 0;
+          this.flash = 0;
+          this.frame = 0;
+          this.bird = { x: 100, y: 300, vy: 0, radiusX: 17, radiusY: 12, flapFrame: 0 };
+          this.initBackground();
+        }
+
+        get settings() { return this.storage.getSettings(); }
+        get config() { return difficultyMap[this.settings.difficulty] || difficultyMap.normal; }
+
+        initBackground() {
+          this.clouds = Array.from({ length: 5 }, (_, i) => ({
+            x: i * 95 + Math.random() * 40,
+            y: 55 + Math.random() * 190,
+            scale: 0.7 + Math.random() * 0.55
+          }));
+        }
+
+        reset() {
+          this.score = 0;
+          this.pipes = [];
+          this.spawnTimer = 35;
+          this.shake = 0;
+          this.flash = 0;
+          this.frame = 0;
+          this.bestBeforeRun = this.storage.getBestScore();
+          this.bird = { x: canvas.width * 0.25, y: canvas.height * 0.48, vy: 0, radiusX: 17, radiusY: 12, flapFrame: 0 };
+          this.updateHUD();
+        }
+
+        start() {
+          this.reset();
+          this.state = 'PLAYING';
+          this.scene.show(['ui']);
+          this.audio.playBGM();
+        }
+
+        pause() {
+          if (this.state !== 'PLAYING') return;
+          this.state = 'PAUSED';
+          this.audio.stopBGM();
+          document.getElementById('pause-game').textContent = '▶';
+        }
+
+        resume() {
+          if (this.state !== 'PAUSED') return;
+          this.state = 'PLAYING';
+          this.audio.playBGM();
+          document.getElementById('pause-game').textContent = 'Ⅱ';
+        }
+
+        jump() {
+          if (this.state === 'PLAYING') {
+            this.bird.vy = -7;
+            this.bird.flapFrame = 0;
+            this.audio.playSFX('flap');
+          } else if (this.state === 'PAUSED') {
+            this.resume();
+          }
+        }
+
+        spawnPipe() {
+          const gap = this.config.gap;
+          const min = canvas.height * 0.2;
+          const max = canvas.height * 0.76;
+          this.pipes.push({
+            x: canvas.width + 56,
+            gapY: min + Math.random() * (max - min),
+            gapSize: gap,
+            width: 52,
+            passed: false
+          });
+        }
+
+        update(delta) {
+          this.frame += delta;
+          if (this.state !== 'PLAYING') {
+            this.render();
+            return;
+          }
+
+          const levelBonus = Math.floor(this.score / 10) * 0.3;
+          const speed = this.config.speed + levelBonus;
+          this.bird.vy += this.config.gravity * delta;
+          this.bird.vy = Math.min(this.bird.vy, 8);
+          this.bird.y += this.bird.vy * delta;
+          this.bird.flapFrame = (this.bird.flapFrame + delta * 0.18) % 3;
+          this.groundOffset = (this.groundOffset + speed * delta) % 40;
+
+          this.clouds.forEach(cloud => {
+            cloud.x -= 0.5 * delta;
+            if (cloud.x < -80) {
+              cloud.x = canvas.width + Math.random() * 80;
+              cloud.y = 55 + Math.random() * 190;
+            }
+          });
+
+          this.spawnTimer -= delta;
+          if (this.spawnTimer <= 0) {
+            this.spawnPipe();
+            this.spawnTimer = this.config.spawn;
+          }
+
+          this.pipes.forEach(pipe => {
+            pipe.x -= speed * delta;
+            if (!pipe.passed && pipe.x + pipe.width < this.bird.x) {
+              pipe.passed = true;
+              this.score += 1;
+              this.updateHUD();
+              this.audio.playSFX(this.score % 10 === 0 ? 'milestone' : 'score');
+            }
+          });
+          this.pipes = this.pipes.filter(pipe => pipe.x + pipe.width > -20);
+
+          if (this.collides()) this.gameOver();
+          if (this.shake > 0) this.shake -= delta;
+          if (this.flash > 0) this.flash -= delta;
+          this.render();
+        }
+
+        collides() {
+          const groundY = canvas.height - 78;
+          if (this.bird.y - this.bird.radiusY < 0 || this.bird.y + this.bird.radiusY > groundY) return true;
+          const pad = 4;
+          const bx1 = this.bird.x - this.bird.radiusX + pad;
+          const bx2 = this.bird.x + this.bird.radiusX - pad;
+          const by1 = this.bird.y - this.bird.radiusY + pad;
+          const by2 = this.bird.y + this.bird.radiusY - pad;
+          return this.pipes.some(pipe => {
+            const px1 = pipe.x;
+            const px2 = pipe.x + pipe.width;
+            const topBottom = pipe.gapY - pipe.gapSize / 2;
+            const bottomTop = pipe.gapY + pipe.gapSize / 2;
+            const horizontal = bx2 > px1 && bx1 < px2;
+            return horizontal && (by1 < topBottom || by2 > bottomTop);
+          });
+        }
+
+        gameOver() {
+          this.state = 'GAMEOVER';
+          this.shake = 18;
+          this.flash = 10;
+          this.audio.stopBGM();
+          this.audio.playSFX('hit');
+          setTimeout(() => this.audio.playSFX('die'), 130);
+          if (this.settings.vibration && navigator.vibrate) navigator.vibrate(200);
+          this.storage.addScore(this.score);
+          const newBest = this.score > this.bestBeforeRun;
+          if (newBest) this.audio.playSFX('highscore');
+          document.getElementById('final-score').textContent = this.score;
+          document.getElementById('best-score').textContent = this.storage.getBestScore();
+          document.getElementById('new-best').classList.toggle('active', newBest);
+          setTimeout(() => this.scene.show(['gameover']), 360);
+          renderMenuData();
+          renderScores();
+        }
+
+        updateHUD() {
+          document.getElementById('hud-score').textContent = this.score;
+        }
+
+        render() {
+          ctx.save();
+          if (this.shake > 0) ctx.translate((Math.random() - 0.5) * 10, (Math.random() - 0.5) * 10);
+          this.drawBackground();
+          this.drawPipes();
+          this.drawGround();
+          this.drawBird();
+          if (this.state === 'PAUSED') this.drawPaused();
+          if (this.flash > 0) {
+            ctx.fillStyle = `rgba(255,255,255,${Math.min(0.8, this.flash / 10)})`;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+          }
+          ctx.restore();
+        }
+
+        drawBackground() {
+          const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+          gradient.addColorStop(0, getCss('--sky-top'));
+          gradient.addColorStop(1, getCss('--sky-bottom'));
+          ctx.fillStyle = gradient;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = document.body.classList.contains('dark') ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.82)';
+          this.clouds.forEach(cloud => {
+            ctx.save();
+            ctx.translate(cloud.x, cloud.y);
+            ctx.scale(cloud.scale, cloud.scale);
+            ctx.beginPath();
+            ctx.arc(0, 12, 20, 0, Math.PI * 2);
+            ctx.arc(22, 2, 26, 0, Math.PI * 2);
+            ctx.arc(50, 13, 18, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+          });
+        }
+
+        drawPipes() {
+          this.pipes.forEach(pipe => {
+            const topBottom = pipe.gapY - pipe.gapSize / 2;
+            const bottomTop = pipe.gapY + pipe.gapSize / 2;
+            this.drawPipe(pipe.x, 0, pipe.width, topBottom, true);
+            this.drawPipe(pipe.x, bottomTop, pipe.width, canvas.height - 78 - bottomTop, false);
+          });
+        }
+
+        drawPipe(x, y, w, h, flip) {
+          if (h <= 0) return;
+          ctx.fillStyle = getCss('--pipe-green');
+          ctx.fillRect(x, y, w, h);
+          ctx.fillStyle = getCss('--pipe-light');
+          ctx.fillRect(x + 8, y, 10, h);
+          ctx.fillStyle = getCss('--pipe-dark');
+          ctx.fillRect(x + w - 12, y, 12, h);
+          const capY = flip ? y + h - 24 : y;
+          ctx.fillStyle = getCss('--pipe-green');
+          ctx.fillRect(x - 8, capY, w + 16, 24);
+          ctx.strokeStyle = '#2E7D32';
+          ctx.lineWidth = 4;
+          ctx.strokeRect(x, y, w, h);
+          ctx.strokeRect(x - 8, capY, w + 16, 24);
+        }
+
+        drawGround() {
+          const y = canvas.height - 78;
+          ctx.fillStyle = getCss('--ground');
+          ctx.fillRect(0, y, canvas.width, 78);
+          ctx.fillStyle = getCss('--ground-dark');
+          for (let x = -40 - this.groundOffset; x < canvas.width + 40; x += 40) {
+            ctx.fillRect(x, y + 16, 22, 8);
+            ctx.fillRect(x + 18, y + 42, 30, 8);
+          }
+          ctx.fillStyle = '#7CB342';
+          ctx.fillRect(0, y, canvas.width, 12);
+        }
+
+        drawBird() {
+          const colors = birdPalettes[this.settings.birdColor] || birdPalettes.yellow;
+          const angle = Math.max(-0.52, Math.min(0.52, this.bird.vy * 0.06));
+          ctx.save();
+          ctx.translate(this.bird.x, this.bird.y);
+          ctx.rotate(angle);
+          ctx.fillStyle = colors[0];
+          ctx.strokeStyle = '#5D4037';
+          ctx.lineWidth = 4;
+          ctx.beginPath();
+          ctx.ellipse(0, 0, 17, 12, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          const wingY = [-6, 0, 5][Math.floor(this.bird.flapFrame)];
+          ctx.fillStyle = colors[1];
+          ctx.beginPath();
+          ctx.ellipse(-7, wingY, 10, 6, -0.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.fillStyle = '#FFFFFF';
+          ctx.beginPath();
+          ctx.arc(9, -6, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.fillStyle = '#212121';
+          ctx.beginPath();
+          ctx.arc(11, -6, 2, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = colors[2];
+          ctx.beginPath();
+          ctx.moveTo(16, -1);
+          ctx.lineTo(31, 4);
+          ctx.lineTo(16, 9);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        drawPaused() {
+          ctx.fillStyle = 'rgba(0,0,0,0.35)';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.fillStyle = '#FFFFFF';
+          ctx.strokeStyle = '#5D4037';
+          ctx.lineWidth = 5;
+          ctx.font = '900 48px Nunito, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.strokeText('PAUSED', canvas.width / 2, canvas.height / 2);
+          ctx.fillText('PAUSED', canvas.width / 2, canvas.height / 2);
+        }
+      }
+
+      const storage = new StorageManager();
+      const audio = new AudioEngine(storage.getSettings());
+      const scene = new SceneManager();
+      const game = new GameEngine(storage, audio, scene);
+      let lastTime = 0;
+
+      function getCss(name) {
+        return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+      }
+
+      function resizeCanvas() {
+        const ratio = 2 / 3;
+        const windowRatio = window.innerWidth / window.innerHeight;
+        let cssW;
+        let cssH;
+        if (windowRatio < ratio) {
+          cssW = window.innerWidth;
+          cssH = window.innerWidth / ratio;
+        } else {
+          cssH = window.innerHeight;
+          cssW = window.innerHeight * ratio;
+        }
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.style.width = `${cssW}px`;
+        canvas.style.height = `${cssH}px`;
+        canvas.width = Math.floor(cssW * dpr);
+        canvas.height = Math.floor(cssH * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        canvas.width = 400;
+        canvas.height = 600;
+        game.bird.x = canvas.width * 0.25;
+        game.render();
+      }
+
+      function renderMenuData() {
+        document.getElementById('menu-best').textContent = storage.getBestScore();
+      }
+
+      function renderScores() {
+        const list = document.getElementById('score-list');
+        const scores = storage.getScores();
+        list.innerHTML = '';
+        const medals = ['🥇', '🥈', '🥉'];
+        const rows = scores.length ? scores : [0, 0, 0, 0, 0];
+        rows.slice(0, 10).forEach((score, i) => {
+          const li = document.createElement('li');
+          li.innerHTML = `<span>#${i + 1} ${medals[i] || ''}</span><span>${score}</span>`;
+          list.appendChild(li);
+        });
+      }
+
+      function applySettings() {
+        const settings = storage.getSettings();
+        document.body.classList.toggle('dark', settings.darkMode);
+        document.getElementById('sfx-volume').value = Math.round(settings.sfxVolume * 100);
+        document.getElementById('bgm-volume').value = Math.round(settings.bgmVolume * 100);
+        document.getElementById('sfx-volume-label').textContent = `${Math.round(settings.sfxVolume * 100)}%`;
+        document.getElementById('bgm-volume-label').textContent = `${Math.round(settings.bgmVolume * 100)}%`;
+        document.getElementById('dark-toggle').classList.toggle('active', settings.darkMode);
+        document.getElementById('vibration-toggle').classList.toggle('active', settings.vibration);
+        document.querySelectorAll('.seg').forEach(btn => btn.classList.toggle('active', btn.dataset.difficulty === settings.difficulty));
+        document.querySelectorAll('.swatch').forEach(btn => btn.classList.toggle('active', btn.dataset.color === settings.birdColor));
+        audio.setBGMVolume(settings.bgmVolume);
+        audio.setSFXVolume(settings.sfxVolume);
+        game.render();
+      }
+
+      function updateSetting(key, value) {
+        const settings = storage.getSettings();
+        settings[key] = value;
+        storage.saveSettings(settings);
+        applySettings();
+      }
+
+      function bindUI() {
+        document.getElementById('start-game').addEventListener('click', () => {
+          audio.playSFX('button');
+          game.start();
+        });
+        document.getElementById('restart-game').addEventListener('click', () => {
+          audio.playSFX('button');
+          game.start();
+        });
+        document.getElementById('gameover-menu').addEventListener('click', () => {
+          audio.playSFX('swoosh');
+          scene.show(['menu']);
+          game.state = 'IDLE';
+          game.render();
+        });
+        document.getElementById('open-settings').addEventListener('click', () => {
+          audio.playSFX('button');
+          scene.show(['settings']);
+        });
+        document.getElementById('open-leaderboard').addEventListener('click', () => {
+          audio.playSFX('button');
+          renderScores();
+          scene.show(['leaderboard']);
+        });
+        document.getElementById('settings-back').addEventListener('click', () => {
+          audio.playSFX('swoosh');
+          scene.show(['menu']);
+        });
+        document.getElementById('leaderboard-back').addEventListener('click', () => {
+          audio.playSFX('swoosh');
+          scene.show(['menu']);
+        });
+        document.getElementById('clear-scores').addEventListener('click', () => {
+          audio.playSFX('button');
+          storage.clearScores();
+          renderScores();
+          renderMenuData();
+        });
+        document.getElementById('pause-game').addEventListener('click', event => {
+          event.stopPropagation();
+          if (game.state === 'PLAYING') game.pause();
+          else if (game.state === 'PAUSED') game.resume();
+        });
+
+        document.getElementById('sfx-volume').addEventListener('input', event => updateSetting('sfxVolume', Number(event.target.value) / 100));
+        document.getElementById('bgm-volume').addEventListener('input', event => updateSetting('bgmVolume', Number(event.target.value) / 100));
+        document.getElementById('dark-toggle').addEventListener('click', () => updateSetting('darkMode', !storage.getSettings().darkMode));
+        document.getElementById('vibration-toggle').addEventListener('click', () => updateSetting('vibration', !storage.getSettings().vibration));
+        document.querySelectorAll('.seg').forEach(btn => btn.addEventListener('click', () => updateSetting('difficulty', btn.dataset.difficulty)));
+
+        const swatches = document.getElementById('bird-swatches');
+        Object.entries(birdPalettes).forEach(([name, colors]) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'swatch';
+          btn.dataset.color = name;
+          btn.title = name;
+          btn.style.background = `linear-gradient(135deg, ${colors[0]} 0 50%, ${colors[2]} 50% 100%)`;
+          btn.addEventListener('click', () => updateSetting('birdColor', name));
+          swatches.appendChild(btn);
+        });
+
+        window.addEventListener('keydown', event => {
+          if (event.code === 'Space' || event.code === 'ArrowUp') {
+            event.preventDefault();
+            game.jump();
+          }
+          if (event.code === 'KeyP' || event.code === 'Escape') {
+            if (game.state === 'PLAYING') game.pause();
+            else if (game.state === 'PAUSED') game.resume();
+          }
+        });
+        canvas.addEventListener('pointerdown', event => {
+          event.preventDefault();
+          game.jump();
+        });
+        document.addEventListener('touchmove', event => event.preventDefault(), { passive: false });
+        document.addEventListener('touchstart', () => audio.resume(), { once: true, passive: true });
+      }
+
+      function gameLoop(timestamp) {
+        const delta = Math.min(2.5, (timestamp - lastTime) / 16.67 || 1);
+        lastTime = timestamp;
+        game.update(delta);
+        requestAnimationFrame(gameLoop);
+      }
+
+      function fakeLoading() {
+        let progress = 0;
+        const fill = document.getElementById('loading-fill');
+        const text = document.getElementById('loading-text');
+        const timer = setInterval(() => {
+          progress = Math.min(100, progress + 8 + Math.random() * 14);
+          fill.style.width = `${progress}%`;
+          text.textContent = `Loading... ${Math.floor(progress)}%`;
+          if (progress >= 100) {
+            clearInterval(timer);
+            setTimeout(() => {
+              scene.show(['menu']);
+              audio.playSFX('swoosh');
+            }, 250);
+          }
+        }, 110);
+      }
+
+      bindUI();
+      renderMenuData();
+      renderScores();
+      applySettings();
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+      requestAnimationFrame(gameLoop);
+      fakeLoading();
+    })();
+  </script>
+</body>
+</html>
