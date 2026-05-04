@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MonkeyFortress TD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section id="menu" class="screen menu-screen">
+        <div class="menu-bg" aria-hidden="true"></div>
+        <div class="menu-content">
+          <h1>MonkeyFortress TD</h1>
+          <div class="menu-actions">
+            <button id="newGameBtn" class="primary-btn">開始遊戲</button>
+            <button id="mapBtn" class="secondary-btn">選擇地圖</button>
+            <button id="settingsBtn" class="secondary-btn">遊戲設定</button>
+            <button id="helpBtn" class="secondary-btn">玩法說明</button>
+          </div>
+          <p class="menu-meta">v1.0.0 · 2026</p>
+        </div>
+      </section>
+
+      <section id="game" class="screen game-screen hidden">
+        <header class="hud">
+          <div class="stat"><span>生命</span><strong id="livesText">20</strong></div>
+          <div class="stat"><span>金幣</span><strong id="goldText">150</strong></div>
+          <div class="stat"><span>分數</span><strong id="scoreText">0</strong></div>
+          <div class="stat"><span>波次</span><strong id="waveText">1/10</strong></div>
+          <div class="hud-actions">
+            <button id="pauseBtn" title="暫停">⏸</button>
+            <button id="speedBtn" title="速度">1x</button>
+            <button id="muteBtn" title="靜音">🔊</button>
+            <button id="homeBtn" title="主選單">⌂</button>
+          </div>
+        </header>
+
+        <div class="play-layout">
+          <div class="canvas-wrap">
+            <canvas id="gameCanvas" width="960" height="640" aria-label="MonkeyFortress TD game board"></canvas>
+            <div id="toast" class="toast hidden"></div>
+          </div>
+
+          <aside class="side-panel">
+            <section>
+              <h2>猴子塔</h2>
+              <div id="towerList" class="tower-list"></div>
+              <button id="startWaveBtn" class="primary-btn full">開始波次</button>
+            </section>
+
+            <section id="selectionPanel" class="selection-panel">
+              <h2>選取資訊</h2>
+              <div id="selectionContent" class="selection-empty">點選猴塔查看升級，或選塔後在草地建造。</div>
+            </section>
+          </aside>
+        </div>
+      </section>
+
+      <dialog id="modal" class="modal">
+        <div class="modal-body">
+          <h2 id="modalTitle">遊戲設定</h2>
+          <div id="modalContent"></div>
+          <div class="modal-actions">
+            <button id="modalCloseBtn" class="primary-btn">關閉</button>
+          </div>
+        </div>
+      </dialog>
+    </main>
+
+    <script src="js/main.js" defer></script>
+  </body>
+</html>
