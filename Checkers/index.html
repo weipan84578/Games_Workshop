@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1a0e00">
+  <title>跳棋 Checkers Master</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section id="screen-menu" class="screen active" aria-labelledby="menu-title">
+      <div class="topbar">
+        <button id="menu-audio" class="icon-button" type="button" aria-label="切換音效">🔊</button>
+        <button class="icon-button" type="button" data-screen="settings" aria-label="設定">⚙</button>
+      </div>
+      <div class="menu-center">
+        <h1 id="menu-title" class="game-title">跳 棋</h1>
+        <p class="subtitle">CHECKERS MASTER</p>
+        <div class="mini-board" aria-hidden="true"></div>
+        <div class="menu-actions">
+          <button id="start-game" class="button primary" type="button">▶ 開始遊戲</button>
+          <button id="show-rules" class="button secondary" type="button">？ 遊戲說明</button>
+          <button class="button secondary" type="button" data-screen="settings">⚙ 遊戲設定</button>
+          <button id="show-stats" class="button secondary" type="button">📊 歷史戰績</button>
+        </div>
+        <p id="menu-stats" class="stats-line"></p>
+      </div>
+    </section>
+
+    <section id="screen-settings" class="screen" aria-labelledby="settings-title">
+      <div class="page-panel">
+        <button class="text-button" type="button" data-screen="menu">← 返回主畫面</button>
+        <h2 id="settings-title">遊戲設定</h2>
+
+        <div class="setting-group">
+          <h3>難度選擇</h3>
+          <div class="segmented" role="radiogroup" aria-label="難度選擇">
+            <button type="button" data-setting="difficulty" data-value="easy">簡單</button>
+            <button type="button" data-setting="difficulty" data-value="medium">普通</button>
+            <button type="button" data-setting="difficulty" data-value="hard">困難</button>
+          </div>
+          <p id="difficulty-note" class="hint"></p>
+        </div>
+
+        <div class="setting-group">
+          <h3>棋子顏色</h3>
+          <div class="segmented two" role="radiogroup" aria-label="棋子顏色">
+            <button type="button" data-setting="playerColor" data-value="red">🔴 紅色</button>
+            <button type="button" data-setting="playerColor" data-value="black">⚫ 黑色</button>
+          </div>
+        </div>
+
+        <div class="setting-group">
+          <h3>棋盤主題</h3>
+          <div class="segmented" role="radiogroup" aria-label="棋盤主題">
+            <button type="button" data-setting="theme" data-value="classic">經典</button>
+            <button type="button" data-setting="theme" data-value="wood">深林</button>
+            <button type="button" data-setting="theme" data-value="neon">霓虹</button>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <label><input id="music-enabled" type="checkbox"> 背景音樂</label>
+          <input id="music-volume" type="range" min="0" max="1" step="0.01" aria-label="背景音樂音量">
+        </div>
+        <div class="setting-row">
+          <label><input id="sfx-enabled" type="checkbox"> 音效</label>
+          <input id="sfx-volume" type="range" min="0" max="1" step="0.01" aria-label="音效音量">
+        </div>
+
+        <button id="confirm-start" class="button primary wide" type="button">確認並開始遊戲</button>
+      </div>
+    </section>
+
+    <section id="screen-game" class="screen" aria-labelledby="game-heading">
+      <header class="game-header">
+        <button class="text-button" type="button" data-action="leave-game">← 返回</button>
+        <h2 id="game-heading">跳棋</h2>
+        <div class="header-actions">
+          <button class="icon-button" type="button" data-action="rules" aria-label="遊戲說明">?</button>
+          <button class="icon-button" type="button" data-action="pause" aria-label="暫停">⏸</button>
+          <button id="game-audio" class="icon-button" type="button" aria-label="切換音效">🔊</button>
+        </div>
+      </header>
+
+      <div class="game-layout">
+        <aside class="player-card ai-card">
+          <h3>🤖 電腦</h3>
+          <p id="ai-piece-label">⚫ 棋子</p>
+          <p>吃子數: <strong id="ai-captures">0</strong></p>
+          <p id="ai-status" class="turn-pill">等待中</p>
+        </aside>
+
+        <div class="board-wrap">
+          <div id="board" class="board" role="grid" aria-label="跳棋棋盤"></div>
+        </div>
+
+        <aside class="player-card human-card">
+          <h3>👤 玩家</h3>
+          <p id="player-piece-label">🔴 棋子</p>
+          <p>吃子數: <strong id="player-captures">0</strong></p>
+          <p id="player-status" class="turn-pill active">你的回合</p>
+        </aside>
+      </div>
+      <div id="status-message" class="status-message" aria-live="polite" aria-atomic="true">你的回合，請選擇棋子。</div>
+    </section>
+
+    <section id="screen-gameover" class="screen" aria-labelledby="gameover-title">
+      <div id="particles" class="particles" aria-hidden="true"></div>
+      <div class="page-panel gameover-panel">
+        <h2 id="gameover-title">本局結束</h2>
+        <div class="game-stats">
+          <p>回合數：<strong id="final-turns">0</strong></p>
+          <p>吃子數：<strong id="final-captures">0</strong></p>
+          <p>遊戲時間：<strong id="final-time">00:00</strong></p>
+          <p>剩餘棋子：<strong id="final-remaining">0</strong></p>
+        </div>
+        <button id="play-again" class="button primary wide" type="button">↺ 再玩一次</button>
+        <button class="button secondary wide" type="button" data-screen="menu">🏠 回主畫面</button>
+      </div>
+    </section>
+  </main>
+
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <h2 id="modal-title"></h2>
+      <div id="modal-body"></div>
+      <div id="modal-actions" class="modal-actions"></div>
+    </div>
+  </div>
+
+  <script src="storage.js"></script>
+  <script src="game.js"></script>
+  <script src="ai.js"></script>
+  <script src="audio.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
