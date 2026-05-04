@@ -31,7 +31,7 @@ const els = {
 };
 
 const TILE_CHARS = new Set(["#", ">", "<", "^", "v", "S", "E", "2"]);
-const BLOCKED_CHARS = new Set(["X", "W", "R", "T", "B", "L", "C", "A", "G", "F", "H"]);
+const BLOCKED_CHARS = new Set(["X", "W", "R", "T", "B", "L", "C", "A", "G", "F", "H", "P", "Q", "N", "O", "M"]);
 const UPGRADE_COSTS = {
   A: [120, 200, 450],
   B: [100, 180, 400],
@@ -642,6 +642,296 @@ const MAPS = [
   },
 ];
 
+function buildGrid(width, height, paths, obstacles = []) {
+  const grid = Array.from({ length: height }, () => Array.from({ length: width }, () => "."));
+  obstacles.forEach(({ x, y, char }) => {
+    if (grid[y]?.[x] === ".") grid[y][x] = char;
+  });
+  paths.forEach((path) => {
+    const cells = expandWaypoints(path.waypoints);
+    cells.forEach((cell, index) => {
+      if (!grid[cell.y]?.[cell.x]) return;
+      if (index === 0) grid[cell.y][cell.x] = "S";
+      else if (index === cells.length - 1) grid[cell.y][cell.x] = "E";
+      else {
+        const next = cells[index + 1];
+        const prev = cells[index - 1];
+        const dx = next ? Math.sign(next.x - cell.x) : Math.sign(cell.x - prev.x);
+        const dy = next ? Math.sign(next.y - cell.y) : Math.sign(cell.y - prev.y);
+        grid[cell.y][cell.x] = dx > 0 ? ">" : dx < 0 ? "<" : dy > 0 ? "v" : "^";
+      }
+    });
+  });
+  return grid.map((row) => row.join(""));
+}
+
+function makeExpansionMap(config) {
+  return {
+    ...config,
+    grid: buildGrid(config.gridWidth, config.gridHeight, config.paths, config.obstacles),
+  };
+}
+
+const EXPANSION_MAPS = [
+  makeExpansionMap({
+    id: "map11",
+    name: "毒沼廢土",
+    nameEn: "Toxic Wasteland",
+    theme: "toxic",
+    difficulty: 11,
+    gridWidth: 20,
+    gridHeight: 15,
+    startGold: 115,
+    startLives: 12,
+    waveCount: 32,
+    paths: [
+      { id: "upper", waypoints: [{ x: 0, y: 1 }, { x: 4, y: 1 }, { x: 4, y: 4 }, { x: 12, y: 4 }, { x: 12, y: 7 }, { x: 19, y: 7 }] },
+      { id: "middle", waypoints: [{ x: 0, y: 7 }, { x: 19, y: 7 }] },
+      { id: "lower", waypoints: [{ x: 0, y: 13 }, { x: 4, y: 13 }, { x: 4, y: 10 }, { x: 12, y: 10 }, { x: 12, y: 7 }, { x: 19, y: 7 }] },
+    ],
+    obstacles: [
+      { x: 6, y: 0, char: "P" }, { x: 7, y: 0, char: "P" }, { x: 12, y: 0, char: "P" }, { x: 13, y: 0, char: "P" },
+      { x: 2, y: 3, char: "P" }, { x: 3, y: 3, char: "P" }, { x: 14, y: 3, char: "P" }, { x: 15, y: 3, char: "P" },
+      { x: 6, y: 6, char: "P" }, { x: 7, y: 6, char: "P" }, { x: 10, y: 6, char: "P" }, { x: 11, y: 6, char: "P" },
+      { x: 2, y: 11, char: "P" }, { x: 3, y: 11, char: "P" }, { x: 14, y: 11, char: "P" }, { x: 15, y: 11, char: "P" },
+      { x: 6, y: 14, char: "P" }, { x: 7, y: 14, char: "P" }, { x: 12, y: 14, char: "P" }, { x: 13, y: 14, char: "P" },
+    ],
+    background: { bgColor: "#1A2A0A", pathColor: "#3A4A2A", pathEdgeColor: "#203018", emptyColor: "#2A3A1A", obstacleColor: "#4AFF4A", accentColor: "#80FF00", uiTint: "#558B2F" },
+    hint: "毒池壓縮建造空間，三路最後會匯入中央出口。",
+  }),
+  makeExpansionMap({
+    id: "map12",
+    name: "水晶洞窟",
+    nameEn: "Crystal Cavern",
+    theme: "crystal",
+    difficulty: 12,
+    gridWidth: 20,
+    gridHeight: 16,
+    startGold: 110,
+    startLives: 10,
+    waveCount: 34,
+    paths: [
+      { id: "top", waypoints: [{ x: 0, y: 2 }, { x: 6, y: 2 }, { x: 6, y: 6 }, { x: 14, y: 6 }, { x: 14, y: 10 }, { x: 19, y: 10 }] },
+      { id: "bottom", waypoints: [{ x: 0, y: 13 }, { x: 8, y: 13 }, { x: 8, y: 9 }, { x: 14, y: 9 }, { x: 14, y: 10 }, { x: 19, y: 10 }] },
+    ],
+    obstacles: [
+      { x: 3, y: 4, char: "Q" }, { x: 10, y: 3, char: "Q" }, { x: 16, y: 3, char: "Q" },
+      { x: 2, y: 8, char: "Q" }, { x: 5, y: 9, char: "Q" }, { x: 11, y: 11, char: "Q" }, { x: 17, y: 13, char: "Q" },
+      { x: 12, y: 1, char: "Q" }, { x: 6, y: 15, char: "Q" },
+    ],
+    background: { bgColor: "#0D0D2B", pathColor: "#2A2A5A", pathEdgeColor: "#151540", emptyColor: "#1A1A3A", obstacleColor: "#88EEFF", accentColor: "#00FFFF", uiTint: "#1565C0" },
+    hint: "水晶阻擋格切割視野，適合長射程塔控住兩路交會處。",
+  }),
+  makeExpansionMap({
+    id: "map13",
+    name: "颱風之眼",
+    nameEn: "Typhoon Eye",
+    theme: "storm",
+    difficulty: 13,
+    gridWidth: 22,
+    gridHeight: 18,
+    startGold: 105,
+    startLives: 10,
+    waveCount: 35,
+    paths: [
+      { id: "north", waypoints: [{ x: 11, y: 0 }, { x: 11, y: 5 }, { x: 17, y: 5 }, { x: 17, y: 12 }, { x: 21, y: 12 }] },
+      { id: "west", waypoints: [{ x: 0, y: 9 }, { x: 7, y: 9 }, { x: 7, y: 5 }, { x: 17, y: 5 }, { x: 17, y: 12 }, { x: 21, y: 12 }] },
+      { id: "south", waypoints: [{ x: 11, y: 17 }, { x: 11, y: 12 }, { x: 17, y: 12 }, { x: 21, y: 12 }] },
+    ],
+    obstacles: [
+      { x: 10, y: 8, char: "O" }, { x: 11, y: 8, char: "O" }, { x: 10, y: 9, char: "O" }, { x: 11, y: 9, char: "O" },
+      { x: 4, y: 3, char: "O" }, { x: 18, y: 2, char: "O" }, { x: 4, y: 15, char: "O" }, { x: 19, y: 15, char: "O" },
+    ],
+    background: { bgColor: "#0A1520", pathColor: "#2A4060", pathEdgeColor: "#132840", emptyColor: "#152030", obstacleColor: "#5ECFFF", accentColor: "#B3E5FC", uiTint: "#0277BD" },
+    hint: "三個入口繞著風眼匯流，中心周邊的建造格最珍貴。",
+  }),
+  makeExpansionMap({
+    id: "map14",
+    name: "聖域長廊",
+    nameEn: "Sacred Corridor",
+    theme: "sacred",
+    difficulty: 14,
+    gridWidth: 22,
+    gridHeight: 18,
+    startGold: 115,
+    startLives: 9,
+    waveCount: 36,
+    paths: [
+      { id: "left", waypoints: [{ x: 0, y: 4 }, { x: 5, y: 4 }, { x: 5, y: 8 }, { x: 16, y: 8 }, { x: 16, y: 13 }, { x: 21, y: 13 }] },
+      { id: "right", waypoints: [{ x: 21, y: 4 }, { x: 16, y: 4 }, { x: 16, y: 8 }, { x: 5, y: 8 }, { x: 5, y: 13 }, { x: 0, y: 13 }] },
+    ],
+    obstacles: [
+      { x: 10, y: 5, char: "A" }, { x: 11, y: 5, char: "A" }, { x: 10, y: 11, char: "A" }, { x: 11, y: 11, char: "A" },
+      { x: 2, y: 2, char: "A" }, { x: 19, y: 2, char: "A" }, { x: 2, y: 15, char: "A" }, { x: 19, y: 15, char: "A" },
+    ],
+    background: { bgColor: "#1A1020", pathColor: "#5A4A7A", pathEdgeColor: "#3A2858", emptyColor: "#2A1A3A", obstacleColor: "#FFD700", accentColor: "#FFFFFF", uiTint: "#7B1FA2" },
+    hint: "雙向長廊會互相穿插，需在中段建立穩定火力網。",
+  }),
+  makeExpansionMap({
+    id: "map15",
+    name: "混沌裂隙",
+    nameEn: "Chaos Rift",
+    theme: "chaos",
+    difficulty: 15,
+    gridWidth: 22,
+    gridHeight: 18,
+    startGold: 130,
+    startLives: 8,
+    waveCount: 38,
+    paths: [
+      { id: "riftA", waypoints: [{ x: 0, y: 4 }, { x: 7, y: 4 }, { x: 7, y: 2 }, { x: 14, y: 2 }, { x: 14, y: 9 }, { x: 21, y: 9 }] },
+      { id: "riftB", waypoints: [{ x: 0, y: 9 }, { x: 9, y: 9 }, { x: 9, y: 14 }, { x: 16, y: 14 }, { x: 16, y: 9 }, { x: 21, y: 9 }] },
+      { id: "riftC", waypoints: [{ x: 0, y: 14 }, { x: 5, y: 14 }, { x: 5, y: 7 }, { x: 13, y: 7 }, { x: 13, y: 9 }, { x: 21, y: 9 }] },
+    ],
+    obstacles: [
+      { x: 4, y: 1, char: "M" }, { x: 18, y: 1, char: "M" }, { x: 11, y: 5, char: "M" }, { x: 3, y: 10, char: "M" },
+      { x: 18, y: 11, char: "M" }, { x: 11, y: 16, char: "M" },
+    ],
+    background: { bgColor: "#0D0015", pathColor: "#4A00AA", pathEdgeColor: "#240055", emptyColor: "#1A0030", obstacleColor: "#FF00FF", accentColor: "#FF40FF", uiTint: "#6A00AA" },
+    hint: "混沌裂隙提供三條不規則路線，後段匯出口壓力極高。",
+  }),
+  makeExpansionMap({
+    id: "map16",
+    name: "深淵巢穴",
+    nameEn: "Abyss Nest",
+    theme: "abyss",
+    difficulty: 16,
+    gridWidth: 22,
+    gridHeight: 18,
+    startGold: 120,
+    startLives: 8,
+    waveCount: 40,
+    paths: [
+      { id: "nestTop", waypoints: [{ x: 0, y: 3 }, { x: 6, y: 3 }, { x: 6, y: 8 }, { x: 15, y: 8 }, { x: 15, y: 15 }, { x: 21, y: 15 }] },
+      { id: "nestMid", waypoints: [{ x: 0, y: 9 }, { x: 21, y: 9 }] },
+      { id: "nestBot", waypoints: [{ x: 0, y: 15 }, { x: 7, y: 15 }, { x: 7, y: 11 }, { x: 15, y: 11 }, { x: 15, y: 9 }, { x: 21, y: 9 }] },
+    ],
+    obstacles: [
+      { x: 4, y: 6, char: "N" }, { x: 11, y: 5, char: "N" }, { x: 17, y: 6, char: "N" },
+      { x: 4, y: 12, char: "N" }, { x: 11, y: 13, char: "N" }, { x: 18, y: 13, char: "N" },
+    ],
+    background: { bgColor: "#050505", pathColor: "#1A0A0A", pathEdgeColor: "#090303", emptyColor: "#0A0505", obstacleColor: "#8B0000", accentColor: "#FF3333", uiTint: "#B71C1C" },
+    hint: "巢穴阻擋建造並製造壓迫感，三路中段必須提早佈防。",
+  }),
+  makeExpansionMap({
+    id: "map17",
+    name: "時序迷宮",
+    nameEn: "Temporal Maze",
+    theme: "temporal",
+    difficulty: 17,
+    gridWidth: 24,
+    gridHeight: 18,
+    startGold: 110,
+    startLives: 8,
+    waveCount: 42,
+    paths: [
+      { id: "timeA", waypoints: [{ x: 0, y: 2 }, { x: 10, y: 2 }, { x: 10, y: 7 }, { x: 4, y: 7 }, { x: 4, y: 14 }, { x: 23, y: 14 }] },
+      { id: "timeB", waypoints: [{ x: 23, y: 3 }, { x: 14, y: 3 }, { x: 14, y: 8 }, { x: 19, y: 8 }, { x: 19, y: 14 }, { x: 23, y: 14 }] },
+      { id: "timeC", waypoints: [{ x: 0, y: 16 }, { x: 8, y: 16 }, { x: 8, y: 11 }, { x: 16, y: 11 }, { x: 16, y: 14 }, { x: 23, y: 14 }] },
+    ],
+    obstacles: [
+      { x: 6, y: 4, char: "T" }, { x: 17, y: 5, char: "T" }, { x: 11, y: 10, char: "T" }, { x: 3, y: 12, char: "T" }, { x: 21, y: 16, char: "T" },
+    ],
+    background: { bgColor: "#080820", pathColor: "#202060", pathEdgeColor: "#101030", emptyColor: "#101040", obstacleColor: "#8080FF", accentColor: "#4444FF", uiTint: "#1A237E" },
+    hint: "時序障礙切斷直線火力，迷宮路線長但交會點少。",
+  }),
+  makeExpansionMap({
+    id: "map18",
+    name: "鏡像世界",
+    nameEn: "Mirror World",
+    theme: "mirror",
+    difficulty: 18,
+    gridWidth: 24,
+    gridHeight: 20,
+    startGold: 100,
+    startLives: 6,
+    waveCount: 45,
+    paths: [
+      { id: "mirrorA", waypoints: [{ x: 0, y: 4 }, { x: 11, y: 4 }, { x: 11, y: 9 }, { x: 23, y: 9 }] },
+      { id: "mirrorB", waypoints: [{ x: 23, y: 4 }, { x: 12, y: 4 }, { x: 12, y: 10 }, { x: 0, y: 10 }] },
+      { id: "mirrorC", waypoints: [{ x: 0, y: 15 }, { x: 11, y: 15 }, { x: 11, y: 10 }, { x: 23, y: 10 }] },
+      { id: "mirrorD", waypoints: [{ x: 23, y: 15 }, { x: 12, y: 15 }, { x: 12, y: 9 }, { x: 0, y: 9 }] },
+    ],
+    obstacles: [
+      { x: 11, y: 0, char: "M" }, { x: 12, y: 0, char: "M" }, { x: 11, y: 19, char: "M" }, { x: 12, y: 19, char: "M" },
+      { x: 5, y: 7, char: "M" }, { x: 18, y: 7, char: "M" }, { x: 5, y: 13, char: "M" }, { x: 18, y: 13, char: "M" },
+    ],
+    background: { bgColor: "#101025", pathColor: "#303060", pathEdgeColor: "#181830", emptyColor: "#181840", obstacleColor: "#8888FF", accentColor: "#AAAAFF", uiTint: "#3949AB" },
+    hint: "鏡像雙側同時進攻，左右半場都需要獨立防線。",
+  }),
+  makeExpansionMap({
+    id: "map19",
+    name: "末日熔爐",
+    nameEn: "Doomsday Forge",
+    theme: "doomsday",
+    difficulty: 19,
+    gridWidth: 26,
+    gridHeight: 20,
+    startGold: 95,
+    startLives: 5,
+    waveCount: 50,
+    paths: [
+      { id: "forgeA", waypoints: [{ x: 0, y: 2 }, { x: 7, y: 2 }, { x: 7, y: 8 }, { x: 18, y: 8 }, { x: 18, y: 17 }, { x: 25, y: 17 }] },
+      { id: "forgeB", waypoints: [{ x: 0, y: 6 }, { x: 12, y: 6 }, { x: 12, y: 12 }, { x: 25, y: 12 }] },
+      { id: "forgeC", waypoints: [{ x: 0, y: 12 }, { x: 5, y: 12 }, { x: 5, y: 17 }, { x: 25, y: 17 }] },
+      { id: "forgeD", waypoints: [{ x: 25, y: 3 }, { x: 20, y: 3 }, { x: 20, y: 9 }, { x: 12, y: 9 }, { x: 12, y: 12 }, { x: 25, y: 12 }] },
+      { id: "forgeE", waypoints: [{ x: 25, y: 19 }, { x: 18, y: 19 }, { x: 18, y: 17 }, { x: 25, y: 17 }] },
+    ],
+    obstacles: [
+      { x: 3, y: 4, char: "L" }, { x: 16, y: 3, char: "L" }, { x: 23, y: 6, char: "L" }, { x: 9, y: 10, char: "L" },
+      { x: 2, y: 16, char: "L" }, { x: 14, y: 16, char: "L" }, { x: 22, y: 15, char: "L" },
+    ],
+    background: { bgColor: "#0A0500", pathColor: "#3A2010", pathEdgeColor: "#1A0800", emptyColor: "#201008", obstacleColor: "#FF4500", accentColor: "#FF6600", uiTint: "#BF360C" },
+    hint: "五路熔爐進攻且生命極低，範圍與控場必須平均分配。",
+  }),
+  makeExpansionMap({
+    id: "map20",
+    name: "創世終局",
+    nameEn: "Genesis End",
+    theme: "genesis",
+    difficulty: 20,
+    gridWidth: 28,
+    gridHeight: 22,
+    startGold: 200,
+    startLives: 5,
+    waveCount: 55,
+    paths: [
+      { id: "genesisA", waypoints: [{ x: 0, y: 0 }, { x: 8, y: 0 }, { x: 8, y: 5 }, { x: 14, y: 5 }, { x: 14, y: 11 }] },
+      { id: "genesisB", waypoints: [{ x: 27, y: 0 }, { x: 19, y: 0 }, { x: 19, y: 5 }, { x: 14, y: 5 }, { x: 14, y: 11 }] },
+      { id: "genesisC", waypoints: [{ x: 0, y: 10 }, { x: 10, y: 10 }, { x: 10, y: 15 }, { x: 14, y: 15 }, { x: 14, y: 11 }] },
+      { id: "genesisD", waypoints: [{ x: 27, y: 10 }, { x: 18, y: 10 }, { x: 18, y: 15 }, { x: 14, y: 15 }, { x: 14, y: 11 }] },
+      { id: "genesisE", waypoints: [{ x: 0, y: 21 }, { x: 7, y: 21 }, { x: 7, y: 17 }, { x: 14, y: 17 }, { x: 14, y: 11 }] },
+      { id: "genesisF", waypoints: [{ x: 27, y: 21 }, { x: 20, y: 21 }, { x: 20, y: 17 }, { x: 14, y: 17 }, { x: 14, y: 11 }] },
+      { id: "genesisCore", waypoints: [{ x: 14, y: 0 }, { x: 14, y: 11 }] },
+    ],
+    obstacles: [
+      { x: 5, y: 3, char: "H" }, { x: 22, y: 3, char: "H" }, { x: 4, y: 14, char: "H" }, { x: 23, y: 14, char: "H" },
+      { x: 10, y: 19, char: "H" }, { x: 18, y: 19, char: "H" }, { x: 13, y: 10, char: "H" }, { x: 15, y: 10, char: "H" },
+    ],
+    background: { bgColor: "#02020F", pathColor: "#15153A", pathEdgeColor: "#08081A", emptyColor: "#080820", obstacleColor: "#6600CC", accentColor: "#CC44FF", starParticles: true, cosmicNebula: true, uiTint: "#4A148C" },
+    hint: "七路終局壓迫核心點，所有防線都必須服務中央收束口。",
+  }),
+];
+
+MAPS.push(...EXPANSION_MAPS);
+
+const V13_WAVE_COUNTS = {
+  map01: 20,
+  map02: 22,
+  map03: 24,
+  map04: 25,
+  map05: 26,
+  map06: 28,
+  map07: 30,
+  map08: 30,
+  map09: 32,
+  map10: 32,
+};
+
+MAPS.forEach((map) => {
+  if (V13_WAVE_COUNTS[map.id]) map.waveCount = V13_WAVE_COUNTS[map.id];
+});
+
 const settings = loadSettings();
 const progress = loadProgress();
 let selectedMapId = settings.selectedMapId || "map01";
@@ -810,9 +1100,7 @@ function getMapById(mapId) {
 }
 
 function isMapUnlocked(map) {
-  if (map.id === "map01") return true;
-  const previousIndex = MAPS.findIndex((item) => item.id === map.id) - 1;
-  return previousIndex >= 0 && Boolean(progress.completedMaps[MAPS[previousIndex].id]);
+  return true;
 }
 
 function prepareMap(map) {
@@ -876,7 +1164,12 @@ function createMapWaves(total, difficulty, pathIds) {
       });
     }
     if (i === total - 1) {
-      groups.unshift({ type: "boss", count: Math.max(1, Math.ceil(difficulty / 2)), interval: 1.2, pathId: pathIds[0] });
+      groups.forEach((group) => {
+        group.count = Math.ceil(group.count * (difficulty >= 15 ? 2.4 : difficulty >= 10 ? 1.9 : 1.5));
+        group.interval = Math.max(0.12, group.interval * 0.6);
+      });
+      const bossCount = difficulty >= 19 ? 3 : difficulty >= 16 ? 2 : 1;
+      groups.unshift({ type: "boss", count: bossCount, interval: 1.0, pathId: pathIds[0] });
     }
     result.push(groups);
   }
@@ -1435,6 +1728,11 @@ function drawTileDetail(char, x, y, colors) {
   if (char === "G") drawText("G", cx, cy, 22, "center", colors.accentColor);
   if (char === "F") drawText("F", cx, cy, 18, "center", colors.accentColor);
   if (char === "H") drawText("BH", cx, cy, 18, "center", colors.accentColor);
+  if (char === "P") drawText("P", cx, cy, 22, "center", "#0f172a");
+  if (char === "Q") drawText("◆", cx, cy, 24, "center", colors.accentColor);
+  if (char === "N") drawText("N", cx, cy, 22, "center", colors.accentColor);
+  if (char === "O") drawText("◎", cx, cy, 24, "center", colors.accentColor);
+  if (char === "M") drawText("M", cx, cy, 20, "center", colors.accentColor);
 }
 
 function drawPathLines(map) {
@@ -1941,7 +2239,7 @@ function openMapSelect() {
       <button class="map-card${selected}" data-map-id="${map.id}" ${unlocked ? "" : "disabled"}>
         <span class="map-thumb" style="--tint:${map.background.uiTint};--path:${map.background.pathColor};--empty:${map.background.emptyColor}"></span>
         <strong>${map.name}</strong>
-        <small>${map.nameEn} · 難度 ${"★".repeat(map.difficulty)}</small>
+        <small>${map.nameEn} · 難度 ${"★".repeat(Math.min(5, Math.ceil(map.difficulty / 4)))}</small>
         <small>${map.waveCount} 波 · $${map.startGold} · 生命 ${map.startLives}</small>
         <small>${unlocked ? `最高分 ${best}` : "通過前一張地圖解鎖"}</small>
       </button>

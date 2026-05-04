@@ -8,12 +8,60 @@
   "gridHeight": 16,
   "startGold": 120,
   "startLives": 12,
-  "waveCount": 18,
+  "waveCount": 30,
   "paths": [
-    { "id": "h1", "waypoints": [{ "x": 0, "y": 2 }, { "x": 19, "y": 2 }] },
-    { "id": "h2", "waypoints": [{ "x": 0, "y": 7 }, { "x": 19, "y": 7 }] },
-    { "id": "h3", "waypoints": [{ "x": 0, "y": 11 }, { "x": 19, "y": 11 }] },
-    { "id": "v1", "waypoints": [{ "x": 8, "y": 0 }, { "x": 8, "y": 15 }] }
+    {
+      "id": "h1",
+      "waypoints": [
+        {
+          "x": 0,
+          "y": 2
+        },
+        {
+          "x": 19,
+          "y": 2
+        }
+      ]
+    },
+    {
+      "id": "h2",
+      "waypoints": [
+        {
+          "x": 0,
+          "y": 7
+        },
+        {
+          "x": 19,
+          "y": 7
+        }
+      ]
+    },
+    {
+      "id": "h3",
+      "waypoints": [
+        {
+          "x": 0,
+          "y": 11
+        },
+        {
+          "x": 19,
+          "y": 11
+        }
+      ]
+    },
+    {
+      "id": "v1",
+      "waypoints": [
+        {
+          "x": 8,
+          "y": 0
+        },
+        {
+          "x": 8,
+          "y": 15
+        }
+      ]
+    }
   ],
   "grid": [
     "........v...........",
@@ -41,5 +89,6 @@
     "obstacleColor": "#C8A878",
     "accentColor": "#FFD700",
     "uiTint": "#FF8F00"
-  }
+  },
+  "hint": "水平與垂直通道交錯，交會點周邊是主要火力區。"
 }

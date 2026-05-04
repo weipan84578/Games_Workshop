@@ -8,12 +8,92 @@
   "gridHeight": 14,
   "startGold": 130,
   "startLives": 15,
-  "waveCount": 15,
+  "waveCount": 28,
   "paths": [
-    { "id": "leftUpper", "waypoints": [{ "x": 0, "y": 3 }, { "x": 4, "y": 3 }, { "x": 4, "y": 6 }, { "x": 8, "y": 6 }] },
-    { "id": "leftLower", "waypoints": [{ "x": 0, "y": 10 }, { "x": 4, "y": 10 }, { "x": 4, "y": 6 }, { "x": 8, "y": 6 }] },
-    { "id": "rightUpper", "waypoints": [{ "x": 17, "y": 3 }, { "x": 13, "y": 3 }, { "x": 13, "y": 6 }, { "x": 8, "y": 6 }] },
-    { "id": "rightLower", "waypoints": [{ "x": 17, "y": 10 }, { "x": 13, "y": 10 }, { "x": 13, "y": 6 }, { "x": 8, "y": 6 }] }
+    {
+      "id": "leftUpper",
+      "waypoints": [
+        {
+          "x": 0,
+          "y": 3
+        },
+        {
+          "x": 4,
+          "y": 3
+        },
+        {
+          "x": 4,
+          "y": 6
+        },
+        {
+          "x": 8,
+          "y": 6
+        }
+      ]
+    },
+    {
+      "id": "leftLower",
+      "waypoints": [
+        {
+          "x": 0,
+          "y": 10
+        },
+        {
+          "x": 4,
+          "y": 10
+        },
+        {
+          "x": 4,
+          "y": 6
+        },
+        {
+          "x": 8,
+          "y": 6
+        }
+      ]
+    },
+    {
+      "id": "rightUpper",
+      "waypoints": [
+        {
+          "x": 17,
+          "y": 3
+        },
+        {
+          "x": 13,
+          "y": 3
+        },
+        {
+          "x": 13,
+          "y": 6
+        },
+        {
+          "x": 8,
+          "y": 6
+        }
+      ]
+    },
+    {
+      "id": "rightLower",
+      "waypoints": [
+        {
+          "x": 17,
+          "y": 10
+        },
+        {
+          "x": 13,
+          "y": 10
+        },
+        {
+          "x": 13,
+          "y": 6
+        },
+        {
+          "x": 8,
+          "y": 6
+        }
+      ]
+    }
   ],
   "grid": [
     "..................",
@@ -39,5 +119,6 @@
     "obstacleColor": "#FF6B9D",
     "accentColor": "#00BCD4",
     "uiTint": "#0288D1"
-  }
+  },
+  "hint": "四路潮汐同時匯入中央，先守住中線交會點。"
 }
