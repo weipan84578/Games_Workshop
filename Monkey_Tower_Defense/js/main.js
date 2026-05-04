@@ -2319,6 +2319,126 @@ function openHelp() {
   });
 }
 
+function openDetailedHelp() {
+  const mapRows = MAPS.map((map) => `
+    <tr>
+      <td>${map.id.replace("map", "")}</td>
+      <td><strong>${map.name}</strong><br><small>${map.nameEn}</small></td>
+      <td>${map.waveCount}</td>
+      <td>$${map.startGold}</td>
+      <td>${map.startLives}</td>
+    </tr>
+  `).join("");
+  const towerRows = Object.values(towerTypes).map((tower) => `
+    <tr>
+      <td>${tower.emoji} <strong>${tower.name}</strong></td>
+      <td>$${tower.cost}</td>
+      <td>${tower.attackType}</td>
+      <td>${tower.desc}</td>
+    </tr>
+  `).join("");
+  const enemyRows = Object.values(enemyTypes).map((enemy) => `
+    <tr>
+      <td><strong>${enemy.name}</strong></td>
+      <td>${enemy.hp}</td>
+      <td>${enemy.speed}</td>
+      <td>$${enemy.reward}</td>
+      <td>${enemy.specialBehavior || enemy.trait || "-"}</td>
+    </tr>
+  `).join("");
+
+  openModal("遊戲說明 v1.4", `
+    <div class="help-tabs" role="tablist">
+      <button class="help-tab active" data-help-tab="basic">目標</button>
+      <button class="help-tab" data-help-tab="controls">操作</button>
+      <button class="help-tab" data-help-tab="maps">地圖</button>
+      <button class="help-tab" data-help-tab="towers">猴塔</button>
+      <button class="help-tab" data-help-tab="enemies">敵人</button>
+      <button class="help-tab" data-help-tab="advanced">進階</button>
+    </div>
+
+    <div class="help-panel" data-help-panel="basic">
+      <h3>遊戲目標</h3>
+      <p>在道路外的可建造格放置猴子防禦塔，阻止敵人從入口走到出口。敵人抵達出口會扣生命，生命歸零即失敗；守完該地圖全部波次即勝利。</p>
+      <ul>
+        <li>擊敗敵人可獲得金幣，完成每波額外獎勵 25 金幣。</li>
+        <li>每張地圖有不同起始金幣、生命值、道路形狀、障礙物與波數。</li>
+        <li>地圖 01 到 20 已全部開放，越後面的地圖敵人組合越複雜。</li>
+      </ul>
+    </div>
+
+    <div class="help-panel hidden" data-help-panel="controls">
+      <h3>操作與 HUD</h3>
+      <ul>
+        <li>左側選擇猴塔後，點擊戰場上的空地建造。</li>
+        <li>點擊已建造的塔會開啟升級面板，可升級、啟動 Apex 或出售。</li>
+        <li>「開始波次」會派出下一波敵人；波次進行中無法重複開始。</li>
+        <li>速度按鈕可切換 1x、2x、3x、4x、5x。</li>
+        <li>暫停會停止戰鬥更新，也會暫停自動波次倒數；恢復後會重新排程。</li>
+        <li>自動模式顯示為「自動: ON/OFF」。開啟後會在可開始下一波時延遲 0.5 秒自動出波。</li>
+      </ul>
+    </div>
+
+    <div class="help-panel hidden" data-help-panel="maps">
+      <h3>20 張地圖</h3>
+      <p>所有地圖都可直接遊玩。前 10 張用來熟悉基礎路線、雙路線與多入口；11 到 20 張加入更長波次、更密集敵群與更嚴格的建塔空間。</p>
+      <div class="help-table-wrap">
+        <table class="help-table">
+          <thead><tr><th>#</th><th>地圖</th><th>波數</th><th>金幣</th><th>生命</th></tr></thead>
+          <tbody>${mapRows}</tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="help-panel hidden" data-help-panel="towers">
+      <h3>猴子防禦塔</h3>
+      <p>每座塔都有 A/B 兩條升級路線，兩條都可升到 3 級。當 A3+B3 都完成後，可以購買 Apex，取得大幅強化。</p>
+      <ul>
+        <li>A 路線通常偏向傷害、射程、穿透或範圍強化。</li>
+        <li>B 路線通常偏向射速、多重射擊、持續效果或控場補強。</li>
+        <li>出售塔會返還該塔累計投入費用的 50%。</li>
+      </ul>
+      <div class="help-table-wrap">
+        <table class="help-table">
+          <thead><tr><th>塔</th><th>費用</th><th>屬性</th><th>定位</th></tr></thead>
+          <tbody>${towerRows}</tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="help-panel hidden" data-help-panel="enemies">
+      <h3>敵人與特殊能力</h3>
+      <p>敵人不只差在血量與速度，也可能有抗性、弱點、免疫或特殊行為。後期需要混合單體輸出、範圍傷害、緩速、毒傷與支援塔。</p>
+      <div class="help-table-wrap">
+        <table class="help-table">
+          <thead><tr><th>敵人</th><th>HP</th><th>速度</th><th>獎勵</th><th>特性</th></tr></thead>
+          <tbody>${enemyRows}</tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="help-panel hidden" data-help-panel="advanced">
+      <h3>進階規則</h3>
+      <ul>
+        <li>自動模式不會自動開啟最後一波，最後一波必須手動開始。</li>
+        <li>自動模式提前開始下一波時會給予 +10 金幣獎勵。</li>
+        <li>密技輸入順序為左、左、右、右、左，成功後獲得 +9999 金幣。</li>
+        <li>使用密技後仍可使用自動模式，但該局不更新最高分與解鎖進度。</li>
+        <li>部分敵人會分裂、爆炸、治療、隱身、加速或吸收特定傷害，單一塔種很難處理所有狀況。</li>
+        <li>通常先用便宜塔穩定前期，再把核心輸出升到 A3+B3 與 Apex，會比平均鋪塔更有效。</li>
+      </ul>
+    </div>
+  `);
+  document.querySelectorAll(".help-tab").forEach((tab) => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".help-tab").forEach((item) => item.classList.toggle("active", item === tab));
+      document.querySelectorAll(".help-panel").forEach((panel) => {
+        panel.classList.toggle("hidden", panel.dataset.helpPanel !== tab.dataset.helpTab);
+      });
+    });
+  });
+}
+
 function openMapSelect() {
   const cards = MAPS.map((map) => {
     const unlocked = isMapUnlocked(map);
@@ -2357,7 +2477,7 @@ function loop(now) {
 els.newGameBtn.addEventListener("click", resetGame);
 els.mapBtn.addEventListener("click", openMapSelect);
 els.settingsBtn.addEventListener("click", openSettings);
-els.helpBtn.addEventListener("click", openHelp);
+els.helpBtn.addEventListener("click", openDetailedHelp);
 els.modalCloseBtn.addEventListener("click", () => els.modal.close());
 els.startWaveBtn.addEventListener("click", startWave);
 els.autoWaveBtn.addEventListener("click", toggleAutoWave);
