@@ -32,6 +32,11 @@ const els = {
 
 const TILE_CHARS = new Set(["#", ">", "<", "^", "v", "S", "E", "2"]);
 const BLOCKED_CHARS = new Set(["X", "W", "R", "T", "B", "L", "C", "A", "G", "F", "H"]);
+const UPGRADE_COSTS = {
+  A: [120, 200, 450],
+  B: [100, 180, 400],
+  apex: 550,
+};
 
 const towerTypes = {
   dart: {
@@ -45,6 +50,7 @@ const towerTypes = {
     projectileSpeed: 430,
     color: "#b77935",
     kind: "dart",
+    attackType: "dart",
     desc: "便宜穩定",
   },
   bomb: {
@@ -52,13 +58,14 @@ const towerTypes = {
     name: "炸彈猴",
     emoji: "💣",
     cost: 80,
-    damage: 3,
+    damage: 4,
     range: 160,
     fireRate: 0.8,
     projectileSpeed: 300,
     splash: 70,
     color: "#4b5563",
     kind: "bomb",
+    attackType: "explosion",
     desc: "範圍爆破",
   },
   ice: {
@@ -67,65 +74,201 @@ const towerTypes = {
     emoji: "❄️",
     cost: 70,
     damage: 0,
-    range: 135,
+    range: 128,
     fireRate: 0.55,
     projectileSpeed: 0,
     freeze: 2.4,
     color: "#60a5fa",
     kind: "ice",
+    attackType: "freeze",
     desc: "減速控場",
   },
   thorn: {
     id: "thorn",
     name: "荊棘猴",
     emoji: "🌿",
-    cost: 90,
-    damage: 1,
-    range: 125,
-    fireRate: 2.1,
+    cost: 60,
+    damage: 2,
+    range: 224,
+    fireRate: 2.0,
     projectileSpeed: 520,
     poison: 3.5,
     color: "#15803d",
     kind: "thorn",
-    desc: "快速中毒",
+    attackType: "poison",
+    desc: "長程毒傷",
   },
-  cannon: {
-    id: "cannon",
-    name: "重砲猴",
-    emoji: "🧨",
+  wizard: {
+    id: "wizard",
+    name: "巫師猴",
+    emoji: "🧙",
     cost: 120,
-    damage: 7,
-    range: 190,
-    fireRate: 0.5,
+    damage: 6,
+    range: 160,
+    fireRate: 0.4,
     projectileSpeed: 260,
-    splash: 100,
-    color: "#7f1d1d",
-    kind: "cannon",
-    desc: "慢速高傷",
+    splash: 45,
+    color: "#7c3aed",
+    kind: "wizard",
+    attackType: "flame",
+    desc: "v1.1 高費控場",
   },
   eagle: {
     id: "eagle",
-    name: "飛鷹猴",
+    name: "狙擊猴",
     emoji: "🦅",
-    cost: 110,
-    damage: 2,
+    cost: 200,
+    damage: 3,
     range: 260,
     fireRate: 1.0,
     projectileSpeed: 620,
     color: "#92400e",
     kind: "eagle",
-    desc: "超遠距離",
+    attackType: "dart",
+    desc: "超遠距單體",
+  },
+  bell: {
+    id: "bell",
+    name: "鐘猴",
+    emoji: "🔔",
+    cost: 80,
+    damage: 2,
+    range: 224,
+    fireRate: 2.5,
+    projectileSpeed: 0,
+    freeze: 0.5,
+    color: "#d97706",
+    kind: "bell",
+    attackType: "sonic",
+    desc: "音波破甲",
+  },
+  magnet: {
+    id: "magnet",
+    name: "磁鐵猴",
+    emoji: "🧲",
+    cost: 110,
+    damage: 0,
+    range: 160,
+    fireRate: 0.7,
+    projectileSpeed: 0,
+    freeze: 1.0,
+    magnetize: 4,
+    color: "#64748b",
+    kind: "magnet",
+    attackType: "magnet",
+    desc: "聚怪增傷",
+  },
+  thunder: {
+    id: "thunder",
+    name: "雷電猴",
+    emoji: "⚡",
+    cost: 130,
+    damage: 3,
+    range: 192,
+    fireRate: 1.0,
+    projectileSpeed: 0,
+    chain: 3,
+    color: "#facc15",
+    kind: "thunder",
+    attackType: "thunder",
+    desc: "連鎖電擊",
+  },
+  mushroom: {
+    id: "mushroom",
+    name: "蘑菇猴",
+    emoji: "🍄",
+    cost: 90,
+    damage: 1,
+    range: 192,
+    fireRate: 2.0,
+    projectileSpeed: 0,
+    poison: 4,
+    color: "#dc2626",
+    kind: "mushroom",
+    attackType: "poison",
+    desc: "毒霧持續傷害",
+  },
+  mirror: {
+    id: "mirror",
+    name: "鏡像猴",
+    emoji: "🪞",
+    cost: 150,
+    damage: 2,
+    range: 256,
+    fireRate: 0.8,
+    projectileSpeed: 520,
+    color: "#38bdf8",
+    kind: "mirror",
+    attackType: "mirror",
+    desc: "複製彈道",
+  },
+  vortex: {
+    id: "vortex",
+    name: "漩渦猴",
+    emoji: "🌀",
+    cost: 160,
+    damage: 2,
+    range: 224,
+    fireRate: 1.5,
+    projectileSpeed: 0,
+    freeze: 1.5,
+    color: "#06b6d4",
+    kind: "vortex",
+    attackType: "vortex",
+    desc: "範圍牽制",
+  },
+  oracle: {
+    id: "oracle",
+    name: "先知猴",
+    emoji: "🔮",
+    cost: 200,
+    damage: 5,
+    range: 256,
+    fireRate: 0.8,
+    projectileSpeed: 500,
+    curse: 5,
+    color: "#a855f7",
+    kind: "oracle",
+    attackType: "oracle",
+    desc: "詛咒弱化",
+  },
+  horn: {
+    id: "horn",
+    name: "號角猴",
+    emoji: "📯",
+    cost: 180,
+    damage: 0,
+    range: 320,
+    fireRate: 0.35,
+    projectileSpeed: 0,
+    support: true,
+    color: "#f59e0b",
+    kind: "horn",
+    attackType: "support",
+    desc: "全隊增益",
   },
 };
 
 const enemyTypes = {
-  red: { name: "紅氣球", hp: 1, speed: 68, reward: 1, lives: 1, color: "#ef4444", emoji: "🎈" },
+  red: { name: "紅氣球", hp: 1, speed: 64, reward: 1, lives: 1, color: "#ef4444", emoji: "🎈" },
   blue: { name: "藍氣球", hp: 1, speed: 96, reward: 1, lives: 1, color: "#3b82f6", emoji: "🎈" },
-  green: { name: "綠氣球", hp: 1, speed: 140, reward: 2, lives: 1, color: "#22c55e", emoji: "🎈" },
-  yellow: { name: "黃氣球", hp: 3, speed: 78, reward: 2, lives: 2, color: "#eab308", emoji: "🎈" },
-  armor: { name: "裝甲氣球", hp: 5, speed: 82, reward: 3, lives: 2, color: "#94a3b8", armor: true, emoji: "🛡️" },
-  lead: { name: "鉛氣球", hp: 10, speed: 58, reward: 5, lives: 3, color: "#475569", armor: true, emoji: "🎈" },
-  boss: { name: "Boss 氣球", hp: 65, speed: 45, reward: 20, lives: 5, color: "#9333ea", armor: true, emoji: "👑" },
+  green: { name: "綠氣球", hp: 1, speed: 160, reward: 2, lives: 1, color: "#22c55e", emoji: "🎈" },
+  yellow: { name: "黃氣球", hp: 3, speed: 64, reward: 2, lives: 2, color: "#eab308", emoji: "🎈" },
+  armor: { name: "裝甲氣球", hp: 5, speed: 77, reward: 3, lives: 2, color: "#94a3b8", armor: true, armorValue: 0.4, emoji: "🛡️" },
+  lead: { name: "鉛氣球", hp: 10, speed: 51, reward: 5, lives: 3, color: "#475569", armor: true, armorValue: 0.5, emoji: "🎈" },
+  boss: { name: "Boss 氣球", hp: 50, speed: 38, reward: 20, lives: 5, color: "#9333ea", armor: true, armorValue: 0.35, emoji: "👑" },
+  steel: { name: "鋼殼氣球", hp: 8, speed: 58, reward: 4, lives: 2, armor: true, armorValue: 0.45, weaknesses: { sonic: 2 }, color: "#71717a", emoji: "🛡️" },
+  emp: { name: "電磁氣球", hp: 6, speed: 77, reward: 4, lives: 2, immunities: ["thunder"], weaknesses: { explosion: 1.5 }, color: "#38bdf8", emoji: "⚙️" },
+  insulated: { name: "絕緣氣球", hp: 10, speed: 45, reward: 5, lives: 3, armor: true, armorValue: 0.3, immunities: ["thunder"], weaknesses: { freeze: 1.8 }, color: "#f97316", emoji: "🧤" },
+  purified: { name: "淨化氣球", hp: 5, speed: 83, reward: 3, lives: 1, immunities: ["poison"], weaknesses: { freeze: 1.5 }, color: "#f8fafc", emoji: "✨" },
+  gale: { name: "疾風氣球", hp: 2, speed: 288, reward: 2, lives: 1, weaknesses: { dart: 1.5, vortex: 2 }, color: "#a7f3d0", emoji: "💨" },
+  tortoise: { name: "龜甲氣球", hp: 60, speed: 22, reward: 8, lives: 5, armor: true, armorValue: 0.65, weaknesses: { poison: 2, vortex: 1.5 }, color: "#166534", emoji: "🐢" },
+  chrono: { name: "時序氣球", hp: 12, speed: 96, reward: 10, lives: 3, specialBehavior: "timeJump", color: "#6366f1", emoji: "⏱️" },
+  regen: { name: "再生氣球", hp: 15, speed: 64, reward: 6, lives: 2, specialBehavior: "regen", color: "#ec4899", emoji: "💗" },
+  cursed: { name: "詛咒氣球", hp: 7, speed: 70, reward: 5, lives: 2, weaknesses: { oracle: 2 }, color: "#581c87", emoji: "☠️" },
+  mirror: { name: "鏡像氣球", hp: 4, speed: 77, reward: 3, lives: 1, specialBehavior: "split", color: "#67e8f9", emoji: "🪞" },
+  suicide: { name: "自爆氣球", hp: 3, speed: 115, reward: 1, lives: 0, specialBehavior: "explode", color: "#f43f5e", emoji: "💥" },
+  shadow: { name: "暗影氣球", hp: 8, speed: 102, reward: 7, lives: 3, immunities: ["dart"], weaknesses: { oracle: 1.5 }, color: "#020617", emoji: "🌑" },
 };
 
 const waves = [
@@ -710,6 +853,7 @@ function tileCenter(x, y) {
 
 function createMapWaves(total, difficulty, pathIds) {
   const result = [];
+  const advancedTypes = ["steel", "emp", "insulated", "purified", "gale", "tortoise", "chrono", "regen", "cursed", "mirror", "suicide", "shadow"];
   for (let i = 0; i < total; i += 1) {
     const base = waves[Math.min(i, waves.length - 1)];
     const multiplier = 1 + difficulty * 0.15 + i * 0.08;
@@ -719,6 +863,16 @@ function createMapWaves(total, difficulty, pathIds) {
       interval: Math.max(0.18, group.interval - difficulty * 0.02),
       pathId: pathIds.length > 1 ? pathIds[(i + groupIndex) % pathIds.length] : pathIds[0],
     }));
+    if (difficulty >= 6 && i >= 4) {
+      const type = advancedTypes[(i + difficulty) % advancedTypes.length];
+      groups.push({
+        type,
+        count: Math.max(2, Math.round((difficulty + i) * 0.45)),
+        interval: Math.max(0.45, 1.15 - difficulty * 0.04),
+        delay: 3 + (i % 4),
+        pathId: pathIds[(i + 1) % pathIds.length],
+      });
+    }
     if (i === total - 1) {
       groups.unshift({ type: "boss", count: Math.max(1, Math.ceil(difficulty / 2)), interval: 1.2, pathId: pathIds[0] });
     }
@@ -861,11 +1015,18 @@ function spawnEnemy(type, pathId, spawnIndex = 0) {
     reward: base.reward,
     lives: base.lives,
     armor: Boolean(base.armor),
+    armorValue: base.armorValue || (base.armor ? 0.4 : 0),
+    immunities: base.immunities || [],
+    weaknesses: base.weaknesses || {},
+    specialBehavior: base.specialBehavior || null,
+    behaviorState: { timer: 0, splitDone: false },
     color: base.color,
     emoji: base.emoji,
     frozen: 0,
     poison: 0,
     poisonTick: 0,
+    magnetized: 0,
+    cursed: 0,
   });
 }
 
@@ -896,6 +1057,16 @@ function updateEnemies(dt) {
       }
     }
     if (enemy.frozen > 0) enemy.frozen -= dt;
+    if (enemy.magnetized > 0) enemy.magnetized -= dt;
+    if (enemy.cursed > 0) enemy.cursed -= dt;
+    if (enemy.specialBehavior === "regen" && enemy.hp < enemy.maxHp) {
+      enemy.behaviorState.timer += dt;
+      if (enemy.behaviorState.timer >= 3) {
+        enemy.behaviorState.timer = 0;
+        enemy.hp = Math.min(enemy.maxHp, enemy.hp + 2);
+        addFloatText(enemy.x, enemy.y - 22, "+2", "#f9a8d4");
+      }
+    }
     if (enemy.hp <= 0) {
       killEnemy(i, enemy);
       continue;
@@ -927,6 +1098,17 @@ function updateEnemies(dt) {
 }
 
 function killEnemy(index, enemy) {
+  if (enemy.specialBehavior === "split" && !enemy.behaviorState.splitDone) {
+    spawnSplitEnemies(enemy, "blue", 3);
+  }
+  if (enemy.specialBehavior === "explode") {
+    for (const nearby of game.enemies) {
+      if (nearby !== enemy && distance(nearby, enemy) <= 96) {
+        nearby.hp -= 5;
+      }
+    }
+    addRing(enemy.x, enemy.y, 96, "#fb7185");
+  }
   game.enemies.splice(index, 1);
   game.gold += enemy.reward;
   game.score += enemy.reward * 10;
@@ -936,13 +1118,48 @@ function killEnemy(index, enemy) {
   updateHud();
 }
 
+function spawnSplitEnemies(enemy, type, count) {
+  const base = enemyTypes[type];
+  for (let i = 0; i < count; i += 1) {
+    game.enemies.push({
+      id: makeId(),
+      type,
+      pathId: enemy.pathId,
+      path: enemy.path,
+      x: enemy.x + (i - 1) * 8,
+      y: enemy.y,
+      pathIndex: enemy.pathIndex,
+      hp: base.hp,
+      maxHp: base.hp,
+      speed: base.speed,
+      reward: 0,
+      lives: base.lives,
+      armor: Boolean(base.armor),
+      armorValue: base.armorValue || 0,
+      immunities: base.immunities || [],
+      weaknesses: base.weaknesses || {},
+      specialBehavior: null,
+      behaviorState: { timer: 0, splitDone: true },
+      color: base.color,
+      emoji: base.emoji,
+      frozen: 0,
+      poison: 0,
+      poisonTick: 0,
+      magnetized: 0,
+      cursed: 0,
+    });
+  }
+}
+
 function updateTowers(dt) {
   for (const tower of game.towers) {
+    if (tower.supportBoost > 0) tower.supportBoost -= dt;
     tower.cooldown -= dt;
     if (tower.cooldown > 0) continue;
     const target = findTarget(tower);
     if (!target) continue;
-    tower.cooldown = 1 / tower.fireRate;
+    const fireRate = tower.fireRate * (tower.supportBoost > 0 ? 1.3 : 1);
+    tower.cooldown = 1 / fireRate;
     tower.angle = Math.atan2(target.y - tower.y, target.x - tower.x);
     fireTower(tower, target);
   }
@@ -965,14 +1182,23 @@ function findTarget(tower) {
 
 function fireTower(tower, target) {
   audio.play(tower.kind === "ice" ? "freeze" : "shoot");
-  if (tower.kind === "ice") {
+  if (tower.support) {
+    applySupportPulse(tower);
+    return;
+  }
+  if (["ice", "bell", "magnet", "thunder", "mushroom", "vortex"].includes(tower.kind)) {
+    let hits = 0;
     for (const enemy of game.enemies) {
       if (distance(tower, enemy) <= tower.range) {
-        enemy.frozen = Math.max(enemy.frozen, tower.freeze);
-        if (tower.damage > 0) applyDamage(enemy, tower.damage, "ice");
+        if (tower.freeze) enemy.frozen = Math.max(enemy.frozen, tower.freeze);
+        if (tower.magnetize) enemy.magnetized = Math.max(enemy.magnetized, tower.magnetize);
+        if (tower.poison && !enemy.immunities?.includes("poison")) enemy.poison = Math.max(enemy.poison, tower.poison);
+        if (tower.damage > 0) applyDamage(enemy, tower.damage, tower.attackType || tower.kind, tower);
+        hits += 1;
+        if (tower.chain && hits >= tower.chain) break;
       }
     }
-    addRing(tower.x, tower.y, tower.range, "#93c5fd");
+    addRing(tower.x, tower.y, tower.range, tower.color);
     return;
   }
 
@@ -987,13 +1213,24 @@ function fireTower(tower, target) {
       speed: tower.projectileSpeed,
       color: tower.color,
       kind: tower.kind,
+      attackType: tower.attackType || tower.kind,
       splash: tower.splash || 0,
       poison: tower.poison || 0,
+      curse: tower.curse || 0,
       pierce: tower.pierce ? 2 : 0,
+      pierceLevel: tower.pathA || 0,
       angleOffset: spread,
-      radius: tower.kind === "bomb" || tower.kind === "cannon" ? 7 : 4,
+      radius: tower.kind === "bomb" || tower.kind === "wizard" ? 7 : 4,
     });
   }
+}
+
+function applySupportPulse(tower) {
+  for (const ally of game.towers) {
+    if (ally === tower || distance(tower, ally) > tower.range) continue;
+    ally.supportBoost = Math.max(ally.supportBoost || 0, 5);
+  }
+  addRing(tower.x, tower.y, tower.range, tower.color);
 }
 
 function updateProjectiles(dt) {
@@ -1017,20 +1254,38 @@ function hitProjectile(p, index) {
     audio.play("bomb");
     addRing(p.target.x, p.target.y, p.splash, "#fbbf24");
     for (const enemy of game.enemies) {
-      if (distance(enemy, p.target) <= p.splash) applyDamage(enemy, p.damage, p.kind);
+      if (distance(enemy, p.target) <= p.splash) applyDamage(enemy, p.damage, p.attackType || p.kind, p);
     }
   } else {
-    applyDamage(p.target, p.damage, p.kind);
-    if (p.poison) p.target.poison = Math.max(p.target.poison, p.poison);
+    applyDamage(p.target, p.damage, p.attackType || p.kind, p);
+    if (p.poison && !p.target.immunities?.includes("poison")) p.target.poison = Math.max(p.target.poison, p.poison);
+    if (p.curse) p.target.cursed = Math.max(p.target.cursed, p.curse);
   }
   game.projectiles.splice(index, 1);
 }
 
-function applyDamage(enemy, amount, kind) {
+function applyDamage(enemy, amount, attackType, source = {}) {
+  const damage = calcDamage(amount, attackType, source, enemy);
+  if (damage <= 0) {
+    addFloatText(enemy.x, enemy.y - 20, "免疫", "#cbd5e1");
+    return;
+  }
+  enemy.hp -= damage;
+  addFloatText(enemy.x, enemy.y - 20, `-${damage}`, "#fee2e2");
+}
+
+function calcDamage(amount, attackType, source, enemy) {
+  if (enemy.immunities?.includes(attackType)) return 0;
   let damage = amount;
-  if (enemy.armor && kind !== "bomb" && kind !== "cannon") damage = Math.ceil(damage * 0.5);
-  enemy.hp -= Math.max(1, damage);
-  addFloatText(enemy.x, enemy.y - 20, `-${Math.max(1, damage)}`, "#fee2e2");
+  if (enemy.armor) {
+    const pierceLevel = source.pierceLevel || source.pierce || 0;
+    const reduction = Math.max(0, (enemy.armorValue || 0.4) - pierceLevel * 0.12);
+    damage *= 1 - reduction;
+  }
+  if (enemy.weaknesses?.[attackType]) damage *= enemy.weaknesses[attackType];
+  if (enemy.magnetized > 0) damage *= 1.5;
+  if (enemy.cursed > 0) damage *= 1.25;
+  return Math.ceil(Math.max(1, damage));
 }
 
 function updateParticles(dt) {
@@ -1341,32 +1596,37 @@ function updateSelection() {
   els.selectionContent.className = "selection-content";
   const sellValue = Math.floor(tower.spent * 0.5);
   els.selectionContent.innerHTML = `
-    <strong>${tower.emoji} ${tower.name} Lv.${1 + tower.pathA + tower.pathB}</strong><br>
+    <strong>${tower.emoji} ${tower.name} Lv.${1 + tower.pathA + tower.pathB}${tower.apexActivated ? " Apex" : ""}</strong><br>
     傷害 ${tower.damage}　範圍 ${Math.round(tower.range)}<br>
     射速 ${tower.fireRate.toFixed(1)}/秒<br>
     A 路線：${tower.pathA}/3　B 路線：${tower.pathB}/3
     <div class="upgrade-row">
-      <button id="upgradeA">升級 A　$${upgradeCost(tower, "A")}</button>
-      <button id="upgradeB">升級 B　$${upgradeCost(tower, "B")}</button>
+      <button id="upgradeA">${tower.pathA >= 3 ? "A 已滿" : `升級 A　$${upgradeCost(tower, "A")}`}</button>
+      <button id="upgradeB">${tower.pathB >= 3 ? "B 已滿" : `升級 B　$${upgradeCost(tower, "B")}`}</button>
     </div>
+    <button id="upgradeApex" ${canUpgrade(tower, "apex") ? "" : "disabled"}>Apex　$${upgradeCost(tower, "apex")}</button>
     <button id="sellTower" class="sell-btn">出售　$${sellValue}</button>
   `;
   document.querySelector("#upgradeA").disabled = !canUpgrade(tower, "A");
   document.querySelector("#upgradeB").disabled = !canUpgrade(tower, "B");
   document.querySelector("#upgradeA").addEventListener("click", () => upgradeTower(tower, "A"));
   document.querySelector("#upgradeB").addEventListener("click", () => upgradeTower(tower, "B"));
+  document.querySelector("#upgradeApex").addEventListener("click", () => upgradeTower(tower, "apex"));
   document.querySelector("#sellTower").addEventListener("click", () => sellTower(tower));
 }
 
 function upgradeCost(tower, path) {
+  if (path === "apex") return tower.apexCost || UPGRADE_COSTS.apex;
   const level = path === "A" ? tower.pathA : tower.pathB;
-  return path === "A" ? [100, 150, 300][level] || 0 : [80, 120, 250][level] || 0;
+  return UPGRADE_COSTS[path][level] || 0;
 }
 
 function canUpgrade(tower, path) {
+  if (path === "apex") {
+    return tower.pathA === 3 && tower.pathB === 3 && !tower.apexActivated && game.gold >= upgradeCost(tower, path);
+  }
   const own = path === "A" ? tower.pathA : tower.pathB;
-  const other = path === "A" ? tower.pathB : tower.pathA;
-  if (own >= 3 || other >= 3 && own >= 2) return false;
+  if (own >= 3) return false;
   return game.gold >= upgradeCost(tower, path);
 }
 
@@ -1379,12 +1639,20 @@ function upgradeTower(tower, path) {
   const cost = upgradeCost(tower, path);
   game.gold -= cost;
   tower.spent += cost;
+  if (path === "apex") {
+    activateApex(tower);
+    audio.play("win");
+    updateHud();
+    updateSelection();
+    return;
+  }
   if (path === "A") {
     tower.pathA += 1;
-    tower.damage += tower.kind === "ice" ? 1 : tower.pathA === 1 ? 1 : 2;
-    tower.range += tower.pathA === 3 ? 35 : 12;
+    tower.damage += tower.kind === "ice" || tower.support ? 1 : tower.pathA === 1 ? 1 : 2;
+    tower.range += tower.pathA === 3 ? 35 : 16;
     if (tower.pathA >= 2) tower.pierce = true;
     if (tower.pathA === 3 && tower.splash) tower.splash += 45;
+    if (tower.pathA === 3 && tower.freeze) tower.freeze += 0.8;
   } else {
     tower.pathB += 1;
     tower.fireRate += tower.pathB === 3 ? 0.8 : 0.45;
@@ -1395,6 +1663,20 @@ function upgradeTower(tower, path) {
   audio.play("upgrade");
   updateHud();
   updateSelection();
+}
+
+function activateApex(tower) {
+  tower.apexActivated = true;
+  tower.damage = Math.ceil(tower.damage * 1.5) + 1;
+  tower.range += 40;
+  tower.fireRate *= 1.35;
+  tower.splash = tower.splash ? Math.ceil(tower.splash * 1.25) : 0;
+  tower.freeze = tower.freeze ? tower.freeze + 1 : 0;
+  tower.poison = tower.poison ? tower.poison + 2 : 0;
+  tower.multishot = Math.max(tower.multishot || 1, 3);
+  tower.pierce = true;
+  addRing(tower.x, tower.y, tower.range, "#fef08a");
+  showToast(`${tower.name} 已啟動 Apex`);
 }
 
 function sellTower(tower) {
@@ -1437,6 +1719,8 @@ function placeTower(col, row) {
     cooldown: 0,
     pathA: 0,
     pathB: 0,
+    apexActivated: false,
+    supportBoost: 0,
     spent: type.cost,
     angle: 0,
   };

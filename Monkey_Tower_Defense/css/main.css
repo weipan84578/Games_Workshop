@@ -301,10 +301,17 @@ canvas {
 }
 
 .upgrade-row button,
+#upgradeApex,
 .sell-btn {
   min-height: 48px;
   background: #314563;
   color: #fff;
+}
+
+#upgradeApex {
+  width: 100%;
+  margin-top: var(--spacing-sm);
+  border-color: rgba(250, 204, 21, 0.45);
 }
 
 .sell-btn {
