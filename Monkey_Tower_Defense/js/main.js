@@ -1282,7 +1282,7 @@ function showMenu() {
 
 function startWave() {
   if (game.waveInProgress || game.currentWave >= game.map.waves.length || game.status !== "playing") return;
-  const earlyAutoStart = Boolean(autoWaveTimer) && game.autoWaveEnabled && !game.cheatUsed;
+  const earlyAutoStart = Boolean(autoWaveTimer) && game.autoWaveEnabled;
   clearAutoWaveTimer();
   if (earlyAutoStart) changeGold(10);
   audio.play("upgrade");
@@ -1305,7 +1305,7 @@ function clearAutoWaveTimer() {
 }
 
 function canAutoStartNextWave() {
-  if (!game.autoWaveEnabled || game.cheatUsed) return false;
+  if (!game.autoWaveEnabled) return false;
   if (game.status !== "playing" || game.paused || game.waveInProgress || !game.map) return false;
   if (game.currentWave >= game.map.waves.length - 1) return false;
   return true;
@@ -1332,12 +1332,6 @@ function scheduleAutoWave() {
 
 function toggleAutoWave() {
   if (game.status !== "playing") return;
-  if (game.cheatUsed) {
-    game.autoWaveEnabled = false;
-    updateAutoWaveButton();
-    showToast("作弊局不可使用自動波次");
-    return;
-  }
   game.autoWaveEnabled = !game.autoWaveEnabled;
   if (game.autoWaveEnabled) {
     scheduleAutoWave();
@@ -1349,7 +1343,7 @@ function toggleAutoWave() {
 
 function updateAutoWaveButton() {
   if (!els.autoWaveBtn) return;
-  const locked = game.status !== "playing" || game.cheatUsed;
+  const locked = game.status !== "playing";
   els.autoWaveBtn.disabled = locked;
   els.autoWaveBtn.textContent = `自動: ${game.autoWaveEnabled && !locked ? "ON" : "OFF"}`;
   els.autoWaveBtn.classList.toggle("enabled", game.autoWaveEnabled && !locked);
@@ -2245,8 +2239,6 @@ const cheatDetector = {
 function triggerMoneyCheat() {
   changeGold(9999);
   game.cheatUsed = true;
-  game.autoWaveEnabled = false;
-  clearAutoWaveTimer();
   audio.play("cheat");
   updateHud();
   showToast("作弊碼啟動：+9999 金幣。本局不更新最高分與解鎖進度。");
