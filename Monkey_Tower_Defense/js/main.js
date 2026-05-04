@@ -22,6 +22,7 @@ const els = {
   homeBtn: document.querySelector("#homeBtn"),
   towerList: document.querySelector("#towerList"),
   startWaveBtn: document.querySelector("#startWaveBtn"),
+  autoWaveBtn: document.querySelector("#autoWaveBtn"),
   selectionContent: document.querySelector("#selectionContent"),
   toast: document.querySelector("#toast"),
   modal: document.querySelector("#modal"),
@@ -938,6 +939,7 @@ let selectedMapId = settings.selectedMapId || "map01";
 let lastTime = performance.now();
 let animationId = 0;
 let toastTimer = 0;
+let autoWaveTimer = 0;
 let nextId = 1;
 
 const game = {
@@ -959,6 +961,7 @@ const game = {
   particles: [],
   spawners: [],
   paused: false,
+  autoWaveEnabled: false,
   kills: 0,
   cheatUsed: false,
 };
@@ -1228,6 +1231,7 @@ function saveProgress() {
 function resetGame() {
   if (!isMapUnlocked(getMapById(selectedMapId))) selectedMapId = "map01";
   const map = prepareMap(getMapById(selectedMapId));
+  clearAutoWaveTimer();
   Object.assign(game, {
     status: "playing",
     map,
@@ -1246,6 +1250,7 @@ function resetGame() {
     particles: [],
     spawners: [],
     paused: false,
+    autoWaveEnabled: false,
     kills: 0,
     cheatUsed: false,
   });
@@ -1268,6 +1273,7 @@ function showGame() {
 }
 
 function showMenu() {
+  clearAutoWaveTimer();
   game.status = "menu";
   cheatDetector.buffer = [];
   els.game.classList.add("hidden");
@@ -1276,6 +1282,9 @@ function showMenu() {
 
 function startWave() {
   if (game.waveInProgress || game.currentWave >= game.map.waves.length || game.status !== "playing") return;
+  const earlyAutoStart = Boolean(autoWaveTimer) && game.autoWaveEnabled && !game.cheatUsed;
+  clearAutoWaveTimer();
+  if (earlyAutoStart) changeGold(10);
   audio.play("upgrade");
   game.waveInProgress = true;
   game.currentWave += 1;
@@ -1287,6 +1296,68 @@ function startWave() {
   els.startWaveBtn.disabled = true;
   showToast(`第 ${game.currentWave} 波開始`);
   updateHud();
+}
+
+function clearAutoWaveTimer() {
+  if (!autoWaveTimer) return;
+  clearTimeout(autoWaveTimer);
+  autoWaveTimer = 0;
+}
+
+function canAutoStartNextWave() {
+  if (!game.autoWaveEnabled || game.cheatUsed) return false;
+  if (game.status !== "playing" || game.paused || game.waveInProgress || !game.map) return false;
+  if (game.currentWave >= game.map.waves.length - 1) return false;
+  return true;
+}
+
+function scheduleAutoWave() {
+  clearAutoWaveTimer();
+  if (!canAutoStartNextWave()) {
+    updateAutoWaveButton();
+    return;
+  }
+  autoWaveTimer = setTimeout(() => {
+    autoWaveTimer = 0;
+    if (!canAutoStartNextWave()) {
+      updateAutoWaveButton();
+      return;
+    }
+    changeGold(10);
+    showToast("自動波次：提前出擊獎勵 +10 金幣");
+    startWave();
+  }, 500);
+  updateAutoWaveButton();
+}
+
+function toggleAutoWave() {
+  if (game.status !== "playing") return;
+  if (game.cheatUsed) {
+    game.autoWaveEnabled = false;
+    updateAutoWaveButton();
+    showToast("作弊局不可使用自動波次");
+    return;
+  }
+  game.autoWaveEnabled = !game.autoWaveEnabled;
+  if (game.autoWaveEnabled) {
+    scheduleAutoWave();
+  } else {
+    clearAutoWaveTimer();
+    updateAutoWaveButton();
+  }
+}
+
+function updateAutoWaveButton() {
+  if (!els.autoWaveBtn) return;
+  const locked = game.status !== "playing" || game.cheatUsed;
+  els.autoWaveBtn.disabled = locked;
+  els.autoWaveBtn.textContent = `自動: ${game.autoWaveEnabled && !locked ? "ON" : "OFF"}`;
+  els.autoWaveBtn.classList.toggle("enabled", game.autoWaveEnabled && !locked);
+  els.autoWaveBtn.classList.toggle("disabled", !game.autoWaveEnabled || locked);
+}
+
+function changeGold(amount) {
+  game.gold = Math.max(0, game.gold + amount);
 }
 
 function update(dt) {
@@ -1426,7 +1497,7 @@ function killEnemy(index, enemy) {
     addRing(enemy.x, enemy.y, 96, "#fb7185");
   }
   game.enemies.splice(index, 1);
-  game.gold += enemy.reward;
+  changeGold(enemy.reward);
   game.score += enemy.reward * 10;
   game.kills += 1;
   audio.play("pop");
@@ -1620,20 +1691,23 @@ function checkWaveComplete() {
   const allSpawned = game.spawners.every((spawner) => spawner.spawned >= spawner.count);
   if (allSpawned && game.enemies.length === 0) {
     game.waveInProgress = false;
-    game.gold += 25;
+    changeGold(25);
     game.score += 250;
-    audio.play(game.currentWave >= waves.length ? "win" : "upgrade");
+    audio.play(game.currentWave >= game.map.waves.length ? "win" : "upgrade");
     updateHud();
     if (game.currentWave >= game.map.waves.length) {
       endGame(true);
     } else {
       els.startWaveBtn.disabled = false;
+      scheduleAutoWave();
       showToast(`第 ${game.currentWave} 波完成，獎勵 25 金幣`);
     }
   }
 }
 
 function endGame(win) {
+  clearAutoWaveTimer();
+  game.autoWaveEnabled = false;
   game.status = win ? "win" : "gameover";
   audio.play(win ? "win" : "lose");
   const mapId = game.map.id;
@@ -1926,18 +2000,37 @@ function updateSelection() {
     射速 ${tower.fireRate.toFixed(1)}/秒<br>
     A 路線：${tower.pathA}/3　B 路線：${tower.pathB}/3
     <div class="upgrade-row">
-      <button id="upgradeA">${tower.pathA >= 3 ? "A 已滿" : `升級 A　$${upgradeCost(tower, "A")}`}</button>
-      <button id="upgradeB">${tower.pathB >= 3 ? "B 已滿" : `升級 B　$${upgradeCost(tower, "B")}`}</button>
+      <button id="upgradeA" class="upgrade-button">${tower.pathA >= 3 ? "A 已滿" : `升級 A　$${upgradeCost(tower, "A")}`}</button>
+      <button id="upgradeB" class="upgrade-button">${tower.pathB >= 3 ? "B 已滿" : `升級 B　$${upgradeCost(tower, "B")}`}</button>
     </div>
-    <button id="upgradeApex" ${canUpgrade(tower, "apex") ? "" : "disabled"}>Apex　$${upgradeCost(tower, "apex")}</button>
+    <button id="upgradeApex" class="upgrade-button" ${canUpgrade(tower, "apex") ? "" : "disabled"}>Apex　$${upgradeCost(tower, "apex")}</button>
     <button id="sellTower" class="sell-btn">出售　$${sellValue}</button>
   `;
-  document.querySelector("#upgradeA").disabled = !canUpgrade(tower, "A");
-  document.querySelector("#upgradeB").disabled = !canUpgrade(tower, "B");
+  setUpgradeButtonState(document.querySelector("#upgradeA"), getUpgradeState(tower, "A"));
+  setUpgradeButtonState(document.querySelector("#upgradeB"), getUpgradeState(tower, "B"));
+  setUpgradeButtonState(document.querySelector("#upgradeApex"), getUpgradeState(tower, "apex"));
   document.querySelector("#upgradeA").addEventListener("click", () => upgradeTower(tower, "A"));
   document.querySelector("#upgradeB").addEventListener("click", () => upgradeTower(tower, "B"));
   document.querySelector("#upgradeApex").addEventListener("click", () => upgradeTower(tower, "apex"));
   document.querySelector("#sellTower").addEventListener("click", () => sellTower(tower));
+}
+
+function getUpgradeState(tower, path) {
+  if (path === "apex") {
+    if (tower.apexActivated) return "purchased";
+    if (tower.pathA < 3 || tower.pathB < 3) return "locked";
+    return game.gold >= upgradeCost(tower, path) ? "available" : "insufficient";
+  }
+  const own = path === "A" ? tower.pathA : tower.pathB;
+  if (own >= 3) return "purchased";
+  return game.gold >= upgradeCost(tower, path) ? "available" : "insufficient";
+}
+
+function setUpgradeButtonState(button, state) {
+  button.dataset.state = state;
+  button.classList.remove("state-available", "state-insufficient", "state-locked", "state-purchased");
+  button.classList.add(`state-${state}`);
+  button.disabled = state !== "available";
 }
 
 function upgradeCost(tower, path) {
@@ -1962,7 +2055,7 @@ function upgradeTower(tower, path) {
     return;
   }
   const cost = upgradeCost(tower, path);
-  game.gold -= cost;
+  changeGold(-cost);
   tower.spent += cost;
   if (path === "apex") {
     activateApex(tower);
@@ -2007,7 +2100,7 @@ function activateApex(tower) {
 function sellTower(tower) {
   const index = game.towers.indexOf(tower);
   if (index < 0) return;
-  game.gold += Math.floor(tower.spent * 0.5);
+  changeGold(Math.floor(tower.spent * 0.5));
   game.towers.splice(index, 1);
   game.selectedTower = null;
   audio.play("place");
@@ -2034,7 +2127,7 @@ function placeTower(col, row) {
     showToast("金幣不足。");
     return;
   }
-  game.gold -= type.cost;
+  changeGold(-type.cost);
   const tower = {
     ...cloneData(type),
     x: col * TILE + TILE / 2,
@@ -2076,7 +2169,9 @@ function updateHud() {
   const totalWaves = game.map?.waves.length || getMapById(selectedMapId).waveCount;
   els.waveText.textContent = `${Math.max(1, game.currentWave || 1)}/${totalWaves}`;
   els.startWaveBtn.disabled = game.waveInProgress || game.status !== "playing";
+  updateAutoWaveButton();
   renderTowerList();
+  if (game.selectedTower) updateSelection();
 }
 
 function canvasToTile(event) {
@@ -2148,11 +2243,13 @@ const cheatDetector = {
 };
 
 function triggerMoneyCheat() {
-  game.gold += 999;
+  changeGold(9999);
   game.cheatUsed = true;
+  game.autoWaveEnabled = false;
+  clearAutoWaveTimer();
   audio.play("cheat");
   updateHud();
-  showToast("作弊碼啟動：+999 金幣。本局不更新最高分與解鎖進度。");
+  showToast("作弊碼啟動：+9999 金幣。本局不更新最高分與解鎖進度。");
 }
 
 function openSettings() {
@@ -2271,10 +2368,17 @@ els.settingsBtn.addEventListener("click", openSettings);
 els.helpBtn.addEventListener("click", openHelp);
 els.modalCloseBtn.addEventListener("click", () => els.modal.close());
 els.startWaveBtn.addEventListener("click", startWave);
+els.autoWaveBtn.addEventListener("click", toggleAutoWave);
 els.pauseBtn.addEventListener("click", () => {
   if (game.status !== "playing") return;
   game.paused = !game.paused;
   els.pauseBtn.textContent = game.paused ? "▶" : "⏸";
+  if (game.paused) {
+    clearAutoWaveTimer();
+  } else {
+    scheduleAutoWave();
+  }
+  updateHud();
 });
 document.querySelectorAll(".speed-button").forEach((button) => {
   button.addEventListener("click", () => setSpeed(button.dataset.speed));

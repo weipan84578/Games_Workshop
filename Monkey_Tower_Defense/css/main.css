@@ -223,6 +223,23 @@ button:disabled {
   color: var(--color-text-main);
 }
 
+.auto-wave-button {
+  min-width: 96px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  font-weight: 900;
+}
+
+.auto-wave-button.enabled {
+  background: #2f7d46;
+  color: #ecfdf5;
+  border-color: rgba(134, 239, 172, 0.55);
+}
+
+.auto-wave-button.disabled {
+  background: #243044;
+  color: var(--color-text-sub);
+}
+
 .play-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 340px;
@@ -334,6 +351,22 @@ canvas {
   min-height: 48px;
   background: #314563;
   color: #fff;
+}
+
+.upgrade-button.state-available {
+  background: #2f7d46;
+  border-color: rgba(134, 239, 172, 0.55);
+}
+
+.upgrade-button.state-insufficient {
+  background: #4b3342;
+  color: #fca5a5;
+}
+
+.upgrade-button.state-locked,
+.upgrade-button.state-purchased {
+  background: #2f3a4d;
+  color: var(--color-text-sub);
 }
 
 #upgradeApex {
