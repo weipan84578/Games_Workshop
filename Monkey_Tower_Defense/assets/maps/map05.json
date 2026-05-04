@@ -1,0 +1,41 @@
+{
+  "id": "map05",
+  "name": "天空群島",
+  "nameEn": "Sky Islands",
+  "theme": "sky",
+  "difficulty": 5,
+  "gridWidth": 20,
+  "gridHeight": 15,
+  "startGold": 100,
+  "startLives": 10,
+  "waveCount": 20,
+  "paths": [
+    { "id": "islands", "waypoints": [{ "x": 0, "y": 0 }, { "x": 7, "y": 0 }, { "x": 7, "y": 3 }, { "x": 0, "y": 3 }, { "x": 0, "y": 5 }, { "x": 4, "y": 5 }, { "x": 4, "y": 6 }, { "x": 15, "y": 6 }, { "x": 15, "y": 9 }, { "x": 19, "y": 9 }, { "x": 19, "y": 13 }, { "x": 3, "y": 13 }, { "x": 19, "y": 13 }, { "x": 19, "y": 14 }] }
+  ],
+  "grid": [
+    "S>>>>>>vWWWWWWWWWWWW",
+    ".......vWWW.......WW",
+    ".......vWWW.......WW",
+    "<<<<<<<<WWW.......WW",
+    "^......WWWWWWWWWWWWW",
+    ">>>>B..WWWWB......WW",
+    "WWWW>>>>>>>>>>>vWWWW",
+    "WWWWWWWWWWWW...vWWWW",
+    "WWWWWWWWWWWW...vWWWW",
+    "WWWWWWWWWWWW...<<<<<",
+    "WWWWWWWWWWWWWWW....v",
+    "...vWWWWWWWWWWW....v",
+    "...vWWWWWWWWWWW....v",
+    "...<<<<<<<<<<<<<<<<<",
+    "...................E"
+  ],
+  "background": {
+    "bgColor": "#87CEEB",
+    "pathColor": "#C8A96E",
+    "pathEdgeColor": "#A0845A",
+    "emptyColor": "#98D4A3",
+    "obstacleColor": "#FFFFFF",
+    "accentColor": "#FFE08A",
+    "uiTint": "#29B6F6"
+  }
+}

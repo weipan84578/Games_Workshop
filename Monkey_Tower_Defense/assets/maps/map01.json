@@ -1,0 +1,48 @@
+{
+  "id": "map01",
+  "name": "森林小徑",
+  "nameEn": "Jungle Path",
+  "theme": "jungle",
+  "difficulty": 1,
+  "gridWidth": 16,
+  "gridHeight": 12,
+  "startGold": 150,
+  "startLives": 20,
+  "waveCount": 10,
+  "paths": [
+    {
+      "id": "main",
+      "waypoints": [
+        { "x": 0, "y": 3 },
+        { "x": 14, "y": 3 },
+        { "x": 14, "y": 6 },
+        { "x": 0, "y": 6 },
+        { "x": 0, "y": 11 },
+        { "x": 15, "y": 11 }
+      ]
+    }
+  ],
+  "grid": [
+    "................",
+    ".T.....T.....T..",
+    "................",
+    "S>>>>>>>>>>>>>v.",
+    "........T.....v.",
+    "..T...........v.",
+    "v<<<<<<<<<<<<<<.",
+    "v...............",
+    "v...............",
+    "v.T.......T.....",
+    "v...............",
+    ">>>>>>>>>>>>>>>E"
+  ],
+  "background": {
+    "bgColor": "#2D5A27",
+    "pathColor": "#8B6914",
+    "pathEdgeColor": "#6B4F10",
+    "emptyColor": "#3A7A32",
+    "obstacleColor": "#1A3D18",
+    "accentColor": "#A8D5A2",
+    "uiTint": "#4CAF50"
+  }
+}

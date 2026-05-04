@@ -1,7 +1,6 @@
 const TILE = 64;
-const COLS = 15;
-const ROWS = 10;
 const STORAGE_KEY = "monkey-fortress-td:settings";
+const PROGRESS_KEY = "monkey-fortress-td:progress";
 
 const canvas = document.querySelector("#gameCanvas");
 const ctx = canvas.getContext("2d");
@@ -31,18 +30,8 @@ const els = {
   modalCloseBtn: document.querySelector("#modalCloseBtn"),
 };
 
-const pathTiles = [
-  [0, 4], [1, 4], [2, 4], [3, 4], [3, 3], [4, 3], [5, 3], [6, 3],
-  [6, 4], [6, 5], [7, 5], [8, 5], [9, 5], [9, 4], [9, 3], [10, 3],
-  [11, 3], [11, 4], [11, 5], [12, 5], [13, 5], [14, 5],
-];
-
-const pathPoints = pathTiles.map(([x, y]) => ({
-  x: x * TILE + TILE / 2,
-  y: y * TILE + TILE / 2,
-}));
-
-const pathSet = new Set(pathTiles.map(([x, y]) => `${x},${y}`));
+const TILE_CHARS = new Set(["#", ">", "<", "^", "v", "S", "E", "2"]);
+const BLOCKED_CHARS = new Set(["X", "W", "R", "T", "B", "L"]);
 
 const towerTypes = {
   dart: {
@@ -152,7 +141,178 @@ const waves = [
   [{ type: "boss", count: 1, interval: 1 }, { type: "lead", count: 15, interval: 0.65, delay: 4 }, { type: "green", count: 20, interval: 0.28, delay: 8 }],
 ];
 
+const MAPS = [
+  {
+    id: "map01",
+    name: "森林小徑",
+    nameEn: "Jungle Path",
+    theme: "jungle",
+    difficulty: 1,
+    gridWidth: 16,
+    gridHeight: 12,
+    startGold: 150,
+    startLives: 20,
+    waveCount: 10,
+    paths: [
+      { id: "main", waypoints: [{ x: 0, y: 3 }, { x: 14, y: 3 }, { x: 14, y: 6 }, { x: 0, y: 6 }, { x: 0, y: 11 }, { x: 15, y: 11 }] },
+    ],
+    grid: [
+      "................",
+      ".T.....T.....T..",
+      "................",
+      "S>>>>>>>>>>>>>v.",
+      "........T.....v.",
+      "..T...........v.",
+      "v<<<<<<<<<<<<<<.",
+      "v...............",
+      "v...............",
+      "v.T.......T.....",
+      "v...............",
+      ">>>>>>>>>>>>>>>E",
+    ],
+    background: { bgColor: "#2D5A27", pathColor: "#8B6914", pathEdgeColor: "#6B4F10", emptyColor: "#3A7A32", obstacleColor: "#1A3D18", accentColor: "#A8D5A2", uiTint: "#4CAF50" },
+    hint: "單一路徑很長，適合在轉角集中火力。",
+  },
+  {
+    id: "map02",
+    name: "沙漠雙蛇",
+    nameEn: "Desert Serpent",
+    theme: "desert",
+    difficulty: 2,
+    gridWidth: 18,
+    gridHeight: 13,
+    startGold: 130,
+    startLives: 18,
+    waveCount: 12,
+    paths: [
+      { id: "upper", waypoints: [{ x: 0, y: 3 }, { x: 2, y: 3 }, { x: 2, y: 2 }, { x: 12, y: 2 }, { x: 12, y: 3 }, { x: 17, y: 3 }] },
+      { id: "lower", waypoints: [{ x: 0, y: 3 }, { x: 2, y: 3 }, { x: 2, y: 4 }, { x: 12, y: 4 }, { x: 12, y: 3 }, { x: 17, y: 3 }] },
+    ],
+    grid: [
+      "..................",
+      ".R....R.....R...R.",
+      "..>>>>>>>>>>v.....",
+      "S.2.........2....E",
+      "..>>>>>>>>>>^.....",
+      ".R.....R......R...",
+      "..................",
+      "....R.......R.....",
+      "..................",
+      ".R..............R.",
+      "..................",
+      ".....R.....R......",
+      "..................",
+    ],
+    background: { bgColor: "#C2A060", pathColor: "#A0784A", pathEdgeColor: "#7A5A30", emptyColor: "#D4B878", obstacleColor: "#8B7355", accentColor: "#E8D5A0", uiTint: "#F5A623" },
+    hint: "敵人會在上下兩條蛇形路徑間分流，遠距離塔更有價值。",
+  },
+  {
+    id: "map03",
+    name: "冰霜堡壘",
+    nameEn: "Frozen Fortress",
+    theme: "snow",
+    difficulty: 3,
+    gridWidth: 18,
+    gridHeight: 14,
+    startGold: 120,
+    startLives: 15,
+    waveCount: 14,
+    paths: [
+      { id: "spiral", waypoints: [{ x: 0, y: 0 }, { x: 17, y: 0 }, { x: 17, y: 13 }, { x: 0, y: 13 }, { x: 0, y: 1 }, { x: 2, y: 1 }, { x: 2, y: 11 }, { x: 4, y: 11 }, { x: 4, y: 2 }, { x: 16, y: 2 }, { x: 16, y: 9 }, { x: 6, y: 9 }, { x: 6, y: 6 }, { x: 12, y: 6 }, { x: 12, y: 7 }, { x: 8, y: 7 }] },
+    ],
+    grid: [
+      "S>>>>>>>>>>>>>>>>v",
+      "^................v",
+      "^.>>>>>>>>>>>>>>v.",
+      "^.^.............v.",
+      "^.^.X....X......v.",
+      "^.^.............v.",
+      "^.^...>>>>>>v...v.",
+      "^.^...^..E<<<...v.",
+      "^.^...^.........v.",
+      "^.^...<<<<<<<<<<v.",
+      "^.^..............v",
+      "^.<<<.............",
+      "^................<",
+      "<<<<<<<<<<<<<<<<<<",
+    ],
+    background: { bgColor: "#B0C8E0", pathColor: "#8EAABB", pathEdgeColor: "#6A8FA8", emptyColor: "#D8EAF5", obstacleColor: "#4A6B8A", accentColor: "#FFFFFF", uiTint: "#64B5F6" },
+    hint: "螺旋路徑很長，但可建造區被壓縮，升級既有猴塔比鋪滿更重要。",
+  },
+  {
+    id: "map04",
+    name: "熔岩迷宮",
+    nameEn: "Lava Maze",
+    theme: "lava",
+    difficulty: 4,
+    gridWidth: 20,
+    gridHeight: 14,
+    startGold: 110,
+    startLives: 12,
+    waveCount: 16,
+    paths: [
+      { id: "top", waypoints: [{ x: 0, y: 1 }, { x: 3, y: 1 }, { x: 3, y: 3 }, { x: 7, y: 3 }, { x: 7, y: 1 }, { x: 13, y: 1 }, { x: 13, y: 3 }, { x: 17, y: 3 }, { x: 17, y: 5 }, { x: 19, y: 5 }] },
+      { id: "middle", waypoints: [{ x: 0, y: 5 }, { x: 19, y: 5 }] },
+      { id: "bottom", waypoints: [{ x: 0, y: 9 }, { x: 3, y: 9 }, { x: 3, y: 7 }, { x: 7, y: 7 }, { x: 7, y: 9 }, { x: 13, y: 9 }, { x: 13, y: 7 }, { x: 17, y: 7 }, { x: 17, y: 5 }, { x: 19, y: 5 }] },
+    ],
+    grid: [
+      "....................",
+      "S>>v...^>>>>>v......",
+      "..L...L....L..v.L...",
+      "..L>>>>^..L..>>>>v..",
+      "..L.......L......v..",
+      "S>>>>>>>>>>>>>>>>>2E",
+      "..L.......L......^..",
+      "..L>>>>v..L..>>>>^..",
+      "..L...v.L...........",
+      "S>>v...>>>>>>^......",
+      "..L.......L.........",
+      "....................",
+      "....................",
+      "....................",
+    ],
+    background: { bgColor: "#3A1A0A", pathColor: "#5A3020", pathEdgeColor: "#3A1A08", emptyColor: "#4A2810", obstacleColor: "#FF6B2B", accentColor: "#FF4500", uiTint: "#FF5722" },
+    hint: "三路同時進攻，熔岩區不能建造。優先守住匯流點。",
+  },
+  {
+    id: "map05",
+    name: "天空群島",
+    nameEn: "Sky Islands",
+    theme: "sky",
+    difficulty: 5,
+    gridWidth: 20,
+    gridHeight: 15,
+    startGold: 100,
+    startLives: 10,
+    waveCount: 20,
+    paths: [
+      { id: "islands", waypoints: [{ x: 0, y: 0 }, { x: 7, y: 0 }, { x: 7, y: 3 }, { x: 0, y: 3 }, { x: 0, y: 5 }, { x: 4, y: 5 }, { x: 4, y: 6 }, { x: 15, y: 6 }, { x: 15, y: 9 }, { x: 19, y: 9 }, { x: 19, y: 13 }, { x: 3, y: 13 }, { x: 19, y: 13 }, { x: 19, y: 14 }] },
+    ],
+    grid: [
+      "S>>>>>>vWWWWWWWWWWWW",
+      ".......vWWW.......WW",
+      ".......vWWW.......WW",
+      "<<<<<<<<WWW.......WW",
+      "^......WWWWWWWWWWWWW",
+      ">>>>B..WWWWB......WW",
+      "WWWW>>>>>>>>>>>vWWWW",
+      "WWWWWWWWWWWW...vWWWW",
+      "WWWWWWWWWWWW...vWWWW",
+      "WWWWWWWWWWWW...<<<<<",
+      "WWWWWWWWWWWWWWW....v",
+      "...vWWWWWWWWWWW....v",
+      "...vWWWWWWWWWWW....v",
+      "...<<<<<<<<<<<<<<<<<",
+      "...................E",
+    ],
+    background: { bgColor: "#87CEEB", pathColor: "#C8A96E", pathEdgeColor: "#A0845A", emptyColor: "#98D4A3", obstacleColor: "#FFFFFF", accentColor: "#FFE08A", uiTint: "#29B6F6" },
+    hint: "可建造島嶼有限，橋樑附近的範圍攻擊是關鍵。",
+  },
+];
+
 const settings = loadSettings();
+const progress = loadProgress();
+let selectedMapId = settings.selectedMapId || "map01";
 let lastTime = performance.now();
 let animationId = 0;
 let toastTimer = 0;
@@ -160,6 +320,9 @@ let nextId = 1;
 
 const game = {
   status: "menu",
+  map: null,
+  pathCells: new Set(),
+  pathPixelSets: {},
   lives: 20,
   gold: 150,
   score: 0,
@@ -308,6 +471,73 @@ class AudioEngine {
 
 const audio = new AudioEngine();
 
+function getMapById(mapId) {
+  return MAPS.find((map) => map.id === mapId) || MAPS[0];
+}
+
+function isMapUnlocked(map) {
+  if (map.id === "map01") return true;
+  const previousIndex = MAPS.findIndex((item) => item.id === map.id) - 1;
+  return previousIndex >= 0 && Boolean(progress.completedMaps[MAPS[previousIndex].id]);
+}
+
+function prepareMap(map) {
+  const prepared = cloneData(map);
+  prepared.paths = prepared.paths.map((path) => {
+    const cells = expandWaypoints(path.waypoints);
+    return {
+      ...path,
+      cells,
+      points: cells.map((cell) => tileCenter(cell.x, cell.y)),
+    };
+  });
+  prepared.pathCells = new Set(prepared.paths.flatMap((path) => path.cells.map((cell) => `${cell.x},${cell.y}`)));
+  prepared.waves = createMapWaves(prepared.waveCount, prepared.difficulty, prepared.paths.map((path) => path.id));
+  return prepared;
+}
+
+function expandWaypoints(waypoints) {
+  const cells = [];
+  for (let i = 0; i < waypoints.length - 1; i += 1) {
+    const start = waypoints[i];
+    const end = waypoints[i + 1];
+    const dx = Math.sign(end.x - start.x);
+    const dy = Math.sign(end.y - start.y);
+    let x = start.x;
+    let y = start.y;
+    if (i === 0) cells.push({ x, y });
+    while (x !== end.x || y !== end.y) {
+      x += dx;
+      y += dy;
+      cells.push({ x, y });
+    }
+  }
+  return cells;
+}
+
+function tileCenter(x, y) {
+  return { x: x * TILE + TILE / 2, y: y * TILE + TILE / 2 };
+}
+
+function createMapWaves(total, difficulty, pathIds) {
+  const result = [];
+  for (let i = 0; i < total; i += 1) {
+    const base = waves[Math.min(i, waves.length - 1)];
+    const multiplier = 1 + difficulty * 0.15 + i * 0.08;
+    const groups = base.map((group, groupIndex) => ({
+      ...group,
+      count: Math.max(1, Math.round(group.count * multiplier)),
+      interval: Math.max(0.18, group.interval - difficulty * 0.02),
+      pathId: pathIds.length > 1 ? pathIds[(i + groupIndex) % pathIds.length] : pathIds[0],
+    }));
+    if (i === total - 1) {
+      groups.unshift({ type: "boss", count: Math.max(1, Math.ceil(difficulty / 2)), interval: 1.2, pathId: pathIds[0] });
+    }
+    result.push(groups);
+  }
+  return result;
+}
+
 function loadSettings() {
   const defaults = { musicVolume: 0.6, sfxVolume: 0.8, speed: 1, muted: false };
   try {
@@ -318,14 +548,35 @@ function loadSettings() {
 }
 
 function saveSettings() {
+  settings.selectedMapId = selectedMapId;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
 }
 
+function loadProgress() {
+  const defaults = {
+    completedMaps: {},
+    highScores: {},
+  };
+  try {
+    return { ...defaults, ...JSON.parse(localStorage.getItem(PROGRESS_KEY) || "{}") };
+  } catch {
+    return defaults;
+  }
+}
+
+function saveProgress() {
+  localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
+}
+
 function resetGame() {
+  if (!isMapUnlocked(getMapById(selectedMapId))) selectedMapId = "map01";
+  const map = prepareMap(getMapById(selectedMapId));
   Object.assign(game, {
     status: "playing",
-    lives: 20,
-    gold: 150,
+    map,
+    pathCells: map.pathCells,
+    lives: map.startLives,
+    gold: map.startGold,
     score: 0,
     currentWave: 0,
     waveInProgress: false,
@@ -340,13 +591,15 @@ function resetGame() {
     paused: false,
     kills: 0,
   });
+  canvas.width = map.gridWidth * TILE;
+  canvas.height = map.gridHeight * TILE;
   els.pauseBtn.textContent = "⏸";
   els.speedBtn.textContent = `${game.speed}x`;
   showGame();
   renderTowerList();
   updateHud();
   updateSelection();
-  showToast("選擇猴塔後，點草地建造防線。");
+  showToast(`${map.name}：${map.hint}`);
 }
 
 function showGame() {
@@ -363,11 +616,11 @@ function showMenu() {
 }
 
 function startWave() {
-  if (game.waveInProgress || game.currentWave >= waves.length || game.status !== "playing") return;
+  if (game.waveInProgress || game.currentWave >= game.map.waves.length || game.status !== "playing") return;
   audio.play("upgrade");
   game.waveInProgress = true;
   game.currentWave += 1;
-  game.spawners = waves[game.currentWave - 1].map((group) => ({
+  game.spawners = game.map.waves[game.currentWave - 1].map((group) => ({
     ...group,
     spawned: 0,
     timer: -(group.delay || 0),
@@ -394,20 +647,24 @@ function updateSpawners(dt) {
     spawner.timer += dt;
     while (spawner.timer >= spawner.interval && spawner.spawned < spawner.count) {
       spawner.timer -= spawner.interval;
-      spawnEnemy(spawner.type);
+      spawnEnemy(spawner.type, spawner.pathId, spawner.spawned);
       spawner.spawned += 1;
     }
   }
 }
 
-function spawnEnemy(type) {
+function spawnEnemy(type, pathId, spawnIndex = 0) {
   const base = enemyTypes[type];
   const hpBoost = 1 + Math.max(0, game.currentWave - 1) * 0.12;
+  const path = chooseEnemyPath(pathId, spawnIndex);
+  const start = path.points[0];
   game.enemies.push({
     id: makeId(),
     type,
-    x: pathPoints[0].x,
-    y: pathPoints[0].y,
+    pathId: path.id,
+    path,
+    x: start.x,
+    y: start.y,
     pathIndex: 0,
     hp: Math.ceil(base.hp * hpBoost),
     maxHp: Math.ceil(base.hp * hpBoost),
@@ -421,6 +678,14 @@ function spawnEnemy(type) {
     poison: 0,
     poisonTick: 0,
   });
+}
+
+function chooseEnemyPath(pathId, spawnIndex) {
+  if (pathId) {
+    const found = game.map.paths.find((path) => path.id === pathId);
+    if (found) return found;
+  }
+  return game.map.paths[spawnIndex % game.map.paths.length];
 }
 
 function makeId() {
@@ -446,7 +711,7 @@ function updateEnemies(dt) {
       killEnemy(i, enemy);
       continue;
     }
-    const target = pathPoints[enemy.pathIndex + 1];
+    const target = enemy.path.points[enemy.pathIndex + 1];
     if (!target) {
       game.enemies.splice(i, 1);
       game.lives -= enemy.lives;
@@ -500,7 +765,7 @@ function findTarget(tower) {
   for (const enemy of game.enemies) {
     const dist = distance(tower, enemy);
     if (dist > tower.range) continue;
-    const progress = enemy.pathIndex * 10000 + distance(pathPoints[enemy.pathIndex] || enemy, enemy);
+    const progress = enemy.pathIndex * 10000 + distance(enemy.path.points[enemy.pathIndex] || enemy, enemy);
     if (progress > bestProgress) {
       best = enemy;
       bestProgress = progress;
@@ -599,7 +864,7 @@ function checkWaveComplete() {
     game.score += 250;
     audio.play(game.currentWave >= waves.length ? "win" : "upgrade");
     updateHud();
-    if (game.currentWave >= waves.length) {
+    if (game.currentWave >= game.map.waves.length) {
       endGame(true);
     } else {
       els.startWaveBtn.disabled = false;
@@ -611,10 +876,15 @@ function checkWaveComplete() {
 function endGame(win) {
   game.status = win ? "win" : "gameover";
   audio.play(win ? "win" : "lose");
-  const best = Number(localStorage.getItem("monkey-fortress-td:best") || "0");
-  if (game.score > best) localStorage.setItem("monkey-fortress-td:best", String(game.score));
+  const mapId = game.map.id;
+  const best = Number(progress.highScores[mapId] || 0);
+  if (game.score > best) progress.highScores[mapId] = game.score;
+  if (win) {
+    progress.completedMaps[mapId] = true;
+  }
+  saveProgress();
   openModal(win ? "勝利" : "城門失守", `
-    <p>${win ? "你守住了香蕉堡壘。" : "氣球突破了防線。"}</p>
+    <p>${win ? `你守住了 ${game.map.name}。` : "氣球突破了防線。"}</p>
     <p>分數：<strong>${game.score}</strong>　擊破：<strong>${game.kills}</strong></p>
     <p>最高分：<strong>${Math.max(best, game.score)}</strong></p>
     <button id="restartFromModal" class="primary-btn full">重新開始</button>
@@ -639,51 +909,76 @@ function render() {
 }
 
 function drawMap() {
-  const grassA = "#2f8f50";
-  const grassB = "#3da85b";
-  for (let y = 0; y < ROWS; y += 1) {
-    for (let x = 0; x < COLS; x += 1) {
-      ctx.fillStyle = (x + y) % 2 ? grassA : grassB;
+  const map = game.map || prepareMap(getMapById(selectedMapId));
+  const colors = map.background;
+  ctx.fillStyle = colors.bgColor;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  for (let y = 0; y < map.gridHeight; y += 1) {
+    for (let x = 0; x < map.gridWidth; x += 1) {
+      const char = map.grid[y]?.[x] || ".";
+      ctx.fillStyle = tileColor(char, colors, x, y);
       ctx.fillRect(x * TILE, y * TILE, TILE, TILE);
       ctx.strokeStyle = "rgba(255,255,255,0.06)";
       ctx.strokeRect(x * TILE, y * TILE, TILE, TILE);
+      drawTileDetail(char, x, y, colors);
     }
   }
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
-  ctx.strokeStyle = "#8b6d3a";
+  ctx.strokeStyle = colors.pathEdgeColor;
   ctx.lineWidth = 52;
-  drawPathLine();
-  ctx.strokeStyle = "#b99555";
+  drawPathLines(map);
+  ctx.strokeStyle = colors.pathColor;
   ctx.lineWidth = 38;
-  drawPathLine();
+  drawPathLines(map);
   ctx.lineWidth = 1;
-  drawScenery();
+  drawEndpoints(map);
 }
 
-function drawPathLine() {
-  ctx.beginPath();
-  pathPoints.forEach((point, index) => {
-    if (index === 0) ctx.moveTo(point.x, point.y);
-    else ctx.lineTo(point.x, point.y);
-  });
-  ctx.stroke();
+function tileColor(char, colors, x, y) {
+  if (BLOCKED_CHARS.has(char)) return colors.obstacleColor;
+  if (TILE_CHARS.has(char)) return colors.pathColor;
+  return (x + y) % 2 ? colors.emptyColor : blendColor(colors.emptyColor, colors.bgColor, 0.18);
 }
 
-function drawScenery() {
-  ctx.fillStyle = "rgba(23, 91, 44, 0.55)";
-  [[2, 1], [12, 2], [4, 7], [13, 8], [1, 8]].forEach(([x, y]) => {
+function drawTileDetail(char, x, y, colors) {
+  const cx = x * TILE + TILE / 2;
+  const cy = y * TILE + TILE / 2;
+  if (char === "T") drawText("♣", cx, cy + 2, 24, "center", colors.accentColor);
+  if (char === "R") drawText("◆", cx, cy, 22, "center", colors.accentColor);
+  if (char === "W") {
+    ctx.fillStyle = "rgba(255,255,255,0.42)";
     ctx.beginPath();
-    ctx.arc(x * TILE + 26, y * TILE + 30, 22, 0, Math.PI * 2);
+    ctx.ellipse(cx, cy, 18, 7, Math.sin(performance.now() / 500 + x) * 0.25, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillStyle = "#6b4f2a";
-    ctx.fillRect(x * TILE + 22, y * TILE + 42, 8, 20);
-    ctx.fillStyle = "rgba(23, 91, 44, 0.55)";
+  }
+  if (char === "L") {
+    ctx.fillStyle = `rgba(255, 184, 77, ${0.45 + Math.sin(performance.now() / 180 + x + y) * 0.2})`;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 18, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  if (char === "B") drawText("□", cx, cy, 24, "center", colors.accentColor);
+}
+
+function drawPathLines(map) {
+  map.paths.forEach((path) => {
+    ctx.beginPath();
+    path.points.forEach((point, index) => {
+      if (index === 0) ctx.moveTo(point.x, point.y);
+      else ctx.lineTo(point.x, point.y);
+    });
+    ctx.stroke();
   });
-  ctx.fillStyle = "rgba(45, 156, 219, 0.62)";
-  ctx.beginPath();
-  ctx.ellipse(800, 92, 84, 32, -0.18, 0, Math.PI * 2);
-  ctx.fill();
+}
+
+function drawEndpoints(map) {
+  map.paths.forEach((path) => {
+    const start = path.points[0];
+    const end = path.points[path.points.length - 1];
+    drawText("S", start.x, start.y, 22, "center", "#ffffff");
+    drawText("E", end.x, end.y, 22, "center", "#ffffff");
+  });
 }
 
 function drawPlacementPreview() {
@@ -965,7 +1260,9 @@ function cloneData(value) {
 
 function canPlaceAt(col, row) {
   if (!inBounds(col, row)) return false;
-  if (pathSet.has(`${col},${row}`)) return false;
+  if (game.pathCells.has(`${col},${row}`)) return false;
+  const char = game.map.grid[row]?.[col] || ".";
+  if (BLOCKED_CHARS.has(char) || TILE_CHARS.has(char)) return false;
   return !game.towers.some((tower) => tower.col === col && tower.row === row);
 }
 
@@ -973,7 +1270,8 @@ function updateHud() {
   els.livesText.textContent = Math.max(0, game.lives);
   els.goldText.textContent = game.gold;
   els.scoreText.textContent = game.score;
-  els.waveText.textContent = `${Math.max(1, game.currentWave || 1)}/${waves.length}`;
+  const totalWaves = game.map?.waves.length || getMapById(selectedMapId).waveCount;
+  els.waveText.textContent = `${Math.max(1, game.currentWave || 1)}/${totalWaves}`;
   els.startWaveBtn.disabled = game.waveInProgress || game.status !== "playing";
   renderTowerList();
 }
@@ -988,11 +1286,27 @@ function canvasToTile(event) {
 }
 
 function inBounds(col, row) {
-  return col >= 0 && col < COLS && row >= 0 && row < ROWS;
+  const map = game.map || getMapById(selectedMapId);
+  return col >= 0 && col < map.gridWidth && row >= 0 && row < map.gridHeight;
 }
 
 function distance(a, b) {
   return Math.hypot(a.x - b.x, a.y - b.y);
+}
+
+function blendColor(hexA, hexB, amount) {
+  const a = parseInt(hexA.slice(1), 16);
+  const b = parseInt(hexB.slice(1), 16);
+  const ar = (a >> 16) & 255;
+  const ag = (a >> 8) & 255;
+  const ab = a & 255;
+  const br = (b >> 16) & 255;
+  const bg = (b >> 8) & 255;
+  const bb = b & 255;
+  const rr = Math.round(ar + (br - ar) * amount);
+  const rg = Math.round(ag + (bg - ag) * amount);
+  const rb = Math.round(ab + (bb - ab) * amount);
+  return `rgb(${rr}, ${rg}, ${rb})`;
 }
 
 function showToast(message) {
@@ -1042,10 +1356,37 @@ function openSettings() {
 
 function openHelp() {
   openModal("玩法說明", `
-    <p>選擇右側猴子塔，再點選草地建造。道路與已有猴塔的位置不能建造。</p>
-    <p>點選已建造猴塔可升級 A/B 路線或出售。阻止氣球走到終點，通過全部 10 波即可勝利。</p>
+    <p>選擇右側猴子塔，再點選草地建造。道路、障礙、水域、熔岩與已有猴塔的位置不能建造。</p>
+    <p>點選已建造猴塔可升級 A/B 路線或出售。每張地圖有不同生命、金幣、路徑與波次。</p>
     <p>炸彈與重砲能有效處理裝甲氣球，冰凍猴負責控場，荊棘猴可讓敵人持續受傷。</p>
   `);
+}
+
+function openMapSelect() {
+  const cards = MAPS.map((map) => {
+    const unlocked = isMapUnlocked(map);
+    const best = progress.highScores[map.id] || 0;
+    const selected = map.id === selectedMapId ? " selected" : "";
+    return `
+      <button class="map-card${selected}" data-map-id="${map.id}" ${unlocked ? "" : "disabled"}>
+        <span class="map-thumb" style="--tint:${map.background.uiTint};--path:${map.background.pathColor};--empty:${map.background.emptyColor}"></span>
+        <strong>${map.name}</strong>
+        <small>${map.nameEn} · 難度 ${"★".repeat(map.difficulty)}</small>
+        <small>${map.waveCount} 波 · $${map.startGold} · 生命 ${map.startLives}</small>
+        <small>${unlocked ? `最高分 ${best}` : "通過前一張地圖解鎖"}</small>
+      </button>
+    `;
+  }).join("");
+  openModal("選擇地圖", `<div class="map-grid">${cards}</div>`);
+  document.querySelectorAll(".map-card").forEach((card) => {
+    card.addEventListener("click", () => {
+      selectedMapId = card.dataset.mapId;
+      settings.selectedMapId = selectedMapId;
+      saveSettings();
+      els.modal.close();
+      resetGame();
+    });
+  });
 }
 
 function loop(now) {
@@ -1057,7 +1398,7 @@ function loop(now) {
 }
 
 els.newGameBtn.addEventListener("click", resetGame);
-els.mapBtn.addEventListener("click", () => openModal("選擇地圖", "<p>目前提供第一張森林堡壘地圖。後續可依規格新增 map02。</p>"));
+els.mapBtn.addEventListener("click", openMapSelect);
 els.settingsBtn.addEventListener("click", openSettings);
 els.helpBtn.addEventListener("click", openHelp);
 els.modalCloseBtn.addEventListener("click", () => els.modal.close());
