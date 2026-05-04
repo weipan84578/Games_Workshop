@@ -184,6 +184,7 @@ button:disabled {
 
 .hud-actions {
   display: flex;
+  align-items: center;
   gap: var(--spacing-sm);
   margin-left: auto;
 }
@@ -193,6 +194,33 @@ button:disabled {
   min-height: 48px;
   background: #243044;
   color: #fff;
+}
+
+.speed-controls {
+  display: flex;
+  gap: 6px;
+}
+
+.speed-button {
+  min-width: 44px;
+  min-height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-text-sub);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: var(--font-size-sm);
+  font-weight: 900;
+}
+
+.speed-button.active {
+  background: var(--color-primary);
+  color: #1f1300;
+  border-color: var(--color-primary);
+  transform: scale(1.08);
+}
+
+.speed-button:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--color-text-main);
 }
 
 .play-layout {
@@ -365,6 +393,33 @@ canvas {
   width: 100%;
 }
 
+.help-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.help-tab {
+  min-height: 40px;
+  padding: 0 12px;
+  background: #243044;
+  color: var(--color-text-sub);
+  font-size: var(--font-size-xs);
+  font-weight: 800;
+}
+
+.help-tab.active {
+  background: var(--color-primary);
+  color: #1f1300;
+}
+
+.help-panel {
+  color: var(--color-text-main);
+  font-size: var(--font-size-sm);
+  line-height: 1.8;
+}
+
 .map-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -450,9 +505,18 @@ canvas {
   .hud-actions {
     width: 100%;
     margin-left: 0;
+    flex-wrap: wrap;
   }
 
   .hud-actions button {
+    flex: 1;
+  }
+
+  .speed-controls {
+    width: 100%;
+  }
+
+  .speed-button {
     flex: 1;
   }
 

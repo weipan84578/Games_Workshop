@@ -17,7 +17,7 @@ const els = {
   scoreText: document.querySelector("#scoreText"),
   waveText: document.querySelector("#waveText"),
   pauseBtn: document.querySelector("#pauseBtn"),
-  speedBtn: document.querySelector("#speedBtn"),
+  speedControls: document.querySelector("#speedControls"),
   muteBtn: document.querySelector("#muteBtn"),
   homeBtn: document.querySelector("#homeBtn"),
   towerList: document.querySelector("#towerList"),
@@ -43,7 +43,7 @@ const towerTypes = {
     id: "dart",
     name: "飛鏢猴",
     emoji: "🐵",
-    cost: 50,
+    cost: 35,
     damage: 1,
     range: 150,
     fireRate: 1.5,
@@ -57,8 +57,8 @@ const towerTypes = {
     id: "bomb",
     name: "炸彈猴",
     emoji: "💣",
-    cost: 80,
-    damage: 4,
+    cost: 90,
+    damage: 3,
     range: 160,
     fireRate: 0.8,
     projectileSpeed: 300,
@@ -102,16 +102,16 @@ const towerTypes = {
     id: "wizard",
     name: "巫師猴",
     emoji: "🧙",
-    cost: 120,
-    damage: 6,
-    range: 160,
-    fireRate: 0.4,
+    cost: 100,
+    damage: 8,
+    range: 192,
+    fireRate: 0.5,
     projectileSpeed: 260,
     splash: 45,
     color: "#7c3aed",
     kind: "wizard",
     attackType: "flame",
-    desc: "v1.1 高費控場",
+    desc: "v1.2 火焰爆發",
   },
   eagle: {
     id: "eagle",
@@ -660,7 +660,7 @@ const game = {
   score: 0,
   currentWave: 0,
   waveInProgress: false,
-  speed: settings.speed,
+  speed: normalizeSpeed(settings.speed),
   selectedTowerType: "dart",
   selectedTower: null,
   towers: [],
@@ -670,6 +670,7 @@ const game = {
   spawners: [],
   paused: false,
   kills: 0,
+  cheatUsed: false,
 };
 
 class AudioEngine {
@@ -753,6 +754,7 @@ class AudioEngine {
       [440, 660, 880].forEach((f, i) => this.tone(f, now + i * 0.07, 0.09, "triangle", 0.18));
     } else if (id === "bad") blip(120, 0.22, "sawtooth", 0.2);
     else if (id === "win") [523, 659, 784, 1046].forEach((f, i) => this.tone(f, now + i * 0.11, 0.15, "triangle", 0.2));
+    else if (id === "cheat") [523, 659, 784, 1046, 1319].forEach((f, i) => this.tone(f, now + i * 0.1, 0.12, "square", 0.22));
     else if (id === "lose") {
       osc.type = "sawtooth";
       osc.frequency.setValueAtTime(240, now);
@@ -895,10 +897,29 @@ function saveSettings() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
 }
 
+function normalizeSpeed(value) {
+  const speed = Number(value) || 1;
+  return Math.min(5, Math.max(1, Math.round(speed)));
+}
+
+function setSpeed(speed) {
+  game.speed = normalizeSpeed(speed);
+  settings.speed = game.speed;
+  saveSettings();
+  updateSpeedButtons();
+}
+
+function updateSpeedButtons() {
+  document.querySelectorAll(".speed-button").forEach((button) => {
+    button.classList.toggle("active", Number(button.dataset.speed) === game.speed);
+  });
+}
+
 function loadProgress() {
   const defaults = {
     completedMaps: {},
     highScores: {},
+    cheatClears: 0,
   };
   try {
     return { ...defaults, ...JSON.parse(localStorage.getItem(PROGRESS_KEY) || "{}") };
@@ -923,7 +944,7 @@ function resetGame() {
     score: 0,
     currentWave: 0,
     waveInProgress: false,
-    speed: settings.speed || 1,
+    speed: normalizeSpeed(settings.speed),
     selectedTowerType: "dart",
     selectedTower: null,
     towers: [],
@@ -933,11 +954,12 @@ function resetGame() {
     spawners: [],
     paused: false,
     kills: 0,
+    cheatUsed: false,
   });
   canvas.width = map.gridWidth * TILE;
   canvas.height = map.gridHeight * TILE;
   els.pauseBtn.textContent = "⏸";
-  els.speedBtn.textContent = `${game.speed}x`;
+  updateSpeedButtons();
   showGame();
   renderTowerList();
   updateHud();
@@ -954,6 +976,7 @@ function showGame() {
 
 function showMenu() {
   game.status = "menu";
+  cheatDetector.buffer = [];
   els.game.classList.add("hidden");
   els.menu.classList.remove("hidden");
 }
@@ -975,7 +998,7 @@ function startWave() {
 
 function update(dt) {
   if (game.status !== "playing" || game.paused) return;
-  const scaledDt = Math.min(dt * game.speed, 0.05);
+  const scaledDt = Math.min(dt, 0.05) * game.speed;
   updateSpawners(scaledDt);
   updateEnemies(scaledDt);
   updateTowers(scaledDt);
@@ -1322,15 +1345,19 @@ function endGame(win) {
   audio.play(win ? "win" : "lose");
   const mapId = game.map.id;
   const best = Number(progress.highScores[mapId] || 0);
-  if (game.score > best) progress.highScores[mapId] = game.score;
-  if (win) {
-    progress.completedMaps[mapId] = true;
+  if (!game.cheatUsed) {
+    if (game.score > best) progress.highScores[mapId] = game.score;
+    if (win) {
+      progress.completedMaps[mapId] = true;
+    }
+  } else {
+    progress.cheatClears = Number(progress.cheatClears || 0) + (win ? 1 : 0);
   }
   saveProgress();
   openModal(win ? "勝利" : "城門失守", `
     <p>${win ? `你守住了 ${game.map.name}。` : "氣球突破了防線。"}</p>
     <p>分數：<strong>${game.score}</strong>　擊破：<strong>${game.kills}</strong></p>
-    <p>最高分：<strong>${Math.max(best, game.score)}</strong></p>
+    <p>${game.cheatUsed ? "本局使用作弊碼，不更新最高分與解鎖進度。" : `最高分：<strong>${Math.max(best, game.score)}</strong>`}</p>
     <button id="restartFromModal" class="primary-btn full">重新開始</button>
   `);
   document.querySelector("#restartFromModal").addEventListener("click", () => {
@@ -1800,8 +1827,38 @@ function openModal(title, html) {
   els.modal.showModal();
 }
 
+const cheatDetector = {
+  sequence: ["ArrowLeft", "ArrowLeft", "ArrowRight", "ArrowRight", "ArrowLeft"],
+  buffer: [],
+  lastKeyTime: 0,
+  windowMs: 2000,
+  onKeyDown(event) {
+    if (game.status !== "playing") return;
+    if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) return;
+    const now = Date.now();
+    if (now - this.lastKeyTime > this.windowMs) this.buffer = [];
+    this.lastKeyTime = now;
+    this.buffer.push(event.key);
+    if (this.buffer.length > this.sequence.length) {
+      this.buffer = this.buffer.slice(-this.sequence.length);
+    }
+    if (this.buffer.length === this.sequence.length && this.buffer.every((key, index) => key === this.sequence[index])) {
+      this.buffer = [];
+      triggerMoneyCheat();
+    }
+  },
+};
+
+function triggerMoneyCheat() {
+  game.gold += 999;
+  game.cheatUsed = true;
+  audio.play("cheat");
+  updateHud();
+  showToast("作弊碼啟動：+999 金幣。本局不更新最高分與解鎖進度。");
+}
+
 function openSettings() {
-  openModal("遊戲設定", `
+  openModal("設定", `
     <div class="settings-grid">
       <label>背景音樂 ${Math.round(settings.musicVolume * 100)}%
         <input id="musicVolume" type="range" min="0" max="1" step="0.05" value="${settings.musicVolume}">
@@ -1809,8 +1866,8 @@ function openSettings() {
       <label>音效音量 ${Math.round(settings.sfxVolume * 100)}%
         <input id="sfxVolume" type="range" min="0" max="1" step="0.05" value="${settings.sfxVolume}">
       </label>
-      <label>預設速度
-        <input id="defaultSpeed" type="range" min="1" max="2" step="1" value="${settings.speed}">
+      <label>預設速度 ${normalizeSpeed(settings.speed)}x
+        <input id="defaultSpeed" type="range" min="1" max="5" step="1" value="${normalizeSpeed(settings.speed)}">
       </label>
     </div>
   `);
@@ -1825,19 +1882,54 @@ function openSettings() {
     event.target.parentElement.firstChild.textContent = `音效音量 ${Math.round(event.target.value * 100)}%`;
   });
   document.querySelector("#defaultSpeed").addEventListener("input", (event) => {
-    settings.speed = Number(event.target.value);
-    game.speed = settings.speed;
-    els.speedBtn.textContent = `${game.speed}x`;
-    saveSettings();
+    event.target.parentElement.firstChild.textContent = `預設速度 ${event.target.value}x`;
+    setSpeed(event.target.value);
   });
 }
 
 function openHelp() {
-  openModal("玩法說明", `
-    <p>選擇右側猴子塔，再點選草地建造。道路、障礙、水域、熔岩與已有猴塔的位置不能建造。</p>
-    <p>點選已建造猴塔可升級 A/B 路線或出售。每張地圖有不同生命、金幣、路徑與波次。</p>
-    <p>炸彈與重砲能有效處理裝甲氣球，冰凍猴負責控場，荊棘猴可讓敵人持續受傷。</p>
+  openModal("遊戲說明", `
+    <div class="help-tabs" role="tablist">
+      <button class="help-tab active" data-help-tab="basic">基礎</button>
+      <button class="help-tab" data-help-tab="gold">金幣</button>
+      <button class="help-tab" data-help-tab="lives">生命</button>
+      <button class="help-tab" data-help-tab="waves">波次</button>
+      <button class="help-tab" data-help-tab="towers">升級</button>
+      <button class="help-tab" data-help-tab="enemies">敵人</button>
+    </div>
+    <div class="help-panel" data-help-panel="basic">
+      <p>選擇右側猴子塔，再點選非道路格建造。道路、障礙、水域、熔岩與已有猴塔的位置不能建造。</p>
+      <p>每張地圖有不同路線、起始金幣、生命與波次。守住終點，撐過最後一波即可過關。</p>
+    </div>
+    <div class="help-panel hidden" data-help-panel="gold">
+      <p>擊破敵人會獲得金幣；完成波次會得到額外獎勵。出售防禦塔只會返還一半投入金額。</p>
+      <p>v1.2 飛鏢猴降為 $35，炸彈猴調整為 $90，巫師猴回復 $100。</p>
+    </div>
+    <div class="help-panel hidden" data-help-panel="lives">
+      <p>敵人抵達終點會扣除生命。一般敵人扣 1 到 3 點，裝甲與 Boss 會造成更高損失。</p>
+      <p>生命歸零時遊戲結束。</p>
+    </div>
+    <div class="help-panel hidden" data-help-panel="waves">
+      <p>按下開始波次後敵人會依路線進場。高難度地圖會混入特殊敵人。</p>
+      <p>HUD 的 1x 到 5x 可以即時調整整體遊戲速度。</p>
+    </div>
+    <div class="help-panel hidden" data-help-panel="towers">
+      <p>點選已建造猴塔可升級 A/B 路線。兩條路線都可以升到 3 級，A3+B3 後可啟動 Apex。</p>
+      <p>Apex 會大幅提高傷害、射程與射速，但使用成本高，適合後期主力塔。</p>
+    </div>
+    <div class="help-panel hidden" data-help-panel="enemies">
+      <p>裝甲敵人會降低一般傷害，部分特殊敵人有免疫與弱點。音波、冰凍、毒、爆炸、先知與漩渦各有對應用途。</p>
+      <p>再生、分裂、自爆與暗影敵人需要優先處理。</p>
+    </div>
   `);
+  document.querySelectorAll(".help-tab").forEach((tab) => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".help-tab").forEach((item) => item.classList.toggle("active", item === tab));
+      document.querySelectorAll(".help-panel").forEach((panel) => {
+        panel.classList.toggle("hidden", panel.dataset.helpPanel !== tab.dataset.helpTab);
+      });
+    });
+  });
 }
 
 function openMapSelect() {
@@ -1886,14 +1978,12 @@ els.pauseBtn.addEventListener("click", () => {
   game.paused = !game.paused;
   els.pauseBtn.textContent = game.paused ? "▶" : "⏸";
 });
-els.speedBtn.addEventListener("click", () => {
-  game.speed = game.speed === 1 ? 2 : 1;
-  settings.speed = game.speed;
-  saveSettings();
-  els.speedBtn.textContent = `${game.speed}x`;
+document.querySelectorAll(".speed-button").forEach((button) => {
+  button.addEventListener("click", () => setSpeed(button.dataset.speed));
 });
 els.muteBtn.addEventListener("click", () => audio.toggleMute());
 els.homeBtn.addEventListener("click", showMenu);
+document.addEventListener("keydown", (event) => cheatDetector.onKeyDown(event));
 
 canvas.addEventListener("pointermove", (event) => {
   game.hover = canvasToTile(event);
@@ -1910,5 +2000,6 @@ canvas.addEventListener("pointerdown", (event) => {
 
 renderTowerList();
 updateHud();
+updateSpeedButtons();
 els.muteBtn.textContent = settings.muted ? "🔇" : "🔊";
 animationId = requestAnimationFrame(loop);

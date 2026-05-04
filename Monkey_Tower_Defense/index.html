@@ -18,10 +18,10 @@
           <div class="menu-actions">
             <button id="newGameBtn" class="primary-btn">開始遊戲</button>
             <button id="mapBtn" class="secondary-btn">選擇地圖</button>
-            <button id="settingsBtn" class="secondary-btn">遊戲設定</button>
-            <button id="helpBtn" class="secondary-btn">玩法說明</button>
+            <button id="settingsBtn" class="secondary-btn">設定</button>
+            <button id="helpBtn" class="secondary-btn">遊戲說明</button>
           </div>
-          <p class="menu-meta">v1.0.0 · 2026</p>
+          <p class="menu-meta">v1.2.0 · 2026</p>
         </div>
       </section>
 
@@ -32,10 +32,16 @@
           <div class="stat"><span>分數</span><strong id="scoreText">0</strong></div>
           <div class="stat"><span>波次</span><strong id="waveText">1/10</strong></div>
           <div class="hud-actions">
+            <div id="speedControls" class="speed-controls" aria-label="遊戲速度">
+              <button class="speed-button active" data-speed="1">1x</button>
+              <button class="speed-button" data-speed="2">2x</button>
+              <button class="speed-button" data-speed="3">3x</button>
+              <button class="speed-button" data-speed="4">4x</button>
+              <button class="speed-button" data-speed="5">5x</button>
+            </div>
             <button id="pauseBtn" title="暫停">⏸</button>
-            <button id="speedBtn" title="速度">1x</button>
             <button id="muteBtn" title="靜音">🔊</button>
-            <button id="homeBtn" title="主選單">⌂</button>
+            <button id="homeBtn" title="回主選單">⌂</button>
           </div>
         </header>
 
@@ -47,14 +53,14 @@
 
           <aside class="side-panel">
             <section>
-              <h2>猴子塔</h2>
+              <h2>防禦塔</h2>
               <div id="towerList" class="tower-list"></div>
               <button id="startWaveBtn" class="primary-btn full">開始波次</button>
             </section>
 
             <section id="selectionPanel" class="selection-panel">
               <h2>選取資訊</h2>
-              <div id="selectionContent" class="selection-empty">點選猴塔查看升級，或選塔後在草地建造。</div>
+              <div id="selectionContent" class="selection-empty">選擇防禦塔，或點擊已建造的塔進行升級。</div>
             </section>
           </aside>
         </div>
@@ -62,7 +68,7 @@
 
       <dialog id="modal" class="modal">
         <div class="modal-body">
-          <h2 id="modalTitle">遊戲設定</h2>
+          <h2 id="modalTitle">設定</h2>
           <div id="modalContent"></div>
           <div class="modal-actions">
             <button id="modalCloseBtn" class="primary-btn">關閉</button>
