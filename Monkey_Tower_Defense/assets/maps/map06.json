@@ -1,0 +1,43 @@
+{
+  "id": "map06",
+  "name": "沉沒遺跡",
+  "nameEn": "Sunken Ruins",
+  "theme": "ocean",
+  "difficulty": 6,
+  "gridWidth": 18,
+  "gridHeight": 14,
+  "startGold": 130,
+  "startLives": 15,
+  "waveCount": 15,
+  "paths": [
+    { "id": "leftUpper", "waypoints": [{ "x": 0, "y": 3 }, { "x": 4, "y": 3 }, { "x": 4, "y": 6 }, { "x": 8, "y": 6 }] },
+    { "id": "leftLower", "waypoints": [{ "x": 0, "y": 10 }, { "x": 4, "y": 10 }, { "x": 4, "y": 6 }, { "x": 8, "y": 6 }] },
+    { "id": "rightUpper", "waypoints": [{ "x": 17, "y": 3 }, { "x": 13, "y": 3 }, { "x": 13, "y": 6 }, { "x": 8, "y": 6 }] },
+    { "id": "rightLower", "waypoints": [{ "x": 17, "y": 10 }, { "x": 13, "y": 10 }, { "x": 13, "y": 6 }, { "x": 8, "y": 6 }] }
+  ],
+  "grid": [
+    "..................",
+    ".C....C...C....C..",
+    "..................",
+    "S>>>v........v<<<E",
+    "....v.C....C.v....",
+    ".C..v........v.C..",
+    "....>>>>E<<<<<....",
+    "....^........^....",
+    ".C..^........^.C..",
+    "....^.C....C.^....",
+    "S>>>^........^<<<E",
+    "..................",
+    ".C.....C.C....C...",
+    ".................."
+  ],
+  "background": {
+    "bgColor": "#0A1628",
+    "pathColor": "#2A4A6A",
+    "pathEdgeColor": "#1A3050",
+    "emptyColor": "#0E2040",
+    "obstacleColor": "#FF6B9D",
+    "accentColor": "#00BCD4",
+    "uiTint": "#0288D1"
+  }
+}

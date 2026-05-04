@@ -1,0 +1,45 @@
+{
+  "id": "map09",
+  "name": "黑暗森林",
+  "nameEn": "Dark Forest",
+  "theme": "dark",
+  "difficulty": 9,
+  "gridWidth": 22,
+  "gridHeight": 16,
+  "startGold": 110,
+  "startLives": 10,
+  "waveCount": 22,
+  "paths": [
+    { "id": "upper", "waypoints": [{ "x": 0, "y": 0 }, { "x": 3, "y": 0 }, { "x": 3, "y": 2 }, { "x": 8, "y": 2 }, { "x": 8, "y": 4 }, { "x": 14, "y": 4 }, { "x": 14, "y": 6 }, { "x": 18, "y": 6 }, { "x": 18, "y": 8 }, { "x": 20, "y": 8 }] },
+    { "id": "middle", "waypoints": [{ "x": 0, "y": 8 }, { "x": 2, "y": 8 }, { "x": 2, "y": 10 }, { "x": 7, "y": 10 }, { "x": 7, "y": 12 }, { "x": 13, "y": 12 }, { "x": 13, "y": 14 }, { "x": 20, "y": 14 }] },
+    { "id": "lower", "waypoints": [{ "x": 0, "y": 14 }, { "x": 20, "y": 14 }] }
+  ],
+  "grid": [
+    "S>>vFFFFFFFFFFFFFFFFF.",
+    "...vFFFFFFFFFFFFFFFFF.",
+    "...>>>>>>vFFFFFFFFFFF.",
+    "........vFFFFFFFFFFFF.",
+    "FFFFFFFF>>>>>>vFFFFFF.",
+    "FFFFFFFF......vFFFFFF.",
+    "FFFFFFFF......>>>>vFF.",
+    "FFFFFFFF..........vFF.",
+    "S>vFFFFFFFFFFFFFFF>>E.",
+    "..vFFFFFFFFFFFFFF.....",
+    "..>>>>>vFFFFFFFFF.....",
+    ".......vFFFFFFFFF.....",
+    "FFFFFFF>>>>>>vFFF.....",
+    "FFFFFFF......vFFF.....",
+    "S>>>>>>>>>>>>>>>>>>>E.",
+    "......................"
+  ],
+  "background": {
+    "bgColor": "#0A0A0A",
+    "pathColor": "#1A2A1A",
+    "pathEdgeColor": "#0A1A0A",
+    "emptyColor": "#0F1A0F",
+    "obstacleColor": "#000000",
+    "accentColor": "#4CAF50",
+    "fogColor": "rgba(0,0,0,0.92)",
+    "uiTint": "#1B5E20"
+  }
+}
