@@ -1,0 +1,71 @@
+@media (max-width: 1023px) {
+  body {
+    overflow: auto;
+  }
+
+  .game-layout {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .black-panel {
+    order: 1;
+  }
+
+  .board-wrap {
+    order: 2;
+    width: min(92vw, 66vh);
+  }
+
+  .controls-panel {
+    order: 3;
+  }
+
+  .side-panel {
+    width: min(680px, 100%);
+    margin: 0 auto;
+  }
+
+  .move-list {
+    max-height: 160px;
+  }
+}
+
+@media (max-width: 680px) {
+  .difficulty-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .setting-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .setting-row input[type="range"],
+  .setting-row select {
+    width: 100%;
+  }
+
+  .panel-actions {
+    flex-direction: column;
+  }
+
+  .panel-actions .primary-btn,
+  .panel-actions .ghost-btn {
+    width: 100%;
+  }
+
+  .game-screen {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .game-header h2 {
+    font-size: 24px;
+  }
+
+  .board-wrap {
+    width: min(calc(100vw - 16px), calc(100vh - 220px));
+    min-width: 304px;
+  }
+}

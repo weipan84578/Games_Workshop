@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1d1712">
+  <title>中國象棋 vs AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/screens.css">
+  <link rel="stylesheet" href="css/board.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <main id="app" class="app-shell">
+    <section id="main-screen" class="screen screen-main active" aria-labelledby="main-title">
+      <div class="main-content">
+        <p class="kicker">Human vs AI</p>
+        <h1 id="main-title">中國象棋</h1>
+        <p class="subtitle">楚河漢界，運籌帷幄</p>
+        <div class="menu-stack" aria-label="主選單">
+          <button class="primary-btn" id="start-btn">開始對局</button>
+          <button class="ghost-btn" id="difficulty-btn">AI 難度</button>
+          <button class="ghost-btn" id="settings-btn">設定</button>
+          <button class="ghost-btn" id="rules-btn">規則說明</button>
+        </div>
+        <p class="version">v1.0 · HTML5 / CSS3 / Vanilla JS</p>
+      </div>
+    </section>
+
+    <section id="difficulty-screen" class="screen panel-screen" aria-labelledby="difficulty-title">
+      <div class="panel">
+        <h2 id="difficulty-title">選擇 AI 難度</h2>
+        <div class="difficulty-grid">
+          <button class="difficulty-card" data-difficulty="easy">
+            <span class="difficulty-name">初階</span>
+            <span class="difficulty-desc">較快出手，偶爾犯錯</span>
+          </button>
+          <button class="difficulty-card" data-difficulty="normal">
+            <span class="difficulty-name">標準</span>
+            <span class="difficulty-desc">兼顧速度與攻防</span>
+          </button>
+          <button class="difficulty-card" data-difficulty="hard">
+            <span class="difficulty-name">進階</span>
+            <span class="difficulty-desc">搜尋更深，較重視威脅</span>
+          </button>
+        </div>
+        <button class="text-btn back-main">返回</button>
+      </div>
+    </section>
+
+    <section id="settings-screen" class="screen panel-screen" aria-labelledby="settings-title">
+      <div class="panel settings-panel">
+        <h2 id="settings-title">設定</h2>
+        <div class="settings-list">
+          <label class="setting-row">
+            <span>背景音樂</span>
+            <input type="checkbox" id="bgm-enabled">
+          </label>
+          <label class="setting-row">
+            <span>音效</span>
+            <input type="checkbox" id="sfx-enabled">
+          </label>
+          <label class="setting-row range-row">
+            <span>音量</span>
+            <input type="range" id="volume-slider" min="0" max="100" step="5">
+          </label>
+          <label class="setting-row">
+            <span>顯示合法落點</span>
+            <input type="checkbox" id="legal-enabled">
+          </label>
+          <label class="setting-row">
+            <span>顯示計時器</span>
+            <input type="checkbox" id="timer-enabled">
+          </label>
+          <label class="setting-row">
+            <span>棋盤主題</span>
+            <select id="theme-select">
+              <option value="classic">古典</option>
+              <option value="dark">深色</option>
+            </select>
+          </label>
+          <label class="setting-row">
+            <span>棋子樣式</span>
+            <select id="piece-style-select">
+              <option value="traditional">傳統</option>
+              <option value="flat">扁平</option>
+            </select>
+          </label>
+        </div>
+        <div class="panel-actions">
+          <button class="ghost-btn" id="reset-settings-btn">重設</button>
+          <button class="primary-btn back-main">完成</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="rules-screen" class="screen panel-screen" aria-labelledby="rules-title">
+      <div class="panel rules-panel">
+        <h2 id="rules-title">規則說明</h2>
+        <div class="rules-copy">
+          <p>紅方先行。將、帥只能在九宮內直橫走一步；士斜走一步；象、相走田且不可過河；馬走日且會被蹩腳；車直橫不限距離；炮不吃子時同車，吃子時中間必須隔一子；兵、卒過河前只能向前，過河後可左右移動。</p>
+          <p>任一方被將軍且無合法應手，或主帥被吃，對局結束。兩將不可在同一直線上無子相隔。</p>
+        </div>
+        <button class="text-btn back-main">返回</button>
+      </div>
+    </section>
+
+    <section id="game-screen" class="screen game-screen" aria-labelledby="game-title">
+      <header class="game-header">
+        <button class="icon-btn" id="home-btn" aria-label="返回主選單">⌂</button>
+        <div>
+          <h2 id="game-title">對局中</h2>
+          <p id="status-text" aria-live="polite">紅方行棋</p>
+        </div>
+        <button class="icon-btn" id="sound-btn" aria-label="切換音效">♪</button>
+      </header>
+
+      <div class="game-layout">
+        <aside class="side-panel black-panel">
+          <div class="player-card">
+            <span class="player-label">黑方 AI</span>
+            <strong id="black-timer">00:00</strong>
+          </div>
+          <div id="captured-red" class="captured-list" aria-label="黑方已吃紅子"></div>
+        </aside>
+
+        <section class="board-wrap" aria-label="中國象棋棋盤">
+          <canvas id="board-canvas" width="720" height="800"></canvas>
+          <div id="thinking-badge" class="thinking-badge" hidden>AI 思考中</div>
+        </section>
+
+        <aside class="side-panel controls-panel">
+          <div class="player-card red">
+            <span class="player-label">紅方 玩家</span>
+            <strong id="red-timer">00:00</strong>
+          </div>
+          <div id="captured-black" class="captured-list" aria-label="紅方已吃黑子"></div>
+          <div class="control-stack">
+            <button class="ghost-btn" id="undo-btn">悔棋</button>
+            <button class="ghost-btn" id="restart-btn">重新開始</button>
+            <button class="ghost-btn" id="game-settings-btn">設定</button>
+          </div>
+          <ol id="move-list" class="move-list" aria-label="棋譜"></ol>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="result-modal" class="result-modal" aria-labelledby="result-title">
+    <h2 id="result-title">對局結束</h2>
+    <p id="result-detail"></p>
+    <div class="panel-actions">
+      <button class="ghost-btn" id="result-home-btn">主選單</button>
+      <button class="primary-btn" id="result-restart-btn">再下一局</button>
+    </div>
+  </dialog>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

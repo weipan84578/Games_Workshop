@@ -1,0 +1,115 @@
+:root {
+  --font-primary: "Noto Serif TC", "PMingLiU", serif;
+  --color-ink: #f8efd8;
+  --color-muted: #c8a96e;
+  --color-gold-light: #ffd700;
+  --color-gold-dark: #d4a017;
+  --color-red-primary: #c0392b;
+  --color-red-hover: #e74c3c;
+  --color-board-bg: #deb887;
+  --color-board-line: #8b4513;
+  --color-piece-red: #cc0000;
+  --color-piece-black: #1a1a1a;
+  --color-valid-move: rgba(21, 132, 86, 0.42);
+  --color-last-move: rgba(66, 135, 245, 0.34);
+  --shadow-panel: 0 18px 52px rgba(0, 0, 0, 0.34);
+}
+
+body {
+  min-height: 100vh;
+  overflow: hidden;
+  overscroll-behavior: none;
+  background:
+    radial-gradient(circle at 22% 18%, rgba(176, 60, 42, 0.24), transparent 28%),
+    linear-gradient(140deg, #17110d 0%, #2b1f17 46%, #141111 100%);
+  color: var(--color-ink);
+  font-family: var(--font-primary);
+  -webkit-overflow-scrolling: touch;
+}
+
+.app-shell,
+.screen {
+  min-height: 100vh;
+}
+
+.screen {
+  display: none;
+}
+
+.screen.active {
+  display: flex;
+}
+
+.primary-btn,
+.ghost-btn,
+.text-btn,
+.icon-btn,
+.difficulty-card {
+  border: 0;
+  border-radius: 8px;
+  min-height: 48px;
+  color: var(--color-ink);
+  transition: transform 150ms ease, border-color 150ms ease, background 150ms ease;
+}
+
+.primary-btn {
+  min-width: 220px;
+  padding: 0 28px;
+  background: linear-gradient(180deg, var(--color-red-hover), var(--color-red-primary));
+  box-shadow: 0 10px 24px rgba(192, 57, 43, 0.32);
+  font-size: clamp(18px, 3vw, 24px);
+  font-weight: 700;
+}
+
+.ghost-btn {
+  min-width: 190px;
+  padding: 0 24px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 215, 0, 0.28);
+  font-size: clamp(16px, 2.4vw, 20px);
+}
+
+.text-btn {
+  width: fit-content;
+  padding: 0 16px;
+  background: transparent;
+  color: var(--color-muted);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+
+.icon-btn {
+  width: 48px;
+  min-width: 48px;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 215, 0, 0.2);
+  font-size: 24px;
+}
+
+.primary-btn:hover,
+.ghost-btn:hover,
+.text-btn:hover,
+.icon-btn:hover,
+.difficulty-card:hover {
+  transform: translateY(-1px);
+}
+
+.primary-btn:active,
+.ghost-btn:active,
+.text-btn:active,
+.icon-btn:active,
+.difficulty-card:active {
+  transform: translateY(1px);
+}
+
+.primary-btn:focus-visible,
+.ghost-btn:focus-visible,
+.text-btn:focus-visible,
+.icon-btn:focus-visible,
+.difficulty-card:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--color-gold-light);
+  outline-offset: 3px;
+}
