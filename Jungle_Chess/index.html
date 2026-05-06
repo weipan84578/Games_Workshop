@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#1a2e1a">
+  <title>鬥獸棋 Jungle Chess</title>
+  <style>
+    :root {
+      --color-bg-primary:#1a2e1a;
+      --color-bg-secondary:#2d4a2d;
+      --color-bg-card:#3d5c3a;
+      --color-board-light:#c8a96e;
+      --color-board-dark:#a07840;
+      --color-board-river:#4a90d4;
+      --color-board-trap:#8b0000;
+      --color-board-den:#ffd700;
+      --color-piece-player:#e84040;
+      --color-piece-ai:#4040e8;
+      --color-piece-text:#ffffff;
+      --color-selected:#ffff00;
+      --color-movable:rgba(255,255,0,0.4);
+      --color-danger:rgba(255,0,0,0.3);
+      --color-text-primary:#f0e6d0;
+      --color-text-secondary:#d4c2a2;
+      --color-text-accent:#ffd700;
+      --color-btn-primary:#c8860a;
+      --color-btn-hover:#e09a10;
+      --color-btn-secondary:#4a6a3a;
+      --font-title:"Trebuchet MS","Microsoft JhengHei",sans-serif;
+      --font-body:"Microsoft JhengHei",Arial,sans-serif;
+      --fs-hero:clamp(38px,8vw,64px);
+      --fs-h1:clamp(28px,6vw,48px);
+      --fs-h2:clamp(22px,4vw,34px);
+      --fs-body:clamp(16px,2.5vw,20px);
+      --fs-piece:clamp(27px,5vw,40px);
+      --fs-btn:clamp(17px,3vw,23px);
+      --fs-small:clamp(13px,2vw,15px);
+      --space-xs:4px;
+      --space-sm:8px;
+      --space-md:16px;
+      --space-lg:24px;
+      --space-xl:40px;
+      --cell-size:clamp(42px,11vw,64px);
+      --cell-gap:clamp(2px,0.5vw,4px);
+      --radius-sm:8px;
+      --radius-md:14px;
+      --shadow:0 18px 44px rgba(0,0,0,.32);
+    }
+
+    * { box-sizing:border-box; }
+    html, body { min-height:100%; margin:0; }
+    body {
+      font-family:var(--font-body);
+      color:var(--color-text-primary);
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255,215,0,.08), transparent 28%),
+        linear-gradient(145deg, #142714, var(--color-bg-primary) 42%, #203d21);
+      overflow-x:hidden;
+      user-select:none;
+      -webkit-tap-highlight-color:transparent;
+    }
+    button, input, select { font:inherit; }
+    button { cursor:pointer; min-height:44px; }
+    #bg-canvas, #effects-canvas {
+      position:fixed;
+      inset:0;
+      width:100%;
+      height:100%;
+      pointer-events:none;
+    }
+    #bg-canvas { z-index:0; opacity:.7; }
+    #effects-canvas { z-index:10; }
+    #app { position:relative; z-index:1; min-height:100vh; }
+    .screen { display:none; min-height:100vh; padding:var(--space-lg); }
+    .screen.active { display:flex; }
+    .sr-only {
+      position:absolute;
+      width:1px;
+      height:1px;
+      overflow:hidden;
+      clip:rect(0,0,0,0);
+      white-space:nowrap;
+    }
+    .home {
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+    }
+    .home-inner {
+      width:min(720px, 100%);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:var(--space-lg);
+    }
+    .title-frame {
+      width:min(620px, 100%);
+      border:3px double rgba(255,215,0,.78);
+      border-radius:var(--radius-sm);
+      padding:var(--space-lg);
+      background:rgba(20,39,20,.62);
+      box-shadow:var(--shadow);
+      animation:floatIn .7s ease-out both;
+    }
+    .main-title {
+      margin:0;
+      font-family:var(--font-title);
+      font-size:var(--fs-hero);
+      color:var(--color-text-accent);
+      text-shadow:2px 3px 6px rgba(0,0,0,.5);
+      letter-spacing:0;
+    }
+    .subtitle { margin:var(--space-sm) 0 0; font-size:var(--fs-h2); color:var(--color-text-secondary); }
+    .button-stack { display:grid; gap:var(--space-md); width:min(320px, 82vw); }
+    .primary-button, .secondary-button, .tool-button {
+      border:0;
+      border-radius:var(--radius-sm);
+      color:#fff;
+      box-shadow:0 10px 18px rgba(0,0,0,.28);
+      transition:transform .16s ease, filter .16s ease, background .16s ease;
+    }
+    .primary-button {
+      min-height:clamp(56px,12vw,78px);
+      font-family:var(--font-title);
+      font-size:var(--fs-btn);
+      font-weight:800;
+      background:linear-gradient(180deg, var(--color-btn-hover), var(--color-btn-primary));
+    }
+    .secondary-button, .tool-button {
+      background:rgba(74,106,58,.9);
+      border:1px solid rgba(200,169,110,.45);
+      font-size:var(--fs-body);
+      padding:10px 14px;
+    }
+    .primary-button:hover, .secondary-button:hover, .tool-button:hover { transform:scale(1.03); filter:brightness(1.08); }
+    .primary-button:active, .secondary-button:active, .tool-button:active { transform:scale(.97); }
+    .quick-volume {
+      width:min(420px,100%);
+      display:grid;
+      grid-template-columns:auto 1fr auto 1fr;
+      gap:var(--space-sm);
+      align-items:center;
+      font-size:var(--fs-small);
+      color:var(--color-text-secondary);
+    }
+
+    .page {
+      width:min(980px,100%);
+      margin:auto;
+      flex-direction:column;
+      gap:var(--space-lg);
+    }
+    .topbar {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:var(--space-md);
+      width:100%;
+      padding-bottom:var(--space-sm);
+      border-bottom:1px solid rgba(240,230,208,.2);
+    }
+    .topbar h1 { margin:0; font-size:var(--fs-h1); color:var(--color-text-accent); }
+    .settings-panel, .rules-panel, .result-panel {
+      background:rgba(45,74,45,.78);
+      border:1px solid rgba(200,169,110,.35);
+      border-radius:var(--radius-sm);
+      padding:var(--space-lg);
+      box-shadow:var(--shadow);
+    }
+    .settings-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
+      gap:var(--space-md);
+    }
+    .field {
+      display:grid;
+      gap:var(--space-xs);
+      padding:var(--space-md);
+      border-radius:var(--radius-sm);
+      background:rgba(26,46,26,.55);
+    }
+    .field label { color:var(--color-text-accent); font-weight:800; }
+    .field select, .field input[type="range"] { width:100%; }
+    .field.checkbox { grid-template-columns:auto 1fr; align-items:center; }
+    .settings-actions, .game-actions { display:flex; flex-wrap:wrap; gap:var(--space-sm); }
+    .rules-panel {
+      line-height:1.72;
+      font-size:var(--fs-body);
+    }
+    .rules-panel h2 { color:var(--color-text-accent); margin:var(--space-lg) 0 var(--space-sm); }
+    .rules-panel h2:first-child { margin-top:0; }
+    .rules-panel table { width:100%; border-collapse:collapse; margin:var(--space-md) 0; }
+    .rules-panel th, .rules-panel td { border:1px solid rgba(240,230,208,.25); padding:8px; text-align:center; }
+
+    .game {
+      align-items:center;
+      justify-content:center;
+      padding:var(--space-md);
+    }
+    .game-layout {
+      width:min(1120px,100%);
+      display:grid;
+      grid-template-columns:minmax(170px, 1fr) auto minmax(170px, 1fr);
+      gap:var(--space-lg);
+      align-items:center;
+    }
+    .status-panel {
+      min-width:0;
+      background:rgba(26,46,26,.76);
+      border:1px solid rgba(200,169,110,.35);
+      border-radius:var(--radius-sm);
+      padding:var(--space-md);
+      box-shadow:var(--shadow);
+    }
+    .status-panel h2 { margin:0 0 var(--space-sm); color:var(--color-text-accent); font-size:22px; }
+    .status-line { margin:0 0 var(--space-md); color:var(--color-text-secondary); min-height:1.5em; }
+    .captured-list {
+      display:flex;
+      gap:6px;
+      flex-wrap:wrap;
+      min-height:34px;
+      padding:var(--space-sm);
+      border-radius:var(--radius-sm);
+      background:rgba(0,0,0,.15);
+    }
+    .captured-piece { opacity:.72; font-size:22px; }
+    .board-area { display:grid; gap:var(--space-sm); justify-items:center; }
+    .board-wrapper {
+      max-width:100vw;
+      overflow:auto;
+      padding:var(--space-sm);
+      border-radius:var(--radius-sm);
+      background:rgba(20,28,18,.44);
+      box-shadow:var(--shadow);
+    }
+    .board {
+      display:grid;
+      grid-template-columns:repeat(7, var(--cell-size));
+      grid-template-rows:repeat(9, var(--cell-size));
+      gap:var(--cell-gap);
+      touch-action:none;
+    }
+    .cell {
+      position:relative;
+      display:grid;
+      place-items:center;
+      min-width:44px;
+      min-height:44px;
+      border:1px solid rgba(74,52,24,.45);
+      border-radius:var(--radius-sm);
+      background:linear-gradient(135deg, var(--color-board-light), var(--color-board-dark));
+      overflow:hidden;
+      outline:0;
+    }
+    .cell:nth-child(even) { filter:saturate(.94); }
+    .cell:focus-visible { box-shadow:0 0 0 3px #fff inset; }
+    .cell.river {
+      background:linear-gradient(135deg, #59a7e8, #2777bc);
+    }
+    .cell.river::after {
+      content:"";
+      position:absolute;
+      inset:0;
+      background:repeating-linear-gradient(90deg, transparent, transparent 10px, rgba(255,255,255,.18) 10px, rgba(255,255,255,.18) 20px);
+      animation:riverFlow 2s linear infinite;
+    }
+    .cell.trap {
+      background:linear-gradient(135deg, #7d1b14, var(--color-board-trap));
+    }
+    .cell.den {
+      background:radial-gradient(circle, #ffe873, var(--color-board-den) 45%, #9f7d00);
+    }
+    .terrain-mark {
+      position:absolute;
+      inset:auto 3px 2px;
+      z-index:1;
+      display:flex;
+      justify-content:space-between;
+      gap:3px;
+      font-size:10px;
+      color:rgba(255,255,255,.82);
+      text-shadow:0 1px 2px #000;
+      pointer-events:none;
+    }
+    .coord { opacity:.86; }
+    .cell.selected { box-shadow:0 0 0 4px var(--color-selected) inset; }
+    .cell.movable::before, .cell.capture-target::before {
+      content:"";
+      position:absolute;
+      inset:6px;
+      z-index:2;
+      border-radius:50%;
+      background:var(--color-movable);
+      animation:pulse 1s ease-in-out infinite;
+    }
+    .cell.capture-target::before { background:var(--color-danger); }
+    .piece {
+      position:relative;
+      z-index:3;
+      width:82%;
+      height:82%;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      color:var(--color-piece-text);
+      border:2px solid rgba(255,255,255,.75);
+      box-shadow:0 7px 13px rgba(0,0,0,.34), inset 0 0 12px rgba(255,255,255,.18);
+      font-size:var(--fs-piece);
+      font-weight:900;
+      transition:transform .15s ease, filter .15s ease;
+    }
+    .piece.red { background:linear-gradient(150deg, #ff6767, var(--color-piece-player)); }
+    .piece.blue { background:linear-gradient(150deg, #6872ff, var(--color-piece-ai)); }
+    .piece:hover { transform:scale(1.08); }
+    .piece-rank {
+      position:absolute;
+      right:-2px;
+      bottom:-2px;
+      min-width:18px;
+      height:18px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:#111;
+      color:#fff;
+      border:1px solid rgba(255,255,255,.8);
+      font-size:11px;
+      line-height:1;
+    }
+    .thinking .piece.blue { animation:thinking 1s ease-in-out infinite; }
+    .turn-badge {
+      justify-self:center;
+      min-height:30px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:var(--color-text-accent);
+      font-weight:900;
+    }
+    .spinner {
+      width:18px;
+      height:18px;
+      border:3px solid rgba(255,255,255,.25);
+      border-top-color:#fff;
+      border-radius:50%;
+      animation:spin 1s linear infinite;
+    }
+    .result-panel { text-align:center; }
+    .result-panel h1 { margin:0 0 var(--space-sm); font-size:var(--fs-h1); color:var(--color-text-accent); animation:victoryBanner .5s ease-out both; }
+
+    @keyframes floatIn {
+      from { opacity:0; transform:translateY(-32px); }
+      to { opacity:1; transform:translateY(0); }
+    }
+    @keyframes riverFlow { to { transform:translateX(20px); } }
+    @keyframes pulse {
+      0%,100% { transform:scale(.78); opacity:.65; }
+      50% { transform:scale(1); opacity:.95; }
+    }
+    @keyframes thinking {
+      0%,100% { opacity:1; transform:scale(1); }
+      50% { opacity:.55; transform:scale(.95); }
+    }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    @keyframes victoryBanner {
+      0% { transform:translateY(-80px); opacity:0; }
+      70% { transform:translateY(8px); opacity:1; }
+      100% { transform:translateY(0); }
+    }
+
+    @media (max-width:900px) {
+      .game-layout { grid-template-columns:1fr; }
+      .status-panel { width:min(520px,100%); justify-self:center; }
+      .ai-panel { order:1; }
+      .board-area { order:2; }
+      .player-panel { order:3; }
+    }
+    @media (max-width:480px) {
+      :root { --cell-size:clamp(40px,12.4vw,48px); --fs-hero:38px; --fs-btn:18px; }
+      .screen { padding:var(--space-md); }
+      .quick-volume { grid-template-columns:auto 1fr; }
+      .topbar { align-items:flex-start; flex-direction:column; }
+      .board-wrapper { width:100vw; border-radius:0; }
+      .game-actions .tool-button { flex:1 1 130px; }
+    }
+    @media (orientation:landscape) and (max-height:540px) {
+      :root { --cell-size:clamp(34px,9vh,48px); }
+      .game-layout { grid-template-columns:minmax(150px,1fr) auto minmax(150px,1fr); gap:var(--space-sm); }
+      .status-panel { font-size:14px; padding:var(--space-sm); }
+      .status-panel h2 { font-size:18px; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bg-canvas"></canvas>
+  <canvas id="effects-canvas"></canvas>
+  <div id="app">
+    <section id="screen-home" class="screen home active">
+      <div class="home-inner">
+        <div class="title-frame">
+          <h1 class="main-title">鬥獸棋</h1>
+          <p class="subtitle">Jungle Chess</p>
+        </div>
+        <div class="button-stack">
+          <button class="primary-button" data-action="start">▶ 開始遊戲</button>
+          <button class="secondary-button" data-route="#rules">📖 遊戲規則</button>
+          <button class="secondary-button" data-route="#settings">⚙ 遊戲設定</button>
+        </div>
+        <div class="quick-volume" aria-label="快速音量">
+          <span>音效</span><input id="quick-sfx" type="range" min="0" max="100">
+          <span>配樂</span><input id="quick-bgm" type="range" min="0" max="100">
+        </div>
+        <small>v1.0 | 玩家紅方 vs AI 藍方</small>
+      </div>
+    </section>
+
+    <section id="screen-settings" class="screen page">
+      <header class="topbar">
+        <h1>遊戲設定</h1>
+        <button class="tool-button" data-route="#home">← 返回</button>
+      </header>
+      <div class="settings-panel">
+        <div class="settings-grid">
+          <div class="field">
+            <label for="aiDifficulty">AI 難度</label>
+            <select id="aiDifficulty">
+              <option value="easy">簡單</option>
+              <option value="normal">普通</option>
+              <option value="hard">困難</option>
+              <option value="expert">專家</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="pieceStyle">棋子樣式</label>
+            <select id="pieceStyle">
+              <option value="emoji">Emoji</option>
+              <option value="chinese">中文</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="sfxVolume">音效音量</label>
+            <input id="sfxVolume" type="range" min="0" max="100">
+          </div>
+          <div class="field">
+            <label for="bgmVolume">配樂音量</label>
+            <input id="bgmVolume" type="range" min="0" max="100">
+          </div>
+          <div class="field">
+            <label for="bgmTheme">配樂主題</label>
+            <select id="bgmTheme">
+              <option value="jungle">森林</option>
+              <option value="guqin">古琴</option>
+              <option value="none">關閉</option>
+            </select>
+          </div>
+          <label class="field checkbox"><input id="showMovableSquares" type="checkbox"> 顯示可移動格</label>
+          <label class="field checkbox"><input id="showPieceRank" type="checkbox"> 顯示棋子階級</label>
+          <label class="field checkbox"><input id="showCoordinates" type="checkbox"> 顯示座標</label>
+          <label class="field checkbox"><input id="showAIThinkAnimation" type="checkbox"> 顯示 AI 思考動畫</label>
+        </div>
+        <div class="settings-actions" style="margin-top:16px">
+          <button class="primary-button" data-action="save-settings">儲存設定</button>
+          <button class="secondary-button" data-action="reset-settings">恢復預設</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-rules" class="screen page">
+      <header class="topbar">
+        <h1>遊戲規則</h1>
+        <button class="tool-button" data-route="#home">← 返回</button>
+      </header>
+      <div class="rules-panel">
+        <h2>目標</h2>
+        <p>輪流移動棋子。進入對方獸穴，或吃掉對方全部棋子即可獲勝。己方棋子不可進入己方獸穴。</p>
+        <h2>棋子等級</h2>
+        <table>
+          <tr><th>棋子</th><th>等級</th><th>備註</th></tr>
+          <tr><td>象</td><td>8</td><td>最大，但不能吃鼠</td></tr>
+          <tr><td>獅</td><td>7</td><td>可直線跳河</td></tr>
+          <tr><td>虎</td><td>6</td><td>可直線跳河</td></tr>
+          <tr><td>豹、狼、狗、貓</td><td>5-2</td><td>可吃同級或低級</td></tr>
+          <tr><td>鼠</td><td>1</td><td>可入河，可吃象；在河中不能吃陸上象</td></tr>
+        </table>
+        <h2>地形</h2>
+        <p>河流只有鼠可以進入。獅與虎可以沿直線跳過河流，但路徑上若有鼠阻擋則不能跳。陷阱會讓進入者戰力降為 0，任何敵方棋子都能吃掉陷阱中的棋子。</p>
+      </div>
+    </section>
+
+    <section id="screen-game" class="screen game">
+      <div class="game-layout">
+        <aside class="status-panel ai-panel" id="ai-panel">
+          <h2>🔵 AI</h2>
+          <p class="status-line" id="ai-status">等待開局</p>
+          <strong>被吃棋子</strong>
+          <div class="captured-list" id="captured-blue"></div>
+        </aside>
+
+        <main class="board-area">
+          <div class="turn-badge" id="turn-badge"></div>
+          <div class="board-wrapper">
+            <div id="board" class="board" role="grid" aria-label="鬥獸棋 7 乘 9 棋盤"></div>
+          </div>
+          <div class="game-actions">
+            <button class="tool-button" data-action="undo">↶ 悔棋</button>
+            <button class="tool-button" data-action="restart">⟳ 重新開始</button>
+            <button class="tool-button" data-action="surrender">投降</button>
+            <button class="tool-button" data-route="#home">首頁</button>
+          </div>
+        </main>
+
+        <aside class="status-panel player-panel" id="player-panel">
+          <h2>🔴 玩家</h2>
+          <p class="status-line" id="player-status">輪到你時點選棋子</p>
+          <strong>被吃棋子</strong>
+          <div class="captured-list" id="captured-red"></div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="screen-result" class="screen page">
+      <div class="result-panel">
+        <h1 id="result-title">遊戲結束</h1>
+        <p id="result-reason"></p>
+        <div class="settings-actions" style="justify-content:center">
+          <button class="primary-button" data-action="start">再玩一局</button>
+          <button class="secondary-button" data-route="#home">回首頁</button>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div id="game-announcer" aria-live="polite" aria-atomic="true" class="sr-only"></div>
+
+  <script>
+    const ROWS = 9;
+    const COLS = 7;
+    const RED = "red";
+    const BLUE = "blue";
+    const SETTINGS_KEY = "jungleChess_settings";
+    const DIFFICULTY_DEPTH = { easy: 1, normal: 2, hard: 3, expert: 4 };
+    const PIECE_VALUE = { 8:800, 7:700, 6:600, 5:500, 4:400, 3:300, 2:200, 1:150 };
+    const DEFAULT_SETTINGS = {
+      aiDifficulty:"normal",
+      pieceStyle:"emoji",
+      language:"zh-TW",
+      sfxVolume:70,
+      bgmVolume:40,
+      bgmTheme:"jungle",
+      showMovableSquares:true,
+      showPieceRank:true,
+      showCoordinates:false,
+      showAIThinkAnimation:true,
+      autoFlipBoard:true
+    };
+    const PIECE_META = {
+      elephant:{ rank:8, emoji:"🐘", chinese:"象", short:"E" },
+      lion:{ rank:7, emoji:"🦁", chinese:"獅", short:"L" },
+      tiger:{ rank:6, emoji:"🐯", chinese:"虎", short:"T" },
+      leopard:{ rank:5, emoji:"🐆", chinese:"豹", short:"P" },
+      wolf:{ rank:4, emoji:"🐺", chinese:"狼", short:"W" },
+      dog:{ rank:3, emoji:"🐶", chinese:"狗", short:"D" },
+      cat:{ rank:2, emoji:"🐱", chinese:"貓", short:"C" },
+      rat:{ rank:1, emoji:"🐭", chinese:"鼠", short:"R" }
+    };
+    const INITIAL_PIECES = [
+      { type:"lion", color:RED, col:6, row:8 },
+      { type:"tiger", color:RED, col:0, row:8 },
+      { type:"dog", color:RED, col:5, row:7 },
+      { type:"cat", color:RED, col:1, row:7 },
+      { type:"rat", color:RED, col:6, row:6 },
+      { type:"leopard", color:RED, col:4, row:6 },
+      { type:"wolf", color:RED, col:2, row:6 },
+      { type:"elephant", color:RED, col:0, row:6 },
+      { type:"lion", color:BLUE, col:0, row:0 },
+      { type:"tiger", color:BLUE, col:6, row:0 },
+      { type:"dog", color:BLUE, col:1, row:1 },
+      { type:"cat", color:BLUE, col:5, row:1 },
+      { type:"rat", color:BLUE, col:0, row:2 },
+      { type:"leopard", color:BLUE, col:2, row:2 },
+      { type:"wolf", color:BLUE, col:4, row:2 },
+      { type:"elephant", color:BLUE, col:6, row:2 }
+    ];
+    const DIRECTIONS = [[1,0],[-1,0],[0,1],[0,-1]];
+
+    let settings = loadSettings();
+    let state = createInitialState();
+    let selectedId = null;
+    let legalTargets = [];
+    let aiBusy = false;
+    let lastResult = null;
+
+    const $ = selector => document.querySelector(selector);
+    const $$ = selector => Array.from(document.querySelectorAll(selector));
+
+    function terrainAt(col, row) {
+      if (col === 3 && row === 0) return "den_blue";
+      if (col === 3 && row === 8) return "den_red";
+      if ((row === 0 && (col === 2 || col === 4)) || (row === 1 && col === 3)) return "trap_blue";
+      if ((row === 8 && (col === 2 || col === 4)) || (row === 7 && col === 3)) return "trap_red";
+      if ((col === 1 || col === 2 || col === 4 || col === 5) && row >= 3 && row <= 5) return "river";
+      return "plain";
+    }
+
+    function createInitialState() {
+      const cells = Array.from({ length: ROWS }, () => Array(COLS).fill(null));
+      const pieces = INITIAL_PIECES.map((piece, index) => {
+        const meta = PIECE_META[piece.type];
+        return {
+          id:`${piece.color}_${piece.type}_${index}`,
+          type:piece.type,
+          rank:meta.rank,
+          color:piece.color,
+          col:piece.col,
+          row:piece.row,
+          isAlive:true,
+          emoji:meta.emoji,
+          chineseName:meta.chinese
+        };
+      });
+      pieces.forEach(piece => cells[piece.row][piece.col] = piece);
+      return {
+        cells,
+        pieces,
+        currentTurn:RED,
+        gameStatus:"playing",
+        winner:null,
+        winReason:null,
+        moveHistory:[],
+        capturedPieces:{ red:[], blue:[] },
+        undoCount:0
+      };
+    }
+
+    function loadSettings() {
+      try {
+        return { ...DEFAULT_SETTINGS, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}") };
+      } catch {
+        return { ...DEFAULT_SETTINGS };
+      }
+    }
+    function saveSettings() {
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    }
+
+    const AudioManager = {
+      ctx:null,
+      bgmTimer:null,
+      init() {
+        if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      },
+      tone(freq, duration, type = "sine", volume = 0.2) {
+        if (settings.sfxVolume <= 0) return;
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(volume * settings.sfxVolume / 100, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+        osc.connect(gain).connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + duration);
+      },
+      play(name) {
+        const map = {
+          click:[520,.06,"triangle"],
+          select:[660,.09,"sine"],
+          move:[420,.14,"triangle"],
+          capture:[120,.24,"sawtooth"],
+          jump:[740,.24,"square"],
+          error:[90,.18,"sawtooth"],
+          win:[880,.5,"triangle"],
+          lose:[160,.5,"sine"],
+          ai_move:[360,.1,"triangle"],
+          undo:[260,.2,"sine"]
+        };
+        const args = map[name] || map.click;
+        this.tone(args[0], args[1], args[2]);
+      },
+      playBGM() {
+        this.stopBGM();
+        if (settings.bgmTheme === "none" || settings.bgmVolume <= 0) return;
+        const jungle = [220, 293.66, 261.63, 196];
+        const guqin = [261.63, 293.66, 329.63, 392, 440];
+        const notes = settings.bgmTheme === "guqin" ? guqin : jungle;
+        let i = 0;
+        this.bgmTimer = setInterval(() => {
+          this.init();
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = settings.bgmTheme === "guqin" ? "sine" : "triangle";
+          osc.frequency.value = notes[i % notes.length];
+          gain.gain.setValueAtTime(0.035 * settings.bgmVolume / 100, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + .7);
+          osc.connect(gain).connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + .75);
+          i++;
+        }, settings.bgmTheme === "guqin" ? 900 : 700);
+      },
+      stopBGM() {
+        if (this.bgmTimer) clearInterval(this.bgmTimer);
+        this.bgmTimer = null;
+      }
+    };
+
+    function inBounds(col, row) {
+      return col >= 0 && col < COLS && row >= 0 && row < ROWS;
+    }
+    function pieceAt(board, col, row) {
+      return inBounds(col, row) ? board[row][col] : null;
+    }
+    function isRiver(col, row) { return terrainAt(col, row) === "river"; }
+    function isOwnDen(piece, col, row) {
+      return terrainAt(col, row) === `den_${piece.color}`;
+    }
+    function effectiveRank(piece, col = piece.col, row = piece.row) {
+      const terrain = terrainAt(col, row);
+      if ((terrain === "trap_red" && piece.color === BLUE) || (terrain === "trap_blue" && piece.color === RED)) return 0;
+      return piece.rank;
+    }
+    function canCapture(attacker, defender, toCol, toRow, board) {
+      if (!defender || attacker.color === defender.color) return false;
+      const fromRiver = isRiver(attacker.col, attacker.row);
+      const toRiver = isRiver(toCol, toRow);
+      if (attacker.type !== "rat" && toRiver) return false;
+      if (attacker.type === "rat" && defender.type === "elephant") return !fromRiver && !toRiver;
+      if (attacker.type === "elephant" && defender.type === "rat") return false;
+      if (fromRiver !== toRiver) return false;
+      const defendingRank = effectiveRank(defender, toCol, toRow);
+      return effectiveRank(attacker) >= defendingRank;
+    }
+    function jumpTarget(piece, dx, dy, board) {
+      if (piece.type !== "lion" && piece.type !== "tiger") return null;
+      let col = piece.col + dx;
+      let row = piece.row + dy;
+      if (!inBounds(col, row) || !isRiver(col, row)) return null;
+      while (inBounds(col, row) && isRiver(col, row)) {
+        const blocker = pieceAt(board, col, row);
+        if (blocker && blocker.type === "rat") return null;
+        col += dx;
+        row += dy;
+      }
+      if (!inBounds(col, row)) return null;
+      return { col, row, isJump:true };
+    }
+    function getLegalMovesForPiece(piece, board = state.cells) {
+      if (!piece || !piece.isAlive) return [];
+      const moves = [];
+      for (const [dx, dy] of DIRECTIONS) {
+        let toCol = piece.col + dx;
+        let toRow = piece.row + dy;
+        let isJump = false;
+        const jump = jumpTarget(piece, dx, dy, board);
+        if (jump) {
+          toCol = jump.col;
+          toRow = jump.row;
+          isJump = true;
+        }
+        if (!inBounds(toCol, toRow) || isOwnDen(piece, toCol, toRow)) continue;
+        if (isRiver(toCol, toRow) && piece.type !== "rat") continue;
+        const target = pieceAt(board, toCol, toRow);
+        if (!target) {
+          moves.push({ piece, fromCol:piece.col, fromRow:piece.row, toCol, toRow, capturedPiece:null, isJump });
+        } else if (canCapture(piece, target, toCol, toRow, board)) {
+          moves.push({ piece, fromCol:piece.col, fromRow:piece.row, toCol, toRow, capturedPiece:target, isJump });
+        }
+      }
+      return moves;
+    }
+    function getAllLegalMoves(color, board = state.cells, pieces = state.pieces) {
+      return pieces.filter(p => p.color === color && p.isAlive).flatMap(piece => getLegalMovesForPiece(piece, board));
+    }
+    function cloneState(input) {
+      const pieces = input.pieces.map(piece => ({ ...piece }));
+      const cells = Array.from({ length: ROWS }, () => Array(COLS).fill(null));
+      pieces.filter(p => p.isAlive).forEach(piece => cells[piece.row][piece.col] = piece);
+      return { ...input, pieces, cells, capturedPieces:{ red:[...input.capturedPieces.red], blue:[...input.capturedPieces.blue] }, moveHistory:[...input.moveHistory] };
+    }
+    function applyMoveToState(input, move, record = false) {
+      const next = cloneState(input);
+      const piece = next.pieces.find(p => p.id === move.piece.id);
+      const captured = pieceAt(next.cells, move.toCol, move.toRow);
+      next.cells[piece.row][piece.col] = null;
+      if (captured) {
+        captured.isAlive = false;
+        next.capturedPieces[captured.color].push({ ...captured });
+      }
+      piece.col = move.toCol;
+      piece.row = move.toRow;
+      next.cells[piece.row][piece.col] = piece;
+      if (record) {
+        next.moveHistory.push({
+          pieceId:piece.id,
+          fromCol:move.fromCol,
+          fromRow:move.fromRow,
+          toCol:move.toCol,
+          toRow:move.toRow,
+          capturedPiece:captured ? { ...captured } : null,
+          isJump:move.isJump,
+          timestamp:Date.now()
+        });
+      }
+      const nextTurn = next.currentTurn === RED ? BLUE : RED;
+      const winner = checkWinner(next, nextTurn);
+      if (winner) {
+        next.winner = winner.color;
+        next.winReason = winner.reason;
+        next.gameStatus = "ended";
+      } else {
+        next.currentTurn = nextTurn;
+      }
+      return next;
+    }
+    function checkWinner(input, nextTurn = input.currentTurn) {
+      const redAlive = input.pieces.some(p => p.color === RED && p.isAlive);
+      const blueAlive = input.pieces.some(p => p.color === BLUE && p.isAlive);
+      if (!redAlive) return { color:BLUE, reason:"annihilate" };
+      if (!blueAlive) return { color:RED, reason:"annihilate" };
+      const redInDen = input.pieces.some(p => p.color === RED && p.isAlive && terrainAt(p.col, p.row) === "den_blue");
+      const blueInDen = input.pieces.some(p => p.color === BLUE && p.isAlive && terrainAt(p.col, p.row) === "den_red");
+      if (redInDen) return { color:RED, reason:"den" };
+      if (blueInDen) return { color:BLUE, reason:"den" };
+      if (getAllLegalMoves(nextTurn, input.cells, input.pieces).length === 0) {
+        return { color:nextTurn === RED ? BLUE : RED, reason:"blocked" };
+      }
+      return null;
+    }
+    function evaluateBoard(input, aiColor = BLUE) {
+      if (input.winner === aiColor) return 100000;
+      if (input.winner && input.winner !== aiColor) return -100000;
+      let score = 0;
+      for (const piece of input.pieces) {
+        if (!piece.isAlive) continue;
+        const sign = piece.color === aiColor ? 1 : -1;
+        const targetRow = piece.color === BLUE ? 8 : 0;
+        const denPressure = 18 - (Math.abs(piece.col - 3) + Math.abs(piece.row - targetRow));
+        const trap = effectiveRank(piece) === 0 ? -90 : 0;
+        score += sign * (PIECE_VALUE[piece.rank] + denPressure * 12 + trap);
+      }
+      score += (getAllLegalMoves(aiColor, input.cells, input.pieces).length - getAllLegalMoves(RED, input.cells, input.pieces).length) * 8;
+      return score;
+    }
+    function orderMoves(moves) {
+      return [...moves].sort((a, b) => {
+        const captureScore = move => move.capturedPiece ? PIECE_VALUE[move.capturedPiece.rank] + 1000 : 0;
+        const denScore = move => terrainAt(move.toCol, move.toRow).startsWith("den_") ? 2000 : 0;
+        return (captureScore(b) + denScore(b) + (b.isJump ? 70 : 0)) - (captureScore(a) + denScore(a) + (a.isJump ? 70 : 0));
+      });
+    }
+    function minimax(input, depth, alpha, beta, maximizing) {
+      if (depth === 0 || input.gameStatus === "ended") return { score:evaluateBoard(input) };
+      const color = maximizing ? BLUE : RED;
+      const moves = orderMoves(getAllLegalMoves(color, input.cells, input.pieces));
+      if (!moves.length) return { score:maximizing ? -99999 : 99999 };
+      let bestMove = moves[0];
+      if (maximizing) {
+        let bestScore = -Infinity;
+        for (const move of moves) {
+          const child = applyMoveToState(input, move);
+          const result = minimax(child, depth - 1, alpha, beta, false);
+          if (result.score > bestScore) {
+            bestScore = result.score;
+            bestMove = move;
+          }
+          alpha = Math.max(alpha, bestScore);
+          if (beta <= alpha) break;
+        }
+        return { score:bestScore, move:bestMove };
+      }
+      let bestScore = Infinity;
+      for (const move of moves) {
+        const child = applyMoveToState(input, move);
+        const result = minimax(child, depth - 1, alpha, beta, true);
+        if (result.score < bestScore) {
+          bestScore = result.score;
+          bestMove = move;
+        }
+        beta = Math.min(beta, bestScore);
+        if (beta <= alpha) break;
+      }
+      return { score:bestScore, move:bestMove };
+    }
+    function getBestAIMove() {
+      const moves = orderMoves(getAllLegalMoves(BLUE, state.cells, state.pieces));
+      if (!moves.length) return null;
+      if (settings.aiDifficulty === "easy" && Math.random() < .3) return moves[Math.floor(Math.random() * Math.min(3, moves.length))];
+      const depth = DIFFICULTY_DEPTH[settings.aiDifficulty] || 2;
+      return minimax(state, depth, -Infinity, Infinity, true).move || moves[0];
+    }
+
+    function renderBoard() {
+      const board = $("#board");
+      board.innerHTML = "";
+      board.classList.toggle("thinking", aiBusy && settings.showAIThinkAnimation);
+      for (let row = 0; row < ROWS; row++) {
+        for (let col = 0; col < COLS; col++) {
+          const cell = document.createElement("button");
+          const terrain = terrainAt(col, row);
+          const piece = state.cells[row][col];
+          cell.type = "button";
+          cell.className = `cell ${terrainClass(terrain)}`;
+          cell.dataset.col = col;
+          cell.dataset.row = row;
+          cell.setAttribute("role", "gridcell");
+          cell.setAttribute("aria-label", cellLabel(col, row, terrain, piece));
+          cell.tabIndex = 0;
+          if (selectedId && piece && piece.id === selectedId) cell.classList.add("selected");
+          const target = legalTargets.find(m => m.toCol === col && m.toRow === row);
+          if (settings.showMovableSquares && target) cell.classList.add(target.capturedPiece ? "capture-target" : "movable");
+          if (piece) cell.appendChild(renderPiece(piece));
+          const mark = document.createElement("span");
+          mark.className = "terrain-mark";
+          mark.innerHTML = `${terrainMark(terrain)}${settings.showCoordinates ? `<span class="coord">${String.fromCharCode(65 + col)}${row + 1}</span>` : ""}`;
+          cell.appendChild(mark);
+          cell.addEventListener("click", () => handleCellClick(col, row));
+          cell.addEventListener("keydown", event => handleCellKey(event, col, row));
+          board.appendChild(cell);
+        }
+      }
+      renderStatus();
+    }
+    function terrainClass(terrain) {
+      if (terrain === "river") return "river";
+      if (terrain.startsWith("trap")) return "trap";
+      if (terrain.startsWith("den")) return "den";
+      return "";
+    }
+    function terrainMark(terrain) {
+      if (terrain === "river") return "<span>河</span>";
+      if (terrain.startsWith("trap")) return "<span>陷</span>";
+      if (terrain.startsWith("den")) return "<span>穴</span>";
+      return "<span></span>";
+    }
+    function cellLabel(col, row, terrain, piece) {
+      const terrainText = terrain === "river" ? "河流" : terrain.startsWith("trap") ? "陷阱" : terrain.startsWith("den") ? "獸穴" : "平地";
+      const pieceText = piece ? `${piece.color === RED ? "紅方" : "藍方"}${piece.chineseName}` : "無棋子";
+      return `${String.fromCharCode(65 + col)}${row + 1}，${terrainText}，${pieceText}`;
+    }
+    function renderPiece(piece) {
+      const el = document.createElement("div");
+      el.className = `piece ${piece.color}`;
+      el.textContent = settings.pieceStyle === "emoji" ? piece.emoji : piece.chineseName;
+      if (settings.showPieceRank) {
+        const rank = document.createElement("span");
+        rank.className = "piece-rank";
+        rank.textContent = effectiveRank(piece) === 0 ? "0" : piece.rank;
+        el.appendChild(rank);
+      }
+      return el;
+    }
+    function renderStatus() {
+      $("#turn-badge").innerHTML = aiBusy ? `<span class="spinner"></span>AI 思考中...` : state.currentTurn === RED ? "輪到玩家" : "輪到 AI";
+      $("#ai-status").textContent = state.currentTurn === BLUE ? "正在判斷最佳走法" : "等待玩家行動";
+      $("#player-status").textContent = state.currentTurn === RED ? (selectedId ? "選擇目的地" : "請選擇紅方棋子") : "AI 回合";
+      $("#captured-red").innerHTML = state.capturedPieces.red.map(p => `<span class="captured-piece">${settings.pieceStyle === "emoji" ? p.emoji : p.chineseName}</span>`).join("");
+      $("#captured-blue").innerHTML = state.capturedPieces.blue.map(p => `<span class="captured-piece">${settings.pieceStyle === "emoji" ? p.emoji : p.chineseName}</span>`).join("");
+    }
+    function handleCellClick(col, row) {
+      if (state.gameStatus !== "playing" || state.currentTurn !== RED || aiBusy) return;
+      AudioManager.init();
+      const piece = state.cells[row][col];
+      if (piece && piece.color === RED) {
+        selectedId = piece.id;
+        legalTargets = getLegalMovesForPiece(piece);
+        AudioManager.play("select");
+        announce(`已選擇${piece.chineseName}`);
+        renderBoard();
+        return;
+      }
+      const move = legalTargets.find(m => m.toCol === col && m.toRow === row);
+      if (move) {
+        makePlayerMove(move);
+      } else {
+        AudioManager.play("error");
+        selectedId = null;
+        legalTargets = [];
+        renderBoard();
+      }
+    }
+    function handleCellKey(event, col, row) {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        handleCellClick(col, row);
+      }
+      if (event.key === "Escape") {
+        selectedId = null;
+        legalTargets = [];
+        renderBoard();
+      }
+    }
+    function makePlayerMove(move) {
+      const capture = !!move.capturedPiece;
+      const jump = move.isJump;
+      state = applyMoveToState(state, move, true);
+      selectedId = null;
+      legalTargets = [];
+      AudioManager.play(capture ? "capture" : jump ? "jump" : "move");
+      if (capture) playCaptureEffect(move.toCol, move.toRow);
+      announce(`紅方移動到 ${String.fromCharCode(65 + move.toCol)}${move.toRow + 1}`);
+      renderBoard();
+      if (state.gameStatus === "ended") return finishGame();
+      setTimeout(aiTurn, 260);
+    }
+    function aiTurn() {
+      if (state.currentTurn !== BLUE || state.gameStatus !== "playing") return;
+      aiBusy = true;
+      renderBoard();
+      setTimeout(() => {
+        const move = getBestAIMove();
+        if (!move) {
+          state.winner = RED;
+          state.winReason = "blocked";
+          state.gameStatus = "ended";
+          aiBusy = false;
+          finishGame();
+          return;
+        }
+        const capture = !!move.capturedPiece;
+        const jump = move.isJump;
+        state = applyMoveToState(state, move, true);
+        aiBusy = false;
+        AudioManager.play(capture ? "capture" : jump ? "jump" : "ai_move");
+        if (capture) playCaptureEffect(move.toCol, move.toRow);
+        announce(`AI 移動到 ${String.fromCharCode(65 + move.toCol)}${move.toRow + 1}`);
+        renderBoard();
+        if (state.gameStatus === "ended") finishGame();
+      }, settings.aiDifficulty === "expert" ? 380 : 220);
+    }
+    function rebuildFromHistory(history) {
+      state = createInitialState();
+      const kept = history.slice(0, -2);
+      for (const item of kept) {
+        const piece = state.pieces.find(p => p.id === item.pieceId);
+        const move = { piece, fromCol:item.fromCol, fromRow:item.fromRow, toCol:item.toCol, toRow:item.toRow, capturedPiece:pieceAt(state.cells, item.toCol, item.toRow), isJump:item.isJump };
+        state = applyMoveToState(state, move, true);
+      }
+      state.undoCount++;
+      selectedId = null;
+      legalTargets = [];
+      AudioManager.play("undo");
+      renderBoard();
+    }
+    function restartGame() {
+      state = createInitialState();
+      selectedId = null;
+      legalTargets = [];
+      aiBusy = false;
+      lastResult = null;
+      location.hash = "#game";
+      AudioManager.playBGM();
+      renderBoard();
+    }
+    function finishGame() {
+      const playerWon = state.winner === RED;
+      lastResult = { winner:state.winner, reason:state.winReason };
+      AudioManager.play(playerWon ? "win" : "lose");
+      $("#result-title").textContent = playerWon ? "你贏了！" : "你輸了";
+      const reasonText = { den:"成功攻入獸穴", annihilate:"吃掉全部敵方棋子", surrender:"投降結束", blocked:"對手無棋可走" };
+      $("#result-reason").textContent = reasonText[state.winReason] || "遊戲結束";
+      location.hash = "#result";
+    }
+    function announce(text) {
+      $("#game-announcer").textContent = text;
+    }
+    function playCaptureEffect(col, row) {
+      const canvas = $("#effects-canvas");
+      const ctx = canvas.getContext("2d");
+      resizeCanvas(canvas);
+      const boardRect = $("#board").getBoundingClientRect();
+      const cell = boardRect.width / COLS;
+      const x = boardRect.left + cell * (col + .5);
+      const y = boardRect.top + cell * (row + .5);
+      const particles = Array.from({ length: 24 }, () => ({
+        x, y,
+        vx:(Math.random() - .5) * 8,
+        vy:(Math.random() - .5) * 8,
+        life:1
+      }));
+      function frame() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += .12;
+          p.life -= .04;
+          ctx.globalAlpha = Math.max(0, p.life);
+          ctx.fillStyle = "#ffd700";
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        ctx.globalAlpha = 1;
+        if (particles.some(p => p.life > 0)) requestAnimationFrame(frame);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      frame();
+    }
+    function resizeCanvas(canvas) {
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.floor(window.innerWidth * dpr);
+      canvas.height = Math.floor(window.innerHeight * dpr);
+      canvas.getContext("2d").setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    function initBackground() {
+      const canvas = $("#bg-canvas");
+      const ctx = canvas.getContext("2d");
+      const particles = Array.from({ length: 44 }, () => ({
+        x:Math.random() * window.innerWidth,
+        y:Math.random() * window.innerHeight,
+        s:Math.random() * 18 + 8,
+        v:Math.random() * .4 + .12,
+        a:Math.random() * .35 + .12,
+        glyph:["葉","竹","光","森"][Math.floor(Math.random() * 4)]
+      }));
+      function loop() {
+        resizeCanvas(canvas);
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+        particles.forEach(p => {
+          p.y += p.v;
+          p.x += Math.sin(p.y / 70) * .18;
+          if (p.y > window.innerHeight + 30) {
+            p.y = -30;
+            p.x = Math.random() * window.innerWidth;
+          }
+          ctx.globalAlpha = p.a;
+          ctx.fillStyle = "#d6c17b";
+          ctx.font = `${p.s}px ${getComputedStyle(document.body).fontFamily}`;
+          ctx.fillText(p.glyph, p.x, p.y);
+        });
+        ctx.globalAlpha = 1;
+        requestAnimationFrame(loop);
+      }
+      loop();
+    }
+
+    function showScreen(hash) {
+      const target = hash || "#home";
+      $$(".screen").forEach(screen => screen.classList.remove("active"));
+      const id = target.replace("#", "screen-");
+      const screen = document.getElementById(id) || $("#screen-home");
+      screen.classList.add("active");
+      if (target === "#game") renderBoard();
+    }
+    function syncSettingsForm() {
+      $("#aiDifficulty").value = settings.aiDifficulty;
+      $("#pieceStyle").value = settings.pieceStyle;
+      $("#sfxVolume").value = settings.sfxVolume;
+      $("#bgmVolume").value = settings.bgmVolume;
+      $("#bgmTheme").value = settings.bgmTheme;
+      $("#showMovableSquares").checked = settings.showMovableSquares;
+      $("#showPieceRank").checked = settings.showPieceRank;
+      $("#showCoordinates").checked = settings.showCoordinates;
+      $("#showAIThinkAnimation").checked = settings.showAIThinkAnimation;
+      $("#quick-sfx").value = settings.sfxVolume;
+      $("#quick-bgm").value = settings.bgmVolume;
+    }
+    function readSettingsForm() {
+      settings.aiDifficulty = $("#aiDifficulty").value;
+      settings.pieceStyle = $("#pieceStyle").value;
+      settings.sfxVolume = Number($("#sfxVolume").value);
+      settings.bgmVolume = Number($("#bgmVolume").value);
+      settings.bgmTheme = $("#bgmTheme").value;
+      settings.showMovableSquares = $("#showMovableSquares").checked;
+      settings.showPieceRank = $("#showPieceRank").checked;
+      settings.showCoordinates = $("#showCoordinates").checked;
+      settings.showAIThinkAnimation = $("#showAIThinkAnimation").checked;
+    }
+    function bindUI() {
+      document.addEventListener("click", event => {
+        const routeButton = event.target.closest("[data-route]");
+        const actionButton = event.target.closest("[data-action]");
+        if (routeButton) {
+          AudioManager.play("click");
+          location.hash = routeButton.dataset.route;
+        }
+        if (!actionButton) return;
+        AudioManager.play("click");
+        const action = actionButton.dataset.action;
+        if (action === "start" || action === "restart") restartGame();
+        if (action === "surrender") {
+          state.winner = BLUE;
+          state.winReason = "surrender";
+          state.gameStatus = "ended";
+          finishGame();
+        }
+        if (action === "save-settings") {
+          readSettingsForm();
+          saveSettings();
+          syncSettingsForm();
+          AudioManager.playBGM();
+          renderBoard();
+        }
+        if (action === "reset-settings") {
+          settings = { ...DEFAULT_SETTINGS };
+          saveSettings();
+          syncSettingsForm();
+          AudioManager.playBGM();
+          renderBoard();
+        }
+        if (action === "undo") {
+          const history = [...state.moveHistory];
+          if (history.length >= 2) rebuildFromHistory(history);
+          else AudioManager.play("error");
+        }
+      });
+      $("#quick-sfx").addEventListener("input", event => {
+        settings.sfxVolume = Number(event.target.value);
+        $("#sfxVolume").value = settings.sfxVolume;
+        saveSettings();
+      });
+      $("#quick-bgm").addEventListener("input", event => {
+        settings.bgmVolume = Number(event.target.value);
+        $("#bgmVolume").value = settings.bgmVolume;
+        saveSettings();
+        AudioManager.playBGM();
+      });
+      document.addEventListener("keydown", event => {
+        if (event.key.toLowerCase() === "u" && location.hash === "#game") {
+          const history = [...state.moveHistory];
+          if (history.length >= 2) rebuildFromHistory(history);
+        }
+        if (event.key === "Escape") {
+          selectedId = null;
+          legalTargets = [];
+          renderBoard();
+        }
+      });
+      window.addEventListener("hashchange", () => showScreen(location.hash));
+      document.addEventListener("pointerdown", () => AudioManager.init(), { once:true });
+    }
+
+    syncSettingsForm();
+    bindUI();
+    initBackground();
+    showScreen(location.hash || "#home");
+    renderBoard();
+  </script>
+</body>
+</html>

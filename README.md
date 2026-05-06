@@ -41,3 +41,7 @@
 ### Chinese_Chess
 
 - 中國象棋
+
+### Jungle_Chess
+
+- 鬥獸棋
