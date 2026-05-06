@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <meta name="theme-color" content="#1a2e1a">
-  <title>鬥獸棋 Jungle Chess</title>
+  <title>鬥獸棋</title>
   <style>
     :root {
       --color-bg-primary:#1a2e1a;
@@ -41,8 +41,10 @@
       --space-md:16px;
       --space-lg:24px;
       --space-xl:40px;
-      --cell-size:clamp(42px,11vw,64px);
-      --cell-gap:clamp(2px,0.5vw,4px);
+      --board-safe-padding:8px;
+      --board-max-width:calc(100vw - var(--board-safe-padding) * 2);
+      --cell-size:min(calc((var(--board-max-width) - 12px) / 7), 72px);
+      --cell-gap:max(1px, min(3px, calc(var(--cell-size) * 0.04)));
       --radius-sm:8px;
       --radius-md:14px;
       --shadow:0 18px 44px rgba(0,0,0,.32);
@@ -72,7 +74,7 @@
     #bg-canvas { z-index:0; opacity:.7; }
     #effects-canvas { z-index:10; }
     #app { position:relative; z-index:1; min-height:100vh; }
-    .screen { display:none; min-height:100vh; padding:var(--space-lg); }
+    .screen { display:none; min-height:100vh; min-height:100dvh; padding:var(--space-lg); }
     .screen.active { display:flex; }
     .sr-only {
       position:absolute;
@@ -184,6 +186,40 @@
     .field select, .field input[type="range"] { width:100%; }
     .field.checkbox { grid-template-columns:auto 1fr; align-items:center; }
     .settings-actions, .game-actions { display:flex; flex-wrap:wrap; gap:var(--space-sm); }
+    .settings-unsaved-indicator {
+      display:none;
+      font-size:13px;
+      color:#ffaa00;
+      animation:blink 1.5s ease-in-out infinite;
+    }
+    .settings-unsaved-indicator.visible {
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+    }
+    .map-options {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(118px, 1fr));
+      gap:var(--space-sm);
+    }
+    .map-option {
+      display:grid;
+      gap:4px;
+      align-content:center;
+      min-height:76px;
+      padding:10px;
+      border:1px solid rgba(240,230,208,.25);
+      border-radius:var(--radius-sm);
+      background:rgba(0,0,0,.16);
+      color:var(--color-text-primary);
+      text-align:left;
+    }
+    .map-option[aria-pressed="true"] {
+      border-color:var(--color-text-accent);
+      box-shadow:0 0 0 2px rgba(255,215,0,.28) inset;
+    }
+    .map-option strong { font-size:14px; }
+    .map-option span { color:var(--color-text-secondary); font-size:12px; }
     .rules-panel {
       line-height:1.72;
       font-size:var(--fs-body);
@@ -196,7 +232,9 @@
     .game {
       align-items:center;
       justify-content:center;
-      padding:var(--space-md);
+      overflow-y:auto;
+      overflow-x:hidden;
+      padding:var(--space-sm) var(--board-safe-padding);
     }
     .game-layout {
       width:min(1120px,100%);
@@ -220,16 +258,28 @@
       gap:6px;
       flex-wrap:wrap;
       min-height:34px;
+      max-width:100%;
+      overflow:hidden;
       padding:var(--space-sm);
       border-radius:var(--radius-sm);
       background:rgba(0,0,0,.15);
     }
-    .captured-piece { opacity:.72; font-size:22px; }
+    .captured-piece {
+      flex-shrink:0;
+      width:clamp(20px,5vw,28px);
+      height:clamp(20px,5vw,28px);
+      display:grid;
+      place-items:center;
+      opacity:.72;
+      font-size:clamp(12px,3vw,16px);
+    }
     .board-area { display:grid; gap:var(--space-sm); justify-items:center; }
     .board-wrapper {
-      max-width:100vw;
-      overflow:auto;
-      padding:var(--space-sm);
+      width:100%;
+      max-width:var(--board-max-width);
+      overflow:hidden;
+      contain:layout;
+      padding:0;
       border-radius:var(--radius-sm);
       background:rgba(20,28,18,.44);
       box-shadow:var(--shadow);
@@ -239,14 +289,17 @@
       grid-template-columns:repeat(7, var(--cell-size));
       grid-template-rows:repeat(9, var(--cell-size));
       gap:var(--cell-gap);
+      width:calc(var(--cell-size) * 7 + var(--cell-gap) * 6);
+      margin:0 auto;
+      overflow:hidden;
       touch-action:none;
     }
     .cell {
       position:relative;
       display:grid;
       place-items:center;
-      min-width:44px;
-      min-height:44px;
+      min-width:0;
+      min-height:0;
       border:1px solid rgba(74,52,24,.45);
       border-radius:var(--radius-sm);
       background:linear-gradient(135deg, var(--color-board-light), var(--color-board-dark));
@@ -256,7 +309,7 @@
     .cell:nth-child(even) { filter:saturate(.94); }
     .cell:focus-visible { box-shadow:0 0 0 3px #fff inset; }
     .cell.river {
-      background:linear-gradient(135deg, #59a7e8, #2777bc);
+      background:linear-gradient(135deg, var(--color-board-river), #2777bc);
     }
     .cell.river::after {
       content:"";
@@ -298,25 +351,46 @@
     .piece {
       position:relative;
       z-index:3;
-      width:82%;
-      height:82%;
+      width:92%;
+      height:88%;
       display:grid;
       place-items:center;
-      border-radius:50%;
       color:var(--color-piece-text);
-      border:2px solid rgba(255,255,255,.75);
-      box-shadow:0 7px 13px rgba(0,0,0,.34), inset 0 0 12px rgba(255,255,255,.18);
-      font-size:var(--fs-piece);
+      border:0;
+      background:transparent;
+      font-size:clamp(13px, calc(var(--cell-size) * .2), 17px);
       font-weight:900;
       transition:transform .15s ease, filter .15s ease;
     }
-    .piece.red { background:linear-gradient(150deg, #ff6767, var(--color-piece-player)); }
-    .piece.blue { background:linear-gradient(150deg, #6872ff, var(--color-piece-ai)); }
     .piece:hover { transform:scale(1.08); }
-    .piece-rank {
+    .piece__shape {
+      position:relative;
+      width:100%;
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:1px;
+      overflow:visible;
+      border-radius:8px;
+      border:2px solid rgba(255,255,255,.75);
+      box-shadow:0 7px 13px rgba(0,0,0,.34), inset 0 0 12px rgba(255,255,255,.18);
+    }
+    .piece.red .piece__shape { background:linear-gradient(150deg, #ff6767, var(--color-piece-player)); }
+    .piece.blue .piece__shape { background:linear-gradient(150deg, #6872ff, var(--color-piece-ai)); }
+    .piece__icon { line-height:1; font-size:clamp(16px, calc(var(--cell-size) * .32), 24px); }
+    .piece__label {
+      display:block;
+      font-size:clamp(10px, calc(var(--cell-size) * .18), 13px);
+      color:rgba(255,255,255,.9);
+      line-height:1;
+      text-shadow:0 1px 2px rgba(0,0,0,.55);
+    }
+    .piece__rank {
       position:absolute;
-      right:-2px;
-      bottom:-2px;
+      right:-5px;
+      bottom:-5px;
       min-width:18px;
       height:18px;
       border-radius:50%;
@@ -328,6 +402,43 @@
       font-size:11px;
       line-height:1;
     }
+    .piece__tooltip {
+      position:absolute;
+      bottom:calc(100% + 6px);
+      left:50%;
+      transform:translateX(-50%);
+      z-index:100;
+      padding:3px 8px;
+      border-radius:6px;
+      background:rgba(0,0,0,.85);
+      color:#fff;
+      font-size:13px;
+      white-space:nowrap;
+      pointer-events:none;
+      opacity:0;
+      transition:opacity .15s;
+    }
+    .piece:hover .piece__tooltip,
+    .piece:focus .piece__tooltip,
+    .piece--tooltip-show .piece__tooltip { opacity:1; }
+    .piece-info {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      width:100%;
+      max-width:var(--board-max-width);
+      min-height:60px;
+      padding:8px 10px;
+      border:1px solid rgba(255,215,0,.32);
+      border-radius:var(--radius-sm);
+      background:rgba(0,0,0,.28);
+      font-size:clamp(13px,2.5vw,16px);
+      animation:floatIn .2s ease-out;
+    }
+    .piece-info.visible { display:flex; }
+    .piece-info__icon { font-size:28px; }
+    .piece-info__text { display:grid; gap:2px; min-width:0; }
+    .piece-info__text span { color:var(--color-text-secondary); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .thinking .piece.blue { animation:thinking 1s ease-in-out infinite; }
     .turn-badge {
       justify-self:center;
@@ -348,6 +459,22 @@
     }
     .result-panel { text-align:center; }
     .result-panel h1 { margin:0 0 var(--space-sm); font-size:var(--fs-h1); color:var(--color-text-accent); animation:victoryBanner .5s ease-out both; }
+    .map-toast {
+      position:fixed;
+      top:20px;
+      left:50%;
+      transform:translateX(-50%) translateY(-80px);
+      z-index:200;
+      padding:12px 24px;
+      border-radius:12px;
+      background:rgba(0,0,0,.75);
+      color:#fff;
+      font-family:var(--font-title);
+      font-size:var(--fs-body);
+      backdrop-filter:blur(4px);
+      animation:mapToastAnim 2.5s ease forwards;
+      pointer-events:none;
+    }
 
     @keyframes floatIn {
       from { opacity:0; transform:translateY(-32px); }
@@ -368,6 +495,27 @@
       70% { transform:translateY(8px); opacity:1; }
       100% { transform:translateY(0); }
     }
+    @keyframes mapToastAnim {
+      0% { transform:translateX(-50%) translateY(-80px); opacity:0; }
+      15%,75% { transform:translateX(-50%) translateY(0); opacity:1; }
+      100% { transform:translateX(-50%) translateY(-20px); opacity:0; }
+    }
+    @keyframes blink {
+      0%,100% { opacity:1; }
+      50% { opacity:.4; }
+    }
+    @keyframes lavaFlow {
+      0% { background-position:0% 50%; }
+      50% { background-position:100% 50%; }
+      100% { background-position:0% 50%; }
+    }
+    .map--volcanic .cell.river {
+      background:linear-gradient(135deg, #ff4400, #cc2200, #ff6600);
+      background-size:200% 200%;
+      animation:lavaFlow 3s ease-in-out infinite;
+    }
+    .map--volcanic .piece { filter:drop-shadow(0 0 4px #ff4400); }
+    .map--ink .piece__label { display:block; color:#221; text-shadow:none; }
 
     @media (max-width:900px) {
       .game-layout { grid-template-columns:1fr; }
@@ -376,16 +524,43 @@
       .board-area { order:2; }
       .player-panel { order:3; }
     }
+    @media (min-width:400px) {
+      .piece__label { display:block; }
+    }
+    @media (max-width:359px) {
+      :root {
+        --board-safe-padding:4px;
+        --cell-size:calc((100vw - 8px - 12px) / 7);
+      }
+      .status-line { font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    }
     @media (max-width:480px) {
-      :root { --cell-size:clamp(40px,12.4vw,48px); --fs-hero:38px; --fs-btn:18px; }
+      :root { --board-safe-padding:8px; --cell-size:min(calc((100vw - 16px - 12px) / 7), 52px); --fs-hero:38px; --fs-btn:18px; }
       .screen { padding:var(--space-md); }
+      #screen-game { padding:var(--space-sm) var(--board-safe-padding); }
       .quick-volume { grid-template-columns:auto 1fr; }
       .topbar { align-items:flex-start; flex-direction:column; }
-      .board-wrapper { width:100vw; border-radius:0; }
-      .game-actions .tool-button { flex:1 1 130px; }
+      .board-wrapper { border-radius:var(--radius-sm); }
+      .game-actions {
+        width:100%;
+        max-width:var(--board-max-width);
+        justify-content:center;
+        padding:0 var(--board-safe-padding);
+      }
+      .game-actions .tool-button {
+        flex:1;
+        max-width:120px;
+        min-width:0;
+        padding:var(--space-sm) clamp(8px,3vw,var(--space-md));
+        font-size:clamp(13px,3.5vw,var(--fs-btn));
+        white-space:nowrap;
+      }
     }
-    @media (orientation:landscape) and (max-height:540px) {
-      :root { --cell-size:clamp(34px,9vh,48px); }
+    @media (orientation:landscape) and (max-height:500px) {
+      :root {
+        --board-safe-padding:4px;
+        --cell-size:min(calc((100vw - 200px - 12px) / 7), calc((100vh - 80px - 16px) / 9));
+      }
       .game-layout { grid-template-columns:minmax(150px,1fr) auto minmax(150px,1fr); gap:var(--space-sm); }
       .status-panel { font-size:14px; padding:var(--space-sm); }
       .status-panel h2 { font-size:18px; }
@@ -399,121 +574,113 @@
     <section id="screen-home" class="screen home active">
       <div class="home-inner">
         <div class="title-frame">
-          <h1 class="main-title">鬥獸棋</h1>
-          <p class="subtitle">Jungle Chess</p>
+          <h1 class="main-title">&#39717;&#29560;&#26827;</h1>
         </div>
         <div class="button-stack">
-          <button class="primary-button" data-action="start">▶ 開始遊戲</button>
-          <button class="secondary-button" data-route="#rules">📖 遊戲規則</button>
-          <button class="secondary-button" data-route="#settings">⚙ 遊戲設定</button>
+          <button class="primary-button" data-action="start">&#9654; &#38283;&#22987;&#36938;&#25138;</button>
+          <button class="secondary-button" data-route="#rules">&#128214; &#36938;&#25138;&#35215;&#21063;</button>
+          <button class="secondary-button" data-route="#settings">&#9881; &#36938;&#25138;&#35373;&#23450;</button>
         </div>
-        <div class="quick-volume" aria-label="快速音量">
-          <span>音效</span><input id="quick-sfx" type="range" min="0" max="100">
-          <span>配樂</span><input id="quick-bgm" type="range" min="0" max="100">
+        <div class="quick-volume" aria-label="&#24555;&#36895;&#38899;&#37327;">
+          <span>&#38899;&#25928;</span><input id="quick-sfx" type="range" min="0" max="100">
+          <span>&#37197;&#27138;</span><input id="quick-bgm" type="range" min="0" max="100">
         </div>
-        <small>v1.0 | 玩家紅方 vs AI 藍方</small>
+        <small>v1.1 | &#29609;&#23478;&#32005;&#26041;&#23565;&#25136;&#38651;&#33126;&#34253;&#26041;</small>
       </div>
     </section>
 
     <section id="screen-settings" class="screen page">
       <header class="topbar">
-        <h1>遊戲設定</h1>
-        <button class="tool-button" data-route="#home">← 返回</button>
+        <h1>&#36938;&#25138;&#35373;&#23450;</h1>
+        <button class="tool-button" data-action="exit-settings">&#36820;&#22238;</button>
       </header>
       <div class="settings-panel">
         <div class="settings-grid">
           <div class="field">
-            <label for="aiDifficulty">AI 難度</label>
+            <label for="aiDifficulty">&#38651;&#33126;&#38627;&#24230;</label>
             <select id="aiDifficulty">
-              <option value="easy">簡單</option>
-              <option value="normal">普通</option>
-              <option value="hard">困難</option>
-              <option value="expert">專家</option>
+              <option value="easy">&#31777;&#21934;</option>
+              <option value="normal">&#26222;&#36890;</option>
+              <option value="hard">&#22256;&#38627;</option>
+              <option value="expert">&#23560;&#23478;</option>
             </select>
           </div>
           <div class="field">
-            <label for="pieceStyle">棋子樣式</label>
-            <select id="pieceStyle">
-              <option value="emoji">Emoji</option>
-              <option value="chinese">中文</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="sfxVolume">音效音量</label>
+            <label for="sfxVolume">&#38899;&#25928;&#38899;&#37327;</label>
             <input id="sfxVolume" type="range" min="0" max="100">
           </div>
           <div class="field">
-            <label for="bgmVolume">配樂音量</label>
+            <label for="bgmVolume">&#37197;&#27138;&#38899;&#37327;</label>
             <input id="bgmVolume" type="range" min="0" max="100">
           </div>
           <div class="field">
-            <label for="bgmTheme">配樂主題</label>
-            <select id="bgmTheme">
-              <option value="jungle">森林</option>
-              <option value="guqin">古琴</option>
-              <option value="none">關閉</option>
-            </select>
+            <label>&#22320;&#22294;&#36984;&#25799;</label>
+            <div id="map-options" class="map-options"></div>
           </div>
-          <label class="field checkbox"><input id="showMovableSquares" type="checkbox"> 顯示可移動格</label>
-          <label class="field checkbox"><input id="showPieceRank" type="checkbox"> 顯示棋子階級</label>
-          <label class="field checkbox"><input id="showCoordinates" type="checkbox"> 顯示座標</label>
-          <label class="field checkbox"><input id="showAIThinkAnimation" type="checkbox"> 顯示 AI 思考動畫</label>
+
+          <label class="field checkbox"><input id="showMovableSquares" type="checkbox"> &#39023;&#31034;&#21487;&#31227;&#21205;&#26684;</label>
+          <label class="field checkbox"><input id="showCoordinates" type="checkbox"> &#39023;&#31034;&#24231;&#27161;</label>
+          <label class="field checkbox"><input id="showAIThinkAnimation" type="checkbox"> &#39023;&#31034;&#38651;&#33126;&#24605;&#32771;&#21205;&#30059;</label>
         </div>
         <div class="settings-actions" style="margin-top:16px">
-          <button class="primary-button" data-action="save-settings">儲存設定</button>
-          <button class="secondary-button" data-action="reset-settings">恢復預設</button>
+          <button class="primary-button" data-action="save-settings">&#20786;&#23384;&#35373;&#23450;</button>
+          <button class="secondary-button" data-action="reset-settings">&#24674;&#24489;&#38928;&#35373;</button>
         </div>
       </div>
     </section>
 
     <section id="screen-rules" class="screen page">
       <header class="topbar">
-        <h1>遊戲規則</h1>
-        <button class="tool-button" data-route="#home">← 返回</button>
+        <h1>&#36938;&#25138;&#35215;&#21063;</h1>
+        <button class="tool-button" data-route="#home">&#8592; &#36820;&#22238;</button>
       </header>
       <div class="rules-panel">
-        <h2>目標</h2>
-        <p>輪流移動棋子。進入對方獸穴，或吃掉對方全部棋子即可獲勝。己方棋子不可進入己方獸穴。</p>
-        <h2>棋子等級</h2>
+        <h2>&#21213;&#21033;&#26781;&#20214;</h2>
+        <p>&#36650;&#27969;&#31227;&#21205;&#26827;&#23376;&#12290;&#36914;&#20837;&#23565;&#26041;&#29560;&#31348;&#65292;&#25110;&#21507;&#25481;&#23565;&#26041;&#20840;&#37096;&#26827;&#23376;&#21363;&#21487;&#29554;&#21213;&#12290;&#24049;&#26041;&#26827;&#23376;&#19981;&#21487;&#36914;&#20837;&#24049;&#26041;&#29560;&#31348;&#12290;</p>
+        <h2>&#26827;&#23376;&#31561;&#32026;</h2>
         <table>
-          <tr><th>棋子</th><th>等級</th><th>備註</th></tr>
-          <tr><td>象</td><td>8</td><td>最大，但不能吃鼠</td></tr>
-          <tr><td>獅</td><td>7</td><td>可直線跳河</td></tr>
-          <tr><td>虎</td><td>6</td><td>可直線跳河</td></tr>
-          <tr><td>豹、狼、狗、貓</td><td>5-2</td><td>可吃同級或低級</td></tr>
-          <tr><td>鼠</td><td>1</td><td>可入河，可吃象；在河中不能吃陸上象</td></tr>
+          <tr><th>&#26827;&#23376;</th><th>&#22294;&#31034;</th><th>&#31561;&#32026;</th><th>&#33021;&#21147;</th></tr>
+          <tr><td>&#35937;</td><td>&#128024;</td><td>8</td><td>&#31561;&#32026;&#26368;&#39640;&#65292;&#20294;&#19981;&#33021;&#21507;&#40736;&#12290;</td></tr>
+          <tr><td>&#29509;</td><td>&#129409;</td><td>7</td><td>&#21487;&#30452;&#32218;&#36339;&#27827;&#65292;&#36335;&#24465;&#19978;&#26377;&#40736;&#26178;&#19981;&#33021;&#36339;&#12290;</td></tr>
+          <tr><td>&#34382;</td><td>&#128047;</td><td>6</td><td>&#21487;&#30452;&#32218;&#36339;&#27827;&#65292;&#36335;&#24465;&#19978;&#26377;&#40736;&#26178;&#19981;&#33021;&#36339;&#12290;</td></tr>
+          <tr><td>&#35961;</td><td>&#128006;</td><td>5</td><td>&#21487;&#21507;&#21516;&#32026;&#25110;&#20302;&#32026;&#26827;&#23376;&#12290;</td></tr>
+          <tr><td>&#29436;</td><td>&#128058;</td><td>4</td><td>&#21487;&#21507;&#21516;&#32026;&#25110;&#20302;&#32026;&#26827;&#23376;&#12290;</td></tr>
+          <tr><td>&#29399;</td><td>&#128054;</td><td>3</td><td>&#21487;&#21507;&#21516;&#32026;&#25110;&#20302;&#32026;&#26827;&#23376;&#12290;</td></tr>
+          <tr><td>&#35987;</td><td>&#128049;</td><td>2</td><td>&#21487;&#21507;&#21516;&#32026;&#25110;&#20302;&#32026;&#26827;&#23376;&#12290;</td></tr>
+          <tr><td>&#40736;</td><td>&#128045;</td><td>1</td><td>&#21487;&#20837;&#27827;&#65292;&#21487;&#22312;&#38520;&#22320;&#21507;&#35937;&#65307;&#27827;&#20013;&#40736;&#19981;&#33021;&#21507;&#38520;&#19978;&#35937;&#12290;</td></tr>
         </table>
-        <h2>地形</h2>
-        <p>河流只有鼠可以進入。獅與虎可以沿直線跳過河流，但路徑上若有鼠阻擋則不能跳。陷阱會讓進入者戰力降為 0，任何敵方棋子都能吃掉陷阱中的棋子。</p>
+        <h2>&#22320;&#24418;</h2>
+        <p>&#27827;&#27969;&#21482;&#26377;&#40736;&#21487;&#20197;&#36914;&#20837;&#12290;&#29509;&#33287;&#34382;&#21487;&#20197;&#27839;&#30452;&#32218;&#36339;&#36942;&#36899;&#32396;&#27827;&#27969;&#26684;&#12290;&#38519;&#38449;&#26371;&#35731;&#36914;&#20837;&#32773;&#25136;&#21147;&#38477;&#28858; 0&#65292;&#20219;&#20309;&#25973;&#26041;&#26827;&#23376;&#37117;&#33021;&#21507;&#25481;&#38519;&#38449;&#20013;&#30340;&#26827;&#23376;&#12290;&#27599;&#24373;&#22320;&#22294;&#30340;&#27827;&#27969;&#20301;&#32622;&#19981;&#21516;&#12290;</p>
       </div>
     </section>
 
     <section id="screen-game" class="screen game">
       <div class="game-layout">
         <aside class="status-panel ai-panel" id="ai-panel">
-          <h2>🔵 AI</h2>
-          <p class="status-line" id="ai-status">等待開局</p>
-          <strong>被吃棋子</strong>
+          <h2>&#128309; &#38651;&#33126;</h2>
+          <p class="status-line" id="ai-status">&#31561;&#24453;&#38283;&#23616;</p>
+          <strong>&#34987;&#21507;&#26827;&#23376;</strong>
           <div class="captured-list" id="captured-blue"></div>
         </aside>
 
         <main class="board-area">
           <div class="turn-badge" id="turn-badge"></div>
           <div class="board-wrapper">
-            <div id="board" class="board" role="grid" aria-label="鬥獸棋 7 乘 9 棋盤"></div>
-          </div>
+            <div id="board" class="board" role="grid" aria-label="&#39717;&#29560;&#26827; 7 &#20056; 9 &#26827;&#30436;"></div>
+          </div>          <div id="piece-info" class="piece-info" aria-live="polite"></div>
+
           <div class="game-actions">
-            <button class="tool-button" data-action="undo">↶ 悔棋</button>
-            <button class="tool-button" data-action="restart">⟳ 重新開始</button>
-            <button class="tool-button" data-action="surrender">投降</button>
-            <button class="tool-button" data-route="#home">首頁</button>
+            <button class="tool-button" data-action="undo">&#8630; &#24724;&#26827;</button>
+            <button class="tool-button" data-action="restart">&#10227; &#37325;&#26032;&#38283;&#22987;</button>
+            <button class="tool-button" data-action="surrender">&#25237;&#38477;</button>
+            <button class="tool-button" data-route="#home">&#39318;&#38913;</button>
           </div>
         </main>
 
         <aside class="status-panel player-panel" id="player-panel">
-          <h2>🔴 玩家</h2>
-          <p class="status-line" id="player-status">輪到你時點選棋子</p>
-          <strong>被吃棋子</strong>
+          <h2>&#128308; &#29609;&#23478;</h2>
+          <p class="status-line" id="player-status">&#36650;&#21040;&#20320;&#26178;&#40670;&#36984;&#26827;&#23376;</p>
+          <strong>&#34987;&#21507;&#26827;&#23376;</strong>
           <div class="captured-list" id="captured-red"></div>
         </aside>
       </div>
@@ -521,11 +688,11 @@
 
     <section id="screen-result" class="screen page">
       <div class="result-panel">
-        <h1 id="result-title">遊戲結束</h1>
+        <h1 id="result-title">&#36938;&#25138;&#32080;&#26463;</h1>
         <p id="result-reason"></p>
         <div class="settings-actions" style="justify-content:center">
-          <button class="primary-button" data-action="start">再玩一局</button>
-          <button class="secondary-button" data-route="#home">回首頁</button>
+          <button class="primary-button" data-action="start">&#20877;&#29609;&#19968;&#23616;</button>
+          <button class="secondary-button" data-route="#home">&#22238;&#39318;&#38913;</button>
         </div>
       </div>
     </section>
@@ -542,26 +709,41 @@
     const PIECE_VALUE = { 8:800, 7:700, 6:600, 5:500, 4:400, 3:300, 2:200, 1:150 };
     const DEFAULT_SETTINGS = {
       aiDifficulty:"normal",
-      pieceStyle:"emoji",
       language:"zh-TW",
       sfxVolume:70,
       bgmVolume:40,
-      bgmTheme:"jungle",
       showMovableSquares:true,
-      showPieceRank:true,
       showCoordinates:false,
       showAIThinkAnimation:true,
-      autoFlipBoard:true
+      autoFlipBoard:true,
+      fixedMapId:"random"
     };
+    const PIECE_INFO = {
+      elephant:{ name:"\u8c61", emoji:"\u{1F418}", ability:"\u7b49\u7d1a\u6700\u9ad8\uff0c\u4f46\u4e0d\u80fd\u5403\u9f20\u3002", canEat:"\u53ef\u5403 2-8 \u7d1a\uff0c\u4e0d\u80fd\u5403\u9f20\u3002" },
+      lion:{ name:"\u7345", emoji:"\u{1F981}", ability:"\u53ef\u76f4\u7dda\u8df3\u904e\u6cb3\u6d41\uff0c\u8def\u5f91\u4e0a\u6709\u9f20\u6642\u4e0d\u80fd\u8df3\u3002", canEat:"\u53ef\u5403 1-6 \u7d1a\u3002" },
+      tiger:{ name:"\u864e", emoji:"\u{1F42F}", ability:"\u53ef\u76f4\u7dda\u8df3\u904e\u6cb3\u6d41\uff0c\u8def\u5f91\u4e0a\u6709\u9f20\u6642\u4e0d\u80fd\u8df3\u3002", canEat:"\u53ef\u5403 1-5 \u7d1a\u3002" },
+      leopard:{ name:"\u8c79", emoji:"\u{1F406}", ability:"\u6bcf\u6b21\u4e0a\u4e0b\u5de6\u53f3\u79fb\u52d5\u4e00\u683c\u3002", canEat:"\u53ef\u5403 1-4 \u7d1a\u3002" },
+      wolf:{ name:"\u72fc", emoji:"\u{1F43A}", ability:"\u6bcf\u6b21\u4e0a\u4e0b\u5de6\u53f3\u79fb\u52d5\u4e00\u683c\u3002", canEat:"\u53ef\u5403 1-3 \u7d1a\u3002" },
+      dog:{ name:"\u72d7", emoji:"\u{1F436}", ability:"\u6bcf\u6b21\u4e0a\u4e0b\u5de6\u53f3\u79fb\u52d5\u4e00\u683c\u3002", canEat:"\u53ef\u5403 1-2 \u7d1a\u3002" },
+      cat:{ name:"\u8c93", emoji:"\u{1F431}", ability:"\u6bcf\u6b21\u4e0a\u4e0b\u5de6\u53f3\u79fb\u52d5\u4e00\u683c\u3002", canEat:"\u53ef\u5403\u9f20\u3002" },
+      rat:{ name:"\u9f20", emoji:"\u{1F42D}", ability:"\u552f\u4e00\u53ef\u9032\u5165\u6cb3\u6d41\u7684\u68cb\u5b50\uff0c\u53ef\u5728\u9678\u5730\u5403\u8c61\u3002", canEat:"\u53ef\u5403\u9f20\uff1b\u5728\u9678\u5730\u53ef\u5403\u8c61\u3002" }
+    };
+    const MAP_THEMES = [
+      { id:"classic", name:"\u7d93\u5178\u53e2\u6797", icon:"\u{1F33F}", description:"\u6a19\u6e96\u6cb3\u9053\u8207\u53e2\u6797\u68cb\u76e4", riverCells:[[1,3],[2,3],[4,3],[5,3],[1,4],[2,4],[4,4],[5,4],[1,5],[2,5],[4,5],[5,5]], cssVars:{"--color-bg-primary":"#1a2e1a","--color-bg-secondary":"#2d4a2d","--color-board-light":"#c8a96e","--color-board-dark":"#a07840","--color-board-river":"#4a90d4","--color-board-trap":"#8b0000","--color-board-den":"#ffd700"}, terrainIcons:{ river:"\u6cb3", trapPlayer:"\u9677", trapAI:"\u9677", denPlayer:"\u7a74", denAI:"\u7a74" }, particleEffect:"leaf", defaultBGM:"jungle" },
+      { id:"arctic", name:"\u51b0\u539f\u51cd\u571f", icon:"\u2744\ufe0f", description:"\u4e2d\u592e\u51b0\u6cb3\u8207\u5169\u5074\u51b0\u88c2", riverCells:[[3,2],[3,3],[3,4],[3,5],[3,6],[1,4],[2,4],[4,4],[5,4]], cssVars:{"--color-bg-primary":"#0a1e3a","--color-bg-secondary":"#1a3a5a","--color-board-light":"#ddeeff","--color-board-dark":"#aaccee","--color-board-river":"#b0d8ff","--color-board-trap":"#003366","--color-board-den":"#e0f8ff"}, terrainIcons:{ river:"\u51b0", trapPlayer:"\u51cd", trapAI:"\u51cd", denPlayer:"\u7a9f", denAI:"\u7a9f" }, particleEffect:"snow", particleConfig:{ count:40, color:"#ffffff", speedX:-0.3, speedY:0.8, size:3 }, defaultBGM:"guqin" },
+      { id:"desert", name:"\u6c99\u6f20\u907a\u8de1", icon:"\u{1F3DC}\ufe0f", description:"\u7da0\u6d32\u6c34\u9053\u5206\u6563\u5728\u907a\u8de1\u9593", riverCells:[[1,2],[3,2],[1,3],[5,3],[1,4],[3,4],[5,4],[1,5],[3,5],[5,5]], cssVars:{"--color-bg-primary":"#3a2010","--color-bg-secondary":"#5a3818","--color-board-light":"#e8c87a","--color-board-dark":"#c8923a","--color-board-river":"#2a8a4a","--color-board-trap":"#6a3a00","--color-board-den":"#ffa500"}, terrainIcons:{ river:"\u6cc9", trapPlayer:"\u5751", trapAI:"\u5751", denPlayer:"\u6bbf", denAI:"\u6bbf" }, particleEffect:"sand", particleConfig:{ count:24, color:"#e8c87a", speedX:-1.2, speedY:0.2, size:2 }, defaultBGM:"jungle" },
+      { id:"volcanic", name:"\u6eab\u6cb3\u5ce1\u8c37", icon:"\u2668\ufe0f", description:"\u6eab\u6696\u6cb3\u6d41\u5448\u659c\u7dda\u5206\u5e03", riverCells:[[1,3],[2,3],[2,4],[3,4],[4,4],[4,5],[5,5],[1,5],[5,3]], cssVars:{"--color-bg-primary":"#24140a","--color-bg-secondary":"#4a2c16","--color-board-light":"#8a6248","--color-board-dark":"#5a3a2a","--color-board-river":"#d98c45","--color-board-trap":"#8b2f18","--color-board-den":"#d0a15f"}, terrainIcons:{ river:"\u6e6f", trapPlayer:"\u9677", trapAI:"\u9677", denPlayer:"\u7a9f", denAI:"\u7a9f" }, particleEffect:"spark", particleConfig:{ count:20, color:"#ffd08a", speedX:0.1, speedY:-0.6, size:2 }, defaultBGM:"jungle" },
+      { id:"ink", name:"\u6c34\u58a8\u5c71\u6cb3", icon:"\u{1F58C}\ufe0f", description:"\u6c34\u58a8\u98a8\u683c\u7684\u66f2\u6298\u6c34\u9053", riverCells:[[1,2],[3,2],[5,2],[2,3],[4,3],[2,4],[3,4],[4,4],[2,5],[4,5],[1,6],[3,6],[5,6]], cssVars:{"--color-bg-primary":"#1a1210","--color-bg-secondary":"#2e2018","--color-board-light":"#f5f0e0","--color-board-dark":"#e0d8c0","--color-board-river":"#3a6a90","--color-board-trap":"#8a0000","--color-board-den":"#cc2200"}, terrainIcons:{ river:"\u5ddd", trapPlayer:"\u7f60", trapAI:"\u7f60", denPlayer:"\u7a74", denAI:"\u7a74" }, particleEffect:null, defaultBGM:"guqin" }
+    ];
     const PIECE_META = {
-      elephant:{ rank:8, emoji:"🐘", chinese:"象", short:"E" },
-      lion:{ rank:7, emoji:"🦁", chinese:"獅", short:"L" },
-      tiger:{ rank:6, emoji:"🐯", chinese:"虎", short:"T" },
-      leopard:{ rank:5, emoji:"🐆", chinese:"豹", short:"P" },
-      wolf:{ rank:4, emoji:"🐺", chinese:"狼", short:"W" },
-      dog:{ rank:3, emoji:"🐶", chinese:"狗", short:"D" },
-      cat:{ rank:2, emoji:"🐱", chinese:"貓", short:"C" },
-      rat:{ rank:1, emoji:"🐭", chinese:"鼠", short:"R" }
+      elephant:{ rank:8, emoji:"\u{1F418}", chinese:"\u8c61", short:"E" },
+      lion:{ rank:7, emoji:"\u{1F981}", chinese:"\u7345", short:"L" },
+      tiger:{ rank:6, emoji:"\u{1F42F}", chinese:"\u864e", short:"T" },
+      leopard:{ rank:5, emoji:"\u{1F406}", chinese:"\u8c79", short:"P" },
+      wolf:{ rank:4, emoji:"\u{1F43A}", chinese:"\u72fc", short:"W" },
+      dog:{ rank:3, emoji:"\u{1F436}", chinese:"\u72d7", short:"D" },
+      cat:{ rank:2, emoji:"\u{1F431}", chinese:"\u8c93", short:"C" },
+      rat:{ rank:1, emoji:"\u{1F42D}", chinese:"\u9f20", short:"R" }
     };
     const INITIAL_PIECES = [
       { type:"lion", color:RED, col:6, row:8 },
@@ -583,22 +765,120 @@
     ];
     const DIRECTIONS = [[1,0],[-1,0],[0,1],[0,-1]];
 
-    let settings = loadSettings();
+    class SettingsStore {
+      constructor(key) {
+        this._key = key;
+        this._saved = null;
+        this._draft = null;
+      }
+      load() {
+        try {
+          const raw = localStorage.getItem(this._key);
+          this._saved = raw ? { ...DEFAULT_SETTINGS, ...JSON.parse(raw) } : { ...DEFAULT_SETTINGS };
+        } catch {
+          this._saved = { ...DEFAULT_SETTINGS };
+        }
+        return { ...this._saved };
+      }
+      beginEdit() {
+        if (!this._saved) this.load();
+        this._draft = { ...this._saved };
+        return { ...this._draft };
+      }
+      updateDraft(key, value) {
+        if (!this._draft) this.beginEdit();
+        this._draft[key] = value;
+      }
+      getDraft() {
+        return this._draft ? { ...this._draft } : this.beginEdit();
+      }
+      save() {
+        if (!this._draft) return false;
+        this._saved = { ...this._draft };
+        try {
+          localStorage.setItem(this._key, JSON.stringify(this._saved));
+        } catch {
+          // Some file:// or privacy-mode contexts block localStorage; keep the in-memory copy.
+        }
+        this._draft = null;
+        return true;
+      }
+      discard() {
+        this._draft = null;
+        if (!this._saved) this.load();
+        return { ...this._saved };
+      }
+      resetToDefault() {
+        this._draft = { ...DEFAULT_SETTINGS };
+        return { ...this._draft };
+      }
+      hasUnsavedChanges() {
+        return !!this._draft && JSON.stringify(this._draft) !== JSON.stringify(this._saved);
+      }
+    }
+
+    const settingsStore = new SettingsStore(SETTINGS_KEY);
+    let settings = settingsStore.load();
     let state = createInitialState();
     let selectedId = null;
     let legalTargets = [];
     let aiBusy = false;
     let lastResult = null;
+    let currentMap = MAP_THEMES[0];
+    let forcedPieceStyle = null;
 
     const $ = selector => document.querySelector(selector);
     const $$ = selector => Array.from(document.querySelectorAll(selector));
+
+    function selectMap() {
+      if (settings.fixedMapId === "random") {
+        return MAP_THEMES[Math.floor(Math.random() * MAP_THEMES.length)];
+      }
+      return MAP_THEMES.find(map => map.id === settings.fixedMapId) || MAP_THEMES[0];
+    }
+
+    function applyMapTheme(mapTheme) {
+      currentMap = mapTheme || MAP_THEMES[0];
+      document.body.className = document.body.className.replace(/\bmap--\S+/g, "").trim();
+      document.body.classList.add(`map--${currentMap.id}`);
+      Object.entries(currentMap.cssVars).forEach(([key, value]) => {
+        document.documentElement.style.setProperty(key, value);
+      });
+      forcedPieceStyle = null;
+      startParticles(currentMap);
+      AudioManager.playBGM(currentMap.defaultBGM);
+      renderBoard();
+    }
+
+    function showMapNameToast(mapTheme) {
+      const oldToast = $(".map-toast");
+      if (oldToast) oldToast.remove();
+      const toast = document.createElement("div");
+      toast.className = "map-toast";
+      toast.textContent = `${mapTheme.icon} ${mapTheme.name}`;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 2600);
+    }
+
+    function ensureBoardFit() {
+      const boardGrid = $("#board");
+      const container = $(".board-wrapper");
+      if (!boardGrid || !container) return;
+      const containerWidth = container.getBoundingClientRect().width;
+      const boardWidth = boardGrid.getBoundingClientRect().width;
+      if (containerWidth > 0 && boardWidth > containerWidth) {
+        const forcedCellSize = Math.floor((containerWidth - 12) / 7);
+        document.documentElement.style.setProperty("--cell-size", `${Math.max(34, forcedCellSize)}px`);
+      }
+    }
 
     function terrainAt(col, row) {
       if (col === 3 && row === 0) return "den_blue";
       if (col === 3 && row === 8) return "den_red";
       if ((row === 0 && (col === 2 || col === 4)) || (row === 1 && col === 3)) return "trap_blue";
       if ((row === 8 && (col === 2 || col === 4)) || (row === 7 && col === 3)) return "trap_red";
-      if ((col === 1 || col === 2 || col === 4 || col === 5) && row >= 3 && row <= 5) return "river";
+      const rivers = (currentMap && currentMap.riverCells) || MAP_THEMES[0].riverCells;
+      if (rivers.some(([riverCol, riverRow]) => riverCol === col && riverRow === row)) return "river";
       return "plain";
     }
 
@@ -632,15 +912,10 @@
       };
     }
 
-    function loadSettings() {
-      try {
-        return { ...DEFAULT_SETTINGS, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}") };
-      } catch {
-        return { ...DEFAULT_SETTINGS };
-      }
-    }
     function saveSettings() {
-      localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+      settingsStore.beginEdit();
+      Object.entries(settings).forEach(([key, value]) => settingsStore.updateDraft(key, value));
+      settingsStore.save();
     }
 
     const AudioManager = {
@@ -678,18 +953,20 @@
         const args = map[name] || map.click;
         this.tone(args[0], args[1], args[2]);
       },
-      playBGM() {
+      playBGM(themeOverride = null) {
         this.stopBGM();
-        if (settings.bgmTheme === "none" || settings.bgmVolume <= 0) return;
+        const theme = themeOverride || (currentMap && currentMap.defaultBGM) || "jungle";
+        if (theme === "none" || settings.bgmVolume <= 0) return;
         const jungle = [220, 293.66, 261.63, 196];
         const guqin = [261.63, 293.66, 329.63, 392, 440];
-        const notes = settings.bgmTheme === "guqin" ? guqin : jungle;
+        const lava = [110, 146.83, 164.81, 98];
+        const notes = theme === "guqin" ? guqin : theme === "lava" ? lava : jungle;
         let i = 0;
         this.bgmTimer = setInterval(() => {
           this.init();
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
-          osc.type = settings.bgmTheme === "guqin" ? "sine" : "triangle";
+          osc.type = theme === "guqin" ? "sine" : theme === "lava" ? "sawtooth" : "triangle";
           osc.frequency.value = notes[i % notes.length];
           gain.gain.setValueAtTime(0.035 * settings.bgmVolume / 100, this.ctx.currentTime);
           gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + .7);
@@ -697,7 +974,7 @@
           osc.start();
           osc.stop(this.ctx.currentTime + .75);
           i++;
-        }, settings.bgmTheme === "guqin" ? 900 : 700);
+        }, theme === "guqin" ? 900 : theme === "lava" ? 600 : 700);
       },
       stopBGM() {
         if (this.bgmTimer) clearInterval(this.bgmTimer);
@@ -920,6 +1197,7 @@
         }
       }
       renderStatus();
+      ensureBoardFit();
     }
     function terrainClass(terrain) {
       if (terrain === "river") return "river";
@@ -928,34 +1206,76 @@
       return "";
     }
     function terrainMark(terrain) {
-      if (terrain === "river") return "<span>河</span>";
-      if (terrain.startsWith("trap")) return "<span>陷</span>";
-      if (terrain.startsWith("den")) return "<span>穴</span>";
+      const icons = currentMap.terrainIcons || MAP_THEMES[0].terrainIcons;
+      if (terrain === "river") return `<span>${icons.river}</span>`;
+      if (terrain === "trap_red") return `<span>${icons.trapPlayer}</span>`;
+      if (terrain === "trap_blue") return `<span>${icons.trapAI}</span>`;
+      if (terrain === "den_red") return `<span>${icons.denPlayer}</span>`;
+      if (terrain === "den_blue") return `<span>${icons.denAI}</span>`;
       return "<span></span>";
     }
     function cellLabel(col, row, terrain, piece) {
       const terrainText = terrain === "river" ? "河流" : terrain.startsWith("trap") ? "陷阱" : terrain.startsWith("den") ? "獸穴" : "平地";
-      const pieceText = piece ? `${piece.color === RED ? "紅方" : "藍方"}${piece.chineseName}` : "無棋子";
+      const pieceText = piece ? `${piece.color === RED ? "玩家" : "電腦"}${PIECE_INFO[piece.type].name}` : "空格";
       return `${String.fromCharCode(65 + col)}${row + 1}，${terrainText}，${pieceText}`;
     }
     function renderPiece(piece) {
       const el = document.createElement("div");
-      el.className = `piece ${piece.color}`;
-      el.textContent = settings.pieceStyle === "emoji" ? piece.emoji : piece.chineseName;
-      if (settings.showPieceRank) {
-        const rank = document.createElement("span");
-        rank.className = "piece-rank";
-        rank.textContent = effectiveRank(piece) === 0 ? "0" : piece.rank;
-        el.appendChild(rank);
-      }
+      const display = `${piece.emoji} ${piece.chineseName}`;
+      const info = PIECE_INFO[piece.type];
+      el.className = `piece ${piece.color} piece--${piece.type}`;
+      el.dataset.type = piece.type;
+      el.dataset.rank = piece.rank;
+      el.tabIndex = -1;
+      el.setAttribute("role", "button");
+      el.setAttribute("aria-label", `${piece.color === RED ? "玩家" : "電腦"}${info.name}，等級 ${piece.rank}`);
+      const shape = document.createElement("div");
+      shape.className = "piece__shape";
+      const icon = document.createElement("span");
+      icon.className = "piece__icon";
+      icon.setAttribute("aria-hidden", "true");
+      icon.textContent = display;
+      shape.appendChild(icon);
+      const rank = document.createElement("span");
+      rank.className = "piece__rank";
+      rank.textContent = effectiveRank(piece) === 0 ? "0" : piece.rank;
+      rank.setAttribute("aria-hidden", "true");
+      shape.appendChild(rank);
+      const label = document.createElement("span");
+      label.className = "piece__label";
+      label.textContent = piece.chineseName;
+      shape.appendChild(label);
+      el.appendChild(shape);
+      const tooltip = document.createElement("span");
+      tooltip.className = "piece__tooltip";
+      tooltip.textContent = `${info.name}，等級 ${piece.rank}`;
+      el.appendChild(tooltip);
       return el;
     }
+    function updatePieceInfoCard(piece) {
+      const card = $("#piece-info");
+      if (!card) return;
+      if (!piece) {
+        card.innerHTML = "";
+        card.classList.add("visible");
+        return;
+      }
+      const info = PIECE_INFO[piece.type];
+      card.innerHTML = `
+        <span class="piece-info__icon">${piece.emoji}</span>
+        <div class="piece-info__text">
+          <strong>${info.name}，等級 ${piece.rank}</strong>
+          <span>${info.ability}</span>
+          <span>可吃：${info.canEat}</span>
+        </div>`;
+      card.classList.add("visible");
+    }
     function renderStatus() {
-      $("#turn-badge").innerHTML = aiBusy ? `<span class="spinner"></span>AI 思考中...` : state.currentTurn === RED ? "輪到玩家" : "輪到 AI";
-      $("#ai-status").textContent = state.currentTurn === BLUE ? "正在判斷最佳走法" : "等待玩家行動";
-      $("#player-status").textContent = state.currentTurn === RED ? (selectedId ? "選擇目的地" : "請選擇紅方棋子") : "AI 回合";
-      $("#captured-red").innerHTML = state.capturedPieces.red.map(p => `<span class="captured-piece">${settings.pieceStyle === "emoji" ? p.emoji : p.chineseName}</span>`).join("");
-      $("#captured-blue").innerHTML = state.capturedPieces.blue.map(p => `<span class="captured-piece">${settings.pieceStyle === "emoji" ? p.emoji : p.chineseName}</span>`).join("");
+      $("#turn-badge").innerHTML = aiBusy ? `<span class="spinner"></span>電腦思考中...` : state.currentTurn === RED ? "輪到玩家" : "輪到電腦";
+      $("#ai-status").textContent = state.currentTurn === BLUE ? "正在判斷走法" : "等待玩家行動";
+      $("#player-status").textContent = state.currentTurn === RED ? (selectedId ? "請選擇目的地" : "請選擇紅方棋子") : "電腦回合";
+      $("#captured-red").innerHTML = state.capturedPieces.red.map(p => `<span class="captured-piece">${p.emoji}${p.chineseName}</span>`).join("");
+      $("#captured-blue").innerHTML = state.capturedPieces.blue.map(p => `<span class="captured-piece">${p.emoji}${p.chineseName}</span>`).join("");
     }
     function handleCellClick(col, row) {
       if (state.gameStatus !== "playing" || state.currentTurn !== RED || aiBusy) return;
@@ -964,6 +1284,7 @@
       if (piece && piece.color === RED) {
         selectedId = piece.id;
         legalTargets = getLegalMovesForPiece(piece);
+        updatePieceInfoCard(piece);
         AudioManager.play("select");
         announce(`已選擇${piece.chineseName}`);
         renderBoard();
@@ -976,6 +1297,7 @@
         AudioManager.play("error");
         selectedId = null;
         legalTargets = [];
+        updatePieceInfoCard(null);
         renderBoard();
       }
     }
@@ -987,6 +1309,7 @@
       if (event.key === "Escape") {
         selectedId = null;
         legalTargets = [];
+        updatePieceInfoCard(null);
         renderBoard();
       }
     }
@@ -996,6 +1319,7 @@
       state = applyMoveToState(state, move, true);
       selectedId = null;
       legalTargets = [];
+      updatePieceInfoCard(null);
       AudioManager.play(capture ? "capture" : jump ? "jump" : "move");
       if (capture) playCaptureEffect(move.toCol, move.toRow);
       announce(`紅方移動到 ${String.fromCharCode(65 + move.toCol)}${move.toRow + 1}`);
@@ -1023,7 +1347,7 @@
         aiBusy = false;
         AudioManager.play(capture ? "capture" : jump ? "jump" : "ai_move");
         if (capture) playCaptureEffect(move.toCol, move.toRow);
-        announce(`AI 移動到 ${String.fromCharCode(65 + move.toCol)}${move.toRow + 1}`);
+        announce(`電腦移動到 ${String.fromCharCode(65 + move.toCol)}${move.toRow + 1}`);
         renderBoard();
         if (state.gameStatus === "ended") finishGame();
       }, settings.aiDifficulty === "expert" ? 380 : 220);
@@ -1043,13 +1367,17 @@
       renderBoard();
     }
     function restartGame() {
+      const map = selectMap();
       state = createInitialState();
       selectedId = null;
       legalTargets = [];
       aiBusy = false;
       lastResult = null;
+      forcedPieceStyle = null;
+      updatePieceInfoCard(null);
       location.hash = "#game";
-      AudioManager.playBGM();
+      applyMapTheme(map);
+      showMapNameToast(map);
       renderBoard();
     }
     function finishGame() {
@@ -1098,41 +1426,61 @@
       frame();
     }
     function resizeCanvas(canvas) {
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = Math.floor(window.innerWidth * dpr);
-      canvas.height = Math.floor(window.innerHeight * dpr);
-      canvas.getContext("2d").setTransform(dpr, 0, 0, dpr, 0, 0);
-    }
-    function initBackground() {
-      const canvas = $("#bg-canvas");
+      if (!canvas) return;
       const ctx = canvas.getContext("2d");
-      const particles = Array.from({ length: 44 }, () => ({
+      if (!ctx) return;
+      const dpr = window.devicePixelRatio || 1;
+      const width = Math.floor(window.innerWidth * dpr);
+      const height = Math.floor(window.innerHeight * dpr);
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+      }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    let particleFrame = null;
+    function startParticles(mapTheme = MAP_THEMES[0]) {
+      if (particleFrame) cancelAnimationFrame(particleFrame);
+      const canvas = $("#bg-canvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      const config = mapTheme.particleConfig || { count:44, color:"#d6c17b", speedX:0.18, speedY:0.22, size:14 };
+      const animals = ["🐘","🦁","🐯","🐆","🐺","🐶","🐱","🐭"];
+      const glyphs = { leaf:animals, snow:animals, sand:animals, spark:animals };
+      const group = glyphs[mapTheme.particleEffect] || glyphs.leaf;
+      const particles = Array.from({ length: config.count || 36 }, () => ({
         x:Math.random() * window.innerWidth,
         y:Math.random() * window.innerHeight,
-        s:Math.random() * 18 + 8,
-        v:Math.random() * .4 + .12,
+        s:Math.random() * (config.size || 12) + 6,
+        vx:config.speedX || 0,
+        vy:config.speedY || .25,
         a:Math.random() * .35 + .12,
-        glyph:["葉","竹","光","森"][Math.floor(Math.random() * 4)]
+        glyph:group[Math.floor(Math.random() * group.length)]
       }));
+      resizeCanvas(canvas);
       function loop() {
-        resizeCanvas(canvas);
         ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
         particles.forEach(p => {
-          p.y += p.v;
-          p.x += Math.sin(p.y / 70) * .18;
-          if (p.y > window.innerHeight + 30) {
-            p.y = -30;
-            p.x = Math.random() * window.innerWidth;
-          }
+          p.y += p.vy;
+          p.x += p.vx + Math.sin(p.y / 70) * .18;
+          if (p.y > window.innerHeight + 30) p.y = -30;
+          if (p.y < -30) p.y = window.innerHeight + 30;
+          if (p.x > window.innerWidth + 30) p.x = -30;
+          if (p.x < -30) p.x = window.innerWidth + 30;
           ctx.globalAlpha = p.a;
-          ctx.fillStyle = "#d6c17b";
-          ctx.font = `${p.s}px ${getComputedStyle(document.body).fontFamily}`;
+          ctx.fillStyle = config.color || "#d6c17b";
+          const fontFamily = window.getComputedStyle ? getComputedStyle(document.body).fontFamily : "sans-serif";
+          ctx.font = `${p.s}px ${fontFamily}`;
           ctx.fillText(p.glyph, p.x, p.y);
         });
         ctx.globalAlpha = 1;
-        requestAnimationFrame(loop);
+        particleFrame = requestAnimationFrame(loop);
       }
       loop();
+    }
+    function initBackground() {
+      startParticles(currentMap || MAP_THEMES[0]);
     }
 
     function showScreen(hash) {
@@ -1141,34 +1489,92 @@
       const id = target.replace("#", "screen-");
       const screen = document.getElementById(id) || $("#screen-home");
       screen.classList.add("active");
-      if (target === "#game") renderBoard();
+      if (target === "#settings") {
+        settings = settingsStore.beginEdit();
+        syncSettingsForm(settings);
+      }
+      if (target === "#game") {
+        ensureBoardFit();
+        renderBoard();
+      }
     }
-    function syncSettingsForm() {
-      $("#aiDifficulty").value = settings.aiDifficulty;
-      $("#pieceStyle").value = settings.pieceStyle;
-      $("#sfxVolume").value = settings.sfxVolume;
-      $("#bgmVolume").value = settings.bgmVolume;
-      $("#bgmTheme").value = settings.bgmTheme;
-      $("#showMovableSquares").checked = settings.showMovableSquares;
-      $("#showPieceRank").checked = settings.showPieceRank;
-      $("#showCoordinates").checked = settings.showCoordinates;
-      $("#showAIThinkAnimation").checked = settings.showAIThinkAnimation;
-      $("#quick-sfx").value = settings.sfxVolume;
-      $("#quick-bgm").value = settings.bgmVolume;
+    function renderMapOptions(activeId = settings.fixedMapId) {
+      const host = $("#map-options");
+      if (!host) return;
+      const randomButton = `
+        <button type="button" class="map-option" data-map-id="random" aria-pressed="${activeId === "random"}">
+          <strong>🎲 隨機地圖</strong>
+          <span>每局開始時隨機選擇一張地圖</span>
+        </button>`;
+      host.innerHTML = randomButton + MAP_THEMES.map(map => `
+        <button type="button" class="map-option" data-map-id="${map.id}" aria-pressed="${map.id === activeId}">
+          <strong>${map.icon} ${map.name}</strong>
+          <span>${map.description}</span>
+        </button>`).join("");
     }
-    function readSettingsForm() {
-      settings.aiDifficulty = $("#aiDifficulty").value;
-      settings.pieceStyle = $("#pieceStyle").value;
-      settings.sfxVolume = Number($("#sfxVolume").value);
-      settings.bgmVolume = Number($("#bgmVolume").value);
-      settings.bgmTheme = $("#bgmTheme").value;
-      settings.showMovableSquares = $("#showMovableSquares").checked;
-      settings.showPieceRank = $("#showPieceRank").checked;
-      settings.showCoordinates = $("#showCoordinates").checked;
-      settings.showAIThinkAnimation = $("#showAIThinkAnimation").checked;
+    function syncSettingsForm(source = settings) {
+      const setValue = (id, value) => {
+        const control = $("#" + id);
+        if (control) control.value = value;
+      };
+      const setChecked = (id, value) => {
+        const control = $("#" + id);
+        if (control) control.checked = !!value;
+      };
+      setValue("aiDifficulty", source.aiDifficulty);
+      setValue("sfxVolume", source.sfxVolume);
+      setValue("bgmVolume", source.bgmVolume);
+      setChecked("showMovableSquares", source.showMovableSquares);
+      setChecked("showCoordinates", source.showCoordinates);
+      setChecked("showAIThinkAnimation", source.showAIThinkAnimation);
+      setValue("quick-sfx", source.sfxVolume);
+      setValue("quick-bgm", source.bgmVolume);
+      renderMapOptions(source.fixedMapId);
+      updateUnsavedIndicator();
+    }
+    function updateDraftFromControl(control) {
+      const checkboxIds = new Set(["showMovableSquares", "showCoordinates", "showAIThinkAnimation"]);
+      const numericIds = new Set(["sfxVolume", "bgmVolume"]);
+      let value = checkboxIds.has(control.id) ? control.checked : numericIds.has(control.id) ? Number(control.value) : control.value;
+      settingsStore.updateDraft(control.id, value);
+      settings = settingsStore.getDraft();
+      if (control.id === "sfxVolume") AudioManager.play("click");
+      if (control.id === "bgmVolume") AudioManager.playBGM(currentMap.defaultBGM);
+      if (control.id.startsWith("show")) renderBoard();
+      updateUnsavedIndicator();
+    }
+    function updateUnsavedIndicator() {
+      const indicator = $("#settings-unsaved");
+      if (indicator) indicator.classList.toggle("visible", settingsStore.hasUnsavedChanges());
+    }
+    function saveDraftSettings() {
+      settingsStore.save();
+      settings = settingsStore.load();
+      syncSettingsForm(settings);
+      AudioManager.playBGM(currentMap.defaultBGM);
+      renderBoard();
+    }
+    function discardDraftSettings() {
+      settings = settingsStore.discard();
+      syncSettingsForm(settings);
+      AudioManager.playBGM(currentMap.defaultBGM);
+      renderBoard();
+    }
+    function exitSettings() {
+      discardDraftSettings();
+      location.hash = "#home";
     }
     function bindUI() {
       document.addEventListener("click", event => {
+        const mapButton = event.target.closest("[data-map-id]");
+        if (mapButton) {
+          settingsStore.updateDraft("fixedMapId", mapButton.dataset.mapId);
+          settings = settingsStore.getDraft();
+          renderMapOptions(settings.fixedMapId);
+          updateUnsavedIndicator();
+          AudioManager.play("click");
+          return;
+        }
         const routeButton = event.target.closest("[data-route]");
         const actionButton = event.target.closest("[data-action]");
         if (routeButton) {
@@ -1185,36 +1591,40 @@
           state.gameStatus = "ended";
           finishGame();
         }
-        if (action === "save-settings") {
-          readSettingsForm();
-          saveSettings();
-          syncSettingsForm();
-          AudioManager.playBGM();
-          renderBoard();
-        }
+        if (action === "save-settings") saveDraftSettings();
         if (action === "reset-settings") {
-          settings = { ...DEFAULT_SETTINGS };
-          saveSettings();
-          syncSettingsForm();
-          AudioManager.playBGM();
+          settings = settingsStore.resetToDefault();
+          syncSettingsForm(settings);
+          AudioManager.playBGM(currentMap.defaultBGM);
           renderBoard();
         }
+        if (action === "exit-settings") exitSettings();
         if (action === "undo") {
           const history = [...state.moveHistory];
           if (history.length >= 2) rebuildFromHistory(history);
           else AudioManager.play("error");
         }
       });
-      $("#quick-sfx").addEventListener("input", event => {
+      ["aiDifficulty", "sfxVolume", "bgmVolume", "showMovableSquares", "showCoordinates", "showAIThinkAnimation"].forEach(id => {
+        const control = $("#" + id);
+        if (!control) return;
+        control.addEventListener("input", () => updateDraftFromControl(control));
+        control.addEventListener("change", () => updateDraftFromControl(control));
+      });
+      const quickSfx = $("#quick-sfx");
+      const quickBgm = $("#quick-bgm");
+      if (quickSfx) quickSfx.addEventListener("input", event => {
         settings.sfxVolume = Number(event.target.value);
-        $("#sfxVolume").value = settings.sfxVolume;
+        const sfxControl = $("#sfxVolume");
+        if (sfxControl) sfxControl.value = settings.sfxVolume;
         saveSettings();
       });
-      $("#quick-bgm").addEventListener("input", event => {
+      if (quickBgm) quickBgm.addEventListener("input", event => {
         settings.bgmVolume = Number(event.target.value);
-        $("#bgmVolume").value = settings.bgmVolume;
+        const bgmControl = $("#bgmVolume");
+        if (bgmControl) bgmControl.value = settings.bgmVolume;
         saveSettings();
-        AudioManager.playBGM();
+        AudioManager.playBGM(currentMap.defaultBGM);
       });
       document.addEventListener("keydown", event => {
         if (event.key.toLowerCase() === "u" && location.hash === "#game") {
@@ -1224,10 +1634,12 @@
         if (event.key === "Escape") {
           selectedId = null;
           legalTargets = [];
+          updatePieceInfoCard(null);
           renderBoard();
         }
       });
       window.addEventListener("hashchange", () => showScreen(location.hash));
+      window.addEventListener("resize", ensureBoardFit);
       document.addEventListener("pointerdown", () => AudioManager.init(), { once:true });
     }
 
@@ -1236,6 +1648,7 @@
     initBackground();
     showScreen(location.hash || "#home");
     renderBoard();
+    updatePieceInfoCard(null);
   </script>
 </body>
 </html>
