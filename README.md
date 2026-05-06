@@ -45,3 +45,7 @@
 ### Jungle_Chess
 
 - 鬥獸棋
+
+### Blackjack
+
+- 21點

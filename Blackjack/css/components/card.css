@@ -1,0 +1,121 @@
+.hand-row {
+  display: flex;
+  min-height: 118px;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0;
+}
+
+.playing-card {
+  position: relative;
+  width: 80px;
+  height: 112px;
+  flex: 0 0 auto;
+  border: 2px solid rgba(26, 26, 26, 0.42);
+  border-radius: var(--radius-card);
+  color: var(--color-black);
+  background: var(--color-card-bg);
+  box-shadow: 0 9px 18px rgba(0, 0, 0, 0.28);
+  animation: dealCard 360ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.playing-card.is-red {
+  color: var(--color-red);
+}
+
+.playing-card.is-hidden {
+  border-color: var(--color-gold);
+  background:
+    radial-gradient(circle, rgba(255, 215, 0, 0.26) 0 14%, transparent 15%),
+    repeating-linear-gradient(45deg, #8b0000, #8b0000 5px, #a00000 5px, #a00000 10px);
+}
+
+.card-corner {
+  position: absolute;
+  display: grid;
+  top: 6px;
+  left: 7px;
+  justify-items: center;
+  font-family: var(--font-mono);
+  font-size: var(--fs-card-corner);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.card-corner.bottom {
+  inset: auto 7px 6px auto;
+  transform: rotate(180deg);
+}
+
+.card-center {
+  position: absolute;
+  inset: 22px 11px;
+  display: grid;
+  place-items: center;
+  font-size: var(--fs-card-center);
+  line-height: 1;
+}
+
+.pip-grid {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  place-items: center;
+  font-size: 1.15rem;
+}
+
+.face-mark {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  font-weight: 900;
+}
+
+@keyframes dealCard {
+  from {
+    opacity: 0;
+    transform: translate(32px, -42px) scale(0.58) rotate(-10deg);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0) scale(1) rotate(0deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .playing-card {
+    width: 70px;
+    height: 98px;
+  }
+
+  .hand-row {
+    min-height: 103px;
+  }
+}
+
+@media (max-width: 480px), (max-height: 500px) and (orientation: landscape) {
+  .playing-card {
+    width: 56px;
+    height: 78px;
+  }
+
+  .hand-row {
+    min-height: 82px;
+  }
+
+  .card-center {
+    inset: 18px 8px;
+    font-size: 1.75rem;
+  }
+
+  .pip-grid {
+    font-size: 0.85rem;
+  }
+}

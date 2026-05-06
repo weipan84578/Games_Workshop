@@ -1,0 +1,60 @@
+body {
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  background:
+    radial-gradient(circle at 18% 12%, rgba(255, 215, 0, 0.16), transparent 28rem),
+    radial-gradient(circle at 90% 20%, rgba(204, 0, 0, 0.16), transparent 24rem),
+    linear-gradient(135deg, var(--color-felt-deep), var(--color-felt) 48%, var(--color-felt-dark));
+  overflow-x: hidden;
+  user-select: none;
+}
+
+.app-shell {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: max(18px, env(safe-area-inset-top)) 18px max(18px, env(safe-area-inset-bottom));
+}
+
+.screen {
+  display: none;
+  min-height: calc(100vh - 36px);
+  animation: screenIn var(--transition-slow);
+}
+
+.screen.is-active {
+  display: block;
+}
+
+.meta-label,
+.eyebrow {
+  color: var(--color-muted);
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+@keyframes screenIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 480px) {
+  .app-shell {
+    padding: max(10px, env(safe-area-inset-top)) 10px max(10px, env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .app-shell {
+    padding: 8px;
+  }
+}

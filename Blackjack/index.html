@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#0d3b12">
+    <title>Blackjack 21點</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components/button.css">
+    <link rel="stylesheet" href="css/components/card.css">
+    <link rel="stylesheet" href="css/components/chip.css">
+    <link rel="stylesheet" href="css/components/modal.css">
+    <link rel="stylesheet" href="css/screens/home.css">
+    <link rel="stylesheet" href="css/screens/game.css">
+    <link rel="stylesheet" href="css/screens/settings.css">
+    <script defer src="js/app.js"></script>
+  </head>
+  <body>
+    <main class="app-shell">
+      <section id="home-screen" class="screen screen-home is-active" aria-labelledby="home-title">
+        <div class="home-card">
+          <p class="eyebrow">Casino Table Edition</p>
+          <h1 id="home-title">BLACKJACK 21</h1>
+          <p class="home-copy">純前端 Web 版 21 點。下注、叫牌、停牌，和最多 3 位 AI 玩家同桌對戰。</p>
+          <div class="home-actions">
+            <button class="btn btn-primary btn-xl" data-nav="game">開始遊戲</button>
+            <button class="btn btn-secondary" data-nav="settings">設定</button>
+            <button class="btn btn-secondary" data-nav="leaderboard">排行榜</button>
+          </div>
+          <div class="home-stats">
+            <span>最高分</span>
+            <strong id="home-high-score">$0</strong>
+          </div>
+          <div class="floating-cards" aria-hidden="true">
+            <span>♠</span><span>♥</span><span>♦</span><span>♣</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="game-screen" class="screen screen-game" aria-labelledby="game-title">
+        <header class="game-topbar">
+          <div>
+            <span class="meta-label">籌碼</span>
+            <strong id="player-chips">$0</strong>
+          </div>
+          <div>
+            <span class="meta-label">回合</span>
+            <strong id="round-count">0</strong>
+          </div>
+          <div>
+            <span class="meta-label">狀態</span>
+            <strong id="phase-label">待下注</strong>
+          </div>
+          <button class="btn btn-ghost" data-nav="home">首頁</button>
+        </header>
+
+        <div id="message-bar" class="message-bar">選擇籌碼後開始下注。</div>
+
+        <section class="table-area" aria-label="Blackjack table">
+          <article class="seat dealer-seat">
+            <div class="seat-heading">
+              <h2>莊家</h2>
+              <span id="dealer-score" class="score-pill">?</span>
+            </div>
+            <div id="dealer-hand" class="hand-row"></div>
+          </article>
+
+          <div id="ai-area" class="ai-area"></div>
+
+          <article class="seat player-seat is-current">
+            <div class="seat-heading">
+              <h2>玩家</h2>
+              <span id="player-score" class="score-pill">0</span>
+            </div>
+            <div id="player-hand" class="hand-row"></div>
+            <div class="bet-line">下注：<strong id="current-bet">$0</strong></div>
+          </article>
+        </section>
+
+        <section class="action-panel" aria-label="Player controls">
+          <div class="action-row">
+            <button id="hit-btn" class="btn btn-primary">叫牌</button>
+            <button id="stand-btn" class="btn btn-primary">停牌</button>
+            <button id="double-btn" class="btn btn-secondary">Double</button>
+            <button id="surrender-btn" class="btn btn-secondary">投降</button>
+          </div>
+          <div class="chip-panel">
+            <div id="chip-buttons" class="chip-row"></div>
+            <div class="bet-actions">
+              <span>本局下注：<strong id="bet-amount">$0</strong></span>
+              <button id="clear-bet-btn" class="btn btn-ghost">清除</button>
+              <button id="deal-btn" class="btn btn-accent">發牌</button>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section id="settings-screen" class="screen screen-settings" aria-labelledby="settings-title">
+        <div class="settings-card">
+          <button class="btn btn-ghost" data-nav="home">返回</button>
+          <h1 id="settings-title">設定</h1>
+          <form id="settings-form" class="settings-form">
+            <label>
+              <span>AI 玩家數</span>
+              <select name="aiCount">
+                <option value="1">1 名</option>
+                <option value="2">2 名</option>
+                <option value="3">3 名</option>
+              </select>
+            </label>
+            <label>
+              <span>AI 難度</span>
+              <select name="difficulty">
+                <option value="easy">簡單</option>
+                <option value="normal">普通</option>
+                <option value="hard">困難</option>
+              </select>
+            </label>
+            <label>
+              <span>牌靴副數</span>
+              <select name="deckCount">
+                <option value="1">1 副</option>
+                <option value="2">2 副</option>
+                <option value="4">4 副</option>
+                <option value="6">6 副</option>
+              </select>
+            </label>
+            <label>
+              <span>起始籌碼</span>
+              <select name="startingChips">
+                <option value="500">$500</option>
+                <option value="1000">$1,000</option>
+                <option value="2000">$2,000</option>
+              </select>
+            </label>
+            <label>
+              <span>背景音樂</span>
+              <input name="musicVolume" type="range" min="0" max="1" step="0.05">
+            </label>
+            <label>
+              <span>音效音量</span>
+              <input name="sfxVolume" type="range" min="0" max="1" step="0.05">
+            </label>
+            <button class="btn btn-primary" type="submit">儲存設定</button>
+          </form>
+        </div>
+      </section>
+
+      <section id="leaderboard-screen" class="screen screen-settings" aria-labelledby="leaderboard-title">
+        <div class="settings-card">
+          <button class="btn btn-ghost" data-nav="home">返回</button>
+          <h1 id="leaderboard-title">排行榜</h1>
+          <div class="record-summary">
+            <span>遊玩局數：<strong id="games-played">0</strong></span>
+            <span>勝場：<strong id="games-won">0</strong></span>
+          </div>
+          <ol id="leaderboard-list" class="leaderboard-list"></ol>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="settlement-modal" class="modal">
+      <div class="modal-card">
+        <h2 id="settlement-title">本局結果</h2>
+        <div id="settlement-body" class="settlement-body"></div>
+        <div class="modal-actions">
+          <button id="next-round-btn" class="btn btn-primary">下一局</button>
+          <button class="btn btn-secondary" data-nav="home">回首頁</button>
+        </div>
+      </div>
+    </dialog>
+  </body>
+</html>

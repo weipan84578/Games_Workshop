@@ -1,0 +1,145 @@
+.screen-game {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.game-topbar {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+  gap: 0.8rem;
+  align-items: center;
+  padding: 0.85rem;
+  border: 1px solid rgba(255, 215, 0, 0.24);
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.game-topbar strong {
+  color: var(--color-gold);
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+}
+
+.message-bar {
+  margin: 0.9rem 0;
+  padding: 0.8rem 1rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.28);
+  text-align: center;
+}
+
+.table-area {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.seat {
+  padding: 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 20px;
+  background: var(--color-panel);
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.18);
+}
+
+.seat.is-current {
+  border-color: rgba(255, 215, 0, 0.72);
+}
+
+.seat-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 0.2rem;
+}
+
+.seat-heading h2,
+.seat-heading h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+}
+
+.score-pill {
+  min-width: 48px;
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  color: #201600;
+  background: var(--color-gold);
+  font-family: var(--font-mono);
+  font-weight: 900;
+  text-align: center;
+}
+
+.ai-area {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.ai-seat .hand-row {
+  min-height: 96px;
+}
+
+.ai-seat .playing-card {
+  width: 64px;
+  height: 90px;
+}
+
+.bet-line {
+  color: var(--color-muted);
+}
+
+.action-panel {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 0.9rem;
+}
+
+.action-row,
+.bet-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+.chip-panel {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.9rem;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+@media (max-width: 768px) {
+  .game-topbar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ai-area {
+    grid-template-columns: 1fr;
+  }
+
+  .chip-panel {
+    display: grid;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-topbar {
+    gap: 0.45rem;
+    padding: 0.6rem;
+  }
+
+  .seat {
+    padding: 0.65rem;
+  }
+
+  .action-row .btn {
+    flex: 1 1 calc(50% - 0.65rem);
+    min-height: 56px;
+  }
+}
