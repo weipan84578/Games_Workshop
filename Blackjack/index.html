@@ -23,10 +23,10 @@
         <div class="home-card">
           <p class="eyebrow">Casino Table Edition</p>
           <h1 id="home-title">BLACKJACK 21</h1>
-          <p class="home-copy">純前端 Web 版 21 點。下注、叫牌、停牌，和最多 3 位 AI 玩家同桌對戰。</p>
           <div class="home-actions">
             <button class="btn btn-primary btn-xl" data-nav="game">開始遊戲</button>
             <button class="btn btn-secondary" data-nav="settings">設定</button>
+            <button class="btn btn-secondary" data-nav="help">說明</button>
             <button class="btn btn-secondary" data-nav="leaderboard">排行榜</button>
           </div>
           <div class="home-stats">
@@ -158,6 +158,57 @@
             <span>勝場：<strong id="games-won">0</strong></span>
           </div>
           <ol id="leaderboard-list" class="leaderboard-list"></ol>
+        </div>
+      </section>
+
+      <section id="help-screen" class="screen screen-settings" aria-labelledby="help-title">
+        <div class="settings-card help-card">
+          <button class="btn btn-ghost" data-nav="home">返回</button>
+          <h1 id="help-title">遊戲說明</h1>
+
+          <article class="help-section">
+            <h2>目標</h2>
+            <p>你的目標是讓手牌點數比莊家高，但不能超過 21 點。超過 21 點稱為爆牌，該局直接輸掉下注。AI 玩家會同桌遊玩，但你的輸贏只和莊家比較。</p>
+          </article>
+
+          <article class="help-section">
+            <h2>牌點計算</h2>
+            <p>2 到 10 依牌面計分，J、Q、K 都是 10 點。A 可以算 11 點，也可以在會爆牌時自動改算 1 點。起手兩張牌剛好 21 點稱為 Blackjack，賠率為 3:2。</p>
+          </article>
+
+          <article class="help-section">
+            <h2>下注與籌碼</h2>
+            <p>下注區提供 $10、$25、$50、$100、$500 籌碼。每次按下籌碼會從你的可用籌碼扣除並加入本局下注。按「清除」會把尚未發牌的下注退回。</p>
+            <p><strong>All In：</strong>把目前剩餘所有籌碼一次加入本局下注。All In 後仍需按「發牌」開始本局。若結算後籌碼變成 0，遊戲會自動結束，必須回首頁重新開始。</p>
+          </article>
+
+          <article class="help-section">
+            <h2>玩家操作</h2>
+            <p><strong>叫牌 Hit：</strong>再拿一張牌。若總點數超過 21，立即爆牌。</p>
+            <p><strong>停牌 Stand：</strong>不再拿牌，輪到 AI 與莊家行動。</p>
+            <p><strong>Double：</strong>僅能在起手兩張牌時使用。下注加倍、只再拿一張牌，然後自動停牌。若剩餘籌碼不足以加倍，按鈕會停用。</p>
+            <p><strong>投降 Surrender：</strong>僅能在起手兩張牌時使用。放棄本局，返還一半下注，另一半視為損失。</p>
+          </article>
+
+          <article class="help-section">
+            <h2>莊家規則</h2>
+            <p>莊家會先蓋牌一張。所有玩家行動結束後，莊家翻開底牌並依規則補牌。莊家低於 17 點必須叫牌，17 點以上停牌，Soft 17 也停牌。</p>
+          </article>
+
+          <article class="help-section">
+            <h2>AI 與難度</h2>
+            <p>可在設定中選擇 1 到 3 位 AI 玩家。簡單 AI 低於 15 點較常叫牌；普通 AI 使用基礎策略；困難 AI 會參考 Hi-Lo running count，牌靴偏有利時更積極 Double 或保守停牌。</p>
+          </article>
+
+          <article class="help-section">
+            <h2>設定與紀錄</h2>
+            <p>設定可調整 AI 人數、難度、牌靴副數、起始籌碼、背景音樂音量與音效音量，會儲存在瀏覽器 localStorage。排行榜會保存最高分、遊玩局數、勝場與前 10 名籌碼紀錄。</p>
+          </article>
+
+          <article class="help-section">
+            <h2>配樂與音效</h2>
+            <p>配樂使用 Web Audio API 即時合成，不依賴外部音檔。網頁會在主畫面載入時嘗試播放；若瀏覽器自動播放政策阻擋，第一次點擊或按鍵後會立即開始。</p>
+          </article>
         </div>
       </section>
     </main>

@@ -246,7 +246,7 @@
       if (!this.context) return;
       this.master.gain.value = 1;
       this.sfx.gain.value = Number(settings.sfxVolume ?? 0.6);
-      this.music.gain.value = Number(settings.musicVolume ?? 0.8) * 0.28;
+      this.music.gain.value = Number(settings.musicVolume ?? 0.8) * 0.55;
     }
 
     play(type) {
@@ -287,17 +287,44 @@
       this.synth = synth;
       this.timer = null;
       this.step = 0;
-      this.notes = [65.41, 82.41, 98, 123.47, 110, 98, 82.41, 73.42];
+      this.swing = 0;
+      this.bass = [65.41, 82.41, 98, 116.54, 110, 98, 82.41, 73.42];
+      this.chords = [
+        [261.63, 329.63, 392.00, 493.88],
+        [220.00, 261.63, 329.63, 440.00],
+        [293.66, 349.23, 440.00, 523.25],
+        [196.00, 246.94, 349.23, 493.88]
+      ];
+      this.riff = [659.25, 783.99, 880.00, 783.99, 659.25, 587.33, 523.25, 587.33];
     }
 
     start() {
       if (this.timer || !this.synth.context) return;
+      this.playBeat();
       this.timer = window.setInterval(() => {
-        const note = this.notes[this.step % this.notes.length];
-        this.synth.tone(note, 0.18, "sine", this.synth.music);
-        if (this.step % 4 === 0) this.synth.tone(note * 3, 0.12, "triangle", this.synth.music);
-        this.step += 1;
-      }, 667);
+        this.playBeat();
+      }, 300);
+    }
+
+    playBeat() {
+      const beat = this.step % 16;
+      const bassNote = this.bass[beat % this.bass.length];
+      this.synth.tone(bassNote, 0.22, "triangle", this.synth.music);
+      if (beat % 4 === 0 || beat % 4 === 3) {
+        const chord = this.chords[Math.floor(beat / 4) % this.chords.length];
+        chord.forEach((note, index) => {
+          window.setTimeout(() => this.synth.tone(note, 0.11, "square", this.synth.music), index * 18);
+        });
+      }
+      if ([2, 5, 7, 10, 13, 15].includes(beat)) {
+        this.synth.tone(this.riff[beat % this.riff.length], 0.12, "sine", this.synth.music);
+      }
+      if (beat === 15) {
+        [1046.5, 1318.51, 1567.98].forEach((note, index) => {
+          window.setTimeout(() => this.synth.tone(note, 0.08, "triangle", this.synth.music), index * 55);
+        });
+      }
+      this.step += 1;
     }
   }
 
@@ -737,6 +764,7 @@
   bindHomeMusic();
   renderRecords();
   renderer.render();
+  startMusicSilently();
 
   function bindNavigation() {
     document.addEventListener("click", async (event) => {
@@ -846,8 +874,15 @@
     const start = () => {
       unlockAudio();
     };
+    document.addEventListener("click", start, { once: true });
     document.addEventListener("pointerdown", start, { once: true });
     document.addEventListener("keydown", start, { once: true });
+  }
+
+  function startMusicSilently() {
+    unlockAudio().catch(() => {
+      // Browsers commonly reject audible autoplay before user interaction.
+    });
   }
 
   function renderRecords() {
