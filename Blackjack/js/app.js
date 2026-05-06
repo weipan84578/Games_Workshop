@@ -332,6 +332,18 @@
       this.prepareBetting();
     }
 
+    startNewGame() {
+      this.human.chips = this.state.settings.startingChips;
+      this.state.round = 0;
+      this.state.deck = createDeck(this.state.settings.deckCount);
+      this.state.runningCount = 0;
+      this.aiPlayers.forEach((ai) => {
+        ai.chips = this.state.settings.startingChips;
+      });
+      this.prepareBetting();
+      this.state.message = `新遊戲開始，起始籌碼 $${this.human.chips.toLocaleString("en-US")}。`;
+    }
+
     prepareBetting() {
       this.state.phase = this.human.chips > 0 ? "BETTING" : "IDLE";
       this.state.dealer = createHand();
@@ -348,6 +360,16 @@
       this.state.pendingBet += amount;
       this.synth.play("chip");
       this.state.message = `已加入下注 $${amount}。`;
+    }
+
+    allIn() {
+      if (!["IDLE", "BETTING"].includes(this.state.phase) || this.human.chips <= 0) return;
+      const amount = this.human.chips;
+      this.state.phase = "BETTING";
+      this.human.chips = 0;
+      this.state.pendingBet += amount;
+      this.synth.play("chip");
+      this.state.message = `All In：本局下注 $${this.state.pendingBet.toLocaleString("en-US")}。`;
     }
 
     clearBet() {
@@ -500,12 +522,15 @@
       const records = saveRoundRecord(this.human.chips, won);
       this.synth.play(scoreHand(this.human.hands[0]).isBlackjack ? "blackjack" : won ? "win" : "lose");
       this.state.message = humanResult.label;
+      const gameOver = this.human.chips <= 0;
       return {
-        title: won ? "本局獲勝" : humanResult.net === 0 ? "本局平手" : "本局落敗",
+        gameOver,
+        title: gameOver ? "遊戲結束" : won ? "本局獲勝" : humanResult.net === 0 ? "本局平手" : "本局落敗",
         lines: [
           `玩家：${humanResult.label}，目前籌碼 $${this.human.chips.toLocaleString("en-US")}`,
           `莊家：${dealerScore.isBust ? "爆牌" : `${dealerScore.value} 點`}`,
           `本局損益：${humanResult.net >= 0 ? "+" : ""}$${humanResult.net.toLocaleString("en-US")}`,
+          ...(gameOver ? ["籌碼已歸零，遊戲自動結束。請回首頁重新開始。"] : []),
           `最高分：$${records.highScore.toLocaleString("en-US")}`,
           ...aiLines
         ]
@@ -561,7 +586,9 @@
         double: document.querySelector("#double-btn"),
         surrender: document.querySelector("#surrender-btn"),
         deal: document.querySelector("#deal-btn"),
+        allIn: document.querySelector("#all-in-btn"),
         clearBet: document.querySelector("#clear-bet-btn"),
+        nextRound: document.querySelector("#next-round-btn"),
         modal: document.querySelector("#settlement-modal"),
         settlementTitle: document.querySelector("#settlement-title"),
         settlementBody: document.querySelector("#settlement-body")
@@ -621,6 +648,7 @@
       this.nodes.chipButtons.querySelectorAll("button").forEach((button) => {
         button.disabled = !isBetting || human.chips < Number(button.dataset.chip);
       });
+      this.nodes.allIn.disabled = !isBetting || human.chips <= 0;
       this.nodes.clearBet.disabled = !isBetting || state.pendingBet <= 0;
       this.nodes.deal.disabled = !isBetting || state.pendingBet < 10;
       this.nodes.hit.disabled = !isTurn;
@@ -632,6 +660,8 @@
     showSettlement(summary) {
       this.nodes.settlementTitle.textContent = summary.title;
       this.nodes.settlementBody.innerHTML = summary.lines.map((line) => `<p>${line}</p>`).join("");
+      this.nodes.nextRound.disabled = Boolean(summary.gameOver);
+      this.nodes.nextRound.textContent = summary.gameOver ? "籌碼歸零" : "下一局";
       if (typeof this.nodes.modal.showModal === "function") {
         if (!this.nodes.modal.open) this.nodes.modal.showModal();
       } else {
@@ -704,6 +734,7 @@
   bindNavigation();
   bindGameControls();
   bindSettings();
+  bindHomeMusic();
   renderRecords();
   renderer.render();
 
@@ -715,7 +746,7 @@
       const target = nav.dataset.nav;
       renderer.closeSettlement();
       if (target === "game") {
-        engine.prepareBetting();
+        engine.startNewGame();
         renderer.render();
       }
       if (target === "leaderboard") renderRecords();
@@ -733,6 +764,10 @@
     });
     document.querySelector("#clear-bet-btn").addEventListener("click", () => {
       engine.clearBet();
+      renderer.render();
+    });
+    document.querySelector("#all-in-btn").addEventListener("click", () => {
+      engine.allIn();
       renderer.render();
     });
     document.querySelector("#deal-btn").addEventListener("click", async () => {
@@ -762,6 +797,7 @@
       await advanceAfterHuman();
     });
     document.querySelector("#next-round-btn").addEventListener("click", () => {
+      if (engine.human.chips <= 0) return;
       renderer.closeSettlement();
       engine.prepareBetting();
       renderer.render();
@@ -804,6 +840,14 @@
     for (const [key, value] of Object.entries(nextSettings)) {
       if (form.elements[key]) form.elements[key].value = String(value);
     }
+  }
+
+  function bindHomeMusic() {
+    const start = () => {
+      unlockAudio();
+    };
+    document.addEventListener("pointerdown", start, { once: true });
+    document.addEventListener("keydown", start, { once: true });
   }
 
   function renderRecords() {
