@@ -25,16 +25,16 @@
   ];
   const RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
   const CHIP_VALUES = [10, 25, 50, 100, 500];
-  const PIP_POSITIONS = {
-    2: [2, 11],
-    3: [2, 7, 11],
-    4: [1, 3, 10, 12],
-    5: [1, 3, 7, 10, 12],
-    6: [1, 3, 4, 9, 10, 12],
-    7: [1, 3, 4, 7, 9, 10, 12],
-    8: [1, 3, 4, 6, 8, 9, 10, 12],
-    9: [1, 3, 4, 6, 7, 8, 9, 10, 12],
-    10: [1, 3, 4, 5, 6, 8, 9, 10, 11, 12]
+  const PIP_LAYOUTS = {
+    2: ["top-center", "bottom-center"],
+    3: ["top-center", "middle-center", "bottom-center"],
+    4: ["top-left", "top-right", "bottom-left", "bottom-right"],
+    5: ["top-left", "top-right", "middle-center", "bottom-left", "bottom-right"],
+    6: ["top-left", "top-right", "middle-left", "middle-right", "bottom-left", "bottom-right"],
+    7: ["top-left", "top-right", "upper-center", "middle-left", "middle-right", "bottom-left", "bottom-right"],
+    8: ["top-left", "top-right", "upper-center", "middle-left", "middle-right", "lower-center", "bottom-left", "bottom-right"],
+    9: ["top-left", "top-right", "upper-center", "middle-left", "middle-right", "center-center", "lower-center", "bottom-left", "bottom-right"],
+    10: ["top-left", "top-right", "upper-left", "upper-right", "upper-center", "lower-center", "lower-left", "lower-right", "bottom-left", "bottom-right"]
   };
 
   function readJson(key, fallback) {
@@ -722,11 +722,12 @@
   function renderCenter(card) {
     if (["J", "Q", "K"].includes(card.rank)) return `<span class="face-mark">${card.rank}</span>`;
     if (card.rank === "A") return card.symbol;
-    const positions = PIP_POSITIONS[card.rank] || [];
-    const cells = Array.from({ length: 12 }, (_, index) => (
-      positions.includes(index + 1) ? `<span>${card.symbol}</span>` : "<span></span>"
-    ));
-    return `<div class="pip-grid">${cells.join("")}</div>`;
+    const positions = PIP_LAYOUTS[card.rank] || [];
+    const pips = positions.map((position) => {
+      const inverted = position.startsWith("lower") || position.startsWith("bottom");
+      return `<span class="pip pip-${position}${inverted ? " is-inverted" : ""}">${card.symbol}</span>`;
+    });
+    return `<div class="pip-grid pip-grid-${card.rank}">${pips.join("")}</div>`;
   }
 
   function scoreText(score) {
