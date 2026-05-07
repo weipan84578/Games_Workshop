@@ -138,6 +138,8 @@
       justify-content: center;
       padding: 18px;
       background: linear-gradient(180deg, #88d2f2 0 24%, #72a845 25% 100%);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
     .select-wrap {
       width: min(960px, 96vw);
@@ -428,6 +430,17 @@
     }
     .projectile.ice { background: radial-gradient(circle at 35% 30%, #ecfeff, #67e8f9 55%, #0e7490); }
     .projectile.fire { background: radial-gradient(circle at 35% 30%, #fff7ad, #ff8c00 55%, #b91c1c); }
+    .projectile.corn { background: radial-gradient(circle at 35% 30%, #fff7ad, #facc15 55%, #a16207); }
+    .projectile.melon, .projectile.ice-melon {
+      width: calc(var(--cell) * .34);
+      height: calc(var(--cell) * .34);
+      background: radial-gradient(circle at 35% 30%, #dcfce7, #22c55e 55%, #166534);
+    }
+    .projectile.ice-melon { background: radial-gradient(circle at 35% 30%, #ecfeff, #38bdf8 55%, #075985); }
+    .projectile.poison { background: radial-gradient(circle at 35% 30%, #f0abfc, #9333ea 55%, #581c87); }
+    .projectile.pierce { border-radius: 45% 55% 55% 45%; background: linear-gradient(90deg, #dcfce7, #15803d); }
+    .projectile.wind { background: radial-gradient(circle at 35% 30%, #e0f2fe, #38bdf8 55%, #0369a1); }
+    .projectile.star { clip-path: polygon(50% 0,61% 35%,98% 35%,68% 56%,79% 91%,50% 70%,21% 91%,32% 56%,2% 35%,39% 35%); background:#fde047; }
     .projectile.spike {
       width: calc(var(--cell) * .32);
       height: calc(var(--cell) * .18);
@@ -479,7 +492,7 @@
     .toast.show { animation: toast-pop 1.5s ease-out; }
 
     .overlay {
-      position: absolute;
+      position: fixed;
       inset: 0;
       z-index: 50;
       display: none;
@@ -487,6 +500,7 @@
       justify-content: center;
       background: rgba(8, 18, 7, .55);
       backdrop-filter: blur(2px);
+      padding: 12px;
     }
     .overlay.active { display: flex; }
     .dialog {
@@ -528,6 +542,120 @@
       font-family: var(--font-hud);
     }
     .settings-row input { width: 100%; }
+
+    .encyclopedia-dialog {
+      width: min(94vw, 1040px);
+      height: min(88vh, 760px);
+      height: min(88dvh, 760px);
+      max-height: 88vh;
+      max-height: 88dvh;
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      overflow: hidden;
+    }
+    .encyclopedia-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+      min-width: 0;
+    }
+    .encyclopedia-head h2 { margin: 0; }
+    .encyclopedia-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .tab-btn {
+      max-width: 100%;
+      min-height: 44px;
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: 3px solid #3a7e10;
+      background: linear-gradient(180deg, #7ec850 0%, #5a9e30 100%);
+      color: #fff;
+      font-weight: 900;
+      cursor: pointer;
+      text-shadow: 0 2px 0 rgba(0,0,0,.35);
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+    .tab-btn.active { outline: 3px solid #ffe261; }
+    .encyclopedia-grid {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+      gap: 10px;
+      padding: 2px 2px 8px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .codex-card {
+      min-width: 0;
+      max-width: 100%;
+      min-height: 156px;
+      padding: 12px;
+      border-radius: 8px;
+      border: 3px solid rgba(53, 111, 37, .75);
+      background: rgba(255, 255, 255, .36);
+      color: #203716;
+      box-shadow: inset 0 1px rgba(255,255,255,.35);
+      overflow: visible;
+    }
+    .codex-title {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-weight: 900;
+      color: #18320f;
+      min-width: 0;
+    }
+    .codex-emoji { flex: 0 0 auto; font-size: 32px; line-height: 1; }
+    .codex-name {
+      flex: 1 1 160px;
+      min-width: 0;
+      max-width: 100%;
+      font-size: 17px;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    .codex-meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(74px, max-content));
+      gap: 6px;
+      margin: 7px 0;
+      font-family: var(--font-hud);
+      font-size: 12px;
+      min-width: 0;
+      max-width: 100%;
+      overflow: hidden;
+    }
+    .codex-pill {
+      max-width: 100%;
+      padding: 4px 7px;
+      border-radius: 999px;
+      background: rgba(46, 93, 33, .16);
+      border: 1px solid rgba(46, 93, 33, .25);
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      white-space: normal;
+    }
+    .codex-desc {
+      margin: 0;
+      line-height: 1.4;
+      font-size: 14px;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      hyphens: auto;
+    }
 
     .ghost {
       position: absolute;
@@ -592,6 +720,42 @@
       .plant-list { grid-template-columns: repeat(auto-fit, minmax(78px, 1fr)); gap: 8px; }
       .select-card { min-height: 104px; padding: 6px; }
       .select-card strong { font-size: 12px; }
+      #encyclopediaOverlay { align-items: stretch; justify-content: stretch; padding: 0; }
+      .encyclopedia-dialog {
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        max-height: none;
+        border-radius: 0;
+        border-width: 0;
+        padding: 10px;
+      }
+      .encyclopedia-head { margin-bottom: 8px; }
+      .encyclopedia-head h2 { font-size: clamp(26px, 9vw, 38px); }
+      .encyclopedia-tabs { margin-bottom: 8px; }
+      .tab-btn { min-height: 40px; padding: 7px 12px; }
+      .encyclopedia-grid {
+        flex: 1 1 auto;
+        height: 100%;
+        max-height: none;
+        display: block;
+        overflow-y: auto;
+        overflow-x: hidden;
+        overscroll-behavior: contain;
+      }
+      .codex-meta { grid-template-columns: repeat(auto-fit, minmax(68px, 1fr)); }
+      .codex-card {
+        display: block;
+        width: 100%;
+        min-height: 0;
+        height: auto;
+        margin-bottom: 10px;
+        padding: 10px;
+        overflow: visible;
+      }
+      .codex-title { align-items: flex-start; }
+      .codex-name { font-size: 15px; }
+      .codex-desc { font-size: 13px; }
       .menu-plant, .menu-zombie { opacity: .78; }
     }
 
@@ -641,6 +805,7 @@
         <p class="subtitle">種下防線，守住五條草坪</p>
         <button class="game-btn" id="newGameBtn">開始遊戲</button>
         <button class="game-btn secondary" id="continueBtn">繼續遊戲</button>
+        <button class="game-btn secondary" id="encyclopediaBtn">圖鑑</button>
         <button class="game-btn secondary" id="settingsBtn">音效設定</button>
       </div>
     </section>
@@ -715,6 +880,20 @@
         <button class="game-btn" id="closeSettingsBtn">完成</button>
       </div>
     </div>
+
+    <div class="overlay" id="encyclopediaOverlay">
+      <div class="dialog encyclopedia-dialog">
+        <div class="encyclopedia-head">
+          <h2>圖鑑</h2>
+          <button class="icon-btn" id="closeEncyclopediaBtn" title="關閉">×</button>
+        </div>
+        <div class="encyclopedia-tabs">
+          <button class="tab-btn active" id="plantCodexTab">植物</button>
+          <button class="tab-btn" id="zombieCodexTab">殭屍與敵人</button>
+        </div>
+        <div class="encyclopedia-grid" id="encyclopediaGrid"></div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -726,14 +905,34 @@
     const PlantDefs = [
       { id: 'P01', name: '向日葵', emoji: '🌻', cost: 50, cooldown: 7000, hp: 300, kind: 'sun', produceInterval: 10000 },
       { id: 'P02', name: '豌豆射手', emoji: '🌱', cost: 75, cooldown: 7500, hp: 300, kind: 'shooter', attackInterval: 1500, damage: 20, projectile: 'pea' },
-      { id: 'P03', name: '寒冰射手', emoji: '❄️', cost: 150, cooldown: 7500, hp: 300, kind: 'shooter', attackInterval: 1650, damage: 20, projectile: 'ice' },
+      { id: 'P03', name: '寒冰射手', emoji: '❄️', cost: 150, cooldown: 7500, hp: 300, kind: 'shooter', attackInterval: 1650, damage: 20, projectile: 'ice', effect: 'slow' },
       { id: 'P04', name: '雙發射手', emoji: '🌿', cost: 150, cooldown: 7500, hp: 400, kind: 'shooter', attackInterval: 1700, damage: 20, projectile: 'pea', shots: 2 },
-      { id: 'P05', name: '櫻桃炸彈', emoji: '🍒', cost: 150, cooldown: 35000, hp: 999, kind: 'bomb' },
+      { id: 'P05', name: '櫻桃炸彈', emoji: '🍒', cost: 150, cooldown: 35000, hp: 999, kind: 'bomb', blast: 'cross', blastDamage: 999 },
       { id: 'P06', name: '堅果牆', emoji: '🥔', cost: 50, cooldown: 30000, hp: 4000, kind: 'wall' },
       { id: 'P07', name: '尖刺草', emoji: '🌵', cost: 125, cooldown: 7500, hp: 300, kind: 'spike', attackInterval: 1100, damage: 20 },
-      { id: 'P08', name: '火焰射手', emoji: '🔥', cost: 200, cooldown: 14500, hp: 300, kind: 'shooter', attackInterval: 1550, damage: 40, projectile: 'fire' },
+      { id: 'P08', name: '火焰射手', emoji: '🔥', cost: 200, cooldown: 14500, hp: 300, kind: 'shooter', attackInterval: 1550, damage: 40, projectile: 'fire', effect: 'burn' },
       { id: 'P09', name: '三線射手', emoji: '☘️', cost: 325, cooldown: 7500, hp: 400, kind: 'threepeater', attackInterval: 1800, damage: 20, projectile: 'pea' },
-      { id: 'P10', name: '催眠菇', emoji: '🍄', cost: 100, cooldown: 15000, hp: 300, kind: 'hypno' }
+      { id: 'P10', name: '催眠菇', emoji: '🍄', cost: 100, cooldown: 15000, hp: 300, kind: 'hypno' },
+      { id: 'P11', name: '雙子向日葵', emoji: '🌼', cost: 150, cooldown: 12000, hp: 300, kind: 'sun', produceInterval: 9000, sunValue: 50 },
+      { id: 'P12', name: '機槍豌豆', emoji: '🫛', cost: 250, cooldown: 12000, hp: 350, kind: 'shooter', attackInterval: 1200, damage: 18, projectile: 'pea', shots: 4 },
+      { id: 'P13', name: '玉米投手', emoji: '🌽', cost: 100, cooldown: 9000, hp: 300, kind: 'lobber', attackInterval: 2300, damage: 35, projectile: 'corn', effect: 'stun' },
+      { id: 'P14', name: '西瓜投手', emoji: '🍉', cost: 300, cooldown: 14000, hp: 300, kind: 'lobber', attackInterval: 2600, damage: 70, projectile: 'melon', splash: 45 },
+      { id: 'P15', name: '冰西瓜', emoji: '🧊', cost: 425, cooldown: 18000, hp: 300, kind: 'lobber', attackInterval: 2800, damage: 65, projectile: 'ice-melon', splash: 40, effect: 'slow' },
+      { id: 'P16', name: '辣椒', emoji: '🌶️', cost: 125, cooldown: 30000, hp: 999, kind: 'rowBomb', blastDamage: 999 },
+      { id: 'P17', name: '土豆地雷', emoji: '💣', cost: 25, cooldown: 22000, hp: 300, kind: 'mine', armTime: 14000, blastDamage: 700 },
+      { id: 'P18', name: '南瓜罩', emoji: '🎃', cost: 125, cooldown: 20000, hp: 2500, kind: 'wall' },
+      { id: 'P19', name: '大嘴花', emoji: '🌺', cost: 150, cooldown: 18000, hp: 400, kind: 'chomper', attackInterval: 6500, damage: 999 },
+      { id: 'P20', name: '星星果', emoji: '⭐', cost: 125, cooldown: 9000, hp: 300, kind: 'star', attackInterval: 1700, damage: 18, projectile: 'star' },
+      { id: 'P21', name: '毒菇', emoji: '☠️', cost: 75, cooldown: 9000, hp: 250, kind: 'shooter', attackInterval: 1900, damage: 12, projectile: 'poison', effect: 'poison' },
+      { id: 'P22', name: '磁力菇', emoji: '🧲', cost: 125, cooldown: 18000, hp: 300, kind: 'magnet', attackInterval: 7000 },
+      { id: 'P23', name: '咖啡豆', emoji: '☕', cost: 75, cooldown: 12000, hp: 180, kind: 'aura', aura: 'haste', attackInterval: 1000 },
+      { id: 'P24', name: '蘆葦閃電', emoji: '⚡', cost: 175, cooldown: 13000, hp: 300, kind: 'chain', attackInterval: 2100, damage: 35, chains: 3 },
+      { id: 'P25', name: '竹刺炮', emoji: '🎋', cost: 175, cooldown: 11000, hp: 320, kind: 'shooter', attackInterval: 1900, damage: 25, projectile: 'pierce', pierce: 3 },
+      { id: 'P26', name: '回力花', emoji: '🪃', cost: 125, cooldown: 10000, hp: 300, kind: 'boomerang', attackInterval: 2200, damage: 28, pierce: 2 },
+      { id: 'P27', name: '治療草', emoji: '💚', cost: 100, cooldown: 16000, hp: 280, kind: 'healer', attackInterval: 3000, heal: 80 },
+      { id: 'P28', name: '寒霜薄荷', emoji: '🪻', cost: 175, cooldown: 24000, hp: 300, kind: 'freezeAura', attackInterval: 2500, damage: 10 },
+      { id: 'P29', name: '風車草', emoji: '🌀', cost: 150, cooldown: 15000, hp: 300, kind: 'shooter', attackInterval: 2100, damage: 18, projectile: 'wind', effect: 'knockback' },
+      { id: 'P30', name: '金盞花', emoji: '🏵️', cost: 75, cooldown: 9000, hp: 260, kind: 'sun', produceInterval: 14000, sunValue: 15, scoreValue: 120 }
     ];
 
     const ZombieDefs = {
@@ -744,7 +943,19 @@
       Z05: { name: '撐竿殭屍', emoji: '🏃', hp: 300, speed: .5, damage: 100, score: 180 },
       Z06: { name: '巨人殭屍', emoji: '💪', hp: 1600, speed: .28, damage: 180, score: 500 },
       Z07: { name: '舞者殭屍', emoji: '🕺', hp: 400, speed: .42, damage: 100, score: 220 },
-      Z08: { name: '潛地殭屍', emoji: '🕳️', hp: 400, speed: .55, damage: 150, score: 260 }
+      Z08: { name: '潛地殭屍', emoji: '🕳️', hp: 400, speed: .55, damage: 150, score: 260 },
+      Z09: { name: '報紙殭屍', emoji: '📰', hp: 380, armor: 120, speed: .38, damage: 100, score: 170, rageAt: .45, rageSpeed: .72 },
+      Z10: { name: '橄欖球殭屍', emoji: '🏈', hp: 1300, armor: 420, speed: .55, damage: 130, score: 360 },
+      Z11: { name: '氣球殭屍', emoji: '🎈', hp: 260, speed: .62, damage: 80, score: 210, flying: true },
+      Z12: { name: '小鬼殭屍', emoji: '👶', hp: 100, speed: .75, damage: 70, score: 90 },
+      Z13: { name: '礦工殭屍', emoji: '⛏️', hp: 500, speed: .58, damage: 120, score: 260, tunnel: true },
+      Z14: { name: '雪橇殭屍', emoji: '🛷', hp: 700, speed: .68, damage: 110, score: 300, iceResist: true },
+      Z15: { name: '巫師殭屍', emoji: '🧙', hp: 450, speed: .32, damage: 80, score: 320, ranged: true },
+      Z16: { name: '盾牌殭屍', emoji: '🛡️', hp: 900, armor: 700, speed: .28, damage: 120, score: 340 },
+      Z17: { name: '毒霧殭屍', emoji: '🧪', hp: 520, speed: .36, damage: 95, score: 300, poisonAura: true },
+      Z18: { name: '火焰殭屍', emoji: '🔥', hp: 480, speed: .44, damage: 140, score: 310, fireResist: true },
+      Z19: { name: '治療殭屍', emoji: '🩹', hp: 380, speed: .34, damage: 70, score: 330, healer: true },
+      Z20: { name: '王冠殭屍', emoji: '👑', hp: 2200, armor: 600, speed: .25, damage: 220, score: 900, boss: true }
     };
 
     function addWave(base, extra) {
@@ -781,6 +992,18 @@
           if (level >= 21 && wave % 5 === 0) pack.Z07 = 1 + Math.floor((level - 21) / 15);
           if (level >= 31 && wave % 4 === 1) pack.Z08 = 1 + Math.floor((level - 31) / 12);
           if (level >= 36 && (huge || wave % 6 === 0)) pack.Z06 = huge ? 1 + Math.floor((level - 36) / 8) : 1;
+          if (level >= 8 && wave % 3 === 1) pack.Z09 = 1 + Math.floor((level - 8) / 14);
+          if (level >= 14 && wave % 5 === 2) pack.Z11 = 1 + Math.floor((level - 14) / 16);
+          if (level >= 18 && wave % 4 === 2) pack.Z12 = 1 + Math.floor((level - 18) / 18);
+          if (level >= 22 && wave % 6 === 3) pack.Z10 = 1 + Math.floor((level - 22) / 16);
+          if (level >= 25 && wave % 5 === 3) pack.Z13 = 1 + Math.floor((level - 25) / 18);
+          if (level >= 28 && wave % 6 === 4) pack.Z14 = 1 + Math.floor((level - 28) / 18);
+          if (level >= 32 && wave % 5 === 4) pack.Z15 = 1 + Math.floor((level - 32) / 20);
+          if (level >= 34 && wave % 7 === 2) pack.Z16 = 1 + Math.floor((level - 34) / 18);
+          if (level >= 38 && wave % 5 === 0) pack.Z17 = 1 + Math.floor((level - 38) / 16);
+          if (level >= 40 && wave % 6 === 1) pack.Z18 = 1 + Math.floor((level - 40) / 16);
+          if (level >= 43 && wave % 7 === 4) pack.Z19 = 1 + Math.floor((level - 43) / 16);
+          if (level >= 48 && huge) pack.Z20 = 1;
         }
 
         waves.push(huge ? addWave(pack, {
@@ -789,7 +1012,14 @@
           Z03: level >= 12 ? 1 + Math.floor((level - 12) / 10) : 0,
           Z05: level >= 18 ? 1 + Math.floor((level - 18) / 14) : 0,
           Z06: level >= 38 ? 1 + Math.floor((level - 38) / 8) : 0,
-          Z08: level >= 34 ? 1 : 0
+          Z08: level >= 34 ? 1 : 0,
+          Z10: level >= 24 ? 1 + Math.floor((level - 24) / 15) : 0,
+          Z11: level >= 16 ? 1 + Math.floor((level - 16) / 18) : 0,
+          Z14: level >= 30 ? 1 + Math.floor((level - 30) / 15) : 0,
+          Z16: level >= 36 ? 1 + Math.floor((level - 36) / 14) : 0,
+          Z18: level >= 42 ? 1 : 0,
+          Z19: level >= 45 ? 1 : 0,
+          Z20: level >= 50 && wave === secondHuge ? 1 : 0
         }) : pack);
       }
       return { waves, hugeWaves: [firstHuge, secondHuge] };
@@ -1071,6 +1301,95 @@
       }
     }
 
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, ch => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[ch]));
+    }
+
+    function seconds(ms) {
+      return `${(ms / 1000).toFixed(ms % 1000 ? 1 : 0)}s`;
+    }
+
+    function describePlant(def) {
+      const lines = [];
+      if (def.kind === 'sun') lines.push(`每 ${seconds(def.produceInterval)} 產生 ${def.sunValue || 25} 陽光。`);
+      if (def.kind === 'shooter') lines.push(`直線射擊，每發造成 ${def.damage} 傷害${def.shots ? `，一次 ${def.shots} 發` : ''}。`);
+      if (def.kind === 'threepeater') lines.push(`同時攻擊上中下三列，每發造成 ${def.damage} 傷害。`);
+      if (def.kind === 'lobber') lines.push(`投擲攻擊，造成 ${def.damage} 傷害${def.splash ? `，並對附近造成 ${def.splash} 濺射傷害` : ''}。`);
+      if (def.kind === 'bomb') lines.push('放下 1 秒後自爆，攻擊放置格與上下左右一格。');
+      if (def.kind === 'rowBomb') lines.push('放下 1 秒後引燃整排，清除同列敵人。');
+      if (def.kind === 'wall') lines.push('高血量防禦植物，用來拖住敵人。');
+      if (def.kind === 'spike') lines.push(`攻擊踩在同格附近的地面敵人，每次 ${def.damage} 傷害。`);
+      if (def.kind === 'hypno') lines.push('被吃掉時催眠目標，直接處理正在啃食的敵人。');
+      if (def.kind === 'mine') lines.push(`需要 ${seconds(def.armTime)} 準備，觸發後對附近地面敵人造成 ${def.blastDamage} 傷害。`);
+      if (def.kind === 'chomper') lines.push('吞噬前方近距離敵人，但攻擊間隔較長。');
+      if (def.kind === 'star') lines.push('向鄰近三列發射星星，適合補側線火力。');
+      if (def.kind === 'magnet') lines.push('定期移除附近敵人的護甲。');
+      if (def.kind === 'aura') lines.push('加速周圍植物的攻擊節奏。');
+      if (def.kind === 'chain') lines.push(`連鎖電擊最多 ${def.chains} 個敵人，每個 ${def.damage} 傷害。`);
+      if (def.kind === 'boomerang') lines.push(`回力攻擊可穿透 ${def.pierce} 個敵人，每次 ${def.damage} 傷害。`);
+      if (def.kind === 'healer') lines.push(`每 ${seconds(def.attackInterval)} 治療附近受傷植物 ${def.heal} 生命。`);
+      if (def.kind === 'freezeAura') lines.push('週期性傷害並緩速周圍敵人。');
+      if (def.effect === 'slow') lines.push('附帶緩速。');
+      if (def.effect === 'burn') lines.push('附帶燃燒持續傷害。');
+      if (def.effect === 'poison') lines.push('附帶中毒持續傷害。');
+      if (def.effect === 'stun') lines.push('有短暫暈眩效果。');
+      if (def.effect === 'knockback') lines.push('命中時擊退敵人。');
+      if (def.pierce && !['boomerang'].includes(def.kind)) lines.push(`投射物可穿透 ${def.pierce} 個敵人。`);
+      if (def.scoreValue) lines.push(`同時提供少量分數收益。`);
+      return lines.join(' ');
+    }
+
+    function describeZombie(def) {
+      const lines = [];
+      if (def.armor) lines.push(`有 ${def.armor} 護甲，需先打掉護甲。`);
+      if (def.rageAt) lines.push('血量降低後會狂暴加速。');
+      if (def.flying) lines.push('飛行敵人，不會被尖刺與地雷命中。');
+      if (def.tunnel) lines.push('會從較靠近草坪的位置鑽出。');
+      if (def.iceResist) lines.push('抗冰，緩速效果無效。');
+      if (def.fireResist) lines.push('抗火，燃燒效果無效。');
+      if (def.ranged) lines.push('具備遠程騷擾能力，啃食節奏較慢但更安全。');
+      if (def.poisonAura) lines.push('會週期性毒傷附近植物。');
+      if (def.healer) lines.push('會治療附近其他敵人。');
+      if (def.boss) lines.push('Boss 級敵人，血量、護甲和傷害都很高。');
+      if (!lines.length) lines.push('標準敵人，穩定向左推進並啃食植物。');
+      return lines.join(' ');
+    }
+
+    function codexMeta(items) {
+      return items.filter(Boolean).map(item => `<span class="codex-pill">${escapeHtml(item)}</span>`).join('');
+    }
+
+    function renderEncyclopedia(type = 'plants') {
+      const grid = $('encyclopediaGrid');
+      const isPlants = type === 'plants';
+      $('plantCodexTab').classList.toggle('active', isPlants);
+      $('zombieCodexTab').classList.toggle('active', !isPlants);
+      const entries = isPlants ? PlantDefs : Object.entries(ZombieDefs).map(([id, def]) => ({ id, ...def }));
+      grid.innerHTML = entries.map(def => {
+        const meta = isPlants
+          ? codexMeta([`陽光 ${def.cost}`, `生命 ${def.hp}`, `CD ${seconds(def.cooldown)}`, def.attackInterval ? `攻速 ${seconds(def.attackInterval)}` : null])
+          : codexMeta([`生命 ${def.hp}`, def.armor ? `護甲 ${def.armor}` : null, `速度 ${def.speed}`, `傷害 ${def.damage}`, `分數 ${def.score}`]);
+        return `<article class="codex-card">
+          <div class="codex-title"><span class="codex-emoji">${escapeHtml(def.emoji)}</span><span class="codex-name">${escapeHtml(def.id)} ${escapeHtml(def.name)}</span></div>
+          <div class="codex-meta">${meta}</div>
+          <p class="codex-desc">${escapeHtml(isPlants ? describePlant(def) : describeZombie(def))}</p>
+        </article>`;
+      }).join('');
+    }
+
+    function openEncyclopedia(type = 'plants') {
+      renderEncyclopedia(type);
+      $('encyclopediaOverlay').classList.add('active');
+      audio.sfx('click');
+    }
+
+    function closeEncyclopedia() {
+      $('encyclopediaOverlay').classList.remove('active');
+      audio.sfx('click');
+    }
+
     function renderHand() {
       const hand = $('plantHand');
       hand.innerHTML = '';
@@ -1185,6 +1504,10 @@
         plant.exploding = true;
         setTimeout(() => explodePlant(plant), 1000);
       }
+      if (def.kind === 'rowBomb') {
+        plant.exploding = true;
+        setTimeout(() => explodeRow(plant), 1000);
+      }
       State.handPlant = null;
       audio.sfx(def.kind === 'bomb' ? 'wave' : 'plant');
       vibrate(40);
@@ -1205,6 +1528,13 @@
         const sameColRange = zombieCol === plant.col && Math.abs(z.row - plant.row) <= 1;
         if (sameRowRange || sameColRange) damageZombie(z, 999);
       });
+      removePlant(plant);
+    }
+
+    function explodeRow(plant) {
+      if (!State.plants.includes(plant)) return;
+      audio.sfx('boom');
+      State.zombies.filter(z => !z.dead && z.row === plant.row).forEach(z => damageZombie(z, 999));
       removePlant(plant);
     }
 
@@ -1244,10 +1574,10 @@
       const def = ZombieDefs[type];
       const row = Math.floor(Math.random() * ROWS);
       State.zombies.push({
-        id: uid('z'), type, row, x: 9.15 + Math.random() * 1.3,
+        id: uid('z'), type, row, x: def.tunnel ? 7.8 + Math.random() * .8 : 9.15 + Math.random() * 1.3,
         hp: def.hp, maxHp: def.hp, armor: def.armor || 0, maxArmor: def.armor || 0,
         speed: def.speed, damage: def.damage, state: 'walk', eatTimer: 0,
-        frozenUntil: 0, burnUntil: 0, dead: false
+        frozenUntil: 0, burnUntil: 0, poisonUntil: 0, stunUntil: 0, specialTimer: 0, dead: false
       });
       State.spawnedInWave++;
     }
@@ -1257,8 +1587,11 @@
       const row = rowOverride ?? plant.row;
       const type = def.projectile || 'pea';
       State.projectiles.push({
-        id: uid('b'), type, row, x: plant.col + .74, speed: 3.2, damage: def.damage || 20,
-        effect: type === 'ice' ? 'slow' : type === 'fire' ? 'burn' : null
+        id: uid('b'), type, row, x: plant.col + .74, speed: def.projectileSpeed || 3.2, damage: def.damage || 20,
+        effect: def.effect || (type === 'ice' || type === 'ice-melon' ? 'slow' : type === 'fire' ? 'burn' : null),
+        splash: def.splash || 0,
+        pierce: def.pierce || 1,
+        hitIds: []
       });
       audio.sfx(type === 'ice' ? 'freeze' : 'shoot');
     }
@@ -1304,27 +1637,83 @@
         const def = getPlantDef(plant.defId);
         if (def.kind === 'sun' && State.time - plant.lastProduce > def.produceInterval) {
           plant.lastProduce = State.time;
-          spawnSun(plant.col + .25, plant.row + .08, plant.row + .35);
+          spawnSun(plant.col + .25, plant.row + .08, plant.row + .35, def.sunValue || 25);
+          State.score += def.scoreValue || 0;
           audio.sfx('collect');
         }
-        if (['shooter', 'threepeater'].includes(def.kind)) {
+        const hasted = State.plants.some(p => getPlantDef(p.defId).aura === 'haste' && Math.abs(p.row - plant.row) <= 1 && Math.abs(p.col - plant.col) <= 1);
+        const interval = (def.attackInterval || 999999) * (hasted ? .75 : 1);
+        if (['shooter', 'threepeater', 'lobber', 'boomerang'].includes(def.kind)) {
           const hasTarget = State.zombies.some(z => !z.dead && z.row === plant.row && z.x > plant.col - .1);
-          if (hasTarget && State.time - plant.lastAttack > def.attackInterval) {
+          if (hasTarget && State.time - plant.lastAttack > interval) {
             plant.lastAttack = State.time;
             if (def.kind === 'threepeater') {
               [plant.row - 1, plant.row, plant.row + 1].filter(r => r >= 0 && r < ROWS).forEach(r => shoot(plant, r));
             } else {
               shoot(plant);
               if (def.shots === 2) setTimeout(() => shoot(plant), 180);
+              if (def.shots === 4) [120, 240, 360].forEach(delay => setTimeout(() => shoot(plant), delay));
             }
           }
         }
         if (def.kind === 'spike' && State.time - plant.lastAttack > def.attackInterval) {
-          const targets = State.zombies.filter(z => !z.dead && z.row === plant.row && Math.abs(z.x - plant.col) < .62);
+          const targets = State.zombies.filter(z => !z.dead && !ZombieDefs[z.type].flying && z.row === plant.row && Math.abs(z.x - plant.col) < .62);
           if (targets.length) {
             plant.lastAttack = State.time;
             targets.forEach(z => damageZombie(z, def.damage));
             audio.sfx('hit');
+          }
+        }
+        if (def.kind === 'mine' && State.time - plant.born > def.armTime) {
+          const target = State.zombies.find(z => !z.dead && !ZombieDefs[z.type].flying && z.row === plant.row && Math.abs(z.x - plant.col) < .55);
+          if (target) {
+            State.zombies.filter(z => !z.dead && z.row === plant.row && Math.abs(z.x - plant.col) < 1).forEach(z => damageZombie(z, def.blastDamage));
+            audio.sfx('boom');
+            removePlant(plant);
+          }
+        }
+        if (def.kind === 'chomper' && State.time - plant.lastAttack > interval) {
+          const target = State.zombies.find(z => !z.dead && !ZombieDefs[z.type].flying && z.row === plant.row && z.x >= plant.col - .15 && z.x <= plant.col + 1);
+          if (target) {
+            plant.lastAttack = State.time;
+            damageZombie(target, def.damage);
+            audio.sfx('hit');
+          }
+        }
+        if (def.kind === 'healer' && State.time - plant.lastAttack > interval) {
+          const allies = State.plants.filter(p => p.hp < p.maxHp && Math.abs(p.row - plant.row) <= 1 && Math.abs(p.col - plant.col) <= 1);
+          const ally = allies.sort((a, b) => (a.hp / a.maxHp) - (b.hp / b.maxHp))[0];
+          if (ally) {
+            plant.lastAttack = State.time;
+            ally.hp = Math.min(ally.maxHp, ally.hp + def.heal);
+          }
+        }
+        if (def.kind === 'freezeAura' && State.time - plant.lastAttack > interval) {
+          plant.lastAttack = State.time;
+          State.zombies.filter(z => !z.dead && Math.abs(z.row - plant.row) <= 1 && Math.abs(z.x - plant.col) <= 1.5)
+            .forEach(z => damageZombie(z, def.damage, 'slow'));
+        }
+        if (def.kind === 'magnet' && State.time - plant.lastAttack > interval) {
+          const target = State.zombies.find(z => !z.dead && z.armor > 0 && Math.abs(z.row - plant.row) <= 1 && Math.abs(z.x - plant.col) <= 4);
+          if (target) {
+            plant.lastAttack = State.time;
+            target.armor = 0;
+            audio.sfx('hit');
+          }
+        }
+        if (def.kind === 'chain' && State.time - plant.lastAttack > interval) {
+          const targets = State.zombies.filter(z => !z.dead && z.x > plant.col - .1).sort((a, b) => a.x - b.x).slice(0, def.chains);
+          if (targets.length) {
+            plant.lastAttack = State.time;
+            targets.forEach(z => damageZombie(z, def.damage));
+            audio.sfx('hit');
+          }
+        }
+        if (def.kind === 'star' && State.time - plant.lastAttack > interval) {
+          const targets = State.zombies.filter(z => !z.dead && Math.abs(z.row - plant.row) <= 2 && z.x > plant.col - .5);
+          if (targets.length) {
+            plant.lastAttack = State.time;
+            [plant.row - 1, plant.row, plant.row + 1].filter(r => r >= 0 && r < ROWS).forEach(r => shoot(plant, r));
           }
         }
       });
@@ -1335,14 +1724,35 @@
         if (z.dead) return;
         const def = ZombieDefs[z.type];
         const frozen = State.time < z.frozenUntil;
-        const speed = z.speed * (frozen ? .5 : 1);
+        const stunned = State.time < z.stunUntil;
+        const raging = def.rageAt && z.hp / z.maxHp < def.rageAt;
+        const speed = stunned ? 0 : (raging ? def.rageSpeed : z.speed) * (frozen ? .5 : 1);
         if (State.time < z.burnUntil) damageZombie(z, dt * .035);
+        if (State.time < z.poisonUntil) damageZombie(z, dt * .025);
+        z.specialTimer += dt;
+        if (def.healer && z.specialTimer > 1800) {
+          z.specialTimer = 0;
+          State.zombies.filter(other => !other.dead && other !== z && Math.abs(other.row - z.row) <= 1 && Math.abs(other.x - z.x) <= 1.5)
+            .forEach(other => other.hp = Math.min(other.maxHp, other.hp + 45));
+        }
+        if (def.poisonAura && z.specialTimer > 1200) {
+          z.specialTimer = 0;
+          State.plants.filter(p => Math.abs(p.row - z.row) <= 1 && Math.abs(p.col - z.x) <= 1)
+            .forEach(p => p.hp -= 20);
+        }
 
         const target = State.plants.find(p => p.row === z.row && Math.abs((p.col + .3) - z.x) < .38);
         if (target) {
+          const targetDef = getPlantDef(target.defId);
+          if (targetDef.kind === 'hypno') {
+            damageZombie(z, z.maxHp);
+            removePlant(target);
+            return;
+          }
           z.state = 'eat';
           z.eatTimer += dt;
-          if (z.eatTimer > 500) {
+          const biteDelay = def.ranged && Math.abs((target.col + .3) - z.x) < 2.5 ? 850 : 500;
+          if (z.eatTimer > biteDelay) {
             z.eatTimer = 0;
             target.hp -= def.damage * .5;
             audio.sfx('bite');
@@ -1362,17 +1772,24 @@
           }
         }
       });
+      State.plants.filter(p => p.hp <= 0).forEach(removePlant);
     }
 
     function updateProjectiles(dt) {
       State.projectiles.forEach(p => {
         p.x += p.speed * dt / 1000;
         const hit = State.zombies
-          .filter(z => !z.dead && z.row === p.row && z.x > p.x - .22 && z.x < p.x + .36)
+          .filter(z => !z.dead && z.row === p.row && !p.hitIds.includes(z.id) && z.x > p.x - .22 && z.x < p.x + .36)
           .sort((a, b) => a.x - b.x)[0];
         if (hit) {
           damageZombie(hit, p.damage, p.effect);
-          p.hit = true;
+          p.hitIds.push(hit.id);
+          if (p.splash) {
+            State.zombies.filter(z => !z.dead && z !== hit && Math.abs(z.row - hit.row) <= 1 && Math.abs(z.x - hit.x) <= 1)
+              .forEach(z => damageZombie(z, p.splash, p.effect));
+          }
+          p.pierce--;
+          p.hit = p.pierce <= 0;
           audio.sfx('hit');
         }
       });
@@ -1388,12 +1805,16 @@
         remaining -= used;
       }
       z.hp -= remaining;
-      if (effect === 'slow') z.frozenUntil = Math.max(z.frozenUntil, State.time + 3000);
-      if (effect === 'burn') z.burnUntil = Math.max(z.burnUntil, State.time + 2200);
+      const def = ZombieDefs[z.type];
+      if (effect === 'slow' && !def.iceResist) z.frozenUntil = Math.max(z.frozenUntil, State.time + 3000);
+      if (effect === 'burn' && !def.fireResist) z.burnUntil = Math.max(z.burnUntil, State.time + 2200);
+      if (effect === 'poison') z.poisonUntil = Math.max(z.poisonUntil, State.time + 3500);
+      if (effect === 'stun') z.stunUntil = Math.max(z.stunUntil, State.time + 900);
+      if (effect === 'knockback') z.x = Math.min(COLS + 1.5, z.x + .35);
       if (z.hp <= 0) {
         z.dead = true;
         State.kills++;
-        State.score += ZombieDefs[z.type].score;
+        State.score += def.score;
         if (Math.random() < .28) spawnSun(z.x, z.row + .2, z.row + .2, Math.random() < .18 ? 50 : 25);
         audio.sfx('die');
         setTimeout(() => State.zombies = State.zombies.filter(item => item !== z), 650);
@@ -1518,6 +1939,10 @@
         buildPlantSelect();
         showScreen('select');
       });
+      $('encyclopediaBtn').addEventListener('click', () => { audio.init(); openEncyclopedia('plants'); });
+      $('plantCodexTab').addEventListener('click', () => { audio.sfx('click'); renderEncyclopedia('plants'); });
+      $('zombieCodexTab').addEventListener('click', () => { audio.sfx('click'); renderEncyclopedia('zombies'); });
+      $('closeEncyclopediaBtn').addEventListener('click', closeEncyclopedia);
       $('settingsBtn').addEventListener('click', () => { audio.init(); openSettings(); });
       $('backMenuBtn').addEventListener('click', () => { audio.sfx('click'); showScreen('menu'); audio.startMusic('menu'); });
       $('startBattleBtn').addEventListener('click', () => {
@@ -1561,7 +1986,9 @@
           if (id) State.handPlant = id;
         }
       });
-      document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+      document.addEventListener('touchmove', e => {
+        if (State.phase === 'PLAYING') e.preventDefault();
+      }, { passive: false });
     }
 
     function pauseGame() {
