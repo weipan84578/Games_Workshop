@@ -134,7 +134,7 @@
     }
 
     .plant-select-screen {
-      align-items: center;
+      align-items: stretch;
       justify-content: center;
       padding: 18px;
       background: linear-gradient(180deg, #88d2f2 0 24%, #72a845 25% 100%);
@@ -143,6 +143,10 @@
     }
     .select-wrap {
       width: min(960px, 96vw);
+      max-height: calc(100dvh - 36px);
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
       color: #213916;
       text-align: center;
     }
@@ -157,6 +161,15 @@
       grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
       gap: 10px;
       margin: 14px 0;
+    }
+    .plant-list {
+      flex: 1 1 auto;
+      min-height: 220px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 4px;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
     }
     .select-card {
       min-height: 116px;
@@ -191,6 +204,14 @@
       background:
         linear-gradient(180deg, #78c7ed 0 18%, #9de3fb 18% 26%, #6faa3e 26% 100%);
     }
+    .game-screen.night {
+      background:
+        radial-gradient(circle at 80% 10%, #f7f0b6 0 4%, transparent 5%),
+        radial-gradient(circle at 15% 16%, rgba(255,255,255,.75) 0 1px, transparent 2px),
+        radial-gradient(circle at 30% 8%, rgba(255,255,255,.65) 0 1px, transparent 2px),
+        radial-gradient(circle at 62% 18%, rgba(255,255,255,.65) 0 1px, transparent 2px),
+        linear-gradient(180deg, #17294d 0 18%, #263d65 18% 26%, #355d35 26% 100%);
+    }
 
     .hud {
       position: relative;
@@ -208,6 +229,12 @@
       scrollbar-width: none;
     }
     .hud::-webkit-scrollbar { display: none; }
+    .plant-hand {
+      display: flex;
+      gap: 8px;
+      flex: 0 0 auto;
+      min-width: 0;
+    }
     .sun-count {
       display: inline-flex;
       align-items: center;
@@ -280,6 +307,26 @@
     }
     .icon-btn:disabled { opacity: .45; cursor: default; filter: grayscale(.35); }
     .icon-btn.active { outline: 3px solid #ffe261; }
+    .toggle-btn {
+      flex: 0 0 auto;
+      min-width: 92px;
+      height: 52px;
+      padding: 0 10px;
+      border-radius: 8px;
+      border: 3px solid #65461b;
+      background: linear-gradient(180deg, #6da6d9 0%, #356fa6 100%);
+      color: #fff;
+      font-family: var(--font-hud);
+      font-size: 13px;
+      cursor: pointer;
+      text-shadow: 0 2px rgba(0,0,0,.35);
+      box-shadow: 0 4px rgba(0,0,0,.25);
+      white-space: normal;
+    }
+    .toggle-btn.active {
+      background: linear-gradient(180deg, #7ec850 0%, #5a9e30 100%);
+      outline: 3px solid #ffe261;
+    }
 
     .playfield-shell {
       position: relative;
@@ -471,6 +518,11 @@
       font-size: calc(var(--cell) * .34);
       pointer-events: none;
       filter: drop-shadow(0 4px rgba(0,0,0,.25));
+      z-index: 8;
+    }
+    .mower.used {
+      opacity: .28;
+      filter: grayscale(1) drop-shadow(0 4px rgba(0,0,0,.18));
     }
 
     .toast {
@@ -512,6 +564,11 @@
       color: #213916;
       text-align: center;
       box-shadow: 0 18px 36px rgba(0,0,0,.32);
+      overflow: hidden;
+    }
+    .dialog .game-btn {
+      max-width: 100%;
+      min-width: 0;
     }
     .dialog h2 {
       margin: 0 0 12px;
@@ -542,6 +599,17 @@
       font-family: var(--font-hud);
     }
     .settings-row input { width: 100%; }
+
+    .level-select {
+      min-height: 46px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 3px solid #3a7e10;
+      background: #fff1b8;
+      color: #203716;
+      font-family: var(--font-hud);
+      font-size: 16px;
+    }
 
     .encyclopedia-dialog {
       width: min(94vw, 1040px);
@@ -708,16 +776,69 @@
 
     @media (max-width: 767px) {
       :root {
-        --zombie-zone: min(18vw, 72px);
-        --cell: min(calc((100vw - var(--zombie-zone) - 12px) / 9), calc((100dvh - 98px) / 5), 56px);
+        --zombie-zone: min(16vw, 58px);
+        --cell: min(calc((100vw - var(--zombie-zone) - 12px) / 9), calc((100dvh - 154px) / 5), 52px);
       }
-      .hud { height: 78px; flex-basis: 78px; padding: 6px; gap: 6px; }
+      .dialog {
+        width: calc(100vw - 28px);
+        padding: 16px;
+      }
+      .dialog .game-btn {
+        width: 100%;
+        margin: 7px 0;
+        padding-inline: 12px;
+      }
+      .plant-select-screen { padding: 8px; align-items: stretch; }
+      .select-wrap { width: 100%; max-height: calc(100dvh - 16px); }
+      .select-title { margin-bottom: 8px; font-size: clamp(24px, 7vw, 34px); }
+      .level-select { min-height: 40px; max-width: 150px; font-size: 13px; }
+      .plant-list {
+        grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+        gap: 8px;
+        margin: 8px 0;
+        min-height: 0;
+      }
+      .chosen-list { margin: 8px auto; grid-template-columns: repeat(6, minmax(42px, 1fr)); }
+      .slot { height: 50px; }
+      .slot .plant-face { font-size: 28px; }
+      .hud {
+        height: 140px;
+        flex-basis: 140px;
+        padding: 6px;
+        gap: 4px;
+        align-content: flex-start;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+      }
+      .hud > :not(.plant-hand) { order: 1; }
+      .plant-hand {
+        order: 2;
+        flex: 1 0 100%;
+        width: 100%;
+        height: 66px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-bottom: 3px;
+        scrollbar-width: none;
+      }
+      .plant-hand::-webkit-scrollbar { display: none; }
       .plant-card { flex-basis: 58px; width: 58px; height: 62px; }
       .plant-card .plant-face { font-size: 24px; }
-      .sun-count { min-width: 98px; height: 54px; padding: 0 8px; }
-      .icon-btn { flex-basis: 48px; width: 48px; height: 48px; }
+      .sun-count { min-width: 82px; height: 44px; padding: 0 7px; font-size: 18px; }
+      .timer, .wave-label { font-size: 12px; line-height: 1; }
+      .hud-spacer { display: none; }
+      .icon-btn { flex-basis: 40px; width: 40px; height: 40px; font-size: 18px; }
+      .toggle-btn { min-width: 64px; height: 40px; font-size: 10px; padding: 0 5px; }
+      .mower {
+        left: 0;
+        width: calc(var(--cell) * .5);
+        height: calc(var(--cell) * .36);
+        font-size: calc(var(--cell) * .28);
+        opacity: .9;
+      }
       .sun-ball { width: 52px; height: 52px; }
-      .plant-list { grid-template-columns: repeat(auto-fit, minmax(78px, 1fr)); gap: 8px; }
       .select-card { min-height: 104px; padding: 6px; }
       .select-card strong { font-size: 12px; }
       #encyclopediaOverlay { align-items: stretch; justify-content: stretch; padding: 0; }
@@ -762,14 +883,16 @@
     @media (max-width: 896px) and (orientation: landscape) {
       :root {
         --zombie-zone: min(26vw, 210px);
-        --cell: min(calc((100vw - var(--zombie-zone) - 80px) / 9), calc((100dvh - 68px) / 5), 62px);
+        --cell: min(calc((100vw - var(--zombie-zone) - 80px) / 9), calc((100dvh - 78px) / 5), 62px);
       }
-      .hud { height: 58px; flex-basis: 58px; }
+      .hud { height: 68px; flex-basis: 68px; flex-wrap: nowrap; align-items: center; overflow-x: auto; }
+      .plant-hand { order: 0; flex: 0 0 auto; width: auto; overflow: visible; }
       .plant-card { height: 48px; flex-basis: 58px; }
       .plant-card .plant-face { font-size: 22px; line-height: 26px; }
       .plant-card .plant-cost { height: 16px; font-size: 10px; }
       .sun-count { height: 46px; }
       .icon-btn { width: 42px; height: 42px; flex-basis: 42px; font-size: 20px; }
+      .toggle-btn { height: 42px; min-width: 72px; font-size: 11px; }
       .toast { top: 70px; }
     }
   </style>
@@ -805,6 +928,7 @@
         <p class="subtitle">種下防線，守住五條草坪</p>
         <button class="game-btn" id="newGameBtn">開始遊戲</button>
         <button class="game-btn secondary" id="continueBtn">繼續遊戲</button>
+        <button class="game-btn secondary" id="practiceBtn">練習</button>
         <button class="game-btn secondary" id="encyclopediaBtn">圖鑑</button>
         <button class="game-btn secondary" id="settingsBtn">音效設定</button>
       </div>
@@ -816,6 +940,7 @@
         <div style="display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
           <button class="icon-btn" id="prevLevelBtn" title="上一關">‹</button>
           <div class="wave-label" id="selectLevelLabel" style="color:#213916;text-shadow:0 1px rgba(255,255,255,.6);">Level 1 / 50</div>
+          <select class="level-select" id="levelJumpSelect" aria-label="選擇關卡"></select>
           <button class="icon-btn" id="nextLevelSelectBtn" title="下一關">›</button>
         </div>
         <div id="plantList" class="plant-list"></div>
@@ -828,8 +953,9 @@
     <section id="gameScreen" class="screen game-screen">
       <header class="hud">
         <div class="sun-count"><span>☀</span><span id="sunCount">150</span></div>
-        <div id="plantHand" style="display:flex;gap:8px;flex:0 0 auto;"></div>
+        <div id="plantHand" class="plant-hand"></div>
         <button class="icon-btn" id="shovelBtn" title="鏟子">♨</button>
+        <button class="toggle-btn" id="autoSunBtn" title="自動採集陽光">自動陽光 OFF</button>
         <div class="hud-spacer"></div>
         <div class="timer" id="timer">00:00</div>
         <div class="wave-label" id="waveLabel">Wave 0/5</div>
@@ -1178,6 +1304,8 @@
       suns: [],
       mowers: [],
       selectedPlants: ['P01', 'P02', 'P03', 'P05', 'P06', 'P08'],
+      practiceMode: false,
+      autoCollectSun: false,
       handPlant: null,
       shovel: false,
       paused: false,
@@ -1202,24 +1330,43 @@
     function uid(prefix) { return `${prefix}${State.nextId++}`; }
     function nowMs() { return performance.now(); }
     function getPlantDef(id) { return PlantDefs.find(p => p.id === id); }
+    function isNightLevel(level = State.level) { return level >= 35; }
+    function getNaturalSunInterval(level = State.level) { return isNightLevel(level) ? 14000 : 5500; }
+    function getFirstWaveDelay(level = State.level) { return isNightLevel(level) ? 60000 : 40000; }
     function getMaxUnlockedLevel() {
       const save = SaveSystem.load();
       return Math.min(MAX_LEVEL, Math.max(1, ...(save.unlockedLevels || [1])));
     }
+    function getSelectableMaxLevel() {
+      return State.practiceMode ? MAX_LEVEL : getMaxUnlockedLevel();
+    }
     function setSelectedLevel(level) {
-      State.level = Math.max(1, Math.min(getMaxUnlockedLevel(), level));
+      State.level = Math.max(1, Math.min(getSelectableMaxLevel(), level));
       updateLevelSelectUi();
     }
     function updateLevelSelectUi() {
-      const maxUnlocked = getMaxUnlockedLevel();
+      const maxUnlocked = getSelectableMaxLevel();
       const label = $('selectLevelLabel');
       const title = $('selectTitle');
       if (!label || !title) return;
-      title.textContent = `第 ${State.level} 關：選擇 6 種植物`;
-      label.textContent = `Level ${State.level} / ${MAX_LEVEL}`;
+      title.textContent = `${State.practiceMode ? '練習 ' : ''}第 ${State.level} 關：選擇 6 種植物`;
+      label.textContent = `Level ${State.level} / ${MAX_LEVEL}${State.practiceMode ? ' · Practice' : ''}`;
       $('prevLevelBtn').disabled = State.level <= 1;
       $('nextLevelSelectBtn').disabled = State.level >= maxUnlocked;
-      $('nextLevelSelectBtn').title = State.level >= maxUnlocked ? '尚未解鎖下一關' : '下一關';
+      $('nextLevelSelectBtn').title = State.level >= maxUnlocked && !State.practiceMode ? '尚未解鎖下一關' : '下一關';
+      const select = $('levelJumpSelect');
+      if (select) {
+        const optionCount = select.options.length;
+        const needsRebuild = optionCount !== maxUnlocked || select.dataset.practice !== String(State.practiceMode);
+        if (needsRebuild) {
+          select.innerHTML = Array.from({ length: maxUnlocked }, (_, i) => {
+            const level = i + 1;
+            return `<option value="${level}">第 ${level} 關${isNightLevel(level) ? ' · 夜晚' : ' · 白天'}</option>`;
+          }).join('');
+          select.dataset.practice = String(State.practiceMode);
+        }
+        select.value = String(State.level);
+      }
     }
     function showScreen(name) {
       Object.values(screens).forEach(s => s.classList.remove('active'));
@@ -1418,6 +1565,14 @@
       $('sunCount').textContent = State.sun;
     }
 
+    function updateAutoSunButton() {
+      const btn = $('autoSunBtn');
+      if (!btn) return;
+      btn.classList.toggle('active', State.autoCollectSun);
+      btn.textContent = State.autoCollectSun ? '自動陽光 ON' : '自動陽光 OFF';
+      btn.title = State.autoCollectSun ? '點擊關閉自動採集陽光' : '點擊開啟自動採集陽光';
+    }
+
     function resetGame(level = 1) {
       State.level = level;
       State.wave = 0;
@@ -1432,19 +1587,22 @@
       State.mowers = Array.from({ length: ROWS }, (_, row) => ({ row, active: true, x: -.7, rolling: false }));
       State.handPlant = null;
       State.shovel = false;
+      State.autoCollectSun = false;
       State.paused = false;
       State.won = false;
       State.gameOver = false;
       State.kills = 0;
       State.lastNaturalSun = 0;
-      State.nextWaveAt = 40000;
+      State.nextWaveAt = getFirstWaveDelay(level);
       State.pendingSpawns = [];
       State.cooldowns = {};
       entityLayer.innerHTML = '';
+      $('gameScreen').classList.toggle('night', isNightLevel(level));
       $('pauseOverlay').classList.remove('active');
       $('resultOverlay').classList.remove('active');
       buildBoard();
       renderHand();
+      updateAutoSunButton();
       audio.startMusic('battle');
     }
 
@@ -1539,7 +1697,7 @@
     }
 
     function spawnSun(x, y, targetY, value = 25) {
-      State.suns.push({ id: uid('s'), x, y, targetY, value, born: State.time, collected: false, lifetime: 10000 });
+      State.suns.push({ id: uid('s'), x, y, targetY, value, born: State.time, collected: false, lifetime: 10000, autoAt: State.time + 450 });
     }
 
     function collectSun(sun) {
@@ -1600,7 +1758,7 @@
       if (State.phase !== 'PLAYING' || State.paused || State.gameOver) return;
       State.time += dt;
 
-      if (State.time - State.lastNaturalSun > 5500) {
+      if (State.time - State.lastNaturalSun > getNaturalSunInterval()) {
         State.lastNaturalSun = State.time;
         spawnSun(Math.random() * 7.8 + .5, -0.5, Math.random() * 3.8 + .45);
       }
@@ -1824,6 +1982,7 @@
     function updateSuns() {
       State.suns.forEach(s => {
         if (s.y < s.targetY) s.y += .012;
+        if (State.autoCollectSun && !s.collected && State.time >= s.autoAt) collectSun(s);
       });
       State.suns = State.suns.filter(s => !s.collected && State.time - s.born < s.lifetime);
     }
@@ -1845,7 +2004,7 @@
         State.won = true;
         State.gameOver = true;
         State.score += Math.max(0, 3000 - Math.floor(State.time / 100));
-        SaveSystem.recordScore(State.level, State.score);
+        if (!State.practiceMode) SaveSystem.recordScore(State.level, State.score);
         showResult(true);
       }
     }
@@ -1876,8 +2035,8 @@
       const els = [];
 
       State.mowers.forEach(m => {
-        if (!m.active && !m.rolling) return;
-        els.push(`<div class="mower" style="top:calc(var(--cell) * ${m.row} + var(--cell) * .28); transform:translateX(calc(var(--cell) * ${m.x}))">⚙️</div>`);
+        const parkedX = m.active ? Math.max(-.55, m.x) : 0;
+        els.push(`<div class="mower ${m.active || m.rolling ? '' : 'used'}" style="top:calc(var(--cell) * ${m.row} + var(--cell) * .28); transform:translateX(calc(var(--cell) * ${m.rolling ? m.x : parkedX}))">⚙️</div>`);
       });
 
       State.plants.forEach(p => {
@@ -1928,6 +2087,7 @@
     function bindUi() {
       $('newGameBtn').addEventListener('click', () => {
         audio.init(); audio.sfx('click'); audio.startMusic('menu');
+        State.practiceMode = false;
         State.level = 1;
         State.selectedPlants = ['P01', 'P02', 'P03', 'P05', 'P06', 'P08'];
         buildPlantSelect();
@@ -1935,7 +2095,16 @@
       });
       $('continueBtn').addEventListener('click', () => {
         audio.init(); audio.sfx('click');
+        State.practiceMode = false;
         State.level = getMaxUnlockedLevel();
+        buildPlantSelect();
+        showScreen('select');
+      });
+      $('practiceBtn').addEventListener('click', () => {
+        audio.init(); audio.sfx('click'); audio.startMusic('menu');
+        State.practiceMode = true;
+        State.level = 1;
+        State.selectedPlants = ['P01', 'P02', 'P03', 'P05', 'P06', 'P08'];
         buildPlantSelect();
         showScreen('select');
       });
@@ -1953,6 +2122,7 @@
       });
       $('prevLevelBtn').addEventListener('click', () => { audio.sfx('click'); setSelectedLevel(State.level - 1); });
       $('nextLevelSelectBtn').addEventListener('click', () => { audio.sfx('click'); setSelectedLevel(State.level + 1); });
+      $('levelJumpSelect').addEventListener('change', (e) => { audio.sfx('click'); setSelectedLevel(Number(e.target.value)); });
       $('shovelBtn').addEventListener('click', () => {
         State.shovel = !State.shovel;
         State.handPlant = null;
@@ -1960,6 +2130,11 @@
         ghost.textContent = State.shovel ? '♨' : '';
         audio.sfx('click');
         renderHand();
+      });
+      $('autoSunBtn').addEventListener('click', () => {
+        State.autoCollectSun = !State.autoCollectSun;
+        updateAutoSunButton();
+        audio.sfx('click');
       });
       $('pauseBtn').addEventListener('click', pauseGame);
       $('resumeBtn').addEventListener('click', resumeGame);
