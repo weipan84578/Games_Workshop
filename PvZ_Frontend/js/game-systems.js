@@ -142,10 +142,28 @@ function updateZombies(dt) {
       State.plants.filter(p => Math.abs(p.row - z.row) <= 1 && Math.abs(p.col - z.x) <= 1)
         .forEach(p => p.hp -= 20);
     }
+    if (def.dancer && !z.summoned && z.x < COLS - .4) {
+      z.summoned = true;
+      [
+        { row: z.row - 1, x: z.x },
+        { row: z.row + 1, x: z.x },
+        { row: z.row, x: z.x - .75 },
+        { row: z.row, x: z.x + .75 }
+      ].filter(pos => pos.row >= 0 && pos.row < ROWS)
+        .forEach(pos => createZombie('Z01', pos.row, Math.min(COLS + 1, Math.max(.2, pos.x))));
+      audio.sfx('wave');
+    }
 
     const target = State.plants.find(p => p.row === z.row && Math.abs((p.col + .3) - z.x) < .38);
     if (target) {
       const targetDef = getPlantDef(target.defId);
+      if (def.jumper && !z.jumped && !targetDef.tall) {
+        z.jumped = true;
+        z.x = target.col - .55;
+        z.state = 'walk';
+        audio.sfx('wave');
+        return;
+      }
       if (targetDef.kind === 'hypno') {
         damageZombie(z, z.maxHp);
         removePlant(target);
@@ -166,8 +184,12 @@ function updateZombies(dt) {
     }
     if (z.x < -.35) {
       const mower = State.mowers[z.row];
-      if (mower && mower.active && !mower.rolling) {
+      if (mower?.rolling) {
+        return;
+      }
+      if (mower && mower.active) {
         mower.rolling = true;
+        mower.active = false;
         audio.sfx('mower');
       } else {
         loseGame();
@@ -200,14 +222,19 @@ function updateProjectiles(dt) {
 
 function damageZombie(z, amount, effect = null) {
   if (z.dead) return;
+  const def = ZombieDefs[z.type];
+  let adjustedAmount = amount;
+  if (def.damageTakenMultiplier) adjustedAmount *= def.damageTakenMultiplier;
+  if (def.fireWeak && effect === 'burn') adjustedAmount *= 1.5;
+  if (def.iceWeak && effect === 'slow') adjustedAmount *= 1.5;
   let remaining = amount;
+  remaining = adjustedAmount;
   if (z.armor > 0) {
     const used = Math.min(z.armor, remaining);
     z.armor -= used;
     remaining -= used;
   }
   z.hp -= remaining;
-  const def = ZombieDefs[z.type];
   if (effect === 'slow' && !def.iceResist) z.frozenUntil = Math.max(z.frozenUntil, State.time + 3000);
   if (effect === 'burn' && !def.fireResist) z.burnUntil = Math.max(z.burnUntil, State.time + 2200);
   if (effect === 'poison') z.poisonUntil = Math.max(z.poisonUntil, State.time + 3500);
@@ -279,6 +306,7 @@ function render() {
   const els = [];
 
   State.mowers.forEach(m => {
+    if (!m.active && !m.rolling) return;
     const parkedX = m.active ? Math.max(-.55, m.x) : 0;
     els.push(`<div class="mower ${m.active || m.rolling ? '' : 'used'}" style="top:calc(var(--cell) * ${m.row} + var(--cell) * .28); transform:translateX(calc(var(--cell) * ${m.rolling ? m.x : parkedX}))">⚙️</div>`);
   });
@@ -286,8 +314,9 @@ function render() {
   State.plants.forEach(p => {
     const def = getPlantDef(p.defId);
     const hp = Math.max(0, p.hp / p.maxHp * 100);
+    const plantEmoji = def.kind === 'mine' && State.time - p.born >= def.armTime ? (def.readyEmoji || def.emoji) : def.emoji;
     els.push(`<div class="plant ${p.exploding ? 'attacking' : ''}" style="left:calc(var(--cell) * ${p.col} + var(--cell) * .09);top:calc(var(--cell) * ${p.row} + var(--cell) * .08)">
-      <div class="plant-hp"><span style="width:${hp}%"></span></div>${def.emoji}
+      <div class="plant-hp"><span style="width:${hp}%"></span></div>${plantEmoji}
     </div>`);
   });
 
@@ -318,4 +347,3 @@ function render() {
     });
   });
 }
-

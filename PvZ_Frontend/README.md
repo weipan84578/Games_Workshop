@@ -1,12 +1,12 @@
-# Garden Defenders Frontend
+# Garden Defenders 前端說明
 
-Plants-vs-Zombies style browser game built with HTML, CSS, and vanilla JavaScript.
+這是一個類 Plants vs. Zombies 的瀏覽器遊戲，使用 HTML、CSS 與 Vanilla JavaScript 製作，不需要建置流程。
 
-## Run
+## 執行方式
 
-Open `index.html` directly in a browser. No build step or dev server is required.
+直接用瀏覽器開啟 `index.html` 即可遊玩。
 
-## File Structure
+## 目錄結構
 
 ```text
 PvZ_Frontend/
@@ -25,116 +25,119 @@ PvZ_Frontend/
 └─ README.md
 ```
 
-## Responsibilities
+## 檔案職責
 
 ### `index.html`
 
-Contains the static DOM structure only:
+只保留靜態 HTML 結構與外部檔案引用，包含：
 
-- Main menu
-- Plant selection screen
-- Game HUD and lawn board container
-- Pause, result, settings, and encyclopedia overlays
-- CSS and JavaScript file references
+- 主選單
+- 植物選擇畫面
+- 遊戲 HUD 與草坪容器
+- 暫停、結算、設定、圖鑑等覆蓋視窗
+- `css/styles.css` 與各個 `js/*.js` 的引用
 
 ### `css/styles.css`
 
-Contains all visual styling and responsive layout rules:
+集中管理所有樣式與 RWD：
 
-- Menu, plant selection, HUD, board, entities, overlays, encyclopedia
-- Plant, zombie, projectile, sun, mower, and animation styles
-- Mobile and landscape RWD rules
+- 主選單、植物選擇、HUD、棋盤、覆蓋視窗、圖鑑
+- 植物、殭屍、投射物、陽光、防線車等視覺樣式
+- CSS 動畫
+- 手機直向、手機橫向與桌面版排版
 
 ### `js/data.js`
 
-Contains static game data and generated level data:
+集中管理靜態資料與關卡產生：
 
-- Global constants: rows, columns, max level, save key
-- `PlantDefs`: 30 plant definitions
-- `ZombieDefs`: 20 zombie/enemy definitions
-- 50-level wave generator
-- Day/night level metadata through generated level behavior
+- 全域常數，例如棋盤行列、最高關卡、最多可攜帶植物數
+- `PlantDefs`：植物資料
+- `ZombieDefs`：殭屍與敵人資料
+- 50 關波次產生器
+- 白天/夜晚關卡使用的資料基礎
 
 ### `js/save-system.js`
 
-Owns persistence through `localStorage`:
+負責 `localStorage` 存檔：
 
-- Default save data
-- Load/save helpers
-- High score recording
-- Formal progression unlocks
+- 預設存檔資料
+- 讀取與寫入
+- 高分紀錄
+- 正式模式的關卡解鎖
 
-Practice mode does not record score or unlock formal progression.
+注意：練習模式不會寫入高分，也不會解鎖正式進度。
 
 ### `js/audio.js`
 
-Owns Web Audio API behavior:
+負責 Web Audio API：
 
-- Audio graph setup
-- Master/music/SFX volume control
-- Procedural sound effects
-- Menu and battle music loops
+- 音訊節點初始化
+- 主音量、音樂音量、音效音量
+- 程式生成音效
+- 主選單與戰鬥音樂
 
 ### `js/state.js`
 
-Owns shared runtime state and common helpers:
+負責共享狀態與通用工具：
 
-- `State`
-- DOM references
-- Current phase, selected level, selected plants, entities, timers
-- Day/night helpers
-- Level selection helpers
-- Common UI helpers such as toast, vibration, and time formatting
+- `State` 遊戲狀態
+- DOM 快取參照
+- 遊戲階段、目前關卡、波次、陽光、已選植物、場上物件
+- 白天/夜晚判斷
+- 關卡選擇上限
+- Toast、震動、時間格式化等工具
 
 ### `js/ui.js`
 
-Owns UI construction and player interaction:
+負責 UI 建立與玩家互動：
 
-- Board construction
-- Plant selection list and selected slots
-- Encyclopedia rendering
-- HUD plant cards
-- Auto-sun toggle display
-- Plant placement and shovel removal
-- Sun collection
-- Wave spawn scheduling
-- Zombie/projectile creation helpers
+- 建立棋盤格
+- 植物選擇清單
+- 已選植物欄位
+- 圖鑑內容
+- HUD 植物卡
+- 自動陽光按鈕狀態
+- 植物放置
+- 鏟子移除植物
+- 陽光收集
+- 波次生成排程
+- 建立殭屍與投射物
 
 ### `js/game-systems.js`
 
-Owns the game simulation and rendering:
+負責遊戲模擬與畫面渲染：
 
-- Main update pipeline
-- Plant behavior
-- Zombie behavior
-- Projectile collision
-- Sun lifetime and optional auto-collection
-- Lawnmower behavior
-- Win/lose checks
-- DOM rendering for plants, zombies, projectiles, suns, and mowers
+- 每幀更新流程
+- 植物行為
+- 殭屍行為
+- 投射物碰撞
+- 陽光生命週期與自動採集
+- 防線車行為
+- 勝利與失敗判定
+- 植物、殭屍、投射物、陽光、防線車的 DOM 渲染
 
 ### `js/main.js`
 
-Owns startup and event wiring:
+負責啟動與事件綁定：
 
-- `requestAnimationFrame` game loop
-- Main menu buttons
-- Practice mode entry
-- Plant selection navigation
-- Shovel and auto-sun controls
-- Pause/result/settings overlays
-- Initial board, plant selection, and first render setup
+- `requestAnimationFrame` 主迴圈
+- 主選單按鈕
+- 練習模式入口
+- 植物選擇頁關卡切換
+- 鏟子與自動陽光按鈕
+- 暫停、結算、設定視窗
+- 初始化棋盤、植物選擇與第一次渲染
 
-## Script Load Order
+## JavaScript 載入順序
 
-The scripts are classic browser scripts and depend on load order:
+目前使用傳統瀏覽器 script，不是 ES module，因此載入順序很重要：
 
-1. `data.js`
-2. `save-system.js`
-3. `audio.js`
-4. `state.js`
-5. `ui.js`
-6. `game-systems.js`
-7. `main.js`
+1. `js/data.js`
+2. `js/save-system.js`
+3. `js/audio.js`
+4. `js/state.js`
+5. `js/ui.js`
+6. `js/game-systems.js`
+7. `js/main.js`
 
-Keep this order in `index.html` unless the code is converted to ES modules.
+除非之後改成 ES modules，否則不要任意調整這個順序。

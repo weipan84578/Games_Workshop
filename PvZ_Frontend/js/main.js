@@ -38,7 +38,10 @@ function bindUi() {
   $('settingsBtn').addEventListener('click', () => { audio.init(); openSettings(); });
   $('backMenuBtn').addEventListener('click', () => { audio.sfx('click'); showScreen('menu'); audio.startMusic('menu'); });
   $('startBattleBtn').addEventListener('click', () => {
-    if (State.selectedPlants.length !== 6) { toast('請選滿 6 種植物'); return; }
+    if (State.selectedPlants.length < 1 || State.selectedPlants.length > MAX_SELECTED_PLANTS) {
+      toast(`請選擇 1 到 ${MAX_SELECTED_PLANTS} 種植物`);
+      return;
+    }
     audio.init(); audio.sfx('click');
     resetGame(State.level);
     showScreen('game');
@@ -79,8 +82,9 @@ function bindUi() {
   });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape' && State.phase === 'PLAYING') State.paused ? resumeGame() : pauseGame();
-    if (e.key >= '1' && e.key <= '6') {
-      const id = State.selectedPlants[Number(e.key) - 1];
+    const keySlots = { '1': 0, '2': 1, '3': 2, '4': 3, '5': 4, '6': 5, '7': 6, '8': 7, '9': 8, '0': 9, '-': 10, '=': 11 };
+    if (Object.prototype.hasOwnProperty.call(keySlots, e.key)) {
+      const id = State.selectedPlants[keySlots[e.key]];
       if (id) State.handPlant = id;
     }
   });

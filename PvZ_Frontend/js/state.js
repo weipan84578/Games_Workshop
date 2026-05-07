@@ -57,7 +57,7 @@ function updateLevelSelectUi() {
   const label = $('selectLevelLabel');
   const title = $('selectTitle');
   if (!label || !title) return;
-  title.textContent = `${State.practiceMode ? '練習 ' : ''}第 ${State.level} 關：選擇 6 種植物`;
+  title.textContent = `${State.practiceMode ? '練習 ' : ''}第 ${State.level} 關：選擇最多 ${MAX_SELECTED_PLANTS} 種植物`;
   label.textContent = `Level ${State.level} / ${MAX_LEVEL}${State.practiceMode ? ' · Practice' : ''}`;
   $('prevLevelBtn').disabled = State.level <= 1;
   $('nextLevelSelectBtn').disabled = State.level >= maxUnlocked;
@@ -95,4 +95,3 @@ function formatTime(ms) {
   const sec = Math.floor(ms / 1000);
   return `${String(Math.floor(sec / 60)).padStart(2, '0')}:${String(sec % 60).padStart(2, '0')}`;
 }
-

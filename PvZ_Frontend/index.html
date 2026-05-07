@@ -45,7 +45,7 @@
 
     <section id="plantSelect" class="screen plant-select-screen">
       <div class="select-wrap">
-        <h2 class="select-title" id="selectTitle">選擇 6 種植物</h2>
+        <h2 class="select-title" id="selectTitle">選擇最多 12 種植物</h2>
         <div style="display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
           <button class="icon-btn" id="prevLevelBtn" title="上一關">‹</button>
           <div class="wave-label" id="selectLevelLabel" style="color:#213916;text-shadow:0 1px rgba(255,255,255,.6);">Level 1 / 50</div>
@@ -65,9 +65,6 @@
         <div id="plantHand" class="plant-hand"></div>
         <button class="icon-btn" id="shovelBtn" title="鏟子">♨</button>
         <button class="toggle-btn" id="autoSunBtn" title="自動採集陽光">自動陽光 OFF</button>
-        <div class="hud-spacer"></div>
-        <div class="timer" id="timer">00:00</div>
-        <div class="wave-label" id="waveLabel">Wave 0/5</div>
         <button class="icon-btn" id="pauseBtn" title="暫停">Ⅱ</button>
       </header>
       <main class="playfield-shell">
@@ -78,6 +75,10 @@
           <div class="ghost" id="ghost"></div>
         </div>
       </main>
+      <div class="battle-status" id="battleStatus">
+        <span class="timer" id="timer">00:00</span>
+        <span class="wave-label" id="waveLabel">Wave 0/5</span>
+      </div>
       <div class="toast" id="toast"></div>
     </section>
 

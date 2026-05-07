@@ -41,15 +41,15 @@ function toggleSelectPlant(id) {
   audio.sfx('click');
   const exists = State.selectedPlants.includes(id);
   if (exists) State.selectedPlants = State.selectedPlants.filter(x => x !== id);
-  else if (State.selectedPlants.length < 6) State.selectedPlants.push(id);
-  else toast('最多選 6 種植物');
+  else if (State.selectedPlants.length < MAX_SELECTED_PLANTS) State.selectedPlants.push(id);
+  else toast(`最多選 ${MAX_SELECTED_PLANTS} 種植物`);
   buildPlantSelect();
 }
 
 function renderChosen() {
   const chosen = $('chosenList');
   chosen.innerHTML = '';
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < MAX_SELECTED_PLANTS; i++) {
     const slot = document.createElement('div');
     slot.className = 'slot';
     const def = getPlantDef(State.selectedPlants[i]);
@@ -72,14 +72,14 @@ function describePlant(def) {
   const lines = [];
   if (def.kind === 'sun') lines.push(`每 ${seconds(def.produceInterval)} 產生 ${def.sunValue || 25} 陽光。`);
   if (def.kind === 'shooter') lines.push(`直線射擊，每發造成 ${def.damage} 傷害${def.shots ? `，一次 ${def.shots} 發` : ''}。`);
-  if (def.kind === 'threepeater') lines.push(`同時攻擊上中下三列，每發造成 ${def.damage} 傷害。`);
+  if (def.kind === 'threepeater') lines.push(`同時攻擊上、中、下三列，每發造成 ${def.damage} 傷害。`);
   if (def.kind === 'lobber') lines.push(`投擲攻擊，造成 ${def.damage} 傷害${def.splash ? `，並對附近造成 ${def.splash} 濺射傷害` : ''}。`);
   if (def.kind === 'bomb') lines.push('放下 1 秒後自爆，攻擊放置格與上下左右一格。');
   if (def.kind === 'rowBomb') lines.push('放下 1 秒後引燃整排，清除同列敵人。');
-  if (def.kind === 'wall') lines.push('高血量防禦植物，用來拖住敵人。');
+  if (def.kind === 'wall') lines.push(def.tall ? '高血量防禦植物，可阻擋撐竿殭屍跳躍。' : '高血量防禦植物，用來拖住敵人。');
   if (def.kind === 'spike') lines.push(`攻擊踩在同格附近的地面敵人，每次 ${def.damage} 傷害。`);
   if (def.kind === 'hypno') lines.push('被吃掉時催眠目標，直接處理正在啃食的敵人。');
-  if (def.kind === 'mine') lines.push(`需要 ${seconds(def.armTime)} 準備，觸發後對附近地面敵人造成 ${def.blastDamage} 傷害。`);
+  if (def.kind === 'mine') lines.push(`需要 ${seconds(def.armTime)} 準備，準備中與已準備完成的圖案不同；觸發後對附近地面敵人造成 ${def.blastDamage} 傷害。`);
   if (def.kind === 'chomper') lines.push('吞噬前方近距離敵人，但攻擊間隔較長。');
   if (def.kind === 'star') lines.push('向鄰近三列發射星星，適合補側線火力。');
   if (def.kind === 'magnet') lines.push('定期移除附近敵人的護甲。');
@@ -105,7 +105,12 @@ function describeZombie(def) {
   if (def.flying) lines.push('飛行敵人，不會被尖刺與地雷命中。');
   if (def.tunnel) lines.push('會從較靠近草坪的位置鑽出。');
   if (def.iceResist) lines.push('抗冰，緩速效果無效。');
+  if (def.fireWeak) lines.push('被火焰攻擊時受到 1.5 倍傷害。');
   if (def.fireResist) lines.push('抗火，燃燒效果無效。');
+  if (def.iceWeak) lines.push('被冰凍攻擊時受到 1.5 倍傷害。');
+  if (def.jumper) lines.push('會跳過第一次遇到的植物，但無法跳過高大堅果。');
+  if (def.dancer) lines.push('只會發動一次召喚，在上下左右召喚普通殭屍。');
+  if (def.damageTakenMultiplier) lines.push('受到任何植物傷害減半。');
   if (def.ranged) lines.push('具備遠程騷擾能力，啃食節奏較慢但更安全。');
   if (def.poisonAura) lines.push('會週期性毒傷附近植物。');
   if (def.healer) lines.push('會治療附近其他敵人。');
@@ -355,13 +360,19 @@ function makeWaveSpawns() {
 function spawnZombie(type) {
   const def = ZombieDefs[type];
   const row = Math.floor(Math.random() * ROWS);
+  createZombie(type, row, def.tunnel ? 7.8 + Math.random() * .8 : 9.15 + Math.random() * 1.3);
+  State.spawnedInWave++;
+}
+
+function createZombie(type, row, x) {
+  const def = ZombieDefs[type];
   State.zombies.push({
-    id: uid('z'), type, row, x: def.tunnel ? 7.8 + Math.random() * .8 : 9.15 + Math.random() * 1.3,
+    id: uid('z'), type, row, x,
     hp: def.hp, maxHp: def.hp, armor: def.armor || 0, maxArmor: def.armor || 0,
     speed: def.speed, damage: def.damage, state: 'walk', eatTimer: 0,
-    frozenUntil: 0, burnUntil: 0, poisonUntil: 0, stunUntil: 0, specialTimer: 0, dead: false
+    frozenUntil: 0, burnUntil: 0, poisonUntil: 0, stunUntil: 0, specialTimer: 0,
+    jumped: false, summoned: false, dead: false
   });
-  State.spawnedInWave++;
 }
 
 function shoot(plant, rowOverride = null) {
