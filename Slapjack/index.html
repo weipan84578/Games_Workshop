@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Slapjack</title>
+  <style>
+    :root {
+      --color-primary: #c62828;
+      --color-primary-dark: #8e0000;
+      --color-secondary: #1b5e20;
+      --color-secondary-dark: #003300;
+      --color-bg-table: #2e7d32;
+      --color-bg-ui: #171828;
+      --color-bg-card: #ffffff;
+      --color-text-primary: #ffffff;
+      --color-text-secondary: #d7dde0;
+      --color-text-card-red: #cc0000;
+      --color-text-card-black: #1a1a1a;
+      --color-success: #43a047;
+      --color-danger: #e53935;
+      --color-warning: #fb8c00;
+      --color-info: #1e88e5;
+      --font-display: clamp(40px, 8vw, 64px);
+      --font-heading: clamp(26px, 5vw, 40px);
+      --font-btn-lg: clamp(22px, 4vw, 28px);
+      --font-btn-sm: clamp(18px, 3.5vw, 24px);
+      --font-setting: clamp(20px, 3.5vw, 24px);
+      --font-body: clamp(16px, 2.5vw, 20px);
+      --font-card-rank: clamp(12px, 2vw, 16px);
+      --font-card-suit-corner: clamp(10px, 1.8vw, 13px);
+      --font-card-suit-center: clamp(22px, 4vw, 32px);
+      --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #0d1216;
+      color: var(--color-text-primary);
+      font-family: "Segoe UI", "Noto Sans TC", system-ui, -apple-system, sans-serif;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      min-height: 44px;
+      border: 0;
+      border-radius: 8px;
+      color: var(--color-text-primary);
+      cursor: pointer;
+      transition: transform 160ms ease, filter 160ms ease, opacity 160ms ease;
+      touch-action: manipulation;
+    }
+
+    button:active {
+      transform: translateY(1px) scale(0.99);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+      transform: none;
+    }
+
+    .screen {
+      position: fixed;
+      inset: 0;
+      display: none;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+    }
+
+    .screen.is-active {
+      display: flex;
+    }
+
+    .title-screen,
+    .settings-screen,
+    .rules-screen,
+    .end-screen {
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background:
+        radial-gradient(circle at 18% 22%, rgba(255,255,255,0.11), transparent 20%),
+        linear-gradient(145deg, #165024 0%, #203041 52%, #121525 100%);
+    }
+
+    .title-inner,
+    .panel {
+      width: min(92vw, 560px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .game-title {
+      margin: 0;
+      font-size: var(--font-display);
+      line-height: 1;
+      text-align: center;
+      letter-spacing: 0;
+      text-shadow: 0 5px 18px rgba(0,0,0,0.45);
+    }
+
+    .subtitle {
+      margin: -4px 0 8px;
+      color: var(--color-text-secondary);
+      font-size: clamp(18px, 3vw, 24px);
+    }
+
+    .primary-btn,
+    .secondary-btn,
+    .danger-btn {
+      width: min(100%, 280px);
+      padding: 0 24px;
+      font-weight: 800;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.28);
+    }
+
+    .primary-btn {
+      height: 70px;
+      background: linear-gradient(180deg, #e43d3d, var(--color-primary-dark));
+      font-size: var(--font-btn-lg);
+    }
+
+    .secondary-btn {
+      height: 60px;
+      background: linear-gradient(180deg, #2b8840, var(--color-secondary-dark));
+      font-size: var(--font-btn-sm);
+    }
+
+    .danger-btn {
+      height: 60px;
+      background: linear-gradient(180deg, #e46b37, #9b2f17);
+      font-size: var(--font-btn-sm);
+    }
+
+    .small-icon-btn {
+      width: 44px;
+      height: 44px;
+      display: inline-grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(0,0,0,0.26);
+      font-size: 22px;
+      box-shadow: none;
+    }
+
+    .panel {
+      align-items: stretch;
+      max-height: calc(100vh - 40px);
+      max-height: calc(100dvh - 40px);
+      overflow: auto;
+      padding: 24px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      background: rgba(14, 17, 30, 0.92);
+      box-shadow: 0 18px 48px rgba(0,0,0,0.34);
+    }
+
+    .panel h2 {
+      margin: 0;
+      font-size: 32px;
+      text-align: center;
+    }
+
+    .settings-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .setting-row {
+      display: grid;
+      grid-template-columns: 1fr minmax(140px, 190px);
+      align-items: center;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .settings-label {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .settings-value,
+    select {
+      width: 100%;
+      min-height: 44px;
+      padding: 8px 10px;
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 8px;
+      background: #262a3e;
+      color: var(--color-text-primary);
+      font-size: 20px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--color-primary);
+    }
+
+    .toggle {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: flex-end;
+      font-size: 20px;
+    }
+
+    .toggle input {
+      width: 24px;
+      height: 24px;
+      accent-color: var(--color-primary);
+    }
+
+    .panel-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .panel-actions .secondary-btn,
+    .panel-actions .primary-btn {
+      width: min(100%, 220px);
+      height: 56px;
+      font-size: 22px;
+    }
+
+    .rules-list {
+      margin: 0;
+      padding-left: 22px;
+      color: var(--color-text-secondary);
+      font-size: var(--font-body);
+      line-height: 1.55;
+    }
+
+    .game-screen {
+      flex-direction: column;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px) 0 0 / 64px 64px,
+        radial-gradient(circle at center, #398a3f 0%, var(--color-bg-table) 48%, #164a23 100%);
+    }
+
+    .game-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 8px;
+      padding: 12px clamp(10px, 2vw, 22px);
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 54px;
+      padding: 0 4px;
+    }
+
+    .status-text {
+      flex: 1;
+      min-width: 0;
+      color: var(--color-text-primary);
+      font-size: var(--font-body);
+      font-weight: 700;
+      text-align: center;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.35);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 8px;
+    }
+
+    .table-area {
+      position: relative;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-height: 0;
+    }
+
+    .ai-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      align-items: start;
+      min-height: 92px;
+    }
+
+    .player-badge {
+      min-height: 76px;
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,0.20);
+      border-radius: 8px;
+      background: rgba(7, 12, 16, 0.42);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+    }
+
+    .player-badge.is-current {
+      border-color: rgba(255,210,82,0.85);
+      box-shadow: 0 0 0 2px rgba(255,210,82,0.26), 0 4px 16px rgba(0,0,0,0.28);
+    }
+
+    .player-badge.is-eliminated {
+      opacity: 0.46;
+      filter: grayscale(0.8);
+    }
+
+    .player-name {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .player-count {
+      margin-top: 8px;
+      color: var(--color-text-secondary);
+      font-size: 16px;
+    }
+
+    .center-table {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 230px;
+      padding: 10px;
+    }
+
+    .pile-hit-area {
+      position: relative;
+      width: min(52vw, 360px);
+      min-width: 240px;
+      height: min(34vh, 260px);
+      min-height: 210px;
+      display: grid;
+      place-items: center;
+      border: 2px dashed rgba(255,255,255,0.28);
+      border-radius: 8px;
+      background: rgba(0,0,0,0.12);
+      transition: background-color 180ms ease, transform 180ms ease;
+    }
+
+    .pile-hit-area.is-clickable {
+      cursor: pointer;
+    }
+
+    .pile-hit-area.slap-success {
+      animation: slapSuccess 300ms ease;
+    }
+
+    .pile-hit-area.slap-fail {
+      animation: slapFail 300ms ease;
+    }
+
+    .pile-info {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      right: 12px;
+      color: rgba(255,255,255,0.84);
+      font-size: 18px;
+      font-weight: 700;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .pile-stack {
+      position: relative;
+      width: 118px;
+      height: 158px;
+    }
+
+    .pile-stack .card {
+      position: absolute;
+      left: 9px;
+      top: 9px;
+    }
+
+    .pile-stack .card:nth-child(1) {
+      transform: rotate(-8deg) translate(-4px, 7px);
+      opacity: 0.8;
+    }
+
+    .pile-stack .card:nth-child(2) {
+      transform: rotate(5deg) translate(4px, -2px);
+      opacity: 0.88;
+    }
+
+    .pile-stack .card:nth-child(3) {
+      transform: rotate(-1deg);
+    }
+
+    .turn-glow {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #ffe28a;
+      font-size: 16px;
+      font-weight: 800;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.45);
+    }
+
+    .human-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: end;
+      gap: 12px;
+      min-height: 118px;
+    }
+
+    .human-card-zone {
+      justify-self: center;
+      display: flex;
+      align-items: end;
+      gap: 12px;
+    }
+
+    .action-zone {
+      display: flex;
+      justify-content: center;
+      align-items: end;
+      gap: 12px;
+    }
+
+    .action-btn {
+      width: 200px;
+      height: 60px;
+      padding: 0 18px;
+      background: linear-gradient(180deg, #f54a4a, #8e0000);
+      font-size: 24px;
+      font-weight: 900;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.28);
+    }
+
+    .deal-btn {
+      background: linear-gradient(180deg, #4f995d, #174d21);
+    }
+
+    .human-info {
+      justify-self: stretch;
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .human-info .player-badge {
+      width: min(100%, 240px);
+    }
+
+    .card {
+      width: 100px;
+      height: 140px;
+      border-radius: 8px;
+      background: var(--color-bg-card);
+      border: 1.5px solid #d0d0d0;
+      box-shadow: 2px 3px 8px rgba(0,0,0,0.25);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
+
+    .card--red {
+      color: var(--color-text-card-red);
+    }
+
+    .card--black {
+      color: var(--color-text-card-black);
+    }
+
+    .card__corner {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.1;
+    }
+
+    .card__corner--top-left {
+      top: 5px;
+      left: 6px;
+    }
+
+    .card__corner--bottom-right {
+      right: 6px;
+      bottom: 5px;
+      transform: rotate(180deg);
+    }
+
+    .card__rank {
+      font-family: Georgia, serif;
+      font-size: var(--font-card-rank);
+      font-weight: 800;
+    }
+
+    .card__suit {
+      font-size: var(--font-card-suit-corner);
+      line-height: 1;
+    }
+
+    .card__suit-center {
+      font-size: var(--font-card-suit-center);
+      opacity: 0.88;
+    }
+
+    .card--back {
+      overflow: hidden;
+      background:
+        repeating-linear-gradient(45deg, rgba(255,255,255,0.06) 0 2px, transparent 2px 8px),
+        linear-gradient(135deg, #1a237e 0%, #283593 50%, #1a237e 100%);
+      border: 2px solid #5f70d6;
+    }
+
+    .card--back::after {
+      content: "";
+      width: 64%;
+      height: 64%;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-radius: 7px;
+      background:
+        linear-gradient(45deg, transparent 46%, rgba(255,255,255,0.36) 47% 53%, transparent 54%),
+        linear-gradient(-45deg, transparent 46%, rgba(255,255,255,0.36) 47% 53%, transparent 54%);
+    }
+
+    .mini-card {
+      width: 60px;
+      height: 84px;
+      border-radius: 6px;
+    }
+
+    .card--dealing {
+      animation: dealCard var(--deal-duration, 300ms) var(--ease-out) forwards;
+    }
+
+    .message-toast {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 5;
+      min-width: min(78vw, 420px);
+      padding: 14px 18px;
+      border-radius: 8px;
+      background: rgba(9, 12, 18, 0.86);
+      color: #fff;
+      font-size: 22px;
+      font-weight: 900;
+      text-align: center;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.38);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 180ms ease;
+    }
+
+    .message-toast.is-visible {
+      opacity: 1;
+    }
+
+    .end-screen .panel {
+      align-items: center;
+      text-align: center;
+    }
+
+    .end-title {
+      margin: 0;
+      font-size: 48px;
+      line-height: 1.1;
+    }
+
+    .end-detail {
+      margin: 0;
+      color: var(--color-text-secondary);
+      font-size: 22px;
+    }
+
+    @keyframes dealCard {
+      from {
+        transform: translateY(80px) scale(0.8);
+        opacity: 0.6;
+      }
+      to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slapSuccess {
+      0% { transform: scale(1); }
+      20% { transform: scale(1.08) rotate(-2deg); }
+      40% { transform: scale(1.06) rotate(2deg); }
+      70% { transform: scale(1.03) rotate(-1deg); }
+      100% { transform: scale(1) rotate(0); }
+    }
+
+    @keyframes slapFail {
+      0%, 100% { background-color: rgba(0,0,0,0.12); }
+      50% { background-color: rgba(220,0,0,0.38); }
+    }
+
+    @media (max-width: 767px) {
+      .title-inner,
+      .panel {
+        width: 100%;
+      }
+
+      .panel {
+        padding: 18px;
+      }
+
+      .setting-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .toggle {
+        justify-content: flex-start;
+      }
+
+      .game-wrapper {
+        gap: 6px;
+        padding: 8px;
+      }
+
+      .top-bar {
+        min-height: 46px;
+      }
+
+      .status-text {
+        font-size: 16px;
+      }
+
+      .ai-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+        min-height: 128px;
+      }
+
+      .player-badge {
+        min-height: 58px;
+        padding: 7px;
+      }
+
+      .player-name {
+        font-size: 16px;
+      }
+
+      .player-count {
+        margin-top: 3px;
+        font-size: 13px;
+      }
+
+      .center-table {
+        min-height: 190px;
+        padding: 4px;
+      }
+
+      .pile-hit-area {
+        width: min(88vw, 330px);
+        min-width: 0;
+        height: min(32vh, 220px);
+        min-height: 180px;
+      }
+
+      .pile-stack {
+        width: 94px;
+        height: 126px;
+      }
+
+      .pile-stack .card {
+        left: 7px;
+        top: 7px;
+      }
+
+      .card {
+        width: 80px;
+        height: 112px;
+        border-radius: 6px;
+      }
+
+      .mini-card {
+        width: 44px;
+        height: 62px;
+        border-radius: 5px;
+      }
+
+      .human-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        min-height: 156px;
+      }
+
+      .human-card-zone {
+        order: 1;
+        justify-content: center;
+      }
+
+      .action-zone {
+        order: 2;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+      }
+
+      .human-info {
+        order: 3;
+      }
+
+      .human-info .player-badge {
+        width: 100%;
+      }
+
+      .action-btn {
+        width: 100%;
+        height: 56px;
+        font-size: 22px;
+      }
+
+      .pile-info {
+        bottom: 8px;
+        font-size: 15px;
+      }
+
+      .turn-glow {
+        top: 8px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main id="titleScreen" class="screen title-screen is-active">
+    <section class="title-inner">
+      <h1 class="game-title">Slapjack</h1>
+      <p class="subtitle">Classic Card Game</p>
+      <button id="startBtn" class="primary-btn" type="button">開始遊戲</button>
+      <button id="settingsBtn" class="secondary-btn" type="button">設定</button>
+      <button id="rulesBtn" class="secondary-btn" type="button">規則說明</button>
+    </section>
+  </main>
+
+  <section id="settingsScreen" class="screen settings-screen">
+    <div class="panel" role="dialog" aria-labelledby="settingsTitle">
+      <h2 id="settingsTitle">設定</h2>
+      <div class="settings-grid">
+        <label class="setting-row">
+          <span class="settings-label">AI 人數</span>
+          <select id="aiCountInput" class="settings-value">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+        </label>
+        <label class="setting-row">
+          <span class="settings-label">AI 難度</span>
+          <select id="difficultyInput" class="settings-value">
+            <option value="easy">簡單</option>
+            <option value="normal">普通</option>
+            <option value="hard">困難</option>
+          </select>
+        </label>
+        <label class="setting-row">
+          <span class="settings-label">背景音量</span>
+          <input id="bgmInput" type="range" min="0" max="100" step="1">
+        </label>
+        <label class="setting-row">
+          <span class="settings-label">音效音量</span>
+          <input id="sfxInput" type="range" min="0" max="100" step="1">
+        </label>
+        <label class="setting-row">
+          <span class="settings-label">拍牌區域</span>
+          <select id="tapAreaInput" class="settings-value">
+            <option value="button">按鈕</option>
+            <option value="center">中央牌堆</option>
+          </select>
+        </label>
+        <label class="setting-row">
+          <span class="settings-label">連續三張可拍</span>
+          <span class="toggle"><input id="ruleConsecutiveInput" type="checkbox"> 開啟</span>
+        </label>
+        <label class="setting-row">
+          <span class="settings-label">2 可拍</span>
+          <span class="toggle"><input id="ruleTwosInput" type="checkbox"> 開啟</span>
+        </label>
+        <label class="setting-row">
+          <span class="settings-label">動畫速度</span>
+          <select id="animationSpeedInput" class="settings-value">
+            <option value="slow">慢</option>
+            <option value="normal">普通</option>
+            <option value="fast">快</option>
+          </select>
+        </label>
+      </div>
+      <div class="panel-actions">
+        <button id="saveSettingsBtn" class="primary-btn" type="button">儲存</button>
+        <button data-screen="titleScreen" class="secondary-btn nav-btn" type="button">返回</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="rulesScreen" class="screen rules-screen">
+    <div class="panel" role="dialog" aria-labelledby="rulesTitle">
+      <h2 id="rulesTitle">規則說明</h2>
+      <ol class="rules-list">
+        <li>玩家與 AI 輪流翻出手牌到中央牌堆。</li>
+        <li>最上方兩張同點數，或隔一張同點數時可以拍牌。</li>
+        <li>拍對的人收走中央牌堆，放到自己手牌底部。</li>
+        <li>拍錯會罰出一張手牌到中央牌堆。</li>
+        <li>沒有手牌的玩家淘汰，最後留下者獲勝。</li>
+      </ol>
+      <div class="panel-actions">
+        <button data-screen="titleScreen" class="secondary-btn nav-btn" type="button">返回</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="gameScreen" class="screen game-screen">
+    <div class="game-wrapper">
+      <header class="top-bar">
+        <button id="homeBtn" class="small-icon-btn" type="button" title="回主選單" aria-label="回主選單">⌂</button>
+        <div id="statusText" class="status-text">準備開始</div>
+        <div class="toolbar">
+          <button id="pauseBtn" class="small-icon-btn" type="button" title="暫停" aria-label="暫停">Ⅱ</button>
+          <button id="muteBtn" class="small-icon-btn" type="button" title="靜音" aria-label="靜音">♪</button>
+        </div>
+      </header>
+
+      <section class="table-area">
+        <div id="aiRow" class="ai-row"></div>
+
+        <div class="center-table">
+          <div id="turnGlow" class="turn-glow"></div>
+          <div id="pileHitArea" class="pile-hit-area" aria-label="中央牌堆">
+            <div id="pileStack" class="pile-stack"></div>
+            <div id="pileInfo" class="pile-info">中央牌堆：0 張</div>
+          </div>
+          <div id="messageToast" class="message-toast"></div>
+        </div>
+
+        <div class="human-row">
+          <div class="human-info">
+            <div id="humanBadge" class="player-badge"></div>
+          </div>
+          <div class="human-card-zone">
+            <div id="humanDeckCard" class="card card--back"></div>
+          </div>
+          <div class="action-zone">
+            <button id="dealBtn" class="action-btn deal-btn" type="button">翻牌</button>
+            <button id="slapBtn" class="action-btn" type="button">拍牌</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <section id="endScreen" class="screen end-screen">
+    <div class="panel">
+      <h2 id="endTitle" class="end-title">遊戲結束</h2>
+      <p id="endDetail" class="end-detail"></p>
+      <div class="panel-actions">
+        <button id="restartBtn" class="primary-btn" type="button">再玩一局</button>
+        <button data-screen="titleScreen" class="secondary-btn nav-btn" type="button">主選單</button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const DEFAULT_SETTINGS = {
+      aiCount: 2,
+      aiDifficulty: "normal",
+      bgmVolume: 0.45,
+      sfxVolume: 0.8,
+      tapArea: "button",
+      ruleConsecutive: false,
+      ruleTwos: false,
+      animationSpeed: "normal"
+    };
+
+    const STORAGE_KEY = "slapjack_settings";
+    const SUITS = [
+      { symbol: "♠", color: "black" },
+      { symbol: "♥", color: "red" },
+      { symbol: "♦", color: "red" },
+      { symbol: "♣", color: "black" }
+    ];
+    const RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+    const AI_AVATARS = ["◆", "●", "▲"];
+    const DIFFICULTY = {
+      easy: { min: 800, max: 1500, mistake: 0.15, playMin: 600, playMax: 1200 },
+      normal: { min: 400, max: 900, mistake: 0.05, playMin: 300, playMax: 700 },
+      hard: { min: 150, max: 450, mistake: 0.01, playMin: 150, playMax: 400 }
+    };
+    const SPEED_MS = { slow: 500, normal: 300, fast: 150 };
+
+    class AudioEngine {
+      constructor() {
+        this.AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        this.ctx = null;
+        this.bgmGain = null;
+        this.sfxGain = null;
+        this.bgmNodes = [];
+        this.bgmPulseTimer = null;
+        this.pendingBgm = false;
+        this.lastSettings = { ...DEFAULT_SETTINGS };
+        this.muted = false;
+      }
+
+      ensureContext() {
+        if (this.ctx || !this.AudioContextClass) return Boolean(this.ctx);
+        this.ctx = new this.AudioContextClass();
+        this.bgmGain = this.ctx.createGain();
+        this.sfxGain = this.ctx.createGain();
+        this.bgmGain.connect(this.ctx.destination);
+        this.sfxGain.connect(this.ctx.destination);
+        this.setVolumes(this.lastSettings);
+        return true;
+      }
+
+      unlock() {
+        if (!this.ensureContext()) return Promise.resolve(false);
+        const afterUnlock = () => {
+          if (this.pendingBgm && !this.bgmNodes.length) this.playBgm(this.lastSettings);
+          return true;
+        };
+        if (this.ctx.state === "suspended") {
+          return this.ctx.resume().then(afterUnlock).catch(() => false);
+        }
+        return Promise.resolve(afterUnlock());
+      }
+
+      ensureStarted(settings) {
+        this.lastSettings = { ...settings };
+        this.pendingBgm = true;
+        if (!this.ensureContext()) return Promise.resolve(false);
+        this.setVolumes(settings);
+        return this.unlock();
+      }
+
+      prepareBgm(settings) {
+        this.lastSettings = { ...settings };
+        this.pendingBgm = true;
+      }
+
+      setVolumes(settings) {
+        this.lastSettings = { ...settings };
+        if (!this.ctx) return;
+        this.bgmGain.gain.value = this.muted ? 0 : settings.bgmVolume;
+        this.sfxGain.gain.value = this.muted ? 0 : settings.sfxVolume;
+      }
+
+      setMuted(muted, settings) {
+        this.muted = muted;
+        this.setVolumes(settings);
+      }
+
+      playSfx(type) {
+        if (this.muted || !this.ensureContext()) return;
+        if (this.ctx.state === "suspended") {
+          this.unlock().then((ok) => {
+            if (ok) this.playSfx(type);
+          });
+          return;
+        }
+        const now = this.ctx.currentTime;
+        const gain = this.ctx.createGain();
+        gain.connect(this.sfxGain);
+
+        if (type === "button") {
+          this.tone(now, 520, 0.045, "triangle", gain, 0.18);
+          this.tone(now + 0.03, 780, 0.055, "sine", gain, 0.13);
+        } else if (type === "deal") {
+          this.tone(now, 180, 0.035, "triangle", gain, 0.16);
+          this.tone(now + 0.035, 130, 0.055, "sine", gain, 0.12);
+        } else if (type === "slap_success") {
+          this.tone(now, 220, 0.07, "square", gain, 0.18);
+          this.tone(now + 0.07, 440, 0.12, "triangle", gain, 0.16);
+        } else if (type === "slap_fail") {
+          this.tone(now, 95, 0.18, "sawtooth", gain, 0.16);
+        } else if (type === "win") {
+          [330, 415, 523, 659].forEach((freq, index) => {
+            this.tone(now + index * 0.08, freq, 0.15, "triangle", gain, 0.12);
+          });
+        } else if (type === "lose") {
+          [220, 175, 130].forEach((freq, index) => {
+            this.tone(now + index * 0.12, freq, 0.18, "sine", gain, 0.12);
+          });
+        }
+      }
+
+      tone(start, freq, duration, type, out, volume) {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, start);
+        gain.gain.setValueAtTime(0.0001, start);
+        gain.gain.exponentialRampToValueAtTime(volume, start + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+        osc.connect(gain);
+        gain.connect(out);
+        osc.start(start);
+        osc.stop(start + duration + 0.02);
+      }
+
+      playBgm(settings) {
+        this.lastSettings = { ...settings };
+        this.pendingBgm = true;
+        if (!this.ensureContext() || this.bgmNodes.length) return;
+        this.setVolumes(settings);
+        if (this.ctx.state === "suspended") {
+          this.unlock();
+          return;
+        }
+        this.pendingBgm = false;
+        const now = this.ctx.currentTime;
+        const freqs = [65.41, 98.00, 130.81, 138.59];
+        this.bgmNodes = freqs.map((freq, index) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = index < 2 ? "triangle" : "sine";
+          osc.frequency.value = freq;
+          gain.gain.value = index === 0 ? 0.13 : 0.055;
+          osc.connect(gain);
+          gain.connect(this.bgmGain);
+          osc.start(now);
+          return osc;
+        });
+        this.bgmPulseTimer = setInterval(() => {
+          if (!this.ctx || this.ctx.state !== "running" || this.muted) return;
+          const start = this.ctx.currentTime;
+          const pulseOut = this.ctx.createGain();
+          pulseOut.connect(this.bgmGain);
+          this.tone(start, 82.41, 0.08, "square", pulseOut, 0.14);
+          this.tone(start + 0.16, 82.41, 0.05, "square", pulseOut, 0.08);
+          this.tone(start + 0.32, 146.83, 0.05, "triangle", pulseOut, 0.07);
+        }, 640);
+      }
+
+      stopBgm() {
+        if (this.bgmPulseTimer) clearInterval(this.bgmPulseTimer);
+        this.bgmPulseTimer = null;
+        this.bgmNodes.forEach((node) => {
+          try { node.stop(); } catch (error) {}
+        });
+        this.bgmNodes = [];
+      }
+    }
+
+    const dom = {
+      screens: [...document.querySelectorAll(".screen")],
+      titleScreen: document.getElementById("titleScreen"),
+      settingsScreen: document.getElementById("settingsScreen"),
+      gameScreen: document.getElementById("gameScreen"),
+      endScreen: document.getElementById("endScreen"),
+      startBtn: document.getElementById("startBtn"),
+      settingsBtn: document.getElementById("settingsBtn"),
+      rulesBtn: document.getElementById("rulesBtn"),
+      saveSettingsBtn: document.getElementById("saveSettingsBtn"),
+      restartBtn: document.getElementById("restartBtn"),
+      homeBtn: document.getElementById("homeBtn"),
+      pauseBtn: document.getElementById("pauseBtn"),
+      muteBtn: document.getElementById("muteBtn"),
+      dealBtn: document.getElementById("dealBtn"),
+      slapBtn: document.getElementById("slapBtn"),
+      pileHitArea: document.getElementById("pileHitArea"),
+      pileStack: document.getElementById("pileStack"),
+      pileInfo: document.getElementById("pileInfo"),
+      aiRow: document.getElementById("aiRow"),
+      humanBadge: document.getElementById("humanBadge"),
+      humanDeckCard: document.getElementById("humanDeckCard"),
+      statusText: document.getElementById("statusText"),
+      turnGlow: document.getElementById("turnGlow"),
+      messageToast: document.getElementById("messageToast"),
+      endTitle: document.getElementById("endTitle"),
+      endDetail: document.getElementById("endDetail"),
+      aiCountInput: document.getElementById("aiCountInput"),
+      difficultyInput: document.getElementById("difficultyInput"),
+      bgmInput: document.getElementById("bgmInput"),
+      sfxInput: document.getElementById("sfxInput"),
+      tapAreaInput: document.getElementById("tapAreaInput"),
+      ruleConsecutiveInput: document.getElementById("ruleConsecutiveInput"),
+      ruleTwosInput: document.getElementById("ruleTwosInput"),
+      animationSpeedInput: document.getElementById("animationSpeedInput")
+    };
+
+    const audio = new AudioEngine();
+    const game = {
+      phase: "idle",
+      pile: [],
+      players: [],
+      currentTurn: 0,
+      turnCount: 0,
+      winner: null,
+      settings: loadSettings(),
+      aiTimer: null,
+      slapTimers: [],
+      toastTimer: null,
+      pausedBefore: "playing"
+    };
+
+    function safeLocalStorage(action, key, value) {
+      try {
+        if (action === "get") return localStorage.getItem(key);
+        if (action === "set") localStorage.setItem(key, value);
+      } catch (error) {
+        return null;
+      }
+      return null;
+    }
+
+    function loadSettings() {
+      const saved = safeLocalStorage("get", STORAGE_KEY);
+      if (!saved) return { ...DEFAULT_SETTINGS };
+      try {
+        return { ...DEFAULT_SETTINGS, ...JSON.parse(saved) };
+      } catch (error) {
+        return { ...DEFAULT_SETTINGS };
+      }
+    }
+
+    function saveSettings(settings) {
+      safeLocalStorage("set", STORAGE_KEY, JSON.stringify(settings));
+    }
+
+    function showScreen(id) {
+      dom.screens.forEach((screen) => screen.classList.toggle("is-active", screen.id === id));
+    }
+
+    function randomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function shuffle(cards) {
+      for (let i = cards.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [cards[i], cards[j]] = [cards[j], cards[i]];
+      }
+      return cards;
+    }
+
+    function createDeck() {
+      return SUITS.flatMap((suit) => RANKS.map((rank, index) => ({
+        suit: suit.symbol,
+        rank,
+        value: index + 1,
+        color: suit.color
+      })));
+    }
+
+    function createPlayers() {
+      const players = [{
+        id: "human",
+        name: "玩家",
+        type: "human",
+        hand: [],
+        isEliminated: false,
+        avatar: "★"
+      }];
+      for (let i = 0; i < game.settings.aiCount; i += 1) {
+        players.push({
+          id: `ai-${i + 1}`,
+          name: `AI-${i + 1}`,
+          type: "ai",
+          hand: [],
+          isEliminated: false,
+          avatar: AI_AVATARS[i]
+        });
+      }
+      return players;
+    }
+
+    function dealDeck(players) {
+      const deck = shuffle(createDeck());
+      deck.forEach((card, index) => players[index % players.length].hand.push(card));
+    }
+
+    function startGame() {
+      clearTimers();
+      audio.ensureStarted(game.settings);
+      game.phase = "playing";
+      game.pile = [];
+      game.players = createPlayers();
+      game.currentTurn = 0;
+      game.turnCount = 0;
+      game.winner = null;
+      dealDeck(game.players);
+      showScreen("gameScreen");
+      setStatus("你的回合，翻出一張牌");
+      render();
+      maybeScheduleAiTurn();
+    }
+
+    function clearTimers() {
+      if (game.aiTimer) clearTimeout(game.aiTimer);
+      game.aiTimer = null;
+      game.slapTimers.forEach((timer) => clearTimeout(timer));
+      game.slapTimers = [];
+    }
+
+    function currentPlayer() {
+      return game.players[game.currentTurn];
+    }
+
+    function nextActiveTurn(fromIndex) {
+      for (let offset = 1; offset <= game.players.length; offset += 1) {
+        const index = (fromIndex + offset) % game.players.length;
+        if (!game.players[index].isEliminated) return index;
+      }
+      return fromIndex;
+    }
+
+    function playTurn() {
+      if (game.phase !== "playing") return;
+      const player = currentPlayer();
+      if (!player || player.isEliminated) {
+        game.currentTurn = nextActiveTurn(game.currentTurn);
+        render();
+        maybeScheduleAiTurn();
+        return;
+      }
+      if (!player.hand.length) {
+        eliminateEmptyPlayers();
+        finishIfNeeded();
+        game.currentTurn = nextActiveTurn(game.currentTurn);
+        render();
+        maybeScheduleAiTurn();
+        return;
+      }
+
+      const card = player.hand.shift();
+      game.pile.push(card);
+      game.turnCount += 1;
+      audio.playSfx("deal");
+      game.currentTurn = nextActiveTurn(game.currentTurn);
+      setStatus(`${player.name} 翻出 ${card.rank}${card.suit}`);
+      animatePile();
+      eliminateEmptyPlayers();
+      render();
+      scheduleAiSlaps();
+
+      if (!finishIfNeeded()) {
+        maybeScheduleAiTurn();
+      }
+    }
+
+    function scheduleAiSlaps() {
+      game.slapTimers.forEach((timer) => clearTimeout(timer));
+      game.slapTimers = [];
+      const isValid = checkSlapConditions(game.pile, game.settings);
+      const config = DIFFICULTY[game.settings.aiDifficulty];
+      game.players.forEach((player) => {
+        if (player.type !== "ai" || player.isEliminated) return;
+        let willSlap = isValid;
+        if (!isValid && Math.random() < config.mistake) willSlap = true;
+        if (!willSlap) return;
+        const delay = randomInt(config.min, config.max);
+        const timer = setTimeout(() => slap(player.id), delay);
+        game.slapTimers.push(timer);
+      });
+    }
+
+    function maybeScheduleAiTurn() {
+      if (game.phase !== "playing") return;
+      const player = currentPlayer();
+      render();
+      if (!player || player.type !== "ai" || player.isEliminated) return;
+      const config = DIFFICULTY[game.settings.aiDifficulty];
+      setStatus(`${player.name} 思考中...`);
+      game.aiTimer = setTimeout(playTurn, randomInt(config.playMin, config.playMax));
+    }
+
+    function slap(playerId) {
+      if (game.phase !== "playing" || !game.pile.length) return;
+      const player = game.players.find((item) => item.id === playerId);
+      if (!player || player.isEliminated) return;
+      const isValid = checkSlapConditions(game.pile, game.settings);
+      const targetClass = isValid ? "slap-success" : "slap-fail";
+      dom.pileHitArea.classList.remove("slap-success", "slap-fail");
+      void dom.pileHitArea.offsetWidth;
+      dom.pileHitArea.classList.add(targetClass);
+
+      if (isValid) {
+        const wonCards = game.pile.splice(0);
+        player.hand.push(...wonCards);
+        clearTimers();
+        audio.playSfx("slap_success");
+        setStatus(`${player.name} 拍對，收走 ${wonCards.length} 張牌`);
+        showToast(`${player.name} 拍對！`);
+      } else {
+        const penalty = player.hand.shift();
+        if (penalty) game.pile.push(penalty);
+        audio.playSfx("slap_fail");
+        setStatus(`${player.name} 拍錯，罰出 1 張牌`);
+        showToast(`${player.name} 拍錯`);
+      }
+
+      eliminateEmptyPlayers();
+      render();
+      if (!finishIfNeeded()) maybeScheduleAiTurn();
+    }
+
+    function checkSlapConditions(pile, settings) {
+      if (pile.length < 2) return false;
+      const top = pile[pile.length - 1];
+      const second = pile[pile.length - 2];
+      if (top.value === second.value) return true;
+
+      if (pile.length >= 3) {
+        const third = pile[pile.length - 3];
+        if (top.value === third.value) return true;
+      }
+
+      if (settings.ruleConsecutive && pile.length >= 3) {
+        const third = pile[pile.length - 3];
+        const sorted = [top.value, second.value, third.value].sort((a, b) => a - b);
+        if (sorted[2] - sorted[1] === 1 && sorted[1] - sorted[0] === 1) return true;
+      }
+
+      if (settings.ruleTwos && top.value === 2) return true;
+      return false;
+    }
+
+    function eliminateEmptyPlayers() {
+      game.players.forEach((player) => {
+        if (!player.isEliminated && player.hand.length === 0 && game.pile.length > 0) {
+          player.isEliminated = true;
+          showToast(`${player.name} 淘汰`);
+        }
+      });
+    }
+
+    function finishIfNeeded() {
+      const active = game.players.filter((player) => !player.isEliminated);
+      if (active.length > 1) return false;
+      if (active.length === 1) {
+        endGame(active[0]);
+        return true;
+      }
+      const fallback = game.players.reduce((best, player) => player.hand.length > best.hand.length ? player : best, game.players[0]);
+      endGame(fallback);
+      return true;
+    }
+
+    function endGame(winner) {
+      clearTimers();
+      game.phase = "ended";
+      game.winner = winner;
+      audio.playSfx(winner.id === "human" ? "win" : "lose");
+      dom.endTitle.textContent = winner.id === "human" ? "你贏了" : `${winner.name} 獲勝`;
+      dom.endDetail.textContent = `總共翻了 ${game.turnCount} 張牌。`;
+      render();
+      showScreen("endScreen");
+    }
+
+    function render() {
+      renderPlayers();
+      renderPile();
+      renderControls();
+    }
+
+    function renderPlayers() {
+      dom.aiRow.innerHTML = "";
+      game.players.filter((player) => player.type === "ai").forEach((player) => {
+        const badge = document.createElement("div");
+        badge.className = "player-badge";
+        if (currentPlayer() && currentPlayer().id === player.id) badge.classList.add("is-current");
+        if (player.isEliminated) badge.classList.add("is-eliminated");
+        badge.innerHTML = `
+          <div class="player-name"><span>${player.avatar} ${player.name}</span><span>${player.isEliminated ? "淘汰" : ""}</span></div>
+          <div class="player-count">手牌 ${player.hand.length} 張</div>
+        `;
+        dom.aiRow.appendChild(badge);
+      });
+
+      const human = game.players.find((player) => player.id === "human");
+      const humanCurrent = currentPlayer() && currentPlayer().id === "human";
+      dom.humanBadge.className = "player-badge";
+      if (humanCurrent) dom.humanBadge.classList.add("is-current");
+      if (human && human.isEliminated) dom.humanBadge.classList.add("is-eliminated");
+      dom.humanBadge.innerHTML = `
+        <div class="player-name"><span>${human ? human.avatar : "★"} 玩家</span><span>${human && human.isEliminated ? "淘汰" : ""}</span></div>
+        <div class="player-count">手牌 ${human ? human.hand.length : 0} 張</div>
+      `;
+      dom.humanDeckCard.style.visibility = human && human.hand.length > 0 && !human.isEliminated ? "visible" : "hidden";
+      dom.turnGlow.textContent = currentPlayer() ? `${currentPlayer().name} 回合` : "";
+    }
+
+    function renderPile() {
+      dom.pileStack.innerHTML = "";
+      const visible = game.pile.slice(-3);
+      visible.forEach((card) => dom.pileStack.appendChild(createCardElement(card)));
+      dom.pileInfo.textContent = game.pile.length
+        ? `中央牌堆：${game.pile.length} 張`
+        : "中央牌堆：0 張";
+      dom.pileHitArea.classList.toggle("is-clickable", game.settings.tapArea === "center");
+    }
+
+    function renderControls() {
+      const player = currentPlayer();
+      const human = game.players.find((item) => item.id === "human");
+      const humanTurn = game.phase === "playing" && player && player.id === "human" && human && !human.isEliminated;
+      dom.dealBtn.disabled = !humanTurn || !human.hand.length;
+      dom.slapBtn.disabled = game.phase !== "playing" || !human || human.isEliminated || !game.pile.length;
+      dom.pauseBtn.textContent = game.phase === "paused" ? "▶" : "Ⅱ";
+      dom.muteBtn.textContent = audio.muted ? "×" : "♪";
+      document.documentElement.style.setProperty("--deal-duration", `${SPEED_MS[game.settings.animationSpeed]}ms`);
+    }
+
+    function createCardElement(card) {
+      const element = document.createElement("div");
+      element.className = `card card--${card.color} card--dealing`;
+      element.dataset.rank = card.rank;
+      element.dataset.suit = card.suit;
+      element.innerHTML = `
+        <div class="card__corner card__corner--top-left">
+          <span class="card__rank">${card.rank}</span>
+          <span class="card__suit">${card.suit}</span>
+        </div>
+        <div class="card__center">
+          <span class="card__suit-center">${card.suit}</span>
+        </div>
+        <div class="card__corner card__corner--bottom-right">
+          <span class="card__rank">${card.rank}</span>
+          <span class="card__suit">${card.suit}</span>
+        </div>
+      `;
+      return element;
+    }
+
+    function setStatus(text) {
+      dom.statusText.textContent = text;
+    }
+
+    function showToast(text) {
+      clearTimeout(game.toastTimer);
+      dom.messageToast.textContent = text;
+      dom.messageToast.classList.add("is-visible");
+      game.toastTimer = setTimeout(() => dom.messageToast.classList.remove("is-visible"), 950);
+    }
+
+    function animatePile() {
+      dom.pileHitArea.classList.remove("slap-success", "slap-fail");
+    }
+
+    function pauseToggle() {
+      if (game.phase === "playing") {
+        game.pausedBefore = "playing";
+        game.phase = "paused";
+        clearTimers();
+        setStatus("已暫停");
+      } else if (game.phase === "paused") {
+        game.phase = "playing";
+        setStatus(currentPlayer() && currentPlayer().id === "human" ? "你的回合" : "繼續遊戲");
+        scheduleAiSlaps();
+        maybeScheduleAiTurn();
+      }
+      renderControls();
+    }
+
+    function populateSettingsForm() {
+      dom.aiCountInput.value = String(game.settings.aiCount);
+      dom.difficultyInput.value = game.settings.aiDifficulty;
+      dom.bgmInput.value = String(Math.round(game.settings.bgmVolume * 100));
+      dom.sfxInput.value = String(Math.round(game.settings.sfxVolume * 100));
+      dom.tapAreaInput.value = game.settings.tapArea;
+      dom.ruleConsecutiveInput.checked = game.settings.ruleConsecutive;
+      dom.ruleTwosInput.checked = game.settings.ruleTwos;
+      dom.animationSpeedInput.value = game.settings.animationSpeed;
+    }
+
+    function readSettingsForm() {
+      game.settings = {
+        aiCount: Number(dom.aiCountInput.value),
+        aiDifficulty: dom.difficultyInput.value,
+        bgmVolume: Number(dom.bgmInput.value) / 100,
+        sfxVolume: Number(dom.sfxInput.value) / 100,
+        tapArea: dom.tapAreaInput.value,
+        ruleConsecutive: dom.ruleConsecutiveInput.checked,
+        ruleTwos: dom.ruleTwosInput.checked,
+        animationSpeed: dom.animationSpeedInput.value
+      };
+      saveSettings(game.settings);
+      audio.setVolumes(game.settings);
+    }
+
+    function goHome() {
+      clearTimers();
+      game.phase = "idle";
+      setStatus("準備開始");
+      showScreen("titleScreen");
+    }
+
+    dom.startBtn.addEventListener("click", startGame);
+    dom.restartBtn.addEventListener("click", startGame);
+    document.addEventListener("click", (event) => {
+      const button = event.target.closest("button");
+      if (!button || button.disabled) return;
+      audio.ensureStarted(game.settings).then(() => audio.playSfx("button"));
+    }, true);
+    dom.settingsBtn.addEventListener("click", () => {
+      populateSettingsForm();
+      showScreen("settingsScreen");
+    });
+    dom.rulesBtn.addEventListener("click", () => showScreen("rulesScreen"));
+    dom.saveSettingsBtn.addEventListener("click", () => {
+      readSettingsForm();
+      showToast("設定已儲存");
+      showScreen("titleScreen");
+    });
+    dom.homeBtn.addEventListener("click", goHome);
+    dom.pauseBtn.addEventListener("click", pauseToggle);
+    dom.muteBtn.addEventListener("click", () => {
+      audio.setMuted(!audio.muted, game.settings);
+      renderControls();
+    });
+    dom.dealBtn.addEventListener("click", playTurn);
+    dom.slapBtn.addEventListener("click", () => slap("human"));
+    dom.pileHitArea.addEventListener("click", () => {
+      if (game.settings.tapArea === "center") slap("human");
+    });
+    document.addEventListener("pointerdown", () => audio.ensureStarted(game.settings), { once: true });
+    document.querySelectorAll(".nav-btn").forEach((button) => {
+      button.addEventListener("click", () => showScreen(button.dataset.screen));
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.code === "Space") {
+        event.preventDefault();
+        if (currentPlayer() && currentPlayer().id === "human") playTurn();
+      }
+      if (event.code === "Enter") slap("human");
+    });
+
+    populateSettingsForm();
+    audio.prepareBgm(game.settings);
+  </script>
+</body>
+</html>

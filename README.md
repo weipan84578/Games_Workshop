@@ -49,3 +49,7 @@
 ### Blackjack
 
 - 21點
+
+### Slapjack
+
+- 心臟病(撲克牌)
