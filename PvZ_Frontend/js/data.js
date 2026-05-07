@@ -21,7 +21,7 @@ const PlantDefs = [
   { id: 'P14', name: '西瓜投手', emoji: '🍉', cost: 300, cooldown: 14000, hp: 300, kind: 'lobber', attackInterval: 2600, damage: 70, projectile: 'melon', splash: 45 },
   { id: 'P15', name: '冰西瓜', emoji: '🧊', cost: 425, cooldown: 18000, hp: 300, kind: 'lobber', attackInterval: 2800, damage: 65, projectile: 'ice-melon', splash: 40, effect: 'slow' },
   { id: 'P16', name: '辣椒', emoji: '🌶️', cost: 125, cooldown: 30000, hp: 999, kind: 'rowBomb', blastDamage: 999 },
-  { id: 'P17', name: '土豆地雷', emoji: '🥔', readyEmoji: '💣', cost: 25, cooldown: 22000, hp: 300, kind: 'mine', armTime: 8000, blastDamage: 700 },
+  { id: 'P17', name: '土豆地雷', emoji: '🧨', readyEmoji: '💣', cost: 25, cooldown: 22000, hp: 300, kind: 'mine', armTime: 8000, blastDamage: 700 },
   { id: 'P18', name: '南瓜罩', emoji: '🎃', cost: 125, cooldown: 20000, hp: 2500, kind: 'wall' },
   { id: 'P19', name: '大嘴花', emoji: '🌺', cost: 150, cooldown: 18000, hp: 400, kind: 'chomper', attackInterval: 6500, damage: 999 },
   { id: 'P20', name: '星星果', emoji: '⭐', cost: 125, cooldown: 9000, hp: 300, kind: 'star', attackInterval: 1700, damage: 18, projectile: 'star' },

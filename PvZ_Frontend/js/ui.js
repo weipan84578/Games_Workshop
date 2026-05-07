@@ -54,6 +54,11 @@ function renderChosen() {
     slot.className = 'slot';
     const def = getPlantDef(State.selectedPlants[i]);
     slot.innerHTML = def ? `<div class="plant-face">${def.emoji}</div>` : '';
+    if (def) {
+      slot.classList.add('filled');
+      slot.title = `取消選擇 ${def.name}`;
+      slot.addEventListener('click', () => toggleSelectPlant(def.id));
+    }
     chosen.appendChild(slot);
   }
 }
@@ -123,6 +128,14 @@ function codexMeta(items) {
   return items.filter(Boolean).map(item => `<span class="codex-pill">${escapeHtml(item)}</span>`).join('');
 }
 
+function codexPlantStates(def) {
+  if (def.kind !== 'mine') return '';
+  return `<div class="codex-states" aria-label="${escapeHtml(def.name)} 狀態圖示">
+    <span class="codex-state"><span class="codex-state-emoji">${escapeHtml(def.emoji)}</span><span>準備中</span></span>
+    <span class="codex-state"><span class="codex-state-emoji">${escapeHtml(def.readyEmoji || def.emoji)}</span><span>已準備</span></span>
+  </div>`;
+}
+
 function renderEncyclopedia(type = 'plants') {
   const grid = $('encyclopediaGrid');
   const isPlants = type === 'plants';
@@ -135,6 +148,7 @@ function renderEncyclopedia(type = 'plants') {
       : codexMeta([`生命 ${def.hp}`, def.armor ? `護甲 ${def.armor}` : null, `速度 ${def.speed}`, `傷害 ${def.damage}`, `分數 ${def.score}`]);
     return `<article class="codex-card">
       <div class="codex-title"><span class="codex-emoji">${escapeHtml(def.emoji)}</span><span class="codex-name">${escapeHtml(def.id)} ${escapeHtml(def.name)}</span></div>
+      ${isPlants ? codexPlantStates(def) : ''}
       <div class="codex-meta">${meta}</div>
       <p class="codex-desc">${escapeHtml(isPlants ? describePlant(def) : describeZombie(def))}</p>
     </article>`;

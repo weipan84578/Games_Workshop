@@ -191,6 +191,16 @@
       border-radius: 8px;
       background: rgba(255,255,255,.23);
     }
+    .slot.filled {
+      cursor: pointer;
+      border-style: solid;
+      background: rgba(255, 226, 97, .22);
+      transition: transform .12s, background .12s;
+    }
+    .slot.filled:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 226, 97, .34);
+    }
 
     .game-screen {
       flex-direction: column;
@@ -688,7 +698,8 @@
       background: rgba(255, 255, 255, .36);
       color: #203716;
       box-shadow: inset 0 1px rgba(255,255,255,.35);
-      overflow: visible;
+      overflow-x: hidden;
+      overflow-y: visible;
     }
     .codex-title {
       display: flex;
@@ -710,9 +721,38 @@
       overflow-wrap: anywhere;
       word-break: break-word;
     }
+    .codex-states {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 6px 0;
+      min-width: 0;
+    }
+    .codex-state {
+      display: inline-flex;
+      align-items: center;
+      flex: 1 1 108px;
+      min-width: 0;
+      gap: 5px;
+      max-width: 100%;
+      padding: 4px 7px;
+      border: 1px solid rgba(46, 93, 33, .28);
+      border-radius: 8px;
+      background: rgba(255, 226, 97, .22);
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+    .codex-state-emoji {
+      flex: 0 0 auto;
+      font-size: 22px;
+      line-height: 1;
+    }
     .codex-meta {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(74px, max-content));
+      grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
       gap: 6px;
       margin: 7px 0;
       font-family: var(--font-hud);
@@ -722,6 +762,7 @@
       overflow: hidden;
     }
     .codex-pill {
+      min-width: 0;
       max-width: 100%;
       padding: 4px 7px;
       border-radius: 999px;
@@ -733,6 +774,8 @@
     }
     .codex-desc {
       margin: 0;
+      max-width: 100%;
+      min-width: 0;
       line-height: 1.4;
       font-size: 14px;
       overflow-wrap: anywhere;
