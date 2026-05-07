@@ -89,7 +89,7 @@ function describePlant(def) {
   if (def.kind === 'star') lines.push('向鄰近三列發射星星，適合補側線火力。');
   if (def.kind === 'magnet') lines.push('定期移除附近敵人的護甲。');
   if (def.kind === 'aura') lines.push('加速周圍植物的攻擊節奏。');
-  if (def.kind === 'chain') lines.push(`連鎖電擊最多 ${def.chains} 個敵人，每個 ${def.damage} 傷害。`);
+  if (def.kind === 'chain') lines.push(`同列前方有敵人才會射出閃光，先命中最前方敵人，再往上或往下 ${def.chainRange || 1.75} 格內折射，最多命中 ${def.chains} 個；沒有可折射目標時只命中第一個敵人，每個 ${def.damage} 傷害。`);
   if (def.kind === 'boomerang') lines.push(`回力攻擊可穿透 ${def.pierce} 個敵人，每次 ${def.damage} 傷害。`);
   if (def.kind === 'healer') lines.push(`每 ${seconds(def.attackInterval)} 治療附近受傷植物 ${def.heal} 生命。`);
   if (def.kind === 'freezeAura') lines.push('週期性傷害並緩速周圍敵人。');
@@ -212,6 +212,7 @@ function resetGame(level = 1) {
   State.plants = [];
   State.zombies = [];
   State.projectiles = [];
+  State.effects = [];
   State.suns = [];
   State.mowers = Array.from({ length: ROWS }, (_, row) => ({ row, active: true, x: -.7, rolling: false }));
   State.handPlant = null;

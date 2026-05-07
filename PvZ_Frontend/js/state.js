@@ -9,6 +9,7 @@ const State = {
   plants: [],
   zombies: [],
   projectiles: [],
+  effects: [],
   suns: [],
   mowers: [],
   selectedPlants: ['P01', 'P02', 'P03', 'P05', 'P06', 'P08'],

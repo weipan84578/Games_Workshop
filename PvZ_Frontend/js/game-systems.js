@@ -28,6 +28,7 @@ function update(dt) {
   updatePlants(dt);
   updateZombies(dt);
   updateProjectiles(dt);
+  updateEffects();
   updateSuns(dt);
   updateMowers(dt);
   checkEnd();
@@ -104,10 +105,11 @@ function updatePlants(dt) {
       }
     }
     if (def.kind === 'chain' && State.time - plant.lastAttack > interval) {
-      const targets = State.zombies.filter(z => !z.dead && z.x > plant.col - .1).sort((a, b) => a.x - b.x).slice(0, def.chains);
+      const targets = selectChainTargets(plant, def);
       if (targets.length) {
         plant.lastAttack = State.time;
         targets.forEach(z => damageZombie(z, def.damage));
+        spawnChainEffect(plant, targets);
         audio.sfx('hit');
       }
     }
@@ -119,6 +121,47 @@ function updatePlants(dt) {
       }
     }
   });
+}
+
+function selectChainTargets(plant, def) {
+  const candidates = State.zombies
+    .filter(z => !z.dead && z.x > plant.col - .1)
+    .sort((a, b) => a.x - b.x);
+  const first = candidates.find(z => z.row === plant.row);
+  if (!first) return [];
+  const targets = [first];
+  const used = new Set([first.id]);
+  const range = def.chainRange || 1.75;
+  while (targets.length < def.chains) {
+    const from = targets[targets.length - 1];
+    const next = candidates
+      .filter(z => !used.has(z.id) && Math.abs(z.row - from.row) === 1 && Math.abs(z.x - from.x) <= range)
+      .sort((a, b) => {
+        const distA = Math.abs(a.row - from.row) + Math.abs(a.x - from.x);
+        const distB = Math.abs(b.row - from.row) + Math.abs(b.x - from.x);
+        return distA - distB || a.x - b.x;
+      })[0];
+    if (!next) break;
+    targets.push(next);
+    used.add(next.id);
+  }
+  return targets;
+}
+
+function spawnChainEffect(plant, targets) {
+  const points = [{ x: plant.col + .55, y: plant.row + .48 }]
+    .concat(targets.map(z => ({ x: z.x + .39, y: z.row + .5 })));
+  State.effects.push({
+    id: uid('fx'),
+    type: 'lightning',
+    born: State.time,
+    duration: 320,
+    points
+  });
+}
+
+function updateEffects() {
+  State.effects = State.effects.filter(effect => State.time - effect.born < effect.duration);
 }
 
 function updateZombies(dt) {
@@ -332,6 +375,22 @@ function render() {
 
   State.projectiles.forEach(p => {
     els.push(`<div class="projectile ${p.type}" style="left:calc(var(--cell) * ${p.x});top:calc(var(--cell) * ${p.row} + var(--cell) * .39)"></div>`);
+  });
+
+  State.effects.forEach(effect => {
+    if (effect.type !== 'lightning') return;
+    const age = Math.max(0, State.time - effect.born);
+    const opacity = Math.max(0, 1 - age / effect.duration);
+    const brightness = 1.2 + opacity * 1.2;
+    for (let i = 0; i < effect.points.length - 1; i++) {
+      const from = effect.points[i];
+      const to = effect.points[i + 1];
+      const dx = to.x - from.x;
+      const dy = to.y - from.y;
+      const length = Math.hypot(dx, dy);
+      const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+      els.push(`<div class="lightning-segment" style="left:calc(var(--cell) * ${from.x});top:calc(var(--cell) * ${from.y} - 4px);width:calc(var(--cell) * ${length});opacity:${opacity.toFixed(2)};filter:brightness(${brightness.toFixed(2)});transform:rotate(${angle}deg)"></div>`);
+    }
   });
 
   State.suns.forEach(s => {
