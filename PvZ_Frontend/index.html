@@ -1,0 +1,1612 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Garden Defenders</title>
+  <style>
+    :root {
+      --color-grass-light: #7bc143;
+      --color-grass-dark: #5f9f34;
+      --color-sky: #87ceeb;
+      --color-sun: #ffd700;
+      --color-plant-green: #4caf50;
+      --color-plant-dark: #2e7d32;
+      --color-pea: #66bb6a;
+      --color-zombie-skin: #b8c99a;
+      --color-zombie-dark: #6f8452;
+      --color-zombie-blood: #8b0000;
+      --color-hud-bg: rgba(17, 27, 14, 0.88);
+      --color-danger: #ff4444;
+      --color-warning: #ff8c00;
+      --font-game: "Comic Sans MS", "Chalkboard SE", "Comic Neue", cursive;
+      --font-hud: "Arial Black", "Arial Bold", sans-serif;
+      --zombie-zone: min(28vw, 280px);
+      --cell: min(calc((100vw - var(--zombie-zone) - 24px) / 9), calc((100vh - 102px) / 5), 82px);
+      --board-w: calc(var(--cell) * 9);
+      --board-h: calc(var(--cell) * 5);
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    body {
+      font-family: var(--font-game);
+      color: #fff;
+      touch-action: none;
+      user-select: none;
+      background:
+        radial-gradient(circle at 12% 15%, rgba(255,255,255,.8), transparent 8%),
+        linear-gradient(#78c7ed 0%, #aee7ff 32%, #75b344 33%, #356f25 100%);
+    }
+
+    button, input { font: inherit; }
+    button { border: 0; }
+
+    #app {
+      position: relative;
+      width: 100vw;
+      height: 100dvh;
+      min-height: 420px;
+      overflow: hidden;
+    }
+
+    .screen {
+      position: absolute;
+      inset: 0;
+      display: none;
+    }
+    .screen.active { display: flex; }
+
+    .menu-screen {
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at 18% 14%, rgba(255,255,255,.9) 0 7%, transparent 8%),
+        linear-gradient(180deg, #8ed7ff 0 48%, #8bc34a 49%, #4e8f32 100%);
+    }
+
+    .menu-hill {
+      position: absolute;
+      inset: auto -8vw -10vh -8vw;
+      height: 44vh;
+      background:
+        radial-gradient(ellipse at 22% 36%, #80bf43 0 28%, transparent 29%),
+        radial-gradient(ellipse at 72% 48%, #69a838 0 34%, transparent 35%),
+        linear-gradient(#5e9f37, #386f27);
+    }
+
+    .menu-plant, .menu-zombie {
+      position: absolute;
+      bottom: 10vh;
+      width: clamp(74px, 12vw, 128px);
+      height: clamp(90px, 15vw, 150px);
+      filter: drop-shadow(0 8px 0 rgba(0,0,0,.2));
+    }
+    .menu-plant { left: clamp(16px, 10vw, 160px); animation: plant-idle 1.7s ease-in-out infinite alternate; }
+    .menu-zombie { right: clamp(16px, 9vw, 150px); animation: zombie-walk 1s ease-in-out infinite; }
+
+    .panel {
+      position: relative;
+      z-index: 2;
+      width: min(92vw, 600px);
+      padding: clamp(20px, 4vw, 36px);
+      text-align: center;
+    }
+
+    .game-title {
+      margin: 0 0 8px;
+      font-size: clamp(38px, 8vw, 76px);
+      line-height: 1.05;
+      color: #ffe261;
+      text-shadow: 0 5px 0 #2f6a23, 0 10px 24px rgba(0,0,0,.34);
+      animation: float-title 2.4s ease-in-out infinite;
+    }
+    .subtitle {
+      margin: 0 0 28px;
+      font-size: clamp(16px, 3vw, 26px);
+      color: #204016;
+      text-shadow: 0 1px rgba(255,255,255,.8);
+      font-weight: 800;
+    }
+
+    .game-btn {
+      min-height: 64px;
+      min-width: min(360px, 82vw);
+      padding: 12px 32px;
+      margin: 8px;
+      border-radius: 12px;
+      border: 3px solid #3a7e10;
+      background: linear-gradient(180deg, #7ec850 0%, #5a9e30 100%);
+      box-shadow: 0 5px 0 #2a6000, inset 0 1px 0 rgba(255,255,255,.35);
+      color: #fff;
+      cursor: pointer;
+      font-size: clamp(18px, 3.5vw, 26px);
+      font-weight: 900;
+      text-shadow: 0 2px 0 rgba(0,0,0,.42);
+      transition: transform .1s, box-shadow .1s, filter .15s;
+    }
+    .game-btn:hover { filter: brightness(1.08); }
+    .game-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #2a6000; }
+    .game-btn.secondary {
+      background: linear-gradient(180deg, #6da6d9 0%, #356fa6 100%);
+      border-color: #194f82;
+      box-shadow: 0 5px 0 #0c355c, inset 0 1px 0 rgba(255,255,255,.35);
+    }
+
+    .plant-select-screen {
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: linear-gradient(180deg, #88d2f2 0 24%, #72a845 25% 100%);
+    }
+    .select-wrap {
+      width: min(960px, 96vw);
+      color: #213916;
+      text-align: center;
+    }
+    .select-title {
+      margin: 0 0 14px;
+      font-size: clamp(28px, 5vw, 48px);
+      color: #ffe261;
+      text-shadow: 0 4px 0 #275d1d;
+    }
+    .plant-list, .chosen-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+      gap: 10px;
+      margin: 14px 0;
+    }
+    .select-card {
+      min-height: 116px;
+      padding: 8px;
+      border-radius: 8px;
+      border: 3px solid #356f25;
+      background: linear-gradient(180deg, #f6e3a0, #bc8b4a);
+      color: #24401b;
+      cursor: pointer;
+      box-shadow: inset 0 2px rgba(255,255,255,.45), 0 4px rgba(0,0,0,.18);
+    }
+    .select-card.selected { border-color: #ffe261; box-shadow: 0 0 0 3px #ffe261, 0 4px rgba(0,0,0,.18); }
+    .select-card .plant-face, .slot .plant-face { font-size: 38px; line-height: 1.1; }
+    .select-card strong { display: block; font-size: 14px; min-height: 34px; }
+    .select-card small { display: block; font-family: var(--font-hud); }
+    .chosen-list {
+      grid-template-columns: repeat(6, minmax(54px, 1fr));
+      max-width: 560px;
+      margin-inline: auto;
+    }
+    .slot {
+      height: 72px;
+      display: grid;
+      place-items: center;
+      border: 3px dashed rgba(42,76,27,.55);
+      border-radius: 8px;
+      background: rgba(255,255,255,.23);
+    }
+
+    .game-screen {
+      flex-direction: column;
+      background:
+        linear-gradient(180deg, #78c7ed 0 18%, #9de3fb 18% 26%, #6faa3e 26% 100%);
+    }
+
+    .hud {
+      position: relative;
+      z-index: 20;
+      height: 82px;
+      flex: 0 0 82px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px clamp(8px, 1.8vw, 20px);
+      background: var(--color-hud-bg);
+      border-bottom: 4px solid rgba(0,0,0,.36);
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: none;
+    }
+    .hud::-webkit-scrollbar { display: none; }
+    .sun-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      height: 58px;
+      min-width: 118px;
+      padding: 0 12px;
+      border-radius: 8px;
+      border: 3px solid #9a7418;
+      background: linear-gradient(180deg, #fff0a8, #d99a21);
+      color: #362508;
+      font-family: var(--font-hud);
+      font-size: clamp(19px, 3vw, 28px);
+      font-variant-numeric: tabular-nums;
+    }
+    .plant-card {
+      position: relative;
+      flex: 0 0 70px;
+      width: 70px;
+      height: 66px;
+      border: 2px solid #4a8a2b;
+      border-radius: 8px;
+      background: linear-gradient(180deg, #2d5a1b 0%, #173709 100%);
+      cursor: pointer;
+      transition: transform .15s, border-color .15s, opacity .15s;
+      overflow: hidden;
+    }
+    .plant-card:hover { transform: translateY(-3px); border-color: #ffd700; }
+    .plant-card.selected { border-color: #ffd700; box-shadow: 0 0 12px #ffd700; }
+    .plant-card.disabled { opacity: .48; cursor: default; }
+    .plant-card .plant-face { font-size: 28px; line-height: 32px; }
+    .plant-card .plant-cost {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 18px;
+      display: grid;
+      place-items: center;
+      background: rgba(0,0,0,.58);
+      font-family: var(--font-hud);
+      font-size: 12px;
+      color: #ffe261;
+    }
+    .plant-card .cooldown-mask {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,.62);
+      transform-origin: top;
+      pointer-events: none;
+    }
+    .hud-spacer { flex: 1 0 12px; }
+    .timer, .wave-label {
+      flex: 0 0 auto;
+      font-family: var(--font-hud);
+      font-size: clamp(16px, 2.6vw, 24px);
+      text-shadow: 0 2px #000;
+      white-space: nowrap;
+    }
+    .icon-btn {
+      flex: 0 0 52px;
+      width: 52px;
+      height: 52px;
+      border-radius: 8px;
+      border: 3px solid #65461b;
+      background: linear-gradient(180deg, #f4cf7b, #a76323);
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 4px rgba(0,0,0,.25);
+    }
+    .icon-btn:disabled { opacity: .45; cursor: default; filter: grayscale(.35); }
+    .icon-btn.active { outline: 3px solid #ffe261; }
+
+    .playfield-shell {
+      position: relative;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 0;
+      padding: 8px 10px 14px;
+    }
+    .playfield {
+      position: relative;
+      width: calc(var(--board-w) + var(--zombie-zone));
+      height: var(--board-h);
+      max-width: 100vw;
+      transform-origin: center;
+    }
+    .board {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: var(--board-w);
+      height: var(--board-h);
+      display: grid;
+      grid-template-columns: repeat(9, var(--cell));
+      grid-template-rows: repeat(5, var(--cell));
+      border: 4px solid #4b772d;
+      box-shadow: 0 10px 26px rgba(0,0,0,.25);
+      background: #66a83c;
+      overflow: hidden;
+    }
+    .grid-cell {
+      position: relative;
+      width: var(--cell);
+      height: var(--cell);
+      border: 1px solid rgba(46, 94, 24, .24);
+      background:
+        radial-gradient(circle at 74% 68%, rgba(255,255,255,.08), transparent 20%),
+        linear-gradient(135deg, rgba(255,255,255,.12), transparent 42%),
+        var(--cell-color, var(--color-grass-light));
+      cursor: pointer;
+    }
+    .grid-cell:nth-child(odd) { --cell-color: #72b642; }
+    .grid-cell.row-alt { --cell-color: #64a338; }
+    .grid-cell.valid { box-shadow: inset 0 0 0 4px rgba(255,226,97,.75); }
+    .grid-cell.invalid { box-shadow: inset 0 0 0 4px rgba(255,68,68,.7); }
+
+    .lane-label {
+      position: absolute;
+      right: -46px;
+      width: 42px;
+      height: var(--cell);
+      display: grid;
+      place-items: center;
+      color: rgba(255,255,255,.65);
+      font-family: var(--font-hud);
+      text-shadow: 0 2px #214618;
+    }
+    .zombie-lane {
+      position: absolute;
+      left: var(--board-w);
+      width: var(--zombie-zone);
+      height: var(--cell);
+      background: linear-gradient(90deg, rgba(73,127,49,.55), rgba(73,127,49,0));
+      border-top: 1px solid rgba(36,79,20,.12);
+    }
+
+    .entity-layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: visible;
+    }
+    .plant, .zombie, .projectile, .sun-ball, .mower, .particle {
+      position: absolute;
+      will-change: transform, opacity;
+      pointer-events: auto;
+    }
+    .plant {
+      width: calc(var(--cell) * .82);
+      height: calc(var(--cell) * .88);
+      display: grid;
+      place-items: center;
+      font-size: calc(var(--cell) * .53);
+      filter: drop-shadow(0 5px 0 rgba(0,0,0,.2));
+      animation: plant-idle 1.7s ease-in-out infinite alternate;
+    }
+    .plant.attacking { animation: plant-attack .3s ease-out; }
+    .plant.hit { filter: hue-rotate(120deg) drop-shadow(0 5px 0 rgba(0,0,0,.2)); }
+    .plant::after {
+      content: "";
+      position: absolute;
+      bottom: 6%;
+      width: 58%;
+      height: 14%;
+      border-radius: 999px;
+      background: rgba(0,0,0,.18);
+      z-index: -1;
+    }
+    .plant-hp {
+      position: absolute;
+      top: 0;
+      width: 50%;
+      height: 5px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(0,0,0,.42);
+      opacity: .85;
+    }
+    .plant-hp span { display: block; height: 100%; background: #6bea56; }
+
+    .zombie {
+      width: calc(var(--cell) * .78);
+      height: calc(var(--cell) * .96);
+      display: grid;
+      place-items: center;
+      font-size: calc(var(--cell) * .56);
+      filter: drop-shadow(0 6px 0 rgba(0,0,0,.24));
+      animation: zombie-walk .8s ease-in-out infinite;
+    }
+    .zombie.eat { animation: zombie-eat .4s ease-in-out infinite; }
+    .zombie.frozen { filter: saturate(.7) hue-rotate(170deg) brightness(1.08) drop-shadow(0 6px 0 rgba(0,0,0,.24)); }
+    .zombie.burning { filter: sepia(.6) saturate(1.7) hue-rotate(330deg) drop-shadow(0 6px 0 rgba(0,0,0,.24)); }
+    .zombie.dying { animation: zombie-die .7s ease-out forwards; pointer-events: none; }
+    .hpbar {
+      position: absolute;
+      top: 1px;
+      width: 44px;
+      height: 6px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(0,0,0,.45);
+    }
+    .hpbar span { display: block; height: 100%; background: #48d643; }
+    .hpbar.low span { background: #ff4444; }
+    .armorbar {
+      top: 9px;
+      height: 5px;
+    }
+    .armorbar span { background: #cbd5e1; }
+
+    .projectile {
+      width: calc(var(--cell) * .24);
+      height: calc(var(--cell) * .24);
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #d4ff9a, var(--color-pea) 55%, #2c7c31);
+      box-shadow: 0 0 8px rgba(102,187,106,.75);
+    }
+    .projectile.ice { background: radial-gradient(circle at 35% 30%, #ecfeff, #67e8f9 55%, #0e7490); }
+    .projectile.fire { background: radial-gradient(circle at 35% 30%, #fff7ad, #ff8c00 55%, #b91c1c); }
+    .projectile.spike {
+      width: calc(var(--cell) * .32);
+      height: calc(var(--cell) * .18);
+      border-radius: 35% 65% 65% 35%;
+      background: linear-gradient(90deg, #fef08a, #a16207);
+    }
+
+    .sun-ball {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      background: radial-gradient(circle, #fff6a8 0 18%, #ffd700 42%, #ff9f1a 72%);
+      box-shadow: 0 0 20px rgba(255,215,0,.8);
+      animation: sun-pulse 1s ease-in-out infinite alternate;
+      pointer-events: auto;
+    }
+    .sun-ball::before { content: "☀"; color: #8b4a00; font-size: 27px; }
+
+    .mower {
+      width: calc(var(--cell) * .62);
+      height: calc(var(--cell) * .42);
+      left: calc(var(--cell) * -.72);
+      display: grid;
+      place-items: center;
+      font-size: calc(var(--cell) * .34);
+      pointer-events: none;
+      filter: drop-shadow(0 4px rgba(0,0,0,.25));
+    }
+
+    .toast {
+      position: absolute;
+      left: 50%;
+      top: 108px;
+      z-index: 40;
+      transform: translateX(-50%);
+      padding: 12px 24px;
+      border-radius: 8px;
+      background: rgba(0,0,0,.72);
+      color: #ffe261;
+      font-size: clamp(20px, 4vw, 36px);
+      font-weight: 900;
+      text-shadow: 0 2px #000;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .toast.show { animation: toast-pop 1.5s ease-out; }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(8, 18, 7, .55);
+      backdrop-filter: blur(2px);
+    }
+    .overlay.active { display: flex; }
+    .dialog {
+      width: min(92vw, 520px);
+      padding: 22px;
+      border: 5px solid #365f20;
+      border-radius: 8px;
+      background: linear-gradient(180deg, #f7e2a2, #bd8844);
+      color: #213916;
+      text-align: center;
+      box-shadow: 0 18px 36px rgba(0,0,0,.32);
+    }
+    .dialog h2 {
+      margin: 0 0 12px;
+      color: #ffe261;
+      font-size: clamp(30px, 6vw, 56px);
+      text-shadow: 0 4px 0 #2e5d21;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin: 14px 0;
+      font-family: var(--font-hud);
+    }
+    .stats div {
+      padding: 9px;
+      border-radius: 8px;
+      background: rgba(255,255,255,.36);
+    }
+
+    .settings-row {
+      display: grid;
+      grid-template-columns: 1fr 150px;
+      gap: 12px;
+      align-items: center;
+      margin: 12px 0;
+      text-align: left;
+      font-family: var(--font-hud);
+    }
+    .settings-row input { width: 100%; }
+
+    .ghost {
+      position: absolute;
+      z-index: 35;
+      width: calc(var(--cell) * .8);
+      height: calc(var(--cell) * .8);
+      display: none;
+      place-items: center;
+      font-size: calc(var(--cell) * .52);
+      opacity: .72;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+    }
+    .ghost.active { display: grid; }
+
+    @keyframes float-title {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    @keyframes plant-idle {
+      from { transform: rotate(-2deg) translateY(1px); }
+      to { transform: rotate(3deg) translateY(-2px); }
+    }
+    @keyframes plant-attack {
+      0% { transform: scale(1); }
+      35% { transform: scale(.85); }
+      70% { transform: scale(1.12); }
+      100% { transform: scale(1); }
+    }
+    @keyframes zombie-walk {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(3px) rotate(3deg); }
+    }
+    @keyframes zombie-eat {
+      0%, 100% { transform: translateX(0) scale(1); }
+      50% { transform: translateX(-5px) scale(1.04); }
+    }
+    @keyframes zombie-die {
+      to { opacity: 0; transform: translateY(30px) rotate(28deg) scale(.25); }
+    }
+    @keyframes sun-pulse {
+      from { transform: scale(.96) rotate(0deg); }
+      to { transform: scale(1.08) rotate(12deg); }
+    }
+    @keyframes toast-pop {
+      0% { opacity: 0; transform: translate(-50%, -20px) scale(.8); }
+      15%, 80% { opacity: 1; transform: translate(-50%, 0) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -12px) scale(.9); }
+    }
+
+    @media (max-width: 767px) {
+      :root {
+        --zombie-zone: min(18vw, 72px);
+        --cell: min(calc((100vw - var(--zombie-zone) - 12px) / 9), calc((100dvh - 98px) / 5), 56px);
+      }
+      .hud { height: 78px; flex-basis: 78px; padding: 6px; gap: 6px; }
+      .plant-card { flex-basis: 58px; width: 58px; height: 62px; }
+      .plant-card .plant-face { font-size: 24px; }
+      .sun-count { min-width: 98px; height: 54px; padding: 0 8px; }
+      .icon-btn { flex-basis: 48px; width: 48px; height: 48px; }
+      .sun-ball { width: 52px; height: 52px; }
+      .plant-list { grid-template-columns: repeat(auto-fit, minmax(78px, 1fr)); gap: 8px; }
+      .select-card { min-height: 104px; padding: 6px; }
+      .select-card strong { font-size: 12px; }
+      .menu-plant, .menu-zombie { opacity: .78; }
+    }
+
+    @media (max-width: 896px) and (orientation: landscape) {
+      :root {
+        --zombie-zone: min(26vw, 210px);
+        --cell: min(calc((100vw - var(--zombie-zone) - 80px) / 9), calc((100dvh - 68px) / 5), 62px);
+      }
+      .hud { height: 58px; flex-basis: 58px; }
+      .plant-card { height: 48px; flex-basis: 58px; }
+      .plant-card .plant-face { font-size: 22px; line-height: 26px; }
+      .plant-card .plant-cost { height: 16px; font-size: 10px; }
+      .sun-count { height: 46px; }
+      .icon-btn { width: 42px; height: 42px; flex-basis: 42px; font-size: 20px; }
+      .toast { top: 70px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <section id="mainMenu" class="screen menu-screen active">
+      <div class="menu-hill"></div>
+      <div class="menu-plant" aria-hidden="true">
+        <svg viewBox="0 0 120 140" width="100%" height="100%">
+          <ellipse cx="60" cy="124" rx="38" ry="10" fill="rgba(0,0,0,.2)"/>
+          <path d="M58 108 C48 88 50 70 61 52 C72 72 74 91 63 110" fill="#2e7d32"/>
+          <circle cx="61" cy="48" r="28" fill="#69c34a" stroke="#2e7d32" stroke-width="6"/>
+          <circle cx="52" cy="42" r="4" fill="#1c3a14"/><circle cx="70" cy="42" r="4" fill="#1c3a14"/>
+          <path d="M50 57 Q61 66 74 57" fill="none" stroke="#1c3a14" stroke-width="4" stroke-linecap="round"/>
+          <ellipse cx="32" cy="86" rx="22" ry="10" fill="#4caf50" transform="rotate(-28 32 86)"/>
+          <ellipse cx="88" cy="84" rx="22" ry="10" fill="#4caf50" transform="rotate(26 88 84)"/>
+        </svg>
+      </div>
+      <div class="menu-zombie" aria-hidden="true">
+        <svg viewBox="0 0 120 150" width="100%" height="100%">
+          <ellipse cx="61" cy="137" rx="37" ry="9" fill="rgba(0,0,0,.22)"/>
+          <rect x="40" y="62" width="42" height="58" rx="8" fill="#6b7280"/>
+          <circle cx="61" cy="43" r="28" fill="#b8c99a" stroke="#6f8452" stroke-width="5"/>
+          <circle cx="51" cy="38" r="5" fill="#263315"/><circle cx="72" cy="39" r="4" fill="#263315"/>
+          <path d="M49 55 L75 56" stroke="#263315" stroke-width="4" stroke-linecap="round"/>
+          <path d="M43 118 L34 139 M77 118 L88 139" stroke="#394150" stroke-width="10" stroke-linecap="round"/>
+          <path d="M40 76 L19 95 M83 75 L101 94" stroke="#b8c99a" stroke-width="9" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="panel">
+        <h1 class="game-title">Garden Defenders</h1>
+        <p class="subtitle">種下防線，守住五條草坪</p>
+        <button class="game-btn" id="newGameBtn">開始遊戲</button>
+        <button class="game-btn secondary" id="continueBtn">繼續遊戲</button>
+        <button class="game-btn secondary" id="settingsBtn">音效設定</button>
+      </div>
+    </section>
+
+    <section id="plantSelect" class="screen plant-select-screen">
+      <div class="select-wrap">
+        <h2 class="select-title" id="selectTitle">選擇 6 種植物</h2>
+        <div style="display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+          <button class="icon-btn" id="prevLevelBtn" title="上一關">‹</button>
+          <div class="wave-label" id="selectLevelLabel" style="color:#213916;text-shadow:0 1px rgba(255,255,255,.6);">Level 1 / 50</div>
+          <button class="icon-btn" id="nextLevelSelectBtn" title="下一關">›</button>
+        </div>
+        <div id="plantList" class="plant-list"></div>
+        <div class="chosen-list" id="chosenList"></div>
+        <button class="game-btn" id="startBattleBtn">進入草坪</button>
+        <button class="game-btn secondary" id="backMenuBtn">返回</button>
+      </div>
+    </section>
+
+    <section id="gameScreen" class="screen game-screen">
+      <header class="hud">
+        <div class="sun-count"><span>☀</span><span id="sunCount">150</span></div>
+        <div id="plantHand" style="display:flex;gap:8px;flex:0 0 auto;"></div>
+        <button class="icon-btn" id="shovelBtn" title="鏟子">♨</button>
+        <div class="hud-spacer"></div>
+        <div class="timer" id="timer">00:00</div>
+        <div class="wave-label" id="waveLabel">Wave 0/5</div>
+        <button class="icon-btn" id="pauseBtn" title="暫停">Ⅱ</button>
+      </header>
+      <main class="playfield-shell">
+        <div class="playfield" id="playfield">
+          <div class="board" id="board"></div>
+          <div id="laneLayer"></div>
+          <div class="entity-layer" id="entityLayer"></div>
+          <div class="ghost" id="ghost"></div>
+        </div>
+      </main>
+      <div class="toast" id="toast"></div>
+    </section>
+
+    <div class="overlay" id="pauseOverlay">
+      <div class="dialog">
+        <h2>遊戲暫停</h2>
+        <button class="game-btn" id="resumeBtn">繼續遊戲</button>
+        <button class="game-btn secondary" id="restartBtn">重新開始</button>
+        <button class="game-btn secondary" id="quitBtn">回主選單</button>
+      </div>
+    </div>
+
+    <div class="overlay" id="resultOverlay">
+      <div class="dialog">
+        <h2 id="resultTitle">勝利</h2>
+        <div class="stats">
+          <div>時間 <span id="statTime">00:00</span></div>
+          <div>分數 <span id="statScore">0</span></div>
+          <div>擊倒 <span id="statKills">0</span></div>
+          <div>波次 <span id="statWave">0</span></div>
+        </div>
+        <button class="game-btn" id="againBtn">再玩一次</button>
+        <button class="game-btn" id="nextLevelBtn">下一關</button>
+        <button class="game-btn secondary" id="resultMenuBtn">回主選單</button>
+      </div>
+    </div>
+
+    <div class="overlay" id="settingsOverlay">
+      <div class="dialog">
+        <h2>音效設定</h2>
+        <label class="settings-row">主音量 <input id="masterVolume" type="range" min="0" max="1" step="0.01"></label>
+        <label class="settings-row">音樂 <input id="musicVolume" type="range" min="0" max="1" step="0.01"></label>
+        <label class="settings-row">音效 <input id="sfxVolume" type="range" min="0" max="1" step="0.01"></label>
+        <label class="settings-row">震動 <input id="vibrationToggle" type="checkbox"></label>
+        <button class="game-btn" id="closeSettingsBtn">完成</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ROWS = 5;
+    const COLS = 9;
+    const MAX_LEVEL = 50;
+    const SAVE_KEY = 'pvz_save';
+
+    const PlantDefs = [
+      { id: 'P01', name: '向日葵', emoji: '🌻', cost: 50, cooldown: 7000, hp: 300, kind: 'sun', produceInterval: 10000 },
+      { id: 'P02', name: '豌豆射手', emoji: '🌱', cost: 75, cooldown: 7500, hp: 300, kind: 'shooter', attackInterval: 1500, damage: 20, projectile: 'pea' },
+      { id: 'P03', name: '寒冰射手', emoji: '❄️', cost: 150, cooldown: 7500, hp: 300, kind: 'shooter', attackInterval: 1650, damage: 20, projectile: 'ice' },
+      { id: 'P04', name: '雙發射手', emoji: '🌿', cost: 150, cooldown: 7500, hp: 400, kind: 'shooter', attackInterval: 1700, damage: 20, projectile: 'pea', shots: 2 },
+      { id: 'P05', name: '櫻桃炸彈', emoji: '🍒', cost: 150, cooldown: 35000, hp: 999, kind: 'bomb' },
+      { id: 'P06', name: '堅果牆', emoji: '🥔', cost: 50, cooldown: 30000, hp: 4000, kind: 'wall' },
+      { id: 'P07', name: '尖刺草', emoji: '🌵', cost: 125, cooldown: 7500, hp: 300, kind: 'spike', attackInterval: 1100, damage: 20 },
+      { id: 'P08', name: '火焰射手', emoji: '🔥', cost: 200, cooldown: 14500, hp: 300, kind: 'shooter', attackInterval: 1550, damage: 40, projectile: 'fire' },
+      { id: 'P09', name: '三線射手', emoji: '☘️', cost: 325, cooldown: 7500, hp: 400, kind: 'threepeater', attackInterval: 1800, damage: 20, projectile: 'pea' },
+      { id: 'P10', name: '催眠菇', emoji: '🍄', cost: 100, cooldown: 15000, hp: 300, kind: 'hypno' }
+    ];
+
+    const ZombieDefs = {
+      Z01: { name: '普通殭屍', emoji: '🧟', hp: 150, speed: .35, damage: 100, score: 100 },
+      Z02: { name: '路障殭屍', emoji: '🚧', hp: 560, armor: 180, speed: .35, damage: 100, score: 180 },
+      Z03: { name: '鐵桶殭屍', emoji: '🪣', hp: 1100, armor: 500, speed: .35, damage: 100, score: 260 },
+      Z04: { name: '旗手殭屍', emoji: '🚩', hp: 200, speed: .42, damage: 100, score: 130 },
+      Z05: { name: '撐竿殭屍', emoji: '🏃', hp: 300, speed: .5, damage: 100, score: 180 },
+      Z06: { name: '巨人殭屍', emoji: '💪', hp: 1600, speed: .28, damage: 180, score: 500 },
+      Z07: { name: '舞者殭屍', emoji: '🕺', hp: 400, speed: .42, damage: 100, score: 220 },
+      Z08: { name: '潛地殭屍', emoji: '🕳️', hp: 400, speed: .55, damage: 150, score: 260 }
+    };
+
+    function addWave(base, extra) {
+      const wave = { ...base };
+      Object.entries(extra).forEach(([type, count]) => {
+        if (count > 0) wave[type] = (wave[type] || 0) + count;
+      });
+      return wave;
+    }
+
+    function generateLevel(level) {
+      const tier = Math.floor((level - 1) / 10);
+      const hard = level - 1;
+      const waveCount = 8 + Math.min(6, Math.floor(hard / 7));
+      const firstHuge = Math.max(4, Math.floor(waveCount * .48));
+      const secondHuge = waveCount;
+      const waves = [];
+
+      for (let wave = 1; wave <= waveCount; wave++) {
+        const beforeFirstHuge = wave < firstHuge;
+        const huge = wave === firstHuge || wave === secondHuge;
+        const pressure = hard * .45 + wave * .8 + tier * 1.8;
+        const normalCount = beforeFirstHuge ? 1 + Math.floor((wave - 1) / 3) : 2 + Math.floor(pressure / 3.2);
+        const pack = { Z01: Math.max(1, normalCount) };
+
+        if (beforeFirstHuge) {
+          if (level >= 12 && wave >= firstHuge - 1) pack.Z02 = 1;
+          if (level >= 30 && wave === firstHuge - 1) pack.Z04 = 1;
+        } else {
+          pack.Z02 = Math.max(0, Math.floor((pressure - 4) / 4));
+          if (level >= 11) pack.Z03 = Math.max(0, Math.floor((pressure - 12) / 6));
+          if (level >= 4 && wave % 4 === 0) pack.Z04 = 1 + Math.floor(tier / 2);
+          if (level >= 16 && wave % 3 === 0) pack.Z05 = 1 + Math.floor((level - 16) / 12);
+          if (level >= 21 && wave % 5 === 0) pack.Z07 = 1 + Math.floor((level - 21) / 15);
+          if (level >= 31 && wave % 4 === 1) pack.Z08 = 1 + Math.floor((level - 31) / 12);
+          if (level >= 36 && (huge || wave % 6 === 0)) pack.Z06 = huge ? 1 + Math.floor((level - 36) / 8) : 1;
+        }
+
+        waves.push(huge ? addWave(pack, {
+          Z01: 3 + tier * 2 + Math.floor(level / 8),
+          Z02: 2 + tier,
+          Z03: level >= 12 ? 1 + Math.floor((level - 12) / 10) : 0,
+          Z05: level >= 18 ? 1 + Math.floor((level - 18) / 14) : 0,
+          Z06: level >= 38 ? 1 + Math.floor((level - 38) / 8) : 0,
+          Z08: level >= 34 ? 1 : 0
+        }) : pack);
+      }
+      return { waves, hugeWaves: [firstHuge, secondHuge] };
+    }
+
+    const Levels = Object.fromEntries(
+      Array.from({ length: MAX_LEVEL }, (_, i) => [i + 1, generateLevel(i + 1)])
+    );
+
+    class SaveSystem {
+      static defaultSave() {
+        return {
+          version: '1.0.0',
+          highScores: [],
+          unlockedLevels: [1],
+          settings: { masterVolume: .8, musicVolume: .45, sfxVolume: .8, vibration: true },
+          lastPlay: null
+        };
+      }
+      static load() {
+        try { return { ...SaveSystem.defaultSave(), ...JSON.parse(localStorage.getItem(SAVE_KEY) || '{}') }; }
+        catch { return SaveSystem.defaultSave(); }
+      }
+      static save(data) { localStorage.setItem(SAVE_KEY, JSON.stringify(data)); }
+      static recordScore(level, score) {
+        const save = SaveSystem.load();
+        save.highScores = [{ level, score, date: new Date().toISOString().slice(0, 10) }, ...save.highScores]
+          .sort((a, b) => b.score - a.score).slice(0, 10);
+        const nextLevel = Math.min(MAX_LEVEL, level + 1);
+        if (level < MAX_LEVEL && !save.unlockedLevels.includes(nextLevel)) save.unlockedLevels.push(nextLevel);
+        save.lastPlay = null;
+        SaveSystem.save(save);
+      }
+    }
+
+    class AudioEngine {
+      constructor() {
+        this.ctx = null;
+        this.masterGain = null;
+        this.musicGain = null;
+        this.sfxGain = null;
+        this.musicTimer = null;
+        this.settings = SaveSystem.load().settings;
+      }
+      init() {
+        if (this.ctx) {
+          if (this.ctx.state === 'suspended') this.ctx.resume();
+          return;
+        }
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        this.ctx = new AudioCtx();
+        this.masterGain = this.ctx.createGain();
+        this.musicGain = this.ctx.createGain();
+        this.sfxGain = this.ctx.createGain();
+        const compressor = this.ctx.createDynamicsCompressor();
+        this.musicGain.connect(compressor);
+        this.sfxGain.connect(compressor);
+        compressor.connect(this.masterGain);
+        this.masterGain.connect(this.ctx.destination);
+        this.applySettings(this.settings);
+      }
+      applySettings(settings) {
+        this.settings = settings;
+        if (!this.ctx) return;
+        this.masterGain.gain.value = settings.masterVolume;
+        this.musicGain.gain.value = settings.musicVolume;
+        this.sfxGain.gain.value = settings.sfxVolume;
+      }
+      beep(freq, duration, volume = .35, type = 'sine', target = 'sfx') {
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, now);
+        gain.gain.setValueAtTime(volume, now);
+        gain.gain.exponentialRampToValueAtTime(.001, now + duration);
+        osc.connect(gain);
+        gain.connect(target === 'music' ? this.musicGain : this.sfxGain);
+        osc.start(now);
+        osc.stop(now + duration + .02);
+      }
+      noise(duration = .2, cutoff = 1000, volume = .4) {
+        if (!this.ctx) return;
+        const bufferSize = Math.max(1, Math.floor(this.ctx.sampleRate * duration));
+        const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+        const source = this.ctx.createBufferSource();
+        const filter = this.ctx.createBiquadFilter();
+        const gain = this.ctx.createGain();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(cutoff, this.ctx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(80, this.ctx.currentTime + duration);
+        gain.gain.setValueAtTime(volume, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(.001, this.ctx.currentTime + duration);
+        source.buffer = buffer;
+        source.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.sfxGain);
+        source.start();
+      }
+      sfx(id) {
+        if (!this.ctx) return;
+        const map = {
+          collect: () => { this.beep(440, .08); this.beep(880, .16, .28); },
+          plant: () => { this.beep(600, .08, .25, 'triangle'); this.beep(420, .12, .18, 'triangle'); },
+          shoot: () => this.noise(.05, 1600, .12),
+          hit: () => this.noise(.08, 900, .18),
+          freeze: () => { this.beep(800, .12, .2, 'sine'); this.beep(400, .2, .16, 'triangle'); },
+          boom: () => this.noise(.75, 600, .65),
+          bite: () => this.noise(.09, 350, .2),
+          die: () => { this.beep(300, .12, .22, 'sawtooth'); this.beep(160, .22, .18, 'sawtooth'); },
+          wave: () => { this.beep(220, .12, .25, 'square'); this.beep(440, .2, .22, 'square'); },
+          click: () => this.beep(880, .05, .18, 'square'),
+          mower: () => this.noise(.55, 450, .5)
+        };
+        (map[id] || map.click)();
+      }
+      startMusic(mode) {
+        this.stopMusic();
+        if (!this.ctx) return;
+        const menu = [523, 659, 784, 659, 880, 784, 698, 659, 587, 523];
+        const battle = [196, 196, 262, 233, 196, 294, 262, 233, 220, 196, 330, 294];
+        const notes = mode === 'battle' ? battle : menu;
+        let i = 0;
+        const play = () => {
+          if (!this.ctx) return;
+          const n = notes[i++ % notes.length];
+          this.beep(n, mode === 'battle' ? .16 : .22, mode === 'battle' ? .09 : .07, mode === 'battle' ? 'sawtooth' : 'triangle', 'music');
+          if (mode === 'battle' && i % 4 === 0) this.beep(98, .08, .08, 'square', 'music');
+        };
+        play();
+        this.musicTimer = setInterval(play, mode === 'battle' ? 230 : 300);
+      }
+      stopMusic() {
+        clearInterval(this.musicTimer);
+        this.musicTimer = null;
+      }
+    }
+
+    const audio = new AudioEngine();
+
+    const State = {
+      phase: 'MAIN_MENU',
+      level: 1,
+      wave: 0,
+      totalWaves: 5,
+      sun: 150,
+      score: 0,
+      time: 0,
+      plants: [],
+      zombies: [],
+      projectiles: [],
+      suns: [],
+      mowers: [],
+      selectedPlants: ['P01', 'P02', 'P03', 'P05', 'P06', 'P08'],
+      handPlant: null,
+      shovel: false,
+      paused: false,
+      won: false,
+      gameOver: false,
+      kills: 0,
+      lastNaturalSun: 0,
+      nextWaveAt: 3000,
+      spawnedInWave: 0,
+      pendingSpawns: [],
+      cooldowns: {},
+      nextId: 1
+    };
+
+    const $ = (id) => document.getElementById(id);
+    const screens = { menu: $('mainMenu'), select: $('plantSelect'), game: $('gameScreen') };
+    const board = $('board');
+    const entityLayer = $('entityLayer');
+    const laneLayer = $('laneLayer');
+    const ghost = $('ghost');
+
+    function uid(prefix) { return `${prefix}${State.nextId++}`; }
+    function nowMs() { return performance.now(); }
+    function getPlantDef(id) { return PlantDefs.find(p => p.id === id); }
+    function getMaxUnlockedLevel() {
+      const save = SaveSystem.load();
+      return Math.min(MAX_LEVEL, Math.max(1, ...(save.unlockedLevels || [1])));
+    }
+    function setSelectedLevel(level) {
+      State.level = Math.max(1, Math.min(getMaxUnlockedLevel(), level));
+      updateLevelSelectUi();
+    }
+    function updateLevelSelectUi() {
+      const maxUnlocked = getMaxUnlockedLevel();
+      const label = $('selectLevelLabel');
+      const title = $('selectTitle');
+      if (!label || !title) return;
+      title.textContent = `第 ${State.level} 關：選擇 6 種植物`;
+      label.textContent = `Level ${State.level} / ${MAX_LEVEL}`;
+      $('prevLevelBtn').disabled = State.level <= 1;
+      $('nextLevelSelectBtn').disabled = State.level >= maxUnlocked;
+      $('nextLevelSelectBtn').title = State.level >= maxUnlocked ? '尚未解鎖下一關' : '下一關';
+    }
+    function showScreen(name) {
+      Object.values(screens).forEach(s => s.classList.remove('active'));
+      screens[name].classList.add('active');
+      State.phase = name === 'menu' ? 'MAIN_MENU' : name === 'select' ? 'PLANT_SELECT' : 'PLAYING';
+    }
+    function toast(message) {
+      const el = $('toast');
+      el.textContent = message;
+      el.classList.remove('show');
+      void el.offsetWidth;
+      el.classList.add('show');
+    }
+    function vibrate(ms = 35) {
+      if (SaveSystem.load().settings.vibration && navigator.vibrate) navigator.vibrate(ms);
+    }
+    function formatTime(ms) {
+      const sec = Math.floor(ms / 1000);
+      return `${String(Math.floor(sec / 60)).padStart(2, '0')}:${String(sec % 60).padStart(2, '0')}`;
+    }
+
+    function buildBoard() {
+      board.innerHTML = '';
+      laneLayer.innerHTML = '';
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const cell = document.createElement('div');
+          cell.className = `grid-cell ${r % 2 ? 'row-alt' : ''}`;
+          cell.dataset.row = r;
+          cell.dataset.col = c;
+          cell.addEventListener('pointerdown', onCellClick);
+          cell.addEventListener('pointerenter', () => markCell(cell));
+          board.appendChild(cell);
+        }
+        const lane = document.createElement('div');
+        lane.className = 'zombie-lane';
+        lane.style.top = `calc(var(--cell) * ${r})`;
+        laneLayer.appendChild(lane);
+        const label = document.createElement('div');
+        label.className = 'lane-label';
+        label.style.top = `calc(var(--cell) * ${r})`;
+        label.textContent = r + 1;
+        laneLayer.appendChild(label);
+      }
+    }
+
+    function buildPlantSelect() {
+      updateLevelSelectUi();
+      const list = $('plantList');
+      list.innerHTML = '';
+      PlantDefs.forEach(def => {
+        const card = document.createElement('button');
+        card.className = `select-card ${State.selectedPlants.includes(def.id) ? 'selected' : ''}`;
+        card.innerHTML = `<div class="plant-face">${def.emoji}</div><strong>${def.name}</strong><small>☀ ${def.cost}</small>`;
+        card.addEventListener('click', () => toggleSelectPlant(def.id));
+        list.appendChild(card);
+      });
+      renderChosen();
+    }
+
+    function toggleSelectPlant(id) {
+      audio.sfx('click');
+      const exists = State.selectedPlants.includes(id);
+      if (exists) State.selectedPlants = State.selectedPlants.filter(x => x !== id);
+      else if (State.selectedPlants.length < 6) State.selectedPlants.push(id);
+      else toast('最多選 6 種植物');
+      buildPlantSelect();
+    }
+
+    function renderChosen() {
+      const chosen = $('chosenList');
+      chosen.innerHTML = '';
+      for (let i = 0; i < 6; i++) {
+        const slot = document.createElement('div');
+        slot.className = 'slot';
+        const def = getPlantDef(State.selectedPlants[i]);
+        slot.innerHTML = def ? `<div class="plant-face">${def.emoji}</div>` : '';
+        chosen.appendChild(slot);
+      }
+    }
+
+    function renderHand() {
+      const hand = $('plantHand');
+      hand.innerHTML = '';
+      State.selectedPlants.forEach(id => {
+        const def = getPlantDef(id);
+        const cdLeft = Math.max(0, (State.cooldowns[id] || 0) - nowMs());
+        const disabled = State.sun < def.cost || cdLeft > 0;
+        const card = document.createElement('button');
+        card.className = `plant-card ${State.handPlant === id ? 'selected' : ''} ${disabled ? 'disabled' : ''}`;
+        const progress = cdLeft > 0 ? cdLeft / def.cooldown : 0;
+        card.innerHTML = `<div class="plant-face">${def.emoji}</div><div class="plant-cost">${def.cost}</div><div class="cooldown-mask" style="transform:scaleY(${progress})"></div>`;
+        card.title = `${def.name} - ${def.cost}`;
+        card.addEventListener('pointerdown', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          audio.sfx('click');
+          if (disabled) return;
+          State.handPlant = State.handPlant === id ? null : id;
+          State.shovel = false;
+          $('shovelBtn').classList.remove('active');
+          ghost.textContent = State.handPlant ? def.emoji : '';
+          renderHand();
+        });
+        hand.appendChild(card);
+      });
+      $('sunCount').textContent = State.sun;
+    }
+
+    function resetGame(level = 1) {
+      State.level = level;
+      State.wave = 0;
+      State.totalWaves = Levels[level].waves.length;
+      State.sun = 150;
+      State.score = 0;
+      State.time = 0;
+      State.plants = [];
+      State.zombies = [];
+      State.projectiles = [];
+      State.suns = [];
+      State.mowers = Array.from({ length: ROWS }, (_, row) => ({ row, active: true, x: -.7, rolling: false }));
+      State.handPlant = null;
+      State.shovel = false;
+      State.paused = false;
+      State.won = false;
+      State.gameOver = false;
+      State.kills = 0;
+      State.lastNaturalSun = 0;
+      State.nextWaveAt = 40000;
+      State.pendingSpawns = [];
+      State.cooldowns = {};
+      entityLayer.innerHTML = '';
+      $('pauseOverlay').classList.remove('active');
+      $('resultOverlay').classList.remove('active');
+      buildBoard();
+      renderHand();
+      audio.startMusic('battle');
+    }
+
+    function onCellClick(e) {
+      if (State.phase !== 'PLAYING' || State.paused || State.gameOver) return;
+      const row = Number(e.currentTarget.dataset.row);
+      const col = Number(e.currentTarget.dataset.col);
+      if (State.shovel) {
+        const plant = plantAt(row, col);
+        if (plant) {
+          removePlant(plant);
+          State.shovel = false;
+          $('shovelBtn').classList.remove('active');
+          audio.sfx('plant');
+        }
+        return;
+      }
+      if (!State.handPlant) return;
+      const def = getPlantDef(State.handPlant);
+      if (!canPlace(row, col, def)) {
+        audio.sfx('hit');
+        markInvalid(row, col);
+        return;
+      }
+      placePlant(row, col, def);
+    }
+
+    function markCell(cell) {
+      document.querySelectorAll('.grid-cell.valid,.grid-cell.invalid').forEach(x => x.classList.remove('valid', 'invalid'));
+      if (!State.handPlant && !State.shovel) return;
+      const row = Number(cell.dataset.row);
+      const col = Number(cell.dataset.col);
+      cell.classList.add(State.shovel || canPlace(row, col, getPlantDef(State.handPlant)) ? 'valid' : 'invalid');
+    }
+
+    function markInvalid(row, col) {
+      const cell = [...board.children].find(c => Number(c.dataset.row) === row && Number(c.dataset.col) === col);
+      if (!cell) return;
+      cell.classList.add('invalid');
+      setTimeout(() => cell.classList.remove('invalid'), 250);
+    }
+
+    function plantAt(row, col) { return State.plants.find(p => p.row === row && p.col === col); }
+    function canPlace(row, col, def) {
+      return def && !plantAt(row, col) && State.sun >= def.cost && nowMs() >= (State.cooldowns[def.id] || 0);
+    }
+
+    function placePlant(row, col, def) {
+      State.sun -= def.cost;
+      State.cooldowns[def.id] = nowMs() + def.cooldown;
+      const plant = {
+        id: uid('p'), defId: def.id, row, col, hp: def.hp, maxHp: def.hp,
+        lastAttack: 0, lastProduce: 0, born: State.time, exploding: false
+      };
+      State.plants.push(plant);
+      if (def.kind === 'bomb') {
+        plant.exploding = true;
+        setTimeout(() => explodePlant(plant), 1000);
+      }
+      State.handPlant = null;
+      audio.sfx(def.kind === 'bomb' ? 'wave' : 'plant');
+      vibrate(40);
+      renderHand();
+    }
+
+    function removePlant(plant) {
+      State.plants = State.plants.filter(p => p !== plant);
+      audio.sfx('die');
+    }
+
+    function explodePlant(plant) {
+      if (!State.plants.includes(plant)) return;
+      audio.sfx('boom');
+      State.zombies.forEach(z => {
+        const zombieCol = Math.floor(z.x + .25);
+        const sameRowRange = z.row === plant.row && Math.abs(zombieCol - plant.col) <= 1;
+        const sameColRange = zombieCol === plant.col && Math.abs(z.row - plant.row) <= 1;
+        if (sameRowRange || sameColRange) damageZombie(z, 999);
+      });
+      removePlant(plant);
+    }
+
+    function spawnSun(x, y, targetY, value = 25) {
+      State.suns.push({ id: uid('s'), x, y, targetY, value, born: State.time, collected: false, lifetime: 10000 });
+    }
+
+    function collectSun(sun) {
+      if (sun.collected) return;
+      sun.collected = true;
+      State.sun += sun.value;
+      State.score += sun.value * 2;
+      audio.sfx('collect');
+      vibrate(25);
+      renderHand();
+    }
+
+    function makeWaveSpawns() {
+      const levelData = Levels[State.level];
+      const wave = levelData.waves[State.wave - 1];
+      const list = [];
+      Object.entries(wave).forEach(([type, count]) => {
+        for (let i = 0; i < count; i++) list.push(type);
+      });
+      list.sort(() => Math.random() - .5);
+      const isHuge = levelData.hugeWaves.includes(State.wave);
+      const beforeFirstHuge = State.wave < levelData.hugeWaves[0];
+      const spawnGap = beforeFirstHuge ? 4200 : isHuge ? 1450 : 2400;
+      const firstDelay = beforeFirstHuge ? 2400 : isHuge ? 1200 : 1700;
+      State.pendingSpawns = list.map((type, i) => ({ type, at: State.time + firstDelay + i * (spawnGap + Math.random() * 1200) }));
+      State.spawnedInWave = 0;
+      toast(isHuge ? '一大波殭屍來襲！' : `Wave ${State.wave}`);
+      audio.sfx(isHuge ? 'boom' : 'wave');
+    }
+
+    function spawnZombie(type) {
+      const def = ZombieDefs[type];
+      const row = Math.floor(Math.random() * ROWS);
+      State.zombies.push({
+        id: uid('z'), type, row, x: 9.15 + Math.random() * 1.3,
+        hp: def.hp, maxHp: def.hp, armor: def.armor || 0, maxArmor: def.armor || 0,
+        speed: def.speed, damage: def.damage, state: 'walk', eatTimer: 0,
+        frozenUntil: 0, burnUntil: 0, dead: false
+      });
+      State.spawnedInWave++;
+    }
+
+    function shoot(plant, rowOverride = null) {
+      const def = getPlantDef(plant.defId);
+      const row = rowOverride ?? plant.row;
+      const type = def.projectile || 'pea';
+      State.projectiles.push({
+        id: uid('b'), type, row, x: plant.col + .74, speed: 3.2, damage: def.damage || 20,
+        effect: type === 'ice' ? 'slow' : type === 'fire' ? 'burn' : null
+      });
+      audio.sfx(type === 'ice' ? 'freeze' : 'shoot');
+    }
+
+    function update(dt) {
+      if (State.phase !== 'PLAYING' || State.paused || State.gameOver) return;
+      State.time += dt;
+
+      if (State.time - State.lastNaturalSun > 5500) {
+        State.lastNaturalSun = State.time;
+        spawnSun(Math.random() * 7.8 + .5, -0.5, Math.random() * 3.8 + .45);
+      }
+
+      if (State.wave < State.totalWaves && State.time >= State.nextWaveAt && State.pendingSpawns.length === 0) {
+        State.wave++;
+        makeWaveSpawns();
+      }
+      State.pendingSpawns = State.pendingSpawns.filter(spawn => {
+        if (State.time >= spawn.at) {
+          spawnZombie(spawn.type);
+          return false;
+        }
+        return true;
+      });
+      if (State.pendingSpawns.length === 0 && State.zombies.length === 0 && State.wave > 0 && State.wave < State.totalWaves) {
+        const nextWave = State.wave + 1;
+        const nextIsFirstHuge = Levels[State.level].hugeWaves[0] === nextWave;
+        const beforeFirstHuge = nextWave < Levels[State.level].hugeWaves[0];
+        State.nextWaveAt = State.time + (beforeFirstHuge ? 12000 : nextIsFirstHuge ? 18000 : 8000);
+      }
+
+      updatePlants(dt);
+      updateZombies(dt);
+      updateProjectiles(dt);
+      updateSuns(dt);
+      updateMowers(dt);
+      checkEnd();
+      renderHand();
+    }
+
+    function updatePlants(dt) {
+      State.plants.forEach(plant => {
+        const def = getPlantDef(plant.defId);
+        if (def.kind === 'sun' && State.time - plant.lastProduce > def.produceInterval) {
+          plant.lastProduce = State.time;
+          spawnSun(plant.col + .25, plant.row + .08, plant.row + .35);
+          audio.sfx('collect');
+        }
+        if (['shooter', 'threepeater'].includes(def.kind)) {
+          const hasTarget = State.zombies.some(z => !z.dead && z.row === plant.row && z.x > plant.col - .1);
+          if (hasTarget && State.time - plant.lastAttack > def.attackInterval) {
+            plant.lastAttack = State.time;
+            if (def.kind === 'threepeater') {
+              [plant.row - 1, plant.row, plant.row + 1].filter(r => r >= 0 && r < ROWS).forEach(r => shoot(plant, r));
+            } else {
+              shoot(plant);
+              if (def.shots === 2) setTimeout(() => shoot(plant), 180);
+            }
+          }
+        }
+        if (def.kind === 'spike' && State.time - plant.lastAttack > def.attackInterval) {
+          const targets = State.zombies.filter(z => !z.dead && z.row === plant.row && Math.abs(z.x - plant.col) < .62);
+          if (targets.length) {
+            plant.lastAttack = State.time;
+            targets.forEach(z => damageZombie(z, def.damage));
+            audio.sfx('hit');
+          }
+        }
+      });
+    }
+
+    function updateZombies(dt) {
+      State.zombies.forEach(z => {
+        if (z.dead) return;
+        const def = ZombieDefs[z.type];
+        const frozen = State.time < z.frozenUntil;
+        const speed = z.speed * (frozen ? .5 : 1);
+        if (State.time < z.burnUntil) damageZombie(z, dt * .035);
+
+        const target = State.plants.find(p => p.row === z.row && Math.abs((p.col + .3) - z.x) < .38);
+        if (target) {
+          z.state = 'eat';
+          z.eatTimer += dt;
+          if (z.eatTimer > 500) {
+            z.eatTimer = 0;
+            target.hp -= def.damage * .5;
+            audio.sfx('bite');
+            if (target.hp <= 0) removePlant(target);
+          }
+        } else {
+          z.state = 'walk';
+          z.x -= speed * dt / 1000;
+        }
+        if (z.x < -.35) {
+          const mower = State.mowers[z.row];
+          if (mower && mower.active && !mower.rolling) {
+            mower.rolling = true;
+            audio.sfx('mower');
+          } else {
+            loseGame();
+          }
+        }
+      });
+    }
+
+    function updateProjectiles(dt) {
+      State.projectiles.forEach(p => {
+        p.x += p.speed * dt / 1000;
+        const hit = State.zombies
+          .filter(z => !z.dead && z.row === p.row && z.x > p.x - .22 && z.x < p.x + .36)
+          .sort((a, b) => a.x - b.x)[0];
+        if (hit) {
+          damageZombie(hit, p.damage, p.effect);
+          p.hit = true;
+          audio.sfx('hit');
+        }
+      });
+      State.projectiles = State.projectiles.filter(p => !p.hit && p.x < COLS + 2);
+    }
+
+    function damageZombie(z, amount, effect = null) {
+      if (z.dead) return;
+      let remaining = amount;
+      if (z.armor > 0) {
+        const used = Math.min(z.armor, remaining);
+        z.armor -= used;
+        remaining -= used;
+      }
+      z.hp -= remaining;
+      if (effect === 'slow') z.frozenUntil = Math.max(z.frozenUntil, State.time + 3000);
+      if (effect === 'burn') z.burnUntil = Math.max(z.burnUntil, State.time + 2200);
+      if (z.hp <= 0) {
+        z.dead = true;
+        State.kills++;
+        State.score += ZombieDefs[z.type].score;
+        if (Math.random() < .28) spawnSun(z.x, z.row + .2, z.row + .2, Math.random() < .18 ? 50 : 25);
+        audio.sfx('die');
+        setTimeout(() => State.zombies = State.zombies.filter(item => item !== z), 650);
+      }
+    }
+
+    function updateSuns() {
+      State.suns.forEach(s => {
+        if (s.y < s.targetY) s.y += .012;
+      });
+      State.suns = State.suns.filter(s => !s.collected && State.time - s.born < s.lifetime);
+    }
+
+    function updateMowers(dt) {
+      State.mowers.forEach(m => {
+        if (!m.rolling) return;
+        m.x += 5.5 * dt / 1000;
+        State.zombies.filter(z => z.row === m.row && z.x < m.x + .45).forEach(z => damageZombie(z, 9999));
+        if (m.x > COLS + 2) {
+          m.active = false;
+          m.rolling = false;
+        }
+      });
+    }
+
+    function checkEnd() {
+      if (State.wave >= State.totalWaves && State.pendingSpawns.length === 0 && State.zombies.length === 0 && !State.won) {
+        State.won = true;
+        State.gameOver = true;
+        State.score += Math.max(0, 3000 - Math.floor(State.time / 100));
+        SaveSystem.recordScore(State.level, State.score);
+        showResult(true);
+      }
+    }
+
+    function loseGame() {
+      if (State.gameOver) return;
+      State.gameOver = true;
+      State.won = false;
+      showResult(false);
+    }
+
+    function showResult(won) {
+      audio.stopMusic();
+      audio.sfx(won ? 'collect' : 'die');
+      $('resultTitle').textContent = won ? '勝利！' : '草坪失守';
+      $('statTime').textContent = formatTime(State.time);
+      $('statScore').textContent = State.score;
+      $('statKills').textContent = State.kills;
+      $('statWave').textContent = `${State.wave}/${State.totalWaves}`;
+      $('nextLevelBtn').style.display = won && State.level < MAX_LEVEL ? '' : 'none';
+      $('resultOverlay').classList.add('active');
+    }
+
+    function render() {
+      $('timer').textContent = formatTime(State.time);
+      $('waveLabel').textContent = `Wave ${State.wave}/${State.totalWaves}`;
+      $('sunCount').textContent = State.sun;
+      const els = [];
+
+      State.mowers.forEach(m => {
+        if (!m.active && !m.rolling) return;
+        els.push(`<div class="mower" style="top:calc(var(--cell) * ${m.row} + var(--cell) * .28); transform:translateX(calc(var(--cell) * ${m.x}))">⚙️</div>`);
+      });
+
+      State.plants.forEach(p => {
+        const def = getPlantDef(p.defId);
+        const hp = Math.max(0, p.hp / p.maxHp * 100);
+        els.push(`<div class="plant ${p.exploding ? 'attacking' : ''}" style="left:calc(var(--cell) * ${p.col} + var(--cell) * .09);top:calc(var(--cell) * ${p.row} + var(--cell) * .08)">
+          <div class="plant-hp"><span style="width:${hp}%"></span></div>${def.emoji}
+        </div>`);
+      });
+
+      State.zombies.forEach(z => {
+        const hp = Math.max(0, z.hp / z.maxHp * 100);
+        const armor = z.maxArmor ? Math.max(0, z.armor / z.maxArmor * 100) : 0;
+        els.push(`<div class="zombie ${z.state === 'eat' ? 'eat' : ''} ${State.time < z.frozenUntil ? 'frozen' : ''} ${State.time < z.burnUntil ? 'burning' : ''} ${z.dead ? 'dying' : ''}" style="left:calc(var(--cell) * ${z.x});top:calc(var(--cell) * ${z.row} + var(--cell) * .02)">
+          <div class="hpbar ${hp < 30 ? 'low' : ''}"><span style="width:${hp}%"></span></div>
+          ${z.maxArmor ? `<div class="hpbar armorbar"><span style="width:${armor}%"></span></div>` : ''}
+          ${ZombieDefs[z.type].emoji}
+        </div>`);
+      });
+
+      State.projectiles.forEach(p => {
+        els.push(`<div class="projectile ${p.type}" style="left:calc(var(--cell) * ${p.x});top:calc(var(--cell) * ${p.row} + var(--cell) * .39)"></div>`);
+      });
+
+      State.suns.forEach(s => {
+        els.push(`<div class="sun-ball" data-sun="${s.id}" style="left:calc(var(--cell) * ${s.x});top:calc(var(--cell) * ${s.y})"></div>`);
+      });
+
+      entityLayer.innerHTML = els.join('');
+      entityLayer.querySelectorAll('.sun-ball').forEach(el => {
+        el.addEventListener('pointerdown', (e) => {
+          e.stopPropagation();
+          const sun = State.suns.find(s => s.id === el.dataset.sun);
+          if (sun) collectSun(sun);
+        });
+      });
+    }
+
+    let lastTs = 0;
+    function loop(ts) {
+      const dt = Math.min(50, ts - lastTs || 16.7);
+      lastTs = ts;
+      update(dt);
+      render();
+      requestAnimationFrame(loop);
+    }
+
+    function bindUi() {
+      $('newGameBtn').addEventListener('click', () => {
+        audio.init(); audio.sfx('click'); audio.startMusic('menu');
+        State.level = 1;
+        State.selectedPlants = ['P01', 'P02', 'P03', 'P05', 'P06', 'P08'];
+        buildPlantSelect();
+        showScreen('select');
+      });
+      $('continueBtn').addEventListener('click', () => {
+        audio.init(); audio.sfx('click');
+        State.level = getMaxUnlockedLevel();
+        buildPlantSelect();
+        showScreen('select');
+      });
+      $('settingsBtn').addEventListener('click', () => { audio.init(); openSettings(); });
+      $('backMenuBtn').addEventListener('click', () => { audio.sfx('click'); showScreen('menu'); audio.startMusic('menu'); });
+      $('startBattleBtn').addEventListener('click', () => {
+        if (State.selectedPlants.length !== 6) { toast('請選滿 6 種植物'); return; }
+        audio.init(); audio.sfx('click');
+        resetGame(State.level);
+        showScreen('game');
+      });
+      $('prevLevelBtn').addEventListener('click', () => { audio.sfx('click'); setSelectedLevel(State.level - 1); });
+      $('nextLevelSelectBtn').addEventListener('click', () => { audio.sfx('click'); setSelectedLevel(State.level + 1); });
+      $('shovelBtn').addEventListener('click', () => {
+        State.shovel = !State.shovel;
+        State.handPlant = null;
+        $('shovelBtn').classList.toggle('active', State.shovel);
+        ghost.textContent = State.shovel ? '♨' : '';
+        audio.sfx('click');
+        renderHand();
+      });
+      $('pauseBtn').addEventListener('click', pauseGame);
+      $('resumeBtn').addEventListener('click', resumeGame);
+      $('restartBtn').addEventListener('click', () => resetGame(State.level));
+      $('quitBtn').addEventListener('click', () => { audio.stopMusic(); showScreen('menu'); $('pauseOverlay').classList.remove('active'); audio.startMusic('menu'); });
+      $('againBtn').addEventListener('click', () => { $('resultOverlay').classList.remove('active'); resetGame(State.level); });
+      $('nextLevelBtn').addEventListener('click', () => {
+        $('resultOverlay').classList.remove('active');
+        resetGame(Math.min(MAX_LEVEL, State.level + 1));
+      });
+      $('resultMenuBtn').addEventListener('click', () => { $('resultOverlay').classList.remove('active'); showScreen('menu'); audio.startMusic('menu'); });
+      $('closeSettingsBtn').addEventListener('click', closeSettings);
+
+      document.addEventListener('pointermove', e => {
+        if (!State.handPlant && !State.shovel) { ghost.classList.remove('active'); return; }
+        ghost.classList.add('active');
+        ghost.style.left = `${e.clientX}px`;
+        ghost.style.top = `${e.clientY}px`;
+      });
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && State.phase === 'PLAYING') State.paused ? resumeGame() : pauseGame();
+        if (e.key >= '1' && e.key <= '6') {
+          const id = State.selectedPlants[Number(e.key) - 1];
+          if (id) State.handPlant = id;
+        }
+      });
+      document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+    }
+
+    function pauseGame() {
+      if (State.phase !== 'PLAYING' || State.gameOver) return;
+      State.paused = true;
+      $('pauseOverlay').classList.add('active');
+      audio.sfx('click');
+    }
+    function resumeGame() {
+      State.paused = false;
+      $('pauseOverlay').classList.remove('active');
+      audio.sfx('click');
+    }
+
+    function openSettings() {
+      const save = SaveSystem.load();
+      $('masterVolume').value = save.settings.masterVolume;
+      $('musicVolume').value = save.settings.musicVolume;
+      $('sfxVolume').value = save.settings.sfxVolume;
+      $('vibrationToggle').checked = save.settings.vibration;
+      $('settingsOverlay').classList.add('active');
+      ['masterVolume', 'musicVolume', 'sfxVolume', 'vibrationToggle'].forEach(id => {
+        $(id).oninput = () => {
+          const current = SaveSystem.load();
+          current.settings = {
+            masterVolume: Number($('masterVolume').value),
+            musicVolume: Number($('musicVolume').value),
+            sfxVolume: Number($('sfxVolume').value),
+            vibration: $('vibrationToggle').checked
+          };
+          SaveSystem.save(current);
+          audio.applySettings(current.settings);
+        };
+      });
+    }
+    function closeSettings() {
+      $('settingsOverlay').classList.remove('active');
+      audio.sfx('click');
+    }
+
+    bindUi();
+    buildBoard();
+    buildPlantSelect();
+    renderHand();
+    requestAnimationFrame(loop);
+  </script>
+</body>
+</html>
