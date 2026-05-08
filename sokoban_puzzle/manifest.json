@@ -1,0 +1,10 @@
+{
+  "name": "BoxMaster 推箱子",
+  "short_name": "BoxMaster",
+  "description": "HTML5 Canvas Web 版推箱子",
+  "start_url": ".",
+  "display": "fullscreen",
+  "orientation": "any",
+  "theme_color": "#151826",
+  "background_color": "#151826"
+}

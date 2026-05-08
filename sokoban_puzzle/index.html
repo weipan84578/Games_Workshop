@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#151826" />
+    <title>BoxMaster 推箱子</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="app" class="app" data-screen="menu">
+      <section id="menuScreen" class="screen menu-screen active" aria-labelledby="gameTitle">
+        <div class="menu-art" aria-hidden="true">
+          <div class="pixel-wall"></div>
+          <div class="pixel-crate"></div>
+          <div class="pixel-target"></div>
+        </div>
+        <div class="brand">
+          <p class="eyebrow">HTML5 Canvas Sokoban</p>
+          <h1 id="gameTitle">BoxMaster</h1>
+          <p class="subtitle">把每個箱子推到標記點，越少步越漂亮。</p>
+        </div>
+        <nav class="menu-actions" aria-label="主選單">
+          <button class="btn primary" data-action="open-levels">開始遊戲</button>
+          <button class="btn" data-action="open-settings">設定</button>
+          <button class="btn" data-action="open-help">說明</button>
+        </nav>
+      </section>
+
+      <section id="levelScreen" class="screen" aria-labelledby="levelTitle">
+        <header class="screen-header">
+          <button class="icon-btn" data-action="menu" title="返回主選單" aria-label="返回主選單">←</button>
+          <div>
+            <p class="eyebrow">Level Select</p>
+            <h2 id="levelTitle">選擇關卡</h2>
+          </div>
+        </header>
+        <div class="difficulty-tabs" role="tablist" aria-label="難度">
+          <button class="tab active" data-difficulty="easy" role="tab">新手</button>
+          <button class="tab" data-difficulty="medium" role="tab">進階</button>
+          <button class="tab" data-difficulty="hard" role="tab">高手</button>
+        </div>
+        <div id="unlockHint" class="unlock-hint"></div>
+        <div id="levelGrid" class="level-grid" aria-label="關卡清單"></div>
+      </section>
+
+      <section id="gameScreen" class="screen game-screen" aria-labelledby="currentLevelName">
+        <header class="hud hud-top">
+          <button class="icon-btn" data-action="levels" title="關卡" aria-label="返回關卡">←</button>
+          <div class="hud-title">
+            <span id="difficultyBadge" class="badge">新手</span>
+            <h2 id="currentLevelName">Level 1</h2>
+          </div>
+          <div class="hud-stats">
+            <span id="timerText">00:00</span>
+            <span id="stepsText">0 步</span>
+          </div>
+        </header>
+        <main class="board-wrap">
+          <canvas id="gameCanvas" width="720" height="720" aria-label="推箱子遊戲棋盤"></canvas>
+        </main>
+        <footer class="hud hud-bottom">
+          <button class="control-btn" data-action="undo" title="Undo">↶<span>復原</span></button>
+          <button class="control-btn" data-action="reset" title="Reset">↻<span>重來</span></button>
+          <button class="control-btn" data-action="pause" title="Pause">Ⅱ<span>暫停</span></button>
+          <button class="control-btn" data-action="hint" title="Hint">?</button>
+        </footer>
+      </section>
+
+      <section id="settingsScreen" class="screen" aria-labelledby="settingsTitle">
+        <header class="screen-header">
+          <button class="icon-btn" data-action="menu" title="返回主選單" aria-label="返回主選單">←</button>
+          <div>
+            <p class="eyebrow">Settings</p>
+            <h2 id="settingsTitle">設定</h2>
+          </div>
+        </header>
+        <div class="settings-panel">
+          <label class="field">
+            <span>音樂音量</span>
+            <input id="musicVolume" type="range" min="0" max="100" step="1" />
+          </label>
+          <label class="field">
+            <span>音效音量</span>
+            <input id="sfxVolume" type="range" min="0" max="100" step="1" />
+          </label>
+          <label class="field">
+            <span>音樂風格</span>
+            <select id="musicStyle">
+              <option value="RELAX">放鬆</option>
+              <option value="FOCUS">專注</option>
+              <option value="TENSION">緊張</option>
+              <option value="PIXEL">像素</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>棋格大小</span>
+            <select id="cellSize">
+              <option value="auto">自動</option>
+              <option value="small">小</option>
+              <option value="medium">中</option>
+              <option value="large">大</option>
+            </select>
+          </label>
+          <label class="switch-field">
+            <span>深色主題</span>
+            <input id="darkMode" type="checkbox" />
+          </label>
+          <label class="switch-field">
+            <span>觸覺回饋</span>
+            <input id="haptic" type="checkbox" />
+          </label>
+          <label class="switch-field">
+            <span>顯示計時</span>
+            <input id="showTimer" type="checkbox" />
+          </label>
+          <button class="btn danger" data-action="clear-save">清除紀錄</button>
+        </div>
+      </section>
+
+      <section id="helpScreen" class="screen" aria-labelledby="helpTitle">
+        <header class="screen-header">
+          <button class="icon-btn" data-action="menu" title="返回主選單" aria-label="返回主選單">←</button>
+          <div>
+            <p class="eyebrow">Guide</p>
+            <h2 id="helpTitle">操作說明</h2>
+          </div>
+        </header>
+        <div class="help-panel">
+          <p>方向鍵或 WASD 移動，Z 復原，R 重來，Esc 暫停。手機可在棋盤上滑動。</p>
+          <p>星等依步數評定：低於標準步數得 3 星，低於 1.5 倍得 2 星，其餘通關得 1 星。</p>
+        </div>
+      </section>
+
+      <div id="modal" class="modal" hidden>
+        <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+          <h2 id="modalTitle">暫停</h2>
+          <p id="modalText"></p>
+          <div id="modalStats" class="modal-stats"></div>
+          <div id="modalActions" class="modal-actions"></div>
+        </div>
+      </div>
+
+      <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    </div>
+    <script src="main.js"></script>
+  </body>
+</html>
