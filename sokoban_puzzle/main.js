@@ -19,9 +19,9 @@ const DEFAULT_SETTINGS = {
 };
 
 const DIFFICULTIES = {
-  easy: { label: "新手", color: "#4caf73", count: 20 },
-  medium: { label: "進階", color: "#f2994a", count: 20 },
-  hard: { label: "高手", color: "#e85f54", count: 20 },
+  easy: { label: "簡單", color: "#4caf73", count: 20 },
+  medium: { label: "中級", color: "#f2994a", count: 20 },
+  hard: { label: "困難", color: "#e85f54", count: 20 },
 };
 
 const DIRS = {
@@ -31,74 +31,127 @@ const DIRS = {
   right: { x: 1, y: 0 },
 };
 
-const LEVEL_TEMPLATES = {
-  easy: [
-    ["#######", "#     #", "#  $  #", "#  .  #", "#  @  #", "#     #", "#######"],
-    ["######", "#    #", "# $@ #", "# .  #", "#    #", "######"],
-    ["#######", "#     #", "# $ $ #", "# . . #", "#  @  #", "#     #", "#######"],
-    ["#######", "#  .  #", "#  $  #", "#  $  #", "#  .  #", "#  @  #", "#######"],
-    ["########", "#      #", "# $$   #", "# ..   #", "#  @   #", "#      #", "########"],
-    ["########", "#      #", "#  .   #", "#  $   #", "#  @ $ #", "#    . #", "#      #", "########"],
-    ["########", "#      #", "#  $   #", "#  .   #", "#  @   #", "#      #", "#      #", "########"],
-    ["#######", "# . . #", "# $$$ #", "#  @  #", "#  .  #", "#     #", "#######"],
-    ["#####", "#   #", "# $ #", "# . #", "# $ #", "# . #", "# @ #", "#   #", "#####"],
-    ["########", "#      #", "#  $$  #", "#  ..  #", "#  @   #", "#      #", "#      #", "########"],
-  ],
-  medium: [
-    ["#########", "#       #", "#  ###  #", "#  $ $  #", "#  . .  #", "#   @   #", "#       #", "#       #", "#########"],
-    ["##########", "#        #", "#  . .   #", "#  $ $   #", "#   @    #", "#   ###  #", "#        #", "##########"],
-    ["#########", "#       #", "# . . . #", "# $ $ $ #", "#   @   #", "#  ###  #", "#       #", "#       #", "#########"],
-    ["##########", "#        #", "#  .##.  #", "#  $  $  #", "#   @    #", "#        #", "#   ##   #", "#        #", "##########"],
-    ["##########", "#        #", "# . . .  #", "# $ $ $  #", "#   @    #", "#  ####  #", "#        #", "#        #", "##########"],
-    ["##########", "#        #", "#  ..    #", "#  $$    #", "#   @    #", "#    $   #", "#    .   #", "#        #", "#        #", "##########"],
-    ["#########", "#       #", "# . . . #", "# $#$ $ #", "#   @   #", "#       #", "#       #", "#       #", "#########"],
-    ["##########", "#        #", "#  . .   #", "#  $ $   #", "#  ##    #", "#   @    #", "#    $.  #", "#        #", "##########"],
-    ["##########", "#        #", "#  ....  #", "#  $$$$  #", "#   @    #", "#   ##   #", "#        #", "#        #", "##########"],
-    ["#########", "#       #", "# .. .. #", "# $$ $$ #", "#   @   #", "#  ###  #", "#       #", "#       #", "#########"],
-  ],
-  hard: [
-    ["###########", "#         #", "#  . . .  #", "#  $ $ $  #", "#   ###   #", "#    @    #", "#         #", "#         #", "#         #", "###########"],
-    ["###########", "#         #", "# . . . . #", "# $ $ $ $ #", "#    @    #", "#  #####  #", "#         #", "#         #", "#         #", "###########"],
-    ["############", "#          #", "#  ..  ..  #", "#  $$  $$  #", "#    @     #", "#  ####    #", "#          #", "#          #", "#          #", "###########"],
-    ["###########", "#         #", "# . . . . #", "# $ $ $ $ #", "#   ###   #", "#    @    #", "#   ###   #", "#         #", "#         #", "#         #", "###########"],
-    ["############", "#          #", "#  . . .   #", "#  $ $ $   #", "#    @     #", "#   ####   #", "#     $.   #", "#     $.   #", "#          #", "#          #", "############"],
-    ["############", "#          #", "#  ......  #", "#  $$$$$$  #", "#    @     #", "#   ####   #", "#          #", "#          #", "#          #", "#          #", "############"],
-    ["###########", "#         #", "# .. . .. #", "# $$ $ $$ #", "#    @    #", "#  #####  #", "#         #", "#         #", "#         #", "#         #", "###########"],
-    ["############", "#          #", "# . . . .  #", "# $ $ $ $  #", "#   ##     #", "#    @     #", "#     $.   #", "#     $.   #", "#          #", "#          #", "############"],
-    ["############", "#          #", "#  .. ..   #", "#  $$ $$   #", "#    @     #", "#  ######  #", "#    $.    #", "#    $.    #", "#          #", "#          #", "############"],
-    ["############", "#          #", "#  ......  #", "#  $$$$$$  #", "#    @     #", "#  ######  #", "#          #", "#          #", "#          #", "#          #", "############"],
-  ],
+const LEVEL_NAMES = {
+  easy: ["Warm Up", "Straight Push", "Twin Boxes", "Short Hall", "Open Room", "Side Step", "Three Marks", "Compact Room", "Clean Line", "Easy Review"],
+  medium: ["Long Lane", "Split Storage", "Offset Boxes", "Wide Room", "Center Posts", "Four Crates", "Side Targets", "Warehouse Bend", "Two Rows", "Medium Review"],
+  hard: ["Deep Warehouse", "Six Crates", "Staggered Goals", "Heavy Floor", "Long Pushes", "Inner Pillars", "Crowded Storage", "Final Rows", "Wide Sweep", "Hard Review"],
 };
 
-const LEVEL_NAMES = {
-  easy: ["暖身一步", "推進教室", "雙箱入門", "直線倉庫", "並排練習", "角落避讓", "窄房間", "三箱同列", "長廊", "基礎總測"],
-  medium: ["分隔牆", "側翼推送", "三點整理", "雙門庫房", "長牆轉位", "分段收納", "中央障礙", "側邊補位", "四箱排列", "交錯路線"],
-  hard: ["高牆之間", "四箱壓力", "倉庫折返", "雙牆中庭", "側翼雙點", "六箱列陣", "交錯陣列", "補位工廠", "雙段推進", "最終倉庫"],
+const LEVEL_RULES = {
+  easy: { width: 7, height: 7, minBoxes: 1, maxBoxes: 3, minPush: 1, maxPush: 2, wallCount: 0, basePar: 8 },
+  medium: { width: 10, height: 9, minBoxes: 3, maxBoxes: 4, minPush: 2, maxPush: 4, wallCount: 5, basePar: 24 },
+  hard: { width: 12, height: 11, minBoxes: 4, maxBoxes: 6, minPush: 3, maxPush: 5, wallCount: 12, basePar: 52 },
 };
 
 function buildLevels() {
   const levels = {};
-  for (const [difficulty, templates] of Object.entries(LEVEL_TEMPLATES)) {
+  for (const difficulty of Object.keys(DIFFICULTIES)) {
     levels[difficulty] = [];
-    for (let i = 0; i < 20; i += 1) {
-      const grid = ensureTargetCapacity(templates[i % templates.length]);
+    for (let i = 0; i < DIFFICULTIES[difficulty].count; i += 1) {
       const index = i + 1;
-      const boxCount = grid.join("").replace(/[^$*]/g, "").length;
-      const basePar = difficulty === "easy" ? 8 : difficulty === "medium" ? 24 : 55;
+      const grid = ensureTargetCapacity(generateSolvableGrid(difficulty, index));
+      const boxCount = countTiles(grid, "$*");
+      const rules = LEVEL_RULES[difficulty];
       levels[difficulty].push({
         id: `${difficulty}_${String(index).padStart(2, "0")}`,
         difficulty,
         index,
-        name: `${LEVEL_NAMES[difficulty][i % templates.length]} ${i >= 10 ? "II" : ""}`.trim(),
+        name: `${LEVEL_NAMES[difficulty][i % LEVEL_NAMES[difficulty].length]} ${i >= 10 ? "II" : ""}`.trim(),
         width: Math.max(...grid.map((row) => row.length)),
         height: grid.length,
-        par: basePar + i * (difficulty === "easy" ? 1 : difficulty === "medium" ? 2 : 4) + boxCount,
+        par: rules.basePar + index * (difficulty === "easy" ? 1 : difficulty === "medium" ? 2 : 4) + boxCount * rules.maxPush,
         grid: normalizeGrid(grid),
-        hint: "先觀察目標點和牆的位置，避免把箱子推進角落。",
+        hint: "先找出每個箱子的直推路線，再調整人物站位。",
       });
     }
   }
   return levels;
+}
+
+function generateSolvableGrid(difficulty, index) {
+  const rules = LEVEL_RULES[difficulty];
+  const width = rules.width + Math.floor((index - 1) / 10);
+  const height = rules.height + (difficulty !== "easy" && index > 10 ? 1 : 0);
+  const grid = Array.from({ length: height }, (_, y) =>
+    Array.from({ length: width }, (_, x) => (x === 0 || y === 0 || x === width - 1 || y === height - 1 ? "#" : " ")),
+  );
+  const boxCount = rules.minBoxes + ((index - 1) % (rules.maxBoxes - rules.minBoxes + 1));
+  const pushDistance = rules.minPush + Math.floor((index - 1) / 5) % (rules.maxPush - rules.minPush + 1);
+  const lanes = chooseLanes(width, boxCount, index);
+  const targetRow = 1 + ((index + Math.floor(index / 4)) % Math.max(1, height - pushDistance - 4));
+  const boxRow = targetRow + pushDistance;
+  const playerRow = Math.min(height - 2, boxRow + 1);
+
+  for (const lane of lanes) {
+    grid[targetRow][lane] = ".";
+    grid[boxRow][lane] = "$";
+  }
+
+  const playerX = lanes[Math.floor(lanes.length / 2)];
+  grid[playerRow][playerX] = "@";
+  addDecorativeWalls(grid, lanes, targetRow, boxRow, playerRow, rules.wallCount, index);
+  return grid.map((row) => row.join(""));
+}
+
+function chooseLanes(width, boxCount, index) {
+  const usable = [];
+  for (let x = 2; x <= width - 3; x += 1) usable.push(x);
+  const lanes = [];
+  const stride = index % 2 === 0 ? 2 : 3;
+  let cursor = index % usable.length;
+  while (lanes.length < boxCount && lanes.length < usable.length) {
+    const lane = usable[cursor % usable.length];
+    if (!lanes.includes(lane) && !lanes.includes(lane - 1) && !lanes.includes(lane + 1)) lanes.push(lane);
+    cursor += stride;
+    if (cursor > usable.length * 4 && lanes.length < boxCount) {
+      for (const fallback of usable) {
+        if (!lanes.includes(fallback)) lanes.push(fallback);
+        if (lanes.length === boxCount) break;
+      }
+    }
+  }
+  return lanes.sort((a, b) => a - b);
+}
+
+function addDecorativeWalls(grid, lanes, targetRow, boxRow, playerRow, wallCount, index) {
+  if (!wallCount) return;
+  const protectedCells = new Set();
+  for (const lane of lanes) {
+    for (let y = targetRow; y <= playerRow; y += 1) protectedCells.add(`${lane},${y}`);
+    protectedCells.add(`${lane},${playerRow + 1}`);
+  }
+
+  let placed = 0;
+  let attempt = 0;
+  while (placed < wallCount && attempt < wallCount * 12) {
+    attempt += 1;
+    const x = 1 + ((index * 7 + attempt * 3) % (grid[0].length - 2));
+    const y = 1 + ((index * 5 + attempt * 2) % (grid.length - 2));
+    const key = `${x},${y}`;
+    if (protectedCells.has(key) || grid[y][x] !== " ") continue;
+    if (lanes.some((lane) => Math.abs(lane - x) <= 1 && y >= targetRow && y <= playerRow + 1)) continue;
+    grid[y][x] = "#";
+    placed += 1;
+  }
+}
+
+function countTiles(grid, chars) {
+  return grid.join("").split("").filter((char) => chars.includes(char)).length;
+}
+
+function roundRect(ctx, x, y, width, height, radius) {
+  const r = Math.min(radius, width / 2, height / 2);
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + width - r, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + r);
+  ctx.lineTo(x + width, y + height - r);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
+  ctx.lineTo(x + r, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
 }
 
 function normalizeGrid(grid) {
@@ -122,7 +175,6 @@ function ensureTargetCapacity(grid) {
   }
   return normalized.map((row) => row.join(""));
 }
-
 function loadJson(key, fallback) {
   try {
     return JSON.parse(localStorage.getItem(key)) ?? fallback;
@@ -494,18 +546,64 @@ class Renderer {
     const { ctx, cell } = this;
     const cx = x * cell + cell / 2;
     const cy = y * cell + cell / 2;
+    const unit = cell / 64;
+    ctx.save();
+    ctx.translate(cx, cy);
+
+    ctx.fillStyle = "rgba(0, 0, 0, 0.24)";
     ctx.beginPath();
-    ctx.arc(cx, cy, cell * 0.3, 0, Math.PI * 2);
-    ctx.fillStyle = "#5aa8ff";
+    ctx.ellipse(0, cell * 0.34, cell * 0.22, cell * 0.08, 0, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillStyle = "#f4f5fb";
+
+    ctx.strokeStyle = "#24476f";
+    ctx.lineWidth = Math.max(2, 4 * unit);
+    ctx.lineCap = "round";
     ctx.beginPath();
-    ctx.arc(cx - cell * 0.09, cy - cell * 0.07, cell * 0.045, 0, Math.PI * 2);
-    ctx.arc(cx + cell * 0.09, cy - cell * 0.07, cell * 0.045, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = "#1d3555";
-    ctx.lineWidth = Math.max(2, cell * 0.04);
+    ctx.moveTo(-cell * 0.16, cell * 0.05);
+    ctx.lineTo(-cell * 0.29, cell * 0.17);
+    ctx.moveTo(cell * 0.16, cell * 0.05);
+    ctx.lineTo(cell * 0.29, cell * 0.17);
     ctx.stroke();
+
+    ctx.fillStyle = "#377fd1";
+    roundRect(ctx, -cell * 0.18, -cell * 0.01, cell * 0.36, cell * 0.35, cell * 0.09);
+    ctx.fill();
+
+    ctx.strokeStyle = "#1b3555";
+    ctx.beginPath();
+    ctx.moveTo(-cell * 0.08, cell * 0.31);
+    ctx.lineTo(-cell * 0.13, cell * 0.43);
+    ctx.moveTo(cell * 0.08, cell * 0.31);
+    ctx.lineTo(cell * 0.13, cell * 0.43);
+    ctx.stroke();
+
+    ctx.fillStyle = "#f2c59e";
+    ctx.beginPath();
+    ctx.arc(0, -cell * 0.22, cell * 0.2, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = "#3a2a24";
+    ctx.beginPath();
+    ctx.arc(0, -cell * 0.28, cell * 0.21, Math.PI, Math.PI * 2);
+    ctx.fill();
+    ctx.fillRect(-cell * 0.19, -cell * 0.27, cell * 0.38, cell * 0.08);
+
+    ctx.fillStyle = "#17223a";
+    ctx.beginPath();
+    ctx.arc(-cell * 0.07, -cell * 0.22, cell * 0.025, 0, Math.PI * 2);
+    ctx.arc(cell * 0.07, -cell * 0.22, cell * 0.025, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.strokeStyle = "#8f4d42";
+    ctx.lineWidth = Math.max(1.5, 2 * unit);
+    ctx.beginPath();
+    ctx.arc(0, -cell * 0.17, cell * 0.065, 0.2, Math.PI - 0.2);
+    ctx.stroke();
+
+    ctx.strokeStyle = "#1d3555";
+    ctx.lineWidth = Math.max(2, 3 * unit);
+    ctx.strokeRect(-cell * 0.18, -cell * 0.01, cell * 0.36, cell * 0.35);
+    ctx.restore();
   }
 }
 
@@ -603,7 +701,7 @@ class App {
       undo: () => this.undo(),
       reset: () => this.reset(),
       pause: () => this.pause(),
-      hint: () => this.toast(this.game.level?.hint || "選一個關卡開始。"),
+      hint: () => this.toast(this.game.level?.hint || "請先選擇一個關卡。"),
       "clear-save": () => this.clearSave(),
     };
     actions[action]?.();
