@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 
 const STORAGE_KEYS = {
   SETTINGS: "boxmaster_settings",
@@ -39,8 +39,8 @@ const LEVEL_NAMES = {
 
 const LEVEL_RULES = {
   easy: { width: 7, height: 7, minBoxes: 1, maxBoxes: 3, minPush: 1, maxPush: 2, wallCount: 0, basePar: 8 },
-  medium: { width: 10, height: 9, minBoxes: 3, maxBoxes: 4, minPush: 2, maxPush: 4, wallCount: 5, basePar: 24 },
-  hard: { width: 12, height: 11, minBoxes: 4, maxBoxes: 6, minPush: 3, maxPush: 5, wallCount: 12, basePar: 52 },
+  medium: { width: 11, height: 10, minBoxes: 3, maxBoxes: 4, minPush: 8, maxPush: 16, wallCount: 6, basePar: 34 },
+  hard: { width: 13, height: 12, minBoxes: 5, maxBoxes: 6, minPush: 24, maxPush: 44, wallCount: 18, basePar: 72 },
 };
 
 function buildLevels() {
@@ -59,9 +59,9 @@ function buildLevels() {
         name: `${LEVEL_NAMES[difficulty][i % LEVEL_NAMES[difficulty].length]} ${i >= 10 ? "II" : ""}`.trim(),
         width: Math.max(...grid.map((row) => row.length)),
         height: grid.length,
-        par: rules.basePar + index * (difficulty === "easy" ? 1 : difficulty === "medium" ? 2 : 4) + boxCount * rules.maxPush,
+        par: rules.basePar + index * (difficulty === "easy" ? 1 : difficulty === "medium" ? 3 : 5) + boxCount * (difficulty === "hard" ? 9 : difficulty === "medium" ? 6 : rules.maxPush),
         grid: normalizeGrid(grid),
-        hint: "先找出每個箱子的直推路線，再調整人物站位。",
+        hint: difficulty === "hard" ? "困難關卡要先想箱子的順序，避免先把通道堵住。" : "先找出每個箱子的直推路線，再調整人物站位。",
       });
     }
   }
@@ -69,6 +69,9 @@ function buildLevels() {
 }
 
 function generateSolvableGrid(difficulty, index) {
+  if (difficulty === "medium") return generateScrambledGrid("medium", index);
+  if (difficulty === "hard") return generateHardGrid(index);
+
   const rules = LEVEL_RULES[difficulty];
   const width = rules.width + Math.floor((index - 1) / 10);
   const height = rules.height + (difficulty !== "easy" && index > 10 ? 1 : 0);
@@ -91,6 +94,176 @@ function generateSolvableGrid(difficulty, index) {
   grid[playerRow][playerX] = "@";
   addDecorativeWalls(grid, lanes, targetRow, boxRow, playerRow, rules.wallCount, index);
   return grid.map((row) => row.join(""));
+}
+
+function generateScrambledGrid(difficulty, index) {
+  const rules = LEVEL_RULES[difficulty];
+  const seed = difficulty === "hard" ? index * 17 + 3 : index * 11 + 5;
+  const width = rules.width + Math.floor((index - 1) / 10);
+  const height = rules.height + (difficulty !== "medium" && index > 10 ? 0 : 0);
+  const grid = createScrambledBaseGrid(width, height, seed, rules.wallCount);
+  const boxCount = rules.minBoxes + (index % (rules.maxBoxes - rules.minBoxes + 1));
+  const targets = chooseScrambledTargets(width, height, boxCount, seed, grid);
+  const targetKeys = new Set(targets.map(posKey));
+  let boxes = targets.map((target) => ({ ...target }));
+  let player = findNearestFloor(grid, Math.floor(width / 2), height - 3, boxes);
+  const scrambleSteps = rules.minPush + ((seed * 7) % (rules.maxPush - rules.minPush + 1));
+  let movedCount = 0;
+
+  const attemptLimit = difficulty === "hard" ? scrambleSteps * 8 : scrambleSteps * 4;
+  for (let attempt = 0; attempt < attemptLimit && movedCount < scrambleSteps; attempt += 1) {
+    const moved = reverseScrambleOnce(grid, boxes, player, seed, attempt, targetKeys);
+    if (!moved) continue;
+    boxes = moved.boxes;
+    player = moved.player;
+    movedCount += 1;
+  }
+
+  const boxKeys = new Set(boxes.map(posKey));
+  for (const target of targets) grid[target.y][target.x] = ".";
+  for (const box of boxes) grid[box.y][box.x] = targetKeys.has(posKey(box)) ? "*" : "$";
+  if (boxKeys.has(posKey(player))) player = findNearestFloor(grid, Math.floor(width / 2), height - 2, boxes);
+  grid[player.y][player.x] = targetKeys.has(posKey(player)) ? "+" : "@";
+  return grid.map((row) => row.join(""));
+}
+
+function generateHardGrid(index) {
+  return generateScrambledGrid("hard", index);
+}
+
+function createScrambledBaseGrid(width, height, index, wallCount) {
+  const grid = Array.from({ length: height }, (_, y) =>
+    Array.from({ length: width }, (_, x) => (x === 0 || y === 0 || x === width - 1 || y === height - 1 ? "#" : " ")),
+  );
+  const pillars = [
+    [3, 3], [3, 7], [5, 5], [7, 3], [7, 8], [9, 5],
+    [width - 4, 3], [width - 4, 7], [width - 6, 6],
+  ];
+  for (const [x, y] of pillars) {
+    if (x > 1 && x < width - 2 && y > 1 && y < height - 2) grid[y][x] = "#";
+  }
+
+  let placed = 0;
+  for (let y = 2; y < height - 2 && placed < wallCount; y += 3) {
+    const gap = 2 + ((index + y) % (width - 4));
+    for (let x = 2; x < width - 2; x += 1) {
+      if (placed >= wallCount) break;
+      if (x !== gap && x !== gap + 1 && (x + y + index) % 5 === 0) {
+        grid[y][x] = "#";
+        placed += 1;
+      }
+    }
+  }
+  return grid;
+}
+
+function chooseScrambledTargets(width, height, boxCount, index, grid) {
+  const fixedCandidates = [
+    { x: 2, y: 3 }, { x: width - 3, y: 3 }, { x: 4, y: 5 },
+    { x: width - 5, y: 5 }, { x: 3, y: height - 4 }, { x: width - 4, y: height - 4 },
+    { x: Math.floor(width / 2), y: 4 }, { x: Math.floor(width / 2), y: height - 5 },
+  ].filter((pos) => isBoxSafeFloor(grid, pos.x, pos.y));
+  const candidates = [...fixedCandidates];
+  for (let y = 2; y < height - 2; y += 1) {
+    for (let x = 2; x < width - 2; x += 1) {
+      if (isBoxSafeFloor(grid, x, y) && !candidates.some((pos) => pos.x === x && pos.y === y)) candidates.push({ x, y });
+    }
+  }
+  const targets = [];
+  let cursor = index % candidates.length;
+  let attempts = 0;
+  while (targets.length < boxCount && attempts < candidates.length * 2) {
+    attempts += 1;
+    const pos = candidates[cursor % candidates.length];
+    if (!targets.some((target) => target.x === pos.x && target.y === pos.y)) targets.push({ ...pos });
+    cursor += 2;
+  }
+  for (const pos of candidates) {
+    if (targets.length >= boxCount) break;
+    if (!targets.some((target) => target.x === pos.x && target.y === pos.y)) targets.push({ ...pos });
+  }
+  return targets;
+}
+
+function reverseScrambleOnce(grid, boxes, player, index, step, targetKeys) {
+  const order = [
+    DIRS.up, DIRS.left, DIRS.down, DIRS.right,
+    DIRS.left, DIRS.up, DIRS.right, DIRS.down,
+  ];
+  const boxOrder = boxes
+    .map((box, i) => ({ index: i, onTarget: targetKeys.has(posKey(box)) }))
+    .sort((a, b) => Number(b.onTarget) - Number(a.onTarget))
+    .map((item, i) => boxes[(item.index + index + step + i) % boxes.length] ? item.index : item.index);
+  for (const boxIndex of boxOrder) {
+    const box = boxes[boxIndex];
+    for (let i = 0; i < order.length; i += 1) {
+      const dir = order[(i + index + step + boxIndex) % order.length];
+      const stand = { x: box.x - dir.x, y: box.y - dir.y };
+      const pulledBox = { x: box.x - dir.x * 2, y: box.y - dir.y * 2 };
+      if (targetKeys.has(posKey(pulledBox))) continue;
+      if (!isOpenFloor(grid, stand.x, stand.y) || !isBoxSafeFloor(grid, pulledBox.x, pulledBox.y)) continue;
+      if (boxes.some((other, iBox) => iBox !== boxIndex && (samePos(other, stand) || samePos(other, pulledBox)))) continue;
+      if (!canReach(grid, player, stand, boxes)) continue;
+      const nextBoxes = boxes.map((other, iBox) => (iBox === boxIndex ? pulledBox : { ...other }));
+      return { boxes: nextBoxes, player: { x: stand.x, y: stand.y } };
+    }
+  }
+  return null;
+}
+
+function canReach(grid, start, goal, boxes) {
+  if (samePos(start, goal)) return true;
+  const blocked = new Set(boxes.map(posKey));
+  const queue = [start];
+  const seen = new Set([posKey(start)]);
+  for (let cursor = 0; cursor < queue.length; cursor += 1) {
+    const pos = queue[cursor];
+    for (const dir of Object.values(DIRS)) {
+      const next = { x: pos.x + dir.x, y: pos.y + dir.y };
+      const key = posKey(next);
+      if (seen.has(key) || blocked.has(key) || !isOpenFloor(grid, next.x, next.y)) continue;
+      if (samePos(next, goal)) return true;
+      seen.add(key);
+      queue.push(next);
+    }
+  }
+  return false;
+}
+
+function findNearestFloor(grid, x, y, boxes) {
+  const blocked = new Set(boxes.map(posKey));
+  const queue = [{ x, y }];
+  const seen = new Set();
+  for (let cursor = 0; cursor < queue.length; cursor += 1) {
+    const pos = queue[cursor];
+    const key = posKey(pos);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    if (isOpenFloor(grid, pos.x, pos.y) && !blocked.has(key)) return pos;
+    for (const dir of Object.values(DIRS)) {
+      const next = { x: pos.x + dir.x, y: pos.y + dir.y };
+      if (next.x >= 0 && next.x < grid[0].length && next.y >= 0 && next.y < grid.length) queue.push(next);
+    }
+  }
+  return { x: 1, y: 1 };
+}
+
+function isOpenFloor(grid, x, y) {
+  return y > 0 && y < grid.length - 1 && x > 0 && x < grid[y].length - 1 && grid[y][x] !== "#";
+}
+
+function isBoxSafeFloor(grid, x, y) {
+  if (!isOpenFloor(grid, x, y)) return false;
+  if (x <= 1 || y <= 1 || x >= grid[y].length - 2 || y >= grid.length - 2) return false;
+  return Object.values(DIRS).every((dir) => isOpenFloor(grid, x + dir.x, y + dir.y));
+}
+
+function samePos(a, b) {
+  return a.x === b.x && a.y === b.y;
+}
+
+function posKey(pos) {
+  return `${pos.x},${pos.y}`;
 }
 
 function chooseLanes(width, boxCount, index) {
