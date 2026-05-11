@@ -1,6 +1,4 @@
-import { BOARD_COLS, BOARD_ROWS, PIECE_LABELS, PieceType, SIDES } from "./pieces.js";
-
-export class BoardView {
+class BoardView {
   constructor(canvas, onPoint) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");

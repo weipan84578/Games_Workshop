@@ -1,10 +1,3 @@
-import { chooseAiMove, aiDelay } from "./ai.js";
-import { AudioManager } from "./audio.js";
-import { BoardView } from "./board.js";
-import { GameState } from "./game.js";
-import { SIDES, opponent, pieceText, sideText } from "./pieces.js";
-import { loadSettings, resetSettings, saveSettings } from "./settings.js";
-
 const game = new GameState();
 let settings = loadSettings();
 let selected = null;

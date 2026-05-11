@@ -1,4 +1,4 @@
-export const DEFAULT_SETTINGS = {
+const DEFAULT_SETTINGS = {
   bgmEnabled: true,
   sfxEnabled: true,
   bgmVolume: 0.6,
@@ -13,7 +13,7 @@ export const DEFAULT_SETTINGS = {
 
 const STORAGE_KEY = "chinese_chess_settings";
 
-export function loadSettings() {
+function loadSettings() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     return { ...DEFAULT_SETTINGS, ...(raw ? JSON.parse(raw) : {}) };
@@ -22,11 +22,15 @@ export function loadSettings() {
   }
 }
 
-export function saveSettings(settings) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+function saveSettings(settings) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+  } catch {
+    // Some browsers restrict localStorage for file:// pages.
+  }
 }
 
-export function resetSettings() {
+function resetSettings() {
   saveSettings(DEFAULT_SETTINGS);
   return { ...DEFAULT_SETTINGS };
 }

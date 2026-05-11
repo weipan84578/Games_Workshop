@@ -1,4 +1,4 @@
-export class AudioManager {
+class AudioManager {
   constructor(settings) {
     this.settings = settings;
     this.context = null;

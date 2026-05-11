@@ -1,6 +1,3 @@
-import { PieceType, SIDES, cloneBoard, opponent } from "./pieces.js";
-import { applyMoveToBoard, getAllLegalMoves, isInCheck } from "./game.js";
-
 const VALUES = {
   [PieceType.GENERAL]: 100000,
   [PieceType.ROOK]: 1000,
@@ -17,7 +14,7 @@ const DIFFICULTY = {
   hard: { depth: 3, noise: 0, delay: 560 }
 };
 
-export function chooseAiMove(board, side, difficulty = "normal") {
+function chooseAiMove(board, side, difficulty = "normal") {
   const config = DIFFICULTY[difficulty] || DIFFICULTY.normal;
   const legalMoves = orderMoves(getAllLegalMoves(board, side));
   if (legalMoves.length === 0) return null;
@@ -43,7 +40,7 @@ export function chooseAiMove(board, side, difficulty = "normal") {
   return selected;
 }
 
-export function aiDelay(difficulty = "normal") {
+function aiDelay(difficulty = "normal") {
   return (DIFFICULTY[difficulty] || DIFFICULTY.normal).delay;
 }
 

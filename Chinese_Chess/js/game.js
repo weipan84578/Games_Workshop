@@ -1,16 +1,4 @@
-import {
-  BOARD_COLS,
-  BOARD_ROWS,
-  PieceType,
-  SIDES,
-  cloneBoard,
-  createInitialBoard,
-  opponent,
-  pieceText,
-  sideText
-} from "./pieces.js";
-
-export class GameState {
+class GameState {
   constructor() {
     this.reset();
   }
@@ -100,16 +88,16 @@ export class GameState {
   }
 }
 
-export function inBounds(row, col) {
+function inBounds(row, col) {
   return row >= 0 && row < BOARD_ROWS && col >= 0 && col < BOARD_COLS;
 }
 
-export function isPalace(side, row, col) {
+function isPalace(side, row, col) {
   const rows = side === SIDES.RED ? row >= 7 && row <= 9 : row >= 0 && row <= 2;
   return rows && col >= 3 && col <= 5;
 }
 
-export function crossedRiver(side, row) {
+function crossedRiver(side, row) {
   return side === SIDES.RED ? row <= 4 : row >= 5;
 }
 
@@ -119,7 +107,7 @@ function addMove(board, piece, moves, row, col) {
   if (!target || target.side !== piece.side) moves.push({ row, col, captured: target || null });
 }
 
-export function getPseudoMoves(board, piece) {
+function getPseudoMoves(board, piece) {
   const moves = [];
   const { row, col, side, type } = piece;
 
@@ -212,7 +200,7 @@ export function getPseudoMoves(board, piece) {
   return moves;
 }
 
-export function getLegalMoves(board, piece) {
+function getLegalMoves(board, piece) {
   return getPseudoMoves(board, piece).filter((move) => {
     const next = cloneBoard(board);
     applyMoveToBoard(next, piece.row, piece.col, move.row, move.col);
@@ -220,7 +208,7 @@ export function getLegalMoves(board, piece) {
   });
 }
 
-export function getAllLegalMoves(board, side) {
+function getAllLegalMoves(board, side) {
   const moves = [];
   for (let row = 0; row < BOARD_ROWS; row += 1) {
     for (let col = 0; col < BOARD_COLS; col += 1) {
@@ -234,7 +222,7 @@ export function getAllLegalMoves(board, side) {
   return moves;
 }
 
-export function applyMoveToBoard(board, fromRow, fromCol, toRow, toCol) {
+function applyMoveToBoard(board, fromRow, fromCol, toRow, toCol) {
   const piece = board[fromRow][fromCol];
   board[toRow][toCol] = piece;
   board[fromRow][fromCol] = null;
@@ -252,13 +240,13 @@ function undoMoveOnBoard(board, move) {
   board[move.to.row][move.to.col] = move.captured ? { ...move.captured } : null;
 }
 
-export function applyMoveImmutable(board, move) {
+function applyMoveImmutable(board, move) {
   const next = cloneBoard(board);
   applyMoveToBoard(next, move.from.row, move.from.col, move.to.row, move.to.col);
   return next;
 }
 
-export function findGeneral(board, side) {
+function findGeneral(board, side) {
   for (let row = 0; row < BOARD_ROWS; row += 1) {
     for (let col = 0; col < BOARD_COLS; col += 1) {
       const piece = board[row][col];
@@ -268,7 +256,7 @@ export function findGeneral(board, side) {
   return null;
 }
 
-export function isInCheck(board, side) {
+function isInCheck(board, side) {
   const general = findGeneral(board, side);
   if (!general) return true;
   const enemy = opponent(side);
@@ -284,15 +272,15 @@ export function isInCheck(board, side) {
   return false;
 }
 
-export function hasAnyLegalMoves(board, side) {
+function hasAnyLegalMoves(board, side) {
   return getAllLegalMoves(board, side).length > 0;
 }
 
-export function formatMove(piece, fromRow, fromCol, toRow, toCol, captured = null) {
+function formatMove(piece, fromRow, fromCol, toRow, toCol, captured = null) {
   const capture = captured ? `吃${pieceText(captured)}` : "至";
   return `${sideText(piece.side)} ${pieceText(piece)} ${coordText(fromRow, fromCol)} ${capture} ${coordText(toRow, toCol)}`;
 }
 
-export function coordText(row, col) {
+function coordText(row, col) {
   return `${String.fromCharCode(97 + col)}${row + 1}`;
 }

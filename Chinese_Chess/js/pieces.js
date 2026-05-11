@@ -1,7 +1,7 @@
-export const BOARD_ROWS = 10;
-export const BOARD_COLS = 9;
+const BOARD_ROWS = 10;
+const BOARD_COLS = 9;
 
-export const PieceType = {
+const PieceType = {
   GENERAL: "general",
   ADVISOR: "advisor",
   BISHOP: "bishop",
@@ -11,12 +11,12 @@ export const PieceType = {
   PAWN: "pawn"
 };
 
-export const SIDES = {
+const SIDES = {
   RED: "red",
   BLACK: "black"
 };
 
-export const PIECE_LABELS = {
+const PIECE_LABELS = {
   red: {
     general: "帥",
     advisor: "仕",
@@ -37,7 +37,7 @@ export const PIECE_LABELS = {
   }
 };
 
-export const PIECE_NAMES = {
+const PIECE_NAMES = {
   general: "將帥",
   advisor: "士仕",
   bishop: "象相",
@@ -49,7 +49,7 @@ export const PIECE_NAMES = {
 
 let nextPieceId = 1;
 
-export class Piece {
+class Piece {
   constructor(type, side, row, col, id = null) {
     this.type = type;
     this.side = side;
@@ -59,19 +59,19 @@ export class Piece {
   }
 }
 
-export function opponent(side) {
+function opponent(side) {
   return side === SIDES.RED ? SIDES.BLACK : SIDES.RED;
 }
 
-export function createEmptyBoard() {
+function createEmptyBoard() {
   return Array.from({ length: BOARD_ROWS }, () => Array(BOARD_COLS).fill(null));
 }
 
-export function place(board, type, side, row, col) {
+function place(board, type, side, row, col) {
   board[row][col] = new Piece(type, side, row, col);
 }
 
-export function createInitialBoard() {
+function createInitialBoard() {
   const board = createEmptyBoard();
   const T = PieceType;
 
@@ -104,18 +104,18 @@ export function createInitialBoard() {
   return board;
 }
 
-export function clonePiece(piece) {
+function clonePiece(piece) {
   return piece ? new Piece(piece.type, piece.side, piece.row, piece.col, piece.id) : null;
 }
 
-export function cloneBoard(board) {
+function cloneBoard(board) {
   return board.map((row) => row.map(clonePiece));
 }
 
-export function pieceText(piece) {
+function pieceText(piece) {
   return PIECE_LABELS[piece.side][piece.type];
 }
 
-export function sideText(side) {
+function sideText(side) {
   return side === SIDES.RED ? "紅方" : "黑方";
 }
