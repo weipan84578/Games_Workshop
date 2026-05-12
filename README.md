@@ -61,3 +61,7 @@
 ### sokoban_puzzle
 
 - 推箱子
+
+### shooting_game
+
+- 槍戰練習

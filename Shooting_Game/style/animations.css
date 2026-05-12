@@ -1,0 +1,63 @@
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes skyline-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-12%); }
+}
+
+@keyframes title-scan {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.35); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.38; }
+}
+
+@keyframes score-pop {
+  0% { transform: scale(1); }
+  55% { transform: scale(1.16); }
+  100% { transform: scale(1); }
+}
+
+@keyframes target-spawn {
+  from { transform: translate(-50%, -50%) translateY(40px) scale(0.82); opacity: 0; }
+  to { transform: translate(-50%, -50%) translateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes target-down {
+  to {
+    transform: translate(-50%, -50%) translateY(42px) rotate(12deg) scale(0.86);
+    opacity: 0;
+  }
+}
+
+@keyframes fx-burst {
+  from { transform: translate(-50%, -50%) scale(0.35); opacity: 1; }
+  to { transform: translate(-50%, -50%) scale(2.2); opacity: 0; }
+}
+
+@keyframes fx-flash {
+  from { transform: translate(-50%, -50%) scale(0.3); opacity: 1; }
+  to { transform: translate(-50%, -50%) scale(1.25); opacity: 0; }
+}
+
+@keyframes float-up {
+  from { transform: translate(-50%, -50%) translateY(0); opacity: 1; }
+  to { transform: translate(-50%, -50%) translateY(-52px); opacity: 0; }
+}
+
+.shake {
+  animation: shake 180ms linear;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(7px, -4px); }
+  50% { transform: translate(-6px, 3px); }
+  75% { transform: translate(4px, 5px); }
+}
