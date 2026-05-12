@@ -87,7 +87,7 @@ class GameController {
     const run = GameState.run;
     run.targets.push(target);
     renderTarget(target, this.targetLayer);
-    this.audio.sfx("reload");
+    this.audio.sfx(target.isHostage ? "help" : "reload");
   }
 
   targetEscaped(target) {
@@ -224,14 +224,23 @@ class GameController {
       this.audio.sfx("reload");
       const bar = this.reloadMeter.querySelector("span");
       this.reloadMeter.classList.add("is-active");
+      bar.getAnimations().forEach((animation) => animation.cancel());
       bar.style.transition = "none";
-      bar.style.width = "0";
-      requestAnimationFrame(() => {
-        bar.style.transition = `width ${ms}ms linear`;
-        bar.style.width = "100%";
+      bar.style.transform = "scaleX(0)";
+      void bar.offsetWidth;
+      bar.animate([
+        { transform: "scaleX(0)" },
+        { transform: "scaleX(1)" }
+      ], {
+        duration: ms,
+        easing: "linear",
+        fill: "forwards"
       });
     }, () => {
       this.audio.sfx("reload");
+      const bar = this.reloadMeter.querySelector("span");
+      bar.getAnimations().forEach((animation) => animation.cancel());
+      bar.style.transform = "scaleX(1)";
       this.reloadMeter.classList.remove("is-active");
       this.updateHud();
     });

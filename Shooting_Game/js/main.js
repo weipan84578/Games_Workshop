@@ -25,7 +25,10 @@ function renderStages() {
       <span>${stage.endless ? "無限時間" : `${stage.seconds} 秒`} / 目標 ${stage.quota === Infinity ? "無限" : stage.quota}</span>
       <small>${stage.boss ? "最終 Boss 戰" : stage.endless ? "隨機混合挑戰" : "固定場景訓練"}</small>
     `;
-    button.addEventListener("click", () => game.start(index));
+    button.addEventListener("click", () => {
+      audio.unlock();
+      game.start(index);
+    });
     list.append(button);
   });
 }
@@ -47,9 +50,9 @@ function bindNavigation() {
       if (screen === "menu") audio.playMusic("menu");
     });
   });
-  document.querySelector("#pause-button").addEventListener("click", () => game.togglePause(true));
+  bindTouchButton("#pause-button", () => game.togglePause(true));
   document.querySelector("#resume-button").addEventListener("click", () => game.togglePause(false));
-  document.querySelector("#reload-button").addEventListener("click", () => game.reload());
+  bindTouchButton("#reload-button", () => game.reload());
   document.querySelector("#retry-button").addEventListener("click", () => game.start(GameState.activeStageIndex));
   document.querySelector("#next-stage-button").addEventListener("click", () => {
     const next = Math.min(GameState.activeStageIndex + 1, STAGES.length - 2);
@@ -64,6 +67,20 @@ function bindNavigation() {
     window.addEventListener("popstate", () => history.pushState(null, "", location.href));
     history.pushState(null, "", location.href);
   }
+}
+
+function bindTouchButton(selector, action) {
+  const button = document.querySelector(selector);
+  button.addEventListener("touchstart", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    action();
+  }, { passive: false });
+  button.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    action();
+  });
 }
 
 function bindSettings() {
