@@ -1,0 +1,1385 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>暗棋</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #1a0f0a;
+      --bg-panel: #26150e;
+      --bg-board: #8b4513;
+      --bg-cell: #d2a679;
+      --bg-cell-dark: #b47a42;
+      --color-red: #dc143c;
+      --color-black: #1c1c1c;
+      --color-gold: #ffd700;
+      --color-hidden: #5c3d1e;
+      --text-main: #f5e6d3;
+      --text-muted: #d7b995;
+      --good: #39d98a;
+      --bad: #ff6b6b;
+      --shadow: 0 14px 38px rgba(0, 0, 0, .38);
+      --fast: 180ms;
+      --normal: 280ms;
+      --slow: 430ms;
+      color-scheme: dark;
+      font-family: "Noto Serif TC", "STSong", "SimSun", serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 50% -15%, rgba(255, 215, 0, .15), transparent 36%),
+        linear-gradient(140deg, #130906 0%, var(--bg-main) 44%, #2a150b 100%);
+      color: var(--text-main);
+      overflow-x: hidden;
+    }
+
+    button, input, select {
+      font: inherit;
+    }
+
+    button {
+      border: 1px solid rgba(255, 215, 0, .28);
+      background: linear-gradient(180deg, #704019, #3d2110);
+      color: var(--text-main);
+      min-height: 44px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: inset 0 1px rgba(255, 255, 255, .1), 0 8px 18px rgba(0, 0, 0, .2);
+      transition: transform .16s ease, border-color .16s ease, filter .16s ease;
+    }
+
+    button:hover:not(:disabled), button:focus-visible {
+      transform: translateY(-1px);
+      border-color: rgba(255, 215, 0, .72);
+      outline: none;
+      filter: brightness(1.08);
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: .48;
+    }
+
+    .screen {
+      display: none;
+      min-height: 100vh;
+      padding: max(env(safe-area-inset-top), 18px) 16px max(env(safe-area-inset-bottom), 18px);
+    }
+
+    .screen.active {
+      display: grid;
+    }
+
+    #screen-menu {
+      place-items: center;
+      text-align: center;
+    }
+
+    .menu-wrap {
+      width: min(560px, 100%);
+      animation: riseIn .55s ease both;
+    }
+
+    .seal {
+      width: 86px;
+      height: 86px;
+      margin: 0 auto 18px;
+      border: 3px double rgba(255, 215, 0, .72);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--color-gold);
+      font-weight: 900;
+      font-size: 2.4rem;
+      background: radial-gradient(circle, #7b1e17, #36130d);
+      box-shadow: 0 0 26px rgba(255, 215, 0, .2);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(2.5rem, 8vw, 4.8rem);
+      letter-spacing: 0;
+      line-height: 1;
+    }
+
+    .subtitle {
+      margin: 0 0 30px;
+      color: var(--text-muted);
+      font-size: clamp(1rem, 3vw, 1.25rem);
+    }
+
+    .menu-actions {
+      display: grid;
+      gap: 12px;
+      width: min(360px, 100%);
+      margin: 0 auto;
+    }
+
+    .menu-actions button {
+      font-size: 1.15rem;
+      min-height: 54px;
+    }
+
+    .page {
+      width: min(880px, 100%);
+      margin: 0 auto;
+      align-self: start;
+    }
+
+    .page-head, #top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .page-title {
+      margin: 0;
+      font-size: clamp(1.8rem, 5vw, 3rem);
+    }
+
+    .panel {
+      background: rgba(38, 21, 14, .82);
+      border: 1px solid rgba(255, 215, 0, .18);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .setting-row {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 14px;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+    }
+
+    .setting-row:last-child {
+      border-bottom: 0;
+    }
+
+    .segmented {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .segmented button.active {
+      background: linear-gradient(180deg, #b07322, #6b3415);
+      border-color: var(--color-gold);
+      color: #fff5cb;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--color-gold);
+    }
+
+    label.toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    input[type="checkbox"] {
+      width: 22px;
+      height: 22px;
+      accent-color: var(--color-gold);
+    }
+
+    .help-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .help-tab[aria-selected="true"] {
+      background: linear-gradient(180deg, #b07322, #6b3415);
+      border-color: var(--color-gold);
+    }
+
+    .help-pane {
+      display: none;
+      line-height: 1.8;
+      color: #f0dcc4;
+    }
+
+    .help-pane.active {
+      display: block;
+    }
+
+    .game-shell {
+      width: min(760px, 100%);
+      margin: 0 auto;
+      align-self: start;
+    }
+
+    #top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      padding-top: env(safe-area-inset-top);
+      background: linear-gradient(180deg, rgba(26, 15, 10, .98), rgba(26, 15, 10, .76));
+      backdrop-filter: blur(8px);
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .small-btn {
+      padding: 8px 11px;
+      min-height: 40px;
+      font-size: .95rem;
+    }
+
+    #status-bar {
+      display: grid;
+      grid-template-columns: 1.2fr .9fr .9fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .status-card {
+      background: rgba(0, 0, 0, .22);
+      border: 1px solid rgba(255, 215, 0, .16);
+      border-radius: 8px;
+      padding: 10px 12px;
+      min-height: 56px;
+      display: grid;
+      align-content: center;
+      gap: 2px;
+    }
+
+    .status-label {
+      color: var(--text-muted);
+      font-size: .82rem;
+    }
+
+    .status-value {
+      font-size: clamp(.95rem, 2.8vw, 1.18rem);
+      font-weight: 700;
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .thinking-dots span {
+      animation: dotBounce 1.2s infinite;
+      display: inline-block;
+    }
+
+    .thinking-dots span:nth-child(2) { animation-delay: .2s; }
+    .thinking-dots span:nth-child(3) { animation-delay: .4s; }
+
+    #board-wrap {
+      display: grid;
+      justify-content: center;
+      padding: 10px;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, .08), transparent 20%, transparent 80%, rgba(0, 0, 0, .16)),
+        linear-gradient(180deg, #a65e25, var(--bg-board));
+      border: 3px solid rgba(48, 22, 8, .9);
+      border-radius: 8px;
+      box-shadow: var(--shadow), inset 0 0 0 2px rgba(255, 215, 0, .12);
+    }
+
+    #board {
+      display: grid;
+      grid-template-columns: repeat(8, var(--cell-size));
+      grid-template-rows: repeat(4, var(--cell-size));
+      gap: 4px;
+      --cell-size: min(calc((100vw - 44px) / 8), 80px);
+    }
+
+    .cell {
+      width: var(--cell-size);
+      height: var(--cell-size);
+      min-width: 36px;
+      min-height: 36px;
+      border: 1px solid rgba(0, 0, 0, .28);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 35% 22%, rgba(255,255,255,.18), transparent 36%),
+        linear-gradient(145deg, var(--bg-cell), var(--bg-cell-dark));
+      display: grid;
+      place-items: center;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .cell.hint-dot::after {
+      content: "";
+      width: 12px;
+      height: 12px;
+      background: rgba(0, 200, 100, .76);
+      border-radius: 50%;
+      box-shadow: 0 0 12px rgba(0, 200, 100, .68);
+      animation: hintPulse 1s ease-in-out infinite;
+      position: absolute;
+      z-index: 1;
+    }
+
+    .piece {
+      width: 85%;
+      height: 85%;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: clamp(1.1rem, 4.1vw, 2.1rem);
+      font-weight: 900;
+      line-height: 1;
+      user-select: none;
+      border: 2px solid rgba(255, 235, 170, .5);
+      box-shadow: 2px 6px 12px rgba(0, 0, 0, .42), inset 0 4px 10px rgba(255,255,255,.18);
+      transition: transform .18s ease, filter .18s ease;
+      position: relative;
+      z-index: 2;
+    }
+
+    .piece:hover {
+      transform: scale(1.05);
+      filter: brightness(1.07);
+    }
+
+    .piece.hidden {
+      background:
+        radial-gradient(circle at 30% 25%, rgba(255, 226, 154, .22), transparent 34%),
+        repeating-linear-gradient(45deg, rgba(255,255,255,.05) 0 4px, transparent 4px 8px),
+        linear-gradient(160deg, #7e562e, var(--color-hidden));
+      color: rgba(255, 229, 176, .8);
+    }
+
+    .piece.hidden .piece-text::before {
+      content: "暗";
+    }
+
+    .piece.red {
+      background: radial-gradient(circle at 32% 24%, #fff1d0, #f4c584 35%, #8c301e 100%);
+      color: var(--color-red);
+      text-shadow: 0 1px 0 #fff1d0;
+    }
+
+    .piece.black {
+      background: radial-gradient(circle at 32% 24%, #f5dfbb, #c3965e 35%, #1b1411 100%);
+      color: var(--color-black);
+      text-shadow: 0 1px 0 rgba(255, 255, 255, .36);
+    }
+
+    .piece.selected {
+      animation: selectedPulse .8s ease-in-out infinite;
+      border: 3px solid var(--color-gold);
+      box-shadow: 0 0 12px var(--color-gold), inset 0 4px 10px rgba(255,255,255,.2);
+    }
+
+    .piece.flip-animation {
+      animation: flipCard .4s ease-in-out;
+    }
+
+    .piece.captured {
+      animation: captureAnim .3s ease-out forwards;
+    }
+
+    #action-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      padding: 12px 0 max(env(safe-area-inset-bottom), 8px);
+    }
+
+    #log {
+      min-height: 48px;
+      max-height: 92px;
+      overflow: auto;
+      color: var(--text-muted);
+      font-size: .95rem;
+      line-height: 1.5;
+      padding: 8px 2px 0;
+    }
+
+    #overlay-gameover {
+      position: fixed;
+      inset: 0;
+      display: none;
+      place-items: center;
+      padding: 20px;
+      background: rgba(10, 5, 3, .78);
+      backdrop-filter: blur(8px);
+      z-index: 30;
+    }
+
+    #overlay-gameover.active {
+      display: grid;
+    }
+
+    .modal {
+      width: min(440px, 100%);
+      text-align: center;
+      animation: riseIn .28s ease both;
+    }
+
+    .modal h2 {
+      margin: 0 0 8px;
+      font-size: clamp(2rem, 7vw, 3.3rem);
+    }
+
+    .modal-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes flipCard {
+      0% { transform: rotateY(0deg); }
+      50% { transform: rotateY(90deg); opacity: .3; }
+      100% { transform: rotateY(0deg); opacity: 1; }
+    }
+
+    @keyframes captureAnim {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: .8; }
+      100% { transform: scale(0); opacity: 0; }
+    }
+
+    @keyframes selectedPulse {
+      0%, 100% { box-shadow: 0 0 8px var(--color-gold); }
+      50% { box-shadow: 0 0 20px var(--color-gold); }
+    }
+
+    @keyframes hintPulse {
+      0%, 100% { transform: scale(.8); opacity: .7; }
+      50% { transform: scale(1.2); opacity: 1; }
+    }
+
+    @keyframes dotBounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: .45; }
+      40% { transform: translateY(-5px); opacity: 1; }
+    }
+
+    @media (max-width: 700px) {
+      .screen {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .page-head, #top-bar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .top-actions, .page-head button {
+        width: 100%;
+      }
+
+      .top-actions button, .page-head button {
+        flex: 1;
+      }
+
+      #status-bar {
+        grid-template-columns: 1fr;
+      }
+
+      #board-wrap {
+        padding: 6px;
+      }
+
+      #board {
+        gap: 3px;
+        --cell-size: min(calc((100vw - 34px) / 8), 72px);
+      }
+
+      #action-bar {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .setting-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 374px) {
+      button {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .piece {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section id="screen-menu" class="screen active">
+      <div class="menu-wrap">
+        <div class="seal" aria-hidden="true">棋</div>
+        <h1>暗棋</h1>
+        <p class="subtitle">翻開第一枚棋，陣營即刻定局。</p>
+        <div class="menu-actions">
+          <button id="btn-start">開始遊戲</button>
+          <button data-screen="settings">設定</button>
+          <button data-screen="help">遊戲說明</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-settings" class="screen">
+      <div class="page">
+        <div class="page-head">
+          <h2 class="page-title">設定</h2>
+          <button class="small-btn" data-screen="menu">返回</button>
+        </div>
+        <div class="panel">
+          <div class="setting-row">
+            <strong>AI 難度</strong>
+            <div class="segmented" data-setting="difficulty">
+              <button data-value="easy">簡單</button>
+              <button data-value="normal">普通</button>
+              <button data-value="hard">困難</button>
+            </div>
+          </div>
+          <div class="setting-row">
+            <strong>背景音量</strong>
+            <input id="setting-bgm" type="range" min="0" max="100">
+          </div>
+          <div class="setting-row">
+            <strong>音效音量</strong>
+            <input id="setting-sfx" type="range" min="0" max="100">
+          </div>
+          <div class="setting-row">
+            <strong>提示</strong>
+            <label class="toggle"><input id="setting-hints" type="checkbox"> 顯示可走位置</label>
+          </div>
+          <div class="setting-row">
+            <strong>動畫速度</strong>
+            <div class="segmented" data-setting="animSpeed">
+              <button data-value="fast">快速</button>
+              <button data-value="normal">標準</button>
+              <button data-value="slow">慢速</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-help" class="screen">
+      <div class="page">
+        <div class="page-head">
+          <h2 class="page-title">遊戲說明</h2>
+          <button class="small-btn" data-screen="menu">返回</button>
+        </div>
+        <div class="panel">
+          <div class="help-tabs" role="tablist">
+            <button class="help-tab" data-tab="basic" aria-selected="true">走法</button>
+            <button class="help-tab" data-tab="rank" aria-selected="false">大小</button>
+            <button class="help-tab" data-tab="cannon" aria-selected="false">炮</button>
+            <button class="help-tab" data-tab="win" aria-selected="false">勝負</button>
+          </div>
+          <div id="help-basic" class="help-pane active">
+            <p>棋盤為 4x8，共 32 枚棋。每回合可翻開一枚暗棋，或移動一枚自己的明棋到上下左右相鄰空格，也可吃掉相鄰敵棋。</p>
+            <p>第一枚翻出的棋決定玩家陣營，另一方由 AI 操作。</p>
+          </div>
+          <div id="help-rank" class="help-pane">
+            <p>一般吃子依大小：將/帥 > 士/仕 > 象/相 > 車/俥 > 馬/傌 > 包/炮 > 卒/兵。兵卒可吃將帥，將帥不可吃兵卒。</p>
+          </div>
+          <div id="help-cannon" class="help-pane">
+            <p>炮不可用一般相鄰吃法。炮吃子時必須同列或同行，中間剛好隔一枚任意棋，才能吃目標敵棋。</p>
+          </div>
+          <div id="help-win" class="help-pane">
+            <p>吃光對方明暗棋即獲勝。若連續 60 回合無吃子，或任一方無合法行動，遊戲會依局面判定勝負或和局。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-game" class="screen">
+      <div class="game-shell">
+        <div id="top-bar">
+          <h2 class="page-title">暗棋</h2>
+          <div class="top-actions">
+            <button class="small-btn" data-screen="menu">主選單</button>
+            <button class="small-btn" id="btn-new">新局</button>
+            <button class="small-btn" data-screen="settings">設定</button>
+          </div>
+        </div>
+        <div id="status-bar">
+          <div class="status-card">
+            <span class="status-label">狀態</span>
+            <span id="turn-status" class="status-value">準備開始</span>
+          </div>
+          <div class="status-card">
+            <span class="status-label">玩家</span>
+            <span id="player-status" class="status-value">未定</span>
+          </div>
+          <div class="status-card">
+            <span class="status-label">AI</span>
+            <span id="ai-status" class="status-value">未定</span>
+          </div>
+        </div>
+        <div id="board-wrap">
+          <div id="board" aria-label="暗棋棋盤"></div>
+        </div>
+        <div id="action-bar">
+          <button id="btn-undo">悔棋</button>
+          <button id="btn-draw">和局</button>
+          <button id="btn-surrender">投降</button>
+          <button id="btn-sound">靜音</button>
+        </div>
+        <div id="log" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+
+  <div id="overlay-gameover">
+    <div class="panel modal">
+      <h2 id="gameover-title">勝負已定</h2>
+      <p id="gameover-detail"></p>
+      <div class="modal-actions">
+        <button id="btn-again">再來一局</button>
+        <button data-screen="menu">回主選單</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const PIECE_DEFS = [
+      { type: "king", red: "帥", black: "將", count: 1, rank: 6, value: 10000 },
+      { type: "guard", red: "仕", black: "士", count: 2, rank: 5, value: 500 },
+      { type: "elephant", red: "相", black: "象", count: 2, rank: 4, value: 300 },
+      { type: "rook", red: "俥", black: "車", count: 2, rank: 3, value: 350 },
+      { type: "horse", red: "傌", black: "馬", count: 2, rank: 2, value: 200 },
+      { type: "cannon", red: "炮", black: "包", count: 2, rank: 1, value: 150 },
+      { type: "soldier", red: "兵", black: "卒", count: 5, rank: 0, value: 100 }
+    ];
+
+    const DIFFICULTY = {
+      easy: { depth: 1, delay: 800, mistake: .3 },
+      normal: { depth: 2, delay: 600, mistake: .1 },
+      hard: { depth: 3, delay: 400, mistake: 0 }
+    };
+
+    const STORAGE = {
+      difficulty: "dchess_difficulty",
+      bgmVolume: "dchess_bgm_vol",
+      sfxVolume: "dchess_sfx_vol",
+      showHints: "dchess_show_hints",
+      animSpeed: "dchess_anim_speed",
+      bestScore: "dchess_best_score"
+    };
+
+    const state = {
+      board: [],
+      phase: "menu",
+      playerColor: null,
+      aiColor: null,
+      currentTurn: "player",
+      turnCount: 0,
+      selectedCell: null,
+      capturedByPlayer: [],
+      capturedByAI: [],
+      noCaptureTurns: 0,
+      history: [],
+      logs: [],
+      aiThinking: false,
+      muted: false,
+      settings: loadSettings()
+    };
+
+    const $ = (selector) => document.querySelector(selector);
+    const $$ = (selector) => [...document.querySelectorAll(selector)];
+
+    const AudioEngine = {
+      ctx: null,
+      master: null,
+      bgm: null,
+      bgmGain: null,
+      sfxGain: null,
+      init() {
+        if (this.ctx) return;
+        const Ctx = window.AudioContext || window.webkitAudioContext;
+        if (!Ctx) return;
+        this.ctx = new Ctx();
+        this.master = this.ctx.createGain();
+        this.bgmGain = this.ctx.createGain();
+        this.sfxGain = this.ctx.createGain();
+        this.bgmGain.connect(this.master);
+        this.sfxGain.connect(this.master);
+        this.master.connect(this.ctx.destination);
+        this.setVolume();
+      },
+      ensure() {
+        this.init();
+        if (this.ctx && this.ctx.state === "suspended") this.ctx.resume();
+      },
+      setVolume() {
+        if (!this.master) return;
+        this.master.gain.value = state.muted ? 0 : 1;
+        this.bgmGain.gain.value = state.settings.bgmVolume;
+        this.sfxGain.gain.value = state.settings.sfxVolume;
+      },
+      playBGM() {
+        if (!this.ctx || this.bgm || state.settings.bgmVolume <= 0) return;
+        const gain = this.ctx.createGain();
+        const filter = this.ctx.createBiquadFilter();
+        const osc = this.ctx.createOscillator();
+        osc.type = "sine";
+        osc.frequency.value = 130.81;
+        filter.type = "lowpass";
+        filter.frequency.value = 640;
+        gain.gain.value = .08;
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.bgmGain);
+        osc.start();
+        this.bgm = { osc, gain };
+      },
+      stopBGM() {
+        if (!this.bgm) return;
+        this.bgm.gain.gain.setTargetAtTime(0, this.ctx.currentTime, .08);
+        this.bgm.osc.stop(this.ctx.currentTime + .3);
+        this.bgm = null;
+      },
+      tone(freq, duration, type = "sine", volume = .18) {
+        if (!this.ctx || state.muted) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0, now);
+        gain.gain.linearRampToValueAtTime(volume, now + .01);
+        gain.gain.exponentialRampToValueAtTime(.001, now + duration);
+        osc.connect(gain);
+        gain.connect(this.sfxGain);
+        osc.start(now);
+        osc.stop(now + duration + .02);
+      },
+      noise(duration = .12, volume = .12) {
+        if (!this.ctx || state.muted) return;
+        const buffer = this.ctx.createBuffer(1, this.ctx.sampleRate * duration, this.ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+        const source = this.ctx.createBufferSource();
+        const gain = this.ctx.createGain();
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = "highpass";
+        filter.frequency.value = 900;
+        gain.gain.value = volume;
+        source.buffer = buffer;
+        source.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.sfxGain);
+        source.start();
+      },
+      playSFX(type) {
+        this.ensure();
+        if (type === "flip") { this.noise(.09, .08); this.tone(330, .12, "triangle", .12); }
+        if (type === "move") this.tone(260, .11, "sine", .12);
+        if (type === "capture") { this.noise(.16, .14); this.tone(180, .18, "sawtooth", .14); }
+        if (type === "win") [261.63, 329.63, 392, 523.25].forEach((f, i) => setTimeout(() => this.tone(f, .18, "triangle", .14), i * 90));
+        if (type === "lose") [392, 329.63, 261.63].forEach((f, i) => setTimeout(() => this.tone(f, .22, "sine", .13), i * 110));
+        if (type === "bad") this.tone(120, .16, "sawtooth", .1);
+      }
+    };
+
+    const BoardLogic = {
+      init() {
+        const pieces = [];
+        let id = 0;
+        for (const color of ["red", "black"]) {
+          for (const def of PIECE_DEFS) {
+            for (let i = 0; i < def.count; i++) {
+              pieces.push({ id: id++, type: def.type, color, text: def[color], rank: def.rank, value: def.value, revealed: false });
+            }
+          }
+        }
+        shuffle(pieces);
+        state.board = pieces;
+      },
+      flip(idx) {
+        const piece = state.board[idx];
+        if (!piece || piece.revealed) return false;
+        piece.revealed = true;
+        if (!state.playerColor) {
+          state.playerColor = piece.color;
+          state.aiColor = opposite(piece.color);
+          log(`你翻出 ${piece.text}，玩家為${colorName(state.playerColor)}。`);
+        } else {
+          log(`翻出 ${piece.text}。`);
+        }
+        AudioEngine.playSFX("flip");
+        return true;
+      },
+      move(from, to) {
+        if (!this.canMove(from, to)) return false;
+        state.board[to] = state.board[from];
+        state.board[from] = null;
+        state.noCaptureTurns++;
+        AudioEngine.playSFX("move");
+        return true;
+      },
+      capture(from, to, actor) {
+        if (!this.canCapture(from, to)) return false;
+        const target = state.board[to];
+        if (actor === "player") state.capturedByPlayer.push(target);
+        else state.capturedByAI.push(target);
+        state.board[to] = state.board[from];
+        state.board[from] = null;
+        state.noCaptureTurns = 0;
+        AudioEngine.playSFX("capture");
+        return true;
+      },
+      canMove(from, to, board = state.board) {
+        const piece = board[from];
+        return !!piece && piece.revealed && !board[to] && adjacent(from, to);
+      },
+      canCapture(from, to, board = state.board) {
+        const attacker = board[from];
+        const target = board[to];
+        if (!attacker || !target || !attacker.revealed || !target.revealed || attacker.color === target.color) return false;
+        if (attacker.type === "cannon") return cannonCanAttack(from, to, board);
+        if (!adjacent(from, to)) return false;
+        if (attacker.type === "soldier" && target.type === "king") return true;
+        if (attacker.type === "king" && target.type === "soldier") return false;
+        return attacker.rank >= target.rank;
+      },
+      getLegalMovesForPiece(idx, board = state.board) {
+        const piece = board[idx];
+        if (!piece || !piece.revealed) return [];
+        const moves = [];
+        for (const n of neighbors(idx)) {
+          if (!board[n]) moves.push({ type: "move", from: idx, to: n });
+          else if (this.canCapture(idx, n, board)) moves.push({ type: "capture", from: idx, to: n });
+        }
+        if (piece.type === "cannon") {
+          for (const to of cannonTargets(idx, board)) moves.push({ type: "capture", from: idx, to });
+        }
+        return moves;
+      },
+      getAllActions(actor, board = state.board) {
+        const color = actor === "player" ? state.playerColor : state.aiColor;
+        const actions = [];
+        board.forEach((piece, idx) => {
+          if (!piece) return;
+          if (!piece.revealed) actions.push({ type: "flip", idx });
+          if (piece.revealed && piece.color === color) actions.push(...this.getLegalMovesForPiece(idx, board));
+        });
+        return actions;
+      },
+      isGameOver() {
+        const redAlive = state.board.some(piece => piece && piece.color === "red");
+        const blackAlive = state.board.some(piece => piece && piece.color === "black");
+        if (!redAlive || !blackAlive) return !redAlive ? "black" : "red";
+        if (state.noCaptureTurns >= 60) return "draw";
+        if (state.playerColor && this.getAllActions("player").length === 0) return "ai";
+        if (state.aiColor && this.getAllActions("ai").length === 0) return "player";
+        return null;
+      }
+    };
+
+    const AIEngine = {
+      getBestMove() {
+        const actions = BoardLogic.getAllActions("ai");
+        if (!actions.length) return null;
+        const config = DIFFICULTY[state.settings.difficulty];
+        if (Math.random() < config.mistake) return actions[Math.floor(Math.random() * actions.length)];
+
+        const tactical = actions.filter(a => a.type === "capture").sort((a, b) => state.board[b.to].value - state.board[a.to].value);
+        if (tactical.length && state.settings.difficulty === "easy") return tactical[0];
+
+        let best = actions[0];
+        let bestScore = -Infinity;
+        for (const action of actions) {
+          const score = this.minimax(applyActionClone(state.board, action), config.depth - 1, -Infinity, Infinity, false);
+          if (score > bestScore) {
+            bestScore = score;
+            best = action;
+          }
+        }
+        return best;
+      },
+      minimax(board, depth, alpha, beta, maximizing) {
+        if (depth <= 0) return this.evaluate(board);
+        const actor = maximizing ? "ai" : "player";
+        const actions = this.actionsForBoard(board, actor).slice(0, 18);
+        if (!actions.length) return this.evaluate(board);
+        if (maximizing) {
+          let score = -Infinity;
+          for (const action of actions) {
+            score = Math.max(score, this.minimax(applyActionClone(board, action), depth - 1, alpha, beta, false));
+            alpha = Math.max(alpha, score);
+            if (beta <= alpha) break;
+          }
+          return score;
+        }
+        let score = Infinity;
+        for (const action of actions) {
+          score = Math.min(score, this.minimax(applyActionClone(board, action), depth - 1, alpha, beta, true));
+          beta = Math.min(beta, score);
+          if (beta <= alpha) break;
+        }
+        return score;
+      },
+      actionsForBoard(board, actor) {
+        const color = actor === "ai" ? state.aiColor : state.playerColor;
+        const actions = [];
+        board.forEach((piece, idx) => {
+          if (!piece) return;
+          if (!piece.revealed) actions.push({ type: "flip", idx, scoreHint: 10 });
+          if (piece.revealed && piece.color === color) actions.push(...BoardLogic.getLegalMovesForPiece(idx, board));
+        });
+        return actions.sort((a, b) => actionPriority(b, board) - actionPriority(a, board));
+      },
+      evaluate(board) {
+        let score = 0;
+        board.forEach((piece, idx) => {
+          if (!piece) return;
+          const sign = piece.color === state.aiColor ? 1 : -1;
+          const hiddenFactor = piece.revealed ? 1 : .35;
+          score += sign * piece.value * hiddenFactor;
+          if (piece.revealed) score += sign * (3 - Math.abs(1.5 - Math.floor(idx / 8))) * 4;
+        });
+        const aiMobility = this.actionsForBoard(board, "ai").filter(a => a.type !== "flip").length;
+        const playerMobility = this.actionsForBoard(board, "player").filter(a => a.type !== "flip").length;
+        score += (aiMobility - playerMobility) * 8;
+        return score;
+      },
+      makeMove(action) {
+        if (!action) return;
+        if (action.type === "flip") {
+          const piece = state.board[action.idx];
+          BoardLogic.flip(action.idx);
+          log(`AI 翻出 ${piece.text}。`);
+        } else if (action.type === "move") {
+          const p = state.board[action.from];
+          BoardLogic.move(action.from, action.to);
+          log(`AI 移動 ${p.text}。`);
+        } else if (action.type === "capture") {
+          const p = state.board[action.from];
+          const t = state.board[action.to];
+          BoardLogic.capture(action.from, action.to, "ai");
+          log(`AI 以 ${p.text} 吃 ${t.text}。`);
+        }
+      }
+    };
+
+    const UIController = {
+      showScreen(name) {
+        $$(".screen").forEach(screen => screen.classList.remove("active"));
+        $(`#screen-${name}`).classList.add("active");
+        state.phase = name === "game" ? "playing" : name;
+        if (name === "game") AudioEngine.playBGM();
+        else AudioEngine.stopBGM();
+      },
+      renderBoard() {
+        const board = $("#board");
+        board.innerHTML = "";
+        state.board.forEach((piece, idx) => {
+          const cell = document.createElement("button");
+          cell.className = "cell";
+          cell.type = "button";
+          cell.dataset.index = idx;
+          cell.setAttribute("aria-label", cellLabel(piece, idx));
+          cell.addEventListener("click", () => GameController.handleCellClick(idx));
+          if (piece) {
+            const pieceEl = document.createElement("div");
+            pieceEl.className = `piece ${piece.revealed ? piece.color : "hidden"}${state.selectedCell === idx ? " selected" : ""}`;
+            pieceEl.dataset.pieceId = piece.id;
+            const text = document.createElement("span");
+            text.className = "piece-text";
+            text.textContent = piece.revealed ? piece.text : "";
+            pieceEl.appendChild(text);
+            cell.appendChild(pieceEl);
+          }
+          board.appendChild(cell);
+        });
+        this.showHints();
+        this.updateStatusBar();
+        $("#log").innerHTML = state.logs.slice(-5).map(item => `<div>${escapeHtml(item)}</div>`).join("");
+      },
+      showHints() {
+        $$(".cell").forEach(cell => cell.classList.remove("hint-dot"));
+        if (!state.settings.showHints || state.selectedCell == null || state.currentTurn !== "player") return;
+        for (const move of BoardLogic.getLegalMovesForPiece(state.selectedCell)) {
+          const cell = $(`.cell[data-index="${move.to}"]`);
+          if (cell) cell.classList.add("hint-dot");
+        }
+      },
+      updateStatusBar() {
+        const remainingPlayer = state.playerColor ? state.board.filter(p => p && p.color === state.playerColor).length : 16;
+        const remainingAI = state.aiColor ? state.board.filter(p => p && p.color === state.aiColor).length : 16;
+        $("#turn-status").innerHTML = state.aiThinking
+          ? `AI 思考中<span class="thinking-dots"><span>.</span><span>.</span><span>.</span></span>`
+          : state.currentTurn === "player" ? "玩家回合" : "AI 回合";
+        $("#player-status").textContent = `${state.playerColor ? colorName(state.playerColor) : "未定"} / ${remainingPlayer} 枚`;
+        $("#ai-status").textContent = `${state.aiColor ? colorName(state.aiColor) : "未定"} / ${remainingAI} 枚`;
+        $("#btn-undo").disabled = state.history.length < 1 || state.aiThinking;
+      },
+      showGameOver(result) {
+        let title = "和局";
+        let detail = "雙方僵持不下。";
+        if (result === "player" || result === state.playerColor) {
+          title = "你贏了";
+          detail = `共進行 ${state.turnCount} 回合。`;
+          AudioEngine.playSFX("win");
+          saveBestScore();
+        } else if (result === "ai" || result === state.aiColor) {
+          title = "AI 獲勝";
+          detail = `共進行 ${state.turnCount} 回合。`;
+          AudioEngine.playSFX("lose");
+        }
+        $("#gameover-title").textContent = title;
+        $("#gameover-detail").textContent = detail;
+        $("#overlay-gameover").classList.add("active");
+      }
+    };
+
+    const GameController = {
+      startGame() {
+        Object.assign(state, {
+          board: [],
+          phase: "playing",
+          playerColor: null,
+          aiColor: null,
+          currentTurn: "player",
+          turnCount: 0,
+          selectedCell: null,
+          capturedByPlayer: [],
+          capturedByAI: [],
+          noCaptureTurns: 0,
+          history: [],
+          logs: [],
+          aiThinking: false
+        });
+        BoardLogic.init();
+        $("#overlay-gameover").classList.remove("active");
+        log("新局開始。");
+        UIController.showScreen("game");
+        UIController.renderBoard();
+      },
+      handleCellClick(idx) {
+        AudioEngine.ensure();
+        if (state.phase !== "playing" || state.currentTurn !== "player" || state.aiThinking) return;
+        const piece = state.board[idx];
+        if (!piece) {
+          if (state.selectedCell != null) this.tryMove(state.selectedCell, idx);
+          return;
+        }
+        if (!piece.revealed) {
+          this.saveHistory();
+          BoardLogic.flip(idx);
+          this.endPlayerTurn();
+          return;
+        }
+        if (piece.color === state.playerColor) {
+          state.selectedCell = state.selectedCell === idx ? null : idx;
+          UIController.renderBoard();
+          return;
+        }
+        if (state.selectedCell != null) this.tryMove(state.selectedCell, idx);
+      },
+      tryMove(from, to) {
+        const actor = "player";
+        this.saveHistory();
+        const moving = state.board[from];
+        const target = state.board[to];
+        let ok = false;
+        if (!target && BoardLogic.move(from, to)) {
+          log(`你移動 ${moving.text}。`);
+          ok = true;
+        } else if (target && BoardLogic.capture(from, to, actor)) {
+          log(`你以 ${moving.text} 吃 ${target.text}。`);
+          ok = true;
+        }
+        if (!ok) {
+          state.history.pop();
+          AudioEngine.playSFX("bad");
+          return;
+        }
+        state.selectedCell = null;
+        this.endPlayerTurn();
+      },
+      endPlayerTurn() {
+        state.turnCount++;
+        state.selectedCell = null;
+        UIController.renderBoard();
+        if (this.checkGameOver()) return;
+        state.currentTurn = "ai";
+        this.triggerAI();
+      },
+      triggerAI() {
+        state.aiThinking = true;
+        UIController.updateStatusBar();
+        const config = DIFFICULTY[state.settings.difficulty];
+        setTimeout(() => {
+          AIEngine.makeMove(AIEngine.getBestMove());
+          state.turnCount++;
+          state.aiThinking = false;
+          state.currentTurn = "player";
+          UIController.renderBoard();
+          this.checkGameOver();
+        }, config.delay);
+      },
+      saveHistory() {
+        state.history.push({
+          board: cloneBoard(state.board),
+          playerColor: state.playerColor,
+          aiColor: state.aiColor,
+          currentTurn: state.currentTurn,
+          turnCount: state.turnCount,
+          capturedByPlayer: cloneBoard(state.capturedByPlayer),
+          capturedByAI: cloneBoard(state.capturedByAI),
+          noCaptureTurns: state.noCaptureTurns,
+          logs: [...state.logs]
+        });
+        state.history = state.history.slice(-2);
+      },
+      undoMove() {
+        const prev = state.history.pop();
+        if (!prev || state.aiThinking) return;
+        Object.assign(state, prev, { selectedCell: null, aiThinking: false });
+        log("已悔棋。");
+        UIController.renderBoard();
+      },
+      surrender() {
+        if (state.phase !== "playing") return;
+        UIController.showGameOver("ai");
+      },
+      proposeDraw() {
+        if (state.phase !== "playing") return;
+        UIController.showGameOver("draw");
+      },
+      checkGameOver() {
+        const result = BoardLogic.isGameOver();
+        if (!result) return false;
+        state.phase = "gameover";
+        UIController.showGameOver(result);
+        return true;
+      }
+    };
+
+    const SettingsController = {
+      bindUI() {
+        $("#setting-bgm").value = Math.round(state.settings.bgmVolume * 100);
+        $("#setting-sfx").value = Math.round(state.settings.sfxVolume * 100);
+        $("#setting-hints").checked = state.settings.showHints;
+        this.refreshSegments();
+        $("#setting-bgm").addEventListener("input", (e) => {
+          state.settings.bgmVolume = Number(e.target.value) / 100;
+          this.save();
+        });
+        $("#setting-sfx").addEventListener("input", (e) => {
+          state.settings.sfxVolume = Number(e.target.value) / 100;
+          AudioEngine.playSFX("move");
+          this.save();
+        });
+        $("#setting-hints").addEventListener("change", (e) => {
+          state.settings.showHints = e.target.checked;
+          this.save();
+          UIController.renderBoard();
+        });
+        $$(".segmented button").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const setting = btn.closest(".segmented").dataset.setting;
+            state.settings[setting] = btn.dataset.value;
+            this.save();
+            this.refreshSegments();
+          });
+        });
+      },
+      refreshSegments() {
+        $$(".segmented").forEach(group => {
+          const setting = group.dataset.setting;
+          group.querySelectorAll("button").forEach(btn => btn.classList.toggle("active", btn.dataset.value === state.settings[setting]));
+        });
+      },
+      save() {
+        localStorage.setItem(STORAGE.difficulty, state.settings.difficulty);
+        localStorage.setItem(STORAGE.bgmVolume, String(state.settings.bgmVolume));
+        localStorage.setItem(STORAGE.sfxVolume, String(state.settings.sfxVolume));
+        localStorage.setItem(STORAGE.showHints, String(state.settings.showHints));
+        localStorage.setItem(STORAGE.animSpeed, state.settings.animSpeed);
+        AudioEngine.setVolume();
+      }
+    };
+
+    function loadSettings() {
+      return {
+        difficulty: localStorage.getItem(STORAGE.difficulty) || "normal",
+        bgmVolume: parseFloat(localStorage.getItem(STORAGE.bgmVolume) || "0.5"),
+        sfxVolume: parseFloat(localStorage.getItem(STORAGE.sfxVolume) || "0.8"),
+        showHints: localStorage.getItem(STORAGE.showHints) !== "false",
+        animSpeed: localStorage.getItem(STORAGE.animSpeed) || "normal"
+      };
+    }
+
+    function shuffle(items) {
+      for (let i = items.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [items[i], items[j]] = [items[j], items[i]];
+      }
+    }
+
+    function opposite(color) {
+      return color === "red" ? "black" : "red";
+    }
+
+    function colorName(color) {
+      return color === "red" ? "紅方" : "黑方";
+    }
+
+    function adjacent(a, b) {
+      return neighbors(a).includes(b);
+    }
+
+    function neighbors(idx) {
+      const row = Math.floor(idx / 8);
+      const col = idx % 8;
+      const result = [];
+      if (row > 0) result.push(idx - 8);
+      if (row < 3) result.push(idx + 8);
+      if (col > 0) result.push(idx - 1);
+      if (col < 7) result.push(idx + 1);
+      return result;
+    }
+
+    function sameLine(a, b) {
+      return Math.floor(a / 8) === Math.floor(b / 8) || a % 8 === b % 8;
+    }
+
+    function pathBetween(a, b) {
+      if (!sameLine(a, b)) return [];
+      const step = Math.floor(a / 8) === Math.floor(b / 8) ? (a < b ? 1 : -1) : (a < b ? 8 : -8);
+      const path = [];
+      for (let i = a + step; i !== b; i += step) path.push(i);
+      return path;
+    }
+
+    function cannonCanAttack(from, to, board) {
+      const attacker = board[from];
+      const target = board[to];
+      if (!attacker || !target || attacker.type !== "cannon" || attacker.color === target.color || !sameLine(from, to)) return false;
+      return pathBetween(from, to).filter(i => board[i]).length === 1;
+    }
+
+    function cannonTargets(from, board) {
+      const piece = board[from];
+      if (!piece || piece.type !== "cannon") return [];
+      const targets = [];
+      for (let to = 0; to < board.length; to++) {
+        if (to !== from && board[to] && board[to].revealed && board[to].color !== piece.color && cannonCanAttack(from, to, board)) {
+          targets.push(to);
+        }
+      }
+      return targets;
+    }
+
+    function cloneBoard(board) {
+      return board.map(piece => piece ? { ...piece } : null);
+    }
+
+    function applyActionClone(board, action) {
+      const next = cloneBoard(board);
+      if (action.type === "flip") {
+        if (next[action.idx]) next[action.idx].revealed = true;
+      } else {
+        next[action.to] = next[action.from];
+        next[action.from] = null;
+      }
+      return next;
+    }
+
+    function actionPriority(action, board) {
+      if (action.type === "capture") return 1000 + board[action.to].value - board[action.from].value * .08;
+      if (action.type === "move") return 100;
+      return 30;
+    }
+
+    function log(message) {
+      state.logs.push(message);
+      state.logs = state.logs.slice(-24);
+    }
+
+    function cellLabel(piece, idx) {
+      if (!piece) return `${idx + 1} 空格`;
+      return piece.revealed ? `${idx + 1} ${colorName(piece.color)} ${piece.text}` : `${idx + 1} 暗棋`;
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+    }
+
+    function saveBestScore() {
+      const key = state.settings.difficulty;
+      const current = JSON.parse(localStorage.getItem(STORAGE.bestScore) || "{}");
+      if (!current[key] || state.turnCount < current[key]) {
+        current[key] = state.turnCount;
+        localStorage.setItem(STORAGE.bestScore, JSON.stringify(current));
+      }
+    }
+
+    function bindEvents() {
+      $("#btn-start").addEventListener("click", () => {
+        AudioEngine.ensure();
+        GameController.startGame();
+      });
+      $("#btn-new").addEventListener("click", () => GameController.startGame());
+      $("#btn-again").addEventListener("click", () => GameController.startGame());
+      $("#btn-undo").addEventListener("click", () => GameController.undoMove());
+      $("#btn-draw").addEventListener("click", () => GameController.proposeDraw());
+      $("#btn-surrender").addEventListener("click", () => GameController.surrender());
+      $("#btn-sound").addEventListener("click", () => {
+        state.muted = !state.muted;
+        $("#btn-sound").textContent = state.muted ? "開音" : "靜音";
+        AudioEngine.setVolume();
+      });
+      $$("[data-screen]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          $("#overlay-gameover").classList.remove("active");
+          UIController.showScreen(btn.dataset.screen);
+          if (btn.dataset.screen === "game") UIController.renderBoard();
+        });
+      });
+      $$(".help-tab").forEach(tab => {
+        tab.addEventListener("click", () => {
+          $$(".help-tab").forEach(t => t.setAttribute("aria-selected", String(t === tab)));
+          $$(".help-pane").forEach(pane => pane.classList.toggle("active", pane.id === `help-${tab.dataset.tab}`));
+        });
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      bindEvents();
+      SettingsController.bindUI();
+      BoardLogic.init();
+      UIController.renderBoard();
+    });
+  </script>
+</body>
+</html>
