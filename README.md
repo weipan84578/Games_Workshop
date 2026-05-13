@@ -65,3 +65,7 @@
 ### shooting_game
 
 - 槍戰練習
+
+### chinese_dark_chess
+
+- 中國暗棋
