@@ -69,3 +69,7 @@
 ### chinese_dark_chess
 
 - 中國暗棋
+
+### chinese_checkers
+
+- 中國跳棋
