@@ -105,6 +105,7 @@
       gap: 4px;
     }
     .choice.active { outline: 3px solid color-mix(in srgb, var(--accent), transparent 50%); border-color: var(--accent); }
+    .choice.disabled { opacity: .45; cursor: not-allowed; }
     .choice b { display: block; }
     .choice span { color: var(--muted); font-size: .88rem; }
     .form-row {
@@ -190,13 +191,42 @@
       text-align: center;
     }
     #hint-text { max-width: 850px; }
-    #screen-result, #screen-setup, #screen-settings { align-items: center; justify-content: center; }
+    #screen-result, #screen-setup, #screen-settings, #screen-rules { align-items: center; justify-content: center; }
     .result-mark { font-size: clamp(3rem, 14vw, 6rem); line-height: 1; }
     .rules {
       color: var(--muted);
       text-align: left;
       display: grid;
+      gap: 12px;
+    }
+    .rules b { color: var(--text); }
+    .rules ul { margin: 0; padding-left: 1.2em; }
+    .rules li { margin: 4px 0; }
+    .target-summary {
+      display: flex;
+      flex-wrap: wrap;
       gap: 8px;
+      align-items: center;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .route-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--surface), transparent 8%);
+      padding: 5px 10px;
+      white-space: nowrap;
+    }
+    .route-chip {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 1px 7px;
+      background: color-mix(in srgb, var(--chip-color), transparent 82%);
+      border: 1px solid color-mix(in srgb, var(--chip-color), transparent 45%);
+      color: var(--text);
     }
     .sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip: rect(0 0 0 0); }
     @media (max-width: 760px) {
@@ -223,10 +253,43 @@
         <button class="btn" data-screen="settings">設定</button>
         <button class="btn" id="rules-btn">規則</button>
       </div>
-      <div class="panel rules" id="rules-panel" hidden>
-        <p>Homecoming：把自己的 10 顆棋全部移到對角目標營地即獲勝。</p>
-        <p>Capture：跳過敵方棋子會吃掉它，最後仍有棋子的玩家獲勝。</p>
-        <p>點選棋子後選擇亮起的位置移動。跳躍後可連跳，也可按「結束連跳」。</p>
+    </div>
+  </section>
+
+  <section id="screen-rules" class="screen">
+    <div class="stack">
+      <div>
+        <h2>規則</h2>
+        <p class="subtitle">兩種模式的玩法與勝利條件不同。</p>
+      </div>
+      <div class="panel rules">
+        <div>
+          <b>共通操作</b>
+          <ul>
+            <li>點自己的棋子，再點亮起的格子移動。</li>
+            <li>相鄰空格可走一步；隔著任一棋子且後方是空格時可跳過去。</li>
+            <li>跳躍後若還有可跳位置，可以連跳；也可以按「結束連跳」。</li>
+          </ul>
+        </div>
+        <div>
+          <b>回家模式</b>
+          <ul>
+            <li>最多 3 人。每局會隨機抽出起始營地，並把目標指定到正對面的營地。</li>
+            <li>遊戲開始後，上方玩家資訊會顯示「起點 → 目標」。</li>
+            <li>先把自己的 10 顆棋全部送進目標營地者獲勝。</li>
+          </ul>
+        </div>
+        <div>
+          <b>吃子模式</b>
+          <ul>
+            <li>2 到 4 人。每局會隨機分配起始營地。</li>
+            <li>可以跳過任意棋子加速移動；跳過敵方棋子時會吃掉該棋。</li>
+            <li>棋子被吃光會出局，最後仍有棋子的玩家獲勝。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" data-screen="title">返回主畫面</button>
       </div>
     </div>
   </section>
@@ -249,9 +312,10 @@
         <div class="setup-grid" data-choice="players">
           <button class="btn choice active" data-value="2"><b>2 人</b><span>1 位玩家 + 1 位 AI。</span></button>
           <button class="btn choice" data-value="3"><b>3 人</b><span>1 位玩家 + 2 位 AI，啟用仇恨值。</span></button>
-          <button class="btn choice" data-value="4"><b>4 人</b><span>1 位玩家 + 3 位 AI，完整混戰。</span></button>
+          <button class="btn choice" data-value="4" id="players-4-choice"><b>4 人</b><span>吃子模式限定，1 位玩家 + 3 位 AI。</span></button>
         </div>
       </div>
+      <div class="target-summary" id="setup-note"></div>
       <div class="panel">
         <h3>AI 難度</h3>
         <div class="setup-grid" data-choice="difficulty">
@@ -358,7 +422,27 @@
       green: { label: "AI 綠", short: "綠", color: "#31995b", zone: "left" },
       yellow: { label: "AI 黃", short: "黃", color: "#d1a018", zone: "right" }
     };
-    const OPPOSITE = { red: "blue", blue: "red", green: "yellow", yellow: "green" };
+    const ZONE_LABELS = {
+      top: "上方",
+      bottom: "下方",
+      left: "左方",
+      right: "右方",
+      upperLeft: "左上",
+      lowerRight: "右下"
+    };
+    const ZONE_OPPOSITE = {
+      top: "bottom",
+      bottom: "top",
+      left: "right",
+      right: "left",
+      upperLeft: "lowerRight",
+      lowerRight: "upperLeft"
+    };
+    const HOME_TRIADS = [
+      ["top", "left", "lowerRight"],
+      ["bottom", "right", "upperLeft"]
+    ];
+    const ALL_ZONES = ["top", "bottom", "left", "right", "upperLeft", "lowerRight"];
     const FONT_SCALES = { S: "15px", M: "17px", L: "19px", XL: "22px" };
     const DIFFICULTY = {
       easy: { delay: 800, depth: 1, beam: 6, random: .38 },
@@ -453,31 +537,56 @@
       boardNodes = [...all].map(p => ({ pos: p, ...parseKey(p) }));
       boardSet = all;
       zones = {
-        red: triangle("top"),
-        blue: triangle("bottom"),
-        green: triangle("left"),
-        yellow: triangle("right")
+        top: triangle("top"),
+        bottom: triangle("bottom"),
+        left: triangle("left"),
+        right: triangle("right"),
+        upperLeft: triangle("upperLeft"),
+        lowerRight: triangle("lowerRight")
       };
     }
 
-    function makeBoard(players) {
+    function makeBoard(players, assignments) {
       const board = {};
       boardNodes.forEach(n => board[n.pos] = { piece: null });
       players.forEach(id => {
-        zones[id].forEach(pos => board[pos].piece = { playerId: id, color: PLAYER_META[id].color });
+        zones[assignments[id].start].forEach(pos => board[pos].piece = { playerId: id, color: PLAYER_META[id].color });
       });
       return board;
     }
 
-    function activePlayers(count) {
-      if (count === 2) return ["red", "blue"];
-      if (count === 3) return ["red", "blue", "green"];
+    function activePlayers(count, mode = setup.mode) {
+      const safeCount = mode === "homecoming" ? Math.min(count, 3) : count;
+      if (safeCount === 2) return ["red", "blue"];
+      if (safeCount === 3) return ["red", "blue", "green"];
       return ["red", "blue", "green", "yellow"];
     }
 
-    function targetZone(playerId) { return zones[OPPOSITE[playerId]] || zones.red; }
+    function buildAssignments(players, mode) {
+      const assignments = {};
+      let starts;
+      if (mode === "homecoming") {
+        starts = shuffle(shuffle(HOME_TRIADS)[0]).slice(0, players.length);
+      } else {
+        starts = shuffle(ALL_ZONES).slice(0, players.length);
+      }
+      players.forEach((id, index) => {
+        const start = starts[index];
+        assignments[id] = {
+          start,
+          target: mode === "homecoming" ? ZONE_OPPOSITE[start] : null
+        };
+      });
+      return assignments;
+    }
+
+    function targetZone(playerId) {
+      if (!game || !game.assignments[playerId] || !game.assignments[playerId].target) return [];
+      return zones[game.assignments[playerId].target] || [];
+    }
     function targetCenter(playerId) {
       const cells = targetZone(playerId);
+      if (!cells.length) return { q: 0, r: 0 };
       const sum = cells.reduce((acc, p) => {
         const n = parseKey(p);
         acc.q += n.q; acc.r += n.r;
@@ -488,12 +597,15 @@
 
     function newGame() {
       clearTimeout(aiTimer);
-      const players = activePlayers(setup.players);
+      if (setup.mode === "homecoming" && setup.players > 3) setup.players = 3;
+      const players = activePlayers(setup.players, setup.mode);
+      const assignments = buildAssignments(players, setup.mode);
       game = {
         mode: setup.mode,
         difficulty: setup.difficulty,
         players,
-        board: makeBoard(players),
+        assignments,
+        board: makeBoard(players, assignments),
         turn: 0,
         round: 1,
         selected: null,
@@ -542,7 +654,6 @@
         const midPiece = board[mid].piece;
         if (!midPiece || board[land].piece) return;
         const isEnemy = midPiece.playerId !== mover;
-        if (mode === "capture" && !isEnemy) return;
         moves.push({ from: pos, to: land, jump: true, capture: mode === "capture" && isEnemy ? mid : null });
       });
       return moves;
@@ -868,17 +979,25 @@
 
     function drawStar(size) {
       ctx.save();
-      ctx.globalAlpha = document.body.classList.contains("dark") ? .22 : .32;
-      Object.keys(zones || {}).forEach(id => {
-        ctx.fillStyle = PLAYER_META[id].color;
+      Object.keys(zones || {}).forEach(zoneId => {
+        const starter = game && Object.keys(game.assignments).find(p => game.assignments[p].start === zoneId);
+        const targetFor = game && Object.keys(game.assignments).find(p => game.assignments[p].target === zoneId);
+        ctx.globalAlpha = starter ? .28 : targetFor ? .24 : (document.body.classList.contains("dark") ? .08 : .12);
+        ctx.fillStyle = starter ? PLAYER_META[starter].color : targetFor ? PLAYER_META[targetFor].color : "#8c7a66";
         ctx.beginPath();
-        zones[id].forEach((pos, i) => {
+        zones[zoneId].forEach((pos, i) => {
           const p = cellLayout.get(pos);
           if (!p) return;
           if (i === 0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y);
         });
         ctx.closePath();
         ctx.fill();
+        if (targetFor) {
+          ctx.globalAlpha = .82;
+          ctx.strokeStyle = PLAYER_META[targetFor].color;
+          ctx.lineWidth = 3;
+          ctx.stroke();
+        }
       });
       ctx.restore();
     }
@@ -886,7 +1005,8 @@
     function drawCells() {
       boardNodes.forEach(n => {
         const p = cellLayout.get(n.pos);
-        const inTarget = game && targetZone(currentPlayer()).includes(n.pos);
+        const currentTarget = game && game.mode === "homecoming" ? targetZone(currentPlayer()) : [];
+        const inTarget = currentTarget.includes(n.pos);
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r * .55, 0, Math.PI * 2);
         ctx.fillStyle = inTarget ? "rgba(184,111,56,.22)" : "rgba(122, 105, 83, .20)";
@@ -982,8 +1102,14 @@
         const count = getPieces(game.board, p).length;
         const aggro = game.aggro[p] || 0;
         const aggroColor = aggro >= 70 ? "var(--danger)" : aggro >= 30 ? "var(--yellow)" : "var(--green)";
+        const route = game.assignments[p]
+          ? (game.mode === "homecoming"
+            ? `<span class="route-chip" style="--chip-color:${PLAYER_META[p].color}">${ZONE_LABELS[game.assignments[p].start]}</span> → <span class="route-chip" style="--chip-color:${PLAYER_META[p].color}">${ZONE_LABELS[game.assignments[p].target]}</span>`
+            : `起點 <span class="route-chip" style="--chip-color:${PLAYER_META[p].color}">${ZONE_LABELS[game.assignments[p].start]}</span>`)
+          : "";
         info.innerHTML = `
           <div class="player-head"><i class="dot" style="background:${PLAYER_META[p].color}"></i><span class="player-name">${PLAYER_META[p].label}</span></div>
+          <div class="meta">${route}</div>
           <div class="meta">棋 ${count}　吃 ${game.captures[p] || 0}</div>
           ${settings.showAggro && game.players.length >= 3 ? `<div class="meta">仇恨 ${aggro}${aggro >= 70 ? " !!" : aggro >= 30 ? " !" : ""}</div><div class="aggro"><i style="width:${aggro}%;background:${aggroColor}"></i></div>` : ""}
         `;
@@ -1015,17 +1141,42 @@
       if (name !== "settings") lastScreen = name;
       if (name === "game") setTimeout(resizeCanvas, 0);
       if (name === "title") drawTitleArt();
+      if (name === "setup") updateSetupControls();
+    }
+
+    function setChoice(groupName, value) {
+      const group = document.querySelector(`[data-choice="${groupName}"]`);
+      if (!group) return;
+      group.querySelectorAll(".choice").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.value === String(value));
+      });
+    }
+
+    function updateSetupControls() {
+      const four = document.getElementById("players-4-choice");
+      const isHome = setup.mode === "homecoming";
+      four.classList.toggle("disabled", isHome);
+      four.disabled = isHome;
+      if (isHome && setup.players > 3) {
+        setup.players = 3;
+        setChoice("players", 3);
+      }
+      const note = document.getElementById("setup-note");
+      note.innerHTML = isHome
+        ? `<span class="route-pill">回家模式最多 3 人</span><span class="route-pill">每局隨機起點</span><span class="route-pill">目標固定為對面營地</span>`
+        : `<span class="route-pill">吃子模式支援 2-4 人</span><span class="route-pill">每局隨機起點</span><span class="route-pill">跳過敵棋即可吃子</span>`;
     }
 
     function bindChoices() {
       document.querySelectorAll("[data-choice]").forEach(group => {
         group.addEventListener("click", e => {
           const btn = e.target.closest(".choice");
-          if (!btn) return;
+          if (!btn || btn.disabled) return;
           group.querySelectorAll(".choice").forEach(b => b.classList.remove("active"));
           btn.classList.add("active");
           const type = group.dataset.choice;
           setup[type] = type === "players" ? Number(btn.dataset.value) : btn.dataset.value;
+          updateSetupControls();
           sfx("tap");
         });
       });
@@ -1159,10 +1310,7 @@
         clearTimeout(aiTimer);
         showScreen("title");
       });
-      document.getElementById("rules-btn").addEventListener("click", () => {
-        const panel = document.getElementById("rules-panel");
-        panel.hidden = !panel.hidden;
-      });
+      document.getElementById("rules-btn").addEventListener("click", () => showScreen("rules"));
       document.getElementById("end-chain-btn").addEventListener("click", endChain);
       document.getElementById("settings-back").addEventListener("click", () => {
         saveSettings();
@@ -1208,6 +1356,7 @@
       loadSettings();
       initEvents();
       applySettings();
+      updateSetupControls();
       drawTitleArt();
       showScreen("title");
     }
