@@ -73,3 +73,7 @@
 ### chinese_checkers
 
 - 中國跳棋
+
+### breakout_game
+
+- 打磚塊
