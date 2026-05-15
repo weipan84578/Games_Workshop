@@ -1,0 +1,1 @@
+﻿class ParticlePool{constructor(){this.active=[]}burst(x,y,color,n=12){if(!save.data.settings.particles)return;for(let i=0;i<n;i++)this.active.push({x,y,vx:(Math.random()-.5)*5,vy:(Math.random()-.5)*5,a:1,color})}update(dt){this.active=this.active.filter(p=>(p.x+=p.vx*dt,p.y+=p.vy*dt,p.vy+=.08*dt,p.a-=.025*dt,p.a>0))}}

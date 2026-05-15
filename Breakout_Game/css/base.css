@@ -1,0 +1,16 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+:root{
+ --color-bg-deep:#0a0a1a;--color-bg-mid:#0f0f2e;--color-bg-surface:#1a1a3e;--color-primary:#00f5ff;--color-primary-glow:#00f5ff88;
+ --color-accent-1:#ff006e;--color-accent-2:#fb5607;--color-accent-3:#ffbe0b;--color-accent-4:#8338ec;--color-accent-5:#3a86ff;
+ --color-success:#06ffa5;--color-warning:#ffbe0b;--color-danger:#ff006e;--color-info:#00f5ff;--color-text-primary:#fff;--color-text-secondary:#a0a0c0;--color-text-muted:#606080;
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:radial-gradient(circle at top,#15153c,var(--color-bg-deep) 60%);color:var(--color-text-primary);font-family:'Exo 2',system-ui,sans-serif}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(#ffffffcc 1px,transparent 1px);background-size:42px 42px;opacity:.08;animation:drift 24s linear infinite;pointer-events:none}
+@keyframes drift{from{transform:translateY(0)}to{transform:translateY(42px)}}
+.muted{color:var(--color-text-muted)}
+.desc{color:var(--color-text-secondary);line-height:1.6;text-align:center}

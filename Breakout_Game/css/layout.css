@@ -1,0 +1,9 @@
+﻿#app{min-height:100svh;display:grid;place-items:center;padding:clamp(8px,2vw,16px)}
+.shell{position:relative;width:min(100%,900px);min-height:0;display:flex;flex-direction:column;align-items:center;gap:clamp(8px,1.5vh,12px)}
+.logo{font:900 clamp(38px,7vw,72px)/1 'Orbitron',sans-serif;letter-spacing:.08em;color:#fff;text-shadow:0 0 8px var(--color-primary),0 0 28px var(--color-primary)}
+.logo small{display:block;font:300 clamp(16px,2vw,28px)/1.3 'Exo 2';letter-spacing:.7em;color:var(--color-text-secondary);text-align:center;margin-top:6px}
+.panel{width:min(100%,800px);max-height:min(76svh,720px);overflow:auto;background:linear-gradient(180deg,#10102cdd,#090916dd);border:1px solid #ffffff1f;border-radius:24px;box-shadow:0 0 30px #0008, inset 0 0 40px #00f5ff08;backdrop-filter:blur(8px)}
+.screen{display:none;padding:24px}.screen.active{display:block}
+#gameFrame{display:none;width:min(100%,800px,calc((100svh - 120px) * 4 / 3))}#gameFrame.active{display:block}
+.canvas-wrap{position:relative;width:100%;aspect-ratio:4/3}
+.game-canvas{width:100%;height:100%;display:block;background:linear-gradient(180deg,#0d1330,#070912);border:1px solid #ffffff1a;border-radius:0 0 18px 18px;touch-action:none}

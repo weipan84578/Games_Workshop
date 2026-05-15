@@ -1,0 +1,28 @@
+﻿@media(max-width:767px){
+  #app{align-items:start}
+  .shell{width:100%}
+  .logo{font-size:clamp(30px,10vw,42px)}
+  .logo small{letter-spacing:.4em}
+  .panel{width:100%;max-height:none;border-radius:18px}
+  .screen{padding:16px}
+  .menu{max-width:none}
+  .hud{height:44px;font-size:clamp(14px,4vw,18px);padding-inline:10px}
+  .level-grid{grid-template-columns:repeat(4,1fr);max-height:none}
+  button{font-size:18px}
+  .settings-row{grid-template-columns:1fr}
+  .choices{justify-content:flex-start}
+  #gameFrame{width:min(100%,calc((100svh - 96px) * 4 / 3))}
+}
+@media(max-width:767px) and (orientation:portrait){
+  #gameFrame{width:100%}
+  .canvas-wrap{aspect-ratio:4/3}
+}
+@media(max-width:767px) and (orientation:landscape){
+  #app{padding:6px}
+  .shell{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:1fr;align-items:center;gap:10px;width:100%}
+  .logo{writing-mode:vertical-rl;transform:rotate(180deg);font-size:24px}
+  .logo small{display:none}
+  .panel{max-height:calc(100svh - 12px)}
+  #gameFrame{width:min(calc(100vw - 70px),calc((100svh - 12px) * 4 / 3))}
+  .hud{height:36px;font-size:16px}
+}
