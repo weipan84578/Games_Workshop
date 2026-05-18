@@ -77,3 +77,7 @@
 ### breakout_game
 
 - 打磚塊
+
+### horse_racing
+
+- 賽馬王
