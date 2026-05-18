@@ -1,0 +1,16 @@
+@media (min-width: 640px) {
+  .horse-grid { grid-template-columns: repeat(2, 1fr); }
+  .settings-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 639px) {
+  .app { padding: 10px; }
+  .screen { padding: 14px; border-radius: 18px; }
+  .stats-row,
+  .race-meta,
+  .ranking,
+  .result-grid {
+    grid-template-columns: 1fr;
+  }
+  .bet-controls { grid-template-columns: 1fr; }
+}

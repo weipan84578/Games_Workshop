@@ -1,0 +1,41 @@
+.app {
+  width: min(960px, 100%);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.screen,
+.panel {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+}
+
+.screen {
+  display: none;
+  padding: 18px;
+  border-radius: 24px;
+}
+
+.screen.active { display: block; }
+.hero { text-align: center; padding: 22px 12px; }
+.logo { font-size: clamp(42px, 8vw, 68px); cursor: pointer; user-select: none; }
+.stats-row, .grid, .race-meta, .ranking, .result-grid { display: grid; gap: 12px; }
+.stats-row { grid-template-columns: repeat(2, 1fr); margin: 18px 0; }
+.actions { display: grid; gap: 10px; margin-top: 18px; }
+.header-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; }
+.knowledge-list { display: grid; gap: 12px; }
+.settings-grid { display: grid; gap: 14px; }
+.setting { display: grid; gap: 7px; }
+.setting-line { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+.race-meta { grid-template-columns: repeat(5, minmax(0, 1fr)); margin-bottom: 14px; }
+.horse-grid { display: grid; gap: 12px; }
+.bars { display: grid; gap: 7px; margin: 12px 0; }
+.bar-line { display: grid; grid-template-columns: 64px 1fr; gap: 8px; align-items: center; }
+.bet-controls { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; margin-top: 12px; }
+.ranking { grid-template-columns: repeat(3, 1fr); margin-top: 12px; }
+.result-grid { grid-template-columns: 1.2fr .8fr; }
+.podium, .bet-result { display: grid; gap: 8px; }
+
