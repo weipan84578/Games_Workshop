@@ -22,10 +22,7 @@
     body { touch-action: manipulation; }
     button, input, select { font: inherit; }
     .app { width: min(960px, 100%); min-height: 100vh; margin: 0 auto; padding: 16px; }
-    .toolbar, .screen, .panel { border: 1px solid var(--line); background: var(--panel); box-shadow: var(--shadow); backdrop-filter: blur(10px); }
-    .toolbar { display:flex; justify-content:space-between; align-items:center; padding:12px 14px; border-radius:18px; margin-bottom:14px; }
-    .brand-mini { font-weight: 800; letter-spacing:.05em; cursor:pointer; }
-    .toolbar-actions { display:flex; gap:8px; }
+    .screen, .panel { border: 1px solid var(--line); background: var(--panel); box-shadow: var(--shadow); backdrop-filter: blur(10px); }
     .screen { display:none; padding:18px; border-radius:24px; }
     .screen.active { display:block; }
     .hero { text-align:center; padding: 22px 12px; }
@@ -43,7 +40,6 @@
     .btn.gold { background:var(--accent-2); color:#241803; }
     .btn.danger { background:var(--danger); color:#2b0505; }
     .btn:disabled { opacity:.45; cursor:not-allowed; }
-    .forecast { margin-top:18px; color:var(--accent-2); }
     .header-row { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:16px; }
     details { background:var(--panel-2); border:1px solid var(--line); border-radius:16px; padding:12px 14px; margin-bottom:10px; }
     summary { cursor:pointer; font-weight:700; }
@@ -58,7 +54,7 @@
     .setting { display:grid; gap:7px; }
     .setting-line { display:flex; justify-content:space-between; gap:12px; align-items:center; }
     input[type="range"] { width:100%; }
-    .race-meta { grid-template-columns: repeat(4, minmax(0,1fr)); margin-bottom:14px; }
+    .race-meta { grid-template-columns: repeat(5, minmax(0,1fr)); margin-bottom:14px; }
     .horse-grid { display:grid; gap:12px; }
     .horse-card { border-left:5px solid var(--horse-color); }
     .horse-head { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
@@ -100,14 +96,6 @@
 </head>
 <body>
   <div class="app">
-    <header class="toolbar">
-      <div class="brand-mini" id="miniLogo">🏇 賽馬王</div>
-      <div class="toolbar-actions">
-        <button class="btn secondary" id="bgmToggle">BGM</button>
-        <button class="btn secondary" data-go="settings">設定</button>
-      </div>
-    </header>
-
     <section class="screen active" id="home">
       <div class="hero">
         <div class="logo" id="heroLogo">🏇</div>
@@ -123,7 +111,6 @@
           <button class="btn secondary" data-go="knowledge">賽馬知識</button>
           <button class="btn secondary" data-go="settings">設定</button>
         </div>
-        <p class="forecast" id="forecast"></p>
       </div>
     </section>
 
@@ -134,7 +121,6 @@
         <table><tr><th>注種</th><th>說明</th><th>最低賠率</th></tr><tr><td>獨贏</td><td>押中第一名</td><td>1.5x</td></tr><tr><td>位置</td><td>押中前三名</td><td>1.2x</td></tr><tr><td>連贏</td><td>押中前二名，不分順序</td><td>3x</td></tr><tr><td>三重彩</td><td>押中前三名，需按順序</td><td>15x</td></tr></table>
       </details>
       <details><summary>馬匹屬性</summary><p>速度決定基礎節奏，耐力決定後段保速，爆發力決定最後衝刺，穩定性會降低壞事件影響；草地與泥地適應則會因當日場地而改變表現。</p></details>
-      <button class="btn" data-go="betting">開始遊戲</button>
     </section>
 
     <section class="screen" id="knowledge">
@@ -159,7 +145,6 @@
       <div class="actions">
         <button class="btn danger" id="resetChips">重置籌碼</button>
         <button class="btn secondary" id="clearRecord">清除紀錄</button>
-        <button class="btn secondary" data-go="knowledge">了解更多賽馬知識</button>
       </div>
     </section>
 
@@ -294,11 +279,11 @@
     const HorseEngine = {
       zh:["閃電王","黑旋風","追風者","天馬行空","神速","虎豹騰空","金風玉露","銀河快車","雷霆萬鈞","烈火戰駒","流星追月","驚雷破風","滄海一粟","萬馬奔騰","疾風驟雨"],
       en:["Lightning King","Storm Runner","Wind Chaser","Sky Dancer","Thunder Bolt","Golden Arrow","Silver Flash","Iron Hooves","Wild Spirit","Red Phoenix","Brave Heart","Midnight Star","Royal Dash","Desert Storm","Ocean Wave"],
-      colors:["#e24b4a","#4aa3ff","#f5c76a","#9b7bff","#69d08d","#ff8f5a"],
+      colors:["#e24b4a","#4aa3ff","#f5c76a","#9b7bff","#69d08d","#ff8f5a","#ff6fae","#72e0d1","#c7ef5f","#f29d49"],
       generate(){
-        const picks=Utils.shuffle(this.zh.map((z,i)=>[z,this.en[i]])).slice(0,6);
+        const picks=Utils.shuffle(this.zh.map((z,i)=>[z,this.en[i]])).slice(0,10);
         return picks.map((pair,i)=>{
-          const tier=i===0?"strong":i===5?"weak":"mid";
+          const tier=i===0?"strong":i===9?"weak":"mid";
           const base=tier==="strong"?[7,10]:tier==="weak"?[3,6]:[5,9];
           const s=()=>Math.round(Utils.rand(...base));
           const age=Math.round(Utils.rand(2,8));
@@ -421,19 +406,21 @@
     const Renderer = {
       canvas:null,ctx:null,
       init(){ this.canvas=document.getElementById("raceCanvas"); this.ctx=this.canvas.getContext("2d"); this.resize(); addEventListener("resize",()=>this.resize()); },
-      resize(){ this.canvas.width=Math.min(innerWidth-40,760); this.canvas.height=innerWidth<480?200:innerWidth<768?260:320; },
+      resize(){ this.canvas.width=Math.min(innerWidth-40,760); this.canvas.height=innerWidth<480?280:innerWidth<768?340:420; },
       draw(){
         const c=this.ctx,w=this.canvas.width,h=this.canvas.height;
         c.clearRect(0,0,w,h);
         c.fillStyle="#1e6b36"; c.fillRect(0,0,w,h);
-        for(let i=0;i<6;i++){ const y=28+i*((h-56)/6); c.fillStyle=i%2?"rgba(255,255,255,.05)":"rgba(0,0,0,.08)"; c.fillRect(0,y,w,(h-56)/6); c.strokeStyle="rgba(255,255,255,.22)"; c.strokeRect(0,y,w,(h-56)/6); }
+        const laneCount=Game.horses.length || 10;
+        const laneHeight=(h-56)/laneCount;
+        for(let i=0;i<laneCount;i++){ const y=28+i*laneHeight; c.fillStyle=i%2?"rgba(255,255,255,.05)":"rgba(0,0,0,.08)"; c.fillRect(0,y,w,laneHeight); c.strokeStyle="rgba(255,255,255,.22)"; c.strokeRect(0,y,w,laneHeight); }
         c.strokeStyle="#fff"; c.lineWidth=4; c.beginPath(); c.moveTo(w-28,18); c.lineTo(w-28,h-18); c.stroke();
         Game.horses.slice().sort((a,b)=>a.live.rank-b.live.rank).forEach((horse,i)=>{
-          const laneY=28+(horse.gateNum-1)*((h-56)/6)+((h-56)/12);
+          const laneY=28+(horse.gateNum-1)*laneHeight+(laneHeight/2);
           const x=18+horse.live.x*(w-56);
           const bob=Math.sin(horse.live.bobPhase)*4;
-          c.fillStyle=horse.color; c.font="24px serif"; c.fillText("🐎",x,laneY+bob);
-          c.fillStyle="#fff"; c.font="12px sans-serif"; c.fillText(horse.nameZh,x-2,laneY+18+bob);
+          c.fillStyle=horse.color; c.font=`${Math.max(16, Math.min(24, laneHeight*.8))}px serif`; c.fillText("🐎",x,laneY+bob);
+          c.fillStyle="#fff"; c.font=`${Math.max(9, Math.min(12, laneHeight*.38))}px sans-serif`; c.fillText(horse.nameZh,x-2,laneY+Math.min(16,laneHeight*.62)+bob);
         });
       }
     };
@@ -445,14 +432,13 @@
         homeChips.textContent=Utils.money(d.chips)+(d.chips<=0?" ⚠️":"");
         homeRecord.textContent=`${d.stats.wins}勝 ${d.stats.losses}負`;
         startBtn.disabled=d.chips<=0;
-        forecast.textContent=`今日賽況：${Game.preview.weather.icon} ${Game.preview.weather.name} ${Game.preview.track}`;
       },
       renderKnowledge(filter="全部"){
         knowledgeFilters.innerHTML=["全部","馬匹","場地","氣象","策略","歷史"].map(x=>`<button class="chip ${x===filter?"active":""}" data-filter="${x}">${x}</button>`).join("");
         knowledgeList.innerHTML=Knowledge.filter(k=>filter==="全部"||k[0]===filter).map(k=>`<article class="knowledge-card"><span class="tag">${k[0]}</span><h3>${k[1]}</h3><p>${k[2]}</p><footer>對遊戲的影響：${k[3]}</footer></article>`).join("");
       },
       renderBetting(){
-        raceMeta.innerHTML=`<div class="card">本場：第 ${Game.race.id} 場</div><div class="card">距離：${Game.race.distance}m</div><div class="card">場地：${Game.race.track}</div><div class="card">天氣：${Game.race.weather.icon} ${Game.race.weather.name}<br><span class="muted">${Game.race.weather.condition}</span></div>`;
+        raceMeta.innerHTML=`<div class="card">本場：第 ${Game.race.id} 場</div><div class="card">距離：${Game.race.distance}m</div><div class="card">場地：${Game.race.track}</div><div class="card">天氣：${Game.race.weather.icon} ${Game.race.weather.name}<br><span class="muted">${Game.race.weather.condition}</span></div><div class="card">我的籌碼：<strong>${Utils.money(GameState.data.chips)}</strong></div>`;
         horseGrid.innerHTML=Game.horses.map(h=>`<article class="card horse-card" style="--horse-color:${h.color}">
           <div class="horse-head"><div class="horse-name"><strong>[${h.gateNum}] ${h.nameZh}</strong><span class="muted">${h.nameEn}</span></div><div class="odds">${h.odds.toFixed(1)}x</div></div>
           <div class="muted">騎師：${h.race.jockeyGrade}級　負磅：${h.race.weight}kg</div>
@@ -547,12 +533,11 @@
         }
         if(e.target.dataset.remove){ Game.bets.splice(+e.target.dataset.remove,1); UI.renderSlip(); }
       });
-      heroLogo.onclick=miniLogo.onclick=()=>AudioEngine.sfxPlay("neigh");
+      heroLogo.onclick=()=>AudioEngine.sfxPlay("neigh");
       toggleSlip.onclick=()=>slipItems.classList.toggle("open");
       confirmBet.onclick=()=>Game.confirm();
       nextRace.onclick=()=>Router.go("betting");
       randomKnowledge.onclick=()=>{ const k=Utils.pick(Knowledge); UI.renderKnowledge(k[0]); UI.toast(`抽到：${k[1]}`); };
-      bgmToggle.onclick=()=>{ GameState.data.settings.bgmOn=!GameState.data.settings.bgmOn; AudioEngine.apply(); AudioEngine.scene(Router.current); GameState.save(); };
       muteRace.onclick=()=>{ GameState.data.settings.sfxOn=!GameState.data.settings.sfxOn; AudioEngine.apply(); muteRace.textContent=GameState.data.settings.sfxOn?"靜音":"取消靜音"; };
       ["bgmVolume","sfxVolume","raceSpeed","quality","initChips","difficulty"].forEach(id=>{
         const el=document.getElementById(id); el.value=GameState.data.settings[id];
@@ -560,7 +545,7 @@
       });
       ["bgmOn","sfxOn"].forEach(id=>{ const el=document.getElementById(id); el.checked=GameState.data.settings[id]; el.oninput=()=>{ GameState.data.settings[id]=el.checked; AudioEngine.apply(); GameState.save(); }; });
       resetChips.onclick=()=>{ if(confirm("確認將籌碼重置？")){ GameState.data.chips=GameState.data.settings.initChips; GameState.save(); UI.renderHome(); UI.toast("籌碼已重置"); } };
-      clearRecord.onclick=()=>{ if(prompt("請輸入「確認」以清除紀錄")==="確認"){ GameState.data.stats=GameState.defaults().stats; GameState.data.raceHistory=[]; GameState.save(); UI.renderHome(); UI.toast("紀錄已清除"); } };
+      clearRecord.onclick=()=>{ GameState.data.stats=GameState.defaults().stats; GameState.data.raceHistory=[]; GameState.save(); UI.renderHome(); UI.toast("紀錄已清除"); };
       document.addEventListener("visibilitychange",()=>{ if(document.hidden) GameState.save(); });
       document.addEventListener("touchstart",()=>{ if(AudioEngine.ctx?.state==="suspended") AudioEngine.ctx.resume(); },{once:true});
       document.addEventListener("click",()=>{ if(AudioEngine.ctx?.state==="suspended") AudioEngine.ctx.resume(); },{once:true});
