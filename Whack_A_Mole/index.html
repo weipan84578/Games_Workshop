@@ -337,6 +337,7 @@
       gap: 10px;
       align-items: center;
       margin-bottom: 12px;
+      min-width: 0;
     }
 
     .game-actions {
@@ -347,6 +348,7 @@
     }
 
     .hud-box {
+      min-width: 0;
       min-height: 74px;
       padding: 10px 14px;
       border-radius: 8px;
@@ -368,6 +370,8 @@
       font-size: clamp(24px, 4vw, 38px);
       color: var(--color-secondary);
       line-height: 1;
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .hud-center {
@@ -381,6 +385,8 @@
       color: var(--color-accent);
       font-size: clamp(22px, 4vw, 34px);
       text-align: center;
+      max-width: 100%;
+      overflow-wrap: anywhere;
     }
 
     .heart-row,
@@ -434,6 +440,7 @@
       margin: 0 auto;
       display: grid;
       justify-items: center;
+      min-width: 0;
     }
 
     .game-grid {
@@ -756,27 +763,6 @@
 
     .toast.show { opacity: 1; }
 
-    .boss-meter {
-      width: min(620px, 100%);
-      height: 18px;
-      border-radius: 999px;
-      overflow: hidden;
-      background: rgba(0,0,0,0.35);
-      border: 2px solid rgba(255,255,255,0.14);
-      display: none;
-      margin: 8px auto 0;
-    }
-
-    .boss-meter.active { display: block; }
-
-    .boss-meter span {
-      display: block;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, var(--color-danger), var(--color-secondary));
-      transition: width 180ms ease;
-    }
-
     @keyframes mascot-bob {
       0%, 100% { transform: translateX(-50%) translateY(0); }
       50% { transform: translateX(-50%) translateY(-10px); }
@@ -827,19 +813,61 @@
     }
 
     @media (max-width: 760px) {
-      .screen { padding: 14px; align-items: stretch; }
+      .screen { padding: 10px; align-items: stretch; }
       .stack { align-content: center; }
       .menu-grid { grid-template-columns: 1fr; }
+      .game-actions {
+        justify-content: flex-end;
+        width: 100%;
+        margin-bottom: 6px;
+      }
+      .game-actions .btn {
+        width: auto;
+        min-width: 108px;
+        min-height: 40px;
+        padding: 8px 12px;
+        font-size: 16px;
+      }
       .hud {
         grid-template-columns: 1fr 1fr;
         align-items: stretch;
+        gap: 8px;
+        width: 100%;
       }
       .hud-center {
         grid-column: 1 / -1;
         order: -1;
+        gap: 4px;
       }
-      .hud-box { min-height: 62px; }
-      .game-grid { width: min(98vw, 620px); }
+      .hud-box {
+        min-height: 58px;
+        padding: 8px 9px;
+      }
+      .hud-label { font-size: 10px; }
+      .hud-value { font-size: clamp(20px, 7vw, 28px); }
+      #hud-combo {
+        display: block;
+        font-size: 12px;
+        line-height: 1.15;
+        overflow-wrap: anywhere;
+      }
+      .stage-name { font-size: clamp(20px, 6vw, 28px); }
+      .heart-row,
+      .power-row { gap: 5px; }
+      .heart {
+        width: 22px;
+        height: 22px;
+        font-size: 20px;
+      }
+      .power {
+        min-width: 34px;
+        height: 32px;
+        font-size: 17px;
+      }
+      .game-grid {
+        width: 100%;
+        max-width: 620px;
+      }
       .hole { padding: 13px; }
       .result-grid { grid-template-columns: 1fr; }
       .setting-row {
@@ -858,7 +886,11 @@
       .level-card { min-height: 126px; padding: 11px; }
       .grid-4x5 { gap: 6px; padding: 8px; }
       .grid-4x5 .hole { padding: 8px; }
-      .mole { width: 76%; }
+      .mole {
+        width: 64%;
+        bottom: 14%;
+      }
+      .grid-4x5 .mole { width: 58%; }
       .mole .mole-art { border-width: 3px; }
       .hud-value { font-size: 25px; }
     }
@@ -986,7 +1018,6 @@
             <span id="hud-combo">COMBO 0</span>
           </div>
         </div>
-        <div id="boss-meter" class="boss-meter"><span></span></div>
         <div id="game-grid" class="game-grid grid-3x3"></div>
       </div>
     </section>
@@ -1130,6 +1161,7 @@
           this.nextNoteTime = 0;
           this.bpm = 120;
           this.pattern = [];
+          this.musicMode = null;
         }
 
         ensure() {
@@ -1159,6 +1191,19 @@
         }
 
         buildPattern(level) {
+          if (level.home) {
+            const root = 196;
+            return [
+              { step: 0, freq: root, type: "triangle", dur: 1.8, gain: 0.1 },
+              { step: 2, freq: root * 1.25, type: "sine", dur: 0.8, gain: 0.12 },
+              { step: 4, freq: root * 1.5, type: "sine", dur: 0.8, gain: 0.12 },
+              { step: 6, freq: root * 2, type: "triangle", dur: 1.2, gain: 0.1 },
+              { step: 8, freq: root * 1.5, type: "sine", dur: 0.8, gain: 0.11 },
+              { step: 10, freq: root * 1.25, type: "sine", dur: 0.8, gain: 0.11 },
+              { step: 12, freq: root * 0.75, type: "triangle", dur: 1.8, gain: 0.1 },
+              { step: 14, freq: root * 1.125, type: "sine", dur: 0.7, gain: 0.09 }
+            ];
+          }
           const root = 220 * Math.pow(2, (level.id % 5) / 12);
           const scale = level.boss ? [0, 3, 5, 6, 7, 10] : [0, 2, 4, 7, 9, 12];
           return [
@@ -1177,6 +1222,7 @@
           this.resume();
           if (!this.ctx) return;
           this.stopMusic();
+          this.musicMode = level.home ? "home" : "game";
           this.bpm = level.bpm;
           this.pattern = this.buildPattern(level);
           this.step = 0;
@@ -1184,9 +1230,16 @@
           this.sequenceId = setInterval(() => this.scheduler(), 25);
         }
 
+        startHomeMusic() {
+          this.resume();
+          if (!this.ctx || this.musicMode === "home") return;
+          this.startMusic({ id: 0, bpm: 88, home: true, boss: false });
+        }
+
         stopMusic() {
           if (this.sequenceId) clearInterval(this.sequenceId);
           this.sequenceId = null;
+          this.musicMode = null;
         }
 
         scheduler() {
@@ -1268,6 +1321,7 @@
           this.holes = [];
           this.activeMoles = new Map();
           this.state = "idle";
+          this.userInteracted = false;
           this.score = 0;
           this.lives = 3;
           this.timeLeft = 60;
@@ -1288,6 +1342,9 @@
 
         bind() {
           document.addEventListener("click", (event) => {
+            this.userInteracted = true;
+            this.audio.resume();
+            if (this.activeScreen === "home") this.audio.startHomeMusic();
             const screenBtn = event.target.closest("[data-screen]");
             if (screenBtn) this.showScreen(screenBtn.dataset.screen);
 
@@ -1346,10 +1403,12 @@
 
         showScreen(name) {
           if (name !== "game") this.stopGame();
+          if (name === "game") this.audio.stopMusic();
           document.querySelectorAll(".screen").forEach(screen => screen.classList.remove("active"));
           document.getElementById(`screen-${name}`).classList.add("active");
           this.activeScreen = name;
           if (name === "select") this.renderLevelSelect();
+          if (name === "home" && this.userInteracted) this.audio.startHomeMusic();
         }
 
         syncSettingsUI() {
@@ -1680,9 +1739,6 @@
             <span class="power" title="生命">♥<small>${this.powers.heart}</small></span>
             <span class="power" title="狂熱">⚡<small>${this.powers.frenzy}</small></span>
           `;
-          const boss = document.getElementById("boss-meter");
-          boss.classList.toggle("active", this.level.boss);
-          boss.querySelector("span").style.width = `${this.bossHp}%`;
         }
 
         finishLevel(gameOver) {
