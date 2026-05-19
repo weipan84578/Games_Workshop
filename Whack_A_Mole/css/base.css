@@ -1,0 +1,120 @@
+:root {
+      --color-bg: #1a0a2e;
+      --color-surface: #2d1b4e;
+      --color-panel: #3a245f;
+      --color-primary: #ff6b35;
+      --color-secondary: #ffd23f;
+      --color-accent: #06d6a0;
+      --color-danger: #ef476f;
+      --color-mole-brown: #8b5e3c;
+      --color-grass: #2d6a4f;
+      --color-hole: #1b0000;
+      --color-text: #f8f9fa;
+      --color-text-dim: #adb5bd;
+      --level-tint: transparent;
+      --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.35);
+      --shadow-soft: 0 12px 28px rgba(0, 0, 0, 0.24);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      background: var(--color-bg);
+      color: var(--color-text);
+      font-family: "Nunito", system-ui, sans-serif;
+      overscroll-behavior: none;
+      user-select: none;
+      touch-action: manipulation;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 20% 12%, rgba(255, 210, 63, 0.13), transparent 28rem),
+        radial-gradient(circle at 82% 18%, rgba(6, 214, 160, 0.14), transparent 26rem),
+        linear-gradient(140deg, #1a0a2e 0%, #24113f 46%, #101b38 100%);
+    }
+
+    button, input, select { font: inherit; }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      color: var(--color-text);
+      touch-action: manipulation;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+      filter: grayscale(0.4);
+    }
+
+    .app {
+      position: relative;
+      min-height: 100vh;
+      isolation: isolate;
+    }
+
+    .screen {
+      display: none;
+      min-height: 100vh;
+      padding: 24px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .screen.active { display: flex; }
+
+    .stack {
+      width: min(980px, 100%);
+      display: grid;
+      gap: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: grid;
+      gap: 6px;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .title {
+      margin: 0;
+      font-family: "Fredoka", system-ui, sans-serif;
+      font-size: clamp(48px, 9vw, 84px);
+      letter-spacing: 0;
+      line-height: 0.92;
+      color: var(--color-secondary);
+      text-shadow: 0 7px 0 #7b2e25, 0 18px 28px rgba(0, 0, 0, 0.32);
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--color-accent);
+      font-family: "Fredoka", system-ui, sans-serif;
+      font-size: clamp(24px, 4vw, 36px);
+      text-shadow: 0 3px 0 rgba(0, 0, 0, 0.28);
+    }
+
+    .panel {
+      background: color-mix(in srgb, var(--color-surface) 84%, black);
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      box-shadow: var(--shadow-heavy);
+      padding: clamp(18px, 4vw, 32px);
+    }

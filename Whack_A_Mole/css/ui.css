@@ -1,0 +1,123 @@
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: grid;
+      place-items: center;
+      background: rgba(12, 5, 26, 0.68);
+      backdrop-filter: blur(4px);
+      padding: 24px;
+    }
+
+    .overlay.hidden { display: none; }
+
+    .overlay-card {
+      width: min(520px, 100%);
+      padding: 28px;
+      border-radius: 8px;
+      text-align: center;
+      background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.03)), var(--color-surface);
+      border: 2px solid rgba(255,255,255,0.15);
+      box-shadow: var(--shadow-heavy);
+    }
+
+    .countdown {
+      font-family: "Orbitron", monospace;
+      font-size: clamp(72px, 18vw, 150px);
+      color: var(--color-secondary);
+      text-shadow: 0 9px 0 rgba(0,0,0,0.35);
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .stat {
+      padding: 14px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .stat span {
+      display: block;
+      color: var(--color-text-dim);
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 4px;
+      font-family: "Orbitron", monospace;
+      font-size: 28px;
+      color: var(--color-secondary);
+    }
+
+    .settings-grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .setting {
+      display: grid;
+      gap: 8px;
+    }
+
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .setting label {
+      font-weight: 800;
+      color: var(--color-text);
+    }
+
+    input[type="range"] { width: min(360px, 100%); accent-color: var(--color-accent); }
+
+    .segmented {
+      display: inline-grid;
+      grid-auto-flow: column;
+      gap: 4px;
+      padding: 4px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .segmented button {
+      min-height: 42px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      background: transparent;
+      font-weight: 800;
+    }
+
+    .segmented button.active {
+      color: #042c22;
+      background: var(--color-accent);
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 20px;
+      z-index: 60;
+      transform: translateX(-50%);
+      padding: 11px 16px;
+      border-radius: 8px;
+      background: rgba(15, 10, 30, 0.92);
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: var(--shadow-soft);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 160ms ease;
+      font-weight: 800;
+    }
+
+    .toast.show { opacity: 1; }
