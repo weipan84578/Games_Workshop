@@ -237,6 +237,31 @@
       gap: 12px;
     }
 
+    .help-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .help-item {
+      padding: 14px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .help-item h3 {
+      margin: 0 0 6px;
+      font-family: "Fredoka", system-ui, sans-serif;
+      color: var(--color-accent);
+      font-size: 22px;
+    }
+
+    .help-item p {
+      margin: 0;
+      color: var(--color-text-dim);
+      line-height: 1.55;
+    }
+
     .btn {
       min-height: 56px;
       padding: 12px 18px;
@@ -312,6 +337,13 @@
       gap: 10px;
       align-items: center;
       margin-bottom: 12px;
+    }
+
+    .game-actions {
+      width: min(1080px, 100%);
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 8px;
     }
 
     .hud-box {
@@ -485,6 +517,45 @@
     .mole.hit { animation: mole-hit 160ms ease forwards; }
 
     .mole .mole-art { width: 100%; height: 100%; }
+
+    .mole .mole-art::before,
+    .mole .mole-art::after {
+      width: 13%;
+      height: 17%;
+      min-width: 6px;
+      min-height: 8px;
+    }
+
+    .mole .mole-snout {
+      width: 42%;
+      height: 30%;
+      top: 49%;
+      min-width: 22px;
+      min-height: 16px;
+    }
+
+    .mole .mole-snout::before {
+      width: 32%;
+      height: 30%;
+      top: 18%;
+      min-width: 7px;
+      min-height: 5px;
+    }
+
+    .mole .mole-teeth {
+      top: 70%;
+      gap: 3%;
+      width: 26%;
+      justify-content: center;
+    }
+
+    .mole .mole-teeth span {
+      width: 38%;
+      height: auto;
+      aspect-ratio: 0.7 / 1;
+      min-width: 5px;
+      min-height: 7px;
+    }
 
     .mole.fast .mole-art { background: linear-gradient(145deg, #f0a44b, #b65c24); }
     .mole.bad .mole-art { background: linear-gradient(145deg, #7f8192, #42424d); }
@@ -788,6 +859,7 @@
       .grid-4x5 { gap: 6px; padding: 8px; }
       .grid-4x5 .hole { padding: 8px; }
       .mole { width: 76%; }
+      .mole .mole-art { border-width: 3px; }
       .hud-value { font-size: 25px; }
     }
   </style>
@@ -811,6 +883,7 @@
         <div class="menu-grid">
           <button class="btn primary" data-action="quick-start">開始遊戲</button>
           <button class="btn secondary" data-screen="select">關卡選擇</button>
+          <button class="btn accent" data-screen="help">遊戲說明</button>
           <button class="btn accent" data-screen="settings">設定</button>
           <button class="btn ghost" data-action="reset-save">重置紀錄</button>
         </div>
@@ -824,6 +897,33 @@
           <button class="icon-btn" data-screen="home" aria-label="返回">←</button>
         </div>
         <div id="level-grid" class="level-grid"></div>
+      </div>
+    </section>
+
+    <section id="screen-help" class="screen">
+      <div class="stack panel">
+        <div class="top-row">
+          <h2 class="screen-title">遊戲說明</h2>
+          <button class="icon-btn" data-screen="home" aria-label="返回">←</button>
+        </div>
+        <div class="help-grid">
+          <article class="help-item">
+            <h3>目標</h3>
+            <p>在時間結束前敲中地鼠累積分數。每一關有不同洞口數、速度、陷阱與目標分數，第 10 關是 BOSS 戰。</p>
+          </article>
+          <article class="help-item">
+            <h3>操作</h3>
+            <p>滑鼠點擊或手指觸碰洞口中的地鼠。連續命中會提升 COMBO 倍率，點空或打到危險地鼠會中斷連擊。</p>
+          </article>
+          <article class="help-item">
+            <h3>地鼠與道具</h3>
+            <p>一般地鼠給分，快鼠出現時間短，裝甲鼠需要敲兩下，寶石鼠可能給加時、生命或狂熱加倍。灰色危險地鼠會扣分或扣生命。</p>
+          </article>
+          <article class="help-item">
+            <h3>關卡與紀錄</h3>
+            <p>所有關卡一開始都可遊玩。完成關卡會保存最高分與星等，設定和紀錄會存在瀏覽器 localStorage。</p>
+          </article>
+        </div>
       </div>
     </section>
 
@@ -867,6 +967,9 @@
 
     <section id="screen-game" class="screen">
       <div class="game-wrap">
+        <div class="game-actions">
+          <button class="btn ghost" data-action="exit-game">離開遊戲</button>
+        </div>
         <div class="hud">
           <div class="hud-box">
             <span class="hud-label">Score</span>
@@ -1228,6 +1331,11 @@
             this.syncSettingsUI();
             this.toast("紀錄已重置");
           }
+          if (action === "exit-game") {
+            this.stopGame();
+            this.showScreen("home");
+            this.toast("已離開遊戲");
+          }
           if (action === "retry-level") this.startLevel(this.currentLevelId);
           if (action === "next-level") this.startLevel(Math.min(10, this.currentLevelId + 1));
         }
@@ -1260,10 +1368,9 @@
           grid.innerHTML = "";
           LEVELS.forEach(level => {
             const data = progress.levels[level.id] || { stars: 0, highScore: 0, unlocked: level.id === 1 };
-            const unlocked = data.unlocked || level.id <= (progress.currentLevel || 1);
             const button = document.createElement("button");
-            button.className = `level-card ${unlocked ? "" : "locked"}`;
-            button.disabled = !unlocked;
+            button.className = "level-card";
+            button.disabled = false;
             button.dataset.level = level.id;
             button.innerHTML = `
               <strong>STAGE ${level.id}</strong>
@@ -1297,7 +1404,11 @@
           this.showScreen("game");
           this.buildGrid();
           this.updateHud();
-          this.countdown().then(() => this.runLevel());
+          const sessionId = Date.now();
+          this.sessionId = sessionId;
+          this.countdown().then(() => {
+            if (this.sessionId === sessionId && this.activeScreen === "game") this.runLevel();
+          });
         }
 
         buildGrid() {
@@ -1650,6 +1761,7 @@
         }
 
         stopGame() {
+          this.sessionId = Date.now();
           this.stopTimers();
           this.audio.stopMusic();
           this.activeMoles.forEach(active => {
