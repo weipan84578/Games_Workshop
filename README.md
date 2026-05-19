@@ -81,3 +81,7 @@
 ### horse_racing
 
 - 賽馬王
+
+### Whack_A_Mole
+
+- 打地鼠
