@@ -85,3 +85,7 @@
 ### Whack_A_Mole
 
 - 打地鼠
+
+### Gomoku
+
+- 五子棋
