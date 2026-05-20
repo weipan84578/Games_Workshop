@@ -69,6 +69,8 @@ const BOARD_SIZE = 15;
       bgmGain: null,
       sfxGain: null,
       bgmTimer: null,
+      bgmNodes: new Set(),
+      bgmSerial: 0,
       bgmPlaying: false,
       currentBGM: null,
       init() {
@@ -98,6 +100,7 @@ const BOARD_SIZE = 15;
         this.stopBGM();
         this.bgmPlaying = true;
         this.currentBGM = track;
+        const serial = ++this.bgmSerial;
         const patterns = {
           main: {
             notes: [392, 493.9, 587.3, 659.3, 587.3, 493.9, 440, 523.3],
@@ -133,9 +136,16 @@ const BOARD_SIZE = 15;
           gain.gain.linearRampToValueAtTime(0.001, time + duration);
           osc.start(time);
           osc.stop(time + duration + 0.02);
+          const node = { osc, gain };
+          this.bgmNodes.add(node);
+          osc.addEventListener('ended', () => {
+            this.bgmNodes.delete(node);
+            try { osc.disconnect(); } catch {}
+            try { gain.disconnect(); } catch {}
+          }, { once: true });
         };
         const loop = () => {
-          if (!this.bgmPlaying || !this.ctx || this.currentBGM !== track) return;
+          if (!this.bgmPlaying || !this.ctx || this.currentBGM !== track || this.bgmSerial !== serial) return;
           const start = this.ctx.currentTime + 0.02;
           for (let i = 0; i < 8; i++) scheduleNote(start + i * duration);
           this.bgmTimer = setTimeout(loop, duration * 8 * 1000 - 120);
@@ -145,7 +155,21 @@ const BOARD_SIZE = 15;
       stopBGM() {
         this.bgmPlaying = false;
         this.currentBGM = null;
+        this.bgmSerial++;
         clearTimeout(this.bgmTimer);
+        if (!this.ctx) {
+          this.bgmNodes.clear();
+          return;
+        }
+        const now = this.ctx.currentTime;
+        for (const node of this.bgmNodes) {
+          try {
+            node.gain.gain.cancelScheduledValues(now);
+            node.gain.gain.setValueAtTime(Math.max(node.gain.gain.value, 0.001), now);
+            node.gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+            node.osc.stop(now + 0.04);
+          } catch {}
+        }
       },
       play(id) {
         if (!this.ctx || !this.sfxGain) return;
