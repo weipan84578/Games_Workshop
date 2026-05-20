@@ -666,6 +666,7 @@
       sfxGain: null,
       bgmTimer: null,
       bgmPlaying: false,
+      currentBGM: null,
       init() {
         if (this.ctx) return;
         const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -687,30 +688,50 @@
       setSFXVolume(value) {
         if (this.sfxGain) this.sfxGain.gain.value = value;
       },
-      startBGM() {
-        if (!this.ctx || this.bgmPlaying) return;
+      startBGM(track = 'game') {
+        if (!this.ctx) return;
+        if (this.bgmPlaying && this.currentBGM === track) return;
+        this.stopBGM();
         this.bgmPlaying = true;
-        const notes = [220, 261.6, 329.6, 349.2, 261.6, 392, 440, 329.6];
+        this.currentBGM = track;
+        const patterns = {
+          main: {
+            notes: [392, 493.9, 587.3, 659.3, 587.3, 493.9, 440, 523.3],
+            duration: 0.55,
+            type: 'triangle',
+            peak: 0.11,
+            sustain: 0.06,
+          },
+          game: {
+            notes: [220, 261.6, 329.6, 349.2, 261.6, 392, 440, 329.6],
+            duration: 0.8,
+            type: 'sine',
+            peak: 0.16,
+            sustain: 0.09,
+          },
+        };
+        const pattern = patterns[track] ?? patterns.game;
+        const notes = pattern.notes;
         let noteIndex = 0;
-        const duration = 0.8;
+        const duration = pattern.duration;
         const scheduleNote = (time) => {
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
           osc.connect(gain);
           gain.connect(this.bgmGain);
-          osc.type = 'sine';
+          osc.type = pattern.type;
           osc.frequency.value = notes[noteIndex % notes.length];
           noteIndex++;
           gain.gain.setValueAtTime(0, time);
-          gain.gain.linearRampToValueAtTime(0.16, time + 0.05);
-          gain.gain.linearRampToValueAtTime(0.09, time + 0.2);
-          gain.gain.setValueAtTime(0.09, time + duration - 0.12);
+          gain.gain.linearRampToValueAtTime(pattern.peak, time + 0.05);
+          gain.gain.linearRampToValueAtTime(pattern.sustain, time + 0.2);
+          gain.gain.setValueAtTime(pattern.sustain, time + duration - 0.12);
           gain.gain.linearRampToValueAtTime(0.001, time + duration);
           osc.start(time);
           osc.stop(time + duration + 0.02);
         };
         const loop = () => {
-          if (!this.bgmPlaying || !this.ctx) return;
+          if (!this.bgmPlaying || !this.ctx || this.currentBGM !== track) return;
           const start = this.ctx.currentTime + 0.02;
           for (let i = 0; i < 8; i++) scheduleNote(start + i * duration);
           this.bgmTimer = setTimeout(loop, duration * 8 * 1000 - 120);
@@ -719,6 +740,7 @@
       },
       stopBGM() {
         this.bgmPlaying = false;
+        this.currentBGM = null;
         clearTimeout(this.bgmTimer);
       },
       play(id) {
@@ -1284,7 +1306,7 @@
     function startGame() {
       AudioManager.init();
       AudioManager.resume();
-      AudioManager.startBGM();
+      AudioManager.startBGM('game');
       GameLogic.init();
       UI.showScreen('screen-game');
       BoardView.render(GameLogic.state.board, GameLogic.state.lastMove);
@@ -1338,10 +1360,10 @@
     function bindEvents() {
       $('btn-start').addEventListener('click', () => { AudioManager.play('click'); startGame(); });
       $('btn-settings').addEventListener('click', () => { AudioManager.play('click'); syncSettingsUI(); UI.showScreen('screen-settings'); });
-      $('btn-back-main').addEventListener('click', () => { AudioManager.play('click'); UI.showScreen('screen-main'); });
+      $('btn-back-main').addEventListener('click', () => { AudioManager.play('click'); UI.showScreen('screen-main'); AudioManager.startBGM('main'); });
       $('btn-save-settings').addEventListener('click', saveSettingsFromUI);
       $('btn-play-again').addEventListener('click', () => { AudioManager.play('click'); startGame(); });
-      $('btn-result-main').addEventListener('click', () => { AudioManager.play('click'); AudioManager.stopBGM(); UI.showScreen('screen-main'); });
+      $('btn-result-main').addEventListener('click', () => { AudioManager.play('click'); UI.showScreen('screen-main'); AudioManager.startBGM('main'); });
       $('btn-undo').addEventListener('click', () => {
         if (GameLogic.undoLastMove()) {
           AudioManager.play('undo');
@@ -1357,8 +1379,8 @@
       $('btn-restart').addEventListener('click', () => { closePause(); startGame(); });
       $('btn-pause-main').addEventListener('click', () => {
         closePause();
-        AudioManager.stopBGM();
         UI.showScreen('screen-main');
+        AudioManager.startBGM('main');
       });
       $('game-canvas').addEventListener('click', (event) => {
         const pos = BoardView.getGridPos(event.clientX, event.clientY);
@@ -1389,6 +1411,13 @@
           AudioManager.setSFXVolume(Number($('sfx-volume').value) / 100);
         });
       }
+      document.addEventListener('pointerdown', activateMainMusic, { once: true });
+    }
+
+    function activateMainMusic() {
+      AudioManager.init();
+      AudioManager.resume();
+      if ($('screen-main').classList.contains('active')) AudioManager.startBGM('main');
     }
 
     function pauseGame() {
