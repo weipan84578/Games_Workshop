@@ -1,0 +1,96 @@
+/* Motion and responsive behavior: keyframes plus tablet/mobile layout rules. */
+@keyframes screenFadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes stoneFloat {
+      0%, 100% { transform: translateY(0) rotateY(0deg); }
+      50% { transform: translateY(-12px) rotateY(180deg); }
+    }
+
+    @keyframes piecePlace {
+      0% { transform: scale(0) translateY(-10px); opacity: 0; }
+      60% { transform: scale(1.15) translateY(0); opacity: 1; }
+      80% { transform: scale(0.95); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes flipToBlack {
+      0% { transform: rotateY(0deg); }
+      49% { transform: rotateY(90deg); }
+      50% { transform: rotateY(90deg); }
+      100% { transform: rotateY(180deg); }
+    }
+
+    @keyframes flipToWhite {
+      0% { transform: rotateY(0deg); }
+      49% { transform: rotateY(90deg); }
+      50% { transform: rotateY(90deg); }
+      100% { transform: rotateY(180deg); }
+    }
+
+    @keyframes hintPulse {
+      0%, 100% { transform: scale(0.8); opacity: 0.5; }
+      50% { transform: scale(1.1); opacity: 0.9; }
+    }
+
+    @keyframes scoreUpdate {
+      0% { transform: scale(1); }
+      30% { transform: scale(1.4); color: var(--color-text-accent); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes thinkBlink {
+      from { opacity: 0.25; transform: translateX(0) scale(0.8); }
+      to { opacity: 1; transform: translateX(0) scale(1); }
+    }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translate(-50%, 100%); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
+
+    @media (max-width: 900px) {
+      .game-screen { align-content: start; }
+      .game-shell {
+        grid-template-columns: 1fr;
+        justify-items: center;
+      }
+      .game-shell > .player-panel { display: none; }
+      .top-mobile { display: grid; }
+      .mobile-score {
+        min-height: 60px;
+        display: grid;
+        place-items: center;
+        padding: 8px;
+        border-radius: var(--radius-sm);
+        background: rgba(45, 38, 32, 0.9);
+        text-align: center;
+      }
+      .mobile-score strong {
+        display: block;
+        font-family: var(--font-number);
+        font-size: 1.6rem;
+      }
+      .mobile-score span {
+        display: block;
+        color: var(--color-text-secondary);
+        font-size: 0.88rem;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .screen { padding: 16px; }
+      .panel { padding: 18px; }
+      .status-text { font-size: 0.92rem; }
+      .bottom-actions { grid-template-columns: 1fr 1fr; }
+      .btn { padding: 10px 12px; }
+      .setting-row {
+        grid-template-columns: 1fr;
+        align-items: start;
+        padding: 12px 0;
+      }
+      input[type="range"], select { width: 100%; }
+      .record-grid { grid-template-columns: 1fr; }
+    }
