@@ -489,6 +489,37 @@
       font-size: clamp(2.1rem, 7vw, 2.8rem);
     }
 
+    .rules-modal {
+      text-align: left;
+      max-height: min(720px, calc(100vh - 48px));
+      overflow: auto;
+    }
+
+    .rules-modal h2 {
+      text-align: center;
+    }
+
+    .rules-list {
+      margin: 0 0 18px;
+      padding-left: 1.35rem;
+      line-height: 1.72;
+      color: var(--color-text-primary);
+    }
+
+    .rules-list li + li {
+      margin-top: 8px;
+    }
+
+    .rules-note {
+      margin: 0 0 20px;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      background: rgba(212, 168, 67, 0.12);
+      border: 1px solid rgba(212, 168, 67, 0.22);
+      color: var(--color-text-secondary);
+      line-height: 1.6;
+    }
+
     .result-score {
       display: flex;
       justify-content: center;
@@ -721,6 +752,7 @@
         <div class="button-stack">
           <button class="btn btn--primary" data-action="new-game">開始新遊戲</button>
           <button class="btn btn--ghost" data-action="continue-game" id="continueBtn">繼續遊戲</button>
+          <button class="btn" data-action="show-rules">遊戲說明</button>
           <button class="btn" data-screen="settings">設定</button>
           <button class="btn" data-screen="records">戰績</button>
         </div>
@@ -875,6 +907,22 @@
           <button class="btn btn--primary" data-action="play-again">再來一局</button>
           <button class="btn" data-action="quit-home">回主畫面</button>
         </div>
+      </div>
+    </div>
+
+    <div id="rules-overlay" class="overlay hidden">
+      <div class="modal rules-modal">
+        <h2>遊戲說明</h2>
+        <ol class="rules-list">
+          <li>黑棋先手，雙方輪流在棋盤空格落子。</li>
+          <li>落子必須夾住至少一顆對手棋子。可在水平、垂直或斜線方向形成夾擊。</li>
+          <li>被新落子與同色棋子夾住的對手棋子，會全部翻成你的顏色。</li>
+          <li>若輪到某方時沒有任何合法步，該方跳過，由對手繼續。</li>
+          <li>雙方都沒有合法步，或棋盤下滿時，遊戲結束。</li>
+          <li>結束時棋子數較多的一方獲勝；數量相同則為平手。</li>
+        </ol>
+        <p class="rules-note">棋盤上的金色小點代表目前可下的位置。角落通常很有價值，因為角落棋子不會再被翻走。</p>
+        <button class="btn btn--primary" data-action="close-rules">我知道了</button>
       </div>
     </div>
 
@@ -1368,6 +1416,7 @@
         this.mobileWhite = document.getElementById('mobileWhite');
         this.pauseOverlay = document.getElementById('pause-overlay');
         this.resultOverlay = document.getElementById('result-overlay');
+        this.rulesOverlay = document.getElementById('rules-overlay');
         this.toastEl = document.getElementById('toast');
         this.hintBtn = document.getElementById('hintBtn');
         this.continueBtn = document.getElementById('continueBtn');
@@ -1437,6 +1486,8 @@
           'new-game': () => this.showScreen('difficulty'),
           'start-selected': () => GameEngine.startNew({ difficulty: this.selectedDifficulty, playerColor: this.selectedColor }),
           'continue-game': () => GameEngine.continueSaved(),
+          'show-rules': () => this.rulesOverlay.classList.remove('hidden'),
+          'close-rules': () => this.rulesOverlay.classList.add('hidden'),
           'pause': () => this.pauseOverlay.classList.remove('hidden'),
           'resume': () => this.pauseOverlay.classList.add('hidden'),
           'restart': () => {
