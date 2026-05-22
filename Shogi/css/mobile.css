@@ -1,0 +1,77 @@
+@media (max-width: 1023px) {
+  :root { --board-size: min(62vh, calc(100vw - 280px)); }
+  .difficulty-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .game-layout {
+    grid-template-columns: 170px minmax(330px, 1fr);
+    grid-template-rows: 1fr auto;
+  }
+  .side-panel {
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr auto;
+  }
+  .kifu-panel { height: 160px; }
+}
+
+@media (max-width: 767px) {
+  body { overflow: auto; }
+  .screen { padding: 16px; }
+  .game-screen { min-height: 100vh; }
+  .game-header {
+    height: 48px;
+    padding: 0 10px;
+  }
+  .game-layout {
+    height: auto;
+    min-height: calc(100vh - 48px);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 8px;
+  }
+  :root { --board-size: min(calc(100vw - 16px), 65vh); }
+  .board { max-height: none; }
+  .hand-column {
+    order: -1;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .hand-panel {
+    padding: 9px;
+  }
+  .hand-panel h3 { font-size: 15px; margin-bottom: 6px; }
+  .player-hand { order: 2; }
+  .side-panel {
+    grid-template-columns: 1fr;
+  }
+  .kifu-panel {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9;
+    height: 42px;
+    border-radius: 8px 8px 0 0;
+    transition: height .22s ease;
+  }
+  .kifu-panel.open { height: 42vh; }
+  .drawer-toggle { display: block; min-height: 32px; }
+  #kifuList { display: none; }
+  .kifu-panel.open #kifuList { display: block; }
+  .game-actions {
+    margin-bottom: 44px;
+  }
+  .difficulty-grid { grid-template-columns: 1fr; }
+  .difficulty-card { min-height: 132px; }
+  button.primary { font-size: 20px; }
+  .settings-panel label { font-size: 16px; }
+  .modal-actions { grid-template-columns: 1fr; }
+  .modal-actions button { min-height: 72px; font-size: 22px; }
+  .thinking { inset: 48px 0 0; }
+}
+
+@media (max-width: 480px) {
+  .menu-shell { padding: 30px 16px; }
+  h1 { font-size: 64px; }
+  .piece { font-size: max(14px, calc(var(--board-size) / 28)); }
+  .hand-piece { min-width: 44px; min-height: 48px; font-size: 16px; }
+}

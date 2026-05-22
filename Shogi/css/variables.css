@@ -1,0 +1,33 @@
+:root {
+  --bg-primary: #1A1208;
+  --bg-secondary: #2D1F0A;
+  --surface: #3E2B0F;
+  --board-color: #F4C87B;
+  --board-line: #5C3317;
+  --piece-base: #FAE0A0;
+  --piece-text: #1A0A00;
+  --piece-promoted: #C0392B;
+  --accent-gold: #D4AF37;
+  --text-primary: #F5E6C8;
+  --text-secondary: #A89060;
+  --btn-primary: #8B4513;
+  --btn-hover: #A0522D;
+  --highlight-move: rgba(100, 200, 100, 0.5);
+  --highlight-legal: rgba(200, 200, 100, 0.4);
+  --danger: #B83232;
+  --shadow: rgba(0, 0, 0, .35);
+  --board-size: min(76vh, 576px);
+  --font-serif: "Noto Serif CJK TC", "Yu Mincho", "Hiragino Mincho ProN", "PMingLiU", serif;
+  --font-sans: system-ui, -apple-system, "Segoe UI", "Microsoft JhengHei", sans-serif;
+}
+
+body.light-theme {
+  --bg-primary: #F0E6D0;
+  --bg-secondary: #E8D5B0;
+  --surface: #D8BD85;
+  --text-primary: #2C1810;
+  --text-secondary: #684825;
+  --btn-primary: #9C6B2F;
+  --btn-hover: #B9823E;
+  --shadow: rgba(65, 38, 11, .25);
+}

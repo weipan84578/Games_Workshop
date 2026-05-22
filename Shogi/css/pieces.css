@@ -1,0 +1,49 @@
+.piece, .hand-piece {
+  display: grid;
+  place-items: center;
+  position: relative;
+  color: var(--piece-text);
+  background: linear-gradient(160deg, #fff0bd, var(--piece-base) 64%, #d59a51);
+  border: 1px solid rgba(70, 36, 9, .55);
+  box-shadow: 0 4px 9px rgba(52, 27, 6, .35);
+  font-family: var(--font-serif);
+  font-weight: 700;
+}
+.piece {
+  width: 74%;
+  height: 82%;
+  clip-path: polygon(50% 0, 88% 22%, 82% 100%, 18% 100%, 12% 22%);
+  font-size: clamp(14px, calc(var(--board-size) / 27), 22px);
+  z-index: 1;
+}
+.piece.gote { transform: rotate(180deg); }
+.piece.promoted { color: var(--piece-promoted); }
+.piece .sub {
+  position: absolute;
+  right: 16%;
+  bottom: 8%;
+  font-size: clamp(10px, calc(var(--board-size) / 44), 14px);
+}
+.hand-piece {
+  min-width: 48px;
+  min-height: 52px;
+  padding: 6px 9px 8px;
+  clip-path: polygon(50% 0, 88% 22%, 82% 100%, 18% 100%, 12% 22%);
+  font-size: 18px;
+}
+.hand-piece.selectable:hover, .hand-piece.selected {
+  outline: 3px solid var(--accent-gold);
+}
+.count-badge {
+  position: absolute;
+  right: -5px;
+  bottom: -5px;
+  min-width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #1A1208;
+  background: var(--accent-gold);
+  font: 700 13px var(--font-sans);
+}

@@ -1,0 +1,148 @@
+body {
+  min-height: 100vh;
+  overflow: hidden;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  background:
+    radial-gradient(circle at 22% 18%, rgba(212,175,55,.12), transparent 24%),
+    repeating-linear-gradient(94deg, rgba(255,255,255,.025) 0 2px, transparent 2px 11px),
+    linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+}
+
+#app, .screen { min-height: 100vh; }
+.screen { display: none; padding: 24px; }
+.screen.active { display: block; animation: fadeIn .28s ease; }
+
+.screen-menu {
+  place-items: center;
+  text-align: center;
+}
+.screen-menu.active { display: grid; }
+.menu-shell {
+  width: min(92vw, 520px);
+  padding: 42px 24px;
+  border: 2px solid rgba(212, 175, 55, .76);
+  background: rgba(26, 18, 8, .5);
+  box-shadow: 0 24px 80px var(--shadow), inset 0 0 40px rgba(212,175,55,.08);
+}
+.title-kicker {
+  margin: 0;
+  color: var(--accent-gold);
+  font-size: 18px;
+  letter-spacing: 8px;
+}
+h1 {
+  margin: 2px 0 28px;
+  font-family: var(--font-serif);
+  font-size: clamp(64px, 12vw, 112px);
+  line-height: 1;
+}
+h2 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(28px, 4vw, 42px);
+}
+.menu-actions, .center-actions {
+  display: grid;
+  gap: 14px;
+}
+.screen-header, .game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 56px;
+  gap: 16px;
+}
+.screen-header { max-width: 980px; margin: 0 auto 22px; }
+.difficulty-grid {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+.difficulty-card {
+  min-height: 180px;
+  padding: 22px;
+  border: 1px solid rgba(212,175,55,.34);
+  border-radius: 8px;
+  color: var(--text-primary);
+  background: rgba(62, 43, 15, .78);
+  text-align: left;
+}
+.difficulty-card.selected {
+  outline: 3px solid var(--accent-gold);
+  background: rgba(86, 64, 24, .92);
+}
+.difficulty-card strong {
+  display: block;
+  font-size: 26px;
+  margin-bottom: 8px;
+}
+.difficulty-card span { font-size: 34px; }
+.center-actions { width: min(360px, 100%); margin: 24px auto 0; }
+
+.game-screen { padding: 0; }
+.game-header {
+  height: 56px;
+  padding: 0 18px;
+  border-bottom: 1px solid rgba(212,175,55,.24);
+  background: rgba(26,18,8,.78);
+}
+.header-actions { display: flex; gap: 8px; }
+.game-layout {
+  height: calc(100vh - 56px);
+  display: grid;
+  grid-template-columns: minmax(190px, 240px) minmax(360px, 1fr) minmax(230px, 290px);
+  gap: 18px;
+  padding: 18px;
+}
+.hand-column, .side-panel {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  min-width: 0;
+}
+.hand-panel, .kifu-panel, .timer-panel {
+  padding: 14px;
+  border: 1px solid rgba(212,175,55,.22);
+  border-radius: 8px;
+  background: rgba(62, 43, 15, .72);
+}
+.hand-panel h3 {
+  margin: 0 0 10px;
+  font-size: 17px;
+}
+.hand-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 54px;
+}
+.board-wrap {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+}
+.kifu-panel {
+  height: min(56vh, 520px);
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+#kifuList {
+  margin: 10px 0 0;
+  padding-left: 28px;
+  overflow: auto;
+  font-family: var(--font-serif);
+}
+.game-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.timer-panel {
+  display: none;
+  gap: 8px;
+  font-size: 24px;
+}
+.timer-panel.active { display: grid; }

@@ -1,0 +1,11 @@
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes checkPulse {
+  from { background: rgba(200, 20, 20, .20); }
+  to { background: rgba(200, 20, 20, .54); }
+}
+.piece { transition: transform .2s ease-out, filter .2s ease; }
+.piece:hover { filter: brightness(1.08); }

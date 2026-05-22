@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>將棋 SHOGI</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/board.css">
+  <link rel="stylesheet" href="css/pieces.css">
+  <link rel="stylesheet" href="css/ui.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+  <div id="app">
+    <section id="menuScreen" class="screen screen-menu active" aria-label="主選單">
+      <div class="menu-shell">
+        <p class="title-kicker">SHOGI</p>
+        <h1>將棋</h1>
+        <div class="menu-actions">
+          <button class="primary" id="startBtn">開始遊戲</button>
+          <button id="continueBtn">繼續上局</button>
+          <button id="settingsBtn">設定</button>
+          <button id="rulesBtn">規則說明</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="difficultyScreen" class="screen" aria-label="難度選擇">
+      <header class="screen-header">
+        <button class="icon-btn" data-screen="menuScreen" aria-label="返回">←</button>
+        <h2>選擇難度</h2>
+      </header>
+      <div class="difficulty-grid" id="difficultyGrid"></div>
+      <div class="center-actions">
+        <button class="primary" id="confirmDifficultyBtn">開始對局</button>
+      </div>
+    </section>
+
+    <section id="settingsScreen" class="screen" aria-label="設定">
+      <header class="screen-header">
+        <button class="icon-btn" data-screen="menuScreen" aria-label="返回">←</button>
+        <h2>設定</h2>
+      </header>
+      <form id="settingsForm" class="settings-panel">
+        <label>AI 難度
+          <select name="aiDifficulty">
+            <option value="BEGINNER">入門</option>
+            <option value="EASY">初級</option>
+            <option value="MEDIUM">中級</option>
+            <option value="HARD">高級</option>
+          </select>
+        </label>
+        <label>背景音樂音量 <output id="musicOut">70</output>
+          <input type="range" name="musicVolume" min="0" max="100">
+        </label>
+        <label>音效音量 <output id="sfxOut">80</output>
+          <input type="range" name="sfxVolume" min="0" max="100">
+        </label>
+        <label>棋盤主題
+          <select name="boardTheme">
+            <option value="DARK_WOOD">暗色木紋</option>
+            <option value="LIGHT_WOOD">淺色木紋</option>
+          </select>
+        </label>
+        <label>棋子風格
+          <select name="pieceStyle">
+            <option value="STANDARD">標準</option>
+            <option value="SINGLE">一字</option>
+          </select>
+        </label>
+        <label class="check-row"><input type="checkbox" name="showLegalMoves"> 顯示合法手提示</label>
+        <label class="check-row"><input type="checkbox" name="showCoordinates"> 顯示座標</label>
+        <label>動畫速度
+          <select name="animationSpeed">
+            <option value="FAST">快</option>
+            <option value="NORMAL">正常</option>
+            <option value="SLOW">慢</option>
+          </select>
+        </label>
+        <label>玩家先後手
+          <select name="playerSide">
+            <option value="SENTE">先手（黑）</option>
+            <option value="GOTE">後手（白）</option>
+          </select>
+        </label>
+        <label class="check-row"><input type="checkbox" name="timerEnabled"> 啟用計時器</label>
+        <label>每方思考時間（秒）
+          <input type="number" name="timerSeconds" min="60" max="3600">
+        </label>
+        <button class="primary" type="submit">儲存設定</button>
+      </form>
+    </section>
+
+    <section id="rulesScreen" class="screen" aria-label="規則說明">
+      <header class="screen-header">
+        <button class="icon-btn" data-screen="menuScreen" aria-label="返回">←</button>
+        <h2>規則說明</h2>
+      </header>
+      <article class="rules-panel">
+        <h3>基本目標</h3>
+        <p>輪流走子，讓對方王將陷入無法解除的王手即為勝利。</p>
+        <h3>升變</h3>
+        <p>棋子進入、離開或停留於敵陣前三段時可升變。步、香到最深行，桂到最深兩行必須升變。</p>
+        <h3>打入</h3>
+        <p>吃到的棋子會變成持駒，可打入空格。步不可二步、不可打在最深行，也不可打步詰。</p>
+      </article>
+    </section>
+
+    <section id="gameScreen" class="screen game-screen" aria-label="遊戲畫面">
+      <header class="game-header">
+        <strong>将棋</strong>
+        <span id="turnLabel">先手回合</span>
+        <div class="header-actions">
+          <button class="icon-btn" id="musicBtn" aria-label="音樂">♪</button>
+          <button class="icon-btn" id="openSettingsInGameBtn" aria-label="設定">⚙</button>
+          <button class="icon-btn" id="menuInGameBtn" aria-label="選單">☰</button>
+        </div>
+      </header>
+      <main class="game-layout">
+        <aside class="hand-column">
+          <section class="hand-panel">
+            <h3>後手（AI）持駒</h3>
+            <div id="goteHand" class="hand-list"></div>
+          </section>
+          <section class="hand-panel player-hand">
+            <h3>先手（玩家）持駒</h3>
+            <div id="senteHand" class="hand-list"></div>
+          </section>
+        </aside>
+        <section class="board-wrap">
+          <div id="board" class="board" aria-label="將棋棋盤"></div>
+        </section>
+        <aside class="side-panel">
+          <section class="timer-panel" id="timerPanel">
+            <div>先手 <span id="senteTimer">10:00</span></div>
+            <div>後手 <span id="goteTimer">10:00</span></div>
+          </section>
+          <section class="kifu-panel">
+            <button id="toggleKifuBtn" class="drawer-toggle">棋譜</button>
+            <ol id="kifuList"></ol>
+          </section>
+          <div class="game-actions">
+            <button id="undoBtn">悔棋</button>
+            <button id="resignBtn" class="danger">投了</button>
+          </div>
+        </aside>
+      </main>
+      <div id="thinking" class="thinking hidden"><span></span>AI 思考中…</div>
+    </section>
+  </div>
+
+  <div id="modalRoot" class="modal-root hidden"></div>
+  <script src="js/main.js"></script>
+</body>
+</html>
