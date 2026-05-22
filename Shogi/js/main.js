@@ -23,7 +23,6 @@
     musicVolume: 70,
     sfxVolume: 80,
     boardTheme: "DARK_WOOD",
-    pieceStyle: "STANDARD",
     showLegalMoves: true,
     showCoordinates: true,
     animationSpeed: "NORMAL",
@@ -65,7 +64,7 @@
   }
 
   function bindUi() {
-    document.body.addEventListener("click", function () { audio.ensure(); }, { once: true });
+    document.body.addEventListener("click", function () { audio.ensure(); audio.startMenuMusic(); }, { once: true });
     els.startBtn.addEventListener("click", function () { audio.play("menu"); showScreen("difficultyScreen"); });
     els.continueBtn.addEventListener("click", continueGame);
     els.settingsBtn.addEventListener("click", function () { audio.play("menu"); showScreen("settingsScreen"); });
@@ -95,7 +94,7 @@
     els.resignBtn.addEventListener("click", function () { confirmDialog("確定要投了嗎？", function () { finishGame(aiSide, "你已投了。"); }); });
     els.musicBtn.addEventListener("click", function () {
       audio.toggleMusic();
-      els.musicBtn.textContent = audio.musicOn ? "♪" : "×";
+      els.musicBtn.textContent = audio.muted ? "×" : "♪";
     });
     els.openSettingsInGameBtn.addEventListener("click", function () { showScreen("settingsScreen"); });
     els.menuInGameBtn.addEventListener("click", function () {
@@ -109,6 +108,8 @@
   function showScreen(id) {
     document.querySelectorAll(".screen").forEach(function (screen) { screen.classList.remove("active"); });
     els[id].classList.add("active");
+    if (id === "gameScreen") audio.startGameMusic();
+    else audio.startMenuMusic();
   }
 
   function startNewGame() {
@@ -119,7 +120,7 @@
     showScreen("gameScreen");
     renderAll();
     saveGame();
-    audio.startMusic();
+    audio.startGameMusic();
     startTimer();
     if (state.currentPlayer === aiSide) triggerAi();
   }
@@ -128,12 +129,13 @@
     var saved = loadJson("shogi_save", null);
     if (!saved || !saved.state) return;
     state = saved.state;
+    if (state.phase === "AI") state.phase = "PLAYING";
     undoStack = saved.undoStack || [];
     playerSide = saved.playerSide || settings.playerSide || SENTE;
     aiSide = opponent(playerSide);
     showScreen("gameScreen");
     renderAll();
-    audio.startMusic();
+    audio.startGameMusic();
     startTimer();
     if (state.currentPlayer === aiSide && state.phase === "PLAYING") triggerAi();
   }
@@ -280,15 +282,29 @@
     state.phase = "AI";
     renderAll();
     window.setTimeout(function () {
-      var best = findBestMove(state, aiSide, DIFFICULTIES[settings.aiDifficulty]);
-      if (!best) {
-        finishGame(playerSide, "AI 無合法手。");
-        return;
+      try {
+        var best = findBestMove(state, aiSide, DIFFICULTIES[settings.aiDifficulty] || DIFFICULTIES.MEDIUM);
+        if (!best) {
+          state.phase = "PLAYING";
+          els.thinking.classList.add("hidden");
+          finishGame(playerSide, "AI 無合法手。");
+          return;
+        }
+        state.phase = "PLAYING";
+        makeMoveWithSnapshot(best);
+        els.thinking.classList.add("hidden");
+        afterMove();
+      } catch (error) {
+        var fallback = generateLegalMoves(state, aiSide, { fast: true, skipPawnDropMate: true })[0];
+        state.phase = "PLAYING";
+        els.thinking.classList.add("hidden");
+        if (fallback) {
+          makeMoveWithSnapshot(fallback);
+          afterMove();
+        } else {
+          finishGame(playerSide, "AI 無合法手。");
+        }
       }
-      state.phase = "PLAYING";
-      makeMoveWithSnapshot(best);
-      els.thinking.classList.add("hidden");
-      afterMove();
     }, 120);
   }
 
@@ -324,7 +340,7 @@
   function updateGameStatus() {
     var player = state.currentPlayer;
     var inCheck = isInCheck(state, player);
-    var legal = generateLegalMoves(state, player);
+    var legal = generateLegalMoves(state, player, { fast: true, skipPawnDropMate: true });
     if (inCheck) audio.play("check");
     if (legal.length === 0) {
       finishGame(opponent(player), inCheck ? "詰將。" : "無合法手。");
@@ -429,7 +445,7 @@
         if (!canDropOn(player, type, r)) continue;
         if (type === "FU" && hasUnpromotedPawnOnFile(s, player, c)) continue;
         var move = { drop: true, piece: type, to: { row: r, col: c } };
-        if (type === "FU" && !options.skipPawnDropMate && isPawnDropMate(s, player, move)) continue;
+        if (type === "FU" && !options.fast && !options.skipPawnDropMate && isPawnDropMate(s, player, move)) continue;
         moves.push(move);
       }
     }
@@ -495,16 +511,17 @@
   }
 
   function findBestMove(s, player, difficulty) {
-    var moves = limitMoves(sortMoves(generateLegalMoves(s, player), s, player), difficulty.depth);
+    var searchDepth = Math.min(difficulty.depth, 2);
+    var moves = limitMoves(sortMoves(generateLegalMoves(s, player, { fast: true, skipPawnDropMate: true }), s, player), searchDepth);
     if (!moves.length) return null;
-    if (difficulty.depth === 1) return moves[Math.floor(Math.random() * Math.min(moves.length, 5))];
+    if (searchDepth === 1) return moves[Math.floor(Math.random() * Math.min(moves.length, 5))];
     var best = moves[0], bestScore = -Infinity;
     var alpha = -Infinity, beta = Infinity;
     for (var i = 0; i < moves.length; i++) {
       var copy = cloneState(s);
       copy.currentPlayer = player;
       applyMoveSilent(copy, moves[i]);
-      var score = minimax(copy, difficulty.depth - 1, alpha, beta, false, player, difficulty.q);
+      var score = minimax(copy, searchDepth - 1, alpha, beta, false, player, 0);
       if (score > bestScore) {
         bestScore = score;
         best = moves[i];
@@ -516,7 +533,7 @@
 
   function minimax(s, depth, alpha, beta, maximizing, aiPlayer, qDepth) {
     var player = s.currentPlayer;
-    var legal = limitMoves(sortMoves(generateLegalMoves(s, player), s, player), depth);
+    var legal = limitMoves(sortMoves(generateLegalMoves(s, player, { fast: true, skipPawnDropMate: true }), s, player), depth);
     if (legal.length === 0) return isInCheck(s, player) ? (player === aiPlayer ? -999999 : 999999) : 0;
     if (depth <= 0) return quiescence(s, alpha, beta, aiPlayer, qDepth);
     if (maximizing) {
@@ -548,7 +565,7 @@
     if (depth <= 0) return stand;
     if (stand >= beta) return beta;
     if (alpha < stand) alpha = stand;
-    var captures = sortMoves(generateLegalMoves(s, s.currentPlayer), s, s.currentPlayer).filter(function (m) {
+    var captures = sortMoves(generateLegalMoves(s, s.currentPlayer, { fast: true, skipPawnDropMate: true }), s, s.currentPlayer).filter(function (m) {
       return !m.drop && s.board[m.to.row][m.to.col];
     }).slice(0, 14);
     for (var i = 0; i < captures.length; i++) {
@@ -772,11 +789,10 @@
   function readSettingsForm() {
     var form = els.settingsForm;
     settings = {
-      aiDifficulty: form.elements.aiDifficulty.value,
+      aiDifficulty: settings.aiDifficulty || "MEDIUM",
       musicVolume: Number(form.elements.musicVolume.value),
       sfxVolume: Number(form.elements.sfxVolume.value),
       boardTheme: form.elements.boardTheme.value,
-      pieceStyle: form.elements.pieceStyle.value,
       showLegalMoves: form.elements.showLegalMoves.checked,
       showCoordinates: form.elements.showCoordinates.checked,
       animationSpeed: form.elements.animationSpeed.value,
@@ -807,9 +823,12 @@
 
   function createAudioManager() {
     return {
-      ctx: null, master: null, sfx: null, music: null, timer: null, musicOn: false,
+      ctx: null, master: null, sfx: null, music: null, timer: null, musicMode: null, muted: false,
       ensure: function () {
-        if (this.ctx) return;
+        if (this.ctx) {
+          if (this.ctx.state === "suspended") this.ctx.resume();
+          return;
+        }
         var Ctx = window.AudioContext || window.webkitAudioContext;
         if (!Ctx) return;
         this.ctx = new Ctx();
@@ -820,10 +839,11 @@
         this.music.connect(this.master);
         this.master.connect(this.ctx.destination);
         this.setVolumes(settings);
+        if (this.ctx.state === "suspended") this.ctx.resume();
       },
       setVolumes: function (cfg) {
         if (!this.ctx) return;
-        this.music.gain.value = cfg.musicVolume / 100 * .18;
+        this.music.gain.value = this.muted ? 0 : cfg.musicVolume / 100 * .18;
         this.sfx.gain.value = cfg.sfxVolume / 100 * .55;
       },
       tone: function (freq, dur, type, dest, delay) {
@@ -854,23 +874,37 @@
         else if (id === "undo") { this.tone(520, .08); this.tone(260, .10, "sine", this.sfx, .08); }
         else this.tone(id === "select" ? 640 : 740, .05, "sine");
       },
-      startMusic: function () {
+      startMenuMusic: function () {
+        this.startMusicMode("menu");
+      },
+      startGameMusic: function () {
+        this.startMusicMode("game");
+      },
+      startMusicMode: function (mode) {
         this.ensure();
-        if (!this.ctx || this.timer) return;
-        this.musicOn = true;
-        var scale = [261.63, 293.66, 329.63, 392, 440];
+        if (!this.ctx) return;
+        if (this.musicMode === mode && this.timer) return;
+        this.stopMusic();
+        this.musicMode = mode;
+        var scale = mode === "menu" ? [196, 246.94, 293.66, 329.63, 392] : [261.63, 293.66, 329.63, 392, 440];
+        var interval = mode === "menu" ? 1850 : 1400;
         var self = this;
         this.timer = window.setInterval(function () {
-          if (!self.musicOn) return;
+          if (self.muted) return;
           var f = scale[Math.floor(Math.random() * scale.length)] * (Math.random() > .72 ? 2 : 1);
-          self.tone(f, 1.2, "triangle", self.music);
-          if (Math.random() > .65) self.tone(98, .25, "sine", self.music, .18);
-        }, 1400);
+          self.tone(f, mode === "menu" ? 1.6 : 1.2, mode === "menu" ? "sine" : "triangle", self.music);
+          if (mode === "game" && Math.random() > .65) self.tone(98, .25, "sine", self.music, .18);
+        }, interval);
+      },
+      stopMusic: function () {
+        if (this.timer) window.clearInterval(this.timer);
+        this.timer = null;
+        this.musicMode = null;
       },
       toggleMusic: function () {
         this.ensure();
-        this.musicOn = !this.musicOn;
-        if (this.musicOn) this.startMusic();
+        this.muted = !this.muted;
+        this.setVolumes(settings);
       }
     };
   }
@@ -927,7 +961,6 @@
 
   function pieceLabel(type) {
     var parts = LABELS[type] || [type, type];
-    if (settings.pieceStyle === "SINGLE") return escapeHtml(parts[0]);
     return escapeHtml(parts[0]) + (parts[1] !== parts[0] ? "<span class=\"sub\">" + escapeHtml(parts[1]) + "</span>" : "");
   }
   function squareName(row, col) { return toFullWidth(9 - col) + toKanjiRank(row + 1); }

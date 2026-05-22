@@ -10,7 +10,12 @@ body {
 }
 
 #app, .screen { min-height: 100vh; }
-.screen { display: none; padding: 24px; }
+.screen {
+  display: none;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 24px;
+}
 .screen.active { display: block; animation: fadeIn .28s ease; }
 
 .screen-menu {
@@ -82,7 +87,7 @@ h2 {
 .difficulty-card span { font-size: 34px; }
 .center-actions { width: min(360px, 100%); margin: 24px auto 0; }
 
-.game-screen { padding: 0; }
+.game-screen { padding: 0; overflow: hidden; }
 .game-header {
   height: 56px;
   padding: 0 18px;

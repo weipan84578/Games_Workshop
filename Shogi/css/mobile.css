@@ -72,6 +72,6 @@
 @media (max-width: 480px) {
   .menu-shell { padding: 30px 16px; }
   h1 { font-size: 64px; }
-  .piece { font-size: max(14px, calc(var(--board-size) / 28)); }
+  .piece { font-size: max(18px, calc(var(--board-size) / 23)); }
   .hand-piece { min-width: 44px; min-height: 48px; font-size: 16px; }
 }
