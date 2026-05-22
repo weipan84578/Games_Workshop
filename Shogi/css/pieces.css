@@ -10,10 +10,10 @@
   font-weight: 700;
 }
 .piece {
-  width: 82%;
-  height: 88%;
+  width: 90%;
+  height: 94%;
   clip-path: polygon(50% 0, 88% 22%, 82% 100%, 18% 100%, 12% 22%);
-  font-size: clamp(18px, calc(var(--board-size) / 22), 28px);
+  font-size: clamp(21px, calc(var(--board-size) / 18), 34px);
   z-index: 1;
 }
 .piece.gote { transform: rotate(180deg); }
@@ -22,14 +22,14 @@
   position: absolute;
   right: 16%;
   bottom: 8%;
-  font-size: clamp(11px, calc(var(--board-size) / 38), 16px);
+  font-size: clamp(12px, calc(var(--board-size) / 32), 18px);
 }
 .hand-piece {
   min-width: 48px;
   min-height: 52px;
   padding: 6px 9px 8px;
   clip-path: polygon(50% 0, 88% 22%, 82% 100%, 18% 100%, 12% 22%);
-  font-size: 18px;
+  font-size: 22px;
 }
 .hand-piece.selectable:hover, .hand-piece.selected {
   outline: 3px solid var(--accent-gold);

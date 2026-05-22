@@ -21,15 +21,15 @@ Open `index.html` in a browser. Chrome, Edge, Firefox, and Safari are expected t
 - `css/ui.css`: Buttons, settings form, rules panel, modal, and thinking overlay.
 - `css/animations.css`: Fade, spinner, check warning, and piece interaction animations.
 - `css/mobile.css`: Responsive layout, mobile board sizing, hand layout, and kifu drawer.
-- `js/main.js`: The complete playable implementation. It includes screen routing, state management, legal move generation, drops, promotion, check/checkmate detection, AI, kifu, localStorage, timers, and Web Audio.
+- `js/main.js`: The complete playable implementation. It includes screen routing, state management, legal move generation, drops, promotion, check/checkmate detection, AI, kifu, localStorage, AI thinking time, and Web Audio.
 - `js/game/*`, `js/ai/*`, `js/ui/*`, `js/audio/*`, `js/utils/*`: Placeholder files kept to match the spec structure. The current no-build version keeps runtime code in `js/main.js`.
 - `shogi_spec.md`: Original implementation specification.
 
 ### Main Code Categories
 
-- State: `createInitialState`, `saveGame`, `loadJson`, `undoStack`, and timer fields maintain the game state.
+- State: `createInitialState`, `saveGame`, `loadJson`, `undoStack`, and player side settings maintain the game state.
 - Rules: `generateLegalMoves`, `generatePseudoMoves`, `directionsFor`, `isInCheck`, and drop validators implement Shogi rules.
-- AI: `findBestMove`, `minimax`, `evaluate`, and move sorting implement a bounded alpha-beta search. The search is capped for browser responsiveness.
+- AI: `findBestMove`, `minimax`, `evaluate`, and move sorting implement a bounded alpha-beta search. The AI uses the side opposite the player and waits according to difficulty: Beginner 2s, Easy 4s, Medium 4-7s, Hard 5-10s.
 - UI: `renderBoard`, `renderHands`, `renderKifu`, `showScreen`, and modal helpers update the DOM.
 - Audio: `createAudioManager` generates menu music, game music, and sound effects with Web Audio API.
 
@@ -54,15 +54,15 @@ Open `index.html` in a browser. Chrome, Edge, Firefox, and Safari are expected t
 - `css/ui.css`：按鈕、設定表單、規則說明、Modal 與 AI 思考遮罩。
 - `css/animations.css`：淡入、旋轉、王手警示與棋子互動動畫。
 - `css/mobile.css`：RWD、手機棋盤尺寸、持駒排列與棋譜抽屜。
-- `js/main.js`：完整可玩版本。包含畫面切換、狀態管理、合法手、打入、升變、王手/詰將、AI、棋譜、localStorage、計時器與 Web Audio。
+- `js/main.js`：完整可玩版本。包含畫面切換、狀態管理、合法手、打入、升變、王手/詰將、AI、棋譜、localStorage、AI 思考時間與 Web Audio。
 - `js/game/*`、`js/ai/*`、`js/ui/*`、`js/audio/*`、`js/utils/*`：保留規格書要求的模組結構。現階段為了維持雙擊可玩，執行邏輯集中在 `js/main.js`。
 - `shogi_spec.md`：原始規格書。
 
 ### 主要程式分類
 
-- 狀態管理：`createInitialState`、`saveGame`、`loadJson`、`undoStack` 與計時欄位負責棋局資料。
+- 狀態管理：`createInitialState`、`saveGame`、`loadJson`、`undoStack` 與玩家先後手設定負責棋局資料。
 - 規則引擎：`generateLegalMoves`、`generatePseudoMoves`、`directionsFor`、`isInCheck` 與打入驗證負責將棋規則。
-- AI：`findBestMove`、`minimax`、`evaluate` 與手順排序負責有限深度 alpha-beta 搜尋。搜尋分支已限制，避免瀏覽器卡死。
+- AI：`findBestMove`、`minimax`、`evaluate` 與手順排序負責有限深度 alpha-beta 搜尋。AI 會使用玩家相反陣營，並依難度等待：入門 2 秒、初級 4 秒、中級 4-7 秒、高級 5-10 秒。
 - UI：`renderBoard`、`renderHands`、`renderKifu`、`showScreen` 與 Modal helper 負責 DOM 更新。
 - 音訊：`createAudioManager` 使用 Web Audio API 產生主選單 BGM、遊戲 BGM 與音效。
 
@@ -87,14 +87,14 @@ Open `index.html` in a browser. Chrome, Edge, Firefox, and Safari are expected t
 - `css/ui.css`: ボタン、設定フォーム、ルール画面、モーダル、AI思考中表示。
 - `css/animations.css`: フェード、スピナー、王手警告、駒のインタラクション。
 - `css/mobile.css`: レスポンシブ対応、スマートフォン用盤サイズ、持ち駒配置、棋譜ドロワー。
-- `js/main.js`: プレイ可能な本体実装。画面遷移、状態管理、合法手、打ち込み、成り、王手/詰み、AI、棋譜、localStorage、タイマー、Web Audio を含みます。
+- `js/main.js`: プレイ可能な本体実装。画面遷移、状態管理、合法手、打ち込み、成り、王手/詰み、AI、棋譜、localStorage、AI思考時間、Web Audio を含みます。
 - `js/game/*`、`js/ai/*`、`js/ui/*`、`js/audio/*`、`js/utils/*`: 仕様書に合わせたモジュール構造の予約ファイルです。現在はダブルクリック実行を優先し、実行コードを `js/main.js` に集約しています。
 - `shogi_spec.md`: 元の仕様書。
 
 ### 主なコード分類
 
-- 状態管理: `createInitialState`、`saveGame`、`loadJson`、`undoStack`、タイマー項目が対局状態を保持します。
+- 状態管理: `createInitialState`、`saveGame`、`loadJson`、`undoStack`、プレイヤーの先後設定が対局状態を保持します。
 - ルールエンジン: `generateLegalMoves`、`generatePseudoMoves`、`directionsFor`、`isInCheck`、打ち込み検証が将棋ルールを処理します。
-- AI: `findBestMove`、`minimax`、`evaluate`、手順ソートが制限付き alpha-beta 探索を行います。ブラウザーが固まらないよう探索分岐を制限しています。
+- AI: `findBestMove`、`minimax`、`evaluate`、手順ソートが制限付き alpha-beta 探索を行います。AI はプレイヤーと反対側を担当し、難易度に応じて待ちます。入門 2 秒、初級 4 秒、中級 4-7 秒、高級 5-10 秒です。
 - UI: `renderBoard`、`renderHands`、`renderKifu`、`showScreen`、モーダル helper が DOM を更新します。
 - 音声: `createAudioManager` が Web Audio API でメニューBGM、ゲームBGM、効果音を生成します。

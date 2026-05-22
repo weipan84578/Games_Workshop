@@ -13,10 +13,10 @@
     TO: ["と", "成歩"], NY: ["杏", "成香"], NK: ["今", "成桂"], NG: ["全", "成銀"], UM: ["馬", "龍馬"], RY: ["龍", "龍王"]
   };
   var DIFFICULTIES = {
-    BEGINNER: { name: "入門", icon: "一", desc: "深度 1，適合第一次熟悉棋子走法。", depth: 1, q: 0 },
-    EASY: { name: "初級", icon: "二", desc: "深度 2，會吃子與簡單防守。", depth: 2, q: 1 },
-    MEDIUM: { name: "中級", icon: "三", desc: "深度 3，具備 Alpha-Beta 搜尋。", depth: 3, q: 2 },
-    HARD: { name: "高級", icon: "四", desc: "深度 4，思考較久並排序手順。", depth: 4, q: 2 }
+    BEGINNER: { name: "入門", icon: "一", desc: "深度 1，AI 思考約 2 秒。", depth: 1, q: 0, thinkMin: 2, thinkMax: 2 },
+    EASY: { name: "初級", icon: "二", desc: "深度 2，AI 思考約 4 秒。", depth: 2, q: 1, thinkMin: 4, thinkMax: 4 },
+    MEDIUM: { name: "中級", icon: "三", desc: "深度 3，AI 思考約 4～7 秒。", depth: 3, q: 2, thinkMin: 4, thinkMax: 7 },
+    HARD: { name: "高級", icon: "四", desc: "深度 4，AI 思考約 5～10 秒。", depth: 4, q: 2, thinkMin: 5, thinkMax: 10 }
   };
   var DEFAULT_SETTINGS = {
     aiDifficulty: "MEDIUM",
@@ -32,7 +32,7 @@
   };
 
   var state = null;
-  var settings = loadJson("shogi_settings", DEFAULT_SETTINGS);
+  var settings = normalizeSettings(loadJson("shogi_settings", DEFAULT_SETTINGS));
   var selectedDifficulty = settings.aiDifficulty;
   var undoStack = [];
   var timerId = null;
@@ -113,8 +113,9 @@
   }
 
   function startNewGame() {
-    playerSide = settings.playerSide;
-    aiSide = opponent(playerSide);
+    playerSide = settings.playerSide || SENTE;
+    aiSide = GOTE;
+    if (playerSide === GOTE) aiSide = SENTE;
     state = createInitialState();
     undoStack = [];
     showScreen("gameScreen");
@@ -132,7 +133,8 @@
     if (state.phase === "AI") state.phase = "PLAYING";
     undoStack = saved.undoStack || [];
     playerSide = saved.playerSide || settings.playerSide || SENTE;
-    aiSide = opponent(playerSide);
+    aiSide = GOTE;
+    if (playerSide === GOTE) aiSide = SENTE;
     showScreen("gameScreen");
     renderAll();
     audio.startGameMusic();
@@ -278,34 +280,46 @@
   }
 
   function triggerAi() {
+    if (!state || state.currentPlayer !== aiSide || state.phase === "GAME_OVER") return;
     els.thinking.classList.remove("hidden");
     state.phase = "AI";
     renderAll();
+    var startedAt = Date.now();
+    var thinkMs = getAiThinkMs();
+    var deadline = startedAt + thinkMs;
     window.setTimeout(function () {
       try {
-        var best = findBestMove(state, aiSide, DIFFICULTIES[settings.aiDifficulty] || DIFFICULTIES.MEDIUM);
+        var best = findBestMove(state, aiSide, DIFFICULTIES[settings.aiDifficulty] || DIFFICULTIES.MEDIUM, deadline);
+        if (Date.now() > deadline) best = randomLegalMove(state, aiSide);
         if (!best) {
           state.phase = "PLAYING";
           els.thinking.classList.add("hidden");
           finishGame(playerSide, "AI 無合法手。");
           return;
         }
-        state.phase = "PLAYING";
-        makeMoveWithSnapshot(best);
-        els.thinking.classList.add("hidden");
-        afterMove();
+        finishAiMove(best, startedAt, thinkMs);
       } catch (error) {
-        var fallback = generateLegalMoves(state, aiSide, { fast: true, skipPawnDropMate: true })[0];
-        state.phase = "PLAYING";
-        els.thinking.classList.add("hidden");
+        var fallback = randomLegalMove(state, aiSide);
         if (fallback) {
-          makeMoveWithSnapshot(fallback);
-          afterMove();
+          finishAiMove(fallback, startedAt, thinkMs);
         } else {
+          state.phase = "PLAYING";
+          els.thinking.classList.add("hidden");
           finishGame(playerSide, "AI 無合法手。");
         }
       }
     }, 120);
+  }
+
+  function finishAiMove(move, startedAt, thinkMs) {
+    var remaining = Math.max(0, thinkMs - (Date.now() - startedAt));
+    window.setTimeout(function () {
+      if (!state || state.phase === "GAME_OVER") return;
+      state.phase = "PLAYING";
+      makeMoveWithSnapshot(move);
+      els.thinking.classList.add("hidden");
+      afterMove();
+    }, remaining);
   }
 
   function applyMove(s, move) {
@@ -510,7 +524,7 @@
     return null;
   }
 
-  function findBestMove(s, player, difficulty) {
+  function findBestMove(s, player, difficulty, deadline) {
     var searchDepth = Math.min(difficulty.depth, 2);
     var moves = limitMoves(sortMoves(generateLegalMoves(s, player, { fast: true, skipPawnDropMate: true }), s, player), searchDepth);
     if (!moves.length) return null;
@@ -518,10 +532,11 @@
     var best = moves[0], bestScore = -Infinity;
     var alpha = -Infinity, beta = Infinity;
     for (var i = 0; i < moves.length; i++) {
+      if (Date.now() > deadline) return randomLegalMove(s, player) || best;
       var copy = cloneState(s);
       copy.currentPlayer = player;
       applyMoveSilent(copy, moves[i]);
-      var score = minimax(copy, searchDepth - 1, alpha, beta, false, player, 0);
+      var score = minimax(copy, searchDepth - 1, alpha, beta, false, player, 0, deadline);
       if (score > bestScore) {
         bestScore = score;
         best = moves[i];
@@ -531,7 +546,8 @@
     return best;
   }
 
-  function minimax(s, depth, alpha, beta, maximizing, aiPlayer, qDepth) {
+  function minimax(s, depth, alpha, beta, maximizing, aiPlayer, qDepth, deadline) {
+    if (Date.now() > deadline) return evaluate(s, aiPlayer);
     var player = s.currentPlayer;
     var legal = limitMoves(sortMoves(generateLegalMoves(s, player, { fast: true, skipPawnDropMate: true }), s, player), depth);
     if (legal.length === 0) return isInCheck(s, player) ? (player === aiPlayer ? -999999 : 999999) : 0;
@@ -541,7 +557,7 @@
       for (var i = 0; i < legal.length; i++) {
         var copy = cloneState(s);
         applyMoveSilent(copy, legal[i]);
-        var val = minimax(copy, depth - 1, alpha, beta, false, aiPlayer, qDepth);
+        var val = minimax(copy, depth - 1, alpha, beta, false, aiPlayer, qDepth, deadline);
         maxEval = Math.max(maxEval, val);
         alpha = Math.max(alpha, val);
         if (beta <= alpha) break;
@@ -552,7 +568,7 @@
     for (var j = 0; j < legal.length; j++) {
       var c = cloneState(s);
       applyMoveSilent(c, legal[j]);
-      var score = minimax(c, depth - 1, alpha, beta, true, aiPlayer, qDepth);
+      var score = minimax(c, depth - 1, alpha, beta, true, aiPlayer, qDepth, deadline);
       minEval = Math.min(minEval, score);
       beta = Math.min(beta, score);
       if (beta <= alpha) break;
@@ -582,6 +598,12 @@
     if (depth >= 3) return moves.slice(0, 30);
     if (depth === 2) return moves.slice(0, 42);
     return moves;
+  }
+
+  function randomLegalMove(s, player) {
+    var moves = generateLegalMoves(s, player, { fast: true, skipPawnDropMate: true });
+    if (!moves.length) return null;
+    return moves[Math.floor(Math.random() * moves.length)];
   }
 
   function evaluate(s, player) {
@@ -797,8 +819,8 @@
       showCoordinates: form.elements.showCoordinates.checked,
       animationSpeed: form.elements.animationSpeed.value,
       playerSide: form.elements.playerSide.value,
-      timerEnabled: form.elements.timerEnabled.checked,
-      timerSeconds: Math.max(60, Math.min(3600, Number(form.elements.timerSeconds.value) || 600))
+      timerEnabled: false,
+      timerSeconds: 600
     };
     selectedDifficulty = settings.aiDifficulty;
   }
@@ -949,6 +971,13 @@
   }
   function inside(r, c) { return r >= 0 && r < 9 && c >= 0 && c < 9; }
   function opponent(player) { return player === SENTE ? GOTE : SENTE; }
+  function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
+  function getAiThinkMs() {
+    var difficulty = DIFFICULTIES[settings.aiDifficulty] || DIFFICULTIES.MEDIUM;
+    var min = difficulty.thinkMin;
+    var max = difficulty.thinkMax;
+    return Math.round((min + Math.random() * (max - min)) * 1000);
+  }
   function cloneState(obj) { return JSON.parse(JSON.stringify(obj)); }
   function loadJson(key, fallback) {
     try {
@@ -957,6 +986,15 @@
       return Object.assign({}, fallback, parsed || {});
     }
     catch (e) { return fallback; }
+  }
+
+  function normalizeSettings(raw) {
+    var normalized = Object.assign({}, DEFAULT_SETTINGS, raw || {});
+    normalized.playerSide = normalized.playerSide === GOTE ? GOTE : SENTE;
+    normalized.timerEnabled = false;
+    normalized.timerSeconds = 600;
+    delete normalized.aiThinkSeconds;
+    return normalized;
   }
 
   function pieceLabel(type) {
