@@ -1,0 +1,1 @@
+window.GoGame=window.GoGame||{};GoGame.AIGreedy={pick(game,color){const moves=GoGame.Rules.legalMoves(game.board,game.size,color,game.hashes);if(!moves.length)return null;moves.sort((a,b)=>b.captured.length-a.captured.length);return moves[0].captured.length?moves[0]:GoGame.Utils.choice(moves.slice(0,Math.min(8,moves.length)))}};

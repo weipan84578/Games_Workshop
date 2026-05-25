@@ -1,0 +1,1 @@
+window.GoGame=window.GoGame||{};GoGame.Board={create(size){return new Int8Array(size*size)},idx:(x,y,size)=>y*size+x,xy:(i,size)=>({x:i%size,y:Math.floor(i/size)}),clone:b=>new Int8Array(b),hash:b=>Array.from(b).join(""),neighbors(x,y,size){const n=[];if(x>0)n.push([x-1,y]);if(x<size-1)n.push([x+1,y]);if(y>0)n.push([x,y-1]);if(y<size-1)n.push([x,y+1]);return n}};

@@ -1,0 +1,1 @@
+#toast-container{position:fixed;z-index:30;right:16px;bottom:16px;display:grid;gap:10px;width:min(92vw,340px)}.toast{padding:12px 14px;border:1px solid var(--border-color);border-radius:var(--radius);background:var(--bg-secondary);box-shadow:var(--shadow);color:var(--text-primary);animation:fadeIn .2s ease both}

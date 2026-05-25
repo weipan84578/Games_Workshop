@@ -1,0 +1,1 @@
+body{font-family:var(--font-body);font-size:var(--fs-sm);color:var(--text-primary);letter-spacing:0}h1,h2,h3{font-family:var(--font-display);font-weight:700;line-height:1.05}h1{font-size:clamp(42px,8vh,72px)}h2{font-size:var(--fs-xl)}h3{font-size:var(--fs-md)}p{line-height:1.65;color:var(--text-secondary)}.muted{color:var(--text-secondary)}.mono{font-family:var(--font-mono)}

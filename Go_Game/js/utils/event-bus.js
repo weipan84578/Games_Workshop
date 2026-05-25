@@ -1,0 +1,1 @@
+window.GoGame=window.GoGame||{};GoGame.EventBus=(()=>{const m=new Map();return{on(e,f){if(!m.has(e))m.set(e,new Set());m.get(e).add(f);return()=>m.get(e).delete(f)},emit(e,p){(m.get(e)||[]).forEach(f=>f(p))}}})();

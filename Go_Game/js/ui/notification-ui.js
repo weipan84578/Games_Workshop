@@ -1,0 +1,1 @@
+window.GoGame=window.GoGame||{};GoGame.Toast={show(msg){const el=document.createElement("div");el.className="toast";el.textContent=msg;document.getElementById("toast-container").appendChild(el);setTimeout(()=>el.remove(),GoGame.CONFIG.TOAST_DURATION_MS)}};

@@ -1,0 +1,1 @@
+window.GoGame=window.GoGame||{};GoGame.Utils={clamp:(v,a,b)=>Math.max(a,Math.min(b,v)),choice:a=>a[Math.floor(Math.random()*a.length)],debounce(fn,ms){let t;return(...args)=>{clearTimeout(t);t=setTimeout(()=>fn(...args),ms)}}};

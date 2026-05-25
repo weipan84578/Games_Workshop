@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="classic">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>圍棋 Go</title>
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/typography.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/components/button.css">
+  <link rel="stylesheet" href="css/components/modal.css">
+  <link rel="stylesheet" href="css/components/board.css">
+  <link rel="stylesheet" href="css/components/scoreboard.css">
+  <link rel="stylesheet" href="css/components/menu.css">
+  <link rel="stylesheet" href="css/components/settings.css">
+  <link rel="stylesheet" href="css/components/tutorial.css">
+  <link rel="stylesheet" href="css/components/notification.css">
+  <link rel="stylesheet" href="css/themes/theme-classic.css" id="theme-stylesheet">
+</head>
+<body>
+  <div id="app">
+    <section id="screen-menu" class="screen"></section>
+    <section id="screen-game" class="screen hidden"></section>
+    <section id="screen-result" class="screen hidden"></section>
+    <section id="screen-tutorial" class="screen hidden"></section>
+    <section id="screen-settings" class="screen hidden"></section>
+  </div>
+  <div id="modal-overlay" class="hidden"></div>
+  <div id="toast-container" aria-live="polite"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/utils/event-bus.js"></script>
+  <script src="js/utils/storage.js"></script>
+  <script src="js/utils/math-utils.js"></script>
+  <script src="js/utils/i18n.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/game/board.js"></script>
+  <script src="js/game/rules.js"></script>
+  <script src="js/game/scoring.js"></script>
+  <script src="js/game/history.js"></script>
+  <script src="js/ai/ai-random.js"></script>
+  <script src="js/ai/ai-greedy.js"></script>
+  <script src="js/ai/ai-heuristic.js"></script>
+  <script src="js/ai/ai-mcts.js"></script>
+  <script src="js/ai/ai-mcts-nn.js"></script>
+  <script src="js/ai/ai-controller.js"></script>
+  <script src="js/audio/audio-config.js"></script>
+  <script src="js/audio/audio-synth.js"></script>
+  <script src="js/audio/audio-manager.js"></script>
+  <script src="js/ui/theme-switcher.js"></script>
+  <script src="js/ui/notification-ui.js"></script>
+  <script src="js/ui/modal-ui.js"></script>
+  <script src="js/ui/board-renderer.js"></script>
+  <script src="js/ui/menu-ui.js"></script>
+  <script src="js/ui/game-ui.js"></script>
+  <script src="js/ui/settings-ui.js"></script>
+  <script src="js/ui/tutorial-ui.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

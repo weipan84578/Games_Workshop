@@ -1,0 +1,1 @@
+window.GoGame=window.GoGame||{};GoGame.I18N={coord(x,y,size){const letters="ABCDEFGHJKLMNOPQRST";return`${letters[x]||x+1}${size-y}`},stone(c){return c===1?"黑":"白"},difficulty(n){return["","入門 Random","貪吃 Greedy","形勢 Heuristic","搜尋 MCTS","段位 MCTS+Policy"][n]||"AI"}};

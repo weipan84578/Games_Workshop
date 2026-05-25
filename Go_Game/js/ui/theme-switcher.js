@@ -1,0 +1,1 @@
+window.GoGame=window.GoGame||{};GoGame.ThemeSwitcher={switchTheme(name){if(!GoGame.CONFIG.THEMES.includes(name))name="classic";document.documentElement.dataset.theme=name;document.getElementById("theme-stylesheet").href=`css/themes/theme-${name}.css`;GoGame.State.updateSettings({theme:name});GoGame.AudioManager.play("theme-change")}};
