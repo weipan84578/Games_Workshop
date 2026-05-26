@@ -1,0 +1,41 @@
+.screen-game {
+  overflow: auto;
+}
+
+.game-layout {
+  display: grid;
+  width: min(1040px, 100%);
+  grid-template-columns: minmax(286px, max-content) minmax(240px, 320px);
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin: 18px auto 0;
+}
+
+.control-column {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+}
+
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.tool-btn.wide {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 760px) {
+  .game-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .control-column {
+    width: min(var(--board-size), 100%);
+    min-width: 0;
+    margin: 0 auto;
+  }
+}

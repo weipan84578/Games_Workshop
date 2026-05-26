@@ -1,0 +1,62 @@
+@media (max-width: 900px) {
+  .screen {
+    padding: 14px;
+  }
+}
+
+@media (max-width: 760px) {
+  .game-navbar {
+    align-items: stretch;
+  }
+
+  .game-metrics {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 520px) {
+  .home-wrap {
+    padding-top: 18px;
+  }
+
+  .difficulty-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .home-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .game-layout {
+    gap: 12px;
+  }
+
+  .tool-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .tool-btn {
+    min-width: 0;
+    padding: 0 8px;
+    font-size: 0.88rem;
+  }
+
+  .tool-btn.wide {
+    grid-column: auto;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 620px) {
+  .screen-game {
+    overflow: auto;
+  }
+
+  .game-layout {
+    grid-template-columns: auto minmax(210px, 280px);
+    align-items: start;
+  }
+
+  .control-column {
+    margin-top: 0;
+  }
+}

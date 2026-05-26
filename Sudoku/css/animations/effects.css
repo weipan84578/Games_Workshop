@@ -1,0 +1,30 @@
+.sudoku-cell.flash-error {
+  animation: flash-error 240ms ease;
+}
+
+.sudoku-cell.flash-success {
+  animation: flash-success 260ms ease;
+}
+
+@keyframes flash-error {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  30% {
+    transform: translateX(-2px);
+  }
+  60% {
+    transform: translateX(2px);
+  }
+}
+
+@keyframes flash-success {
+  0% {
+    box-shadow: inset 0 0 0 0 var(--color-accent-ring);
+    box-shadow: inset 0 0 0 0 color-mix(in srgb, var(--color-accent) 60%, transparent);
+  }
+  100% {
+    box-shadow: inset 0 0 0 3px transparent;
+  }
+}

@@ -1,0 +1,80 @@
+.screen-home {
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.screen-home.is-active {
+  display: flex;
+}
+
+.home-wrap {
+  width: min(780px, 100%);
+  margin: 0 auto;
+}
+
+.brand-block {
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+.eyebrow {
+  margin-bottom: 4px;
+  color: var(--color-accent);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.home-subtitle {
+  margin-top: 8px;
+  font-size: 1.05rem;
+}
+
+.difficulty-panel {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.difficulty-card {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: 14px 10px;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  text-align: left;
+}
+
+.difficulty-card.is-selected {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-accent-ring);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 18%, transparent);
+}
+
+.difficulty-name {
+  font-weight: 900;
+}
+
+.difficulty-meta {
+  color: var(--color-muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.home-actions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.version-note {
+  margin-top: 28px;
+  color: var(--color-muted);
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+}

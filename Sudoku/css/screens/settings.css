@@ -1,0 +1,56 @@
+.settings-list {
+  display: grid;
+  width: min(720px, 100%);
+  gap: 10px;
+  margin: 24px auto 0;
+}
+
+.setting-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 1fr) minmax(160px, 260px);
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-weight: 800;
+}
+
+.setting-row select,
+.setting-row input[type="range"] {
+  width: 100%;
+}
+
+.setting-row select {
+  min-height: var(--tap-size);
+  padding: 0 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+.switch-row input[type="checkbox"] {
+  justify-self: end;
+  width: 22px;
+  height: 22px;
+  accent-color: var(--color-primary);
+}
+
+.settings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+@media (max-width: 560px) {
+  .setting-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .switch-row {
+    grid-template-columns: 1fr auto;
+  }
+}

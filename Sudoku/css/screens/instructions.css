@@ -1,0 +1,7 @@
+.screen-instructions {
+  color: var(--color-text);
+}
+
+.screen-instructions .content-flow {
+  padding-bottom: 36px;
+}

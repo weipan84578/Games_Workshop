@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="classic">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="一款可離線遊玩的 Web 版數獨遊戲，支援多種難度、筆記、提示、復原、主題與自動儲存。">
+  <meta name="theme-color" content="#1565c0">
+  <title>Sudoku 數獨</title>
+
+  <link rel="stylesheet" href="css/base/reset.css">
+  <link rel="stylesheet" href="css/base/variables.css">
+  <link rel="stylesheet" href="css/base/typography.css">
+
+  <link rel="stylesheet" href="css/layout/grid.css">
+  <link rel="stylesheet" href="css/layout/responsive.css">
+
+  <link rel="stylesheet" href="css/components/button.css">
+  <link rel="stylesheet" href="css/components/modal.css">
+  <link rel="stylesheet" href="css/components/board.css">
+  <link rel="stylesheet" href="css/components/numpad.css">
+  <link rel="stylesheet" href="css/components/timer.css">
+  <link rel="stylesheet" href="css/components/navbar.css">
+  <link rel="stylesheet" href="css/components/toast.css">
+
+  <link rel="stylesheet" href="css/screens/home.css">
+  <link rel="stylesheet" href="css/screens/game.css">
+  <link rel="stylesheet" href="css/screens/instructions.css">
+  <link rel="stylesheet" href="css/screens/settings.css">
+
+  <link rel="stylesheet" href="css/themes/theme-classic.css" id="theme-stylesheet">
+  <link rel="stylesheet" href="css/themes/theme-dark.css">
+  <link rel="stylesheet" href="css/themes/theme-ocean.css">
+  <link rel="stylesheet" href="css/themes/theme-forest.css">
+  <link rel="stylesheet" href="css/themes/theme-sakura.css">
+  <link rel="stylesheet" href="css/themes/theme-galaxy.css">
+
+  <link rel="stylesheet" href="css/animations/transitions.css">
+  <link rel="stylesheet" href="css/animations/effects.css">
+  <link rel="stylesheet" href="css/animations/loading.css">
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <section id="home-screen" class="screen screen-home is-active" aria-labelledby="home-title">
+      <div class="home-wrap">
+        <header class="brand-block">
+          <p class="eyebrow">Web Puzzle</p>
+          <h1 id="home-title">Sudoku</h1>
+          <p class="home-subtitle">專注、清晰、可離線遊玩的數獨。</p>
+        </header>
+
+        <div class="difficulty-panel" aria-label="選擇難度">
+          <button class="difficulty-card is-selected" type="button" data-difficulty="easy">
+            <span class="difficulty-name">簡單</span>
+            <span class="difficulty-meta">36 格空白</span>
+          </button>
+          <button class="difficulty-card" type="button" data-difficulty="medium">
+            <span class="difficulty-name">中等</span>
+            <span class="difficulty-meta">46 格空白</span>
+          </button>
+          <button class="difficulty-card" type="button" data-difficulty="hard">
+            <span class="difficulty-name">困難</span>
+            <span class="difficulty-meta">52 格空白</span>
+          </button>
+          <button class="difficulty-card" type="button" data-difficulty="expert">
+            <span class="difficulty-name">專家</span>
+            <span class="difficulty-meta">58 格空白</span>
+          </button>
+        </div>
+
+        <div class="home-actions">
+          <button id="new-game-btn" class="btn btn-primary" type="button">開始遊戲</button>
+          <button id="continue-game-btn" class="btn btn-secondary" type="button" disabled>繼續遊戲</button>
+          <button class="btn btn-ghost" type="button" data-screen-target="instructions">玩法說明</button>
+          <button class="btn btn-ghost" type="button" data-screen-target="settings">設定</button>
+        </div>
+
+        <footer class="version-note">v1.0.0</footer>
+      </div>
+    </section>
+
+    <section id="game-screen" class="screen screen-game" aria-labelledby="game-title">
+      <nav class="game-navbar" aria-label="遊戲導覽">
+        <button id="back-home-btn" class="icon-btn" type="button" aria-label="返回首頁" title="返回首頁">←</button>
+        <div class="game-status">
+          <h2 id="game-title">數獨</h2>
+          <span id="difficulty-label" class="status-pill">簡單</span>
+        </div>
+        <div class="game-metrics">
+          <span id="timer-display" class="timer-display" aria-label="遊戲時間">00:00</span>
+          <span id="error-display" class="status-pill danger" aria-label="錯誤次數">錯誤 0/3</span>
+        </div>
+      </nav>
+
+      <main class="game-layout">
+        <div class="board-column">
+          <div id="sudoku-board" class="sudoku-board" role="grid" aria-label="數獨棋盤"></div>
+          <div id="game-loading" class="loading-cover" hidden>
+            <div class="spinner" aria-hidden="true"></div>
+            <span>產生題目中</span>
+          </div>
+        </div>
+
+        <aside class="control-column" aria-label="遊戲控制">
+          <div id="numpad" class="numpad" aria-label="數字鍵盤"></div>
+          <div class="tool-grid">
+            <button id="undo-btn" class="tool-btn" type="button">復原</button>
+            <button id="hint-btn" class="tool-btn" type="button">提示</button>
+            <button id="erase-btn" class="tool-btn" type="button">清除</button>
+            <button id="memo-btn" class="tool-btn" type="button" aria-pressed="false">筆記</button>
+            <button id="pause-btn" class="tool-btn wide" type="button">暫停</button>
+          </div>
+        </aside>
+      </main>
+    </section>
+
+    <section id="instructions-screen" class="screen screen-instructions" aria-labelledby="instructions-title">
+      <nav class="simple-navbar">
+        <button class="icon-btn" type="button" data-screen-target="home" aria-label="返回首頁" title="返回首頁">←</button>
+        <h2 id="instructions-title">玩法說明</h2>
+      </nav>
+      <main class="content-flow">
+        <section>
+          <h3>基本規則</h3>
+          <p>在 9x9 棋盤中填入 1 到 9。每一列、每一行與每一個 3x3 宮格都不能重複數字。</p>
+        </section>
+        <section>
+          <h3>操作</h3>
+          <p>點選格子後可用畫面數字鍵或鍵盤輸入。Backspace、Delete 或 0 可清除目前格子。</p>
+        </section>
+        <section>
+          <h3>筆記與提示</h3>
+          <p>啟用筆記後，輸入的數字會變成候選註記。提示會填入一格正確答案並計入分數扣分。</p>
+        </section>
+        <section>
+          <h3>快捷鍵</h3>
+          <p>方向鍵移動格子，M 切換筆記，H 使用提示，U 復原，Esc 暫停。</p>
+        </section>
+      </main>
+    </section>
+
+    <section id="settings-screen" class="screen screen-settings" aria-labelledby="settings-title">
+      <nav class="simple-navbar">
+        <button class="icon-btn" type="button" data-screen-target="home" aria-label="返回首頁" title="返回首頁">←</button>
+        <h2 id="settings-title">設定</h2>
+      </nav>
+
+      <main class="settings-list">
+        <label class="setting-row">
+          <span>主題</span>
+          <select id="theme-select">
+            <option value="classic">經典</option>
+            <option value="dark">深色</option>
+            <option value="ocean">海洋</option>
+            <option value="forest">森林</option>
+            <option value="sakura">櫻花</option>
+            <option value="galaxy">銀河</option>
+          </select>
+        </label>
+
+        <label class="setting-row">
+          <span>背景音量</span>
+          <input id="bgm-volume" type="range" min="0" max="100" step="1">
+        </label>
+
+        <label class="setting-row">
+          <span>音效音量</span>
+          <input id="sfx-volume" type="range" min="0" max="100" step="1">
+        </label>
+
+        <label class="setting-row switch-row">
+          <span>背景音樂</span>
+          <input id="bgm-enabled" type="checkbox">
+        </label>
+
+        <label class="setting-row switch-row">
+          <span>操作音效</span>
+          <input id="sfx-enabled" type="checkbox">
+        </label>
+
+        <label class="setting-row">
+          <span>錯誤上限</span>
+          <select id="error-limit">
+            <option value="3">3 次</option>
+            <option value="5">5 次</option>
+            <option value="none">無限制</option>
+          </select>
+        </label>
+
+        <label class="setting-row switch-row">
+          <span>顯示計時器</span>
+          <input id="show-timer" type="checkbox">
+        </label>
+
+        <label class="setting-row switch-row">
+          <span>自動高亮關聯格</span>
+          <input id="auto-highlight" type="checkbox">
+        </label>
+
+        <label class="setting-row switch-row">
+          <span>輸入時驗證錯誤</span>
+          <input id="validate-on-input" type="checkbox">
+        </label>
+
+        <div class="settings-actions">
+          <button id="reset-settings-btn" class="btn btn-secondary" type="button">還原設定</button>
+          <button id="clear-save-btn" class="btn btn-danger" type="button">清除存檔</button>
+        </div>
+      </main>
+    </section>
+  </div>
+
+  <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+
+  <div id="modal-root" class="modal-root" hidden>
+    <div class="modal-backdrop" data-modal-close></div>
+    <section class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <h2 id="modal-title"></h2>
+      <div id="modal-body" class="modal-body"></div>
+      <div id="modal-actions" class="modal-actions"></div>
+    </section>
+  </div>
+
+  <script src="js/core/sudoku-solver.js"></script>
+  <script src="js/core/sudoku-generator.js"></script>
+  <script src="js/core/sudoku-validator.js"></script>
+
+  <script src="js/state/storage.js"></script>
+  <script src="js/state/settings-state.js"></script>
+  <script src="js/state/game-state.js"></script>
+
+  <script src="js/audio/bgm-controller.js"></script>
+  <script src="js/audio/sfx-controller.js"></script>
+  <script src="js/audio/audio-manager.js"></script>
+
+  <script src="js/input/keyboard-handler.js"></script>
+  <script src="js/input/touch-handler.js"></script>
+  <script src="js/input/mouse-handler.js"></script>
+
+  <script src="js/ui/toast-manager.js"></script>
+  <script src="js/ui/modal-manager.js"></script>
+  <script src="js/ui/timer-ui.js"></script>
+  <script src="js/ui/board-renderer.js"></script>
+  <script src="js/ui/numpad-renderer.js"></script>
+  <script src="js/ui/screen-manager.js"></script>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

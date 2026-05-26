@@ -1,0 +1,29 @@
+.toast-region {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 60;
+  display: grid;
+  gap: 10px;
+  width: min(360px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+.toast {
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  background: var(--color-surface);
+  border-left: 4px solid var(--color-primary);
+  box-shadow: var(--shadow-soft);
+  font-weight: 700;
+  pointer-events: auto;
+}
+
+.toast.is-danger {
+  border-left-color: var(--color-danger);
+}
+
+.toast.is-accent {
+  border-left-color: var(--color-accent);
+}

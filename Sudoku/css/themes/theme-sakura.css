@@ -1,0 +1,29 @@
+[data-theme="sakura"] {
+  --color-bg: #fce4ec;
+  --color-surface: #fff9fb;
+  --color-surface-2: #fdeef4;
+  --color-text: #2f1721;
+  --color-muted: #8a5365;
+  --color-border: #ebb2c9;
+  --color-board-line: #74334d;
+  --color-number-given: #2f1721;
+  --color-number-input: #880e4f;
+  --color-number-error: #c62828;
+  --color-cell-selected: #f8bbd9;
+  --color-cell-highlight: #fde5f0;
+  --color-cell-same: #eee8ff;
+  --color-primary: #c2185b;
+  --color-primary-contrast: #ffffff;
+  --color-primary-soft: #fde5f0;
+  --color-primary-border: #df8dad;
+  --color-accent: #6a1b9a;
+  --color-danger: #c62828;
+  --color-focus: #caa1e8;
+  --color-grid-light: #d99bb5;
+  --color-error-bg: #fde8e8;
+  --color-error-selected-bg: #f5c7cf;
+  --color-note: #8f4771;
+  --color-loading-bg: rgba(255, 249, 251, 0.86);
+  --color-spinner-track: #f5cfe0;
+  --color-accent-ring: rgba(106, 27, 154, 0.28);
+}

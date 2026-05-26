@@ -1,0 +1,17 @@
+.timer-display {
+  display: inline-flex;
+  min-width: 72px;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+  background: color-mix(in srgb, var(--color-primary) 11%, var(--color-surface));
+  font-family: var(--font-mono);
+  font-weight: 800;
+}
+
+.timer-display.is-hidden {
+  display: none;
+}
