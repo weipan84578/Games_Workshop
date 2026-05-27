@@ -43,3 +43,24 @@ body.mode-dark .hud-stat,
 body.mode-dark .canvas-frame {
   background: rgba(255, 255, 255, 0.08);
 }
+
+body.mode-dark .upload-zone {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)),
+    rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+body.mode-dark .upload-actions .btn:not(.btn-accent) {
+  color: #fff8df;
+  background: rgba(255, 209, 102, 0.18);
+  border: 2px solid rgba(255, 209, 102, 0.9);
+  box-shadow:
+    0 0 0 1px rgba(255, 209, 102, 0.18),
+    0 10px 22px rgba(0, 0, 0, 0.3);
+}
+
+body.mode-dark .upload-actions .btn:not(.btn-accent):hover {
+  background: rgba(255, 209, 102, 0.28);
+  border-color: #ffd166;
+}
