@@ -43,11 +43,14 @@ class PuzzleApp {
     });
 
     this.handleDocumentClick = this.handleDocumentClick.bind(this);
+    this.handleAudioGesture = this.handleAudioGesture.bind(this);
     this.handleBeforeUnload = this.handleBeforeUnload.bind(this);
   }
 
   init() {
     this.theme.apply();
+    document.addEventListener("pointerdown", this.handleAudioGesture, { passive: true });
+    document.addEventListener("keydown", this.handleAudioGesture);
     document.addEventListener("click", this.handleDocumentClick);
     window.addEventListener("beforeunload", this.handleBeforeUnload);
     this.navigate("main-menu");
@@ -55,9 +58,13 @@ class PuzzleApp {
 
   handleDocumentClick(event) {
     if (event.target.closest("button")) {
-      this.unlockAudio();
+      void this.unlockAudio();
       this.sfx.play("click");
     }
+  }
+
+  handleAudioGesture() {
+    void this.unlockAudio();
   }
 
   handleBeforeUnload() {
@@ -110,6 +117,7 @@ class PuzzleApp {
       imageSourceKind: snapshot.imageSourceKind || this.state.imageSourceKind
     });
 
+    this.sfx.play("start");
     this.navigate("game", { snapshot });
   }
 
@@ -124,6 +132,7 @@ class PuzzleApp {
   startGame({ sourceCanvas, imageName, sourceKind, difficultyId, snapshot = null }) {
     this.state.setImage(copyCanvas(sourceCanvas), imageName, sourceKind);
     this.state.setGameConfig({ difficultyId, imageSourceKind: sourceKind });
+    this.sfx.play("start");
     this.navigate("game", { snapshot });
   }
 
@@ -164,12 +173,20 @@ class PuzzleApp {
 
   updateSettings(partial) {
     this.audioSettings.update(partial);
-    if (partial.theme) this.theme.apply(partial.theme);
+    if (partial.theme || partial.appearance) {
+      this.theme.apply(this.state.settings.theme, this.state.settings.appearance);
+    }
     this.playMusicForCurrentScreen();
   }
 
   setTheme(themeId) {
     this.theme.set(themeId);
+    this.playMusicForCurrentScreen();
+    this.router.refresh();
+  }
+
+  setAppearance(appearance) {
+    this.theme.setAppearance(appearance);
     this.playMusicForCurrentScreen();
     this.router.refresh();
   }

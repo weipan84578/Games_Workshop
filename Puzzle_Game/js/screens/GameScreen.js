@@ -142,6 +142,7 @@ export class GameScreen {
 
   togglePause() {
     this.paused = !this.paused;
+    this.app.sfx.play(this.paused ? "pause" : "resume");
     this.engine?.setPaused(this.paused);
     this.pauseOverlay.classList.toggle("is-visible", this.paused);
     this.pauseButton.textContent = this.paused ? "繼續" : "暫停";

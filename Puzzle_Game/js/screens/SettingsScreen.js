@@ -9,9 +9,17 @@ export class SettingsScreen {
 
   render() {
     const settings = this.app.state.settings;
-
     const musicValue = el("strong", { text: `${settings.musicVolume}%` });
     const sfxValue = el("strong", { text: `${settings.sfxVolume}%` });
+
+    const appearanceButton = (label, value) => {
+      const button = makeButton(label, {
+        on: { click: () => this.app.setAppearance(value) }
+      });
+      if (settings.appearance === value) button.classList.add("is-selected");
+      button.setAttribute("aria-pressed", String(settings.appearance === value));
+      return button;
+    };
 
     const screen = el("main", { className: "screen" }, [
       el("div", { className: "screen-shell stack" }, [
@@ -29,7 +37,7 @@ export class SettingsScreen {
               el("input", {
                 type: "range",
                 value: settings.musicVolume,
-                attrs: { min: "0", max: "100" },
+                attrs: { min: "0", max: "100", "aria-label": "背景音樂音量" },
                 on: {
                   input: (event) => {
                     const value = Number(event.currentTarget.value);
@@ -47,7 +55,7 @@ export class SettingsScreen {
               el("input", {
                 type: "range",
                 value: settings.sfxVolume,
-                attrs: { min: "0", max: "100" },
+                attrs: { min: "0", max: "100", "aria-label": "音效音量" },
                 on: {
                   input: (event) => {
                     const value = Number(event.currentTarget.value);
@@ -56,20 +64,22 @@ export class SettingsScreen {
                   }
                 }
               }),
-              sfxValue
-            ])
-          ]),
-          el("div", { className: "setting-row" }, [
-            el("strong", { text: "靜音" }),
-            el("div", { className: "setting-control" }, [
-              makeButton(settings.muted ? "已靜音" : "開啟聲音", {
+              sfxValue,
+              makeButton("測試", {
                 on: {
-                  click: () => {
-                    this.app.updateSettings({ muted: !this.app.state.settings.muted });
-                    this.app.navigate("settings");
+                  click: async () => {
+                    await this.app.unlockAudio();
+                    this.app.sfx.play("combo");
                   }
                 }
               })
+            ])
+          ]),
+          el("div", { className: "setting-row" }, [
+            el("strong", { text: "顯示模式" }),
+            el("div", { className: "segmented" }, [
+              appearanceButton("明亮", "light"),
+              appearanceButton("黑暗", "dark")
             ])
           ]),
           el("div", { className: "setting-row" }, [
@@ -89,7 +99,7 @@ export class SettingsScreen {
             ])))
           ]),
           el("div", { className: "setting-row" }, [
-            el("strong", { text: "主題" }),
+            el("strong", { text: "色彩主題" }),
             el("div", { className: "theme-grid" }, THEMES.map((theme) => el("button", {
               className: `theme-option ${settings.theme === theme.id ? "is-selected" : ""}`,
               type: "button",
@@ -102,24 +112,22 @@ export class SettingsScreen {
               })))
             ])))
           ]),
-          el("div", { className: "setting-row" }, [
-            el("strong", { text: "語言" }),
-            el("div", { className: "segmented" }, [
-              makeButton("繁中", {
-                on: { click: () => this.app.updateSettings({ language: "zh-TW" }) }
-              }),
-              makeButton("English", {
-                on: { click: () => this.app.updateSettings({ language: "en" }) }
-              })
-            ])
-          ]),
           el("div", { className: "toolbar" }, [
+            makeButton("播放背景音樂", {
+              on: {
+                click: async () => {
+                  await this.app.unlockAudio();
+                  this.app.playMusicForCurrentScreen();
+                  this.app.toast.show("背景音樂已啟動", "success");
+                }
+              }
+            }),
             makeButton("還原預設", {
               on: {
                 click: () => {
                   this.app.updateSettings({ ...DEFAULT_SETTINGS });
                   this.app.setTheme(DEFAULT_SETTINGS.theme);
-                  this.app.navigate("settings");
+                  this.app.setAppearance(DEFAULT_SETTINGS.appearance);
                 }
               }
             })

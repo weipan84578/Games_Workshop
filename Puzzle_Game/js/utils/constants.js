@@ -20,12 +20,11 @@ export const THEMES = [
 ];
 
 export const DEFAULT_SETTINGS = {
-  musicVolume: 50,
-  sfxVolume: 80,
-  muted: false,
+  musicVolume: 68,
+  sfxVolume: 86,
   theme: "theme-ocean",
-  defaultDifficulty: "4x4",
-  language: "zh-TW"
+  appearance: "light",
+  defaultDifficulty: "4x4"
 };
 
 export const IMAGE_RULES = {

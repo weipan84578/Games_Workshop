@@ -1,0 +1,45 @@
+body.mode-light {
+  color-scheme: light;
+}
+
+body.mode-dark {
+  --color-bg: #0d1117;
+  --color-bg-strong: #182131;
+  --color-surface: rgba(22, 29, 42, 0.94);
+  --color-surface-solid: #151c29;
+  --color-text: #f4f7fb;
+  --color-muted: #b8c2d0;
+  --color-border: rgba(255, 255, 255, 0.14);
+  --shadow-panel: 0 18px 45px rgba(0, 0, 0, 0.38);
+  --shadow-button: 0 8px 20px rgba(0, 0, 0, 0.34);
+  --focus-ring: #ffd166;
+  color-scheme: dark;
+}
+
+body.mode-dark .surface,
+body.mode-dark .modal {
+  backdrop-filter: blur(16px);
+}
+
+body.mode-dark .btn {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+body.mode-dark .btn-primary,
+body.mode-dark .btn-accent,
+body.mode-dark .btn.is-selected,
+body.mode-dark .btn[aria-pressed="true"] {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+}
+
+body.mode-dark .difficulty-card,
+body.mode-dark .theme-option,
+body.mode-dark .instruction-steps li,
+body.mode-dark .result-stat {
+  background: var(--color-surface-solid);
+}
+
+body.mode-dark .hud-stat,
+body.mode-dark .canvas-frame {
+  background: rgba(255, 255, 255, 0.08);
+}

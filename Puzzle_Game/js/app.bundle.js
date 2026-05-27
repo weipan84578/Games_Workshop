@@ -25,12 +25,11 @@ const THEMES = [
 ];
 
 const DEFAULT_SETTINGS = {
-  musicVolume: 50,
-  sfxVolume: 80,
-  muted: false,
+  musicVolume: 68,
+  sfxVolume: 86,
   theme: "theme-ocean",
-  defaultDifficulty: "4x4",
-  language: "zh-TW"
+  appearance: "light",
+  defaultDifficulty: "4x4"
 };
 
 const IMAGE_RULES = {
@@ -937,31 +936,53 @@ class AudioEngine {
     this.settings = settings;
     this.ensure();
     if (!this.context) return;
-    const muted = settings.muted ? 0 : 1;
-    this.musicGain.gain.setTargetAtTime((settings.musicVolume / 100) * muted, this.context.currentTime, 0.02);
-    this.sfxGain.gain.setTargetAtTime((settings.sfxVolume / 100) * muted, this.context.currentTime, 0.02);
-    this.masterGain.gain.setTargetAtTime(muted, this.context.currentTime, 0.02);
+    this.musicGain.gain.setTargetAtTime(settings.musicVolume / 100, this.context.currentTime, 0.02);
+    this.sfxGain.gain.setTargetAtTime(settings.sfxVolume / 100, this.context.currentTime, 0.02);
+    this.masterGain.gain.setTargetAtTime(1, this.context.currentTime, 0.02);
   }
 
-  playTone({ frequency = 440, duration = 0.12, type = "sine", gain = 0.12, destination = "sfx", delay = 0 }) {
+  playTone({
+    frequency = 440,
+    endFrequency = null,
+    duration = 0.12,
+    type = "sine",
+    gain = 0.12,
+    destination = "sfx",
+    delay = 0,
+    attack = 0.012,
+    pan = 0
+  }) {
     const context = this.ensure();
     if (!context) return;
 
     const start = context.currentTime + delay;
     const oscillator = context.createOscillator();
     const envelope = context.createGain();
+    const output = this.createOutputNode(destination, pan);
+
     oscillator.type = type;
     oscillator.frequency.setValueAtTime(frequency, start);
+    if (endFrequency) {
+      oscillator.frequency.exponentialRampToValueAtTime(Math.max(1, endFrequency), start + duration);
+    }
     envelope.gain.setValueAtTime(0.0001, start);
-    envelope.gain.exponentialRampToValueAtTime(gain, start + 0.012);
+    envelope.gain.exponentialRampToValueAtTime(gain, start + attack);
     envelope.gain.exponentialRampToValueAtTime(0.0001, start + duration);
     oscillator.connect(envelope);
-    envelope.connect(destination === "music" ? this.musicGain : this.sfxGain);
+    envelope.connect(output);
     oscillator.start(start);
     oscillator.stop(start + duration + 0.02);
   }
 
-  playNoise({ duration = 0.12, gain = 0.08 }) {
+  playNoise({
+    duration = 0.12,
+    gain = 0.08,
+    delay = 0,
+    destination = "sfx",
+    filterType = "bandpass",
+    frequency = 900,
+    pan = 0
+  }) {
     const context = this.ensure();
     if (!context) return;
     const sampleRate = context.sampleRate;
@@ -973,11 +994,32 @@ class AudioEngine {
 
     const source = context.createBufferSource();
     const envelope = context.createGain();
-    envelope.gain.value = gain;
+    const filter = context.createBiquadFilter();
+    const output = this.createOutputNode(destination, pan);
+    const start = context.currentTime + delay;
+
+    filter.type = filterType;
+    filter.frequency.setValueAtTime(frequency, start);
+    filter.Q.setValueAtTime(1.8, start);
+    envelope.gain.setValueAtTime(0.0001, start);
+    envelope.gain.linearRampToValueAtTime(gain, start + 0.01);
+    envelope.gain.exponentialRampToValueAtTime(0.0001, start + duration);
     source.buffer = buffer;
-    source.connect(envelope);
-    envelope.connect(this.sfxGain);
-    source.start();
+    source.connect(filter);
+    filter.connect(envelope);
+    envelope.connect(output);
+    source.start(start);
+    source.stop(start + duration + 0.02);
+  }
+
+  createOutputNode(destination, pan) {
+    const base = destination === "music" ? this.musicGain : this.sfxGain;
+    if (!this.context.createStereoPanner || pan === 0) return base;
+
+    const panner = this.context.createStereoPanner();
+    panner.pan.value = Math.max(-1, Math.min(1, pan));
+    panner.connect(base);
+    return panner;
   }
 }
 
@@ -993,38 +1035,58 @@ class SoundEffects {
   play(name) {
     switch (name) {
       case "click":
-        this.audio.playTone({ frequency: 620, duration: 0.06, type: "triangle", gain: 0.09 });
+        this.audio.playTone({ frequency: 720, endFrequency: 920, duration: 0.055, type: "triangle", gain: 0.1 });
+        this.audio.playTone({ frequency: 1440, duration: 0.035, type: "sine", gain: 0.035, delay: 0.025, pan: 0.25 });
+        break;
+      case "start":
+        [392, 523, 659, 784].forEach((frequency, index) => {
+          this.audio.playTone({ frequency, duration: 0.12, type: "triangle", gain: 0.09, delay: index * 0.055 });
+        });
         break;
       case "pickup":
-        this.audio.playTone({ frequency: 330, duration: 0.1, type: "sine", gain: 0.08 });
+        this.audio.playTone({ frequency: 280, endFrequency: 430, duration: 0.13, type: "sine", gain: 0.09, pan: -0.14 });
+        this.audio.playNoise({ duration: 0.055, gain: 0.035, filterType: "highpass", frequency: 1900, pan: 0.15 });
         break;
       case "drop":
-        this.audio.playTone({ frequency: 180, duration: 0.11, type: "triangle", gain: 0.08 });
+        this.audio.playTone({ frequency: 210, endFrequency: 130, duration: 0.13, type: "triangle", gain: 0.085 });
+        this.audio.playNoise({ duration: 0.075, gain: 0.05, filterType: "lowpass", frequency: 620 });
         break;
       case "snap":
-        this.audio.playTone({ frequency: 520, duration: 0.08, type: "triangle", gain: 0.1 });
-        this.audio.playTone({ frequency: 780, duration: 0.1, type: "sine", gain: 0.07, delay: 0.05 });
+        this.audio.playTone({ frequency: 520, duration: 0.075, type: "triangle", gain: 0.12, pan: -0.12 });
+        this.audio.playTone({ frequency: 780, duration: 0.105, type: "sine", gain: 0.08, delay: 0.045, pan: 0.12 });
+        this.audio.playTone({ frequency: 1175, duration: 0.075, type: "sine", gain: 0.045, delay: 0.095 });
         this.trackCombo();
         break;
       case "combo":
-        [660, 880, 1100].forEach((frequency, index) => {
-          this.audio.playTone({ frequency, duration: 0.11, type: "sine", gain: 0.08, delay: index * 0.06 });
+        [660, 880, 990, 1320].forEach((frequency, index) => {
+          this.audio.playTone({ frequency, duration: 0.12, type: "sine", gain: 0.085, delay: index * 0.055, pan: (index - 1.5) / 4 });
         });
         break;
       case "shuffle":
-        this.audio.playNoise({ duration: 0.2, gain: 0.08 });
+        this.audio.playNoise({ duration: 0.22, gain: 0.075, filterType: "bandpass", frequency: 850, pan: -0.18 });
+        this.audio.playNoise({ duration: 0.18, gain: 0.055, delay: 0.1, filterType: "highpass", frequency: 2200, pan: 0.18 });
+        this.audio.playTone({ frequency: 260, endFrequency: 520, duration: 0.18, type: "sawtooth", gain: 0.035, delay: 0.04 });
         break;
       case "hint":
-        this.audio.playTone({ frequency: 880, duration: 0.12, type: "sine", gain: 0.08 });
-        this.audio.playTone({ frequency: 660, duration: 0.12, type: "sine", gain: 0.07, delay: 0.08 });
+        this.audio.playTone({ frequency: 880, duration: 0.12, type: "sine", gain: 0.085 });
+        this.audio.playTone({ frequency: 660, duration: 0.12, type: "sine", gain: 0.075, delay: 0.08 });
+        this.audio.playTone({ frequency: 990, duration: 0.16, type: "triangle", gain: 0.06, delay: 0.16 });
+        break;
+      case "pause":
+        this.audio.playTone({ frequency: 440, endFrequency: 220, duration: 0.18, type: "triangle", gain: 0.075 });
+        break;
+      case "resume":
+        this.audio.playTone({ frequency: 220, endFrequency: 440, duration: 0.18, type: "triangle", gain: 0.075 });
         break;
       case "victory":
-        [523, 659, 784, 1046].forEach((frequency, index) => {
-          this.audio.playTone({ frequency, duration: 0.22, type: "triangle", gain: 0.1, delay: index * 0.13 });
+        [523, 659, 784, 1046, 1318].forEach((frequency, index) => {
+          this.audio.playTone({ frequency, duration: 0.22, type: "triangle", gain: 0.12, delay: index * 0.12, pan: (index - 2) / 4 });
         });
+        this.audio.playNoise({ duration: 0.28, gain: 0.045, delay: 0.18, filterType: "bandpass", frequency: 2400 });
         break;
       case "error":
-        this.audio.playTone({ frequency: 180, duration: 0.18, type: "sawtooth", gain: 0.06 });
+        this.audio.playTone({ frequency: 190, endFrequency: 110, duration: 0.2, type: "sawtooth", gain: 0.075 });
+        this.audio.playTone({ frequency: 160, endFrequency: 90, duration: 0.2, type: "square", gain: 0.045, delay: 0.055 });
         break;
       default:
         this.play("click");
@@ -1046,11 +1108,43 @@ class SoundEffects {
 
 
 /* js/audio/MusicPlayer.js */
-const PATTERNS = {
-  menu: [392, 494, 587, 494, 440, 523, 659, 523],
-  game_easy: [330, 392, 440, 392, 349, 440, 523, 440],
-  game_hard: [220, 330, 392, 440, 392, 330, 294, 330],
-  victory: [523, 659, 784, 1046, 784, 659, 523]
+const TRACKS = {
+  menu: {
+    interval: 310,
+    wave: "triangle",
+    melodyGain: 0.06,
+    bassGain: 0.035,
+    melody: [392, 494, 587, 659, 587, 494, 440, 523, 659, 784, 659, 523, 494, 440, 392, 0],
+    bass: [196, 196, 220, 220, 247, 247, 220, 220],
+    chords: [[392, 494, 587], [440, 523, 659], [349, 440, 587], [392, 494, 659]]
+  },
+  game_easy: {
+    interval: 260,
+    wave: "sine",
+    melodyGain: 0.055,
+    bassGain: 0.032,
+    melody: [330, 392, 440, 523, 440, 392, 349, 392, 440, 523, 587, 659, 587, 523, 440, 392],
+    bass: [165, 165, 196, 196, 174, 174, 196, 196],
+    chords: [[330, 392, 494], [349, 440, 523], [392, 494, 587], [330, 440, 523]]
+  },
+  game_hard: {
+    interval: 210,
+    wave: "square",
+    melodyGain: 0.045,
+    bassGain: 0.038,
+    melody: [220, 330, 392, 440, 392, 330, 294, 330, 247, 370, 440, 494, 440, 370, 330, 294],
+    bass: [110, 110, 147, 147, 123, 123, 165, 165],
+    chords: [[220, 330, 440], [247, 370, 494], [294, 392, 523], [247, 330, 440]]
+  },
+  victory: {
+    interval: 190,
+    wave: "triangle",
+    melodyGain: 0.075,
+    bassGain: 0.04,
+    melody: [523, 659, 784, 1046, 880, 1046, 1175, 1318, 1046, 880, 784, 659, 784, 1046, 1318, 0],
+    bass: [262, 262, 330, 330, 392, 392, 330, 330],
+    chords: [[523, 659, 784], [587, 740, 880], [659, 784, 1046], [523, 784, 1046]]
+  }
 };
 
 class MusicPlayer {
@@ -1072,7 +1166,7 @@ class MusicPlayer {
     this.stop();
     this.currentPattern = pattern;
     this.step = 0;
-    this.intervalId = window.setInterval(() => this.tick(), pattern === "victory" ? 270 : 420);
+    this.intervalId = window.setInterval(() => this.tick(), TRACKS[pattern].interval);
     this.tick();
   }
 
@@ -1083,12 +1177,71 @@ class MusicPlayer {
   }
 
   tick() {
-    const pattern = PATTERNS[this.currentPattern];
-    if (!pattern) return;
-    const frequency = pattern[this.step % pattern.length];
-    const harmonic = pattern[(this.step + 2) % pattern.length] / 2;
-    this.audio.playTone({ frequency, duration: 0.18, type: "sine", gain: 0.035, destination: "music" });
-    this.audio.playTone({ frequency: harmonic, duration: 0.24, type: "triangle", gain: 0.02, destination: "music" });
+    const track = TRACKS[this.currentPattern];
+    if (!track) return;
+
+    const beat = this.step % track.melody.length;
+    const phrase = Math.floor(this.step / track.melody.length);
+    const melody = track.melody[beat];
+    const chord = track.chords[Math.floor(beat / 4) % track.chords.length];
+    const pan = ((beat % 8) - 3.5) / 7;
+
+    if (melody) {
+      this.audio.playTone({
+        frequency: melody,
+        duration: track.interval / 1000 * 0.76,
+        type: track.wave,
+        gain: track.melodyGain,
+        destination: "music",
+        pan
+      });
+    }
+
+    if (beat % 4 === 0) {
+      const bass = track.bass[(beat / 2) % track.bass.length];
+      this.audio.playTone({
+        frequency: bass,
+        duration: track.interval / 1000 * 1.8,
+        type: "sine",
+        gain: track.bassGain,
+        destination: "music",
+        pan: -0.18
+      });
+
+      chord.forEach((frequency, index) => {
+        this.audio.playTone({
+          frequency,
+          duration: track.interval / 1000 * 2.4,
+          type: "triangle",
+          gain: 0.018,
+          destination: "music",
+          delay: index * 0.018,
+          pan: 0.18
+        });
+      });
+    }
+
+    if (this.currentPattern === "game_hard" && beat % 4 === 2) {
+      this.audio.playNoise({
+        duration: 0.045,
+        gain: 0.018,
+        destination: "music",
+        filterType: "highpass",
+        frequency: 2600,
+        pan: 0.22
+      });
+    }
+
+    if (this.currentPattern === "victory" && beat % 8 === 0 && phrase < 4) {
+      this.audio.playNoise({
+        duration: 0.18,
+        gain: 0.025,
+        destination: "music",
+        filterType: "bandpass",
+        frequency: 1800
+      });
+    }
+
     this.step += 1;
   }
 }
@@ -1115,15 +1268,23 @@ class ThemeManager {
     this.state = appState;
   }
 
-  apply(themeId = this.state.settings.theme) {
+  apply(themeId = this.state.settings.theme, appearance = this.state.settings.appearance) {
     const known = THEMES.map((theme) => theme.id);
+    const modes = ["mode-light", "mode-dark"];
     document.body.classList.remove(...known);
+    document.body.classList.remove(...modes);
     document.body.classList.add(themeId);
+    document.body.classList.add(`mode-${appearance || "light"}`);
   }
 
   set(themeId) {
     this.state.setSettings({ theme: themeId });
     this.apply(themeId);
+  }
+
+  setAppearance(appearance) {
+    this.state.setSettings({ appearance });
+    this.apply(this.state.settings.theme, appearance);
   }
 }
 
@@ -1628,6 +1789,7 @@ class GameScreen {
 
   togglePause() {
     this.paused = !this.paused;
+    this.app.sfx.play(this.paused ? "pause" : "resume");
     this.engine?.setPaused(this.paused);
     this.pauseOverlay.classList.toggle("is-visible", this.paused);
     this.pauseButton.textContent = this.paused ? "繼續" : "暫停";
@@ -1658,9 +1820,17 @@ class SettingsScreen {
 
   render() {
     const settings = this.app.state.settings;
-
     const musicValue = el("strong", { text: `${settings.musicVolume}%` });
     const sfxValue = el("strong", { text: `${settings.sfxVolume}%` });
+
+    const appearanceButton = (label, value) => {
+      const button = makeButton(label, {
+        on: { click: () => this.app.setAppearance(value) }
+      });
+      if (settings.appearance === value) button.classList.add("is-selected");
+      button.setAttribute("aria-pressed", String(settings.appearance === value));
+      return button;
+    };
 
     const screen = el("main", { className: "screen" }, [
       el("div", { className: "screen-shell stack" }, [
@@ -1678,7 +1848,7 @@ class SettingsScreen {
               el("input", {
                 type: "range",
                 value: settings.musicVolume,
-                attrs: { min: "0", max: "100" },
+                attrs: { min: "0", max: "100", "aria-label": "背景音樂音量" },
                 on: {
                   input: (event) => {
                     const value = Number(event.currentTarget.value);
@@ -1696,7 +1866,7 @@ class SettingsScreen {
               el("input", {
                 type: "range",
                 value: settings.sfxVolume,
-                attrs: { min: "0", max: "100" },
+                attrs: { min: "0", max: "100", "aria-label": "音效音量" },
                 on: {
                   input: (event) => {
                     const value = Number(event.currentTarget.value);
@@ -1705,20 +1875,22 @@ class SettingsScreen {
                   }
                 }
               }),
-              sfxValue
-            ])
-          ]),
-          el("div", { className: "setting-row" }, [
-            el("strong", { text: "靜音" }),
-            el("div", { className: "setting-control" }, [
-              makeButton(settings.muted ? "已靜音" : "開啟聲音", {
+              sfxValue,
+              makeButton("測試", {
                 on: {
-                  click: () => {
-                    this.app.updateSettings({ muted: !this.app.state.settings.muted });
-                    this.app.navigate("settings");
+                  click: async () => {
+                    await this.app.unlockAudio();
+                    this.app.sfx.play("combo");
                   }
                 }
               })
+            ])
+          ]),
+          el("div", { className: "setting-row" }, [
+            el("strong", { text: "顯示模式" }),
+            el("div", { className: "segmented" }, [
+              appearanceButton("明亮", "light"),
+              appearanceButton("黑暗", "dark")
             ])
           ]),
           el("div", { className: "setting-row" }, [
@@ -1738,7 +1910,7 @@ class SettingsScreen {
             ])))
           ]),
           el("div", { className: "setting-row" }, [
-            el("strong", { text: "主題" }),
+            el("strong", { text: "色彩主題" }),
             el("div", { className: "theme-grid" }, THEMES.map((theme) => el("button", {
               className: `theme-option ${settings.theme === theme.id ? "is-selected" : ""}`,
               type: "button",
@@ -1751,24 +1923,22 @@ class SettingsScreen {
               })))
             ])))
           ]),
-          el("div", { className: "setting-row" }, [
-            el("strong", { text: "語言" }),
-            el("div", { className: "segmented" }, [
-              makeButton("繁中", {
-                on: { click: () => this.app.updateSettings({ language: "zh-TW" }) }
-              }),
-              makeButton("English", {
-                on: { click: () => this.app.updateSettings({ language: "en" }) }
-              })
-            ])
-          ]),
           el("div", { className: "toolbar" }, [
+            makeButton("播放背景音樂", {
+              on: {
+                click: async () => {
+                  await this.app.unlockAudio();
+                  this.app.playMusicForCurrentScreen();
+                  this.app.toast.show("背景音樂已啟動", "success");
+                }
+              }
+            }),
             makeButton("還原預設", {
               on: {
                 click: () => {
                   this.app.updateSettings({ ...DEFAULT_SETTINGS });
                   this.app.setTheme(DEFAULT_SETTINGS.theme);
-                  this.app.navigate("settings");
+                  this.app.setAppearance(DEFAULT_SETTINGS.appearance);
                 }
               }
             })
@@ -1901,11 +2071,14 @@ class PuzzleApp {
     });
 
     this.handleDocumentClick = this.handleDocumentClick.bind(this);
+    this.handleAudioGesture = this.handleAudioGesture.bind(this);
     this.handleBeforeUnload = this.handleBeforeUnload.bind(this);
   }
 
   init() {
     this.theme.apply();
+    document.addEventListener("pointerdown", this.handleAudioGesture, { passive: true });
+    document.addEventListener("keydown", this.handleAudioGesture);
     document.addEventListener("click", this.handleDocumentClick);
     window.addEventListener("beforeunload", this.handleBeforeUnload);
     this.navigate("main-menu");
@@ -1913,9 +2086,13 @@ class PuzzleApp {
 
   handleDocumentClick(event) {
     if (event.target.closest("button")) {
-      this.unlockAudio();
+      void this.unlockAudio();
       this.sfx.play("click");
     }
+  }
+
+  handleAudioGesture() {
+    void this.unlockAudio();
   }
 
   handleBeforeUnload() {
@@ -1968,6 +2145,7 @@ class PuzzleApp {
       imageSourceKind: snapshot.imageSourceKind || this.state.imageSourceKind
     });
 
+    this.sfx.play("start");
     this.navigate("game", { snapshot });
   }
 
@@ -1982,6 +2160,7 @@ class PuzzleApp {
   startGame({ sourceCanvas, imageName, sourceKind, difficultyId, snapshot = null }) {
     this.state.setImage(copyCanvas(sourceCanvas), imageName, sourceKind);
     this.state.setGameConfig({ difficultyId, imageSourceKind: sourceKind });
+    this.sfx.play("start");
     this.navigate("game", { snapshot });
   }
 
@@ -2022,12 +2201,20 @@ class PuzzleApp {
 
   updateSettings(partial) {
     this.audioSettings.update(partial);
-    if (partial.theme) this.theme.apply(partial.theme);
+    if (partial.theme || partial.appearance) {
+      this.theme.apply(this.state.settings.theme, this.state.settings.appearance);
+    }
     this.playMusicForCurrentScreen();
   }
 
   setTheme(themeId) {
     this.theme.set(themeId);
+    this.playMusicForCurrentScreen();
+    this.router.refresh();
+  }
+
+  setAppearance(appearance) {
+    this.theme.setAppearance(appearance);
     this.playMusicForCurrentScreen();
     this.router.refresh();
   }
