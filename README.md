@@ -105,3 +105,7 @@
 ### Sudoku
 
 - 數獨
+
+### Puzzle_Game
+
+- 拼圖遊戲

@@ -1,0 +1,40 @@
+.difficulty-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.difficulty-card {
+  min-height: 92px;
+  display: grid;
+  gap: 4px;
+  padding: 14px;
+  text-align: left;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--panel-radius);
+  transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.difficulty-card:hover,
+.difficulty-card.is-selected {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-button);
+  transform: translateY(-1px);
+}
+
+.difficulty-card strong {
+  font-size: 1.05rem;
+  font-weight: 900;
+}
+
+.difficulty-card span {
+  color: var(--color-muted);
+  font-size: 0.92rem;
+}
+
+@media (max-width: 640px) {
+  .difficulty-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

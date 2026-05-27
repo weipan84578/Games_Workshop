@@ -1,0 +1,59 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(8, 13, 27, 0.62);
+}
+
+.modal {
+  width: min(720px, 100%);
+  max-height: min(760px, calc(100vh - 36px));
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  background: var(--color-surface-solid);
+  border: 1px solid var(--color-border);
+  border-radius: var(--panel-radius);
+  box-shadow: 0 26px 70px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+}
+
+.modal-header,
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.modal-footer {
+  justify-content: flex-end;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 0;
+}
+
+.modal-body {
+  padding: 18px;
+  overflow: auto;
+}
+
+.modal-steps {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.modal-step {
+  flex: 1;
+  height: 8px;
+  background: rgba(20, 33, 61, 0.12);
+  border-radius: 999px;
+}
+
+.modal-step.is-active {
+  background: var(--color-accent);
+}

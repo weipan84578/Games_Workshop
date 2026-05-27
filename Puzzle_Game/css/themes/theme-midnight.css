@@ -1,0 +1,10 @@
+.theme-midnight {
+  --color-primary: #7b2fbe;
+  --color-secondary: #e040fb;
+  --color-accent: #ffd166;
+  --color-soft: #ece7ff;
+  --color-bg: #191126;
+  --color-bg-strong: #213547;
+  --color-surface: rgba(255, 255, 255, 0.9);
+  --color-text: #170f22;
+}

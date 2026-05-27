@@ -1,0 +1,52 @@
+.victory-screen {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+}
+
+.victory-panel {
+  width: min(760px, 100%);
+  display: grid;
+  gap: 20px;
+  padding: 28px;
+  text-align: center;
+}
+
+.victory-preview {
+  width: min(360px, 90vw);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: var(--panel-radius);
+  box-shadow: var(--shadow-button);
+}
+
+.victory-preview canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.result-stat {
+  padding: 14px;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--panel-radius);
+}
+
+.result-stat strong {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+
+@media (max-width: 640px) {
+  .result-grid {
+    grid-template-columns: 1fr;
+  }
+}

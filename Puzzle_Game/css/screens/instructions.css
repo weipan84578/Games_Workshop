@@ -1,0 +1,32 @@
+.instructions-panel {
+  padding: 22px;
+}
+
+.instruction-steps {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+  padding: 0;
+  list-style: none;
+}
+
+.instruction-steps li {
+  min-height: 92px;
+  padding: 14px;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--panel-radius);
+}
+
+.instruction-steps strong {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 900;
+}
+
+@media (max-width: 680px) {
+  .instruction-steps {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Puzzle Challenge">
+  <rect width="64" height="64" rx="14" fill="#0077b6"/>
+  <path d="M12 14h18v13c0 3 4 3 4 0V14h18v18H39c-3 0-3 4 0 4h13v14H34V39c0-3-4-3-4 0v11H12V36h12c3 0 3-4 0-4H12z" fill="#fff"/>
+  <path d="M12 36h12c3 0 3-4 0-4H12V14h18v13c0 3 4 3 4 0V14h18v18H39c-3 0-3 4 0 4h13v14H34V39c0-3-4-3-4 0v11H12z" fill="#ffd166" opacity=".5"/>
+</svg>

@@ -1,0 +1,39 @@
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.theme-option {
+  min-height: 74px;
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  text-align: left;
+  background: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--panel-radius);
+}
+
+.theme-option.is-selected {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-button);
+}
+
+.swatches {
+  display: flex;
+  gap: 6px;
+}
+
+.swatch {
+  width: 22px;
+  height: 22px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 50%;
+}
+
+@media (max-width: 640px) {
+  .theme-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
