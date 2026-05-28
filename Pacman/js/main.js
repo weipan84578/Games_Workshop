@@ -1081,6 +1081,7 @@
       this.gameOver();
       return;
     }
+    this.scatterClock = 0;
     this.resetActors();
     this.readyTimer = 1.7;
     this.saveGame("SAVED");
