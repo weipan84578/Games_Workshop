@@ -697,20 +697,15 @@
 
   Game.prototype.getDifficulty = function () {
     if (this.settings.difficulty === "easy") {
-      return { lives: 5, pacmanSpeed: 6.2, ghostSpeed: 4.8, releaseScale: 0.45, readyTime: 1.0 };
+      return { lives: 5, pacmanSpeed: 6.2, ghostSpeed: 4.8 };
     }
     if (this.settings.difficulty === "hard") {
-      return { lives: 3, pacmanSpeed: 6.4, ghostSpeed: 6.5, releaseScale: 0.7, readyTime: 1.2 };
+      return { lives: 3, pacmanSpeed: 6.4, ghostSpeed: 6.5 };
     }
-    return { lives: 3, pacmanSpeed: 6.5, ghostSpeed: 5.7, releaseScale: 1, readyTime: 1.6 };
+    return { lives: 3, pacmanSpeed: 6.5, ghostSpeed: 5.7 };
   };
 
   Game.prototype.resetActors = function () {
-    var difficulty = this.getDifficulty();
-    var releaseScale = difficulty.releaseScale || 1;
-    var release = function (seconds) {
-      return seconds * releaseScale;
-    };
     this.pacman = {
       x: 13,
       y: 23,
@@ -719,10 +714,10 @@
       radiusScale: 0.82
     };
     this.ghosts = [
-      { name: "Blinky", colorVar: "--color-blinky", x: 13, y: 13, spawn: { x: 13, y: 13 }, dir: DIRS.left, mode: "CHASE", corner: { x: 26, y: 1 }, release: release(0) },
-      { name: "Pinky", colorVar: "--color-pinky", x: 14, y: 13, spawn: { x: 14, y: 13 }, dir: DIRS.right, mode: "CHASE", corner: { x: 1, y: 1 }, release: release(1.5) },
-      { name: "Inky", colorVar: "--color-inky", x: 13, y: 14, spawn: { x: 13, y: 14 }, dir: DIRS.up, mode: "CHASE", corner: { x: 26, y: 29 }, release: release(3) },
-      { name: "Clyde", colorVar: "--color-clyde", x: 14, y: 14, spawn: { x: 14, y: 14 }, dir: DIRS.up, mode: "CHASE", corner: { x: 1, y: 29 }, release: release(4.5) }
+      { name: "Blinky", colorVar: "--color-blinky", x: 13, y: 13, spawn: { x: 13, y: 13 }, dir: DIRS.left, mode: "CHASE", corner: { x: 26, y: 1 }, release: 0 },
+      { name: "Pinky", colorVar: "--color-pinky", x: 14, y: 13, spawn: { x: 14, y: 13 }, dir: DIRS.right, mode: "CHASE", corner: { x: 1, y: 1 }, release: 1.5 },
+      { name: "Inky", colorVar: "--color-inky", x: 13, y: 14, spawn: { x: 13, y: 14 }, dir: DIRS.up, mode: "CHASE", corner: { x: 26, y: 29 }, release: 3 },
+      { name: "Clyde", colorVar: "--color-clyde", x: 14, y: 14, spawn: { x: 14, y: 14 }, dir: DIRS.up, mode: "CHASE", corner: { x: 1, y: 29 }, release: 4.5 }
     ];
   };
 
@@ -745,7 +740,7 @@
     this.scatterClock = 0;
     this.resetMaze();
     this.resetActors();
-    this.readyTimer = difficulty.readyTime;
+    this.readyTimer = 1.6;
     this.state = "PLAYING";
     this.updateAllHud();
     this.switchScreen("game");
@@ -770,7 +765,7 @@
     this.ghostEatValue = 200;
     this.scatterClock = 0;
     this.resetActors();
-    this.readyTimer = this.getDifficulty().readyTime;
+    this.readyTimer = 1.2;
     this.state = "PLAYING";
     this.saveFlashTimer = 1.4;
     this.updateAllHud();
@@ -803,7 +798,7 @@
   Game.prototype.resume = function () {
     if (this.state !== "PAUSED") return;
     this.state = "PLAYING";
-    this.readyTimer = Math.min(0.35, this.getDifficulty().readyTime);
+    this.readyTimer = 0.35;
     this.showPauseOverlay(false);
     this.dom.headerPauseBtn.hidden = false;
   };
@@ -894,6 +889,9 @@
       if (!this.canMove(entity, entity.dir, type)) {
         entity.dir = DIRS.none;
       }
+      if (entity.dir.name !== "none") {
+        entity.centerLock = this.getCenterKey(entity);
+      }
     }
     entity.x += entity.dir.x * speed * dt;
     entity.y += entity.dir.y * speed * dt;
@@ -903,8 +901,17 @@
   };
 
   Game.prototype.isAtCenter = function (entity, epsilon) {
+    if (!this.isNearCenter(entity, epsilon)) return false;
+    return entity.dir.name === "none" || entity.centerLock !== this.getCenterKey(entity);
+  };
+
+  Game.prototype.isNearCenter = function (entity, epsilon) {
     return Math.abs(entity.x - Math.round(entity.x)) < epsilon &&
       Math.abs(entity.y - Math.round(entity.y)) < epsilon;
+  };
+
+  Game.prototype.getCenterKey = function (entity) {
+    return wrapCol(Math.round(entity.x)) + "," + Math.round(entity.y);
   };
 
   Game.prototype.snapToCenter = function (entity) {
@@ -929,7 +936,7 @@
   };
 
   Game.prototype.consumeCurrentTile = function () {
-    if (!this.isAtCenter(this.pacman, 0.18)) return;
+    if (!this.isNearCenter(this.pacman, 0.18)) return;
     var col = wrapCol(Math.round(this.pacman.x));
     var row = Math.round(this.pacman.y);
     var tile = this.maze[row] && this.maze[row][col];
@@ -975,7 +982,7 @@
     this.scatterClock = 0;
     this.resetMaze();
     this.resetActors();
-    this.readyTimer = this.getDifficulty().readyTime;
+    this.readyTimer = 1.8;
     this.audio.playSFX("level-up");
     this.refreshMusicForScreen();
     this.saveGame("LEVEL");
@@ -1075,7 +1082,7 @@
       return;
     }
     this.resetActors();
-    this.readyTimer = this.getDifficulty().readyTime;
+    this.readyTimer = 1.7;
     this.saveGame("SAVED");
   };
 
