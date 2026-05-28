@@ -1,0 +1,27 @@
+.game-over-screen {
+  place-items: center;
+  text-align: center;
+}
+
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 24px 0;
+}
+
+.result-grid div {
+  display: grid;
+  gap: 8px;
+  padding: 14px 10px;
+  border: 2px solid rgba(var(--rgb-maze), 0.7);
+  border-radius: var(--radius-sm);
+  background: rgba(var(--rgb-ui-bg), 0.92);
+}
+
+.result-grid span {
+  color: rgba(var(--rgb-text), 0.65);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 700;
+}

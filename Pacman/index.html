@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="zh-Hant" data-theme="classic">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#000000">
+    <title>Pac-Man Web</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/base/reset.css">
+    <link rel="stylesheet" href="css/base/variables.css">
+    <link rel="stylesheet" href="css/base/typography.css">
+    <link rel="stylesheet" href="css/layout/grid.css">
+    <link rel="stylesheet" href="css/screens/main-menu.css">
+    <link rel="stylesheet" href="css/screens/game.css">
+    <link rel="stylesheet" href="css/screens/settings.css">
+    <link rel="stylesheet" href="css/screens/instructions.css">
+    <link rel="stylesheet" href="css/screens/game-over.css">
+    <link rel="stylesheet" href="css/components/buttons.css">
+    <link rel="stylesheet" href="css/components/modal.css">
+    <link rel="stylesheet" href="css/components/hud.css">
+    <link rel="stylesheet" href="css/components/mobile-controls.css">
+    <link rel="stylesheet" href="css/components/theme-switcher.css">
+    <link rel="stylesheet" href="css/animations/transitions.css">
+    <link rel="stylesheet" href="css/animations/effects.css">
+    <link rel="stylesheet" href="css/animations/ghost.css">
+    <link rel="stylesheet" href="css/layout/responsive.css">
+  </head>
+  <body>
+    <div id="app" class="app-container">
+      <header class="app-header" aria-label="Game status">
+        <div class="brand-lockup">
+          <span class="brand-dot" aria-hidden="true"></span>
+          <span>Pac-Man</span>
+        </div>
+        <div class="header-metrics">
+          <span>HIGH <strong id="headerHighScore">00000</strong></span>
+          <button id="headerPauseBtn" class="icon-button" type="button" title="暫停" aria-label="暫停" hidden>II</button>
+        </div>
+      </header>
+
+      <main class="screen-stack" aria-live="polite">
+        <section id="screen-menu" class="screen main-menu-screen is-active" data-screen="menu">
+          <div class="menu-stage" aria-hidden="true">
+            <div class="menu-maze-line"></div>
+            <div class="menu-runner">
+              <span class="menu-pacman"></span>
+              <span class="menu-dot"></span>
+              <span class="menu-dot"></span>
+              <span class="menu-dot"></span>
+              <span class="ghost-sprite ghost-red"></span>
+              <span class="ghost-sprite ghost-pink"></span>
+            </div>
+          </div>
+          <div class="menu-content">
+            <p class="kicker">Web Arcade</p>
+            <h1>PAC-MAN</h1>
+            <p class="menu-score">最高分 <strong id="menuHighScore">00000</strong></p>
+            <div class="button-column">
+              <button id="newGameBtn" class="arcade-button primary" type="button">開始遊戲</button>
+              <button id="continueGameBtn" class="arcade-button" type="button">繼續遊戲</button>
+              <button id="instructionsBtn" class="arcade-button" type="button">遊戲說明</button>
+              <button id="settingsBtn" class="arcade-button" type="button">設定</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="screen-instructions" class="screen instructions-screen" data-screen="instructions">
+          <div class="screen-panel wide">
+            <div class="screen-heading">
+              <p class="kicker">Guide</p>
+              <h2>遊戲說明</h2>
+            </div>
+            <div class="instructions-grid">
+              <article>
+                <h3>目標</h3>
+                <p>吃完迷宮內所有豆子，避開追逐中的鬼魂。吃下能量豆後，短時間內可以反過來吃掉鬼魂。</p>
+              </article>
+              <article>
+                <h3>操作</h3>
+                <p>鍵盤可使用方向鍵或 WASD。行動裝置可使用下方方向盤，也可以在畫布上滑動。</p>
+              </article>
+              <article>
+                <h3>得分</h3>
+                <p>一般豆子 10 分，能量豆 50 分，連續吃鬼魂為 200、400、800、1600 分。</p>
+              </article>
+              <article>
+                <h3>暫停</h3>
+                <p>遊戲中按 ESC 或 P 暫停。暫停時可存檔離開，回到主選單後再繼續。</p>
+              </article>
+            </div>
+            <button class="arcade-button back-to-menu" type="button">返回主選單</button>
+          </div>
+        </section>
+
+        <section id="screen-settings" class="screen settings-screen" data-screen="settings">
+          <div class="screen-panel wide">
+            <div class="screen-heading">
+              <p class="kicker">Options</p>
+              <h2>設定</h2>
+            </div>
+            <div class="settings-grid">
+              <label class="setting-row">
+                <span>音樂音量</span>
+                <input id="musicVolume" type="range" min="0" max="100" step="1">
+                <strong id="musicVolumeValue">70</strong>
+              </label>
+              <label class="setting-row">
+                <span>音效音量</span>
+                <input id="sfxVolume" type="range" min="0" max="100" step="1">
+                <strong id="sfxVolumeValue">90</strong>
+              </label>
+              <div class="setting-row stacked">
+                <span>主題</span>
+                <div id="themeChoices" class="theme-choices" role="listbox" aria-label="主題"></div>
+              </div>
+              <div class="setting-row stacked">
+                <span>難度</span>
+                <div id="difficultyChoices" class="segmented-control" role="group" aria-label="難度">
+                  <button type="button" data-difficulty="easy">輕鬆</button>
+                  <button type="button" data-difficulty="normal">標準</button>
+                  <button type="button" data-difficulty="hard">困難</button>
+                </div>
+              </div>
+              <label class="toggle-row">
+                <input id="bgmContinuous" type="checkbox">
+                <span>BGM 換場連續播放</span>
+              </label>
+              <label class="toggle-row">
+                <input id="vibrationToggle" type="checkbox">
+                <span>手機震動回饋</span>
+              </label>
+            </div>
+            <div class="button-row">
+              <button id="resetSettingsBtn" class="arcade-button" type="button">還原設定</button>
+              <button id="resetScoreBtn" class="arcade-button danger" type="button">清除最高分</button>
+              <button class="arcade-button back-to-menu primary" type="button">返回主選單</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="screen-game" class="screen game-screen" data-screen="game">
+          <div class="game-layout">
+            <aside class="life-rail" aria-label="Lives">
+              <span>生命</span>
+              <div id="lifeIcons" class="life-icons"></div>
+            </aside>
+
+            <div class="playfield-column">
+              <div class="hud-bar">
+                <div><span>SCORE</span><strong id="scoreValue">00000</strong></div>
+                <div><span>LEVEL</span><strong id="levelValue">1</strong></div>
+                <div><span>HIGH</span><strong id="highScoreValue">00000</strong></div>
+              </div>
+              <div class="canvas-shell">
+                <canvas id="gameCanvas" width="560" height="620" aria-label="Pac-Man game board"></canvas>
+                <div id="readyBanner" class="ready-banner" hidden>READY!</div>
+              </div>
+            </div>
+
+            <aside class="side-panel" aria-label="Game info">
+              <div>
+                <span class="panel-label">剩餘豆子</span>
+                <strong id="dotCountValue">000</strong>
+              </div>
+              <div>
+                <span class="panel-label">模式</span>
+                <strong id="modeValue">CHASE</strong>
+              </div>
+              <div>
+                <span class="panel-label">存檔</span>
+                <strong id="saveStateValue">READY</strong>
+              </div>
+            </aside>
+          </div>
+
+          <div class="mobile-controls" aria-label="方向控制">
+            <button type="button" data-dir="up" aria-label="上">▲</button>
+            <button type="button" data-dir="left" aria-label="左">◀</button>
+            <button type="button" data-dir="down" aria-label="下">▼</button>
+            <button type="button" data-dir="right" aria-label="右">▶</button>
+          </div>
+
+          <div id="pauseOverlay" class="modal-backdrop" hidden>
+            <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="pauseTitle">
+              <h2 id="pauseTitle">PAUSED</h2>
+              <div class="button-column">
+                <button id="resumeBtn" class="arcade-button primary" type="button">繼續</button>
+                <button id="saveQuitBtn" class="arcade-button" type="button">存檔並返回</button>
+                <button id="restartBtn" class="arcade-button" type="button">重新開始</button>
+                <button id="pauseSettingsBtn" class="arcade-button" type="button">設定</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="screen-game-over" class="screen game-over-screen" data-screen="game-over">
+          <div class="screen-panel compact">
+            <p class="kicker">Result</p>
+            <h2>GAME OVER</h2>
+            <div class="result-grid">
+              <div><span>分數</span><strong id="finalScoreValue">00000</strong></div>
+              <div><span>最高分</span><strong id="finalHighScoreValue">00000</strong></div>
+              <div><span>關卡</span><strong id="finalLevelValue">1</strong></div>
+            </div>
+            <div class="button-column">
+              <button id="playAgainBtn" class="arcade-button primary" type="button">再玩一次</button>
+              <button class="arcade-button back-to-menu" type="button">返回主選單</button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script defer src="js/main.js"></script>
+  </body>
+</html>

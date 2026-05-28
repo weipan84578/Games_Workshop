@@ -1,0 +1,60 @@
+.main-menu-screen {
+  place-items: center;
+  overflow: hidden;
+}
+
+.menu-content {
+  display: grid;
+  gap: 20px;
+  width: min(100%, 420px);
+  z-index: 1;
+  text-align: center;
+}
+
+.menu-score {
+  color: rgba(var(--rgb-text), 0.82);
+  font-family: var(--font-ui);
+}
+
+.menu-stage {
+  position: absolute;
+  inset-inline: 0;
+  top: 18%;
+  height: 120px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.menu-maze-line {
+  position: absolute;
+  inset-inline: 0;
+  top: 52px;
+  height: 18px;
+  border-block: 4px solid var(--color-maze);
+  opacity: 0.8;
+}
+
+.menu-runner {
+  position: absolute;
+  top: 35px;
+  left: -220px;
+  display: inline-flex;
+  align-items: center;
+  gap: 28px;
+  animation: runner 7s linear infinite;
+}
+
+.menu-pacman {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: conic-gradient(from 35deg, transparent 0 70deg, var(--color-pacman) 70deg);
+  filter: drop-shadow(0 0 10px var(--color-pacman));
+}
+
+.menu-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-dot);
+}

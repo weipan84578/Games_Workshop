@@ -1,0 +1,74 @@
+.hud-bar {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+
+.hud-bar div,
+.side-panel div,
+.life-rail {
+  border: 2px solid rgba(var(--rgb-maze), 0.75);
+  border-radius: var(--radius-sm);
+  background: rgba(var(--rgb-ui-bg), 0.92);
+}
+
+.hud-bar div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: 10px 12px;
+}
+
+.hud-bar span,
+.life-rail span {
+  color: rgba(var(--rgb-text), 0.65);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.hud-bar strong {
+  overflow: hidden;
+  font-size: clamp(16px, 2vw, 22px);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.life-rail {
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  gap: 12px;
+  min-width: 82px;
+  padding: 14px 10px;
+}
+
+.life-icons {
+  display: grid;
+  gap: 8px;
+}
+
+.life-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: conic-gradient(from 35deg, transparent 0 70deg, var(--color-pacman) 70deg);
+}
+
+.side-panel {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-width: 180px;
+}
+
+.side-panel div {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+}
+
+.side-panel strong {
+  font-size: 24px;
+}

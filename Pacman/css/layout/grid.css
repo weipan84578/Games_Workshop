@@ -1,0 +1,90 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 64px;
+  padding: 14px clamp(16px, 4vw, 40px);
+  border-bottom: 2px solid rgba(var(--rgb-maze), 0.65);
+  background: rgba(var(--rgb-ui-bg), 0.9);
+}
+
+.brand-lockup,
+.header-metrics {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-ui);
+  font-weight: 900;
+}
+
+.brand-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-pacman);
+  box-shadow: 0 0 12px var(--color-pacman);
+}
+
+.screen-stack {
+  position: relative;
+  display: grid;
+  flex: 1;
+}
+
+.screen {
+  display: none;
+  width: 100%;
+  min-height: calc(100vh - 64px);
+  padding: clamp(16px, 3vw, 32px);
+}
+
+.screen.is-active {
+  display: grid;
+}
+
+.screen-panel {
+  width: min(100%, 940px);
+  margin: auto;
+  border: 2px solid rgba(var(--rgb-maze), 0.8);
+  border-radius: var(--radius-md);
+  background: rgba(var(--rgb-panel), 0.96);
+  box-shadow: var(--shadow-arcade);
+}
+
+.screen-panel.wide {
+  padding: clamp(18px, 4vw, 36px);
+}
+
+.screen-panel.compact {
+  width: min(100%, 560px);
+  padding: clamp(20px, 5vw, 40px);
+}
+
+.screen-heading {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.button-column,
+.button-row {
+  display: flex;
+  gap: 12px;
+}
+
+.button-column {
+  flex-direction: column;
+}
+
+.button-row {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  margin-top: 28px;
+}

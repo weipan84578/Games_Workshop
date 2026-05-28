@@ -1,0 +1,86 @@
+@media (max-width: 1023px) {
+  .game-layout {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .life-rail,
+  .side-panel {
+    display: none;
+  }
+
+  .mobile-controls {
+    display: grid;
+  }
+}
+
+@media (max-width: 767px) {
+  .app-header {
+    min-height: 56px;
+    padding: 10px 14px;
+  }
+
+  .brand-lockup {
+    font-size: 16px;
+  }
+
+  .header-metrics {
+    gap: 8px;
+    font-size: 14px;
+  }
+
+  .screen {
+    min-height: calc(100vh - 56px);
+    padding: 12px;
+  }
+
+  .hud-bar {
+    grid-template-columns: 1fr 0.65fr 1fr;
+  }
+
+  .hud-bar div {
+    padding: 8px;
+  }
+
+  .hud-bar span {
+    font-size: 10px;
+  }
+
+  .instructions-grid,
+  .result-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .setting-row,
+  .setting-row.stacked {
+    grid-template-columns: 1fr;
+  }
+
+  .theme-choices {
+    grid-template-columns: repeat(3, minmax(42px, 1fr));
+  }
+
+  .button-row {
+    justify-content: stretch;
+  }
+}
+
+@media (max-width: 479px) {
+  h1 {
+    font-size: 38px;
+  }
+
+  h2 {
+    font-size: 24px;
+  }
+
+  .screen-panel.wide,
+  .screen-panel.compact,
+  .modal-panel {
+    padding: 16px;
+  }
+
+  .menu-content {
+    width: 100%;
+  }
+}
