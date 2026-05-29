@@ -66,12 +66,22 @@
     },
 
     getSettings: function () {
-      return this.get("settings", {
+      var defaults = {
         theme: "classic",
-        bgmVolume: 0.8,
+        difficulty: "normal",
+        bgmVolume: 0.45,
         sfxVolume: 0.9,
         muted: false
-      });
+      };
+      var settings = this.get("settings", {});
+
+      return {
+        theme: settings.theme || defaults.theme,
+        difficulty: settings.difficulty || defaults.difficulty,
+        bgmVolume: typeof settings.bgmVolume === "number" ? settings.bgmVolume : defaults.bgmVolume,
+        sfxVolume: typeof settings.sfxVolume === "number" ? settings.sfxVolume : defaults.sfxVolume,
+        muted: typeof settings.muted === "boolean" ? settings.muted : defaults.muted
+      };
     },
 
     saveSettings: function (settings) {

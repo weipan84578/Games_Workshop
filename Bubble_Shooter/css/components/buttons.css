@@ -1,6 +1,7 @@
 .button,
 .icon-button,
-.theme-option {
+.theme-option,
+.difficulty-option {
   min-height: 48px;
   border-radius: var(--radius-sm);
   transition: transform 140ms ease, box-shadow 140ms ease, background-color 140ms ease, color 140ms ease;
@@ -22,19 +23,22 @@
 
 .button:hover,
 .icon-button:hover,
-.theme-option:hover {
+.theme-option:hover,
+.difficulty-option:hover {
   transform: translateY(-1px);
 }
 
 .button:active,
 .icon-button:active,
-.theme-option:active {
+.theme-option:active,
+.difficulty-option:active {
   transform: translateY(1px);
 }
 
 .button:focus-visible,
 .icon-button:focus-visible,
 .theme-option:focus-visible,
+.difficulty-option:focus-visible,
 input:focus-visible {
   outline: 3px solid color-mix(in srgb, var(--color-primary), #fff 24%);
   outline-offset: 3px;
@@ -77,7 +81,8 @@ input:focus-visible {
   font-weight: 900;
 }
 
-.theme-option {
+.theme-option,
+.difficulty-option {
   display: grid;
   gap: 7px;
   min-width: 0;
@@ -88,9 +93,21 @@ input:focus-visible {
   text-align: left;
 }
 
-.theme-option.is-selected {
+.theme-option.is-selected,
+.difficulty-option.is-selected {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 26%, transparent);
+}
+
+.difficulty-option strong,
+.difficulty-option small {
+  display: block;
+}
+
+.difficulty-option small {
+  color: var(--color-muted);
+  font-size: 13px;
+  font-weight: 800;
 }
 
 .theme-swatch {

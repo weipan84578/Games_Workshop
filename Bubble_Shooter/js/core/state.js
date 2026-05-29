@@ -8,6 +8,9 @@
 
   BS.Core.createGameState = function (saved) {
     var config = BS.Core.Config.game;
+    var settings = BS.Storage.getSettings();
+    var difficultyName = saved && saved.difficulty ? saved.difficulty : settings.difficulty;
+    var difficulty = BS.Core.getDifficulty(difficultyName);
     var grid = new BS.Game.Grid(config);
     var shooter = new BS.Game.Shooter(config);
 
@@ -41,6 +44,8 @@
       combo: saved && saved.combo ? saved.combo : 0,
       misses: saved && saved.misses ? saved.misses : 0,
       shots: saved && saved.shots ? saved.shots : 0,
+      difficulty: difficulty.name,
+      pressureTimer: saved && typeof saved.pressureTimer === "number" ? saved.pressureTimer : 0,
       grid: grid,
       shooter: shooter,
       activeBubble: activeBubble,
@@ -58,6 +63,8 @@
       combo: state.combo,
       misses: state.misses,
       shots: state.shots,
+      difficulty: state.difficulty,
+      pressureTimer: state.pressureTimer,
       grid: state.grid.serialize(),
       shooter: state.shooter.serialize(),
       activeBubble: state.activeBubble ? {

@@ -7,6 +7,7 @@
   var bgmVolume = 0.8;
   var sfxVolume = 0.9;
   var muted = false;
+  var bgmMaster = 0.55;
 
   var audioContext = null;
   var fallbackBgm = null;
@@ -28,11 +29,23 @@
     return audioContext;
   }
 
+  function getEffectiveBgmVolume(multiplier) {
+    if (muted) {
+      return 0;
+    }
+    return bgmVolume * bgmMaster * (multiplier === undefined ? 1 : multiplier);
+  }
+
   function stopFallbackBgm() {
     if (fallbackBgm) {
-      for (var i = 0; i < fallbackBgm.length; i += 1) {
+      if (fallbackBgm.timeoutId) {
+        window.clearTimeout(fallbackBgm.timeoutId);
+      }
+      fallbackBgm.stopped = true;
+
+      for (var i = 0; i < fallbackBgm.nodes.length; i += 1) {
         try {
-          fallbackBgm[i].stop();
+          fallbackBgm.nodes[i].stop();
         } catch (error) {
           noop();
         }
@@ -42,6 +55,29 @@
     fallbackGain = null;
   }
 
+  function playSoftTone(ctx, frequency, start, duration, gainScale) {
+    if (!fallbackBgm || !fallbackGain) {
+      return;
+    }
+
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    var peak = 0.026 * gainScale;
+
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(frequency, start);
+    gain.gain.setValueAtTime(0.0001, start);
+    gain.gain.linearRampToValueAtTime(peak, start + 0.22);
+    gain.gain.linearRampToValueAtTime(peak * 0.72, start + duration * 0.45);
+    gain.gain.linearRampToValueAtTime(0.0001, start + duration);
+
+    osc.connect(gain);
+    gain.connect(fallbackGain);
+    osc.start(start);
+    osc.stop(start + duration + 0.08);
+    fallbackBgm.nodes.push(osc);
+  }
+
   function playFallbackBgm(track) {
     var ctx = ensureAudioContext();
     if (!ctx || muted || !track) {
@@ -49,27 +85,63 @@
     }
 
     stopFallbackBgm();
-    var maps = {
-      menu: [196, 246.94],
-      game: [164.81, 220],
-      victory: [261.63, 329.63]
+    var sequences = {
+      menu: [
+        [261.63, 329.63, 392.00],
+        [293.66, 349.23, 440.00],
+        [246.94, 329.63, 392.00],
+        [220.00, 293.66, 369.99]
+      ],
+      game: [
+        [220.00, 277.18, 329.63],
+        [246.94, 293.66, 369.99],
+        [196.00, 261.63, 329.63],
+        [174.61, 246.94, 293.66]
+      ],
+      victory: [
+        [261.63, 329.63, 392.00],
+        [329.63, 392.00, 493.88],
+        [293.66, 369.99, 440.00],
+        [349.23, 440.00, 523.25]
+      ]
     };
-    var tones = maps[track] || maps.menu;
+    var sequence = sequences[track] || sequences.menu;
     var gain = ctx.createGain();
-    gain.gain.value = bgmVolume * 0.035;
+    gain.gain.value = getEffectiveBgmVolume();
     gain.connect(ctx.destination);
 
-    fallbackBgm = [];
+    fallbackBgm = {
+      nodes: [],
+      step: 0,
+      timeoutId: 0,
+      stopped: false
+    };
     fallbackGain = gain;
 
-    for (var i = 0; i < tones.length; i += 1) {
-      var osc = ctx.createOscillator();
-      osc.type = i === 0 ? "triangle" : "sine";
-      osc.frequency.value = tones[i];
-      osc.connect(gain);
-      osc.start();
-      fallbackBgm.push(osc);
+    function scheduleNext() {
+      if (!fallbackBgm || fallbackBgm.stopped) {
+        return;
+      }
+
+      if (ctx.state !== "running") {
+        fallbackBgm.timeoutId = window.setTimeout(scheduleNext, 500);
+        return;
+      }
+
+      var chord = sequence[fallbackBgm.step % sequence.length];
+      var start = ctx.currentTime + 0.04;
+      var duration = track === "victory" ? 1.35 : 1.65;
+      var wait = track === "victory" ? 1300 : 1750;
+
+      for (var i = 0; i < chord.length; i += 1) {
+        playSoftTone(ctx, chord[i], start + i * 0.035, duration, 1 / chord.length);
+      }
+
+      fallbackBgm.step += 1;
+      fallbackBgm.timeoutId = window.setTimeout(scheduleNext, wait);
     }
+
+    scheduleNext();
   }
 
   function playFallbackSfx(name) {
@@ -111,12 +183,11 @@
   }
 
   function applyBgmVolume() {
-    var volume = muted ? 0 : bgmVolume;
     if (bgmEl) {
-      bgmEl.volume = volume;
+      bgmEl.volume = getEffectiveBgmVolume();
     }
     if (fallbackGain) {
-      fallbackGain.gain.value = volume * 0.035;
+      fallbackGain.gain.value = getEffectiveBgmVolume();
     }
   }
 
@@ -140,6 +211,9 @@
 
     var unlock = function () {
       ensureAudioContext();
+      if (currentTrack && (!bgmEl || bgmEl.paused || bgmEl.error)) {
+        playFallbackBgm(currentTrack);
+      }
       document.removeEventListener("pointerdown", unlock);
       document.removeEventListener("keydown", unlock);
     };
@@ -175,6 +249,11 @@
     var next = makeAudio(config.bgm[track], true);
     next.volume = 0;
     bgmEl = next;
+    next.addEventListener("error", function () {
+      if (currentTrack === track) {
+        playFallbackBgm(track);
+      }
+    }, { once: true });
 
     var playPromise = next.play();
     if (playPromise && playPromise.catch) {
@@ -187,10 +266,10 @@
     bgmFadeId = window.setInterval(function () {
       step += 1;
       var ratio = Math.min(1, step / 18);
-      next.volume = muted ? 0 : bgmVolume * ratio;
+      next.volume = getEffectiveBgmVolume(ratio);
 
       if (previous) {
-        previous.volume = muted ? 0 : bgmVolume * (1 - ratio);
+        previous.volume = getEffectiveBgmVolume(1 - ratio);
       }
 
       if (ratio >= 1) {
@@ -238,18 +317,18 @@
     applyBgmVolume();
     if (muted) {
       stopFallbackBgm();
-    } else if (currentTrack && (!bgmEl || bgmEl.paused)) {
+    } else if (currentTrack && (!bgmEl || bgmEl.paused || bgmEl.error)) {
       playFallbackBgm(currentTrack);
     }
   };
 
   BS.Audio.duck = function (flag) {
-    var target = muted ? 0 : bgmVolume * (flag ? 0.5 : 1);
+    var target = getEffectiveBgmVolume(flag ? 0.5 : 1);
     if (bgmEl) {
       bgmEl.volume = target;
     }
     if (fallbackGain) {
-      fallbackGain.gain.value = target * 0.035;
+      fallbackGain.gain.value = target;
     }
   };
 })(window.BubbleShooter);

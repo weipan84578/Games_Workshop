@@ -224,6 +224,8 @@
         } else if (hit) {
           this.resolveShot(hit);
         }
+      } else {
+        this.updatePressure(dt);
       }
     },
 
@@ -250,6 +252,7 @@
       if (match.matched) {
         this.state.combo += 1;
         this.state.misses = 0;
+        this.state.pressureTimer = 0;
         this.state.score += match.popped.length * config.pointsPerPop;
         this.state.score += match.dropped.length * config.pointsPerDrop;
         if (this.state.combo > 1) {
@@ -261,12 +264,14 @@
           BS.Audio.playSFX("drop");
         }
       } else {
+        var difficulty = BS.Core.getDifficulty(this.state.difficulty);
         this.state.combo = 0;
         this.state.misses += 1;
-        if (this.state.misses >= config.addRowEveryMisses) {
+        if (this.state.misses >= difficulty.addRowEveryMisses) {
           this.state.misses = 0;
-          this.state.grid.addPressureRow(config.colorCount);
-          BS.Audio.playSFX("drop");
+          if (this.pushDownRows()) {
+            return;
+          }
         }
       }
 
@@ -286,6 +291,37 @@
 
       BS.UI.HUD.update(this.state);
       this.saveCurrentGame();
+    },
+
+    updatePressure: function (dt) {
+      var difficulty = BS.Core.getDifficulty(this.state.difficulty);
+
+      if (!difficulty.pressureInterval) {
+        return;
+      }
+
+      this.state.pressureTimer += dt;
+      if (this.state.pressureTimer >= difficulty.pressureInterval) {
+        this.pushDownRows();
+      }
+    },
+
+    pushDownRows: function () {
+      var config = BS.Core.Config.game;
+
+      this.state.pressureTimer = 0;
+      this.state.grid.addPressureRow(config.colorCount);
+      this.state.shooter.refreshPalette(this.state.grid.getActiveColors());
+      BS.Audio.playSFX("drop");
+
+      if (this.state.grid.hasReachedDanger()) {
+        this.endGame("lose");
+        return true;
+      }
+
+      BS.UI.HUD.update(this.state);
+      this.saveCurrentGame();
+      return false;
     },
 
     endGame: function (result) {

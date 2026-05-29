@@ -11,6 +11,7 @@
     init: function () {
       this.settings = BS.Storage.getSettings();
       this.themeOptions = document.getElementById("theme-options");
+      this.difficultyOptions = document.getElementById("difficulty-options");
       this.sliderBgm = document.getElementById("slider-bgm");
       this.sliderSfx = document.getElementById("slider-sfx");
       this.valueBgm = document.getElementById("value-bgm");
@@ -20,6 +21,7 @@
       this.btnReset = document.getElementById("btn-reset-save");
 
       this.renderThemes();
+      this.renderDifficulties();
       this.syncControls();
       this.bind();
       save(this.settings);
@@ -92,6 +94,41 @@
           button.classList.add("is-selected");
         }
         self.themeOptions.appendChild(button);
+      });
+    },
+
+    renderDifficulties: function () {
+      var self = this;
+      this.difficultyOptions.innerHTML = "";
+
+      BS.Core.Config.difficulties.forEach(function (difficulty) {
+        var button = document.createElement("button");
+        var label = document.createElement("strong");
+        var detail = document.createElement("small");
+
+        button.type = "button";
+        button.className = "difficulty-option";
+        button.setAttribute("role", "radio");
+        button.setAttribute("aria-checked", difficulty.name === self.settings.difficulty ? "true" : "false");
+        button.dataset.difficulty = difficulty.name;
+
+        label.textContent = difficulty.label;
+        detail.textContent = difficulty.description;
+        button.appendChild(label);
+        button.appendChild(detail);
+
+        button.addEventListener("click", function () {
+          BS.Audio.playSFX("click");
+          self.settings.difficulty = difficulty.name;
+          save(self.settings);
+          self.renderDifficulties();
+        });
+
+        if (difficulty.name === self.settings.difficulty) {
+          button.classList.add("is-selected");
+        }
+
+        self.difficultyOptions.appendChild(button);
       });
     },
 
