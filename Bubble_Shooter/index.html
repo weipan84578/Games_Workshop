@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="zh-Hant" data-theme="classic">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#15213a">
+  <title>Bubble Shooter 泡泡龍</title>
+
+  <link rel="stylesheet" href="css/base/reset.css">
+  <link rel="stylesheet" href="css/base/variables.css">
+  <link rel="stylesheet" href="css/base/typography.css">
+  <link rel="stylesheet" href="css/layout/responsive.css">
+  <link rel="stylesheet" href="css/layout/screens.css">
+  <link rel="stylesheet" href="css/components/buttons.css">
+  <link rel="stylesheet" href="css/components/modal.css">
+  <link rel="stylesheet" href="css/components/slider.css">
+  <link rel="stylesheet" href="css/components/hud.css">
+  <link rel="stylesheet" href="css/themes/theme-classic.css">
+  <link rel="stylesheet" href="css/themes/theme-ocean.css">
+  <link rel="stylesheet" href="css/themes/theme-candy.css">
+  <link rel="stylesheet" href="css/themes/theme-neon.css">
+  <link rel="stylesheet" href="css/themes/theme-dark.css">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <section id="screen-menu" class="screen screen-menu is-active" aria-labelledby="menu-title">
+      <div class="menu-panel">
+        <p class="eyebrow">HTML5 Canvas</p>
+        <h1 id="menu-title">Bubble Shooter 泡泡龍</h1>
+        <div class="score-strip" aria-live="polite">
+          <span>最高分</span>
+          <strong id="menu-high-score">0</strong>
+        </div>
+        <div class="menu-actions">
+          <button id="btn-new-game" class="button button-primary" type="button">
+            <span class="button-icon" aria-hidden="true">▶</span>
+            <span>新遊戲</span>
+          </button>
+          <button id="btn-continue" class="button" type="button" disabled>
+            <span class="button-icon" aria-hidden="true">↻</span>
+            <span>繼續遊戲</span>
+          </button>
+          <button id="btn-instructions" class="button" type="button">
+            <span class="button-icon" aria-hidden="true">?</span>
+            <span>玩法說明</span>
+          </button>
+          <button id="btn-settings" class="button" type="button">
+            <span class="button-icon" aria-hidden="true">⚙</span>
+            <span>設定</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-game" class="screen screen-game" aria-label="遊戲畫面">
+      <header class="hud">
+        <div class="hud-stat">
+          <span>分數</span>
+          <strong id="hud-score">0</strong>
+        </div>
+        <div class="hud-stat">
+          <span>最高</span>
+          <strong id="hud-high-score">0</strong>
+        </div>
+        <div class="hud-next" aria-label="下一顆泡泡">
+          <span>下一顆</span>
+          <i id="hud-next-bubble" class="next-bubble-dot" aria-hidden="true"></i>
+        </div>
+        <button id="btn-pause" class="icon-button" type="button" aria-label="暫停">
+          <span aria-hidden="true">Ⅱ</span>
+        </button>
+      </header>
+      <main class="game-stage">
+        <canvas id="game-canvas" width="720" height="960" aria-label="泡泡龍遊戲區"></canvas>
+      </main>
+    </section>
+
+    <section id="screen-instructions" class="screen screen-page" aria-labelledby="instructions-title">
+      <div class="page-panel">
+        <div class="page-topbar">
+          <button id="btn-instructions-back" class="icon-button" type="button" aria-label="返回主選單">
+            <span aria-hidden="true">←</span>
+          </button>
+          <h2 id="instructions-title">玩法說明</h2>
+        </div>
+        <div class="text-block">
+          <p>拖曳或移動指標瞄準，點擊或放開即可發射泡泡。泡泡會在左右牆反彈，撞到上方或其他泡泡後會吸附到六角格線。</p>
+          <p>同色泡泡連成三顆以上會消除。消除後沒有連到頂端的泡泡會掉落並加分。連續消除會提高連段獎勵。</p>
+          <p>清空場上泡泡即可獲勝。泡泡推進到警戒線以下時遊戲結束。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-settings" class="screen screen-page" aria-labelledby="settings-title">
+      <div class="page-panel">
+        <div class="page-topbar">
+          <button id="btn-settings-back" class="icon-button" type="button" aria-label="返回主選單">
+            <span aria-hidden="true">←</span>
+          </button>
+          <h2 id="settings-title">設定</h2>
+        </div>
+
+        <fieldset class="setting-group">
+          <legend>主題</legend>
+          <div id="theme-options" class="theme-options" role="radiogroup" aria-label="主題"></div>
+        </fieldset>
+
+        <div class="setting-group">
+          <label class="slider-row" for="slider-bgm">
+            <span>背景音量</span>
+            <input id="slider-bgm" type="range" min="0" max="100" step="1">
+            <output id="value-bgm" for="slider-bgm">80%</output>
+          </label>
+          <label class="slider-row" for="slider-sfx">
+            <span>音效音量</span>
+            <input id="slider-sfx" type="range" min="0" max="100" step="1">
+            <output id="value-sfx" for="slider-sfx">90%</output>
+          </label>
+          <label class="toggle-row" for="toggle-muted">
+            <input id="toggle-muted" type="checkbox">
+            <span>靜音</span>
+          </label>
+        </div>
+
+        <button id="btn-reset-save" class="button button-danger" type="button">
+          <span class="button-icon" aria-hidden="true">×</span>
+          <span>清除存檔</span>
+        </button>
+      </div>
+    </section>
+
+    <div id="modal-pause" class="modal" aria-hidden="true">
+      <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="pause-title">
+        <h2 id="pause-title">暫停</h2>
+        <div class="modal-actions">
+          <button id="btn-resume" class="button button-primary" type="button">繼續</button>
+          <button id="btn-pause-restart" class="button" type="button">重新開始</button>
+          <button id="btn-pause-menu" class="button" type="button">主選單</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-result" class="modal" aria-hidden="true">
+      <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="result-title">
+        <p id="result-kicker" class="eyebrow">Result</p>
+        <h2 id="result-title">遊戲結束</h2>
+        <div class="result-score">
+          <span>本局分數</span>
+          <strong id="result-score">0</strong>
+        </div>
+        <div class="modal-actions">
+          <button id="btn-result-restart" class="button button-primary" type="button">再玩一次</button>
+          <button id="btn-result-menu" class="button" type="button">主選單</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/utils/namespace.js"></script>
+  <script src="js/utils/helpers.js"></script>
+  <script src="js/utils/storage.js"></script>
+  <script src="js/core/config.js"></script>
+  <script src="js/core/state.js"></script>
+  <script src="js/core/loop.js"></script>
+  <script src="js/game/bubble.js"></script>
+  <script src="js/game/grid.js"></script>
+  <script src="js/game/collision.js"></script>
+  <script src="js/game/match.js"></script>
+  <script src="js/game/shooter.js"></script>
+  <script src="js/game/renderer.js"></script>
+  <script src="js/audio/audioManager.js"></script>
+  <script src="js/ui/screens.js"></script>
+  <script src="js/ui/menu.js"></script>
+  <script src="js/ui/settings.js"></script>
+  <script src="js/ui/instructions.js"></script>
+  <script src="js/ui/hud.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

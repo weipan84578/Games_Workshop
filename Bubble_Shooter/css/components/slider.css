@@ -1,0 +1,44 @@
+.slider-row,
+.toggle-row {
+  display: grid;
+  gap: 8px;
+  align-items: center;
+}
+
+.slider-row {
+  grid-template-columns: 1fr;
+}
+
+.slider-row span,
+.toggle-row span {
+  color: var(--color-text-strong);
+  font-weight: 800;
+}
+
+.slider-row output {
+  color: var(--color-muted);
+  font-weight: 800;
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--color-primary);
+}
+
+.toggle-row {
+  display: flex;
+  min-height: 48px;
+  gap: 12px;
+}
+
+.toggle-row input {
+  width: 24px;
+  height: 24px;
+  accent-color: var(--color-primary);
+}
+
+@media (min-width: 560px) {
+  .slider-row {
+    grid-template-columns: 120px 1fr 58px;
+  }
+}

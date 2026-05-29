@@ -1,0 +1,38 @@
+body {
+  color: var(--color-text);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1 {
+  color: var(--color-text-strong);
+  font-size: var(--font-size-title);
+  line-height: 1.08;
+}
+
+h2 {
+  color: var(--color-text-strong);
+  font-size: 30px;
+  line-height: 1.15;
+}
+
+.eyebrow {
+  color: var(--color-secondary);
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.text-block {
+  display: grid;
+  gap: 16px;
+  color: var(--color-text);
+}

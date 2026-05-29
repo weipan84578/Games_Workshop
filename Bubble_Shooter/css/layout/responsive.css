@@ -1,0 +1,93 @@
+.app-shell {
+  min-height: 100svh;
+}
+
+.menu-panel,
+.page-panel {
+  width: min(100%, 560px);
+}
+
+.screen-game {
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.game-stage {
+  min-height: 0;
+  padding: 8px 12px 14px;
+}
+
+#game-canvas {
+  width: 100%;
+  height: min(76svh, 760px);
+  min-height: 440px;
+  border-radius: var(--radius-md);
+  touch-action: none;
+}
+
+@media (min-width: 600px) {
+  :root {
+    --font-size-title: 52px;
+  }
+
+  .screen {
+    padding: 28px;
+  }
+
+  .menu-panel,
+  .page-panel {
+    width: min(88vw, 640px);
+  }
+
+  #game-canvas {
+    height: min(78svh, 840px);
+  }
+}
+
+@media (min-width: 1025px) {
+  .screen-menu {
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: max(42px, 9vw);
+  }
+
+  .menu-panel {
+    width: 520px;
+  }
+
+  .screen-game {
+    padding: 20px max(20px, 8vw) 24px;
+  }
+
+  .game-stage {
+    display: grid;
+    place-items: center;
+  }
+
+  #game-canvas {
+    width: min(78vw, 760px);
+    height: min(82svh, 900px);
+  }
+}
+
+@media (max-width: 420px) {
+  :root {
+    --font-size-base: 16px;
+    --font-size-button: 18px;
+    --font-size-title: 34px;
+    --font-size-hud: 22px;
+  }
+
+  .screen {
+    padding: 16px;
+  }
+
+  .hud {
+    gap: 8px;
+    padding: 8px;
+  }
+
+  #game-canvas {
+    min-height: 400px;
+    height: 72svh;
+  }
+}

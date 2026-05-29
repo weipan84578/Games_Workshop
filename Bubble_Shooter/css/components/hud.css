@@ -1,0 +1,60 @@
+.hud {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto 48px;
+  gap: 10px;
+  align-items: center;
+  width: min(100%, 760px);
+  margin: 0 auto;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-surface) 94%, transparent);
+  box-shadow: var(--shadow-soft);
+}
+
+.hud-stat,
+.hud-next {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.hud-stat span,
+.hud-next span {
+  color: var(--color-muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.hud-stat strong {
+  overflow: hidden;
+  color: var(--color-text-strong);
+  font-size: var(--font-size-hud);
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hud-next {
+  align-items: center;
+  justify-items: center;
+}
+
+.next-bubble-dot {
+  display: block;
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  background: var(--bubble-1);
+  box-shadow: inset -6px -7px 0 rgba(0, 0, 0, 0.14), inset 6px 6px 0 rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 380px) {
+  .hud {
+    grid-template-columns: 1fr auto 48px;
+  }
+
+  .hud-stat:nth-child(2) {
+    display: none;
+  }
+}

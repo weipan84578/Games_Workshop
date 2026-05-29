@@ -1,0 +1,99 @@
+body {
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.24), transparent 24%),
+    linear-gradient(150deg, var(--color-bg), color-mix(in srgb, var(--color-bg) 78%, #000 22%));
+}
+
+.screen {
+  position: fixed;
+  inset: 0;
+  display: none;
+  min-height: 100svh;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.screen.is-active {
+  display: grid;
+}
+
+.screen-menu,
+.screen-page {
+  place-items: center;
+}
+
+.screen-menu {
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.15), transparent 58%),
+    radial-gradient(circle at 74% 28%, color-mix(in srgb, var(--bubble-4) 36%, transparent), transparent 26%),
+    radial-gradient(circle at 82% 70%, color-mix(in srgb, var(--bubble-1) 32%, transparent), transparent 23%);
+}
+
+.menu-panel,
+.page-panel {
+  display: grid;
+  gap: 24px;
+  padding: clamp(24px, 5vw, 42px);
+  border: 1px solid color-mix(in srgb, var(--color-line), transparent 12%);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-surface) 95%, transparent);
+  box-shadow: var(--shadow-strong);
+}
+
+.screen-page {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.13), transparent 42%),
+    var(--color-bg);
+}
+
+.page-topbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.score-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 52px;
+  padding: 10px 14px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+}
+
+.score-strip strong {
+  color: var(--color-primary);
+  font-size: 28px;
+}
+
+.menu-actions,
+.modal-actions {
+  display: grid;
+  gap: 12px;
+}
+
+.setting-group {
+  display: grid;
+  gap: 14px;
+}
+
+.setting-group legend {
+  margin-bottom: 12px;
+  color: var(--color-text-strong);
+  font-weight: 800;
+}
+
+.theme-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+@media (min-width: 600px) {
+  .theme-options {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}

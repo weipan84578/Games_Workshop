@@ -1,0 +1,22 @@
+:root[data-theme="neon"] {
+  --color-bg: #080b24;
+  --color-surface: #10162c;
+  --color-surface-2: #171f3a;
+  --color-primary: #20e3b2;
+  --color-primary-contrast: #071019;
+  --color-secondary: #ffcf33;
+  --color-danger: #ff4976;
+  --color-text: #ecf5ff;
+  --color-text-strong: #ffffff;
+  --color-muted: #a9b5d3;
+  --color-line: rgba(236, 245, 255, 0.18);
+  --color-canvas-bg: #0b1027;
+  --color-canvas-grid: rgba(32, 227, 178, 0.16);
+  --color-warning: #ff4f7c;
+  --bubble-1: #ff4976;
+  --bubble-2: #20e3b2;
+  --bubble-3: #ffcf33;
+  --bubble-4: #38a2ff;
+  --bubble-5: #b455ff;
+  --bubble-6: #ff8a2a;
+}

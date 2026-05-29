@@ -1,0 +1,21 @@
+:root[data-theme="classic"] {
+  --color-bg: #14223f;
+  --color-surface: #fff7e6;
+  --color-surface-2: #ffffff;
+  --color-primary: #e44762;
+  --color-secondary: #207d6d;
+  --color-danger: #c73545;
+  --color-text: #1c2336;
+  --color-text-strong: #0d1526;
+  --color-muted: #63708b;
+  --color-line: rgba(28, 35, 54, 0.18);
+  --color-canvas-bg: #e9f6ee;
+  --color-canvas-grid: rgba(16, 39, 64, 0.13);
+  --color-warning: #e3444f;
+  --bubble-1: #e84d64;
+  --bubble-2: #29a98d;
+  --bubble-3: #f6c94c;
+  --bubble-4: #4388f0;
+  --bubble-5: #9a61de;
+  --bubble-6: #f0833a;
+}

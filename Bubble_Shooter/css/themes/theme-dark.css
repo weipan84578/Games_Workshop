@@ -1,0 +1,22 @@
+:root[data-theme="dark"] {
+  --color-bg: #111417;
+  --color-surface: #22272d;
+  --color-surface-2: #2c333b;
+  --color-primary: #7fc97f;
+  --color-primary-contrast: #061107;
+  --color-secondary: #f0b35a;
+  --color-danger: #e45f62;
+  --color-text: #eef2f0;
+  --color-text-strong: #ffffff;
+  --color-muted: #adb7b5;
+  --color-line: rgba(238, 242, 240, 0.16);
+  --color-canvas-bg: #181e22;
+  --color-canvas-grid: rgba(238, 242, 240, 0.11);
+  --color-warning: #f06b6d;
+  --bubble-1: #e85b65;
+  --bubble-2: #55c9a8;
+  --bubble-3: #eec65f;
+  --bubble-4: #5a9de6;
+  --bubble-5: #a47de4;
+  --bubble-6: #e88948;
+}

@@ -1,0 +1,35 @@
+:root {
+  --font-family-base: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", "Heiti TC", sans-serif;
+  --font-size-base: 18px;
+  --font-size-button: 22px;
+  --font-size-title: 40px;
+  --font-size-hud: 28px;
+  --line-height-base: 1.55;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --shadow-strong: 0 18px 50px rgba(0, 0, 0, 0.32);
+  --shadow-soft: 0 10px 24px rgba(0, 0, 0, 0.18);
+
+  --color-bg: #15213a;
+  --color-surface: #f7f3e8;
+  --color-surface-2: #fffaf0;
+  --color-primary: #e44d6a;
+  --color-primary-contrast: #ffffff;
+  --color-secondary: #1f8f7a;
+  --color-danger: #c73842;
+  --color-text: #172033;
+  --color-text-strong: #0c1324;
+  --color-muted: #657089;
+  --color-line: rgba(23, 32, 51, 0.18);
+  --color-canvas-bg: #eaf6f4;
+  --color-canvas-grid: rgba(20, 44, 62, 0.12);
+  --color-warning: #dc3545;
+
+  --bubble-1: #e94f64;
+  --bubble-2: #34b6a5;
+  --bubble-3: #ffd166;
+  --bubble-4: #4d8df7;
+  --bubble-5: #9b5de5;
+  --bubble-6: #f78c36;
+}

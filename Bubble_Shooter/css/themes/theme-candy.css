@@ -1,0 +1,21 @@
+:root[data-theme="candy"] {
+  --color-bg: #65304d;
+  --color-surface: #fff3f8;
+  --color-surface-2: #ffffff;
+  --color-primary: #d8488e;
+  --color-secondary: #2a9872;
+  --color-danger: #b9304b;
+  --color-text: #342133;
+  --color-text-strong: #241121;
+  --color-muted: #7d6278;
+  --color-line: rgba(52, 33, 51, 0.17);
+  --color-canvas-bg: #fff2df;
+  --color-canvas-grid: rgba(150, 68, 103, 0.13);
+  --color-warning: #c93256;
+  --bubble-1: #ff5fa1;
+  --bubble-2: #55d6a7;
+  --bubble-3: #ffd95a;
+  --bubble-4: #6ba7ff;
+  --bubble-5: #b36af2;
+  --bubble-6: #ff8a65;
+}
