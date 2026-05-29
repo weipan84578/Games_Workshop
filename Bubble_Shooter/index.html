@@ -26,28 +26,28 @@
   <div id="app" class="app-shell">
     <section id="screen-menu" class="screen screen-menu is-active" aria-labelledby="menu-title">
       <div class="menu-panel">
-        <p class="eyebrow">HTML5 Canvas</p>
-        <h1 id="menu-title">Bubble Shooter 泡泡龍</h1>
+        <p class="eyebrow" data-i18n="app.eyebrow">HTML5 Canvas</p>
+        <h1 id="menu-title" data-i18n="app.title">Bubble Shooter 泡泡龍</h1>
         <div class="score-strip" aria-live="polite">
-          <span>最高分</span>
+          <span data-i18n="menu.highScore">最高分</span>
           <strong id="menu-high-score">0</strong>
         </div>
         <div class="menu-actions">
           <button id="btn-new-game" class="button button-primary" type="button">
             <span class="button-icon" aria-hidden="true">▶</span>
-            <span>新遊戲</span>
+            <span data-i18n="menu.newGame">新遊戲</span>
           </button>
           <button id="btn-continue" class="button" type="button" disabled>
             <span class="button-icon" aria-hidden="true">↻</span>
-            <span>繼續遊戲</span>
+            <span data-i18n="menu.continue">繼續遊戲</span>
           </button>
           <button id="btn-instructions" class="button" type="button">
             <span class="button-icon" aria-hidden="true">?</span>
-            <span>玩法說明</span>
+            <span data-i18n="menu.instructions">玩法說明</span>
           </button>
           <button id="btn-settings" class="button" type="button">
             <span class="button-icon" aria-hidden="true">⚙</span>
-            <span>設定</span>
+            <span data-i18n="menu.settings">設定</span>
           </button>
         </div>
       </div>
@@ -56,18 +56,18 @@
     <section id="screen-game" class="screen screen-game" aria-label="遊戲畫面">
       <header class="hud">
         <div class="hud-stat">
-          <span>分數</span>
+          <span data-i18n="hud.score">分數</span>
           <strong id="hud-score">0</strong>
         </div>
         <div class="hud-stat">
-          <span>最高</span>
+          <span data-i18n="hud.high">最高</span>
           <strong id="hud-high-score">0</strong>
         </div>
-        <div class="hud-next" aria-label="下一顆泡泡">
-          <span>下一顆</span>
+        <div class="hud-next" aria-label="下一顆泡泡" data-i18n-aria="hud.nextAria">
+          <span data-i18n="hud.next">下一顆</span>
           <i id="hud-next-bubble" class="next-bubble-dot" aria-hidden="true"></i>
         </div>
-        <button id="btn-pause" class="icon-button" type="button" aria-label="暫停">
+        <button id="btn-pause" class="icon-button" type="button" aria-label="暫停" data-i18n-aria="common.pause">
           <span aria-hidden="true">Ⅱ</span>
         </button>
       </header>
@@ -79,15 +79,47 @@
     <section id="screen-instructions" class="screen screen-page" aria-labelledby="instructions-title">
       <div class="page-panel">
         <div class="page-topbar">
-          <button id="btn-instructions-back" class="icon-button" type="button" aria-label="返回主選單">
+          <button id="btn-instructions-back" class="icon-button" type="button" aria-label="返回主選單" data-i18n-aria="common.backMenu">
             <span aria-hidden="true">←</span>
           </button>
-          <h2 id="instructions-title">玩法說明</h2>
+          <h2 id="instructions-title" data-i18n="instructions.title">玩法說明</h2>
         </div>
-        <div class="text-block">
-          <p>拖曳或移動指標瞄準，點擊或放開即可發射泡泡。泡泡會在左右牆反彈，撞到上方或其他泡泡後會吸附到六角格線。</p>
-          <p>同色泡泡連成三顆以上會消除。消除後沒有連到頂端的泡泡會掉落並加分。連續消除會提高連段獎勵。</p>
-          <p>清空場上泡泡即可獲勝。泡泡推進到警戒線以下時遊戲結束。</p>
+        <div class="instruction-list">
+          <section class="instruction-item">
+            <span class="instruction-step">1</span>
+            <div>
+              <h3 data-i18n="instructions.aim.title">瞄準與發射</h3>
+              <p data-i18n="instructions.aim.body">移動游標或手指瞄準，點擊、放開或按空白鍵發射泡泡。</p>
+            </div>
+          </section>
+          <section class="instruction-item">
+            <span class="instruction-step">2</span>
+            <div>
+              <h3 data-i18n="instructions.match.title">消除泡泡</h3>
+              <p data-i18n="instructions.match.body">三顆以上同色泡泡相連就會消除，連段會給更多分數。</p>
+            </div>
+          </section>
+          <section class="instruction-item">
+            <span class="instruction-step">3</span>
+            <div>
+              <h3 data-i18n="instructions.drop.title">掉落加分</h3>
+              <p data-i18n="instructions.drop.body">消除後沒有連到頂端的泡泡會掉落，掉落泡泡也會加分。</p>
+            </div>
+          </section>
+          <section class="instruction-item">
+            <span class="instruction-step">4</span>
+            <div>
+              <h3 data-i18n="instructions.pressure.title">下推壓力</h3>
+              <p data-i18n="instructions.pressure.body">難度越高，泡泡列下推越快；多次未消除也會觸發下推。</p>
+            </div>
+          </section>
+          <section class="instruction-item">
+            <span class="instruction-step">5</span>
+            <div>
+              <h3 data-i18n="instructions.win.title">勝負條件</h3>
+              <p data-i18n="instructions.win.body">清空場上泡泡即可過關。泡泡碰到警戒線時遊戲結束。</p>
+            </div>
+          </section>
         </div>
       </div>
     </section>
@@ -95,53 +127,58 @@
     <section id="screen-settings" class="screen screen-page" aria-labelledby="settings-title">
       <div class="page-panel">
         <div class="page-topbar">
-          <button id="btn-settings-back" class="icon-button" type="button" aria-label="返回主選單">
+          <button id="btn-settings-back" class="icon-button" type="button" aria-label="返回主選單" data-i18n-aria="common.backMenu">
             <span aria-hidden="true">←</span>
           </button>
-          <h2 id="settings-title">設定</h2>
+          <h2 id="settings-title" data-i18n="settings.title">設定</h2>
         </div>
 
         <fieldset class="setting-group">
-          <legend>主題</legend>
+          <legend data-i18n="settings.language">語言</legend>
+          <div id="language-options" class="language-options" role="radiogroup" aria-label="語言"></div>
+        </fieldset>
+
+        <fieldset class="setting-group">
+          <legend data-i18n="settings.theme">主題</legend>
           <div id="theme-options" class="theme-options" role="radiogroup" aria-label="主題"></div>
         </fieldset>
 
         <fieldset class="setting-group">
-          <legend>難易度</legend>
+          <legend data-i18n="settings.difficulty">難易度</legend>
           <div id="difficulty-options" class="difficulty-options" role="radiogroup" aria-label="難易度"></div>
         </fieldset>
 
         <div class="setting-group">
           <label class="slider-row" for="slider-bgm">
-            <span>背景音量</span>
+            <span data-i18n="settings.bgm">背景音量</span>
             <input id="slider-bgm" type="range" min="0" max="100" step="1">
             <output id="value-bgm" for="slider-bgm">80%</output>
           </label>
           <label class="slider-row" for="slider-sfx">
-            <span>音效音量</span>
+            <span data-i18n="settings.sfx">音效音量</span>
             <input id="slider-sfx" type="range" min="0" max="100" step="1">
             <output id="value-sfx" for="slider-sfx">90%</output>
           </label>
           <label class="toggle-row" for="toggle-muted">
             <input id="toggle-muted" type="checkbox">
-            <span>靜音</span>
+            <span data-i18n="settings.muted">靜音</span>
           </label>
         </div>
 
         <button id="btn-reset-save" class="button button-danger" type="button">
           <span class="button-icon" aria-hidden="true">×</span>
-          <span>清除存檔</span>
+          <span data-i18n="settings.clearSave">清除存檔</span>
         </button>
       </div>
     </section>
 
     <div id="modal-pause" class="modal" aria-hidden="true">
       <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="pause-title">
-        <h2 id="pause-title">暫停</h2>
+        <h2 id="pause-title" data-i18n="common.pause">暫停</h2>
         <div class="modal-actions">
-          <button id="btn-resume" class="button button-primary" type="button">繼續</button>
-          <button id="btn-pause-restart" class="button" type="button">重新開始</button>
-          <button id="btn-pause-menu" class="button" type="button">主選單</button>
+          <button id="btn-resume" class="button button-primary" type="button" data-i18n="common.resume">繼續</button>
+          <button id="btn-pause-restart" class="button" type="button" data-i18n="common.restart">重新開始</button>
+          <button id="btn-pause-menu" class="button" type="button" data-i18n="common.mainMenu">主選單</button>
         </div>
       </div>
     </div>
@@ -151,12 +188,12 @@
         <p id="result-kicker" class="eyebrow">Result</p>
         <h2 id="result-title">遊戲結束</h2>
         <div class="result-score">
-          <span>本局分數</span>
+          <span data-i18n="result.score">本局分數</span>
           <strong id="result-score">0</strong>
         </div>
         <div class="modal-actions">
-          <button id="btn-result-restart" class="button button-primary" type="button">再玩一次</button>
-          <button id="btn-result-menu" class="button" type="button">主選單</button>
+          <button id="btn-result-restart" class="button button-primary" type="button" data-i18n="common.playAgain">再玩一次</button>
+          <button id="btn-result-menu" class="button" type="button" data-i18n="common.mainMenu">主選單</button>
         </div>
       </div>
     </div>
@@ -175,6 +212,7 @@
   <script src="js/game/shooter.js"></script>
   <script src="js/game/renderer.js"></script>
   <script src="js/audio/audioManager.js"></script>
+  <script src="js/ui/i18n.js"></script>
   <script src="js/ui/screens.js"></script>
   <script src="js/ui/menu.js"></script>
   <script src="js/ui/settings.js"></script>

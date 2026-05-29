@@ -1,5 +1,6 @@
 .button,
 .icon-button,
+.language-option,
 .theme-option,
 .difficulty-option {
   min-height: 48px;
@@ -23,6 +24,7 @@
 
 .button:hover,
 .icon-button:hover,
+.language-option:hover,
 .theme-option:hover,
 .difficulty-option:hover {
   transform: translateY(-1px);
@@ -30,6 +32,7 @@
 
 .button:active,
 .icon-button:active,
+.language-option:active,
 .theme-option:active,
 .difficulty-option:active {
   transform: translateY(1px);
@@ -37,6 +40,7 @@
 
 .button:focus-visible,
 .icon-button:focus-visible,
+.language-option:focus-visible,
 .theme-option:focus-visible,
 .difficulty-option:focus-visible,
 input:focus-visible {
@@ -81,6 +85,7 @@ input:focus-visible {
   font-weight: 900;
 }
 
+.language-option,
 .theme-option,
 .difficulty-option {
   display: grid;
@@ -93,6 +98,7 @@ input:focus-visible {
   text-align: left;
 }
 
+.language-option.is-selected,
 .theme-option.is-selected,
 .difficulty-option.is-selected {
   border-color: var(--color-primary);

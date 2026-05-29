@@ -8,25 +8,25 @@
       { name: "dark", label: "Dark", swatch: ["#e85b65", "#55c9a8", "#eec65f", "#5a9de6"] }
     ],
 
+    languages: [
+      { name: "zh", label: "中文", htmlLang: "zh-Hant" },
+      { name: "en", label: "English", htmlLang: "en" },
+      { name: "ja", label: "日本語", htmlLang: "ja" }
+    ],
+
     difficulties: [
       {
         name: "easy",
-        label: "簡單",
-        description: "下推較慢",
         pressureInterval: 68,
         addRowEveryMisses: 7
       },
       {
         name: "normal",
-        label: "普通",
-        description: "標準節奏",
         pressureInterval: 48,
         addRowEveryMisses: 5
       },
       {
         name: "hard",
-        label: "困難",
-        description: "下推較快",
         pressureInterval: 30,
         addRowEveryMisses: 3
       }

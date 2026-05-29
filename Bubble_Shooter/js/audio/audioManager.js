@@ -7,7 +7,7 @@
   var bgmVolume = 0.8;
   var sfxVolume = 0.9;
   var muted = false;
-  var bgmMaster = 0.55;
+  var bgmMaster = 0.72;
 
   var audioContext = null;
   var fallbackBgm = null;
@@ -36,6 +36,10 @@
     return bgmVolume * bgmMaster * (multiplier === undefined ? 1 : multiplier);
   }
 
+  function needsFallbackBgm() {
+    return !bgmEl || bgmEl.paused || bgmEl.error || bgmEl.networkState === 3;
+  }
+
   function stopFallbackBgm() {
     if (fallbackBgm) {
       if (fallbackBgm.timeoutId) {
@@ -62,7 +66,7 @@
 
     var osc = ctx.createOscillator();
     var gain = ctx.createGain();
-    var peak = 0.026 * gainScale;
+    var peak = 0.075 * gainScale;
 
     osc.type = "sine";
     osc.frequency.setValueAtTime(frequency, start);
@@ -227,6 +231,9 @@
     }
     if (currentTrack === track) {
       applyBgmVolume();
+      if (track && !fallbackBgm && needsFallbackBgm()) {
+        playFallbackBgm(track);
+      }
       return;
     }
 
@@ -258,7 +265,9 @@
     var playPromise = next.play();
     if (playPromise && playPromise.catch) {
       playPromise.catch(function () {
-        playFallbackBgm(track);
+        if (currentTrack === track) {
+          playFallbackBgm(track);
+        }
       });
     }
 
@@ -306,6 +315,9 @@
   BS.Audio.setBgmVolume = function (value) {
     bgmVolume = BS.Utils.clamp(value, 0, 1);
     applyBgmVolume();
+    if (currentTrack && !muted && !fallbackBgm && needsFallbackBgm()) {
+      playFallbackBgm(currentTrack);
+    }
   };
 
   BS.Audio.setSfxVolume = function (value) {

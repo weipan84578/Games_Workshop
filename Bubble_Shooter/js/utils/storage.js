@@ -68,8 +68,9 @@
     getSettings: function () {
       var defaults = {
         theme: "classic",
+        language: "zh",
         difficulty: "normal",
-        bgmVolume: 0.45,
+        bgmVolume: 0.62,
         sfxVolume: 0.9,
         muted: false
       };
@@ -77,6 +78,7 @@
 
       return {
         theme: settings.theme || defaults.theme,
+        language: settings.language || defaults.language,
         difficulty: settings.difficulty || defaults.difficulty,
         bgmVolume: typeof settings.bgmVolume === "number" ? settings.bgmVolume : defaults.bgmVolume,
         sfxVolume: typeof settings.sfxVolume === "number" ? settings.sfxVolume : defaults.sfxVolume,

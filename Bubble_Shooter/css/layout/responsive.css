@@ -45,9 +45,7 @@
 
 @media (min-width: 1025px) {
   .screen-menu {
-    align-items: center;
-    justify-content: flex-start;
-    padding-left: max(42px, 9vw);
+    place-items: center;
   }
 
   .menu-panel {

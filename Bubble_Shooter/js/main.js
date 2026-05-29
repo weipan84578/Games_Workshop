@@ -9,6 +9,7 @@
     init: function () {
       var settings = BS.Storage.getSettings();
       document.documentElement.setAttribute("data-theme", settings.theme);
+      BS.UI.I18n.setLanguage(settings.language);
 
       BS.Audio.init();
       BS.UI.Screens.init();

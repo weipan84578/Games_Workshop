@@ -2,6 +2,7 @@
   function save(settings) {
     BS.Storage.saveSettings(settings);
     document.documentElement.setAttribute("data-theme", settings.theme);
+    BS.UI.I18n.setLanguage(settings.language);
     BS.Audio.setBgmVolume(settings.bgmVolume);
     BS.Audio.setSfxVolume(settings.sfxVolume);
     BS.Audio.mute(settings.muted);
@@ -10,6 +11,7 @@
   BS.UI.Settings = {
     init: function () {
       this.settings = BS.Storage.getSettings();
+      this.languageOptions = document.getElementById("language-options");
       this.themeOptions = document.getElementById("theme-options");
       this.difficultyOptions = document.getElementById("difficulty-options");
       this.sliderBgm = document.getElementById("slider-bgm");
@@ -20,6 +22,7 @@
       this.btnBack = document.getElementById("btn-settings-back");
       this.btnReset = document.getElementById("btn-reset-save");
 
+      this.renderLanguages();
       this.renderThemes();
       this.renderDifficulties();
       this.syncControls();
@@ -97,6 +100,36 @@
       });
     },
 
+    renderLanguages: function () {
+      var self = this;
+      this.languageOptions.innerHTML = "";
+
+      BS.Core.Config.languages.forEach(function (language) {
+        var button = document.createElement("button");
+
+        button.type = "button";
+        button.className = "language-option";
+        button.setAttribute("role", "radio");
+        button.setAttribute("aria-checked", language.name === self.settings.language ? "true" : "false");
+        button.dataset.language = language.name;
+        button.textContent = language.label;
+
+        button.addEventListener("click", function () {
+          BS.Audio.playSFX("click");
+          self.settings.language = language.name;
+          save(self.settings);
+          self.renderLanguages();
+          self.renderDifficulties();
+        });
+
+        if (language.name === self.settings.language) {
+          button.classList.add("is-selected");
+        }
+
+        self.languageOptions.appendChild(button);
+      });
+    },
+
     renderDifficulties: function () {
       var self = this;
       this.difficultyOptions.innerHTML = "";
@@ -112,8 +145,8 @@
         button.setAttribute("aria-checked", difficulty.name === self.settings.difficulty ? "true" : "false");
         button.dataset.difficulty = difficulty.name;
 
-        label.textContent = difficulty.label;
-        detail.textContent = difficulty.description;
+        label.textContent = BS.UI.I18n.t("difficulty." + difficulty.name + ".label");
+        detail.textContent = BS.UI.I18n.t("difficulty." + difficulty.name + ".desc");
         button.appendChild(label);
         button.appendChild(detail);
 

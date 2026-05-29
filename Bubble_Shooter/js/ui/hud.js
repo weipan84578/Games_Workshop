@@ -52,8 +52,8 @@
 
     showResult: function (state) {
       var won = state.result === "win";
-      this.resultKicker.textContent = won ? "Victory" : "Game Over";
-      this.resultTitle.textContent = won ? "過關" : "遊戲結束";
+      this.resultKicker.textContent = BS.UI.I18n.t(won ? "result.victoryKicker" : "result.gameOverKicker");
+      this.resultTitle.textContent = BS.UI.I18n.t(won ? "result.victory" : "result.gameOver");
       this.resultScore.textContent = BS.Utils.formatScore(state.score);
     }
   };
