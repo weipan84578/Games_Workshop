@@ -17,6 +17,32 @@
   }
 }
 
+@media (max-width: 767px) {
+  .game-toolbar {
+    position: static;
+    backdrop-filter: none;
+  }
+
+  .board-frame,
+  .clue-panel,
+  .panel {
+    box-shadow: none;
+  }
+
+  .cell {
+    transition: none;
+  }
+
+  .cell.wrong,
+  .cell.hint {
+    animation: none;
+  }
+
+  .clue-list {
+    max-height: none;
+  }
+}
+
 @media (min-width: 768px) {
   .game-content {
     grid-template-columns: minmax(0, 3fr) minmax(260px, 2fr);

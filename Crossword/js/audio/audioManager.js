@@ -131,7 +131,11 @@
 
     playSFX(name) {
       this.init();
-      if (!this.context || this.muted || this.sfxVolume <= 0 || this.activeSfx >= 8) {
+      const lowPower = isLowPowerMode();
+      if (lowPower && isDisposableSfx(name)) {
+        return;
+      }
+      if (!this.context || this.muted || this.sfxVolume <= 0 || this.activeSfx >= (lowPower ? 3 : 8)) {
         return;
       }
 
@@ -144,7 +148,7 @@
 
       const [frequency, duration] = toneMap[name] || toneMap.click;
       this.activeSfx += 1;
-      playSfxTone(this.context, frequency, duration, this.sfxVolume, name === "type_wrong" ? "square" : "sine", () => {
+      playSfxTone(this.context, frequency, lowPower ? Math.min(duration, 0.045) : duration, this.sfxVolume, name === "type_wrong" ? "square" : "sine", () => {
         this.activeSfx = Math.max(0, this.activeSfx - 1);
       });
     },
@@ -178,17 +182,24 @@
   function createTrack(context, config) {
     const output = context.createGain();
     const melodyOsc = context.createOscillator();
-    const bassOsc = context.createOscillator();
+    const lowPower = isLowPowerMode();
+    const bassOsc = lowPower ? null : context.createOscillator();
     const melodyGain = context.createGain();
-    const bassGain = context.createGain();
+    const bassGain = lowPower ? null : context.createGain();
 
     output.gain.value = 0.0001;
     melodyOsc.type = config.melodyWave;
-    bassOsc.type = config.bassWave;
+    if (bassOsc) {
+      bassOsc.type = config.bassWave;
+    }
     melodyGain.gain.value = 0.0001;
-    bassGain.gain.value = 0.0001;
+    if (bassGain) {
+      bassGain.gain.value = 0.0001;
+    }
     melodyOsc.connect(melodyGain).connect(output);
-    bassOsc.connect(bassGain).connect(output);
+    if (bassOsc && bassGain) {
+      bassOsc.connect(bassGain).connect(output);
+    }
 
     return {
       config,
@@ -206,9 +217,13 @@
   function startTrack(context, track) {
     const now = context.currentTime;
     track.melodyOsc.frequency.value = track.config.melody[0];
-    track.bassOsc.frequency.value = track.config.bass[0];
+    if (track.bassOsc) {
+      track.bassOsc.frequency.value = track.config.bass[0];
+    }
     track.melodyOsc.start(now);
-    track.bassOsc.start(now);
+    if (track.bassOsc) {
+      track.bassOsc.start(now);
+    }
     advanceTrack(context, track);
   }
 
@@ -219,7 +234,7 @@
 
     const config = track.config;
     const beatMs = 60000 / config.bpm;
-    const stepMs = beatMs / 2;
+    const stepMs = isLowPowerMode() ? beatMs : beatMs / 2;
     const now = context.currentTime;
     const melodyFrequency = config.melody[track.step % config.melody.length];
     const bassFrequency = config.bass[track.step % config.bass.length];
@@ -228,7 +243,7 @@
     track.melodyOsc.frequency.setTargetAtTime(melodyFrequency, now, 0.012);
     pulseGain(context, track.melodyGain.gain, 0.52, now, noteEnd);
 
-    if (track.step % 2 === 0) {
+    if (track.bassOsc && track.bassGain && track.step % 2 === 0) {
       track.bassOsc.frequency.setTargetAtTime(bassFrequency, now, 0.018);
       pulseGain(context, track.bassGain.gain, 0.24, now, now + (beatMs / 1000) * 0.72);
     }
@@ -263,7 +278,9 @@
     }
     try {
       track.melodyOsc.stop(stopAt);
-      track.bassOsc.stop(stopAt);
+      if (track.bassOsc) {
+        track.bassOsc.stop(stopAt);
+      }
     } catch (error) {
       // Oscillators may already be stopped during very rapid track changes.
     }
@@ -273,9 +290,13 @@
   function disconnectTrack(track) {
     try {
       track.melodyOsc.disconnect();
-      track.bassOsc.disconnect();
       track.melodyGain.disconnect();
-      track.bassGain.disconnect();
+      if (track.bassOsc) {
+        track.bassOsc.disconnect();
+      }
+      if (track.bassGain) {
+        track.bassGain.disconnect();
+      }
       track.output.disconnect();
     } catch (error) {
       // Ignore disconnect races.
@@ -315,6 +336,14 @@
         onDone();
       }
     }, duration * 1000 + 80);
+  }
+
+  function isLowPowerMode() {
+    return Boolean(window.Device && (Device.isTouch() || Device.isSmallViewport()));
+  }
+
+  function isDisposableSfx(name) {
+    return name === "click" || name === "cell_select" || name === "type_correct" || name === "direction_toggle";
   }
 
   window.AudioManager = manager;

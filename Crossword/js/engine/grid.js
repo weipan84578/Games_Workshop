@@ -66,7 +66,7 @@
       }
     });
 
-    updateProgress(model, userGrid);
+    return updateProgress(model, userGrid);
   }
 
   function cellClasses(cell, userCell, selectedKey, activeKeys) {

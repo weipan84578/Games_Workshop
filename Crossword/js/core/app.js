@@ -11,6 +11,8 @@
   let refreshFrameId = 0;
   let refreshMobileClueList = false;
   let lastCommandAt = 0;
+  let lastActiveEntryId = null;
+  let forceClueCompletionRefresh = false;
 
   function init() {
     applySettings();
@@ -209,7 +211,8 @@
       }
       AppState.state.elapsedSeconds += 1;
       GameTimer.update(AppState.state.elapsedSeconds);
-      if (AppState.state.elapsedSeconds - lastTimedSaveAt >= 10) {
+      const saveInterval = Device.isTouch() || Device.isSmallViewport() ? 45 : 15;
+      if (AppState.state.elapsedSeconds - lastTimedSaveAt >= saveInterval) {
         saveCurrentGame();
         lastTimedSaveAt = AppState.state.elapsedSeconds;
       }
@@ -352,16 +355,16 @@
     }
 
     const boardRoot = Helpers.$("#board-root");
+    let percent = 0;
     if (boardRoot) {
-      GridRenderer.refresh(boardRoot, model, userGrid, AppState.state);
+      percent = GridRenderer.refresh(boardRoot, model, userGrid, AppState.state);
     }
 
-    const progress = Solver.completion(model, userGrid);
     Helpers.$all("[data-direction-label]").forEach((node) => {
       node.textContent = Helpers.directionLabel(AppState.state.direction);
     });
     Helpers.$all("[data-progress-text]").forEach((node) => {
-      node.textContent = `${progress.percent}%`;
+      node.textContent = `${percent}%`;
     });
     Helpers.$all("[data-hint-count]").forEach((node) => {
       node.textContent = AppState.state.hintsRemaining;
@@ -402,11 +405,30 @@
 
   function refreshClueStates() {
     const { model, userGrid, activeEntryId } = AppState.state;
-    Helpers.$all("#screen-game [data-entry-id]").forEach((button) => {
-      const entryId = button.dataset.entryId;
-      button.classList.toggle("active", entryId === activeEntryId);
-      button.classList.toggle("complete", Solver.isEntryComplete(model, userGrid, entryId));
+    Helpers.$all("#screen-game [data-entry-id].active").forEach((button) => {
+      if (button.dataset.entryId !== activeEntryId) {
+        button.classList.remove("active");
+      }
     });
+    Helpers.$all(`#screen-game [data-entry-id="${activeEntryId}"]`).forEach((button) => {
+      button.classList.add("active");
+    });
+
+    const idsToUpdate = forceClueCompletionRefresh
+      ? Array.from(model.entries.keys())
+      : [activeEntryId, lastActiveEntryId].filter(Boolean);
+
+    idsToUpdate.forEach((entryId) => {
+      if (!model.entries.has(entryId)) {
+        return;
+      }
+      const complete = Solver.isEntryComplete(model, userGrid, entryId);
+      Helpers.$all(`#screen-game [data-entry-id="${entryId}"]`).forEach((button) => {
+        button.classList.toggle("complete", complete);
+      });
+    });
+    lastActiveEntryId = activeEntryId;
+    forceClueCompletionRefresh = false;
   }
 
   function leaveGame() {
@@ -667,6 +689,7 @@
     AudioManager.playSFX("click");
     const mistakes = Solver.validateAll(AppState.state.model, AppState.state.userGrid);
     AppState.state.mistakes += mistakes;
+    forceClueCompletionRefresh = true;
     if (checkVictory()) {
       return;
     }
@@ -696,6 +719,7 @@
     userCell.status = "";
     AppState.state.hintsRemaining -= 1;
     AppState.state.hintsUsed += 1;
+    forceClueCompletionRefresh = true;
     selectCell(target.row, target.col);
     AudioManager.playSFX("hint_use");
     saveCurrentGame();
@@ -769,13 +793,6 @@
                 ${segment("xlarge", "特大", settings.fontSize)}
               </div>
             </div>
-            <div class="panel setting-row">
-              <div class="setting-topline"><h2>語言</h2></div>
-              <div class="segmented">
-                <button class="segment ${settings.language === "zh-TW" ? "active" : ""}" type="button" data-language="zh-TW">繁中</button>
-                <button class="segment ${settings.language === "en" ? "active" : ""}" type="button" data-language="en">English</button>
-              </div>
-            </div>
           </section>
         </div>
       </main>
@@ -838,12 +855,6 @@
     Helpers.$all("[data-font-size]").forEach((button) => {
       button.addEventListener("click", () => {
         AppState.setSettings({ fontSize: button.dataset.fontSize });
-        renderSettings();
-      });
-    });
-    Helpers.$all("[data-language]").forEach((button) => {
-      button.addEventListener("click", () => {
-        AppState.setSettings({ language: button.dataset.language });
         renderSettings();
       });
     });

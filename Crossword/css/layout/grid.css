@@ -51,6 +51,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-soft);
+  contain: layout paint;
 }
 
 .crossword-board {
@@ -61,6 +62,7 @@
   background: var(--color-black-cell);
   user-select: none;
   touch-action: manipulation;
+  contain: layout paint;
 }
 
 .cell {

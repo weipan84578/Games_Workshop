@@ -9,7 +9,6 @@
     showTimer: true,
     showErrors: true,
     fontSize: "normal",
-    language: "zh-TW",
   };
 
   let pendingGameSave = null;
@@ -37,11 +36,23 @@
   }
 
   function loadSettings() {
-    return { ...defaults, ...read(SETTINGS_KEY, {}) };
+    return normalizeSettings(read(SETTINGS_KEY, {}));
   }
 
   function saveSettings(settings) {
-    return write(SETTINGS_KEY, { ...defaults, ...settings });
+    return write(SETTINGS_KEY, normalizeSettings(settings));
+  }
+
+  function normalizeSettings(settings = {}) {
+    const merged = { ...defaults, ...settings };
+    return {
+      theme: merged.theme,
+      bgmVolume: merged.bgmVolume,
+      sfxVolume: merged.sfxVolume,
+      showTimer: merged.showTimer,
+      showErrors: merged.showErrors,
+      fontSize: merged.fontSize,
+    };
   }
 
   function loadGame() {
@@ -74,10 +85,10 @@
     };
     if (typeof window.requestIdleCallback === "function") {
       saveHandleType = "idle";
-      saveHandle = window.requestIdleCallback(flush, { timeout: 900 });
+      saveHandle = window.requestIdleCallback(flush, { timeout: 3000 });
     } else {
       saveHandleType = "timeout";
-      saveHandle = window.setTimeout(flush, 120);
+      saveHandle = window.setTimeout(flush, 1800);
     }
   }
 
@@ -106,6 +117,12 @@
 
   if (typeof window.addEventListener === "function") {
     window.addEventListener("beforeunload", flushGameSave);
+    window.addEventListener("pagehide", flushGameSave);
+    window.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "hidden") {
+        flushGameSave();
+      }
+    });
   }
 
   window.GameStorage = {
