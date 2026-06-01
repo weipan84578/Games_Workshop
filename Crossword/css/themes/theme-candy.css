@@ -1,0 +1,18 @@
+[data-theme="candy"] {
+  --color-bg-primary: #fff0f7;
+  --color-bg-secondary: #fffafd;
+  --color-bg-panel: #ffffff;
+  --color-bg-cell: #ffffff;
+  --color-bg-cell-active: #fff06a;
+  --color-bg-cell-word: #ffe0ef;
+  --color-bg-cell-correct: #bff0df;
+  --color-bg-cell-wrong: #ffc2d8;
+  --color-bg-cell-hint: #ffe38f;
+  --color-text-primary: #2c1520;
+  --color-text-secondary: #6d5260;
+  --color-text-cell: #2c1520;
+  --color-accent: #ff6b9d;
+  --color-accent-hover: #d94e80;
+  --color-border: #efb5ca;
+  --color-shadow: rgba(117, 47, 78, 0.16);
+}

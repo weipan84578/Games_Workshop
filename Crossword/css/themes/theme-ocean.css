@@ -1,0 +1,18 @@
+[data-theme="ocean"] {
+  --color-bg-primary: #eaf7fb;
+  --color-bg-secondary: #f8fcff;
+  --color-bg-panel: #ffffff;
+  --color-bg-cell: #ffffff;
+  --color-bg-cell-active: #ffe169;
+  --color-bg-cell-word: #d6eff9;
+  --color-bg-cell-correct: #b7efd4;
+  --color-bg-cell-wrong: #ffc9c9;
+  --color-bg-cell-hint: #ffe79a;
+  --color-text-primary: #10212b;
+  --color-text-secondary: #4d6570;
+  --color-text-cell: #10212b;
+  --color-accent: #0077b6;
+  --color-accent-hover: #005f92;
+  --color-border: #9fc3d3;
+  --color-shadow: rgba(13, 63, 82, 0.18);
+}

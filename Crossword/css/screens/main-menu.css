@@ -1,0 +1,55 @@
+.main-menu {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: var(--space-5);
+}
+
+.menu-panel {
+  width: min(520px, 100%);
+  display: grid;
+  gap: var(--space-6);
+  padding: var(--space-6);
+}
+
+.brand-lockup {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  text-align: center;
+}
+
+.brand-mark {
+  width: 116px;
+  height: 116px;
+}
+
+.brand-title {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.brand-title span {
+  font-size: clamp(1.55rem, 5vw, 2rem);
+  font-weight: 900;
+}
+
+.menu-actions {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.menu-button {
+  width: 100%;
+  min-height: 60px;
+  justify-content: flex-start;
+  padding-inline: var(--space-5);
+  font-size: 1.16rem;
+}
+
+.version-label {
+  justify-self: end;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  font-weight: 800;
+}

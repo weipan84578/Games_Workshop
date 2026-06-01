@@ -1,0 +1,35 @@
+.virtual-keyboard {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--color-bg-panel);
+  border-top: 1px solid var(--color-border);
+}
+
+.keyboard-row {
+  display: grid;
+  grid-template-columns: repeat(var(--key-count), minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.key {
+  min-height: 44px;
+  display: grid;
+  place-items: center;
+  color: var(--color-text-primary);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-weight: 900;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.key:hover,
+.key:focus-visible {
+  background: color-mix(in srgb, var(--color-bg-secondary) 72%, var(--color-accent) 28%);
+}
+
+.key.wide {
+  grid-column: span 2;
+}

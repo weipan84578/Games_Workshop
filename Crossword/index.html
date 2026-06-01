@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="ocean">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Crossword 填字遊戲</title>
+
+  <link rel="stylesheet" href="css/base/reset.css">
+  <link rel="stylesheet" href="css/base/variables.css">
+  <link rel="stylesheet" href="css/base/typography.css">
+
+  <link rel="stylesheet" href="css/themes/theme-ocean.css">
+  <link rel="stylesheet" href="css/themes/theme-forest.css">
+  <link rel="stylesheet" href="css/themes/theme-sunset.css">
+  <link rel="stylesheet" href="css/themes/theme-candy.css">
+  <link rel="stylesheet" href="css/themes/theme-midnight.css">
+  <link rel="stylesheet" href="css/themes/theme-gold.css">
+
+  <link rel="stylesheet" href="css/layout/grid.css">
+  <link rel="stylesheet" href="css/layout/responsive.css">
+
+  <link rel="stylesheet" href="css/components/buttons.css">
+  <link rel="stylesheet" href="css/components/modal.css">
+  <link rel="stylesheet" href="css/components/clue-panel.css">
+  <link rel="stylesheet" href="css/components/keyboard.css">
+  <link rel="stylesheet" href="css/components/timer.css">
+  <link rel="stylesheet" href="css/components/progress.css">
+  <link rel="stylesheet" href="css/components/notification.css">
+
+  <link rel="stylesheet" href="css/screens/main-menu.css">
+  <link rel="stylesheet" href="css/screens/game.css">
+  <link rel="stylesheet" href="css/screens/settings.css">
+  <link rel="stylesheet" href="css/screens/instructions.css">
+  <link rel="stylesheet" href="css/screens/victory.css">
+</head>
+<body>
+  <div id="app">
+    <div id="screen-main-menu" class="screen active" aria-live="polite"></div>
+    <div id="screen-game" class="screen" aria-live="polite"></div>
+    <div id="screen-settings" class="screen" aria-live="polite"></div>
+    <div id="screen-instructions" class="screen" aria-live="polite"></div>
+    <div id="screen-victory" class="screen" aria-live="polite"></div>
+  </div>
+
+  <div id="modal-container"></div>
+  <div id="notification-container" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="js/utils/helpers.js"></script>
+  <script src="js/utils/storage.js"></script>
+  <script src="js/utils/device.js"></script>
+  <script src="js/core/eventBus.js"></script>
+  <script src="js/core/state.js"></script>
+  <script src="js/audio/sfxPool.js"></script>
+  <script src="js/audio/audioManager.js"></script>
+  <script src="js/audio/bgmController.js"></script>
+  <script src="js/engine/puzzle.js"></script>
+  <script src="js/engine/grid.js"></script>
+  <script src="js/engine/solver.js"></script>
+  <script src="js/ui/screenManager.js"></script>
+  <script src="js/ui/keyboard.js"></script>
+  <script src="js/ui/cluePanel.js"></script>
+  <script src="js/ui/timer.js"></script>
+  <script src="js/ui/modal.js"></script>
+  <script src="js/ui/notification.js"></script>
+  <script src="js/data/themes.js"></script>
+  <script src="js/data/puzzles/easy.js"></script>
+  <script src="js/data/puzzles/medium.js"></script>
+  <script src="js/data/puzzles/hard.js"></script>
+  <script src="js/core/app.js"></script>
+</body>
+</html>

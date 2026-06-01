@@ -1,0 +1,18 @@
+[data-theme="forest"] {
+  --color-bg-primary: #eef6ec;
+  --color-bg-secondary: #fbfff8;
+  --color-bg-panel: #ffffff;
+  --color-bg-cell: #ffffff;
+  --color-bg-cell-active: #f1d36b;
+  --color-bg-cell-word: #dcefdc;
+  --color-bg-cell-correct: #b9e8c1;
+  --color-bg-cell-wrong: #ffd0c8;
+  --color-bg-cell-hint: #e9d06e;
+  --color-text-primary: #14251b;
+  --color-text-secondary: #536757;
+  --color-text-cell: #14251b;
+  --color-accent: #2d6a4f;
+  --color-accent-hover: #1f523d;
+  --color-border: #a9c5a7;
+  --color-shadow: rgba(30, 75, 45, 0.17);
+}

@@ -1,0 +1,3 @@
+{
+  "note": "Primary puzzle data is loaded from js/data/puzzles/*.js so the game can run by directly opening index.html."
+}

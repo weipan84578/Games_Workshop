@@ -1,0 +1,46 @@
+.puzzle-heading {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.puzzle-heading strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 1rem;
+}
+
+.puzzle-heading span {
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.game-footer {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.compact-stat {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .game-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .puzzle-heading {
+    flex: 1 1 100%;
+    order: 3;
+  }
+
+  .compact-stat {
+    display: inline-flex;
+  }
+
+  .wide-stat {
+    display: none;
+  }
+}

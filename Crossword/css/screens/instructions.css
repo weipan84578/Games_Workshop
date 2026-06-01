@@ -1,0 +1,44 @@
+.instruction-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.instruction-card {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-5);
+}
+
+.instruction-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-4);
+}
+
+.mini-board {
+  width: 176px;
+  display: grid;
+  grid-template-columns: repeat(4, 44px);
+  grid-template-rows: repeat(4, 44px);
+  border: 2px solid var(--color-black-cell);
+  background: var(--color-black-cell);
+}
+
+.mini-cell {
+  display: grid;
+  place-items: center;
+  background: var(--color-bg-cell);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-cell);
+  font-weight: 900;
+}
+
+.mini-cell.black {
+  background: var(--color-black-cell);
+}
+
+.mini-cell.active {
+  background: var(--color-bg-cell-active);
+}

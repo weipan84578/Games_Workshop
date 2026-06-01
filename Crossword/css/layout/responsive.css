@@ -1,0 +1,70 @@
+@media (max-width: 479px) {
+  .screen-inner {
+    padding: var(--space-4) var(--space-3);
+  }
+
+  .game-toolbar {
+    gap: var(--space-2);
+    padding: var(--space-2);
+  }
+
+  .toolbar-label {
+    display: none;
+  }
+
+  .btn {
+    padding-inline: 0.72rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .game-content {
+    grid-template-columns: minmax(0, 3fr) minmax(260px, 2fr);
+    align-items: start;
+  }
+
+  .clue-layout {
+    position: sticky;
+    top: calc(var(--toolbar-height) + var(--space-4));
+  }
+}
+
+@media (min-width: 1024px) {
+  .game-content {
+    grid-template-columns: minmax(230px, 1fr) minmax(420px, auto) minmax(230px, 1fr);
+  }
+
+  .desktop-down {
+    order: 1;
+  }
+
+  .board-region {
+    order: 2;
+  }
+
+  .desktop-across {
+    order: 3;
+  }
+
+  .mobile-clues {
+    display: none;
+  }
+
+  .desktop-clues {
+    display: block;
+  }
+
+  .virtual-keyboard {
+    display: none;
+  }
+}
+
+@media (max-width: 1023px) {
+  .desktop-clues {
+    display: none;
+  }
+
+  .mobile-clues {
+    display: block;
+  }
+}

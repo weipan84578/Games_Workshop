@@ -1,0 +1,99 @@
+.btn {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 0.72rem 1rem;
+  color: #ffffff;
+  background: var(--color-accent);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 90%, black);
+  border-radius: var(--radius-md);
+  font-weight: 800;
+  font-size: 1.05rem;
+  line-height: 1;
+  transition: transform var(--transition-fast), background var(--transition-fast), opacity var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.btn:hover,
+.btn:focus-visible {
+  background: var(--color-accent-hover);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 28%, transparent);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  box-shadow: none;
+}
+
+.btn.secondary {
+  color: var(--color-text-primary);
+  background: var(--color-bg-secondary);
+  border-color: var(--color-border);
+}
+
+.btn.secondary:hover,
+.btn.secondary:focus-visible {
+  color: var(--color-text-primary);
+  background: color-mix(in srgb, var(--color-bg-secondary) 78%, var(--color-accent) 22%);
+}
+
+.btn.danger {
+  background: var(--color-danger);
+  border-color: color-mix(in srgb, var(--color-danger) 85%, black);
+}
+
+.icon-btn {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-primary);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 1.15rem;
+  font-weight: 900;
+  transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.icon-btn:hover,
+.icon-btn:focus-visible {
+  background: color-mix(in srgb, var(--color-bg-secondary) 78%, var(--color-accent) 22%);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 24%, transparent);
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.segmented {
+  display: inline-grid;
+  grid-auto-flow: column;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  background: color-mix(in srgb, var(--color-bg-secondary) 72%, var(--color-border) 28%);
+  border-radius: var(--radius-md);
+}
+
+.segment {
+  min-height: 40px;
+  padding: 0.45rem 0.75rem;
+  color: var(--color-text-primary);
+  background: transparent;
+  border-radius: var(--radius-sm);
+  font-weight: 800;
+}
+
+.segment.active {
+  color: #ffffff;
+  background: var(--color-accent);
+}

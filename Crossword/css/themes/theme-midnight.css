@@ -1,0 +1,19 @@
+[data-theme="midnight"] {
+  --color-bg-primary: #121626;
+  --color-bg-secondary: #181c2f;
+  --color-bg-panel: #1f2438;
+  --color-bg-cell: #f5f7fb;
+  --color-bg-cell-active: #f2cc66;
+  --color-bg-cell-word: #d9e0ff;
+  --color-bg-cell-correct: #9ee6c4;
+  --color-bg-cell-wrong: #ffb3b3;
+  --color-bg-cell-hint: #f1d277;
+  --color-text-primary: #f5f7fb;
+  --color-text-secondary: #bac4df;
+  --color-text-cell: #111827;
+  --color-accent: #7ca7ff;
+  --color-accent-hover: #9dbdff;
+  --color-border: #3a4260;
+  --color-shadow: rgba(0, 0, 0, 0.34);
+  --color-black-cell: #070a12;
+}

@@ -1,0 +1,150 @@
+.game-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+.game-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-height: var(--toolbar-height);
+  padding: var(--space-3);
+  background: color-mix(in srgb, var(--color-bg-primary) 72%, var(--color-bg-panel) 28%);
+  border-bottom: 1px solid var(--color-border);
+  backdrop-filter: blur(12px);
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.game-content {
+  width: min(1280px, 100%);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+  margin: 0 auto;
+  padding: var(--space-4);
+}
+
+.board-region {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  gap: var(--space-3);
+}
+
+.board-frame {
+  width: fit-content;
+  max-width: 100%;
+  padding: var(--space-2);
+  background: var(--color-bg-panel);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+}
+
+.crossword-board {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), var(--cell-size));
+  grid-template-rows: repeat(var(--rows), var(--cell-size));
+  border: 2px solid var(--color-black-cell);
+  background: var(--color-black-cell);
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.cell {
+  position: relative;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  display: grid;
+  place-items: center;
+  color: var(--color-text-cell);
+  background: var(--color-bg-cell);
+  border: 1px solid var(--color-border);
+  font-size: clamp(1.15rem, calc(var(--cell-size) * 0.52), 1.55rem);
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+  transition: background var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.cell.black {
+  background: var(--color-black-cell);
+  border-color: var(--color-black-cell);
+  pointer-events: none;
+}
+
+.cell.in-word {
+  background: var(--color-bg-cell-word);
+}
+
+.cell.active {
+  z-index: 2;
+  background: var(--color-bg-cell-active);
+  box-shadow: inset 0 0 0 3px var(--color-accent), 0 0 0 3px color-mix(in srgb, var(--color-accent) 28%, transparent);
+}
+
+.cell.correct {
+  background: var(--color-bg-cell-correct);
+}
+
+.cell.wrong {
+  background: var(--color-bg-cell-wrong);
+  animation: cell-shake 180ms ease-in-out;
+}
+
+.cell.hint {
+  background: var(--color-bg-cell-hint);
+  animation: hint-pop 180ms ease-out;
+}
+
+.cell-number {
+  position: absolute;
+  top: 2px;
+  left: 3px;
+  color: color-mix(in srgb, var(--color-text-cell) 78%, var(--color-accent) 22%);
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.cell-letter {
+  transform: translateY(1px);
+}
+
+.board-status {
+  width: min(100%, calc(var(--cell-size) * var(--cols) + 20px));
+}
+
+@keyframes cell-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  35% {
+    transform: translateX(-3px);
+  }
+  70% {
+    transform: translateX(3px);
+  }
+}
+
+@keyframes hint-pop {
+  from {
+    transform: scale(0.94);
+  }
+  to {
+    transform: scale(1);
+  }
+}

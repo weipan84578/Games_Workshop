@@ -1,0 +1,18 @@
+[data-theme="gold"] {
+  --color-bg-primary: #f9f3df;
+  --color-bg-secondary: #fffaf0;
+  --color-bg-panel: #ffffff;
+  --color-bg-cell: #fffefd;
+  --color-bg-cell-active: #eacb5f;
+  --color-bg-cell-word: #f0e2b6;
+  --color-bg-cell-correct: #c7e6c8;
+  --color-bg-cell-wrong: #ffcfc1;
+  --color-bg-cell-hint: #f2d97a;
+  --color-text-primary: #261f12;
+  --color-text-secondary: #6a5b39;
+  --color-text-cell: #261f12;
+  --color-accent: #c9a84c;
+  --color-accent-hover: #a8872e;
+  --color-border: #d3bd7b;
+  --color-shadow: rgba(91, 72, 26, 0.17);
+}
