@@ -1,0 +1,16 @@
+html[data-theme="neon"] {
+  --color-bg-primary: #0a0014;
+  --color-bg-secondary: #160c28;
+  --color-bg-tertiary: #25183d;
+  --color-surface: rgba(22, 12, 40, 0.88);
+  --color-surface-strong: rgba(28, 13, 50, 0.98);
+  --color-border: rgba(255, 255, 255, 0.2);
+  --color-text-primary: #fff8ff;
+  --color-text-secondary: #d7c8ee;
+  --color-text-muted: #9c8ab6;
+  --color-accent: #ff4fd8;
+  --color-accent-hover: #ff8ce7;
+  --color-accent-contrast: #160018;
+  --color-secondary-accent: #39f5ff;
+  --color-warm-accent: #f8f65d;
+}

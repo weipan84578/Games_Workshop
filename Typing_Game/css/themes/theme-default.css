@@ -1,0 +1,16 @@
+html[data-theme="default"] {
+  --color-bg-primary: #0d1117;
+  --color-bg-secondary: #111827;
+  --color-bg-tertiary: #1f2937;
+  --color-surface: rgba(17, 24, 39, 0.86);
+  --color-surface-strong: rgba(22, 31, 45, 0.98);
+  --color-border: rgba(218, 230, 245, 0.16);
+  --color-text-primary: #f0f6fc;
+  --color-text-secondary: #b9c6d4;
+  --color-text-muted: #7f8b99;
+  --color-accent: #58a6ff;
+  --color-accent-hover: #79c0ff;
+  --color-accent-contrast: #061522;
+  --color-secondary-accent: #7ee787;
+  --color-warm-accent: #ffb454;
+}

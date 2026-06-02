@@ -1,0 +1,149 @@
+.game-screen {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: var(--space-5);
+}
+
+.game-hud {
+  display: grid;
+  grid-template-columns: 1.2fr 2fr 1.4fr;
+  gap: var(--space-4);
+  align-items: center;
+  padding: var(--space-4);
+}
+
+.hud-stack {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.hud-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+  color: var(--color-text-secondary);
+}
+
+.game-stage {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: var(--space-5);
+  min-height: 390px;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+.target-word {
+  max-width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.12em;
+  font-family: var(--font-game);
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  font-weight: 900;
+  line-height: 1.35;
+  letter-spacing: 0;
+}
+
+.target-word span {
+  min-width: 0.75em;
+  min-height: 1.35em;
+  display: inline-grid;
+  place-items: center;
+  border-bottom: 3px solid transparent;
+  color: var(--color-pending);
+}
+
+.target-word .correct {
+  color: var(--color-correct);
+  animation: pop 100ms ease;
+}
+
+.target-word .wrong {
+  color: var(--color-wrong);
+  animation: shake 200ms ease;
+}
+
+.target-word .cursor {
+  border-bottom-color: var(--color-cursor);
+  animation: cursor-blink var(--anim-cursor) steps(2, jump-none) infinite;
+}
+
+.input-preview {
+  min-height: 3rem;
+  width: min(720px, 100%);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  background: rgba(0, 0, 0, 0.16);
+  font-family: var(--font-game);
+  font-size: clamp(1.2rem, 4vw, 2rem);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.game-input {
+  color: var(--color-text-primary);
+  caret-color: var(--color-cursor);
+  outline: none;
+}
+
+.game-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.combo-badge {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-warm-accent);
+  background: rgba(255, 180, 84, 0.09);
+  font-family: var(--font-display);
+}
+
+.countdown {
+  position: fixed;
+  inset: 0;
+  z-index: 12;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 20vw, 10rem);
+  color: var(--color-accent);
+  background: rgba(0, 0, 0, 0.38);
+  animation: countdown-pop 800ms ease both;
+}
+
+.game-footer {
+  display: grid;
+  gap: var(--space-4);
+}
+
+@keyframes cursor-blink {
+  50% {
+    border-bottom-color: transparent;
+  }
+}
+
+@keyframes countdown-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  20%,
+  80% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+}

@@ -1,0 +1,80 @@
+@media (max-width: 1024px) {
+  .menu-hero,
+  .result-hero,
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .game-hud {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  #app {
+    padding: calc(var(--safe-top) + var(--space-3)) calc(var(--safe-right) + var(--space-3)) calc(var(--safe-bottom) + var(--space-3)) calc(var(--safe-left) + var(--space-3));
+  }
+
+  .screen,
+  #screen-container {
+    min-height: calc(100vh - var(--space-6));
+    min-height: calc(100dvh - var(--space-6));
+  }
+
+  .score-grid,
+  .help-grid,
+  .choice-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .setting-row {
+    grid-template-columns: 1fr;
+  }
+
+  .brand-panel {
+    min-height: 340px;
+  }
+}
+
+@media (max-width: 480px) {
+  .screen-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .score-grid,
+  .help-grid,
+  .choice-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .brand-panel,
+  .game-stage,
+  .panel-pad {
+    padding: var(--space-4);
+  }
+
+  .keyboard {
+    display: none;
+  }
+
+  .modal {
+    width: 100vw;
+    max-height: 100dvh;
+    border-radius: var(--radius-md);
+  }
+
+  #modal-overlay {
+    padding: var(--space-2);
+  }
+
+  .shortcut {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 1440px) {
+  #screen-container {
+    width: min(1320px, 100%);
+  }
+}

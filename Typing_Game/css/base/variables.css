@@ -1,0 +1,84 @@
+:root {
+  --font-display: "Orbitron", "Noto Sans TC", monospace;
+  --font-game: "Noto Sans TC", "Courier New", monospace;
+  --font-ui: "Noto Sans TC", system-ui, sans-serif;
+
+  --font-scale: 1;
+  --anim-fast: 150ms;
+  --anim-normal: 300ms;
+  --anim-slow: 600ms;
+  --anim-cursor: 800ms;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  --bp-sm: 480px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1440px;
+
+  --color-bg-primary: #0d1117;
+  --color-bg-secondary: #141b25;
+  --color-bg-tertiary: #1c2633;
+  --color-surface: rgba(20, 27, 37, 0.86);
+  --color-surface-strong: rgba(28, 38, 51, 0.96);
+  --color-border: rgba(218, 230, 245, 0.16);
+  --color-shadow: rgba(0, 0, 0, 0.28);
+
+  --color-text-primary: #f0f6fc;
+  --color-text-secondary: #b9c6d4;
+  --color-text-muted: #788797;
+
+  --color-accent: #58a6ff;
+  --color-accent-hover: #79c0ff;
+  --color-accent-contrast: #071522;
+  --color-secondary-accent: #7ee787;
+  --color-warm-accent: #ffb454;
+
+  --color-correct: #7ee787;
+  --color-wrong: #ff6b6b;
+  --color-pending: #94a3b8;
+  --color-cursor: #ffdd57;
+
+  --color-success: #7ee787;
+  --color-warning: #ffb454;
+  --color-danger: #ff6b6b;
+  --color-info: #58a6ff;
+  --color-focus: #ffdd57;
+
+  --hud-height: 72px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+}
+
+html[data-font-size="small"] {
+  --font-scale: 0.9;
+}
+
+html[data-font-size="medium"] {
+  --font-scale: 1;
+}
+
+html[data-font-size="large"] {
+  --font-scale: 1.12;
+}
+
+html[data-animation="false"] *,
+html[data-animation="false"] *::before,
+html[data-animation="false"] *::after {
+  animation-duration: 1ms !important;
+  transition-duration: 1ms !important;
+}

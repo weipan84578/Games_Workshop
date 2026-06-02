@@ -1,0 +1,44 @@
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.score-tile {
+  min-height: 84px;
+  display: grid;
+  align-content: center;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.score-label {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+.score-value {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 4vw, 2.3rem);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}
+
+.record-list {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.record-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}

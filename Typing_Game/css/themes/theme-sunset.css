@@ -1,0 +1,16 @@
+html[data-theme="sunset"] {
+  --color-bg-primary: #1a0a00;
+  --color-bg-secondary: #2d1304;
+  --color-bg-tertiary: #472109;
+  --color-surface: rgba(45, 19, 4, 0.88);
+  --color-surface-strong: rgba(56, 24, 7, 0.98);
+  --color-border: rgba(255, 230, 204, 0.18);
+  --color-text-primary: #fff8ef;
+  --color-text-secondary: #f0c9a3;
+  --color-text-muted: #bd8a62;
+  --color-accent: #ff6b35;
+  --color-accent-hover: #ff9369;
+  --color-accent-contrast: #210600;
+  --color-secondary-accent: #ffd166;
+  --color-warm-accent: #9ef01a;
+}

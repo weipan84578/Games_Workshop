@@ -1,0 +1,17 @@
+html[data-theme="sakura"] {
+  --color-bg-primary: #fff0f5;
+  --color-bg-secondary: #ffe4ef;
+  --color-bg-tertiary: #ffffff;
+  --color-surface: rgba(255, 255, 255, 0.86);
+  --color-surface-strong: rgba(255, 255, 255, 0.98);
+  --color-border: rgba(113, 39, 69, 0.18);
+  --color-text-primary: #2a1720;
+  --color-text-secondary: #60404f;
+  --color-text-muted: #8a6475;
+  --color-accent: #e91e8c;
+  --color-accent-hover: #f05aa9;
+  --color-accent-contrast: #ffffff;
+  --color-secondary-accent: #1aa37a;
+  --color-warm-accent: #d98519;
+  --color-shadow: rgba(92, 26, 50, 0.16);
+}
