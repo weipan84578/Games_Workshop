@@ -4,13 +4,13 @@ import { ScoreCalculator } from "./ScoreCalculator.js";
 import { WordGenerator } from "./WordGenerator.js";
 
 export class GameEngine {
-  constructor({ settings, snapshot = null, audio = null, onUpdate = () => {}, onFinish = () => {}, onCombo = () => {} }) {
+  constructor({ settings, words, snapshot = null, audio = null, onUpdate = () => {}, onFinish = () => {}, onCombo = () => {} }) {
     this.settings = { ...settings };
     this.audio = audio;
     this.onUpdate = onUpdate;
     this.onFinish = onFinish;
     this.onCombo = onCombo;
-    this.generator = new WordGenerator(this.settings);
+    this.generator = new WordGenerator(this.settings, words);
     this.comboSystem = new ComboSystem();
     this.timerId = null;
     this.lastTick = 0;

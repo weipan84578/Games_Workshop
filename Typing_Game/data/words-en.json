@@ -1,4 +1,4 @@
-export const wordsEn = [
+[
   "typing", "master", "window", "signal", "rocket", "planet", "keyboard", "energy", "future", "random",
   "garden", "silver", "canvas", "engine", "browser", "module", "object", "syntax", "motion", "simple",
   "vector", "galaxy", "screen", "result", "player", "combo", "record", "memory", "typing", "escape",
@@ -7,5 +7,5 @@ export const wordsEn = [
   "puzzle", "rhythm", "magnet", "anchor", "charge", "crystal", "launch", "stream", "summer", "winter",
   "autumn", "spring", "wonder", "matrix", "legend", "online", "offline", "victory", "session", "control",
   "quality", "clarity", "practice", "fortune", "journey", "balance", "library", "station", "monitor", "network",
-  "package", "storage", "history", "setting", "accuracy", "minute", "second", "finish", "screen", "sound",
-];
+  "package", "storage", "history", "setting", "accuracy", "minute", "second", "finish", "screen", "sound"
+]

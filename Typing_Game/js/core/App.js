@@ -2,6 +2,7 @@ import { EventBus } from "./EventBus.js";
 import { Router } from "./Router.js";
 import { ModalManager } from "../ui/ModalManager.js";
 import { ToastManager } from "../ui/ToastManager.js";
+import { WordRepository } from "../data/WordRepository.js";
 import { MenuScreen } from "../screens/MenuScreen.js";
 import { GameScreen } from "../screens/GameScreen.js";
 import { ResultScreen } from "../screens/ResultScreen.js";
@@ -14,6 +15,7 @@ export class App {
     this.audio = audio;
     this.theme = theme;
     this.events = new EventBus();
+    this.words = new WordRepository();
     this.router = null;
     this.toast = null;
     this.modal = null;

@@ -16,8 +16,9 @@ export class GameScreen {
     this.paused = false;
   }
 
-  mount({ settings = null, snapshot = null } = {}) {
+  async mount({ settings = null, snapshot = null } = {}) {
     const activeSettings = { ...this.app.state.getSettings(), ...(settings ?? snapshot?.settings ?? {}) };
+    const words = await this.app.words.load(activeSettings.language);
     this.root = document.createElement("section");
     this.root.id = "game";
     this.root.className = "screen game-screen";
@@ -67,6 +68,7 @@ export class GameScreen {
 
     this.engine = new GameEngine({
       settings: activeSettings,
+      words,
       snapshot,
       audio: this.app.audio,
       onUpdate: (view) => this.updateView(view),

@@ -2,6 +2,8 @@
 (function () {
   'use strict';
 
+globalThis.TYPING_GAME_EMBEDDED_WORDS = {"en":["typing","master","window","signal","rocket","planet","keyboard","energy","future","random","garden","silver","canvas","engine","browser","module","object","syntax","motion","simple","vector","galaxy","screen","result","player","combo","record","memory","typing","escape","update","branch","commit","origin","layout","margin","button","shadow","focus","target","swift","calm","bright","clever","steady","prism","forest","island","harbor","cipher","puzzle","rhythm","magnet","anchor","charge","crystal","launch","stream","summer","winter","autumn","spring","wonder","matrix","legend","online","offline","victory","session","control","quality","clarity","practice","fortune","journey","balance","library","station","monitor","network","package","storage","history","setting","accuracy","minute","second","finish","screen","sound"],"zh":["速度","鍵盤","練習","挑戰","準確","節奏","遊戲","文字","畫面","分數","連擊","紀錄","開始","暫停","繼續","設定","教學","結果","音效","主題","簡單","普通","困難","地獄","輸入","完成","成功","失誤","時間","進度","視窗","模組","狀態","資料","儲存","歷史","排行","語言","英文","數字","混合","專注","冷靜","敏捷","明亮","星光","海洋","櫻花","霓虹","夕陽","黑白","練功","高手","任務","目標","反應","滑順","節拍","光標","回合"],"num":["2048","1024","4096","31415","27182","16180","202606","8675309","13579","24680","98765","12345","54321","112358","144233","377610","80085","65536","32768","16384","404","200","500","302","418","8080","443","127001","255255","010101","9090","7777","10001","2024","2025","2026","86400","3600","1800","120"],"mixed":["alpha7","Beta42","code-9","RWD2026","pixel8","type99","Web3","focus!","go-go","OK123","Noto字","星光88","level5","comboX","run2win","data_1","shift+","tab4","ESC!","Qwerty","hello世界","Ocean7","Sakura2","neon99","mono-1","hard++","score50","WPM120","CSS3","HTML5","JS2026","font2","audio8","local42","save9","clear0","rankS","fast30","night7","daybreak"]};
+
 
 /* js/utils/helpers.js */
 const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
@@ -114,47 +116,50 @@ class Timer {
 }
 
 
-/* js/data/words-en.js */
-const wordsEn = [
-  "typing", "master", "window", "signal", "rocket", "planet", "keyboard", "energy", "future", "random",
-  "garden", "silver", "canvas", "engine", "browser", "module", "object", "syntax", "motion", "simple",
-  "vector", "galaxy", "screen", "result", "player", "combo", "record", "memory", "typing", "escape",
-  "update", "branch", "commit", "origin", "layout", "margin", "button", "shadow", "focus", "target",
-  "swift", "calm", "bright", "clever", "steady", "prism", "forest", "island", "harbor", "cipher",
-  "puzzle", "rhythm", "magnet", "anchor", "charge", "crystal", "launch", "stream", "summer", "winter",
-  "autumn", "spring", "wonder", "matrix", "legend", "online", "offline", "victory", "session", "control",
-  "quality", "clarity", "practice", "fortune", "journey", "balance", "library", "station", "monitor", "network",
-  "package", "storage", "history", "setting", "accuracy", "minute", "second", "finish", "screen", "sound",
-];
+/* js/data/WordRepository.js */
+const WORD_JSON_FILES = {
+  en: "data/words-en.json",
+  zh: "data/words-zh.json",
+  num: "data/words-num.json",
+  mixed: "data/words-mixed.json",
+};
 
+class WordRepository {
+  constructor(embeddedWords = globalThis.TYPING_GAME_EMBEDDED_WORDS || {}) {
+    this.embeddedWords = embeddedWords;
+    this.cache = new Map();
+  }
 
-/* js/data/words-zh.js */
-const wordsZh = [
-  "速度", "鍵盤", "練習", "挑戰", "準確", "節奏", "遊戲", "文字", "畫面", "分數",
-  "連擊", "紀錄", "開始", "暫停", "繼續", "設定", "教學", "結果", "音效", "主題",
-  "簡單", "普通", "困難", "地獄", "輸入", "完成", "成功", "失誤", "時間", "進度",
-  "視窗", "模組", "狀態", "資料", "儲存", "歷史", "排行", "語言", "英文", "數字",
-  "混合", "專注", "冷靜", "敏捷", "明亮", "星光", "海洋", "櫻花", "霓虹", "夕陽",
-  "黑白", "練功", "高手", "任務", "目標", "反應", "滑順", "節拍", "光標", "回合",
-];
+  async load(language) {
+    const key = WORD_JSON_FILES[language] ? language : "en";
+    if (this.cache.has(key)) return this.cache.get(key);
 
+    const words = await this.loadFromJson(key).catch(() => this.embeddedWords[key]);
+    const normalized = this.normalize(words, key);
+    this.cache.set(key, normalized);
+    return normalized;
+  }
 
-/* js/data/words-num.js */
-const wordsNum = [
-  "2048", "1024", "4096", "31415", "27182", "16180", "202606", "8675309", "13579", "24680",
-  "98765", "12345", "54321", "112358", "144233", "377610", "80085", "65536", "32768", "16384",
-  "404", "200", "500", "302", "418", "8080", "443", "127001", "255255", "010101",
-  "9090", "7777", "10001", "2024", "2025", "2026", "86400", "3600", "1800", "120",
-];
+  async loadFromJson(language) {
+    const response = await fetch(WORD_JSON_FILES[language], { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error(`Cannot load word file: ${WORD_JSON_FILES[language]}`);
+    }
+    return response.json();
+  }
 
-
-/* js/data/words-mixed.js */
-const wordsMixed = [
-  "alpha7", "Beta42", "code-9", "RWD2026", "pixel8", "type99", "Web3", "focus!", "go-go", "OK123",
-  "Noto字", "星光88", "level5", "comboX", "run2win", "data_1", "shift+", "tab4", "ESC!", "Qwerty",
-  "hello世界", "Ocean7", "Sakura2", "neon99", "mono-1", "hard++", "score50", "WPM120", "CSS3", "HTML5",
-  "JS2026", "font2", "audio8", "local42", "save9", "clear0", "rankS", "fast30", "night7", "daybreak",
-];
+  normalize(payload, language) {
+    const words = Array.isArray(payload) ? payload : payload?.words;
+    if (!Array.isArray(words)) {
+      throw new Error(`Word file for "${language}" must be a JSON array.`);
+    }
+    const normalized = [...new Set(words.map((word) => String(word).trim()).filter(Boolean))];
+    if (normalized.length === 0) {
+      throw new Error(`Word file for "${language}" is empty.`);
+    }
+    return normalized;
+  }
+}
 
 
 /* js/game/DifficultyManager.js */
@@ -295,29 +300,18 @@ class ComboSystem {
 /* js/game/WordGenerator.js */
 
 
-
-
-
-
-const WORD_BANKS = {
-  en: wordsEn,
-  zh: wordsZh,
-  num: wordsNum,
-  mixed: wordsMixed,
-};
-
 class WordGenerator {
-  constructor(settings) {
+  constructor(settings, words) {
     this.settings = settings;
+    this.words = words;
     this.recent = [];
   }
 
   next(completedCount = 0) {
-    const bank = WORD_BANKS[this.settings.language] ?? wordsEn;
-    let word = randomItem(bank);
+    let word = randomItem(this.words);
     let guard = 0;
     while (this.recent.includes(word) && guard < 8) {
-      word = randomItem(bank);
+      word = randomItem(this.words);
       guard += 1;
     }
     this.recent = [word, ...this.recent].slice(0, 5);
@@ -332,13 +326,13 @@ class WordGenerator {
 
 
 class GameEngine {
-  constructor({ settings, snapshot = null, audio = null, onUpdate = () => {}, onFinish = () => {}, onCombo = () => {} }) {
+  constructor({ settings, words, snapshot = null, audio = null, onUpdate = () => {}, onFinish = () => {}, onCombo = () => {} }) {
     this.settings = { ...settings };
     this.audio = audio;
     this.onUpdate = onUpdate;
     this.onFinish = onFinish;
     this.onCombo = onCombo;
-    this.generator = new WordGenerator(this.settings);
+    this.generator = new WordGenerator(this.settings, words);
     this.comboSystem = new ComboSystem();
     this.timerId = null;
     this.lastTick = 0;
@@ -1350,8 +1344,9 @@ class GameScreen {
     this.paused = false;
   }
 
-  mount({ settings = null, snapshot = null } = {}) {
+  async mount({ settings = null, snapshot = null } = {}) {
     const activeSettings = { ...this.app.state.getSettings(), ...(settings ?? snapshot?.settings ?? {}) };
+    const words = await this.app.words.load(activeSettings.language);
     this.root = document.createElement("section");
     this.root.id = "game";
     this.root.className = "screen game-screen";
@@ -1401,6 +1396,7 @@ class GameScreen {
 
     this.engine = new GameEngine({
       settings: activeSettings,
+      words,
       snapshot,
       audio: this.app.audio,
       onUpdate: (view) => this.updateView(view),
@@ -2157,12 +2153,14 @@ class SettingsScreen {
 
 
 
+
 class App {
   constructor({ state, audio, theme }) {
     this.state = state;
     this.audio = audio;
     this.theme = theme;
     this.events = new EventBus();
+    this.words = new WordRepository();
     this.router = null;
     this.toast = null;
     this.modal = null;
