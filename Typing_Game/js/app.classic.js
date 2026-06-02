@@ -2,7 +2,7 @@
 (function () {
   'use strict';
 
-globalThis.TYPING_GAME_EMBEDDED_WORDS = {"en":["typing","master","window","signal","rocket","planet","keyboard","energy","future","random","garden","silver","canvas","engine","browser","module","object","syntax","motion","simple","vector","galaxy","screen","result","player","combo","record","memory","escape","update","branch","commit","origin","layout","margin","button","shadow","focus","target","swift","calm","bright","clever","steady","prism","forest","island","harbor","cipher","puzzle","rhythm","magnet","anchor","charge","crystal","launch","stream","summer","winter","autumn","spring","wonder","matrix","legend","online","offline","victory","session","control","quality","clarity","practice","fortune","journey","balance","library","station","monitor","network","package","storage","history","setting","accuracy","minute","second","finish","sound","ai","zen","orbit","nebula","quantum","algorithm","database","latency","throughput","interface","variable","function"],"zh":["速度","鍵盤","練習","挑戰","準確","節奏","遊戲","文字","畫面","分數","連擊","紀錄","開始","暫停","繼續","設定","教學","結果","音效","主題","簡單","普通","困難","地獄","輸入","完成","成功","失誤","時間","進度","視窗","模組","狀態","資料","儲存","歷史","排行","語言","英文","數字","混合","專注","冷靜","敏捷","明亮","星光","海洋","櫻花","霓虹","夕陽","黑白","練功","高手","任務","目標","反應","滑順","節拍","光標","回合","短句","長篇","效率","穩定","測試","瀏覽器","網頁","檔案","清單","擴充","候選字","輸入法","拼音","注音","段落","句子","詞語","標點","空白","游標","排行榜","成就","挑錯","修正","加速","減速","專案","模擬","真實","實作","維護","更新","同步","備份","還原","匯入","匯出","樣式","配色","按鈕"],"num":["2048","1024","4096","31415","27182","16180","202606","8675309","13579","24680","98765","12345","54321","112358","144233","377610","80085","65536","32768","16384","404","200","500","302","418","8080","443","127001","255255","010101","9090","7777","10001","2024","2025","2026","86400","3600","1800","120","0","1","7","42","99","256","512","999","1000","10086","123456","654321","101010","121212","314159","271828","161803","141421","173205","223606","987654","456789","789123","246813","97531","112233","445566","778899","135792","246802","111111","222222","333333","444444","555555","666666","777777","888888","999999","000000","202301","202302","202401","202402","202501","202502","202601","202602","31415926","27182818","16180339","14142135","123456789","987654321","192168001","172160001","100000000","4294967295","655350","808080"],"mixed":["alpha7","Beta42","code-9","RWD2026","pixel8","type99","Web3","focus!","go-go","OK123","Noto字","星光88","level5","comboX","run2win","data_1","shift+","tab4","ESC!","Qwerty","hello世界","Ocean7","Sakura2","neon99","mono-1","hard++","score50","WPM120","CSS3","HTML5","JS2026","font2","audio8","local42","save9","clear0","rankS","fast30","night7","daybreak","A1","z9","Go!","Hi2U","Type中文","速度99","鍵盤X","mix-42","dataJSON","word_100","PIME輸入","zh-TW","en-US","Num#7","Combo連擊","Rank-S","WPM_88","score+10","level-12","mode無限","Easy01","Hard99","Hell!!","Normal_5","focus中文","IME-ready","json4all","file://ok","HTML5中文","CSS_grid","JS_async","local存檔","theme霓虹","sakura櫻","ocean海","sunset夕","mono黑白","btn_click","key_correct","wrong字","fast快","slow慢","run跑","save儲存","load載入","test測試","debug除錯","build_bundle","update更新","clear清除","100words","No.404","OK_GO","RWD手機","Tab鍵","Esc暫停","CtrlR","audio8bit","fontNoto","Orbitron7"]};
+globalThis.TYPING_GAME_EMBEDDED_WORDS = {"en":["typing","master","window","signal","rocket","planet","keyboard","energy","future","random","garden","silver","canvas","engine","browser","module","object","syntax","motion","simple","vector","galaxy","screen","result","player","combo","record","memory","escape","update","branch","commit","origin","layout","margin","button","shadow","focus","target","swift","calm","bright","clever","steady","prism","forest","island","harbor","cipher","puzzle","rhythm","magnet","anchor","charge","crystal","launch","stream","summer","winter","autumn","spring","wonder","matrix","legend","online","offline","victory","session","control","quality","clarity","practice","fortune","journey","balance","library","station","monitor","network","package","storage","history","setting","accuracy","minute","second","finish","sound","ai","zen","orbit","nebula","quantum","algorithm","database","latency","throughput","interface","variable","function"],"zh":["速度","鍵盤","練習","挑戰","準確","節奏","遊戲","文字","畫面","分數","連擊","紀錄","開始","暫停","繼續","設定","教學","結果","音效","主題","簡單","普通","困難","地獄","輸入","完成","成功","失誤","時間","進度","視窗","模組","狀態","資料","儲存","歷史","排行","語言","英文","數字","混合","專注","冷靜","敏捷","明亮","星光","海洋","櫻花","霓虹","夕陽","黑白","練功","高手","任務","目標","反應","滑順","節拍","光標","回合","短句","長篇","效率","穩定","測試","瀏覽器","網頁","檔案","清單","擴充","候選字","輸入法","拼音","注音","段落","句子","詞語","標點","空白","游標","排行榜","成就","挑錯","修正","加速","減速","專案","模擬","真實","實作","維護","更新","同步","備份","還原","匯入","匯出","樣式","配色","按鈕"],"num":["2048","1024","4096","31415","27182","16180","202606","8675309","13579","24680","98765","12345","54321","112358","144233","377610","80085","65536","32768","16384","404","200","500","302","418","8080","443","127001","255255","010101","9090","7777","10001","2024","2025","2026","86400","3600","1800","120","0","1","7","42","99","256","512","999","1000","10086","123456","654321","101010","121212","314159","271828","161803","141421","173205","223606","987654","456789","789123","246813","97531","112233","445566","778899","135792","246802","111111","222222","333333","444444","555555","666666","777777","888888","999999","000000","202301","202302","202401","202402","202501","202502","202601","202602","31415926","27182818","16180339","14142135","123456789","987654321","192168001","172160001","100000000","4294967295","655350","808080"],"mixed":["alpha7","Beta42","code-9","RWD2026","pixel8","type99","Web3","focus!","go-go","OK123","Noto字","星光88","level5","comboX","run2win","data_1","shift+","tab4","ESC!","Qwerty","hello世界","Ocean7","Sakura2","neon99","mono-1","hard++","score50","WPM120","CSS3","HTML5","JS2026","font2","audio8","local42","save9","clear0","rankS","fast30","night7","daybreak","A1","z9","Go!","Hi2U","Type中文","速度99","鍵盤X","mix-42","dataJSON","word_100","PIME輸入","zh-TW","en-US","Num#7","Combo連擊","Rank-S","WPM_88","score+10","level-12","mode無限","Easy01","Hard99","Hell!!","Normal_5","focus中文","IME-ready","json4all","file://ok","HTML5中文","CSS_grid","JS_async","local存檔","theme霓虹","sakura櫻","ocean海","sunset夕","mono黑白","btn_click","key_correct","wrong字","fast快","slow慢","run跑","save儲存","load載入","test測試","debug除錯","build_bundle","update更新","clear清除","100words","No.404","OK_GO","RWD手機","Tab鍵","Esc暫停","CtrlR","audio8bit","fontNoto","Orbitron7"],"hira":["あさ","いぬ","うみ","えき","おと","かぜ","きつね","くも","けしき","こえ","さくら","しずく","すし","せかい","そら","たび","ちから","つき","てがみ","とけい","なみ","にわ","ぬの","ねこ","のはら","はな","ひかり","ふね","へや","ほし","まち","みず","むし","めがね","もり","やま","ゆき","よる","らいおん","りんご","るす","れんしゅう","ろうそく","わらう","をどり","んまえ","あめ","いろ","うた","えほん","おちゃ","かばん","きもち","くるま","けんこう","ことば","さかな","しごと","すなば","せんせい","そうじ","たいよう","ちず","つくえ","てんき","ともだち","なつ","にじ","ぬま","ねむる","のぞみ","はしる","ひる","ふゆ","へいわ","ほほえみ","まど","みち","むら","めだか","ものがたり","やさい","ゆめ","よろこび","らくだ","りょうり","るり","れきし","ろじ","わかば","あおぞら","いちご","うさぎ","えがお","おまつり","かみなり","きせつ","くさばな","けいけん","こもれび"],"kata":["アイス","イカ","ウサギ","エアコン","オレンジ","カメラ","キーボード","クラス","ケーキ","コーヒー","サクラ","システム","スピード","センサー","ソフト","タイマー","チーム","ツール","テスト","トマト","ナイフ","ニュース","ヌードル","ネオン","ノート","ハード","ヒント","ファイル","ヘッドホン","ホテル","マウス","ミラー","ムービー","メール","モード","ヤカン","ユニット","ヨーグルト","ライト","リズム","ルール","レコード","ロケット","ワイン","ンジャメナ","アプリ","インク","ウォーター","エンジン","オフィス","カード","キャラクター","クラウド","ケース","コード","サウンド","シャツ","スクリーン","セット","ソース","タブレット","チャット","ツアー","テーマ","トラック","ナビ","ニーズ","ヌード","ネット","ノイズ","バッグ","ピクセル","フォント","ページ","ボタン","マップ","ミッション","メモリ","モデル","モニター","ランク","リスト","ループ","レビュー","ログイン","ワーク","アラーム","イベント","ウィンドウ","エラー","オーディオ","カウント","ゲーム","コンボ","ステージ","デザイン","プログラム","ブラウザ","スマート","タイピング"]};
 
 
 /* js/utils/helpers.js */
@@ -122,6 +122,8 @@ const WORD_JSON_FILES = {
   zh: "data/words-zh.json",
   num: "data/words-num.json",
   mixed: "data/words-mixed.json",
+  hira: "data/words-hira.json",
+  kata: "data/words-kata.json",
 };
 
 class WordRepository {
@@ -192,7 +194,10 @@ class DifficultyManager {
     return 0;
   }
 
-  static transformWord(word, difficulty, completedCount) {
+  static transformWord(word, difficulty, completedCount, language = "en") {
+    if (["hira", "kata"].includes(language)) {
+      return word;
+    }
     if (difficulty === "easy") {
       return word.toLowerCase();
     }
@@ -315,7 +320,7 @@ class WordGenerator {
       guard += 1;
     }
     this.recent = [word, ...this.recent].slice(0, 5);
-    return DifficultyManager.transformWord(word, this.settings.difficulty, completedCount);
+    return DifficultyManager.transformWord(word, this.settings.difficulty, completedCount, this.settings.language);
   }
 }
 
@@ -1143,6 +1148,13 @@ const LANGUAGE_LABELS = {
   zh: "中文",
   num: "數字",
   mixed: "混合",
+  hira: "平假名",
+  kata: "片假名",
+};
+
+const LANGUAGE_DESCRIPTIONS = {
+  hira: "只能輸入日文假名，羅馬拼音不會被接受",
+  kata: "只能輸入日文片假名，羅馬拼音不會被接受",
 };
 
 const DIFFICULTY_DESCRIPTIONS = {
@@ -1265,7 +1277,7 @@ class MenuScreen {
     const body = document.createElement("div");
     body.className = "start-options";
     body.innerHTML = `
-      ${this.renderChoices("language", "語言", LANGUAGE_LABELS, selected.language)}
+      ${this.renderChoices("language", "語言", LANGUAGE_LABELS, selected.language, LANGUAGE_DESCRIPTIONS)}
       ${this.renderChoices("difficulty", "難度", {
         easy: "Easy",
         normal: "Normal",
@@ -1378,7 +1390,7 @@ class GameScreen {
           <div class="score-tile"><span class="score-label">錯誤</span><strong class="score-value" data-field="errors">0</strong></div>
         </div>
         <div class="target-word" data-field="word"></div>
-        <input class="input-preview game-input" data-field="hiddenInput" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="text" placeholder="準備開始" aria-label="打字輸入">
+        <input class="input-preview game-input" data-field="hiddenInput" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="text" lang="${this.inputLang(activeSettings.language)}" placeholder="準備開始" aria-label="打字輸入">
         <div class="combo-badge" data-field="comboBadge">Combo x0</div>
       </section>
 
@@ -1469,6 +1481,10 @@ class GameScreen {
     if (valueChars.length > currentChars.length) {
       const additions = valueChars.slice(currentChars.length);
       for (const char of additions) {
+        if (this.shouldBlockRomaji(char)) {
+          this.app.showToast("請切換日文輸入法輸入假名，羅馬拼音不會被接受。", "warning", 1800);
+          continue;
+        }
         this.engine.typeChar(char);
         this.keyboard?.flash(char);
       }
@@ -1523,13 +1539,17 @@ class GameScreen {
     return (
       this.engine?.status === "playing" &&
       document.activeElement !== this.input &&
-      !["zh", "mixed"].includes(this.engine.settings.language) &&
+      !["zh", "mixed", "hira", "kata"].includes(this.engine.settings.language) &&
       !event.ctrlKey &&
       !event.metaKey &&
       !event.altKey &&
       !event.isComposing &&
       event.key.length === 1
     );
+  }
+
+  shouldBlockRomaji(char) {
+    return ["hira", "kata"].includes(this.engine?.settings.language) && /[A-Za-z]/.test(char);
   }
 
   focusInput = () => {
@@ -1642,7 +1662,11 @@ class GameScreen {
   }
 
   languageLabel(language) {
-    return { en: "English", zh: "中文", num: "數字", mixed: "混合" }[language] ?? "English";
+    return { en: "English", zh: "中文", num: "數字", mixed: "混合", hira: "平假名", kata: "片假名" }[language] ?? "English";
+  }
+
+  inputLang(language) {
+    return ["hira", "kata"].includes(language) ? "ja" : "zh-TW";
   }
 
   unmount() {
@@ -1756,6 +1780,7 @@ const TABS = {
       <div class="help-grid">
         <div class="help-item"><h3 class="section-title">輸入目前單字</h3><p class="muted">照畫面中央的字元逐一輸入。正確字元會變綠，錯誤字元會變紅。</p></div>
         <div class="help-item"><h3 class="section-title">完成單字</h3><p class="muted">整個單字完全相同後會自動切換下一題，並獲得單字完成加分。</p></div>
+        <div class="help-item"><h3 class="section-title">日文假名</h3><p class="muted">平假名與片假名模式必須輸入日文假名本身，不能直接輸入英文羅馬拼音。</p></div>
         <div class="help-item"><h3 class="section-title">WPM</h3><p class="muted">WPM 以正確字元除以 5 後換算每分鐘字數。</p></div>
         <div class="help-item"><h3 class="section-title">準確率</h3><p class="muted">準確率 = 正確字元 / 全部輸入字元。錯字即使修正也會計入。</p></div>
       </div>
@@ -1881,6 +1906,8 @@ const LANGUAGE_OPTIONS = {
   zh: "中文",
   num: "數字",
   mixed: "混合",
+  hira: "平假名",
+  kata: "片假名",
 };
 
 const DIFFICULTY_OPTIONS = {

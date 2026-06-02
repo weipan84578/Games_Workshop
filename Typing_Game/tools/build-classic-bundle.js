@@ -8,6 +8,8 @@ const wordFiles = {
   zh: "data/words-zh.json",
   num: "data/words-num.json",
   mixed: "data/words-mixed.json",
+  hira: "data/words-hira.json",
+  kata: "data/words-kata.json",
 };
 
 const sourceFiles = [

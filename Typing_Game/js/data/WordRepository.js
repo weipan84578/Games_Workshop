@@ -3,6 +3,8 @@ const WORD_JSON_FILES = {
   zh: "data/words-zh.json",
   num: "data/words-num.json",
   mixed: "data/words-mixed.json",
+  hira: "data/words-hira.json",
+  kata: "data/words-kata.json",
 };
 
 export class WordRepository {

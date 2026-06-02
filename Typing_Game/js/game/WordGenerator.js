@@ -16,6 +16,6 @@ export class WordGenerator {
       guard += 1;
     }
     this.recent = [word, ...this.recent].slice(0, 5);
-    return DifficultyManager.transformWord(word, this.settings.difficulty, completedCount);
+    return DifficultyManager.transformWord(word, this.settings.difficulty, completedCount, this.settings.language);
   }
 }

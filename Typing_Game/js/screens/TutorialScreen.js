@@ -5,6 +5,7 @@ const TABS = {
       <div class="help-grid">
         <div class="help-item"><h3 class="section-title">輸入目前單字</h3><p class="muted">照畫面中央的字元逐一輸入。正確字元會變綠，錯誤字元會變紅。</p></div>
         <div class="help-item"><h3 class="section-title">完成單字</h3><p class="muted">整個單字完全相同後會自動切換下一題，並獲得單字完成加分。</p></div>
+        <div class="help-item"><h3 class="section-title">日文假名</h3><p class="muted">平假名與片假名模式必須輸入日文假名本身，不能直接輸入英文羅馬拼音。</p></div>
         <div class="help-item"><h3 class="section-title">WPM</h3><p class="muted">WPM 以正確字元除以 5 後換算每分鐘字數。</p></div>
         <div class="help-item"><h3 class="section-title">準確率</h3><p class="muted">準確率 = 正確字元 / 全部輸入字元。錯字即使修正也會計入。</p></div>
       </div>

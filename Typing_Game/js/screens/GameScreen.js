@@ -50,7 +50,7 @@ export class GameScreen {
           <div class="score-tile"><span class="score-label">錯誤</span><strong class="score-value" data-field="errors">0</strong></div>
         </div>
         <div class="target-word" data-field="word"></div>
-        <input class="input-preview game-input" data-field="hiddenInput" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="text" placeholder="準備開始" aria-label="打字輸入">
+        <input class="input-preview game-input" data-field="hiddenInput" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" inputmode="text" lang="${this.inputLang(activeSettings.language)}" placeholder="準備開始" aria-label="打字輸入">
         <div class="combo-badge" data-field="comboBadge">Combo x0</div>
       </section>
 
@@ -141,6 +141,10 @@ export class GameScreen {
     if (valueChars.length > currentChars.length) {
       const additions = valueChars.slice(currentChars.length);
       for (const char of additions) {
+        if (this.shouldBlockRomaji(char)) {
+          this.app.showToast("請切換日文輸入法輸入假名，羅馬拼音不會被接受。", "warning", 1800);
+          continue;
+        }
         this.engine.typeChar(char);
         this.keyboard?.flash(char);
       }
@@ -195,13 +199,17 @@ export class GameScreen {
     return (
       this.engine?.status === "playing" &&
       document.activeElement !== this.input &&
-      !["zh", "mixed"].includes(this.engine.settings.language) &&
+      !["zh", "mixed", "hira", "kata"].includes(this.engine.settings.language) &&
       !event.ctrlKey &&
       !event.metaKey &&
       !event.altKey &&
       !event.isComposing &&
       event.key.length === 1
     );
+  }
+
+  shouldBlockRomaji(char) {
+    return ["hira", "kata"].includes(this.engine?.settings.language) && /[A-Za-z]/.test(char);
   }
 
   focusInput = () => {
@@ -314,7 +322,11 @@ export class GameScreen {
   }
 
   languageLabel(language) {
-    return { en: "English", zh: "中文", num: "數字", mixed: "混合" }[language] ?? "English";
+    return { en: "English", zh: "中文", num: "數字", mixed: "混合", hira: "平假名", kata: "片假名" }[language] ?? "English";
+  }
+
+  inputLang(language) {
+    return ["hira", "kata"].includes(language) ? "ja" : "zh-TW";
   }
 
   unmount() {

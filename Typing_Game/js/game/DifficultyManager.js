@@ -27,7 +27,10 @@ export class DifficultyManager {
     return 0;
   }
 
-  static transformWord(word, difficulty, completedCount) {
+  static transformWord(word, difficulty, completedCount, language = "en") {
+    if (["hira", "kata"].includes(language)) {
+      return word;
+    }
     if (difficulty === "easy") {
       return word.toLowerCase();
     }

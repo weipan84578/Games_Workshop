@@ -27,6 +27,8 @@ const LANGUAGE_OPTIONS = {
   zh: "中文",
   num: "數字",
   mixed: "混合",
+  hira: "平假名",
+  kata: "片假名",
 };
 
 const DIFFICULTY_OPTIONS = {

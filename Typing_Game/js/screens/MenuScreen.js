@@ -6,6 +6,13 @@ const LANGUAGE_LABELS = {
   zh: "中文",
   num: "數字",
   mixed: "混合",
+  hira: "平假名",
+  kata: "片假名",
+};
+
+const LANGUAGE_DESCRIPTIONS = {
+  hira: "只能輸入日文假名，羅馬拼音不會被接受",
+  kata: "只能輸入日文片假名，羅馬拼音不會被接受",
 };
 
 const DIFFICULTY_DESCRIPTIONS = {
@@ -128,7 +135,7 @@ export class MenuScreen {
     const body = document.createElement("div");
     body.className = "start-options";
     body.innerHTML = `
-      ${this.renderChoices("language", "語言", LANGUAGE_LABELS, selected.language)}
+      ${this.renderChoices("language", "語言", LANGUAGE_LABELS, selected.language, LANGUAGE_DESCRIPTIONS)}
       ${this.renderChoices("difficulty", "難度", {
         easy: "Easy",
         normal: "Normal",
