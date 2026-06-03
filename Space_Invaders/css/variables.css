@@ -1,0 +1,96 @@
+/* css/variables.css */
+:root {
+  /* Typography Scale - Large and Clear */
+  --font-size-xs: clamp(12px, 1.5vw, 16px);
+  --font-size-sm: clamp(14px, 1.8vw, 18px);
+  --font-size-base: clamp(18px, 2.2vw, 24px);
+  --font-size-lg: clamp(24px, 3.5vw, 36px);
+  --font-size-xl: clamp(32px, 5.5vw, 54px);   /* Big Title */
+  --font-size-xxl: clamp(40px, 7vw, 72px);
+
+  --font-family-game: "Press Start 2P", "VT323", "Courier New", Courier, monospace;
+  --letter-spacing: 0.08em;
+  --line-height: 1.5;
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* Shared Effects */
+  --glow-radius: 8px;
+  --transition-speed: 0.2s;
+  --border-width: 4px;
+}
+
+/* 1. 經典綠 Classic Green (Default) */
+body[data-theme="classic-green"] {
+  --bg-color: #000000;
+  --fg-color: #00ff66;
+  --accent-color: #00ff66;
+  --enemy-color: #00ff66;
+  --player-color: #ffffff;
+  --danger-color: #ff3333;
+  --barrier-color: #00ff66;
+  --glow-color: rgba(0, 255, 102, 0.4);
+  --ui-bg-overlay: rgba(0, 0, 0, 0.85);
+  --scanline-color: rgba(0, 255, 102, 0.03);
+}
+
+/* 2. 復古琥珀 Amber */
+body[data-theme="amber"] {
+  --bg-color: #1a0f00;
+  --fg-color: #ffb000;
+  --accent-color: #ffd166;
+  --enemy-color: #ff8800;
+  --player-color: #fff4d6;
+  --danger-color: #ff4d4d;
+  --barrier-color: #ffb000;
+  --glow-color: rgba(255, 176, 0, 0.4);
+  --ui-bg-overlay: rgba(26, 15, 0, 0.9);
+  --scanline-color: rgba(255, 176, 0, 0.04);
+}
+
+/* 3. 霓虹紫 Neon Purple */
+body[data-theme="neon-purple"] {
+  --bg-color: #0d0221;
+  --fg-color: #b388ff;
+  --accent-color: #ff2a6d;
+  --enemy-color: #7c4dff;
+  --player-color: #00e5ff;
+  --danger-color: #ff1744;
+  --barrier-color: #ff2a6d;
+  --glow-color: rgba(179, 136, 255, 0.4);
+  --ui-bg-overlay: rgba(13, 2, 33, 0.9);
+  --scanline-color: rgba(255, 42, 109, 0.04);
+}
+
+/* 4. 海洋藍 Ocean Blue */
+body[data-theme="ocean-blue"] {
+  --bg-color: #001018;
+  --fg-color: #29b6f6;
+  --accent-color: #00e5ff;
+  --enemy-color: #4fc3f7;
+  --player-color: #e0f7fa;
+  --danger-color: #ff5252;
+  --barrier-color: #29b6f6;
+  --glow-color: rgba(41, 182, 246, 0.4);
+  --ui-bg-overlay: rgba(0, 16, 24, 0.9);
+  --scanline-color: rgba(0, 229, 255, 0.03);
+}
+
+/* 5. 高對比 High Contrast */
+body[data-theme="high-contrast"] {
+  --bg-color: #000000;
+  --fg-color: #ffffff;
+  --accent-color: #ffff00;
+  --enemy-color: #ffffff;
+  --player-color: #00ffff;
+  --danger-color: #ff0000;
+  --barrier-color: #ffffff;
+  --glow-color: rgba(255, 255, 255, 0.5);
+  --ui-bg-overlay: rgba(0, 0, 0, 0.95);
+  --scanline-color: rgba(255, 255, 255, 0); /* No scanlines for high contrast accessibility */
+}

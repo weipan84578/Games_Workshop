@@ -1,0 +1,79 @@
+/* css/base.css */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+body {
+  background-color: var(--bg-color);
+  color: var(--fg-color);
+  font-family: var(--font-family-game);
+  letter-spacing: var(--letter-spacing);
+  font-size: var(--font-size-base);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+/* CRT Screen Scanline Effect */
+body::after {
+  content: " ";
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(
+    to bottom,
+    var(--scanline-color) 0%,
+    var(--scanline-color) 50%,
+    rgba(0, 0, 0, 0.4) 50%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+  background-size: 100% 4px;
+  z-index: 99999;
+  pointer-events: none;
+}
+
+/* Flicker effect for retro screen feel */
+@keyframes crt-flicker {
+  0% { opacity: 0.985; }
+  50% { opacity: 0.995; }
+  100% { opacity: 0.985; }
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: crt-flicker 0.15s infinite;
+}
+
+/* Common text alignments & headings */
+h1, h2, h3, h4 {
+  font-weight: normal;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* Retro glow effect for headers and accents */
+.text-glow {
+  text-shadow: 0 0 var(--glow-radius) var(--accent-color);
+}
+
+.text-danger {
+  color: var(--danger-color);
+  text-shadow: 0 0 var(--glow-radius) var(--danger-color);
+}
+
+.text-player {
+  color: var(--player-color);
+}
+
+.text-enemy {
+  color: var(--enemy-color);
+  text-shadow: 0 0 var(--glow-radius) var(--enemy-color);
+}

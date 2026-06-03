@@ -1,0 +1,73 @@
+/* css/hud.css */
+#game-hud {
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-lg);
+  box-sizing: border-box;
+  background-color: transparent;
+  color: var(--fg-color);
+  font-family: var(--font-family-game);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  user-select: none;
+}
+
+.hud-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.hud-label {
+  font-size: var(--font-size-xs);
+  color: var(--fg-color);
+  opacity: 0.8;
+  text-shadow: 0 0 calc(var(--glow-radius) * 0.5) var(--glow-color);
+}
+
+.hud-value {
+  font-size: var(--font-size-sm);
+  color: var(--accent-color);
+  text-shadow: 0 0 var(--glow-radius) var(--glow-color);
+}
+
+/* Specific styling for Lives icons */
+.hud-lives-container {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.hud-life-icon {
+  width: 16px;
+  height: 12px;
+  background-color: var(--player-color);
+  /* Use a clip-path to draw a mini retro cannon shape */
+  clip-path: polygon(
+    40% 0%, 60% 0%,
+    40% 30%, 60% 30%,
+    10% 30%, 90% 30%,
+    0% 100%, 100% 100%
+  );
+  box-shadow: 0 0 var(--glow-radius) var(--player-color);
+  display: inline-block;
+}
+
+/* Pause button inside playing screen (top-right corner overlaying hud or canvas) */
+.btn-pause-quick {
+  background: transparent;
+  border: 2px solid var(--fg-color);
+  color: var(--fg-color);
+  font-family: var(--font-family-game);
+  font-size: var(--font-size-xs);
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+
+.btn-pause-quick:hover {
+  background: var(--fg-color);
+  color: var(--bg-color);
+  box-shadow: 0 0 var(--glow-radius) var(--fg-color);
+}

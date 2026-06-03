@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Space Invaders - 太空侵略者</title>
+
+  <!-- CSS Style Layouts -->
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/menu.css" />
+  <link rel="stylesheet" href="css/screens.css" />
+  <link rel="stylesheet" href="css/hud.css" />
+  <link rel="stylesheet" href="css/controls.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body data-theme="classic-green">
+  
+  <div id="app">
+    <div id="game-wrapper">
+      <div id="game-container">
+        
+        <!-- HUD Overlay Panel -->
+        <div id="game-hud" class="hidden">
+          <div class="hud-row">
+            <div class="hud-label">SCORE</div>
+            <div class="hud-label">HI-SCORE</div>
+            <div class="hud-label">WAVE</div>
+          </div>
+          <div class="hud-row">
+            <div id="hud-score" class="hud-value">0000</div>
+            <div id="hud-highscore" class="hud-value">0000</div>
+            <div id="hud-level" class="hud-value">01</div>
+          </div>
+          <div class="hud-row" style="margin-top: 8px;">
+            <div class="hud-lives-container">
+              <span class="hud-label">LIVES:</span>
+              <span id="hud-lives-container" class="hud-lives-container"></span>
+            </div>
+            <button id="btn-pause-quick" class="btn-pause-quick">PAUSE</button>
+          </div>
+        </div>
+
+        <!-- Main Gameplay Canvas -->
+        <canvas id="game-canvas" class="hidden"></canvas>
+
+        <!-- SCREEN OVERLAY: MAIN MENU -->
+        <div id="screen-menu" class="screen-overlay">
+          <div class="game-title text-glow">SPACE<br/>INVADERS</div>
+          <div class="menu-buttons">
+            <button id="btn-new-game" class="btn-retro">開始遊戲</button>
+            <button id="btn-continue" class="btn-retro" disabled>繼續遊戲</button>
+            <button id="btn-help" class="btn-retro">遊戲說明</button>
+            <button id="btn-settings" class="btn-retro">設定</button>
+          </div>
+        </div>
+
+        <!-- SCREEN OVERLAY: SETTINGS -->
+        <div id="screen-settings" class="screen-overlay hidden">
+          <div class="screen-title text-glow">遊戲設定</div>
+          <div class="settings-scroll-container">
+            <div class="settings-list">
+              <div class="setting-item">
+                <div class="setting-label">背景音樂音量</div>
+                <input type="range" id="music-volume" class="slider-retro" min="0" max="100" value="50"/>
+              </div>
+              <div class="setting-item">
+                <div class="setting-label">音效音量</div>
+                <input type="range" id="sfx-volume" class="slider-retro" min="0" max="100" value="50"/>
+              </div>
+              <div class="setting-item">
+                <label class="checkbox-retro">
+                  <input type="checkbox" id="mute-switch"/>
+                  <span class="checkmark"></span>
+                  全靜音
+                </label>
+              </div>
+              <div class="setting-item">
+                <div class="setting-label">主題配色</div>
+                <select id="theme-select" class="select-retro">
+                  <!-- Loaded dynamically -->
+                </select>
+              </div>
+              <div class="setting-item">
+                <div class="setting-label">遊戲難度</div>
+                <select id="difficulty-select" class="select-retro">
+                  <option value="easy">簡單 (4 生命)</option>
+                  <option value="normal" selected>普通 (3 生命)</option>
+                  <option value="hard">困難 (2 生命)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <button id="btn-reset-high" class="btn-retro text-danger" style="margin-bottom: 20px;">重置最高分</button>
+          <button id="btn-back-settings" class="btn-retro">返回主選單</button>
+        </div>
+
+        <!-- SCREEN OVERLAY: HELP (HOW TO PLAY) -->
+        <div id="screen-help" class="screen-overlay hidden">
+          <div class="screen-title text-glow">說明</div>
+          
+          <!-- Detailed Switch Button -->
+          <button id="btn-toggle-help" class="btn-retro" style="font-size: var(--font-size-xs); padding: 8px 16px; margin-bottom: var(--spacing-md); width: auto; max-width: 280px; align-self: center;">切換：詳細說明</button>
+          
+          <div class="help-content">
+            <!-- TAB 1: BASIC CONTROLS (default) -->
+            <div id="help-tab-basic">
+              <div class="help-section">
+                <div class="help-subtitle">操作方法</div>
+                <div class="help-grid">
+                  <div><span class="key-cap">A</span> / <span class="key-cap">←</span></div>
+                  <div>向左移動砲台</div>
+                  <div><span class="key-cap">D</span> / <span class="key-cap">→</span></div>
+                  <div>向右移動砲台</div>
+                  <div><span class="key-cap">Space</span></div>
+                  <div>發射雷射子彈</div>
+                  <div><span class="key-cap">Esc</span> / <span class="key-cap">P</span></div>
+                  <div>暫停 / 恢復遊戲</div>
+                </div>
+              </div>
+              <div class="help-section">
+                <div class="help-subtitle">得分規則</div>
+                <table class="points-table">
+                  <tr>
+                    <td class="text-enemy">🐙 頂層</td>
+                    <td>頂層外星侵略者</td>
+                    <td class="text-glow">30 分</td>
+                  </tr>
+                  <tr>
+                    <td class="text-enemy">🦀 中層</td>
+                    <td>中層外星侵略者</td>
+                    <td class="text-glow">20 分</td>
+                  </tr>
+                  <tr>
+                    <td class="text-enemy">🦑 底層</td>
+                    <td>底層外星侵略者</td>
+                    <td class="text-glow">10 分</td>
+                  </tr>
+                  <tr>
+                    <td class="text-danger">🛸 UFO</td>
+                    <td>神秘飛碟 (加分用)</td>
+                    <td class="text-glow">50-300 隨機分</td>
+                  </tr>
+                </table>
+              </div>
+              <div class="help-section">
+                <div class="help-subtitle">額外生命</div>
+                <div style="font-size: var(--font-size-xs); line-height: 1.5;">
+                  分數每累計達到 <span class="text-glow">10,000分</span> 即可獲贈 <span class="text-glow">1 個額外生命</span>！
+                </div>
+              </div>
+            </div>
+
+            <!-- TAB 2: DETAILED MANUAL (lore, mechanics, tips) -->
+            <div id="help-tab-detail" class="hidden">
+              <div class="help-section">
+                <div class="help-subtitle">故事背景</div>
+                <div style="font-size: var(--font-size-xs); line-height: 1.6; margin-bottom: var(--spacing-sm);">
+                  西元 2026 年，外星侵略者大軍正以整齊佇列逼近地球。作為地球防衛隊的最後希望，你將駕駛裝載最新電漿雷射炮的移動戰車，誓死捍衛人類生存的最後防線！
+                </div>
+              </div>
+              <div class="help-section">
+                <div class="help-subtitle">進階遊戲機制</div>
+                <div style="font-size: var(--font-size-xs); line-height: 1.6; margin-bottom: var(--spacing-sm); display: flex; flex-direction: column; gap: 8px;">
+                  <div>• <b>敵軍加速：</b> 每消滅一隻外星人，整支隊伍的行軍步進與子彈頻率皆會隨之攀升。當剩餘外星人極少時，會進入超高速暴走移動。</div>
+                  <div>• <b>掩體毀損：</b> 四座防禦碉堡會被子彈慢慢射穿。當外星人隊伍下降並觸碰到防護罩時，會直接粉碎接觸到的防禦區塊。</div>
+                  <div>• <b>神祕 UFO：</b> 畫面頂端偶爾飛過的紅色飛碟，擊中可獲 50、100、150、300 隨機高額得分。</div>
+                </div>
+              </div>
+              <div class="help-section">
+                <div class="help-subtitle">戰術攻略提示</div>
+                <div style="font-size: var(--font-size-xs); line-height: 1.6; display: flex; flex-direction: column; gap: 8px;">
+                  <div>• <b>邊緣切割：</b> 優先消滅左右兩側的外星人，限制其前進軌距，可有效減緩敵軍向下進逼的速度。</div>
+                  <div>• <b>防空隧道：</b> 故意將碉堡正上方打穿出一條小縫，製造一個只容子彈通過的「狙擊孔」，即可在掩體後方安全放冷槍。</div>
+                  <div>• <b>存檔機制：</b> 每次過關、手動暫停時，系統均會自動將關卡、生命值與分數寫入本地快取，可在主畫面點選「繼續遊戲」無縫續玩。</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <button id="btn-back-help" class="btn-retro">返回主選單</button>
+        </div>
+
+        <!-- SCREEN OVERLAY: PAUSED -->
+        <div id="screen-paused" class="screen-overlay hidden">
+          <div class="screen-title text-glow">遊戲暫停</div>
+          <div class="menu-buttons">
+            <button id="btn-resume" class="btn-retro">恢復遊戲</button>
+            <button id="btn-quit-paused" class="btn-retro">儲存並离开</button>
+          </div>
+        </div>
+
+        <!-- SCREEN OVERLAY: GAME OVER -->
+        <div id="screen-gameover" class="screen-overlay hidden">
+          <div class="screen-title text-danger">GAME OVER</div>
+          <div class="gameover-score-info">
+            <div>最終得分：<span id="gameover-final-score" class="text-glow">0</span></div>
+            <div>最高紀錄：<span id="gameover-high-score">0</span></div>
+            <div id="gameover-new-record" class="new-high-score-tag hidden">★ NEW RECORD ★</div>
+          </div>
+          <div class="menu-buttons">
+            <button id="btn-restart" class="btn-retro">再玩一次</button>
+            <button id="btn-quit-gameover" class="btn-retro">返回主選單</button>
+          </div>
+        </div>
+
+        <!-- MOBILE TOUCH CONTROLLERS -->
+        <div id="mobile-controls">
+          <div class="control-group-left">
+            <button id="btn-left" class="btn-virtual">←</button>
+            <button id="btn-right" class="btn-virtual">→</button>
+          </div>
+          <div class="control-group-right">
+            <button id="btn-fire" class="btn-virtual btn-fire">FIRE</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Javascript Modules (Loaded in Sequence) -->
+  <script src="js/config.js"></script>
+  <script src="js/utils/helpers.js"></script>
+  <script src="js/utils/storage.js"></script>
+  <script src="js/utils/input.js"></script>
+  <script src="js/audio/audioManager.js"></script>
+  <script src="js/entities/bullet.js"></script>
+  <script src="js/entities/player.js"></script>
+  <script src="js/entities/invader.js"></script>
+  <script src="js/entities/invaderFleet.js"></script>
+  <script src="js/entities/barrier.js"></script>
+  <script src="js/entities/ufo.js"></script>
+  <script src="js/core/gameLoop.js"></script>
+  <script src="js/core/game.js"></script>
+  <script src="js/core/stateManager.js"></script>
+  <script src="js/ui/hud.js"></script>
+  <script src="js/ui/menu.js"></script>
+  <script src="js/ui/settings.js"></script>
+  <script src="js/ui/help.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>

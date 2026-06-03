@@ -1,0 +1,103 @@
+/* css/responsive.css */
+
+/* Hide mobile controls by default */
+#mobile-controls {
+  display: none !important;
+}
+
+/* Detect touch device */
+@media (pointer: coarse), (hover: none) {
+  /* Show mobile controls only in PLAYING state */
+  body.state-playing #mobile-controls {
+    display: flex !important;
+  }
+}
+
+/* Mobile Screen Adjustments */
+@media (max-width: 600px) {
+  :root {
+    --font-size-xs: 12px;
+    --font-size-sm: 14px;
+    --font-size-base: 16px;
+    --font-size-lg: 22px;
+    --font-size-xl: 28px;
+    --border-width: 3px;
+  }
+  
+  #game-wrapper {
+    padding: var(--spacing-xs);
+  }
+  
+  #game-container {
+    border-width: var(--border-width);
+  }
+  
+  .screen-overlay {
+    padding: var(--spacing-md);
+  }
+  
+  .menu-buttons {
+    width: 100%;
+    gap: var(--spacing-sm);
+  }
+  
+  /* Larger tap targets for mobile usability */
+  .btn-retro {
+    padding: 14px 20px !important;
+    font-size: var(--font-size-base) !important;
+    min-height: 48px;
+  }
+  
+  .settings-list {
+    gap: var(--spacing-xs);
+  }
+}
+
+/* Landscape Mode Adjustments for mobile phones */
+@media (orientation: landscape) and (max-height: 500px) {
+  #game-wrapper {
+    padding: var(--spacing-xs);
+  }
+  
+  #game-container {
+    aspect-ratio: 4 / 5;
+    max-height: 100vh;
+    max-width: 80vh;
+  }
+  
+  /* Reposition mobile controls to side panels to avoid overlapping in wide viewports */
+  body.state-playing #mobile-controls {
+    display: flex !important;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 120px;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    padding: var(--spacing-sm);
+    background-color: rgba(0, 0, 0, 0.4);
+    border-left: 2px solid var(--fg-color);
+  }
+  
+  body.state-playing #game-canvas {
+    max-width: calc(100% - 120px) !important;
+    max-height: 100% !important;
+  }
+  
+  .control-group-left {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .btn-virtual {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .btn-virtual.btn-fire {
+    width: 60px;
+    height: 60px;
+  }
+}

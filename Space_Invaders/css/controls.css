@@ -1,0 +1,66 @@
+/* css/controls.css */
+#mobile-controls {
+  display: none; /* Shown in responsive.css on touch devices */
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  background-color: var(--ui-bg-overlay);
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
+  touch-action: none;
+}
+
+.control-group-left {
+  display: flex;
+  gap: var(--spacing-md);
+  pointer-events: auto;
+}
+
+.control-group-right {
+  pointer-events: auto;
+}
+
+/* Virtual Button General Style */
+.btn-virtual {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: var(--border-width) solid var(--fg-color);
+  background-color: var(--ui-bg-overlay);
+  color: var(--fg-color);
+  font-family: var(--font-family-game);
+  font-size: var(--font-size-base);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 var(--glow-radius) var(--glow-color);
+  user-select: none;
+  touch-action: none;
+  transition: transform 0.1s, background-color 0.1s;
+}
+
+.btn-virtual:active {
+  transform: scale(0.9);
+  background-color: var(--fg-color);
+  color: var(--bg-color);
+  box-shadow: 0 0 calc(var(--glow-radius) * 1.5) var(--fg-color);
+}
+
+/* Specific styling for fire button */
+.btn-virtual.btn-fire {
+  width: 80px;
+  height: 80px;
+  font-size: var(--font-size-sm);
+  color: var(--danger-color);
+  border-color: var(--danger-color);
+  box-shadow: 0 0 var(--glow-radius) rgba(255, 23, 68, 0.4);
+}
+
+.btn-virtual.btn-fire:active {
+  background-color: var(--danger-color);
+  color: var(--bg-color);
+  box-shadow: 0 0 calc(var(--glow-radius) * 1.5) var(--danger-color);
+}

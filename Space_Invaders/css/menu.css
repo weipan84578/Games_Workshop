@@ -1,0 +1,80 @@
+/* css/menu.css */
+
+/* Big title style */
+.game-title {
+  font-size: var(--font-size-xl);
+  color: var(--fg-color);
+  margin-bottom: var(--spacing-xl);
+  text-shadow: 0 0 var(--glow-radius) var(--glow-color);
+  text-align: center;
+  animation: title-glow-pulse 2s infinite alternate;
+}
+
+@keyframes title-glow-pulse {
+  from {
+    text-shadow: 0 0 calc(var(--glow-radius) * 0.5) var(--glow-color);
+    transform: scale(0.98);
+  }
+  to {
+    text-shadow: 0 0 calc(var(--glow-radius) * 1.5) var(--glow-color);
+    transform: scale(1.02);
+  }
+}
+
+/* Menu list of buttons */
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  width: 80%;
+  max-width: 400px;
+}
+
+/* Retro arcade button styling */
+.btn-retro {
+  display: block;
+  width: 100%;
+  padding: var(--spacing-md);
+  font-family: var(--font-family-game);
+  font-size: var(--font-size-base);
+  color: var(--fg-color);
+  background-color: transparent;
+  border: var(--border-width) solid var(--fg-color);
+  text-align: center;
+  text-transform: uppercase;
+  transition: all var(--transition-speed) ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 0 transparent;
+}
+
+.btn-retro:hover:not(:disabled) {
+  background-color: var(--fg-color);
+  color: var(--bg-color);
+  box-shadow: 0 0 var(--glow-radius) var(--fg-color);
+  transform: translateY(-2px);
+}
+
+.btn-retro:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn-retro:disabled {
+  color: #555555;
+  border-color: #555555;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Quick hint below buttons (e.g. for disabled state) */
+.btn-hint {
+  font-size: var(--font-size-xs);
+  color: var(--danger-color);
+  margin-top: calc(-1 * var(--spacing-sm));
+  text-align: center;
+  visibility: hidden;
+}
+
+.btn-retro:disabled + .btn-hint {
+  visibility: visible;
+}
