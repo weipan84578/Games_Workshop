@@ -26,10 +26,10 @@
     grid-template-columns: 1fr;
     grid-template-rows: auto minmax(0, 1fr) auto;
     align-content: stretch;
-    gap: 3px;
+    gap: 8px;
     width: 100vw;
     height: 100dvh;
-    padding: 4px 6px 6px;
+    padding: 6px 8px 8px;
   }
 
   .hud-panel {
@@ -80,8 +80,9 @@
   .board-wrap {
     justify-self: center;
     align-self: center;
-    width: min(calc((100dvh - 86px) * 0.5625), calc(100vw - 12px));
-    max-height: calc(100dvh - 86px);
+    width: min(calc((100dvh - 132px) * 0.5625), calc(100vw - 36px));
+    max-height: calc(100dvh - 132px);
+    margin: 4px auto;
   }
 
   .touch-controls {
@@ -131,8 +132,8 @@
   }
 
   .board-wrap {
-    width: min(calc((100dvh - 82px) * 0.5625), calc(100vw - 8px));
-    max-height: calc(100dvh - 82px);
+    width: min(calc((100dvh - 128px) * 0.5625), calc(100vw - 34px));
+    max-height: calc(100dvh - 128px);
   }
 
   .touch-controls button {

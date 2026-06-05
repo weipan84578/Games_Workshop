@@ -58,7 +58,7 @@
 
 .info-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   gap: var(--gap);
   overflow: auto;
   padding-bottom: 0.2rem;
@@ -80,4 +80,16 @@
 
 .info-card p {
   color: var(--c-text-dim);
+}
+
+.info-card ul {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+  padding-left: 1.05rem;
+  color: var(--c-text-dim);
+}
+
+.info-card li {
+  padding-left: 0.1rem;
 }

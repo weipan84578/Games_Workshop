@@ -1,3 +1,9 @@
+.screen-help {
+  overflow: auto;
+}
+
 .screen-help .content-shell {
   justify-content: center;
+  min-height: 100%;
+  height: auto;
 }
