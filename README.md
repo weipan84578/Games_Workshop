@@ -53,6 +53,7 @@
 | `breakout_game`  | 打磚塊     |
 | `Space_Invaders` | 太空侵略者 |
 | `shooting_game`  | 槍戰練習   |
+| `Pinball`        | 彈珠台     |
 
 ### 策略遊戲
 
