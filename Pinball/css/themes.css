@@ -1,0 +1,54 @@
+[data-theme="classic"] {
+  --c-bg: #210809;
+  --c-surface: #3a1410;
+  --c-panel: #4a1c14;
+  --c-primary: #e63946;
+  --c-secondary: #ffb703;
+  --c-accent: #fefae0;
+  --c-text: #fff7ef;
+  --c-text-dim: #f0c9a8;
+}
+
+[data-theme="ocean"] {
+  --c-bg: #001b35;
+  --c-surface: #073b4c;
+  --c-panel: #0b4f6c;
+  --c-primary: #00b4d8;
+  --c-secondary: #caf0f8;
+  --c-accent: #ffd166;
+  --c-text: #ffffff;
+  --c-text-dim: #b9e6f2;
+}
+
+[data-theme="forest"] {
+  --c-bg: #081c15;
+  --c-surface: #1b4332;
+  --c-panel: #2d6a4f;
+  --c-primary: #95d5b2;
+  --c-secondary: #fca311;
+  --c-accent: #fefae0;
+  --c-text: #f7fff9;
+  --c-text-dim: #cbead2;
+}
+
+[data-theme="sunset"] {
+  --c-bg: #25001f;
+  --c-surface: #4a154b;
+  --c-panel: #6d1f52;
+  --c-primary: #ff006e;
+  --c-secondary: #3a86ff;
+  --c-accent: #ffbe0b;
+  --c-text: #fff8f0;
+  --c-text-dim: #ffc5d3;
+}
+
+[data-theme="mono"] {
+  --c-bg: #050505;
+  --c-surface: #151515;
+  --c-panel: #242424;
+  --c-primary: #ffffff;
+  --c-secondary: #9a9a9a;
+  --c-accent: #ffd60a;
+  --c-text: #ffffff;
+  --c-text-dim: #d2d2d2;
+}

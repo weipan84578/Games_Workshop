@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Neon Pinball</title>
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/screen-menu.css" />
+  <link rel="stylesheet" href="css/screen-game.css" />
+  <link rel="stylesheet" href="css/screen-help.css" />
+  <link rel="stylesheet" href="css/screen-settings.css" />
+  <link rel="stylesheet" href="css/themes.css" />
+  <link rel="stylesheet" href="css/responsive.css" />
+</head>
+<body data-theme="neon">
+  <main id="app" class="app-shell">
+    <section id="screen-menu" class="screen screen-menu is-active" aria-labelledby="menu-title">
+      <div class="menu-layout">
+        <div class="brand-panel">
+          <p class="eyebrow">HTML5 Canvas</p>
+          <h1 id="menu-title">Neon Pinball</h1>
+          <div class="score-strip" aria-live="polite">
+            <span>High Score</span>
+            <strong id="menu-high-score">0</strong>
+          </div>
+          <div class="menu-actions">
+            <button id="btn-start" class="button button-primary" type="button">Start Game</button>
+            <button id="btn-continue" class="button" type="button">Continue</button>
+            <button id="btn-help" class="button" type="button">Help</button>
+            <button id="btn-settings" class="button" type="button">Settings</button>
+          </div>
+        </div>
+        <div class="attract-panel" aria-hidden="true">
+          <canvas id="attract-canvas" width="270" height="480"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-game" class="screen screen-game" aria-label="Pinball game">
+      <div class="game-layout">
+        <aside class="hud-panel" aria-live="polite">
+          <div class="hud-grid">
+            <div class="hud-item">
+              <span>Score</span>
+              <strong id="hud-score">0</strong>
+            </div>
+            <div class="hud-item">
+              <span>Balls</span>
+              <strong id="hud-balls">3</strong>
+            </div>
+            <div class="hud-item">
+              <span>Bonus</span>
+              <strong id="hud-multiplier">x1</strong>
+            </div>
+            <div class="hud-item">
+              <span>Combo</span>
+              <strong id="hud-combo">0</strong>
+            </div>
+          </div>
+          <div id="hud-message" class="hud-message">READY</div>
+          <div class="game-buttons">
+            <button id="btn-pause" class="icon-button" type="button" aria-label="Pause">II</button>
+            <button id="btn-back-menu" class="icon-button" type="button" aria-label="Back to menu">Home</button>
+          </div>
+        </aside>
+
+        <div class="board-wrap">
+          <canvas id="board" width="540" height="960"></canvas>
+          <div id="pause-overlay" class="pause-overlay" hidden>
+            <div class="pause-panel">
+              <h2>Paused</h2>
+              <button id="btn-resume" class="button button-primary" type="button">Resume</button>
+              <button id="btn-save-exit" class="button" type="button">Save and Exit</button>
+              <button id="btn-restart" class="button" type="button">Restart</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="touch-controls" aria-hidden="true">
+          <button id="touch-left" type="button">Left</button>
+          <button id="touch-launch" type="button">Launch</button>
+          <button id="touch-right" type="button">Right</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-help" class="screen screen-help" aria-labelledby="help-title">
+      <div class="content-shell">
+        <header class="screen-header">
+          <button class="icon-button js-back-menu" type="button" aria-label="Back to menu">Home</button>
+          <h2 id="help-title">Help</h2>
+        </header>
+        <div class="info-grid">
+          <article class="info-card">
+            <h3>Controls</h3>
+            <p>Left flipper: A / Left Arrow. Right flipper: D / Right Arrow. Launch: hold Space / Down Arrow, then release. Pause: Esc.</p>
+          </article>
+          <article class="info-card">
+            <h3>Scoring</h3>
+            <p>Bumpers score 100, targets score 250, and ramps score 500. Fast repeated hits build combo and bonus multiplier.</p>
+          </article>
+          <article class="info-card">
+            <h3>Rules</h3>
+            <p>You start with 3 balls. A weak launch returns to the plunger for another try. Only balls that have entered the table can drain.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-settings" class="screen screen-settings" aria-labelledby="settings-title">
+      <div class="content-shell">
+        <header class="screen-header">
+          <button class="icon-button js-back-menu" type="button" aria-label="Back to menu">Home</button>
+          <h2 id="settings-title">Settings</h2>
+        </header>
+        <form id="settings-form" class="settings-form">
+          <fieldset>
+            <legend>Theme</legend>
+            <div class="theme-picker" role="radiogroup" aria-label="Theme">
+              <button type="button" class="theme-swatch" data-theme-choice="neon" aria-label="Neon" style="--swatch-a:#ff2d95;--swatch-b:#00e5ff;--swatch-c:#faff00"></button>
+              <button type="button" class="theme-swatch" data-theme-choice="classic" aria-label="Classic" style="--swatch-a:#e63946;--swatch-b:#ffb703;--swatch-c:#fefae0"></button>
+              <button type="button" class="theme-swatch" data-theme-choice="ocean" aria-label="Ocean" style="--swatch-a:#00b4d8;--swatch-b:#caf0f8;--swatch-c:#48cae4"></button>
+              <button type="button" class="theme-swatch" data-theme-choice="forest" aria-label="Forest" style="--swatch-a:#2d6a4f;--swatch-b:#d8f3dc;--swatch-c:#fca311"></button>
+              <button type="button" class="theme-swatch" data-theme-choice="sunset" aria-label="Sunset" style="--swatch-a:#ff006e;--swatch-b:#ffbe0b;--swatch-c:#3a86ff"></button>
+              <button type="button" class="theme-swatch" data-theme-choice="mono" aria-label="Mono" style="--swatch-a:#ffffff;--swatch-b:#999999;--swatch-c:#ffd60a"></button>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Audio</legend>
+            <label class="range-row">
+              <span>BGM</span>
+              <input id="setting-bgm" type="range" min="0" max="100" step="1" />
+              <output id="setting-bgm-value">45%</output>
+            </label>
+            <label class="range-row">
+              <span>SFX</span>
+              <input id="setting-sfx" type="range" min="0" max="100" step="1" />
+              <output id="setting-sfx-value">80%</output>
+            </label>
+            <label class="toggle-row">
+              <span>Mute</span>
+              <input id="setting-muted" type="checkbox" />
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Game</legend>
+            <div class="segmented" role="radiogroup" aria-label="Difficulty">
+              <button type="button" data-difficulty="easy">Easy</button>
+              <button type="button" data-difficulty="normal">Normal</button>
+              <button type="button" data-difficulty="hard">Hard</button>
+            </div>
+          </fieldset>
+
+          <div class="settings-actions">
+            <button id="btn-reset-storage" class="button" type="button">Clear Records</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/audio/audio-manager.js"></script>
+  <script src="js/audio/sound-effects.js"></script>
+  <script src="js/core/game-loop.js"></script>
+  <script src="js/core/physics.js"></script>
+  <script src="js/core/collision.js"></script>
+  <script src="js/core/renderer.js"></script>
+  <script src="js/entities/ball.js"></script>
+  <script src="js/entities/flipper.js"></script>
+  <script src="js/entities/bumper.js"></script>
+  <script src="js/entities/target.js"></script>
+  <script src="js/entities/plunger.js"></script>
+  <script src="js/entities/wall.js"></script>
+  <script src="js/ui/screen-manager.js"></script>
+  <script src="js/ui/menu.js"></script>
+  <script src="js/ui/hud.js"></script>
+  <script src="js/ui/settings.js"></script>
+  <script src="js/ui/input.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+.app-shell {
+  position: relative;
+  width: 100vw;
+  height: 100dvh;
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+.screen {
+  position: absolute;
+  inset: 0;
+  display: none;
+  overflow: hidden;
+}
+
+.screen.is-active {
+  display: block;
+}
+
+.menu-layout,
+.content-shell,
+.game-layout {
+  width: min(1180px, calc(100vw - 24px));
+  height: 100%;
+  margin: 0 auto;
+}
+
+.menu-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.95fr) minmax(260px, 0.72fr);
+  align-items: center;
+  gap: clamp(1rem, 5vw, 4rem);
+  padding: clamp(1rem, 4vh, 2rem) 0;
+}
+
+.content-shell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  padding: clamp(1rem, 4vh, 2.2rem) 0;
+}
+
+.screen-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 54px;
+}
+
+.game-layout {
+  display: grid;
+  grid-template-columns: minmax(188px, 250px) minmax(280px, calc((100dvh - 20px) * 0.5625));
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.75rem, 2vw, 1.3rem);
+  padding: 10px 0;
+}

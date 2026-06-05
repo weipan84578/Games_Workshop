@@ -1,0 +1,110 @@
+.settings-form {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--gap);
+  align-content: start;
+  overflow: auto;
+  padding-bottom: 0.2rem;
+}
+
+.settings-form fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding: 1rem;
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--c-panel), transparent 5%);
+}
+
+.settings-form legend {
+  margin-bottom: 0.75rem;
+  color: var(--c-accent);
+  font-weight: var(--fw-black);
+}
+
+.theme-picker {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(48px, 1fr));
+  gap: 0.65rem;
+}
+
+.theme-swatch {
+  position: relative;
+  min-height: 54px;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--swatch-a), var(--swatch-b) 52%, var(--swatch-c));
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.38);
+}
+
+.theme-swatch.is-selected::after {
+  position: absolute;
+  inset: 6px;
+  border: 3px solid #000;
+  border-radius: calc(var(--radius) - 3px);
+  content: "";
+  outline: 2px solid #fff;
+}
+
+.range-row,
+.toggle-row {
+  display: grid;
+  grid-template-columns: 68px minmax(0, 1fr) 54px;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.range-row span,
+.toggle-row span {
+  color: var(--c-text-dim);
+  font-weight: var(--fw-bold);
+}
+
+.range-row input {
+  width: 100%;
+  accent-color: var(--c-secondary);
+}
+
+.range-row output {
+  text-align: right;
+  color: var(--c-accent);
+  font-family: var(--font-score);
+}
+
+.toggle-row {
+  grid-template-columns: minmax(0, 1fr) 54px;
+}
+
+.toggle-row input {
+  width: 24px;
+  height: 24px;
+  justify-self: end;
+  accent-color: var(--c-secondary);
+}
+
+.segmented {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--radius);
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.segmented button {
+  min-height: 42px;
+  border-radius: calc(var(--radius) - 2px);
+  color: var(--c-text-dim);
+  background: transparent;
+}
+
+.segmented button.is-selected {
+  color: #050112;
+  background: var(--c-accent);
+  font-weight: var(--fw-bold);
+}
+
+.settings-actions {
+  grid-column: 1 / -1;
+  width: min(100%, 260px);
+}

@@ -1,0 +1,72 @@
+body {
+  color: var(--c-text);
+  background:
+    linear-gradient(140deg, color-mix(in srgb, var(--c-bg), #000 18%), var(--c-bg) 60%),
+    radial-gradient(circle at 50% 20%, color-mix(in srgb, var(--c-secondary), transparent 84%), transparent 38%);
+  font-family: var(--font-ui);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  content: "";
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(to bottom, black, transparent 82%);
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1 {
+  max-width: 9ch;
+  font-family: var(--font-score);
+  font-size: var(--fs-display);
+  font-weight: var(--fw-black);
+  line-height: var(--lh-tight);
+  color: var(--c-text);
+  text-shadow:
+    0 0 12px color-mix(in srgb, var(--c-primary), transparent 28%),
+    0 0 26px color-mix(in srgb, var(--c-secondary), transparent 40%);
+}
+
+h2 {
+  font-size: var(--fs-h2);
+  line-height: var(--lh-tight);
+}
+
+h3 {
+  font-size: var(--fs-h3);
+  line-height: var(--lh-tight);
+}
+
+button,
+input {
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.46;
+}
+
+:focus-visible {
+  outline: 3px solid var(--c-accent);
+  outline-offset: 3px;
+}

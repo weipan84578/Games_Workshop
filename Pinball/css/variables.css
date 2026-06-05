@@ -1,0 +1,36 @@
+:root {
+  --font-ui: "Segoe UI", "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", system-ui, sans-serif;
+  --font-score: "Arial Black", Impact, var(--font-ui);
+
+  --fs-display: clamp(2.4rem, 6vw, 4.8rem);
+  --fs-h1: clamp(2rem, 4vw, 3.4rem);
+  --fs-h2: clamp(1.45rem, 3vw, 2.3rem);
+  --fs-h3: clamp(1.1rem, 2vw, 1.45rem);
+  --fs-button: clamp(1rem, 2vw, 1.25rem);
+  --fs-body: clamp(0.95rem, 1.6vw, 1.08rem);
+  --fs-score: clamp(1.4rem, 4vw, 2.5rem);
+
+  --fw-bold: 700;
+  --fw-black: 900;
+  --lh-tight: 1.2;
+  --lh-body: 1.55;
+
+  --radius: 8px;
+  --control-size: 48px;
+  --gap: clamp(0.75rem, 2vw, 1.25rem);
+
+  --c-bg: #0d0221;
+  --c-surface: #1a0b2e;
+  --c-panel: #21133a;
+  --c-primary: #ff2d95;
+  --c-secondary: #00e5ff;
+  --c-accent: #faff00;
+  --c-text: #ffffff;
+  --c-text-dim: #c8b9e8;
+  --c-line: rgba(255, 255, 255, 0.18);
+  --c-success: #00ff9f;
+  --c-danger: #ff4d5e;
+
+  --shadow-hard: 0 16px 50px rgba(0, 0, 0, 0.36);
+  --shadow-glow: 0 0 22px color-mix(in srgb, var(--c-secondary), transparent 52%);
+}

@@ -1,0 +1,112 @@
+.hud-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.hud-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.55rem;
+}
+
+.hud-item {
+  display: flex;
+  min-height: 62px;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0.62rem 0.75rem;
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--c-panel), transparent 4%);
+}
+
+.hud-item span {
+  color: var(--c-text-dim);
+  font-size: 0.78rem;
+  font-weight: var(--fw-bold);
+}
+
+.hud-item strong {
+  overflow-wrap: anywhere;
+  font-family: var(--font-score);
+  font-size: clamp(1.25rem, 3vw, 2rem);
+  line-height: var(--lh-tight);
+  color: var(--c-accent);
+}
+
+.hud-message {
+  min-height: 52px;
+  display: grid;
+  place-items: center;
+  padding: 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--c-primary), transparent 35%);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--c-primary), transparent 86%);
+  color: var(--c-text);
+  font-family: var(--font-score);
+  font-size: clamp(0.95rem, 2vw, 1.35rem);
+  text-align: center;
+}
+
+.game-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, var(--control-size));
+  gap: 0.55rem;
+}
+
+.board-wrap {
+  position: relative;
+  width: min(calc((100dvh - 20px) * 0.5625), calc(100vw - 24px));
+  max-height: calc(100dvh - 20px);
+  aspect-ratio: 9 / 16;
+  border: 1px solid color-mix(in srgb, var(--c-secondary), transparent 50%);
+  border-radius: var(--radius);
+  background: #090014;
+  box-shadow: var(--shadow-hard), var(--shadow-glow);
+  overflow: hidden;
+}
+
+#board {
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+.pause-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.68);
+}
+
+.pause-overlay[hidden] {
+  display: none;
+}
+
+.screen-game.is-paused .touch-controls {
+  pointer-events: none;
+  opacity: 0.45;
+}
+
+.pause-panel {
+  display: grid;
+  width: min(260px, 100%);
+  gap: 0.7rem;
+  padding: 1rem;
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--c-surface), #000 18%);
+  box-shadow: var(--shadow-hard);
+}
+
+.pause-panel h2 {
+  text-align: center;
+}
+
+.touch-controls {
+  display: none;
+}
