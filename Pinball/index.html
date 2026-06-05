@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Neon Pinball</title>
+  <title>霓虹彈珠台</title>
   <link rel="stylesheet" href="css/reset.css" />
   <link rel="stylesheet" href="css/variables.css" />
   <link rel="stylesheet" href="css/base.css" />
@@ -21,17 +21,17 @@
     <section id="screen-menu" class="screen screen-menu is-active" aria-labelledby="menu-title">
       <div class="menu-layout">
         <div class="brand-panel">
-          <p class="eyebrow">HTML5 Canvas</p>
-          <h1 id="menu-title">Neon Pinball</h1>
+          <p class="eyebrow">靜態網頁版</p>
+          <h1 id="menu-title">霓虹彈珠台</h1>
           <div class="score-strip" aria-live="polite">
-            <span>High Score</span>
+            <span>最高分</span>
             <strong id="menu-high-score">0</strong>
           </div>
           <div class="menu-actions">
-            <button id="btn-start" class="button button-primary" type="button">Start Game</button>
-            <button id="btn-continue" class="button" type="button">Continue</button>
-            <button id="btn-help" class="button" type="button">Help</button>
-            <button id="btn-settings" class="button" type="button">Settings</button>
+            <button id="btn-start" class="button button-primary" type="button">開始</button>
+            <button id="btn-continue" class="button" type="button">繼續</button>
+            <button id="btn-help" class="button" type="button">說明</button>
+            <button id="btn-settings" class="button" type="button">設定</button>
           </div>
         </div>
         <div class="attract-panel" aria-hidden="true">
@@ -40,31 +40,31 @@
       </div>
     </section>
 
-    <section id="screen-game" class="screen screen-game" aria-label="Pinball game">
+    <section id="screen-game" class="screen screen-game" aria-label="彈珠台遊戲">
       <div class="game-layout">
         <aside class="hud-panel" aria-live="polite">
           <div class="hud-grid">
             <div class="hud-item">
-              <span>Score</span>
+              <span>分數</span>
               <strong id="hud-score">0</strong>
             </div>
             <div class="hud-item">
-              <span>Balls</span>
+              <span>球數</span>
               <strong id="hud-balls">3</strong>
             </div>
             <div class="hud-item">
-              <span>Bonus</span>
+              <span>倍率</span>
               <strong id="hud-multiplier">x1</strong>
             </div>
             <div class="hud-item">
-              <span>Combo</span>
+              <span>連擊</span>
               <strong id="hud-combo">0</strong>
             </div>
           </div>
-          <div id="hud-message" class="hud-message">READY</div>
+          <div id="hud-message" class="hud-message">準備</div>
           <div class="game-buttons">
-            <button id="btn-pause" class="icon-button" type="button" aria-label="Pause">II</button>
-            <button id="btn-back-menu" class="icon-button" type="button" aria-label="Back to menu">Home</button>
+            <button id="btn-pause" class="icon-button" type="button" aria-label="暫停">Ⅱ</button>
+            <button id="btn-back-menu" class="icon-button" type="button" aria-label="返回主選單">⌂</button>
           </div>
         </aside>
 
@@ -72,18 +72,18 @@
           <canvas id="board" width="540" height="960"></canvas>
           <div id="pause-overlay" class="pause-overlay" hidden>
             <div class="pause-panel">
-              <h2>Paused</h2>
-              <button id="btn-resume" class="button button-primary" type="button">Resume</button>
-              <button id="btn-save-exit" class="button" type="button">Save and Exit</button>
-              <button id="btn-restart" class="button" type="button">Restart</button>
+              <h2>暫停</h2>
+              <button id="btn-resume" class="button button-primary" type="button">繼續</button>
+              <button id="btn-save-exit" class="button" type="button">保存離開</button>
+              <button id="btn-restart" class="button" type="button">重開</button>
             </div>
           </div>
         </div>
 
         <div class="touch-controls" aria-hidden="true">
-          <button id="touch-left" type="button">Left</button>
-          <button id="touch-launch" type="button">Launch</button>
-          <button id="touch-right" type="button">Right</button>
+          <button id="touch-left" type="button">左</button>
+          <button id="touch-launch" type="button">發射</button>
+          <button id="touch-right" type="button">右</button>
         </div>
       </div>
     </section>
@@ -91,21 +91,21 @@
     <section id="screen-help" class="screen screen-help" aria-labelledby="help-title">
       <div class="content-shell">
         <header class="screen-header">
-          <button class="icon-button js-back-menu" type="button" aria-label="Back to menu">Home</button>
-          <h2 id="help-title">Help</h2>
+          <button class="icon-button js-back-menu" type="button" aria-label="返回主選單">⌂</button>
+          <h2 id="help-title">說明</h2>
         </header>
         <div class="info-grid">
           <article class="info-card">
-            <h3>Controls</h3>
-            <p>Left flipper: A / Left Arrow. Right flipper: D / Right Arrow. Launch: hold Space / Down Arrow, then release. Pause: Esc.</p>
+            <h3>操作</h3>
+            <p>左彈板：A / ←。右彈板：D / →。發射：長按 Space / ↓ 後放開。暫停：Esc。</p>
           </article>
           <article class="info-card">
-            <h3>Scoring</h3>
-            <p>Bumpers score 100, targets score 250, and ramps score 500. Fast repeated hits build combo and bonus multiplier.</p>
+            <h3>得分</h3>
+            <p>彈柱 100 分，目標 250 分，坡道 500 分。連續命中會提高連擊與倍率。</p>
           </article>
           <article class="info-card">
-            <h3>Rules</h3>
-            <p>You start with 3 balls. A weak launch returns to the plunger for another try. Only balls that have entered the table can drain.</p>
+            <h3>規則</h3>
+            <p>每局 3 顆球。發射太弱會回到發射器重射；只有進入主場後才會扣球。</p>
           </article>
         </div>
       </div>
@@ -114,51 +114,51 @@
     <section id="screen-settings" class="screen screen-settings" aria-labelledby="settings-title">
       <div class="content-shell">
         <header class="screen-header">
-          <button class="icon-button js-back-menu" type="button" aria-label="Back to menu">Home</button>
-          <h2 id="settings-title">Settings</h2>
+          <button class="icon-button js-back-menu" type="button" aria-label="返回主選單">⌂</button>
+          <h2 id="settings-title">設定</h2>
         </header>
         <form id="settings-form" class="settings-form">
           <fieldset>
-            <legend>Theme</legend>
-            <div class="theme-picker" role="radiogroup" aria-label="Theme">
-              <button type="button" class="theme-swatch" data-theme-choice="neon" aria-label="Neon" style="--swatch-a:#ff2d95;--swatch-b:#00e5ff;--swatch-c:#faff00"></button>
-              <button type="button" class="theme-swatch" data-theme-choice="classic" aria-label="Classic" style="--swatch-a:#e63946;--swatch-b:#ffb703;--swatch-c:#fefae0"></button>
-              <button type="button" class="theme-swatch" data-theme-choice="ocean" aria-label="Ocean" style="--swatch-a:#00b4d8;--swatch-b:#caf0f8;--swatch-c:#48cae4"></button>
-              <button type="button" class="theme-swatch" data-theme-choice="forest" aria-label="Forest" style="--swatch-a:#2d6a4f;--swatch-b:#d8f3dc;--swatch-c:#fca311"></button>
-              <button type="button" class="theme-swatch" data-theme-choice="sunset" aria-label="Sunset" style="--swatch-a:#ff006e;--swatch-b:#ffbe0b;--swatch-c:#3a86ff"></button>
-              <button type="button" class="theme-swatch" data-theme-choice="mono" aria-label="Mono" style="--swatch-a:#ffffff;--swatch-b:#999999;--swatch-c:#ffd60a"></button>
+            <legend>主題</legend>
+            <div class="theme-picker" role="radiogroup" aria-label="主題">
+              <button type="button" class="theme-swatch" data-theme-choice="neon" aria-label="霓虹" style="--swatch-a:#ff2d95;--swatch-b:#00e5ff;--swatch-c:#faff00"></button>
+              <button type="button" class="theme-swatch" data-theme-choice="classic" aria-label="經典" style="--swatch-a:#e63946;--swatch-b:#ffb703;--swatch-c:#fefae0"></button>
+              <button type="button" class="theme-swatch" data-theme-choice="ocean" aria-label="海洋" style="--swatch-a:#00b4d8;--swatch-b:#caf0f8;--swatch-c:#48cae4"></button>
+              <button type="button" class="theme-swatch" data-theme-choice="forest" aria-label="森林" style="--swatch-a:#2d6a4f;--swatch-b:#d8f3dc;--swatch-c:#fca311"></button>
+              <button type="button" class="theme-swatch" data-theme-choice="sunset" aria-label="夕陽" style="--swatch-a:#ff006e;--swatch-b:#ffbe0b;--swatch-c:#3a86ff"></button>
+              <button type="button" class="theme-swatch" data-theme-choice="mono" aria-label="單色" style="--swatch-a:#ffffff;--swatch-b:#999999;--swatch-c:#ffd60a"></button>
             </div>
           </fieldset>
 
           <fieldset>
-            <legend>Audio</legend>
+            <legend>音量</legend>
             <label class="range-row">
               <span>BGM</span>
               <input id="setting-bgm" type="range" min="0" max="100" step="1" />
               <output id="setting-bgm-value">45%</output>
             </label>
             <label class="range-row">
-              <span>SFX</span>
+              <span>音效</span>
               <input id="setting-sfx" type="range" min="0" max="100" step="1" />
               <output id="setting-sfx-value">80%</output>
             </label>
             <label class="toggle-row">
-              <span>Mute</span>
+              <span>靜音</span>
               <input id="setting-muted" type="checkbox" />
             </label>
           </fieldset>
 
           <fieldset>
-            <legend>Game</legend>
-            <div class="segmented" role="radiogroup" aria-label="Difficulty">
-              <button type="button" data-difficulty="easy">Easy</button>
-              <button type="button" data-difficulty="normal">Normal</button>
-              <button type="button" data-difficulty="hard">Hard</button>
+            <legend>遊戲</legend>
+            <div class="segmented" role="radiogroup" aria-label="難度">
+              <button type="button" data-difficulty="easy">簡單</button>
+              <button type="button" data-difficulty="normal">普通</button>
+              <button type="button" data-difficulty="hard">困難</button>
             </div>
           </fieldset>
 
           <div class="settings-actions">
-            <button id="btn-reset-storage" class="button" type="button">Clear Records</button>
+            <button id="btn-reset-storage" class="button" type="button">清除紀錄</button>
           </div>
         </form>
       </div>

@@ -19,25 +19,28 @@
     },
     DIFFICULTY: {
       easy: {
-        gravity: 1080,
-        friction: 0.997,
-        restitution: 0.82,
-        flipperForce: 920,
-        ballSaveMs: 10000
+        gravity: 1220,
+        friction: 0.996,
+        restitution: 0.78,
+        flipperForce: 1080,
+        ballSaveMs: 7500,
+        flipperScale: 1
       },
       normal: {
         gravity: 1220,
         friction: 0.996,
         restitution: 0.78,
         flipperForce: 1080,
-        ballSaveMs: 7500
+        ballSaveMs: 7500,
+        flipperScale: 0.9
       },
       hard: {
-        gravity: 1360,
-        friction: 0.995,
-        restitution: 0.74,
-        flipperForce: 1160,
-        ballSaveMs: 5200
+        gravity: 1220,
+        friction: 0.996,
+        restitution: 0.78,
+        flipperForce: 1080,
+        ballSaveMs: 7500,
+        flipperScale: 0.85
       }
     },
     BOARD: {

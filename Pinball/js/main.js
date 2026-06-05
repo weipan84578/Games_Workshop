@@ -16,7 +16,7 @@
     this.gameScreen = document.getElementById("screen-game");
     this.pauseOverlay = document.getElementById("pause-overlay");
     this.state = "idle";
-    this.message = "READY";
+    this.message = "準備";
     this.messageUntil = 0;
     this.wallSoundCooldown = 0;
     this.rampCooldown = 0;
@@ -93,13 +93,17 @@
   };
 
   Game.prototype.createFlippers = function () {
+    var scale = this.physics.flipperScale || 1;
+    var length = 96 * scale;
+    var width = 22 * scale;
+
     return [
       new Pinball.Flipper({
         side: "left",
         pivotX: 150,
         pivotY: 825,
-        length: 96,
-        width: 22,
+        length: length,
+        width: width,
         restAngle: 0.24,
         activeAngle: -0.72
       }),
@@ -107,8 +111,8 @@
         side: "right",
         pivotX: 390,
         pivotY: 825,
-        length: 96,
-        width: 22,
+        length: length,
+        width: width,
         restAngle: Math.PI - 0.24,
         activeAngle: Math.PI + 0.72
       })
@@ -120,7 +124,7 @@
     this.resetTable();
     this.state = "playing";
     this.spawnShooterBall();
-    this.setMessage("HOLD LAUNCH");
+    this.setMessage("長按發射");
     this.screenManager.show("game");
     this.setPausedUi(false);
     this.loop.start();
@@ -144,7 +148,7 @@
     this.extraAwarded = Boolean(saved.extraAwarded);
     this.state = "playing";
     this.spawnShooterBall();
-    this.setMessage("HOLD LAUNCH");
+    this.setMessage("長按發射");
     this.screenManager.show("game");
     this.setPausedUi(false);
     this.loop.start();
@@ -169,6 +173,7 @@
   Game.prototype.updateSettings = function () {
     this.settings = this.settingsPanel.get();
     this.physics = CONFIG.DIFFICULTY[this.settings.difficulty] || CONFIG.DIFFICULTY.normal;
+    this.flippers = this.createFlippers();
     Pinball.AudioManager.configure(this.settings);
     this.renderer.refreshTheme();
   };
@@ -225,7 +230,7 @@
 
     this.bumpers.forEach(function (bumper) {
       if (bumper.collide(ball, this.physics)) {
-        this.addScore(bumper.value, "BUMPER", "bumper");
+        this.addScore(bumper.value, "彈柱", "bumper");
         this.advanceJackpot(0.25);
       }
     }, this);
@@ -233,7 +238,7 @@
     this.targets.forEach(function (target) {
       if (target.collide(ball, this.physics)) {
         var sfx = target.kind === "rollover" ? "score" : "target";
-        this.addScore(target.value, target.kind === "rollover" ? "ROLLOVER" : "TARGET", sfx);
+        this.addScore(target.value, target.kind === "rollover" ? "通道" : "目標", sfx);
         this.advanceJackpot(target.kind === "rollover" ? 0.5 : 1);
         this.checkTargetBanks();
       }
@@ -264,14 +269,14 @@
       ball.vy = 120;
       ball.trail.length = 0;
       this.shooterGatePulse = 1;
-      this.setMessage("GATE OPEN");
+      this.setMessage("閘門開啟");
       Pinball.AudioManager.playSFX("ramp");
       return true;
     }
 
     if (ball.vy > 0 && ball.y >= CONFIG.BOARD.shooterRestY - 8) {
       ball.setShooterRest();
-      this.setMessage("TRY AGAIN");
+      this.setMessage("重新發射");
       Pinball.AudioManager.playSFX("wall");
       return true;
     }
@@ -288,7 +293,7 @@
     this.rampPulse = 1;
     ball.vy -= 260;
     ball.vx += inLeftRamp ? 380 : -380;
-    this.addScore(CONFIG.SCORE.ramp, "RAMP", "ramp");
+    this.addScore(CONFIG.SCORE.ramp, "坡道", "ramp");
     this.advanceJackpot(1);
   };
 
@@ -301,7 +306,7 @@
       if (targets.length && targets.every(function (target) { return target.down; })) {
         targets.forEach(function (target) { target.reset(); });
         this.multiplier = Math.min(5, this.multiplier + 1);
-        this.addScore(900, "BANK CLEAR", "combo");
+        this.addScore(900, "全組命中", "combo");
       }
     }, this);
   };
@@ -315,7 +320,7 @@
 
   Game.prototype.awardJackpot = function () {
     this.jackpotProgress = 0;
-    this.addScore(CONFIG.SCORE.jackpot, "JACKPOT", "jackpot");
+    this.addScore(CONFIG.SCORE.jackpot, "大獎", "jackpot");
     if (this.balls.length < 3) {
       this.addMultiball();
     }
@@ -344,7 +349,7 @@
     if (!this.extraAwarded && this.score >= CONFIG.SCORE.extraBallAt) {
       this.extraAwarded = true;
       this.ballsRemaining += 1;
-      this.setMessage("EXTRA BALL");
+      this.setMessage("追加球");
       Pinball.AudioManager.playSFX("extraBall");
     }
   };
@@ -353,7 +358,7 @@
     var drained = this.balls[index];
     if (drained && drained.fromShooter) {
       drained.setShooterRest();
-      this.setMessage("TRY AGAIN");
+      this.setMessage("重新發射");
       return;
     }
 
@@ -366,7 +371,7 @@
 
     if (performance.now() < this.ballSaveUntil && this.state === "playing") {
       this.spawnShooterBall();
-      this.setMessage("BALL SAVE");
+      this.setMessage("保球");
       Pinball.AudioManager.playSFX("launch");
       return;
     }
@@ -378,7 +383,7 @@
 
     if (this.ballsRemaining > 0) {
       this.spawnShooterBall();
-      this.setMessage("BALL " + this.ballsRemaining);
+      this.setMessage("第 " + this.ballsRemaining + " 球");
     } else {
       this.gameOver();
     }
@@ -393,10 +398,10 @@
     if (this.score > previousHigh) {
       Utils.saveNumber(CONFIG.STORAGE.HIGH_SCORE, this.score);
       Pinball.AudioManager.playSFX("newHighScore");
-      this.setMessage("NEW HIGH SCORE");
+      this.setMessage("新紀錄");
     } else {
       Pinball.AudioManager.playSFX("gameOver");
-      this.setMessage("GAME OVER");
+      this.setMessage("遊戲結束");
     }
     this.menu.refresh();
     this.hud.update(this);
@@ -483,7 +488,7 @@
       if (ball.inShooter) {
         ball.launch(power);
         Pinball.AudioManager.playSFX("launch");
-        this.setMessage("LAUNCH");
+        this.setMessage("發射");
       }
     }, this);
   };
@@ -496,9 +501,9 @@
   Game.prototype.updateMessage = function () {
     if (this.message && performance.now() > this.messageUntil && this.state !== "gameover") {
       if (this.balls.some(function (ball) { return ball.inShooter; })) {
-        this.message = "HOLD LAUNCH";
+        this.message = "長按發射";
       } else {
-        this.message = "PLAY";
+        this.message = "遊戲中";
       }
     }
   };

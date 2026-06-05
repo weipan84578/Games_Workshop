@@ -48,6 +48,9 @@
   font-family: var(--font-score);
   font-size: clamp(0.95rem, 2vw, 1.35rem);
   text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .game-buttons {
@@ -109,4 +112,10 @@
 
 .touch-controls {
   display: none;
+}
+
+.touch-controls button {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

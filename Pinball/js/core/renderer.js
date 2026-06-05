@@ -264,7 +264,7 @@
       ctx.globalAlpha = 0.75;
       ctx.font = "700 13px Segoe UI, sans-serif";
       ctx.textAlign = "center";
-      ctx.fillText("LAUNCH", 491, 824);
+      ctx.fillText("發射", 491, 824);
       ctx.restore();
     }
   };
@@ -332,13 +332,13 @@
     ctx.globalAlpha = 0.72;
     ctx.font = "900 22px Arial Black, Impact, sans-serif";
     ctx.textAlign = "center";
-    ctx.fillText("NEON PINBALL", 270, 72);
+    ctx.fillText("霓虹彈珠台", 270, 72);
 
     if (game.state === "gameover") {
       ctx.globalAlpha = 0.94;
       ctx.fillStyle = c.danger;
       ctx.font = "900 44px Arial Black, Impact, sans-serif";
-      ctx.fillText("GAME OVER", 270, 468);
+      ctx.fillText("遊戲結束", 270, 468);
     }
     ctx.restore();
   };
@@ -420,7 +420,7 @@
     ctx.fillStyle = colors.text;
     ctx.font = "900 22px Arial Black, Impact, sans-serif";
     ctx.textAlign = "center";
-    ctx.fillText("READY", w / 2, h * 0.16);
+    ctx.fillText("準備", w / 2, h * 0.16);
     ctx.restore();
   }
 

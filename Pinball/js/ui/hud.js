@@ -17,7 +17,7 @@
     this.balls.textContent = String(game.ballsRemaining);
     this.multiplier.textContent = "x" + game.multiplier;
     this.combo.textContent = String(game.combo);
-    this.message.textContent = game.message || "READY";
+    this.message.textContent = game.message || "準備";
   };
 
   Pinball.HUD = HUD;

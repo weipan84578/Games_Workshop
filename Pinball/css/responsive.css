@@ -26,74 +26,80 @@
     grid-template-columns: 1fr;
     grid-template-rows: auto minmax(0, 1fr) auto;
     align-content: stretch;
-    gap: 0.45rem;
-    padding: 6px 0;
+    gap: 3px;
+    width: 100vw;
+    height: 100dvh;
+    padding: 4px 6px 6px;
   }
 
   .hud-panel {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
-    gap: 0.5rem;
+    grid-template-rows: auto;
+    align-items: stretch;
+    gap: 4px;
   }
 
   .hud-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 0.35rem;
+    gap: 4px;
   }
 
   .hud-item {
-    min-height: 48px;
-    padding: 0.4rem;
+    min-height: 32px;
+    padding: 0.16rem 0.26rem;
   }
 
   .hud-item span {
-    font-size: 0.65rem;
+    display: none;
   }
 
   .hud-item strong {
-    font-size: clamp(0.88rem, 4vw, 1.2rem);
+    font-size: clamp(0.78rem, 3.4vw, 1rem);
   }
 
   .hud-message {
-    grid-column: 1 / -1;
-    min-height: 34px;
-    padding: 0.25rem 0.5rem;
-    font-size: 0.85rem;
+    display: none;
   }
 
   .game-buttons {
-    grid-template-columns: repeat(2, 44px);
+    grid-template-columns: repeat(2, 42px);
     grid-row: 1;
     grid-column: 2;
+    align-self: start;
+    gap: 4px;
   }
 
   .game-buttons .icon-button {
-    width: 44px;
-    height: 44px;
-    min-height: 44px;
+    width: 42px;
+    height: 42px;
+    min-height: 42px;
+    font-size: 0.98rem;
   }
 
   .board-wrap {
     justify-self: center;
-    width: min(calc((100dvh - 126px) * 0.5625), calc(100vw - 12px));
-    max-height: calc(100dvh - 126px);
+    align-self: center;
+    width: min(calc((100dvh - 86px) * 0.5625), calc(100vw - 12px));
+    max-height: calc(100dvh - 86px);
   }
 
   .touch-controls {
     display: grid;
-    grid-template-columns: 1fr 72px 1fr;
-    gap: 0.45rem;
+    grid-template-columns: 1fr minmax(58px, 0.62fr) 1fr;
+    gap: 5px;
     width: min(100%, 540px);
     justify-self: center;
   }
 
   .touch-controls button {
-    min-height: 54px;
+    min-height: 36px;
     border-radius: var(--radius);
     color: #050112;
     background: color-mix(in srgb, var(--c-secondary), var(--c-accent) 24%);
     font-family: var(--font-score);
-    font-size: 1.05rem;
+    font-size: 0.82rem;
+    padding: 0 0.35rem;
   }
 
   .content-shell {
@@ -125,11 +131,12 @@
   }
 
   .board-wrap {
-    width: min(calc((100dvh - 138px) * 0.5625), calc(100vw - 10px));
-    max-height: calc(100dvh - 138px);
+    width: min(calc((100dvh - 82px) * 0.5625), calc(100vw - 8px));
+    max-height: calc(100dvh - 82px);
   }
 
   .touch-controls button {
-    min-height: 50px;
+    min-height: 34px;
+    font-size: 0.78rem;
   }
 }
