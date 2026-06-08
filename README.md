@@ -54,6 +54,7 @@
 | `Space_Invaders` | 太空侵略者 |
 | `shooting_game`  | 槍戰練習   |
 | `Pinball`        | 彈珠台     |
+| `Bomberman_Lite` | 炸彈超人   |
 
 ### 策略遊戲
 
