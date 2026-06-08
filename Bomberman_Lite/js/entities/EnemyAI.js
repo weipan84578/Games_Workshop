@@ -27,7 +27,7 @@
 
   function passable(game, tile, phase) {
     if (!game.map.isWalkable(tile.x, tile.y, phase)) return false;
-    if (!phase && game.bombAt(tile.x, tile.y)) return false;
+    if (game.bombAt(tile.x, tile.y)) return false;
     return true;
   }
 

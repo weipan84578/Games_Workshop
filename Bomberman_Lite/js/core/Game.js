@@ -56,7 +56,6 @@
           </div>
           <div class="canvas-frame">
             <canvas id="game-canvas" width="${root.CONFIG.baseWidth}" height="${root.CONFIG.baseHeight}"></canvas>
-            <div class="game-overlay-label" data-stage-label></div>
           </div>
           <div id="touch-root"></div>
         </div>
@@ -149,7 +148,6 @@
       this.loop.start();
       this.music.switchBGM(this.trackForStage(stage));
       this.audio.play(stage === 25 ? "sfx_boss_appear" : "sfx_stage_start");
-      document.querySelector("[data-stage-label]").textContent = this.config.name;
       this.hud.update(this);
     }
 
@@ -207,7 +205,7 @@
         const tile = tiles[i];
         if (!this.map.isWalkable(tile.x, tile.y, opts.allowPhase)) return false;
         const bomb = this.bombAt(tile.x, tile.y);
-        if (bomb && H.tileKey(tile.x, tile.y) !== opts.ignoreBombKey && !opts.allowPhase) return false;
+        if (bomb && H.tileKey(tile.x, tile.y) !== opts.ignoreBombKey) return false;
       }
       return true;
     }
@@ -294,6 +292,10 @@
       this.score += root.SCORE[def.scoreKey] || 100;
       this.audio.play("sfx_enemy_die");
       this.notify(def.label + " defeated");
+      if (enemy.boss && this.stage === 25 && this.mode === "PLAYING") {
+        this.enemies = [];
+        this.completeStage();
+      }
     }
 
     onPlayerDeath() {

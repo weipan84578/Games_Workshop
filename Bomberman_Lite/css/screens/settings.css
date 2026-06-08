@@ -12,17 +12,20 @@
 
 .theme-picker {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(116px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(108px, 1fr));
   gap: var(--space-2);
 }
 
 .theme-chip {
   min-height: 44px;
+  padding: 0.5rem 0.65rem;
   border: 2px solid transparent;
   border-radius: var(--radius);
   background: var(--color-bg-surface);
   color: var(--color-text);
   cursor: pointer;
+  line-height: 1.2;
+  white-space: normal;
 }
 
 .theme-chip.active {
@@ -33,6 +36,7 @@
 .segmented {
   display: flex;
   gap: var(--space-2);
+  flex-wrap: wrap;
 }
 
 .segmented button {
@@ -52,6 +56,20 @@
 
 @media (max-width: 560px) {
   .setting-row {
+    grid-template-columns: 1fr;
+  }
+
+  .theme-picker {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .segmented button {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 360px) {
+  .theme-picker {
     grid-template-columns: 1fr;
   }
 }

@@ -28,6 +28,7 @@
   justify-content: space-between;
   gap: var(--space-3);
   padding: var(--space-4);
+  flex-wrap: wrap;
 }
 
 .modal-head {
@@ -91,5 +92,16 @@
 @media (max-width: 640px) {
   .modal-grid.two {
     grid-template-columns: 1fr;
+  }
+
+  .modal-actions {
+    align-items: stretch;
+    flex-direction: column-reverse;
+  }
+
+  .modal-actions .btn-primary,
+  .modal-actions .btn-secondary {
+    width: 100%;
+    min-width: 0;
   }
 }

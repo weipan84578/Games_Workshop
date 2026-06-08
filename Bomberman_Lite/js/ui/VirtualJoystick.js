@@ -18,7 +18,6 @@
           <div class="joystick" data-joystick><div class="joystick-knob" data-knob></div></div>
           <div class="touch-action-group">
             <button class="touch-button" data-bomb title="放置炸彈">B</button>
-            <button class="touch-button pause" data-pause title="暫停">Ⅱ</button>
           </div>
         </div>
       `;
@@ -51,10 +50,6 @@
         event.preventDefault();
         this.touchInput.pressBomb();
         this.game.vibrate(25);
-      });
-      this.host.querySelector("[data-pause]").addEventListener("pointerdown", (event) => {
-        event.preventDefault();
-        this.touchInput.pressPause();
       });
     }
 

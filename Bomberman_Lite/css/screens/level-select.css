@@ -12,8 +12,3 @@
   color: var(--color-text);
   cursor: pointer;
 }
-
-.level-button.locked {
-  opacity: 0.38;
-  cursor: not-allowed;
-}

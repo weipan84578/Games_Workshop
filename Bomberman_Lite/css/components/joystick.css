@@ -35,6 +35,8 @@
 .touch-action-group {
   display: flex;
   gap: var(--space-3);
+  justify-content: flex-end;
+  min-width: 72px;
 }
 
 .touch-button {
@@ -46,10 +48,6 @@
   color: var(--color-text);
   font-size: 1.6rem;
   box-shadow: var(--shadow-button);
-}
-
-.touch-button.pause {
-  background: var(--color-bg-surface);
 }
 
 @media (min-width: 900px) {
