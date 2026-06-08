@@ -1,0 +1,95 @@
+#modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.64);
+  backdrop-filter: blur(5px);
+}
+
+#modal-content {
+  position: fixed;
+  z-index: 21;
+  top: 50%;
+  left: 50%;
+  width: min(760px, calc(100vw - 24px));
+  max-height: min(86svh, 760px);
+  overflow: auto;
+  transform: translate(-50%, -50%);
+  border: 3px solid var(--color-accent);
+  border-radius: var(--radius);
+  background: var(--color-bg-card);
+  box-shadow: var(--shadow-panel);
+}
+
+.modal-head,
+.modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.modal-head {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.18);
+}
+
+.modal-body {
+  padding: var(--space-4);
+}
+
+.modal-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(0.95rem, 1.8vw, 1.35rem);
+  line-height: 1.45;
+}
+
+.tab-row {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+
+.tab-button {
+  padding: 0.55rem 0.75rem;
+  border-radius: var(--radius);
+  background: var(--color-bg-surface);
+  color: var(--color-text);
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.tab-button.active {
+  border-color: var(--color-accent);
+  background: var(--color-primary);
+}
+
+.modal-grid {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.modal-grid.two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-label);
+}
+
+.info-table th,
+.info-table td {
+  padding: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  text-align: left;
+}
+
+@media (max-width: 640px) {
+  .modal-grid.two {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,38 @@
+#notification-layer {
+  position: fixed;
+  z-index: 30;
+  top: 20px;
+  left: 50%;
+  pointer-events: none;
+  transform: translateX(-50%);
+  display: grid;
+  gap: 8px;
+}
+
+.toast {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius);
+  border: 2px solid var(--color-accent);
+  background: var(--color-bg-card);
+  color: var(--color-text);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+  animation: float-up 1.5s ease both;
+}
+
+@keyframes float-up {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  12%,
+  82% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-18px);
+  }
+}

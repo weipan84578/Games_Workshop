@@ -1,0 +1,21 @@
+[data-theme="candy"] {
+  --color-primary: #e91e63;
+  --color-primary-dark: #a80f43;
+  --color-primary-light: #ff8ab3;
+  --color-bg: #fff8e1;
+  --color-bg-card: #fff0f5;
+  --color-bg-surface: #f6d7ec;
+  --color-accent: #9c27b0;
+  --color-accent-glow: rgba(156, 39, 176, 0.28);
+  --color-text: #381f3f;
+  --color-text-muted: #745269;
+  --color-danger: #d50000;
+  --color-success: #2e7d32;
+  --color-wall-hard: #90a4ae;
+  --color-wall-soft: #ffb74d;
+  --color-floor: #fff3c4;
+  --color-bomb: #3b3040;
+  --color-explosion: #ff4081;
+  --color-player: #00acc1;
+  --color-enemy: #7b1fa2;
+}

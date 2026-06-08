@@ -1,0 +1,21 @@
+[data-theme="classic"] {
+  --color-primary: #ff6b35;
+  --color-primary-dark: #d4500a;
+  --color-primary-light: #ff9a6c;
+  --color-bg: #1a1a2e;
+  --color-bg-card: #16213e;
+  --color-bg-surface: #0f3460;
+  --color-accent: #ffd700;
+  --color-accent-glow: rgba(255, 215, 0, 0.4);
+  --color-text: #ffffff;
+  --color-text-muted: #b9bdd4;
+  --color-danger: #ff4444;
+  --color-success: #4caf50;
+  --color-wall-hard: #5c5c5c;
+  --color-wall-soft: #8b4513;
+  --color-floor: #2c2c3e;
+  --color-bomb: #222222;
+  --color-explosion: #ff6b35;
+  --color-player: #00bcd4;
+  --color-enemy: #f44336;
+}

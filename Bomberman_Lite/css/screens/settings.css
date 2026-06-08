@@ -1,0 +1,57 @@
+.settings-form {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.setting-row {
+  display: grid;
+  grid-template-columns: minmax(150px, 1fr) minmax(180px, 2fr);
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.theme-picker {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(116px, 1fr));
+  gap: var(--space-2);
+}
+
+.theme-chip {
+  min-height: 44px;
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  background: var(--color-bg-surface);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.theme-chip.active {
+  border-color: var(--color-accent);
+  background: var(--color-primary);
+}
+
+.segmented {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.segmented button {
+  flex: 1;
+  min-height: 44px;
+  border-radius: var(--radius);
+  background: var(--color-bg-surface);
+  color: var(--color-text);
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.segmented button.active {
+  border-color: var(--color-accent);
+  background: var(--color-primary);
+}
+
+@media (max-width: 560px) {
+  .setting-row {
+    grid-template-columns: 1fr;
+  }
+}

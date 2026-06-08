@@ -1,0 +1,17 @@
+@media (max-width: 767px) {
+  .desktop-only {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .screen-shell {
+    width: min(100vw - 16px, 480px);
+  }
+}

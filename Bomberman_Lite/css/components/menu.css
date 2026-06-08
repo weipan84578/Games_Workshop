@@ -1,0 +1,15 @@
+.menu-actions {
+  display: grid;
+  gap: var(--space-4);
+  width: min(420px, 100%);
+  margin: var(--space-6) auto;
+}
+
+.menu-stats {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  color: var(--color-text-muted);
+  font-size: var(--fs-label);
+}

@@ -1,0 +1,21 @@
+[data-theme="ocean"] {
+  --color-primary: #29b6f6;
+  --color-primary-dark: #0578b8;
+  --color-primary-light: #8bdfff;
+  --color-bg: #0a1628;
+  --color-bg-card: #10233d;
+  --color-bg-surface: #173b62;
+  --color-accent: #00e5ff;
+  --color-accent-glow: rgba(0, 229, 255, 0.32);
+  --color-text: #eefaff;
+  --color-text-muted: #a7c5d9;
+  --color-danger: #ff6e6e;
+  --color-success: #62e6b8;
+  --color-wall-hard: #4e7896;
+  --color-wall-soft: #2e8aa6;
+  --color-floor: #123052;
+  --color-bomb: #0b1018;
+  --color-explosion: #80deea;
+  --color-player: #fff176;
+  --color-enemy: #ff8a65;
+}

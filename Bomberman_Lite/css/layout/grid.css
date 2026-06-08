@@ -1,0 +1,20 @@
+#app {
+  min-height: 100svh;
+}
+
+.screen {
+  min-height: 100svh;
+  width: 100%;
+}
+
+.screen-shell {
+  width: min(1120px, calc(100vw - 24px));
+  margin: 0 auto;
+}
+
+.panel {
+  border: 3px solid var(--color-accent);
+  border-radius: var(--radius);
+  background: var(--color-bg-card);
+  box-shadow: var(--shadow-panel);
+}

@@ -1,0 +1,21 @@
+[data-theme="volcano"] {
+  --color-primary: #ff1744;
+  --color-primary-dark: #a90020;
+  --color-primary-light: #ff7c8e;
+  --color-bg: #0d0000;
+  --color-bg-card: #220707;
+  --color-bg-surface: #401313;
+  --color-accent: #ff6d00;
+  --color-accent-glow: rgba(255, 109, 0, 0.42);
+  --color-text: #fff3ed;
+  --color-text-muted: #d7a19a;
+  --color-danger: #ffeb3b;
+  --color-success: #ffab40;
+  --color-wall-hard: #57504c;
+  --color-wall-soft: #8e2d13;
+  --color-floor: #210c0c;
+  --color-bomb: #111111;
+  --color-explosion: #ffab00;
+  --color-player: #40c4ff;
+  --color-enemy: #ff5252;
+}

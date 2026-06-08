@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="classic">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Bomberman Lite</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@700;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/base/reset.css">
+  <link rel="stylesheet" href="css/base/variables.css">
+  <link rel="stylesheet" href="css/base/typography.css">
+  <link rel="stylesheet" href="css/layout/grid.css">
+  <link rel="stylesheet" href="css/layout/responsive.css">
+  <link rel="stylesheet" href="css/components/buttons.css">
+  <link rel="stylesheet" href="css/components/modal.css">
+  <link rel="stylesheet" href="css/components/hud.css">
+  <link rel="stylesheet" href="css/components/menu.css">
+  <link rel="stylesheet" href="css/components/joystick.css">
+  <link rel="stylesheet" href="css/components/notification.css">
+  <link rel="stylesheet" href="css/screens/main-menu.css">
+  <link rel="stylesheet" href="css/screens/game.css">
+  <link rel="stylesheet" href="css/screens/level-select.css">
+  <link rel="stylesheet" href="css/screens/settings.css">
+  <link rel="stylesheet" href="css/screens/game-over.css">
+  <link rel="stylesheet" href="css/themes/theme-classic.css">
+  <link rel="stylesheet" href="css/themes/theme-neon.css">
+  <link rel="stylesheet" href="css/themes/theme-forest.css">
+  <link rel="stylesheet" href="css/themes/theme-ocean.css">
+  <link rel="stylesheet" href="css/themes/theme-volcano.css">
+  <link rel="stylesheet" href="css/themes/theme-candy.css">
+</head>
+<body>
+  <div id="app">
+    <section id="screen-menu" class="screen"></section>
+    <section id="screen-game" class="screen hidden"></section>
+    <section id="screen-gameover" class="screen hidden"></section>
+    <div id="modal-overlay" class="hidden"></div>
+    <div id="modal-content" class="hidden" role="dialog" aria-modal="true"></div>
+    <div id="notification-layer" aria-live="polite"></div>
+  </div>
+
+  <script src="js/utils/constants.js"></script>
+  <script src="js/utils/helpers.js"></script>
+  <script src="js/utils/animator.js"></script>
+  <script src="js/core/EventBus.js"></script>
+  <script src="js/storage/SaveManager.js"></script>
+  <script src="js/core/StateManager.js"></script>
+  <script src="js/audio/AudioAssets.js"></script>
+  <script src="js/audio/SoundEffects.js"></script>
+  <script src="js/audio/AudioEngine.js"></script>
+  <script src="js/audio/MusicPlayer.js"></script>
+  <script src="js/input/KeyboardInput.js"></script>
+  <script src="js/input/TouchInput.js"></script>
+  <script src="js/input/InputManager.js"></script>
+  <script src="js/map/CollisionDetector.js"></script>
+  <script src="js/map/TileMap.js"></script>
+  <script src="js/map/TileRenderer.js"></script>
+  <script src="js/map/LevelLoader.js"></script>
+  <script src="js/levels/levels-01-05.js"></script>
+  <script src="js/levels/levels-06-10.js"></script>
+  <script src="js/levels/levels-11-15.js"></script>
+  <script src="js/levels/levels-16-20.js"></script>
+  <script src="js/levels/levels-21-25.js"></script>
+  <script src="js/entities/PowerUp.js"></script>
+  <script src="js/entities/Explosion.js"></script>
+  <script src="js/entities/Bomb.js"></script>
+  <script src="js/entities/EnemyAI.js"></script>
+  <script src="js/entities/Enemy.js"></script>
+  <script src="js/entities/Player.js"></script>
+  <script src="js/ui/Notification.js"></script>
+  <script src="js/ui/Modal.js"></script>
+  <script src="js/ui/HUD.js"></script>
+  <script src="js/ui/VirtualJoystick.js"></script>
+  <script src="js/ui/Settings.js"></script>
+  <script src="js/ui/LevelSelect.js"></script>
+  <script src="js/ui/MainMenu.js"></script>
+  <script src="js/core/GameLoop.js"></script>
+  <script src="js/core/Game.js"></script>
+</body>
+</html>

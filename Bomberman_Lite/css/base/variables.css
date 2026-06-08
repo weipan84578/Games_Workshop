@@ -1,0 +1,20 @@
+:root {
+  --bp-mobile: 480px;
+  --bp-tablet: 768px;
+  --bp-desktop: 1024px;
+  --bp-wide: 1440px;
+  --font-display: "Press Start 2P", ui-monospace, SFMono-Regular, Consolas, monospace;
+  --font-title: "Nunito", "Arial Rounded MT Bold", Arial, sans-serif;
+  --font-body: "Nunito", Arial, sans-serif;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --radius: 8px;
+  --shadow-button: 0 4px 0 var(--color-primary-dark);
+  --shadow-panel: 0 24px 64px rgba(0, 0, 0, 0.38);
+  --canvas-base-w: 720px;
+  --canvas-base-h: 624px;
+}

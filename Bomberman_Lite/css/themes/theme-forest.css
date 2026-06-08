@@ -1,0 +1,21 @@
+[data-theme="forest"] {
+  --color-primary: #4caf50;
+  --color-primary-dark: #2c7d30;
+  --color-primary-light: #9bd28e;
+  --color-bg: #1b2c1b;
+  --color-bg-card: #223522;
+  --color-bg-surface: #355032;
+  --color-accent: #cddc39;
+  --color-accent-glow: rgba(205, 220, 57, 0.36);
+  --color-text: #f3ffe8;
+  --color-text-muted: #bdd1aa;
+  --color-danger: #ff7043;
+  --color-success: #95e36d;
+  --color-wall-hard: #556b4a;
+  --color-wall-soft: #7a5a2b;
+  --color-floor: #203322;
+  --color-bomb: #1b1d17;
+  --color-explosion: #ffca28;
+  --color-player: #7ee8c2;
+  --color-enemy: #f06292;
+}
