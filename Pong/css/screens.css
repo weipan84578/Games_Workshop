@@ -154,20 +154,30 @@
   z-index: 7;
   display: none;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-2);
   transform: translateY(-50%);
-  pointer-events: auto;
+  pointer-events: none;
 }
 
 .touch-button {
-  width: 60px;
-  height: 60px;
-  border: 1px solid rgba(var(--primary-rgb), 0.45);
+  width: 56px;
+  height: 56px;
+  border: 1px solid rgba(var(--primary-rgb), 0.32);
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-rgb), 0.24);
   color: var(--color-primary);
-  font-size: 24px;
+  font-size: 22px;
+  opacity: 0.52;
+  pointer-events: auto;
   backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: opacity var(--transition-fast), transform var(--transition-fast), background-color var(--transition-fast);
+}
+
+.touch-button:active {
+  opacity: 0.88;
+  transform: scale(0.96);
+  background: rgba(var(--primary-rgb), 0.18);
 }
 
 .result-title {

@@ -99,8 +99,8 @@
   }
 
   .touch-button {
-    width: 56px;
-    height: 56px;
+    width: 52px;
+    height: 52px;
   }
 
   .result-title {
@@ -123,5 +123,26 @@
 
   .touch-controls {
     left: 8px;
+  }
+}
+
+@media (max-width: 1023px) and (max-aspect-ratio: 16/9) {
+  .touch-controls {
+    left: 50%;
+    top: calc(50% + 27.5625vw + 10px);
+    flex-direction: row;
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 479px) and (max-aspect-ratio: 16/9) {
+  .touch-controls {
+    top: calc(50% + 27.5625vw + 8px);
+  }
+
+  .touch-button {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
   }
 }
