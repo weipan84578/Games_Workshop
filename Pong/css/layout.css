@@ -1,0 +1,89 @@
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  background: var(--color-bg);
+  transition: var(--transition-theme);
+}
+
+body {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+#app {
+  position: relative;
+  width: 100vw;
+  height: 100dvh;
+  min-height: 100vh;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(var(--primary-rgb), 0.13), transparent 34%),
+    radial-gradient(circle at 70% 22%, rgba(var(--secondary-rgb), 0.13), transparent 32%),
+    var(--color-bg);
+  transition: var(--transition-theme);
+}
+
+.screen {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-6);
+  padding: clamp(18px, 4vw, 48px);
+}
+
+.screen-scroll {
+  justify-content: flex-start;
+  overflow-y: auto;
+  padding-block: clamp(24px, 5vw, 64px);
+}
+
+.screen-inner {
+  width: min(940px, 100%);
+  margin-inline: auto;
+}
+
+.center-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.button-stack {
+  display: grid;
+  width: min(360px, 100%);
+  gap: var(--space-3);
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}

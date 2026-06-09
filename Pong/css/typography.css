@@ -1,0 +1,43 @@
+@import url("https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=Orbitron:wght@700;900&display=swap");
+
+body {
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 72px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.score-value {
+  font-family: var(--font-display);
+  font-size: 64px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.countdown-value {
+  font-family: var(--font-display);
+  font-size: 120px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.body-copy {
+  font-size: 18px;
+}

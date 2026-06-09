@@ -1,0 +1,41 @@
+:root {
+  --font-display: "Orbitron", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  --font-body: "Exo 2", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --color-primary: #00FFAA;
+  --color-secondary: #FF00FF;
+  --color-bg: #0A0A1A;
+  --primary-rgb: 0, 255, 170;
+  --secondary-rgb: 255, 0, 255;
+  --bg-rgb: 10, 10, 26;
+  --text-rgb: 255, 255, 255;
+  --color-bg-panel: rgba(255, 255, 255, 0.07);
+  --color-bg-panel-strong: rgba(255, 255, 255, 0.13);
+  --color-text: #FFFFFF;
+  --color-text-muted: rgba(255, 255, 255, 0.64);
+  --color-accent: #FFD700;
+  --color-ball: var(--color-primary);
+  --color-paddle-player: var(--color-primary);
+  --color-paddle-ai: var(--color-secondary);
+  --color-center-line: rgba(255, 255, 255, 0.2);
+  --color-danger: #ff4d6d;
+  --color-success: #69f0ae;
+  --shadow-panel: 0 22px 70px rgba(0, 0, 0, 0.38);
+  --glow-primary: 0 0 15px var(--color-primary);
+  --glow-secondary: 0 0 15px var(--color-secondary);
+  --glow-accent: 0 0 16px var(--color-accent);
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+
+  --transition-fast: 140ms ease;
+  --transition-theme: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+}

@@ -1,0 +1,127 @@
+@media (max-width: 1023px) {
+  .title {
+    font-size: 56px;
+  }
+
+  .score-value {
+    font-size: 48px;
+  }
+
+  .game-button {
+    min-height: 58px;
+    font-size: 24px;
+  }
+
+  .countdown-value {
+    font-size: 96px;
+  }
+
+  .subtitle,
+  .panel-title {
+    font-size: 26px;
+  }
+
+  .touch-controls {
+    display: flex;
+  }
+}
+
+@media (max-width: 767px) {
+  .screen {
+    padding: 16px;
+  }
+
+  .title {
+    font-size: 40px;
+  }
+
+  .score-value {
+    font-size: 36px;
+  }
+
+  .game-button {
+    min-height: 54px;
+    font-size: 20px;
+  }
+
+  .countdown-value {
+    font-size: 72px;
+  }
+
+  .subtitle,
+  .panel-title {
+    font-size: 22px;
+  }
+
+  .body-copy,
+  .help-section p {
+    font-size: 16px;
+  }
+
+  .setting-row {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: var(--space-2);
+  }
+
+  .grid-2,
+  .grid-3,
+  .difficulty-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .difficulty-grid .game-button:last-child {
+    width: 100%;
+  }
+
+  .game-hud {
+    grid-template-columns: minmax(86px, 1fr) 34px minmax(86px, 1fr);
+    top: 8px;
+  }
+
+  .hud-label {
+    display: none;
+  }
+
+  .hud-divider {
+    font-size: 24px;
+  }
+
+  .game-footer {
+    bottom: 8px;
+    grid-template-columns: 48px 1fr 48px;
+  }
+
+  .difficulty-badge {
+    min-width: 92px;
+    padding-inline: 10px;
+    font-size: 12px;
+  }
+
+  .touch-button {
+    width: 56px;
+    height: 56px;
+  }
+
+  .result-title {
+    font-size: 38px;
+  }
+}
+
+@media (max-width: 479px) {
+  .button-stack {
+    width: 100%;
+  }
+
+  .game-button {
+    width: 100%;
+  }
+
+  .panel {
+    padding: 18px;
+  }
+
+  .touch-controls {
+    left: 8px;
+  }
+}

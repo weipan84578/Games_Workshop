@@ -1,0 +1,76 @@
+.screen-enter {
+  animation: screen-fade 400ms ease both;
+}
+
+@keyframes screen-fade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes countdown-pulse {
+  0%,
+  100% {
+    transform: scale(0.94);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+}
+
+@keyframes score-pop {
+  0% {
+    transform: translateY(0) scale(1);
+    color: var(--color-text);
+  }
+  45% {
+    transform: translateY(-6px) scale(1.18);
+    color: var(--color-accent);
+    text-shadow: var(--glow-accent);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    color: var(--color-text);
+  }
+}
+
+@keyframes result-glow {
+  0%,
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.03);
+    filter: brightness(1.25);
+  }
+}
+
+.screen-flash::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 18;
+  background: rgba(var(--primary-rgb), 0.3);
+  pointer-events: none;
+  animation: flash-out 420ms ease forwards;
+}
+
+@keyframes flash-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
