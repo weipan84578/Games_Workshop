@@ -8,66 +8,66 @@
 
 ### 棋盤遊戲
 
-| 資料夾               | 遊戲名稱 |
-| -------------------- | -------- |
-| `Checkers`           | 跳棋     |
-| `Chinese_Chess`      | 中國象棋 |
-| `chinese_dark_chess` | 中國暗棋 |
-| `chinese_checkers`   | 中國跳棋 |
-| `Jungle_Chess`       | 鬥獸棋   |
-| `Gomoku`             | 五子棋   |
-| `Othello`            | 黑白棋   |
-| `Shogi`              | 將棋     |
-| `Go_Game`            | 圍棋     |
+| 資料夾               | 遊戲名稱 | English Name    | 日本語名         |
+| -------------------- | -------- | --------------- | ---------------- |
+| `Checkers`           | 跳棋     | Checkers        | チェッカー       |
+| `Chinese_Chess`      | 中國象棋 | Chinese Chess   | 中国将棋         |
+| `chinese_dark_chess` | 中國暗棋 | Dark Chess      | 中国暗棋         |
+| `chinese_checkers`   | 中國跳棋 | Chinese Checkers| 中国チェッカー   |
+| `Jungle_Chess`       | 鬥獸棋   | Jungle Chess    | ジャングルチェス |
+| `Gomoku`             | 五子棋   | Gomoku          | 五目並べ         |
+| `Othello`            | 黑白棋   | Othello         | オセロ           |
+| `Shogi`              | 將棋     | Shogi           | 将棋             |
+| `Go_Game`            | 圍棋     | Go              | 囲碁             |
 
 ### 撲克牌遊戲
 
-| 資料夾      | 遊戲名稱                       |
-| ----------- | ------------------------------ |
-| `Blackjack` | 21 點                          |
-| `Slapjack`  | 心臟病                         |
-| `Solitaire` | 撲克牌接龍 _(npm run preview)_ |
+| 資料夾      | 遊戲名稱                       | English Name | 日本語名           |
+| ----------- | ------------------------------ | ------------ | ------------------ |
+| `Blackjack` | 21 點                          | Blackjack    | ブラックジャック   |
+| `Slapjack`  | 心臟病                         | Slapjack     | スラップジャック   |
+| `Solitaire` | 撲克牌接龍 _(npm run preview)_ | Solitaire    | ソリティア         |
 
 ### 益智遊戲
 
-| 資料夾           | 遊戲名稱 |
-| ---------------- | -------- |
-| `Minesweeper`    | 踩地雷   |
-| `2048`           | 2048     |
-| `Sudoku`         | 數獨     |
-| `Puzzle_Game`    | 拼圖遊戲 |
-| `Crossword`      | 猜字遊戲 |
-| `sokoban_puzzle` | 推箱子   |
+| 資料夾           | 遊戲名稱 | English Name | 日本語名           |
+| ---------------- | -------- | ------------ | ------------------ |
+| `Minesweeper`    | 踩地雷   | Minesweeper  | マインスイーパー   |
+| `2048`           | 2048     | 2048         | 2048               |
+| `Sudoku`         | 數獨     | Sudoku       | 数独               |
+| `Puzzle_Game`    | 拼圖遊戲 | Puzzle Game  | パズルゲーム       |
+| `Crossword`      | 猜字遊戲 | Crossword    | クロスワード       |
+| `sokoban_puzzle` | 推箱子   | Sokoban      | 倉庫番             |
 
 ### 動作遊戲
 
-| 資料夾           | 遊戲名稱   |
-| ---------------- | ---------- |
-| `Snake_Game`     | 貪食蛇     |
-| `Tetris`         | 俄羅斯方塊 |
-| `frogger`        | 青蛙過河   |
-| `Endless_Runner` | 無限跑酷   |
-| `Flappy_Bird`    | 飛揚的小鳥 |
-| `Pacman`         | 小精靈     |
-| `Bubble_Shooter` | 泡泡龍     |
-| `breakout_game`  | 打磚塊     |
-| `Space_Invaders` | 太空侵略者 |
-| `shooting_game`  | 槍戰練習   |
-| `Pinball`        | 彈珠台     |
-| `Bomberman_Lite` | 炸彈超人   |
-| `Pong`           | 乒乓球     |
+| 資料夾           | 遊戲名稱   | English Name   | 日本語名               |
+| ---------------- | ---------- | -------------- | ---------------------- |
+| `Snake_Game`     | 貪食蛇     | Snake          | スネーク               |
+| `Tetris`         | 俄羅斯方塊 | Tetris         | テトリス               |
+| `frogger`        | 青蛙過河   | Frogger        | フロッガー             |
+| `Endless_Runner` | 無限跑酷   | Endless Runner | エンドレスランナー     |
+| `Flappy_Bird`    | 飛揚的小鳥 | Flappy Bird    | フラッピーバード       |
+| `Pacman`         | 小精靈     | Pac-Man        | パックマン             |
+| `Bubble_Shooter` | 泡泡龍     | Bubble Shooter | バブルシューター       |
+| `breakout_game`  | 打磚塊     | Breakout       | ブロックくずし         |
+| `Space_Invaders` | 太空侵略者 | Space Invaders | スペースインベーダー   |
+| `shooting_game`  | 槍戰練習   | Shooting Game  | シューティング練習     |
+| `Pinball`        | 彈珠台     | Pinball        | ピンボール             |
+| `Bomberman_Lite` | 炸彈超人   | Bomberman Lite | ボンバーマン ライト   |
+| `Pong`           | 乒乓球     | Pong           | ポン                   |
 
 ### 策略遊戲
 
-| 資料夾                 | 遊戲名稱   |
-| ---------------------- | ---------- |
-| `Monkey_Tower_Defense` | 猴子塔防   |
-| `PvZ_Frontend`         | 植物防衛戰 |
+| 資料夾                 | 遊戲名稱   | English Name          | 日本語名                   |
+| ---------------------- | ---------- | --------------------- | -------------------------- |
+| `Monkey_Tower_Defense` | 猴子塔防   | Monkey Tower Defense  | モンキータワーディフェンス |
+| `PvZ_Frontend`         | 植物防衛戰 | Plants vs. Zombies    | プランツvsゾンビ           |
 
 ### 其他
 
-| 資料夾         | 遊戲名稱 |
-| -------------- | -------- |
-| `horse_racing` | 賽馬王   |
-| `Whack_A_Mole` | 打地鼠   |
-| `Typing_Game`  | 打字練習 |
+| 資料夾         | 遊戲名稱 | English Name | 日本語名       |
+| -------------- | -------- | ------------ | -------------- |
+| `horse_racing` | 賽馬王   | Horse Racing | 競馬王         |
+| `Whack_A_Mole` | 打地鼠   | Whack-A-Mole | もぐら叩き     |
+| `Typing_Game`  | 打字練習 | Typing Game  | タイピング練習 |
