@@ -46,6 +46,12 @@
       fast: "快"
     },
 
+    LANGUAGES: [
+      { id: "zh-TW", label: "繁體中文", htmlLang: "zh-TW" },
+      { id: "en", label: "English", htmlLang: "en" },
+      { id: "ja", label: "日本語", htmlLang: "ja" }
+    ],
+
     THEMES: [
       { id: "neon", name: "霓虹", primary: "#00FFAA", secondary: "#FF00FF", bg: "#0A0A1A" },
       { id: "classic", name: "經典", primary: "#FFFFFF", secondary: "#FFFFFF", bg: "#000000" },

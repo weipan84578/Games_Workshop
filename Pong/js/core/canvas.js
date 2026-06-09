@@ -2,7 +2,7 @@
   const Canvas = {
     init(wrapper) {
       const state = Pong.GameState;
-      wrapper.innerHTML = '<canvas class="game-canvas" aria-label="Pong 遊戲畫布"></canvas>';
+      wrapper.innerHTML = `<canvas class="game-canvas" aria-label="${Pong.I18n.t("aria.gameCanvas")}"></canvas>`;
       state.canvas.wrapper = wrapper;
       state.canvas.element = wrapper.querySelector("canvas");
       state.canvas.context = state.canvas.element.getContext("2d");

@@ -60,23 +60,25 @@
     themeDots(selectedTheme) {
       return CONSTANTS.THEMES.map((theme) => {
         const active = theme.id === selectedTheme ? " is-active" : "";
-        return `<button class="theme-dot${active}" type="button" style="--swatch-primary:${theme.primary};--swatch-secondary:${theme.secondary}" data-theme-id="${theme.id}" title="${theme.name}" aria-label="${theme.name}"></button>`;
+        const name = Pong.I18n.t(`themes.${theme.id}`);
+        return `<button class="theme-dot${active}" type="button" style="--swatch-primary:${theme.primary};--swatch-secondary:${theme.secondary}" data-theme-id="${theme.id}" title="${name}" aria-label="${name}"></button>`;
       }).join("");
     },
 
     themeSwatches(selectedTheme) {
       return CONSTANTS.THEMES.map((theme) => {
         const active = theme.id === selectedTheme ? " is-active" : "";
-        return `<button class="theme-swatch${active}" type="button" style="--swatch-primary:${theme.primary};--swatch-secondary:${theme.secondary}" data-theme-id="${theme.id}" title="${theme.name}" aria-label="${theme.name}"></button>`;
+        const name = Pong.I18n.t(`themes.${theme.id}`);
+        return `<button class="theme-swatch${active}" type="button" style="--swatch-primary:${theme.primary};--swatch-secondary:${theme.secondary}" data-theme-id="${theme.id}" title="${name}" aria-label="${name}"></button>`;
       }).join("");
     },
 
     difficultyName(value) {
-      return CONSTANTS.DIFFICULTY_LABELS[value] || value;
+      return Pong.I18n.t(`difficulty.${value}`);
     },
 
     speedName(value) {
-      return CONSTANTS.BALL_SPEED_LABELS[value] || value;
+      return Pong.I18n.t(`speed.${value}`);
     }
   };
 

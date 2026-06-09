@@ -3,20 +3,21 @@
     render(data) {
       const active = (data && data.tab) || "game";
       const settings = Pong.GameState.settings || Pong.Storage.loadSettings();
+      const t = Pong.I18n.t;
       const app = Pong.DOM.setApp(`
         <main class="screen screen-scroll settings-screen">
           <div class="screen-inner">
-            <h1 class="subtitle">設定</h1>
+            <h1 class="subtitle">${t("settings.title")}</h1>
             <div class="tab-row" role="tablist">
-              <button class="tab-button ${active === "game" ? "is-active" : ""}" type="button" data-action="tabGame">遊戲設定</button>
-              <button class="tab-button ${active === "audio" ? "is-active" : ""}" type="button" data-action="tabAudio">音效設定</button>
-              <button class="tab-button ${active === "visual" ? "is-active" : ""}" type="button" data-action="tabVisual">視覺設定</button>
+              <button class="tab-button ${active === "game" ? "is-active" : ""}" type="button" data-action="tabGame">${t("settings.gameTab")}</button>
+              <button class="tab-button ${active === "audio" ? "is-active" : ""}" type="button" data-action="tabAudio">${t("settings.audioTab")}</button>
+              <button class="tab-button ${active === "visual" ? "is-active" : ""}" type="button" data-action="tabVisual">${t("settings.visualTab")}</button>
             </div>
             <section class="content-panel">
               ${SettingsScreen.section(active, settings)}
               <div class="grid-2" style="margin-top:24px;">
-                ${Pong.DOM.button("重設預設值", { action: "reset" })}
-                ${Pong.DOM.button("返回主選單", { action: "back" })}
+                ${Pong.DOM.button(t("settings.reset"), { action: "reset" })}
+                ${Pong.DOM.button(t("settings.back"), { action: "back" })}
               </div>
             </section>
           </div>
@@ -42,11 +43,12 @@
     },
 
     section(active, settings) {
+      const t = Pong.I18n.t;
       if (active === "audio") {
         return `
           <div class="form-grid">
-            ${SettingsScreen.rangeRow("musicVolume", "背景音樂音量", settings.musicVolume)}
-            ${SettingsScreen.rangeRow("sfxVolume", "音效音量", settings.sfxVolume)}
+            ${SettingsScreen.rangeRow("musicVolume", t("settings.musicVolume"), settings.musicVolume)}
+            ${SettingsScreen.rangeRow("sfxVolume", t("settings.sfxVolume"), settings.sfxVolume)}
           </div>
         `;
       }
@@ -55,11 +57,17 @@
         return `
           <div class="form-grid">
             <div class="setting-row">
-              <span class="setting-label">配色主題</span>
+              <label for="language">${t("settings.language")}</label>
+              <select class="select-input" id="language">
+                ${CONSTANTS.LANGUAGES.map((language) => `<option value="${language.id}" ${settings.language === language.id ? "selected" : ""}>${language.label}</option>`).join("")}
+              </select>
+            </div>
+            <div class="setting-row">
+              <span class="setting-label">${t("settings.theme")}</span>
               <div class="theme-swatches">${Pong.DOM.themeSwatches(settings.theme)}</div>
             </div>
-            ${SettingsScreen.switchRow("showFPS", "顯示 FPS", settings.showFPS)}
-            ${SettingsScreen.switchRow("vibration", "震動回饋", settings.vibration)}
+            ${SettingsScreen.switchRow("showFPS", t("settings.showFPS"), settings.showFPS)}
+            ${SettingsScreen.switchRow("vibration", t("settings.vibration"), settings.vibration)}
           </div>
         `;
       }
@@ -67,13 +75,13 @@
       return `
         <div class="form-grid">
           <div class="setting-row">
-            <label for="targetScore">目標分數</label>
+            <label for="targetScore">${t("settings.targetScore")}</label>
             <select class="select-input" id="targetScore">
               ${CONSTANTS.TARGET_SCORES.map((score) => `<option value="${score}" ${settings.targetScore === score ? "selected" : ""}>${score}</option>`).join("")}
             </select>
           </div>
           <div class="setting-row">
-            <label for="ballSpeed">球速</label>
+            <label for="ballSpeed">${t("settings.ballSpeed")}</label>
             <select class="select-input" id="ballSpeed">
               ${Object.keys(CONSTANTS.SPEED_MULTIPLIERS).map((speed) => `<option value="${speed}" ${settings.ballSpeed === speed ? "selected" : ""}>${Pong.DOM.speedName(speed)}</option>`).join("")}
             </select>
@@ -118,7 +126,18 @@
 
       const ballSpeed = Pong.DOM.qs("#ballSpeed", app);
       if (ballSpeed) {
-        ballSpeed.addEventListener("change", () => update({ ballSpeed: ballSpeed.value }));
+        ballSpeed.addEventListener("change", () => {
+          update({ ballSpeed: ballSpeed.value });
+          SettingsScreen.render({ tab: active });
+        });
+      }
+
+      const language = Pong.DOM.qs("#language", app);
+      if (language) {
+        language.addEventListener("change", () => {
+          update({ language: language.value });
+          SettingsScreen.render({ tab: active });
+        });
       }
 
       ["musicVolume", "sfxVolume"].forEach((id) => {

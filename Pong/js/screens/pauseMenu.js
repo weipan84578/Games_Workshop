@@ -3,15 +3,16 @@
     show() {
       PauseMenu.hide();
       const overlay = document.createElement("div");
+      const t = Pong.I18n.t;
       overlay.className = "modal-backdrop";
       overlay.id = "pauseOverlay";
       overlay.innerHTML = `
         <section class="panel" role="dialog" aria-modal="true" aria-labelledby="pause-title">
-          <h2 class="panel-title" id="pause-title">暫停中</h2>
+          <h2 class="panel-title" id="pause-title">${t("pause.title")}</h2>
           <div class="button-stack" style="margin-inline:auto;">
-            ${Pong.DOM.button("繼續遊戲", { action: "resume" })}
-            ${Pong.DOM.button("重新開始", { action: "restart" })}
-            ${Pong.DOM.button("主選單", { action: "menu" })}
+            ${Pong.DOM.button(t("pause.resume"), { action: "resume" })}
+            ${Pong.DOM.button(t("pause.restart"), { action: "restart" })}
+            ${Pong.DOM.button(t("pause.menu"), { action: "menu" })}
           </div>
         </section>
       `;

@@ -6,7 +6,8 @@
     sfxVolume: CONSTANTS.DEFAULT_SFX_VOLUME,
     ballSpeed: "normal",
     showFPS: false,
-    vibration: true
+    vibration: true,
+    language: "zh-TW"
   };
 
   function safeParse(raw) {
@@ -29,6 +30,9 @@
     if (!CONSTANTS.SPEED_MULTIPLIERS[merged.ballSpeed]) {
       merged.ballSpeed = defaultSettings.ballSpeed;
     }
+    if (!Pong.I18n.isSupported(merged.language)) {
+      merged.language = defaultSettings.language;
+    }
     merged.musicVolume = Pong.Math.clamp(Number(merged.musicVolume), 0, 1);
     merged.sfxVolume = Pong.Math.clamp(Number(merged.sfxVolume), 0, 1);
     merged.showFPS = Boolean(merged.showFPS);
@@ -45,6 +49,7 @@
       const settings = sanitizeSettings(safeParse(localStorage.getItem(CONSTANTS.SETTINGS_KEY)));
       Pong.GameState.settings = settings;
       document.documentElement.setAttribute("data-theme", settings.theme);
+      Pong.I18n.apply(settings.language);
       return settings;
     },
 
@@ -52,6 +57,7 @@
       const sanitized = sanitizeSettings(settings);
       Pong.GameState.settings = sanitized;
       document.documentElement.setAttribute("data-theme", sanitized.theme);
+      Pong.I18n.apply(sanitized.language);
       localStorage.setItem(CONSTANTS.SETTINGS_KEY, JSON.stringify(sanitized));
       Pong.Audio.applySettings();
       return sanitized;

@@ -2,12 +2,13 @@
   const GameScreen = {
     render(data) {
       const difficulty = data && data.difficulty ? data.difficulty : Pong.GameState.game.difficulty;
+      const t = Pong.I18n.t;
       const app = Pong.DOM.setApp(`
         <main class="screen game-screen">
           <div class="game-shell">
             <div class="game-hud" aria-live="polite">
               <div class="hud-side">
-                <span class="hud-label">玩家</span>
+                <span class="hud-label">${t("game.player")}</span>
                 <span class="score-value" id="playerScore">0</span>
               </div>
               <div class="hud-divider">║</div>
@@ -20,14 +21,14 @@
             <div class="canvas-wrap" id="canvasWrap"></div>
 
             <div class="game-footer">
-              <button class="icon-button" type="button" data-action="pause" title="暫停" aria-label="暫停">⏸</button>
+              <button class="icon-button" type="button" data-action="pause" title="${t("aria.pause")}" aria-label="${t("aria.pause")}">⏸</button>
               <span class="difficulty-badge" id="difficultyBadge">${Pong.DOM.difficultyName(difficulty)}</span>
-              <button class="icon-button" type="button" data-action="mute" id="muteButton" title="靜音" aria-label="靜音">🔊</button>
+              <button class="icon-button" type="button" data-action="mute" id="muteButton" title="${t("aria.mute")}" aria-label="${t("aria.mute")}">🔊</button>
             </div>
 
-            <div class="touch-controls" aria-label="觸控方向鍵">
-              <button class="touch-button" type="button" data-touch-dir="up" aria-label="上移">▲</button>
-              <button class="touch-button" type="button" data-touch-dir="down" aria-label="下移">▼</button>
+            <div class="touch-controls" aria-label="${t("aria.touchControls")}">
+              <button class="touch-button" type="button" data-touch-dir="up" aria-label="${t("aria.touchUp")}">▲</button>
+              <button class="touch-button" type="button" data-touch-dir="down" aria-label="${t("aria.touchDown")}">▼</button>
             </div>
 
             <div class="countdown-overlay" id="countdownOverlay">
@@ -122,8 +123,8 @@
         return;
       }
       button.textContent = Pong.GameState.muted ? "🔇" : "🔊";
-      button.setAttribute("aria-label", Pong.GameState.muted ? "取消靜音" : "靜音");
-      button.setAttribute("title", Pong.GameState.muted ? "取消靜音" : "靜音");
+      button.setAttribute("aria-label", Pong.GameState.muted ? Pong.I18n.t("aria.unmute") : Pong.I18n.t("aria.mute"));
+      button.setAttribute("title", Pong.GameState.muted ? Pong.I18n.t("aria.unmute") : Pong.I18n.t("aria.mute"));
     }
   };
 
