@@ -29,15 +29,19 @@
     var self = this;
 
     aiOrder.forEach(function(index, displayIndex) {
-      self.aiPits.appendChild(self.createPit(gameState, index, "ai", "AI " + (6 - displayIndex)));
+      self.aiPits.appendChild(self.createPit(gameState, index, "ai", t("aiPit", {
+        number: 6 - displayIndex
+      })));
     });
 
     playerOrder.forEach(function(index, displayIndex) {
-      self.playerPits.appendChild(self.createPit(gameState, index, "player", "玩家 " + (displayIndex + 1)));
+      self.playerPits.appendChild(self.createPit(gameState, index, "player", t("playerPit", {
+        number: displayIndex + 1
+      })));
     });
 
-    this.renderStore(this.aiStore, gameState, 13, "ai", "AI 大倉");
-    this.renderStore(this.playerStore, gameState, 6, "player", "玩家 大倉");
+    this.renderStore(this.aiStore, gameState, 13, "ai", t("aiStore"));
+    this.renderStore(this.playerStore, gameState, 6, "player", t("playerStore"));
   };
 
   BoardRenderer.prototype.createPit = function(gameState, index, owner, label) {
@@ -64,7 +68,10 @@
     }
     button.setAttribute("role", "gridcell");
     button.setAttribute("data-board-index", String(index));
-    button.setAttribute("aria-label", label + "，現有 " + count + " 顆棋子");
+    button.setAttribute("aria-label", t("pitAria", {
+      label: label,
+      count: count
+    }));
     button.setAttribute("aria-disabled", canClick ? "false" : "true");
     button.disabled = !canClick;
 
@@ -79,7 +86,10 @@
     var count = gameState.board[index];
     store.innerHTML = "";
     store.setAttribute("data-board-index", String(index));
-    store.setAttribute("aria-label", label + "，共 " + count + " 顆棋子");
+    store.setAttribute("aria-label", t("storeAria", {
+      label: label,
+      count: count
+    }));
     store.appendChild(labelNode(label));
     store.appendChild(stonesNode(count, owner));
     store.appendChild(countNode(count));
@@ -109,6 +119,10 @@
       field.appendChild(stone);
     }
     return field;
+  }
+
+  function t(key, params) {
+    return Mancala.i18n ? Mancala.i18n.t(key, params) : key;
   }
 
   Mancala.BoardRenderer = BoardRenderer;

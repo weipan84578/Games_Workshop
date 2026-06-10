@@ -218,6 +218,15 @@
             </label>
           </section>
 
+          <section class="settings-group" aria-labelledby="setting-language">
+            <h3 id="setting-language">語言</h3>
+            <div class="segmented language-options" role="radiogroup" aria-label="語言">
+              <button type="button" data-language-choice="zh-Hant">繁體中文</button>
+              <button type="button" data-language-choice="en">English</button>
+              <button type="button" data-language-choice="ja">日本語</button>
+            </div>
+          </section>
+
           <section class="settings-group" aria-labelledby="setting-theme">
             <h3 id="setting-theme">遊戲主題</h3>
             <div class="swatch-grid" role="radiogroup" aria-label="遊戲主題">
@@ -313,6 +322,7 @@
   <script src="js/audio/MusicPlayer.js"></script>
   <script src="js/audio/AudioEngine.js"></script>
   <script src="js/storage/SaveManager.js"></script>
+  <script src="js/ui/I18n.js"></script>
   <script src="js/ui/ThemeManager.js"></script>
   <script src="js/ui/ToastManager.js"></script>
   <script src="js/ui/AnimationManager.js"></script>

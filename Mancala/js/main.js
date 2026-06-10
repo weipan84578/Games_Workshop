@@ -6,6 +6,8 @@
   function App() {
     this.saveManager = new Mancala.SaveManager();
     this.settings = this.saveManager.loadSettings();
+    this.i18n = new Mancala.I18n(this.settings.language);
+    Mancala.i18n = this.i18n;
     this.themeManager = new Mancala.ThemeManager();
     this.audio = new Mancala.AudioEngine(this.settings);
     this.toast = new Mancala.ToastManager(document.getElementById("toast-container"));
@@ -29,8 +31,13 @@
     });
   }
 
+  App.prototype.t = function(key, params) {
+    return this.i18n.t(key, params);
+  };
+
   App.prototype.init = function() {
     this.themeManager.apply(this.settings.theme);
+    this.i18n.apply();
     this.bindControls();
     this.syncSettingsForm();
     this.updateContinueButton();
@@ -139,12 +146,25 @@
       });
     });
 
+    document.querySelectorAll("[data-language-choice]").forEach(function(button) {
+      button.addEventListener("click", function() {
+        self.settings.language = button.getAttribute("data-language-choice");
+        self.i18n.setLanguage(self.settings.language);
+        self.syncSettingsForm();
+        self.updateContinueButton();
+        if (self.state) {
+          self.renderGame();
+        }
+      });
+    });
+
     form.addEventListener("submit", function(event) {
       event.preventDefault();
       self.saveManager.saveSettings(self.settings);
       self.audio.applySettings(self.settings);
+      self.i18n.apply();
       self.updateControlButtons();
-      self.toast.show("設定已儲存");
+      self.toast.show(self.t("settingsSaved"));
       document.dispatchEvent(new CustomEvent("mancala:settingsSave", {
         detail: { settings: self.settings }
       }));
@@ -168,19 +188,20 @@
     setSelected("[data-theme-choice]", "data-theme-choice", this.settings.theme);
     setSelected("[data-difficulty-choice]", "data-difficulty-choice", this.settings.defaultDifficulty);
     setSelected("[data-stones-choice]", "data-stones-choice", String(this.settings.initialStones));
+    setSelected("[data-language-choice]", "data-language-choice", this.settings.language);
   };
 
   App.prototype.openDifficultyModal = function() {
     var self = this;
     this.showModal(
       '<div class="modal__header">' +
-        '<div><p class="eyebrow">New Game</p><h2 id="modal-title">選擇 AI 難度</h2></div>' +
-        '<button class="icon-button js-modal-close" type="button" aria-label="關閉"><svg class="icon"><use href="#icon-close"></use></svg></button>' +
+        '<div><p class="eyebrow">New Game</p><h2 id="modal-title">' + this.t("chooseDifficulty") + '</h2></div>' +
+        '<button class="icon-button js-modal-close" type="button" aria-label="' + this.t("close") + '"><svg class="icon"><use href="#icon-close"></use></svg></button>' +
       '</div>' +
       '<div class="difficulty-grid">' +
-        difficultyCard("easy", "簡單", "AI 會從合法走法中隨機選擇，適合熟悉規則。", "icon-play") +
-        difficultyCard("normal", "普通", "AI 會優先選擇再走一次、吃子與得分較高的走法。", "icon-settings") +
-        difficultyCard("hard", "困難", "AI 使用 Minimax 搜尋與剪枝，會規劃多步後果。", "icon-trophy") +
+        difficultyCard("easy", this.t("easy"), this.t("easyDescription"), "icon-play") +
+        difficultyCard("normal", this.t("normal"), this.t("normalDescription"), "icon-settings") +
+        difficultyCard("hard", this.t("hard"), this.t("hardDescription"), "icon-trophy") +
       '</div>'
     );
 
@@ -244,7 +265,7 @@
   App.prototype.continueGame = function() {
     var saved = this.saveManager.loadGame();
     if (!saved) {
-      this.toast.show("目前沒有可繼續的存檔");
+      this.toast.show(this.t("noSaveToast"));
       return;
     }
 
@@ -305,13 +326,13 @@
     var self = this;
     this.showModal(
       '<div class="modal__header">' +
-        '<div><p class="eyebrow">Leave Game</p><h2 id="modal-title">返回主選單？</h2></div>' +
-        '<button class="icon-button js-modal-close" type="button" aria-label="關閉"><svg class="icon"><use href="#icon-close"></use></svg></button>' +
+        '<div><p class="eyebrow">Leave Game</p><h2 id="modal-title">' + this.t("leaveTitle") + '</h2></div>' +
+        '<button class="icon-button js-modal-close" type="button" aria-label="' + this.t("close") + '"><svg class="icon"><use href="#icon-close"></use></svg></button>' +
       '</div>' +
-      '<p>目前進度會自動儲存，下次可從主選單繼續。</p>' +
+      '<p>' + this.t("leaveBody") + '</p>' +
       '<div class="modal-actions">' +
-        '<button class="button js-modal-close" type="button">取消</button>' +
-        '<button id="confirm-return-menu" class="button button--primary" type="button"><svg class="icon"><use href="#icon-home"></use></svg>返回</button>' +
+        '<button class="button js-modal-close" type="button">' + this.t("cancel") + '</button>' +
+        '<button id="confirm-return-menu" class="button button--primary" type="button"><svg class="icon"><use href="#icon-home"></use></svg>' + this.t("back") + '</button>' +
       '</div>'
     );
     document.getElementById("confirm-return-menu").addEventListener("click", function() {
@@ -348,7 +369,7 @@
       this.clearAiTimeout();
     }
     document.getElementById("btn-pause").classList.toggle("is-active", this.state.isPaused);
-    this.toast.show(this.state.isPaused ? "遊戲已暫停" : "遊戲繼續");
+    this.toast.show(this.state.isPaused ? this.t("pausedToast") : this.t("resumedToast"));
     this.renderGame();
     if (!this.state.isPaused && this.state.currentTurn === "ai") {
       this.scheduleAiMove();
@@ -397,9 +418,14 @@
       self.renderer.setLocked(false);
 
       if (result.capture) {
-        self.toast.show((result.player === "player" ? "玩家" : "AI") + "吃子 " + result.capture.capturedCount + " 顆");
+        self.toast.show(self.t("captureToast", {
+          player: self.t(result.player),
+          count: result.capture.capturedCount
+        }));
       } else if (result.extraTurn) {
-        self.toast.show((result.player === "player" ? "玩家" : "AI") + "再走一次");
+        self.toast.show(self.t("extraTurnToast", {
+          player: self.t(result.player)
+        }));
       }
 
       if (self.state.isGameOver) {
@@ -485,7 +511,7 @@
     if (!this.state) {
       return;
     }
-    text("hud-difficulty", difficultyLabel(this.state.difficulty));
+    text("hud-difficulty", this.t(this.state.difficulty));
     text("hud-timer", formatTime(this.state.gameTime));
     text("hud-ai-score", String(this.state.board[13]));
     text("hud-player-score", String(this.state.board[6]));
@@ -499,15 +525,15 @@
     var line = document.getElementById("status-line");
     line.classList.toggle("is-thinking", this.state.aiThinking);
     if (this.state.isGameOver) {
-      line.textContent = "遊戲結束";
+      line.textContent = this.t("gameOverStatus");
     } else if (this.state.isPaused) {
-      line.textContent = "遊戲已暫停";
+      line.textContent = this.t("pausedStatus");
     } else if (this.state.aiThinking) {
-      line.textContent = "AI 正在思考";
+      line.textContent = this.t("aiThinking");
     } else if (this.state.currentTurn === "player") {
-      line.textContent = "玩家的回合，請選擇一個坑。";
+      line.textContent = this.t("playerTurn");
     } else {
-      line.textContent = "AI 的回合。";
+      line.textContent = this.t("aiTurn");
     }
   };
 
@@ -529,13 +555,15 @@
     if (!save) {
       button.disabled = true;
       button.setAttribute("aria-disabled", "true");
-      meta.textContent = "尚無存檔";
+      meta.textContent = this.t("noSave");
       return;
     }
 
     button.disabled = false;
     button.setAttribute("aria-disabled", "false");
-    meta.textContent = "上次遊玩：" + this.saveManager.formatSaveTime(save);
+    meta.textContent = this.t("lastPlayed", {
+      time: this.saveManager.formatSaveTime(save)
+    });
   };
 
   App.prototype.endGame = function() {
@@ -567,10 +595,10 @@
     var resultLayout = document.querySelector(".result-layout");
     resultLayout.classList.toggle("is-win", this.state.winner === "player");
     title.textContent = this.state.winner === "player"
-      ? "玩家獲勝"
+      ? this.t("playerWin")
       : this.state.winner === "ai"
-        ? "AI 獲勝"
-        : "平手";
+        ? this.t("aiWin")
+        : this.t("draw");
     text("result-player-score", String(this.state.board[6]));
     text("result-ai-score", String(this.state.board[13]));
     text("result-time", formatTime(this.state.gameTime));
@@ -617,16 +645,6 @@
     return hours > 0
       ? hours + ":" + pad(remainderMinutes) + ":" + pad(remainderSeconds)
       : pad(remainderMinutes) + ":" + pad(remainderSeconds);
-  }
-
-  function difficultyLabel(difficulty) {
-    if (difficulty === "easy") {
-      return "簡單";
-    }
-    if (difficulty === "hard") {
-      return "困難";
-    }
-    return "普通";
   }
 
   function dispatch(name, detail) {

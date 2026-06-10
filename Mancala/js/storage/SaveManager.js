@@ -12,6 +12,7 @@
     isMusicMuted: false,
     isSfxMuted: false,
     theme: "classic",
+    language: "zh-Hant",
     showTimer: true,
     defaultDifficulty: "normal",
     initialStones: 4
@@ -93,6 +94,9 @@
     }
     if (["classic", "ocean", "forest", "sunset", "night", "candy"].indexOf(result.theme) === -1) {
       result.theme = "classic";
+    }
+    if (["zh-Hant", "en", "ja"].indexOf(result.language) === -1) {
+      result.language = "zh-Hant";
     }
     return result;
   }
