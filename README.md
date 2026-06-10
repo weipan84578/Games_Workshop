@@ -19,6 +19,7 @@
 | `Othello`            | 黑白棋   | Othello         | オセロ           |
 | `Shogi`              | 將棋     | Shogi           | 将棋             |
 | `Go_Game`            | 圍棋     | Go              | 囲碁             |
+| `Mancala`            | 播棋     | Mancala         | マンカラ         |
 
 ### 撲克牌遊戲
 
