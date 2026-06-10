@@ -1,0 +1,14 @@
+.screen {
+  display: none;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.screen--active {
+  display: block;
+  animation: screen-in 280ms var(--ease-out);
+}
+
+.screen.is-leaving {
+  animation: screen-out 180ms ease forwards;
+}

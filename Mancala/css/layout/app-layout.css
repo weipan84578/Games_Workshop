@@ -1,0 +1,71 @@
+.icon-sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.icon {
+  width: 1.1em;
+  height: 1.1em;
+  fill: currentColor;
+  flex: 0 0 auto;
+}
+
+.app-shell {
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+.screen__inner {
+  width: min(100%, var(--screen-max));
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: clamp(18px, 3vw, 34px);
+}
+
+.content-layout {
+  display: grid;
+  align-content: start;
+  gap: 24px;
+}
+
+.game-layout {
+  display: grid;
+  grid-template-rows: auto auto auto minmax(0, 1fr) auto;
+  gap: 16px;
+  padding-bottom: calc(var(--control-bar-height) + env(safe-area-inset-bottom) + 18px);
+}
+
+.page-header,
+.game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.page-header {
+  justify-content: flex-start;
+}
+
+.game-header__actions {
+  display: flex;
+  gap: 10px;
+}
+
+.board-stage {
+  display: grid;
+  place-items: center;
+  min-height: 0;
+}
+
+.result-layout {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 18px;
+  text-align: center;
+}

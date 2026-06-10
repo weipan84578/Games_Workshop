@@ -1,0 +1,25 @@
+[data-theme="night"] {
+  --color-bg: #15171f;
+  --color-bg-rgb: 21, 23, 31;
+  --color-bg-alt: #24333d;
+  --color-surface: #232536;
+  --color-surface-rgb: 35, 37, 54;
+  --color-text: #f4f2ee;
+  --color-muted: #b4b6c8;
+  --color-border-rgb: 113, 119, 152;
+  --color-primary: #59c7b2;
+  --color-primary-strong: #36a995;
+  --color-on-primary: #102321;
+  --color-accent-rgb: 89, 199, 178;
+  --color-active: #f1c85f;
+  --color-active-rgb: 241, 200, 95;
+  --color-board: #342a54;
+  --color-board-deep: #1e1b32;
+  --color-board-edge-rgb: 96, 86, 138;
+  --color-pit: #60518d;
+  --color-pit-text: #f9f4ff;
+  --color-pit-label: #eee7ff;
+  --color-stone-player: #f07f7f;
+  --color-stone-ai: #69d0ff;
+  --color-stone-highlight: #ffffff;
+}

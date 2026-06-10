@@ -1,0 +1,68 @@
+.game-hud {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.hud-card {
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(var(--color-border-rgb), 0.5);
+  border-radius: var(--radius-md);
+  background: rgba(var(--color-surface-rgb), 0.78);
+  box-shadow: var(--shadow-tight);
+  backdrop-filter: blur(10px);
+}
+
+.hud-label {
+  display: block;
+  color: var(--color-muted);
+  font-size: 0.74rem;
+  font-weight: 800;
+}
+
+.hud-card strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 3vw, 1.35rem);
+  font-weight: 900;
+}
+
+.status-line {
+  min-height: 46px;
+  padding: 12px 16px;
+  border: 1px solid rgba(var(--color-border-rgb), 0.55);
+  border-radius: var(--radius-md);
+  background: rgba(var(--color-surface-rgb), 0.82);
+  color: var(--color-text);
+  font-weight: 800;
+  text-align: center;
+  box-shadow: var(--shadow-tight);
+}
+
+.status-line.is-thinking::after {
+  display: inline-block;
+  width: 1.5em;
+  content: "";
+  animation: thinking-dots 1s steps(4, end) infinite;
+}
+
+.game-controls-bar {
+  position: fixed;
+  z-index: 20;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  grid-template-columns: repeat(4, max-content);
+  justify-content: center;
+  gap: 10px;
+  min-height: var(--control-bar-height);
+  padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(var(--color-border-rgb), 0.5);
+  background: rgba(var(--color-bg-rgb), 0.84);
+  backdrop-filter: blur(12px);
+}

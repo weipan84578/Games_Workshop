@@ -1,0 +1,25 @@
+[data-theme="classic"] {
+  --color-bg: #f4efe5;
+  --color-bg-rgb: 244, 239, 229;
+  --color-bg-alt: #dce9e2;
+  --color-surface: #fffaf1;
+  --color-surface-rgb: 255, 250, 241;
+  --color-text: #243233;
+  --color-muted: #66746e;
+  --color-border-rgb: 116, 105, 88;
+  --color-primary: #2e8f7f;
+  --color-primary-strong: #246b66;
+  --color-on-primary: #ffffff;
+  --color-accent-rgb: 46, 143, 127;
+  --color-active: #ffd36e;
+  --color-active-rgb: 255, 211, 110;
+  --color-board: #8b684a;
+  --color-board-deep: #5a3d2f;
+  --color-board-edge-rgb: 82, 58, 44;
+  --color-pit: #c99c67;
+  --color-pit-text: #1f2427;
+  --color-pit-label: #fff6df;
+  --color-stone-player: #e36a57;
+  --color-stone-ai: #3b8eb8;
+  --color-stone-highlight: #fff0c7;
+}

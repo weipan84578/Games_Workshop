@@ -1,0 +1,184 @@
+.game-board {
+  display: grid;
+  grid-template-columns: var(--store-width) minmax(0, 1fr) var(--store-width);
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "ai-store ai-pits player-store"
+    "ai-store player-pits player-store";
+  align-items: stretch;
+  gap: clamp(10px, 2vw, 18px);
+  width: min(100%, 980px);
+  padding: clamp(14px, 3vw, 28px);
+  border: 1px solid rgba(var(--color-board-edge-rgb), 0.72);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.17), transparent 42%),
+    linear-gradient(160deg, var(--color-board), var(--color-board-deep));
+  box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+
+.game-board__pit-row {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(8px, 1.5vw, 14px);
+}
+
+.game-board__pit-row--ai {
+  grid-area: ai-pits;
+}
+
+.game-board__pit-row--player {
+  grid-area: player-pits;
+}
+
+.game-board__store--ai {
+  grid-area: ai-store;
+}
+
+.game-board__store--player {
+  grid-area: player-store;
+}
+
+.game-board__pit,
+.game-board__store {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  border: 2px solid rgba(var(--color-board-edge-rgb), 0.48);
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 50% 62%, rgba(0, 0, 0, 0.18), transparent 66%),
+    radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.24), transparent 42%),
+    var(--color-pit);
+  color: var(--color-pit-text);
+  box-shadow: inset 0 9px 20px rgba(0, 0, 0, 0.25), 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.game-board__pit {
+  width: 100%;
+  aspect-ratio: 1;
+  min-height: var(--pit-size);
+  padding: 8px;
+  cursor: not-allowed;
+}
+
+.game-board__pit--clickable {
+  cursor: pointer;
+  border-color: var(--color-active);
+  box-shadow:
+    0 0 0 4px rgba(var(--color-active-rgb), 0.24),
+    inset 0 9px 20px rgba(0, 0, 0, 0.25),
+    0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.game-board__pit--clickable:hover {
+  transform: translateY(-2px);
+}
+
+.game-board__pit--empty {
+  opacity: 0.72;
+}
+
+.game-board__pit--last {
+  border-color: var(--color-focus);
+}
+
+.game-board__store {
+  min-height: calc(var(--pit-size) * 2 + 16px);
+  padding: 12px 8px;
+  border-radius: 38px;
+}
+
+.game-board__store .pit-label {
+  top: 10px;
+}
+
+.pit-label {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  width: calc(100% - 12px);
+  transform: translateX(-50%);
+  color: var(--color-pit-label);
+  font-size: 0.68rem;
+  font-weight: 900;
+  line-height: 1.05;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.pit-count {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  min-width: 30px;
+  min-height: 30px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(var(--color-surface-rgb), 0.88);
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 3vw, 1.25rem);
+  font-weight: 900;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.16);
+}
+
+.stone-field {
+  position: absolute;
+  inset: 17% 14%;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  gap: 3px;
+  pointer-events: none;
+}
+
+.stone {
+  width: var(--stone-size);
+  height: var(--stone-size);
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%, var(--color-stone-highlight), var(--stone-color) 72%);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+}
+
+.stone--player {
+  --stone-color: var(--color-stone-player);
+}
+
+.stone--ai {
+  --stone-color: var(--color-stone-ai);
+}
+
+.stone-field.is-dense {
+  gap: 2px;
+}
+
+@media (max-width: 480px) {
+  .game-board {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto;
+    grid-template-areas:
+      "ai-store"
+      "ai-pits"
+      "player-pits"
+      "player-store";
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .game-board__pit-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .game-board__store {
+    min-height: 58px;
+    border-radius: 999px;
+  }
+
+  .stone-field {
+    inset: 22% 13%;
+  }
+}

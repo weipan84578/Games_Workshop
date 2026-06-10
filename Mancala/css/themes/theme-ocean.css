@@ -1,0 +1,25 @@
+[data-theme="ocean"] {
+  --color-bg: #e7f6f4;
+  --color-bg-rgb: 231, 246, 244;
+  --color-bg-alt: #d4e4f4;
+  --color-surface: #fbfffe;
+  --color-surface-rgb: 251, 255, 254;
+  --color-text: #183440;
+  --color-muted: #52707a;
+  --color-border-rgb: 58, 112, 128;
+  --color-primary: #0f8ca8;
+  --color-primary-strong: #0b637d;
+  --color-on-primary: #ffffff;
+  --color-accent-rgb: 15, 140, 168;
+  --color-active: #f2c76e;
+  --color-active-rgb: 242, 199, 110;
+  --color-board: #24728d;
+  --color-board-deep: #144b5e;
+  --color-board-edge-rgb: 18, 68, 86;
+  --color-pit: #84c7d3;
+  --color-pit-text: #10262d;
+  --color-pit-label: #effcff;
+  --color-stone-player: #ff9b6a;
+  --color-stone-ai: #f5d96f;
+  --color-stone-highlight: #ffffff;
+}

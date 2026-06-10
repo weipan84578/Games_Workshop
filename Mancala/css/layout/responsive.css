@@ -1,0 +1,68 @@
+@media (max-width: 768px) {
+  :root {
+    --pit-size: 68px;
+    --store-width: 76px;
+    --stone-size: 11px;
+  }
+
+  .game-layout {
+    gap: 12px;
+  }
+
+  .game-hud {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --pit-size: 58px;
+    --store-width: 100%;
+    --stone-size: 10px;
+    --control-bar-height: 78px;
+  }
+
+  .screen__inner {
+    padding: 16px;
+  }
+
+  .game-layout {
+    min-height: 100dvh;
+    padding-bottom: calc(var(--control-bar-height) + env(safe-area-inset-bottom) + 12px);
+  }
+
+  .game-header {
+    align-items: flex-start;
+  }
+
+  .game-header h2 {
+    font-size: 1.7rem;
+  }
+
+  .game-controls-bar {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .control-button {
+    padding-inline: 8px;
+    font-size: 0.78rem;
+  }
+}
+
+@media (max-width: 360px) {
+  :root {
+    --pit-size: 50px;
+    --stone-size: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

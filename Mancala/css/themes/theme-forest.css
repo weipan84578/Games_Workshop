@@ -1,0 +1,25 @@
+[data-theme="forest"] {
+  --color-bg: #edf4e8;
+  --color-bg-rgb: 237, 244, 232;
+  --color-bg-alt: #d7e7d1;
+  --color-surface: #fbfff7;
+  --color-surface-rgb: 251, 255, 247;
+  --color-text: #1d3329;
+  --color-muted: #607265;
+  --color-border-rgb: 76, 112, 83;
+  --color-primary: #386d4c;
+  --color-primary-strong: #294f39;
+  --color-on-primary: #ffffff;
+  --color-accent-rgb: 56, 109, 76;
+  --color-active: #d1a24b;
+  --color-active-rgb: 209, 162, 75;
+  --color-board: #6e7d4f;
+  --color-board-deep: #415138;
+  --color-board-edge-rgb: 50, 70, 45;
+  --color-pit: #a8b978;
+  --color-pit-text: #18251d;
+  --color-pit-label: #f7ffe7;
+  --color-stone-player: #dd765d;
+  --color-stone-ai: #4aa6a8;
+  --color-stone-highlight: #fff2c2;
+}
