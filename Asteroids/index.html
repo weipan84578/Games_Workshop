@@ -24,189 +24,199 @@
 </head>
 <body data-theme="neon">
   <div id="app" class="app-shell">
-    <section id="screen-menu" class="screen screen-menu active" aria-label="Main menu">
+    <section id="screen-menu" class="screen screen-menu active" aria-label="Main menu" data-i18n-aria="aria.mainMenu">
       <div class="menu-panel">
-        <p class="kicker">Vector arcade</p>
-        <h1>ASTEROIDS</h1>
-        <p class="tagline">Break the field. Dodge the debris. Chase the high score.</p>
-        <nav class="menu-actions" aria-label="Main actions">
-          <button id="btn-new-game" class="btn btn-primary" type="button">New Game</button>
-          <button id="btn-continue" class="btn" type="button">Continue</button>
-          <button id="btn-help" class="btn btn-secondary" type="button">Help</button>
-          <button id="btn-settings" class="btn btn-secondary" type="button">Settings</button>
+        <p class="kicker" data-i18n="menu.kicker">Vector arcade</p>
+        <h1 data-i18n="menu.title">ASTEROIDS</h1>
+        <p class="tagline" data-i18n="menu.tagline">Break the field. Dodge the debris. Chase the high score.</p>
+        <nav class="menu-actions" aria-label="Main actions" data-i18n-aria="aria.mainActions">
+          <button id="btn-new-game" class="btn btn-primary" type="button" data-i18n="menu.newGame">New Game</button>
+          <button id="btn-continue" class="btn" type="button" data-i18n="menu.continue">Continue</button>
+          <button id="btn-help" class="btn btn-secondary" type="button" data-i18n="menu.help">Help</button>
+          <button id="btn-settings" class="btn btn-secondary" type="button" data-i18n="menu.settings">Settings</button>
         </nav>
         <div class="menu-meta">
-          <span>High <strong id="menu-highscore">000000</strong></span>
+          <span><span data-i18n="menu.high">High</span> <strong id="menu-highscore">000000</strong></span>
           <span>v1.0</span>
         </div>
       </div>
     </section>
 
-    <section id="screen-game" class="screen screen-game" aria-label="Game">
-      <canvas id="game-canvas" width="960" height="640" aria-label="Asteroids play field"></canvas>
+    <section id="screen-game" class="screen screen-game" aria-label="Game" data-i18n-aria="aria.game">
+      <canvas id="game-canvas" width="960" height="640" aria-label="Asteroids play field" data-i18n-aria="aria.canvas"></canvas>
 
       <div id="hud" class="hud" aria-live="polite">
         <div class="hud-group hud-score">
-          <span class="hud-label">Score</span>
+          <span class="hud-label" data-i18n="hud.score">Score</span>
           <strong id="hud-score">000000</strong>
         </div>
         <div class="hud-group">
-          <span class="hud-label">High</span>
+          <span class="hud-label" data-i18n="hud.high">High</span>
           <strong id="hud-highscore">000000</strong>
         </div>
         <div class="hud-group">
-          <span class="hud-label">Level</span>
+          <span class="hud-label" data-i18n="hud.level">Level</span>
           <strong id="hud-level">01</strong>
         </div>
         <div class="hud-group">
-          <span class="hud-label">Lives</span>
+          <span class="hud-label" data-i18n="hud.lives">Lives</span>
           <strong id="hud-lives">3</strong>
         </div>
         <div id="hud-powerups" class="hud-powerups"></div>
         <div class="hud-tools">
-          <button id="btn-hud-mute" class="icon-btn" type="button" aria-label="Toggle sound" title="Sound">M</button>
-          <button id="btn-hud-pause" class="icon-btn" type="button" aria-label="Pause" title="Pause">II</button>
+          <button id="btn-hud-mute" class="icon-btn" type="button" aria-label="Toggle sound" title="Sound" data-i18n-aria="aria.toggleSound" data-i18n-title="aria.sound">M</button>
+          <button id="btn-hud-pause" class="icon-btn" type="button" aria-label="Pause" title="Pause" data-i18n-aria="aria.pause" data-i18n-title="aria.pause">II</button>
         </div>
       </div>
 
-      <div id="touch-controls" class="touch-controls" aria-label="Touch controls">
+      <div id="touch-controls" class="touch-controls" aria-label="Touch controls" data-i18n-aria="aria.touchControls">
         <div class="touch-cluster touch-cluster-left">
-          <button class="touch-btn" data-touch="left" type="button" aria-label="Turn left">L</button>
-          <button class="touch-btn touch-thrust" data-touch="thrust" type="button" aria-label="Thrust">TH</button>
-          <button class="touch-btn" data-touch="right" type="button" aria-label="Turn right">R</button>
+          <button class="touch-btn" data-touch="left" type="button" aria-label="Turn left" data-i18n="touch.left" data-i18n-aria="aria.turnLeft">L</button>
+          <button class="touch-btn touch-thrust" data-touch="thrust" type="button" aria-label="Thrust" data-i18n="touch.thrust" data-i18n-aria="aria.thrust">TH</button>
+          <button class="touch-btn" data-touch="right" type="button" aria-label="Turn right" data-i18n="touch.right" data-i18n-aria="aria.turnRight">R</button>
         </div>
         <div class="touch-cluster touch-cluster-right">
-          <button class="touch-btn" data-touch="warp" type="button" aria-label="Warp">WP</button>
-          <button class="touch-btn touch-fire" data-touch="fire" type="button" aria-label="Fire">FIRE</button>
+          <button class="touch-btn" data-touch="warp" type="button" aria-label="Warp" data-i18n="touch.warp" data-i18n-aria="aria.warp">WP</button>
+          <button class="touch-btn touch-fire" data-touch="fire" type="button" aria-label="Fire" data-i18n="touch.fire" data-i18n-aria="aria.fire">FIRE</button>
         </div>
       </div>
     </section>
 
-    <section id="screen-help" class="screen screen-panel" aria-label="Help">
+    <section id="screen-help" class="screen screen-panel" aria-label="Help" data-i18n-aria="aria.help">
       <div class="panel">
         <div class="panel-header">
-          <h2>How To Play</h2>
-          <button class="icon-btn" data-back-menu type="button" aria-label="Back">X</button>
+          <h2 data-i18n="help.title">How To Play</h2>
+          <button class="icon-btn" data-back-menu type="button" aria-label="Back" data-i18n-aria="aria.back">X</button>
         </div>
-        <div class="tabs" role="tablist" aria-label="Help sections">
-          <button class="tab active" type="button" data-help-tab="controls">Controls</button>
-          <button class="tab" type="button" data-help-tab="scoring">Scoring</button>
-          <button class="tab" type="button" data-help-tab="powerups">Powerups</button>
+        <div class="tabs" role="tablist" aria-label="Help sections" data-i18n-aria="aria.helpSections">
+          <button class="tab active" type="button" data-help-tab="controls" data-i18n="help.controls">Controls</button>
+          <button class="tab" type="button" data-help-tab="scoring" data-i18n="help.scoring">Scoring</button>
+          <button class="tab" type="button" data-help-tab="powerups" data-i18n="help.powerups">Powerups</button>
         </div>
         <div class="help-page active" data-help-page="controls">
           <dl class="help-grid">
-            <div><dt>A / Left</dt><dd>Turn left</dd></div>
-            <div><dt>D / Right</dt><dd>Turn right</dd></div>
-            <div><dt>W / Up</dt><dd>Thrust</dd></div>
-            <div><dt>Space / J</dt><dd>Fire</dd></div>
-            <div><dt>Shift / K</dt><dd>Warp with risk</dd></div>
-            <div><dt>Esc / P</dt><dd>Pause</dd></div>
-            <div><dt>M</dt><dd>Mute</dd></div>
+            <div><dt data-i18n="help.control.left.key">A / Left</dt><dd data-i18n="help.control.left.desc">Turn left</dd></div>
+            <div><dt data-i18n="help.control.right.key">D / Right</dt><dd data-i18n="help.control.right.desc">Turn right</dd></div>
+            <div><dt data-i18n="help.control.thrust.key">W / Up</dt><dd data-i18n="help.control.thrust.desc">Thrust</dd></div>
+            <div><dt data-i18n="help.control.fire.key">Space / J</dt><dd data-i18n="help.control.fire.desc">Fire</dd></div>
+            <div><dt data-i18n="help.control.warp.key">Shift / K</dt><dd data-i18n="help.control.warp.desc">Warp with risk</dd></div>
+            <div><dt data-i18n="help.control.pause.key">Esc / P</dt><dd data-i18n="help.control.pause.desc">Pause</dd></div>
+            <div><dt data-i18n="help.control.mute.key">M</dt><dd data-i18n="help.control.mute.desc">Mute</dd></div>
           </dl>
         </div>
         <div class="help-page" data-help-page="scoring">
           <dl class="help-grid">
-            <div><dt>Large asteroid</dt><dd>20 points</dd></div>
-            <div><dt>Medium asteroid</dt><dd>50 points</dd></div>
-            <div><dt>Small asteroid</dt><dd>100 points</dd></div>
-            <div><dt>Large UFO</dt><dd>200 points</dd></div>
-            <div><dt>Small UFO</dt><dd>1000 points</dd></div>
-            <div><dt>Extra life</dt><dd>Every 10,000 points</dd></div>
+            <div><dt data-i18n="help.score.largeAsteroid">Large asteroid</dt><dd data-i18n="help.score.20">20 points</dd></div>
+            <div><dt data-i18n="help.score.mediumAsteroid">Medium asteroid</dt><dd data-i18n="help.score.50">50 points</dd></div>
+            <div><dt data-i18n="help.score.smallAsteroid">Small asteroid</dt><dd data-i18n="help.score.100">100 points</dd></div>
+            <div><dt data-i18n="help.score.largeUfo">Large UFO</dt><dd data-i18n="help.score.200">200 points</dd></div>
+            <div><dt data-i18n="help.score.smallUfo">Small UFO</dt><dd data-i18n="help.score.1000">1000 points</dd></div>
+            <div><dt data-i18n="help.score.extraLife">Extra life</dt><dd data-i18n="help.score.extraLifeDesc">Every 10,000 points</dd></div>
           </dl>
         </div>
         <div class="help-page" data-help-page="powerups">
           <dl class="help-grid">
-            <div><dt>Shield</dt><dd>Absorbs one hit</dd></div>
-            <div><dt>Triple</dt><dd>Fires three rounds</dd></div>
-            <div><dt>Boost</dt><dd>Raises thrust speed</dd></div>
-            <div><dt>Rapid</dt><dd>Shorter fire cooldown</dd></div>
+            <div><dt data-i18n="power.shield">Shield</dt><dd data-i18n="help.power.shield.desc">Absorbs one hit</dd></div>
+            <div><dt data-i18n="power.triple">Triple</dt><dd data-i18n="help.power.triple.desc">Fires three rounds</dd></div>
+            <div><dt data-i18n="power.boost">Boost</dt><dd data-i18n="help.power.boost.desc">Raises thrust speed</dd></div>
+            <div><dt data-i18n="power.rapid">Rapid</dt><dd data-i18n="help.power.rapid.desc">Shorter fire cooldown</dd></div>
           </dl>
         </div>
       </div>
     </section>
 
-    <section id="screen-settings" class="screen screen-panel" aria-label="Settings">
+    <section id="screen-settings" class="screen screen-panel" aria-label="Settings" data-i18n-aria="aria.settings">
       <div class="panel">
         <div class="panel-header">
-          <h2>Settings</h2>
-          <button class="icon-btn" data-back-menu type="button" aria-label="Back">X</button>
+          <h2 data-i18n="settings.title">Settings</h2>
+          <button class="icon-btn" data-back-menu type="button" aria-label="Back" data-i18n-aria="aria.back">X</button>
         </div>
 
         <form id="settings-form" class="settings-form">
+          <label class="setting-row">
+            <span data-i18n="settings.language">Language</span>
+            <select id="setting-language" name="language">
+              <option value="zh-Hant">繁體中文</option>
+              <option value="en">English</option>
+              <option value="ja">日本語</option>
+            </select>
+          </label>
+
           <fieldset>
-            <legend>Theme</legend>
-            <div class="theme-picks" role="radiogroup" aria-label="Theme">
-              <label><input type="radio" name="theme" value="neon"><span class="swatch swatch-neon"></span>Neon</label>
-              <label><input type="radio" name="theme" value="retro"><span class="swatch swatch-retro"></span>Retro</label>
-              <label><input type="radio" name="theme" value="ocean"><span class="swatch swatch-ocean"></span>Ocean</label>
-              <label><input type="radio" name="theme" value="sunset"><span class="swatch swatch-sunset"></span>Sunset</label>
-              <label><input type="radio" name="theme" value="mono"><span class="swatch swatch-mono"></span>Mono</label>
+            <legend data-i18n="settings.theme">Theme</legend>
+            <div class="theme-picks" role="radiogroup" aria-label="Theme" data-i18n-aria="aria.theme">
+              <label><input type="radio" name="theme" value="neon"><span class="swatch swatch-neon"></span><span data-i18n="theme.neon">Neon</span></label>
+              <label><input type="radio" name="theme" value="retro"><span class="swatch swatch-retro"></span><span data-i18n="theme.retro">Retro</span></label>
+              <label><input type="radio" name="theme" value="ocean"><span class="swatch swatch-ocean"></span><span data-i18n="theme.ocean">Ocean</span></label>
+              <label><input type="radio" name="theme" value="sunset"><span class="swatch swatch-sunset"></span><span data-i18n="theme.sunset">Sunset</span></label>
+              <label><input type="radio" name="theme" value="mono"><span class="swatch swatch-mono"></span><span data-i18n="theme.mono">Mono</span></label>
             </div>
           </fieldset>
 
           <label class="setting-row">
-            <span>BGM Volume</span>
+            <span data-i18n="settings.bgm">BGM Volume</span>
             <input id="setting-music" name="musicVolume" type="range" min="0" max="100" step="1">
           </label>
           <label class="setting-row">
-            <span>SFX Volume</span>
+            <span data-i18n="settings.sfx">SFX Volume</span>
             <input id="setting-sfx" name="sfxVolume" type="range" min="0" max="100" step="1">
           </label>
           <label class="setting-row">
-            <span>Touch Opacity</span>
+            <span data-i18n="settings.touchOpacity">Touch Opacity</span>
             <input id="setting-touch-opacity" name="touchOpacity" type="range" min="20" max="90" step="5">
           </label>
           <label class="setting-row">
-            <span>Touch Layout</span>
+            <span data-i18n="settings.touchLayout">Touch Layout</span>
             <select id="setting-touch-layout" name="touchLayout">
-              <option value="default">Default</option>
-              <option value="compact">Compact</option>
-              <option value="split">Split</option>
+              <option value="default" data-i18n="settings.layout.default">Default</option>
+              <option value="compact" data-i18n="settings.layout.compact">Compact</option>
+              <option value="split" data-i18n="settings.layout.split">Split</option>
             </select>
           </label>
           <label class="toggle-row">
             <input id="setting-muted" name="muted" type="checkbox">
-            <span>Muted</span>
+            <span data-i18n="settings.muted">Muted</span>
           </label>
           <label class="toggle-row">
             <input id="setting-particles" name="particles" type="checkbox">
-            <span>Particles</span>
+            <span data-i18n="settings.particles">Particles</span>
           </label>
           <label class="toggle-row">
             <input id="setting-shake" name="screenShake" type="checkbox">
-            <span>Screen shake</span>
+            <span data-i18n="settings.screenShake">Screen shake</span>
           </label>
           <label class="toggle-row">
             <input id="setting-fps" name="showFps" type="checkbox">
-            <span>Show FPS</span>
+            <span data-i18n="settings.showFps">Show FPS</span>
           </label>
         </form>
       </div>
     </section>
 
-    <div id="modal-pause" class="modal hidden" role="dialog" aria-modal="true" aria-label="Paused">
+    <div id="modal-pause" class="modal hidden" role="dialog" aria-modal="true" aria-label="Paused" data-i18n-aria="aria.paused">
       <div class="modal-card">
-        <h2>Paused</h2>
-        <button id="btn-resume" class="btn btn-primary" type="button">Resume</button>
-        <button id="btn-restart" class="btn" type="button">Restart</button>
-        <button id="btn-pause-settings" class="btn btn-secondary" type="button">Settings</button>
-        <button id="btn-menu-from-pause" class="btn btn-secondary" type="button">Main Menu</button>
+        <h2 data-i18n="modal.paused">Paused</h2>
+        <button id="btn-resume" class="btn btn-primary" type="button" data-i18n="modal.resume">Resume</button>
+        <button id="btn-restart" class="btn" type="button" data-i18n="modal.restart">Restart</button>
+        <button id="btn-pause-settings" class="btn btn-secondary" type="button" data-i18n="menu.settings">Settings</button>
+        <button id="btn-menu-from-pause" class="btn btn-secondary" type="button" data-i18n="modal.mainMenu">Main Menu</button>
       </div>
     </div>
 
-    <div id="modal-gameover" class="modal hidden" role="dialog" aria-modal="true" aria-label="Game over">
+    <div id="modal-gameover" class="modal hidden" role="dialog" aria-modal="true" aria-label="Game over" data-i18n-aria="aria.gameOver">
       <div class="modal-card">
-        <h2>Game Over</h2>
+        <h2 data-i18n="modal.gameOver">Game Over</h2>
         <p id="gameover-score">Score 000000</p>
         <p id="gameover-highscore">High 000000</p>
-        <button id="btn-play-again" class="btn btn-primary" type="button">Play Again</button>
-        <button id="btn-menu-from-gameover" class="btn btn-secondary" type="button">Main Menu</button>
+        <button id="btn-play-again" class="btn btn-primary" type="button" data-i18n="modal.playAgain">Play Again</button>
+        <button id="btn-menu-from-gameover" class="btn btn-secondary" type="button" data-i18n="modal.mainMenu">Main Menu</button>
       </div>
     </div>
   </div>
 
   <script src="js/core/constants.js"></script>
   <script src="js/core/utils.js"></script>
+  <script src="js/data/i18n.js"></script>
   <script src="js/data/storage.js"></script>
   <script src="js/data/levels.js"></script>
   <script src="js/core/stateManager.js"></script>

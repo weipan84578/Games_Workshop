@@ -7,6 +7,7 @@
   var saveKey = PREFIX + "save";
 
   var defaults = {
+    language: "zh-Hant",
     theme: "neon",
     musicVolume: 60,
     sfxVolume: 80,

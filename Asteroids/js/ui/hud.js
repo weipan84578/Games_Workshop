@@ -22,10 +22,9 @@
       var chips = [];
       if (app.ship) {
         Object.keys(Game.Constants.POWERUPS.TYPES).forEach(function (type) {
-          var data = Game.Constants.POWERUPS.TYPES[type];
           var until = type === "shield" ? app.ship.shieldUntil : app.ship.powerups[type];
           if (until && until > app.time) {
-            chips.push('<span class="power-chip">' + data.label + " " + Math.ceil(until - app.time) + "s</span>");
+            chips.push('<span class="power-chip">' + Game.I18n.t("power." + type) + " " + Math.ceil(until - app.time) + "s</span>");
           }
         });
       }

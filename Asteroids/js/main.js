@@ -36,6 +36,7 @@
       this.canvas = document.getElementById("game-canvas");
       this.ctx = this.canvas.getContext("2d");
       this.settings = Game.Storage.loadSettings();
+      Game.I18n.setLanguage(this.settings.language);
       this.scoreManager = Game.Score.create();
       this.ship = Game.Ship.create(this.width / 2, this.height / 2);
 
@@ -188,8 +189,7 @@
       Game.State.set(STATES.GAME_OVER);
       Game.Storage.clearSave();
       Game.Screens.showModal("modal-gameover");
-      document.getElementById("gameover-score").textContent = "Score " + Game.Utils.formatScore(this.scoreManager.score);
-      document.getElementById("gameover-highscore").textContent = "High " + Game.Utils.formatScore(this.scoreManager.highscore);
+      this.refreshLocalizedText();
       Game.Sfx.play("gameOver");
       Game.Music.play("gameover");
       Game.Menu.refresh();
@@ -203,6 +203,16 @@
 
     updateHud: function () {
       Game.Hud.update(this);
+    },
+
+    refreshLocalizedText: function () {
+      this.updateHud();
+      document.getElementById("gameover-score").textContent = Game.I18n.t("game.scoreLine", {
+        score: Game.Utils.formatScore(this.scoreManager.score)
+      });
+      document.getElementById("gameover-highscore").textContent = Game.I18n.t("game.highLine", {
+        score: Game.Utils.formatScore(this.scoreManager.highscore)
+      });
     },
 
     update: function (dt) {
@@ -372,7 +382,10 @@
         this.particles.forEach(function (particle) { Game.Particle.draw(ctx, particle); });
 
         if (this.levelClearTimer > 0) {
-          this.drawCenterText("LEVEL " + String(this.level + 1), "Incoming field");
+          this.drawCenterText(
+            Game.I18n.t("game.levelTitle", { level: String(this.level + 1) }),
+            Game.I18n.t("game.incomingField")
+          );
         }
       }
 
@@ -415,7 +428,7 @@
       ctx.font = "700 12px system-ui";
       ctx.textAlign = "left";
       ctx.fillStyle = Game.Utils.cssColor("--c-muted");
-      ctx.fillText("FPS " + Math.round(this.fps || 0), 12, this.height - 12);
+      ctx.fillText(Game.I18n.t("game.fps", { fps: Math.round(this.fps || 0) }), 12, this.height - 12);
       ctx.restore();
     }
   };

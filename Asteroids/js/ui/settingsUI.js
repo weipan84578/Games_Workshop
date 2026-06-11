@@ -5,6 +5,7 @@
 
   function setForm(settings) {
     if (!form) return;
+    form.elements.language.value = settings.language;
     form.elements.theme.value = settings.theme;
     form.elements.musicVolume.value = settings.musicVolume;
     form.elements.sfxVolume.value = settings.sfxVolume;
@@ -23,6 +24,7 @@
   function readForm(base) {
     return Object.assign({}, base, {
       theme: form.elements.theme.value,
+      language: form.elements.language.value,
       musicVolume: Number(form.elements.musicVolume.value),
       sfxVolume: Number(form.elements.sfxVolume.value),
       touchOpacity: Number(form.elements.touchOpacity.value),
@@ -52,11 +54,15 @@
     },
 
     apply: function (settings) {
+      Game.I18n.setLanguage(settings.language);
       document.body.setAttribute("data-theme", settings.theme);
       document.body.setAttribute("data-touch-layout", settings.touchLayout);
       document.body.style.setProperty("--control-opacity", String(settings.touchOpacity / 100));
       Game.Audio.applySettings(settings);
       setForm(settings);
+      if (Game.App && Game.App.refreshLocalizedText) {
+        Game.App.refreshLocalizedText();
+      }
     }
   };
 }());
