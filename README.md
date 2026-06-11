@@ -57,6 +57,7 @@
 | `Pinball`        | 彈珠台     | Pinball        | ピンボール             |
 | `Bomberman_Lite` | 炸彈超人   | Bomberman Lite | ボンバーマン ライト   |
 | `Pong`           | 乒乓球     | Pong           | ポン                   |
+| `Asteroids`      | 小行星     | Asteroids      | アステロイド           |
 
 ### 策略遊戲
 
