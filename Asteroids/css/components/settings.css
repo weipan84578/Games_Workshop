@@ -1,0 +1,83 @@
+.settings-form {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.settings-form fieldset {
+  margin: 0;
+  padding: var(--space-md);
+  border: var(--line);
+  border-radius: var(--radius-sm);
+}
+
+.settings-form legend {
+  padding: 0 var(--space-sm);
+  color: var(--c-accent);
+  font-weight: 800;
+}
+
+.theme-picks {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-sm);
+}
+
+.theme-picks label,
+.setting-row,
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  min-height: 48px;
+}
+
+.theme-picks label {
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: var(--space-sm);
+  border: var(--line);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.theme-picks input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.theme-picks label.selected {
+  border-color: var(--c-accent);
+  box-shadow: 0 0 14px var(--c-glow);
+}
+
+.swatch {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+}
+
+.swatch-neon { background: linear-gradient(135deg, #00e5ff, #ff2ec4); }
+.swatch-retro { background: linear-gradient(135deg, #ffb000, #7cfc00); }
+.swatch-ocean { background: linear-gradient(135deg, #38bdf8, #34d399); }
+.swatch-sunset { background: linear-gradient(135deg, #ff7a45, #ffd166); }
+.swatch-mono { background: linear-gradient(135deg, #ffffff, #777777); }
+
+.setting-row input[type="range"] {
+  width: min(360px, 45vw);
+}
+
+.setting-row select {
+  min-width: 160px;
+  color: var(--c-fg);
+  border: var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--c-bg);
+}
+
+.toggle-row {
+  justify-content: flex-start;
+}

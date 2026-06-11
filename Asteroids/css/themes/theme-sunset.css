@@ -1,0 +1,13 @@
+body[data-theme="sunset"] {
+  --c-bg: #1b0a14;
+  --c-fg: #ffe9d6;
+  --c-muted: #e0a98c;
+  --c-panel: rgba(27, 10, 20, 0.91);
+  --c-accent: #ff7a45;
+  --c-accent-2: #ffd166;
+  --c-danger: #ef4444;
+  --c-glow: rgba(255, 122, 69, 0.45);
+  --c-asteroid: #bd7a67;
+  --c-ship: #ffd166;
+  --c-bullet: #ffffff;
+}

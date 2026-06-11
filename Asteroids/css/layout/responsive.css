@@ -1,0 +1,78 @@
+@media (max-width: 900px) {
+  :root {
+    --fs-title: 4rem;
+    --fs-menu: 1.6rem;
+    --fs-hud: 1.05rem;
+  }
+
+  .hud {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+  }
+
+  .hud-powerups {
+    display: none;
+  }
+
+  .touch-controls {
+    display: flex;
+  }
+}
+
+@media (max-width: 600px) {
+  :root {
+    --fs-title: 3rem;
+    --control-size: 58px;
+  }
+
+  .menu-panel {
+    gap: var(--space-md);
+  }
+
+  .hud {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
+    align-items: start;
+  }
+
+  .hud-group:nth-of-type(3),
+  .hud-group:nth-of-type(4) {
+    display: none;
+  }
+
+  .hud strong {
+    font-size: 1rem;
+  }
+
+  .help-grid,
+  .theme-picks {
+    grid-template-columns: 1fr;
+  }
+
+  .tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .setting-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .setting-row input[type="range"] {
+    width: 100%;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+  :root {
+    --control-size: 52px;
+  }
+
+  .hud {
+    padding-block: 0.35rem;
+  }
+
+  .touch-controls {
+    top: 4.2rem;
+    bottom: auto;
+    align-items: center;
+  }
+}

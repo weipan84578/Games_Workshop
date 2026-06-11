@@ -1,0 +1,13 @@
+body[data-theme="retro"] {
+  --c-bg: #100c00;
+  --c-fg: #ffe8b0;
+  --c-muted: #d6b879;
+  --c-panel: rgba(16, 12, 0, 0.91);
+  --c-accent: #ffb000;
+  --c-accent-2: #7cfc00;
+  --c-danger: #ff5533;
+  --c-glow: rgba(255, 176, 0, 0.46);
+  --c-asteroid: #c47f36;
+  --c-ship: #ffdc66;
+  --c-bullet: #ffffff;
+}

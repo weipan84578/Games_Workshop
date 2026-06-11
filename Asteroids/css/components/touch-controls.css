@@ -1,0 +1,55 @@
+.touch-controls {
+  position: fixed;
+  z-index: 8;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: none;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-md) max(var(--space-md), env(safe-area-inset-right)) max(var(--space-md), env(safe-area-inset-bottom)) max(var(--space-md), env(safe-area-inset-left));
+  pointer-events: none;
+}
+
+.touch-cluster {
+  display: flex;
+  align-items: end;
+  gap: var(--space-sm);
+  pointer-events: auto;
+}
+
+.touch-btn {
+  display: grid;
+  place-items: center;
+  width: var(--control-size);
+  height: var(--control-size);
+  min-width: var(--control-size);
+  border: 2px solid color-mix(in srgb, var(--c-accent), transparent 30%);
+  border-radius: 50%;
+  color: var(--c-fg);
+  background: color-mix(in srgb, var(--c-bg), transparent 34%);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--c-accent), transparent 75%);
+  opacity: var(--control-opacity);
+  cursor: pointer;
+  touch-action: none;
+}
+
+.touch-btn.active {
+  color: var(--c-bg);
+  background: var(--c-accent);
+  opacity: 1;
+}
+
+.touch-fire {
+  width: calc(var(--control-size) * 1.22);
+  border-radius: var(--control-size);
+}
+
+body[data-touch-layout="compact"] {
+  --control-size: 58px;
+}
+
+body[data-touch-layout="split"] .touch-cluster-left {
+  align-items: center;
+}

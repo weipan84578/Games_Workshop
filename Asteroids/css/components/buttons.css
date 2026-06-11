@@ -1,0 +1,59 @@
+.btn {
+  width: 100%;
+  min-height: 54px;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--c-accent);
+  border-radius: var(--radius-sm);
+  color: var(--c-accent);
+  background: color-mix(in srgb, var(--c-bg), transparent 8%);
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: transform 140ms ease, background 160ms ease, color 160ms ease, box-shadow 160ms ease, opacity 160ms ease;
+}
+
+.btn:hover,
+.btn:focus-visible {
+  color: var(--c-bg);
+  background: var(--c-accent);
+  box-shadow: 0 0 18px var(--c-glow);
+  outline: none;
+}
+
+.btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+  box-shadow: none;
+}
+
+.btn-secondary {
+  border-color: color-mix(in srgb, var(--c-fg), transparent 48%);
+  color: var(--c-fg);
+}
+
+.btn-primary {
+  color: var(--c-bg);
+  background: var(--c-accent);
+}
+
+.icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid color-mix(in srgb, var(--c-accent), transparent 30%);
+  border-radius: var(--radius-sm);
+  color: var(--c-fg);
+  background: color-mix(in srgb, var(--c-bg), transparent 10%);
+  cursor: pointer;
+}
+
+.icon-btn:hover,
+.icon-btn:focus-visible {
+  color: var(--c-bg);
+  background: var(--c-accent);
+  outline: none;
+}

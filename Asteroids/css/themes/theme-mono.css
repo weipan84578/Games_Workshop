@@ -1,0 +1,13 @@
+body[data-theme="mono"] {
+  --c-bg: #000000;
+  --c-fg: #ffffff;
+  --c-muted: #bbbbbb;
+  --c-panel: rgba(0, 0, 0, 0.93);
+  --c-accent: #ffffff;
+  --c-accent-2: #bbbbbb;
+  --c-danger: #ffffff;
+  --c-glow: rgba(255, 255, 255, 0.34);
+  --c-asteroid: #bdbdbd;
+  --c-ship: #ffffff;
+  --c-bullet: #ffffff;
+}

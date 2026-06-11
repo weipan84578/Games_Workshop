@@ -1,0 +1,61 @@
+.hud {
+  position: fixed;
+  z-index: 5;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) repeat(3, minmax(76px, auto)) minmax(120px, 1fr) auto;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: max(0.65rem, env(safe-area-inset-top)) max(0.75rem, env(safe-area-inset-right)) 0.65rem max(0.75rem, env(safe-area-inset-left));
+  pointer-events: none;
+}
+
+.hud-group {
+  display: grid;
+  min-width: 0;
+  padding: 0.25rem 0.55rem;
+  border: 1px solid color-mix(in srgb, var(--c-fg), transparent 78%);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--c-bg), transparent 18%);
+}
+
+.hud-label {
+  color: var(--c-muted);
+  font-size: 0.72rem;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.hud strong {
+  color: var(--c-fg);
+  font-size: var(--fs-hud);
+  line-height: 1;
+}
+
+.hud-powerups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  min-height: 34px;
+}
+
+.power-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 30px;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--c-accent-2), transparent 30%);
+  border-radius: var(--radius-sm);
+  color: var(--c-accent-2);
+  background: color-mix(in srgb, var(--c-bg), transparent 15%);
+  font-size: 0.8rem;
+}
+
+.hud-tools {
+  display: flex;
+  gap: var(--space-sm);
+  pointer-events: auto;
+}

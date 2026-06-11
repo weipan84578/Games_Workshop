@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Asteroids</title>
+
+  <link rel="stylesheet" href="css/base/reset.css">
+  <link rel="stylesheet" href="css/base/variables.css">
+  <link rel="stylesheet" href="css/base/typography.css">
+  <link rel="stylesheet" href="css/layout/screens.css">
+  <link rel="stylesheet" href="css/components/buttons.css">
+  <link rel="stylesheet" href="css/components/menu.css">
+  <link rel="stylesheet" href="css/components/hud.css">
+  <link rel="stylesheet" href="css/components/modal.css">
+  <link rel="stylesheet" href="css/components/settings.css">
+  <link rel="stylesheet" href="css/components/touch-controls.css">
+  <link rel="stylesheet" href="css/themes/theme-neon.css">
+  <link rel="stylesheet" href="css/themes/theme-retro.css">
+  <link rel="stylesheet" href="css/themes/theme-ocean.css">
+  <link rel="stylesheet" href="css/themes/theme-sunset.css">
+  <link rel="stylesheet" href="css/themes/theme-mono.css">
+  <link rel="stylesheet" href="css/layout/responsive.css">
+</head>
+<body data-theme="neon">
+  <div id="app" class="app-shell">
+    <section id="screen-menu" class="screen screen-menu active" aria-label="Main menu">
+      <div class="menu-panel">
+        <p class="kicker">Vector arcade</p>
+        <h1>ASTEROIDS</h1>
+        <p class="tagline">Break the field. Dodge the debris. Chase the high score.</p>
+        <nav class="menu-actions" aria-label="Main actions">
+          <button id="btn-new-game" class="btn btn-primary" type="button">New Game</button>
+          <button id="btn-continue" class="btn" type="button">Continue</button>
+          <button id="btn-help" class="btn btn-secondary" type="button">Help</button>
+          <button id="btn-settings" class="btn btn-secondary" type="button">Settings</button>
+        </nav>
+        <div class="menu-meta">
+          <span>High <strong id="menu-highscore">000000</strong></span>
+          <span>v1.0</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-game" class="screen screen-game" aria-label="Game">
+      <canvas id="game-canvas" width="960" height="640" aria-label="Asteroids play field"></canvas>
+
+      <div id="hud" class="hud" aria-live="polite">
+        <div class="hud-group hud-score">
+          <span class="hud-label">Score</span>
+          <strong id="hud-score">000000</strong>
+        </div>
+        <div class="hud-group">
+          <span class="hud-label">High</span>
+          <strong id="hud-highscore">000000</strong>
+        </div>
+        <div class="hud-group">
+          <span class="hud-label">Level</span>
+          <strong id="hud-level">01</strong>
+        </div>
+        <div class="hud-group">
+          <span class="hud-label">Lives</span>
+          <strong id="hud-lives">3</strong>
+        </div>
+        <div id="hud-powerups" class="hud-powerups"></div>
+        <div class="hud-tools">
+          <button id="btn-hud-mute" class="icon-btn" type="button" aria-label="Toggle sound" title="Sound">M</button>
+          <button id="btn-hud-pause" class="icon-btn" type="button" aria-label="Pause" title="Pause">II</button>
+        </div>
+      </div>
+
+      <div id="touch-controls" class="touch-controls" aria-label="Touch controls">
+        <div class="touch-cluster touch-cluster-left">
+          <button class="touch-btn" data-touch="left" type="button" aria-label="Turn left">L</button>
+          <button class="touch-btn touch-thrust" data-touch="thrust" type="button" aria-label="Thrust">TH</button>
+          <button class="touch-btn" data-touch="right" type="button" aria-label="Turn right">R</button>
+        </div>
+        <div class="touch-cluster touch-cluster-right">
+          <button class="touch-btn" data-touch="warp" type="button" aria-label="Warp">WP</button>
+          <button class="touch-btn touch-fire" data-touch="fire" type="button" aria-label="Fire">FIRE</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-help" class="screen screen-panel" aria-label="Help">
+      <div class="panel">
+        <div class="panel-header">
+          <h2>How To Play</h2>
+          <button class="icon-btn" data-back-menu type="button" aria-label="Back">X</button>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Help sections">
+          <button class="tab active" type="button" data-help-tab="controls">Controls</button>
+          <button class="tab" type="button" data-help-tab="scoring">Scoring</button>
+          <button class="tab" type="button" data-help-tab="powerups">Powerups</button>
+        </div>
+        <div class="help-page active" data-help-page="controls">
+          <dl class="help-grid">
+            <div><dt>A / Left</dt><dd>Turn left</dd></div>
+            <div><dt>D / Right</dt><dd>Turn right</dd></div>
+            <div><dt>W / Up</dt><dd>Thrust</dd></div>
+            <div><dt>Space / J</dt><dd>Fire</dd></div>
+            <div><dt>Shift / K</dt><dd>Warp with risk</dd></div>
+            <div><dt>Esc / P</dt><dd>Pause</dd></div>
+            <div><dt>M</dt><dd>Mute</dd></div>
+          </dl>
+        </div>
+        <div class="help-page" data-help-page="scoring">
+          <dl class="help-grid">
+            <div><dt>Large asteroid</dt><dd>20 points</dd></div>
+            <div><dt>Medium asteroid</dt><dd>50 points</dd></div>
+            <div><dt>Small asteroid</dt><dd>100 points</dd></div>
+            <div><dt>Large UFO</dt><dd>200 points</dd></div>
+            <div><dt>Small UFO</dt><dd>1000 points</dd></div>
+            <div><dt>Extra life</dt><dd>Every 10,000 points</dd></div>
+          </dl>
+        </div>
+        <div class="help-page" data-help-page="powerups">
+          <dl class="help-grid">
+            <div><dt>Shield</dt><dd>Absorbs one hit</dd></div>
+            <div><dt>Triple</dt><dd>Fires three rounds</dd></div>
+            <div><dt>Boost</dt><dd>Raises thrust speed</dd></div>
+            <div><dt>Rapid</dt><dd>Shorter fire cooldown</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-settings" class="screen screen-panel" aria-label="Settings">
+      <div class="panel">
+        <div class="panel-header">
+          <h2>Settings</h2>
+          <button class="icon-btn" data-back-menu type="button" aria-label="Back">X</button>
+        </div>
+
+        <form id="settings-form" class="settings-form">
+          <fieldset>
+            <legend>Theme</legend>
+            <div class="theme-picks" role="radiogroup" aria-label="Theme">
+              <label><input type="radio" name="theme" value="neon"><span class="swatch swatch-neon"></span>Neon</label>
+              <label><input type="radio" name="theme" value="retro"><span class="swatch swatch-retro"></span>Retro</label>
+              <label><input type="radio" name="theme" value="ocean"><span class="swatch swatch-ocean"></span>Ocean</label>
+              <label><input type="radio" name="theme" value="sunset"><span class="swatch swatch-sunset"></span>Sunset</label>
+              <label><input type="radio" name="theme" value="mono"><span class="swatch swatch-mono"></span>Mono</label>
+            </div>
+          </fieldset>
+
+          <label class="setting-row">
+            <span>BGM Volume</span>
+            <input id="setting-music" name="musicVolume" type="range" min="0" max="100" step="1">
+          </label>
+          <label class="setting-row">
+            <span>SFX Volume</span>
+            <input id="setting-sfx" name="sfxVolume" type="range" min="0" max="100" step="1">
+          </label>
+          <label class="setting-row">
+            <span>Touch Opacity</span>
+            <input id="setting-touch-opacity" name="touchOpacity" type="range" min="20" max="90" step="5">
+          </label>
+          <label class="setting-row">
+            <span>Touch Layout</span>
+            <select id="setting-touch-layout" name="touchLayout">
+              <option value="default">Default</option>
+              <option value="compact">Compact</option>
+              <option value="split">Split</option>
+            </select>
+          </label>
+          <label class="toggle-row">
+            <input id="setting-muted" name="muted" type="checkbox">
+            <span>Muted</span>
+          </label>
+          <label class="toggle-row">
+            <input id="setting-particles" name="particles" type="checkbox">
+            <span>Particles</span>
+          </label>
+          <label class="toggle-row">
+            <input id="setting-shake" name="screenShake" type="checkbox">
+            <span>Screen shake</span>
+          </label>
+          <label class="toggle-row">
+            <input id="setting-fps" name="showFps" type="checkbox">
+            <span>Show FPS</span>
+          </label>
+        </form>
+      </div>
+    </section>
+
+    <div id="modal-pause" class="modal hidden" role="dialog" aria-modal="true" aria-label="Paused">
+      <div class="modal-card">
+        <h2>Paused</h2>
+        <button id="btn-resume" class="btn btn-primary" type="button">Resume</button>
+        <button id="btn-restart" class="btn" type="button">Restart</button>
+        <button id="btn-pause-settings" class="btn btn-secondary" type="button">Settings</button>
+        <button id="btn-menu-from-pause" class="btn btn-secondary" type="button">Main Menu</button>
+      </div>
+    </div>
+
+    <div id="modal-gameover" class="modal hidden" role="dialog" aria-modal="true" aria-label="Game over">
+      <div class="modal-card">
+        <h2>Game Over</h2>
+        <p id="gameover-score">Score 000000</p>
+        <p id="gameover-highscore">High 000000</p>
+        <button id="btn-play-again" class="btn btn-primary" type="button">Play Again</button>
+        <button id="btn-menu-from-gameover" class="btn btn-secondary" type="button">Main Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/core/constants.js"></script>
+  <script src="js/core/utils.js"></script>
+  <script src="js/data/storage.js"></script>
+  <script src="js/data/levels.js"></script>
+  <script src="js/core/stateManager.js"></script>
+  <script src="js/audio/audioEngine.js"></script>
+  <script src="js/audio/sfx.js"></script>
+  <script src="js/audio/music.js"></script>
+  <script src="js/systems/input.js"></script>
+  <script src="js/systems/physics.js"></script>
+  <script src="js/systems/collision.js"></script>
+  <script src="js/systems/score.js"></script>
+  <script src="js/systems/spawner.js"></script>
+  <script src="js/entities/particle.js"></script>
+  <script src="js/entities/bullet.js"></script>
+  <script src="js/entities/asteroid.js"></script>
+  <script src="js/entities/ufo.js"></script>
+  <script src="js/entities/powerup.js"></script>
+  <script src="js/entities/ship.js"></script>
+  <script src="js/ui/hud.js"></script>
+  <script src="js/ui/menu.js"></script>
+  <script src="js/ui/helpUI.js"></script>
+  <script src="js/ui/settingsUI.js"></script>
+  <script src="js/ui/touchControls.js"></script>
+  <script src="js/core/gameLoop.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+:root {
+  --font-display: "Arial Black", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: "Segoe UI", "Noto Sans TC", system-ui, sans-serif;
+
+  --fs-title: 5rem;
+  --fs-menu: 2rem;
+  --fs-hud: 1.5rem;
+  --fs-body: 1.05rem;
+  --fs-label: 0.92rem;
+
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --line: 1px solid color-mix(in srgb, var(--c-fg), transparent 72%);
+
+  --c-bg: #05060f;
+  --c-fg: #eaf6ff;
+  --c-muted: #9db4c4;
+  --c-panel: rgba(5, 6, 15, 0.88);
+  --c-accent: #00e5ff;
+  --c-accent-2: #ff2ec4;
+  --c-danger: #ff3b3b;
+  --c-glow: rgba(0, 229, 255, 0.48);
+  --c-asteroid: #aab4c4;
+  --c-ship: var(--c-accent);
+  --c-bullet: #fff176;
+
+  --control-opacity: 0.72;
+  --control-size: 68px;
+}

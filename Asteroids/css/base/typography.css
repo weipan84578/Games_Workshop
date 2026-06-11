@@ -1,0 +1,46 @@
+body {
+  color: var(--c-fg);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.5;
+  background: var(--c-bg);
+}
+
+h1,
+h2,
+h3,
+.btn,
+.hud,
+.kicker {
+  font-family: var(--font-display);
+  letter-spacing: 0;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: var(--fs-title);
+  line-height: 0.95;
+  text-shadow: 0 0 14px var(--c-glow), 0 0 34px var(--c-glow);
+}
+
+h2 {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+
+.kicker {
+  color: var(--c-accent-2);
+  font-size: var(--fs-label);
+  text-transform: uppercase;
+}
+
+.tagline {
+  max-width: 34rem;
+  color: var(--c-muted);
+  font-size: 1.08rem;
+}

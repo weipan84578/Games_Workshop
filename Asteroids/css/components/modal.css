@@ -1,0 +1,30 @@
+.modal {
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--space-md);
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-card {
+  display: grid;
+  width: min(420px, 100%);
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  border: 1px solid color-mix(in srgb, var(--c-accent), transparent 25%);
+  border-radius: var(--radius-md);
+  background: var(--c-panel);
+  box-shadow: 0 0 30px var(--c-glow);
+  text-align: center;
+}
+
+.modal-card p {
+  color: var(--c-muted);
+}
