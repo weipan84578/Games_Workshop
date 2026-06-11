@@ -63,6 +63,11 @@
       if (Game.App && Game.App.refreshLocalizedText) {
         Game.App.refreshLocalizedText();
       }
+      if (Game.App && Game.App.resize) {
+        requestAnimationFrame(function () {
+          Game.App.resize();
+        });
+      }
     }
   };
 }());

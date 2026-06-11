@@ -1,14 +1,13 @@
 .touch-controls {
-  position: fixed;
+  grid-area: touch;
+  position: relative;
   z-index: 8;
-  left: 0;
-  right: 0;
-  bottom: 0;
   display: none;
   align-items: end;
   justify-content: space-between;
   gap: var(--space-md);
-  padding: var(--space-md) max(var(--space-md), env(safe-area-inset-right)) max(var(--space-md), env(safe-area-inset-bottom)) max(var(--space-md), env(safe-area-inset-left));
+  min-height: calc(var(--control-size) + 24px);
+  padding: var(--space-sm) max(var(--space-md), env(safe-area-inset-right)) max(var(--space-sm), env(safe-area-inset-bottom)) max(var(--space-md), env(safe-area-inset-left));
   pointer-events: none;
 }
 

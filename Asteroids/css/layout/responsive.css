@@ -1,12 +1,26 @@
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   :root {
     --fs-title: 4rem;
     --fs-menu: 1.6rem;
     --fs-hud: 1.05rem;
   }
 
+  .screen-game {
+    grid-template-areas:
+      "hud"
+      "field"
+      "touch";
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+
+  .game-playfield {
+    padding: 0 var(--space-sm);
+  }
+
   .hud {
     grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+    gap: 0.45rem;
+    padding-bottom: 0.45rem;
   }
 
   .hud-powerups {
@@ -28,14 +42,36 @@
     gap: var(--space-md);
   }
 
+  .screen-menu,
+  .screen-panel {
+    align-items: stretch;
+  }
+
+  .panel {
+    width: 100%;
+    max-height: calc(100dvh - 1rem);
+    padding: var(--space-md);
+  }
+
+  .panel-header {
+    margin-bottom: var(--space-md);
+  }
+
   .hud {
     grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
     align-items: start;
   }
 
-  .hud-group:nth-of-type(3),
-  .hud-group:nth-of-type(4) {
-    display: none;
+  .hud-tools {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    align-self: stretch;
+    flex-direction: column;
+  }
+
+  .hud-tools .icon-btn {
+    width: 40px;
+    height: 40px;
   }
 
   .hud strong {
@@ -54,25 +90,78 @@
   .setting-row {
     align-items: stretch;
     flex-direction: column;
+    gap: var(--space-sm);
   }
 
   .setting-row input[type="range"] {
     width: 100%;
   }
+
+  .setting-row select {
+    width: 100%;
+  }
 }
 
-@media (orientation: landscape) and (max-height: 520px) {
+@media (max-width: 380px) {
   :root {
+    --fs-title: 2.35rem;
     --control-size: 52px;
   }
 
+  .btn {
+    min-height: 48px;
+    padding: 0.65rem 0.75rem;
+  }
+
+  .panel {
+    padding: var(--space-sm);
+  }
+}
+
+@media (max-width: 1024px) and (orientation: landscape) and (max-height: 520px) {
+  :root {
+    --control-size: 48px;
+  }
+
+  .screen-game {
+    grid-template-areas:
+      "hud hud hud"
+      "left field right";
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .game-playfield {
+    padding: 0 var(--space-xs) var(--space-xs);
+  }
+
   .hud {
+    grid-area: hud;
+    grid-template-columns: repeat(4, minmax(72px, 1fr)) auto;
     padding-block: 0.35rem;
   }
 
   .touch-controls {
-    top: 4.2rem;
-    bottom: auto;
-    align-items: center;
+    display: contents;
+  }
+
+  .touch-cluster {
+    align-self: center;
+    flex-direction: column;
+    padding: var(--space-xs);
+  }
+
+  .touch-cluster-left {
+    grid-area: left;
+  }
+
+  .touch-cluster-right {
+    grid-area: right;
+  }
+
+  .touch-fire {
+    width: var(--control-size);
+    height: calc(var(--control-size) * 1.2);
+    border-radius: var(--control-size);
   }
 }

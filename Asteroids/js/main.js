@@ -31,6 +31,7 @@
     thrustFxTimer: 0,
     shake: 0,
     fps: 60,
+    resizeObserver: null,
 
     init: function () {
       this.canvas = document.getElementById("game-canvas");
@@ -49,7 +50,16 @@
 
       this.resize();
       window.addEventListener("resize", this.resize.bind(this));
-      window.addEventListener("orientationchange", this.resize.bind(this));
+      window.addEventListener("orientationchange", function () {
+        App.resize();
+        setTimeout(function () { App.resize(); }, 180);
+      });
+      if (window.ResizeObserver && this.canvas.parentElement) {
+        this.resizeObserver = new ResizeObserver(function () {
+          App.resize();
+        });
+        this.resizeObserver.observe(this.canvas.parentElement);
+      }
       window.addEventListener("blur", function () {
         if (Game.State.is(STATES.PLAYING)) App.pause();
       });
@@ -60,14 +70,13 @@
     },
 
     resize: function () {
-      var rect = this.canvas.getBoundingClientRect();
+      var rectTarget = this.canvas.parentElement || this.canvas;
+      var rect = rectTarget.getBoundingClientRect();
       var cssWidth = rect.width || window.innerWidth || Game.Constants.WORLD.WIDTH;
       var cssHeight = rect.height || window.innerHeight || Game.Constants.WORLD.HEIGHT;
       this.dpr = Math.min(window.devicePixelRatio || 1, Game.Constants.WORLD.MAX_DPR);
       this.canvas.width = Math.floor(cssWidth * this.dpr);
       this.canvas.height = Math.floor(cssHeight * this.dpr);
-      this.canvas.style.width = cssWidth + "px";
-      this.canvas.style.height = cssHeight + "px";
       this.ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
       this.width = cssWidth;
       this.height = cssHeight;
@@ -171,6 +180,7 @@
       if (!Game.State.is(STATES.PAUSED)) return;
       Game.Screens.hideModal("modal-pause");
       Game.State.set(STATES.PLAYING);
+      this.resize();
       Game.Music.resume();
     },
 

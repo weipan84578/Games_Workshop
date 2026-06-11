@@ -1,9 +1,7 @@
 .hud {
-  position: fixed;
+  grid-area: hud;
+  position: relative;
   z-index: 5;
-  top: 0;
-  left: 0;
-  right: 0;
   display: grid;
   grid-template-columns: minmax(120px, 1fr) repeat(3, minmax(76px, auto)) minmax(120px, 1fr) auto;
   align-items: center;
@@ -15,6 +13,7 @@
 .hud-group {
   display: grid;
   min-width: 0;
+  min-height: 44px;
   padding: 0.25rem 0.55rem;
   border: 1px solid color-mix(in srgb, var(--c-fg), transparent 78%);
   border-radius: var(--radius-sm);
@@ -32,6 +31,8 @@
   color: var(--c-fg);
   font-size: var(--fs-hud);
   line-height: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .hud-powerups {

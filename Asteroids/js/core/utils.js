@@ -57,7 +57,7 @@
     },
 
     randomEdgePosition: function (width, height) {
-      var side = window.innerWidth <= 900 ? Utils.choice([0, 1, 3]) : Utils.randInt(0, 3);
+      var side = Utils.randInt(0, 3);
       if (side === 0) return { x: Utils.rand(0, width), y: -40 };
       if (side === 1) return { x: width + 40, y: Utils.rand(0, height) };
       if (side === 2) return { x: Utils.rand(0, width), y: height + 40 };

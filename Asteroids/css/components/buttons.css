@@ -8,6 +8,8 @@
   background: color-mix(in srgb, var(--c-bg), transparent 8%);
   cursor: pointer;
   text-transform: uppercase;
+  white-space: normal;
+  overflow-wrap: anywhere;
   transition: transform 140ms ease, background 160ms ease, color 160ms ease, box-shadow 160ms ease, opacity 160ms ease;
 }
 
@@ -42,6 +44,7 @@
 .icon-btn {
   display: inline-grid;
   place-items: center;
+  flex: 0 0 auto;
   width: 44px;
   height: 44px;
   border: 1px solid color-mix(in srgb, var(--c-accent), transparent 30%);

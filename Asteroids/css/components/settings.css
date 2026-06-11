@@ -18,7 +18,7 @@
 
 .theme-picks {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(96px, 1fr));
   gap: var(--space-sm);
 }
 
@@ -39,6 +39,8 @@
   border: var(--line);
   border-radius: var(--radius-sm);
   cursor: pointer;
+  text-align: center;
+  overflow-wrap: anywhere;
 }
 
 .theme-picks input {
@@ -68,10 +70,12 @@
 
 .setting-row input[type="range"] {
   width: min(360px, 45vw);
+  max-width: 100%;
 }
 
 .setting-row select {
   min-width: 160px;
+  max-width: 100%;
   color: var(--c-fg);
   border: var(--line);
   border-radius: var(--radius-sm);
