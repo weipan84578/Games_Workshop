@@ -1,0 +1,98 @@
+.touch-controls {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  width: min(100%, 520px);
+  min-height: 116px;
+  margin: 0 auto;
+  padding: 8px 14px calc(8px + var(--safe-bottom));
+  touch-action: none;
+}
+
+.stick {
+  position: relative;
+  width: 112px;
+  height: 112px;
+  border: 2px solid rgba(57, 255, 20, 0.45);
+  border: 2px solid color-mix(in srgb, var(--c-primary) 45%, transparent);
+  border-radius: 50%;
+  background: rgba(18, 18, 32, 0.72);
+  background: color-mix(in srgb, var(--c-surface) 72%, transparent);
+}
+
+.stick::before {
+  content: "";
+  position: absolute;
+  inset: 35%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  background: color-mix(in srgb, var(--c-text) 18%, transparent);
+}
+
+.stick__nub {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 48px;
+  height: 48px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--c-primary);
+  box-shadow: 0 0 18px rgba(57, 255, 20, 0.65);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--c-primary) 65%, transparent);
+}
+
+.fire-button {
+  width: 92px;
+  height: 92px;
+  border: 2px solid rgba(255, 49, 88, 0.7);
+  border: 2px solid color-mix(in srgb, var(--c-danger) 70%, transparent);
+  border-radius: 50%;
+  color: var(--c-bg);
+  background: var(--c-danger);
+  font-weight: 900;
+  box-shadow: 0 0 22px rgba(255, 49, 88, 0.42);
+  box-shadow: 0 0 22px color-mix(in srgb, var(--c-danger) 42%, transparent);
+}
+
+.touch-controls.is-left .stick {
+  order: 2;
+}
+
+.touch-controls.is-left .fire-button {
+  order: 1;
+}
+
+@media (pointer: coarse), (max-width: 1023px) {
+  .touch-controls {
+    display: flex;
+  }
+}
+
+@media (max-width: 1023px) and (orientation: landscape) {
+  .touch-controls {
+    display: contents;
+  }
+
+  .stick {
+    grid-column: 1;
+    grid-row: 2;
+    align-self: center;
+    justify-self: center;
+  }
+
+  .fire-button {
+    grid-column: 3;
+    grid-row: 2;
+    align-self: center;
+    justify-self: center;
+  }
+
+  .touch-controls.is-left .stick {
+    grid-column: 3;
+  }
+
+  .touch-controls.is-left .fire-button {
+    grid-column: 1;
+  }
+}

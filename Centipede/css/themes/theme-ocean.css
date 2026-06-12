@@ -1,0 +1,14 @@
+body[data-theme="ocean"] {
+  --c-bg: #06283d;
+  --c-surface: #123f58;
+  --c-primary: #47b5ff;
+  --c-secondary: #84f6d6;
+  --c-accent: #ffd166;
+  --c-mushroom: #b7f2ff;
+  --c-poison: #ef7bff;
+  --c-text: #eefcff;
+  --c-text-dim: #a8cad4;
+  --c-danger: #ff5577;
+  --c-grid: rgba(183, 242, 255, 0.1);
+  --c-player-zone: rgba(71, 181, 255, 0.1);
+}

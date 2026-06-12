@@ -1,0 +1,14 @@
+body[data-theme="retro"] {
+  --c-bg: #101000;
+  --c-surface: #231f05;
+  --c-primary: #ffb000;
+  --c-secondary: #76ff7a;
+  --c-accent: #ff5d2c;
+  --c-mushroom: #e2da63;
+  --c-poison: #5dffb4;
+  --c-text: #fff7bd;
+  --c-text-dim: #c7b76a;
+  --c-danger: #ff3b2f;
+  --c-grid: rgba(255, 176, 0, 0.11);
+  --c-player-zone: rgba(255, 176, 0, 0.08);
+}

@@ -1,0 +1,92 @@
+.settings-form {
+  display: grid;
+  gap: 14px;
+}
+
+.setting {
+  display: grid;
+  gap: 7px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid color-mix(in srgb, var(--c-text) 12%, transparent);
+}
+
+.setting:last-child {
+  border-bottom: 0;
+}
+
+.setting label,
+.setting legend {
+  font-weight: 800;
+}
+
+.setting input[type="range"] {
+  width: 100%;
+  accent-color: var(--c-accent);
+}
+
+.segmented,
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.segmented button,
+.swatches button {
+  min-height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border: 1px solid color-mix(in srgb, var(--c-text) 24%, transparent);
+  border-radius: var(--radius-sm);
+  color: var(--c-text);
+  background: rgba(17, 18, 28, 0.94);
+  background: color-mix(in srgb, var(--c-surface) 84%, black);
+  font-weight: 800;
+}
+
+.segmented button {
+  min-width: 88px;
+  padding: 0 12px;
+}
+
+.swatches button {
+  display: grid;
+  grid-template-columns: 22px auto;
+  min-width: 112px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+}
+
+.swatch-dot {
+  width: 22px;
+  height: 22px;
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 50%;
+  background: var(--swatch);
+}
+
+.segmented button.is-active,
+.swatches button.is-active {
+  border-color: var(--c-accent);
+  color: var(--c-bg);
+  background: var(--c-accent);
+}
+
+.toggle-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.toggle-line input {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--c-accent);
+}
+
+.setting__hint {
+  color: var(--c-text-dim);
+  font-size: var(--fs-label);
+}

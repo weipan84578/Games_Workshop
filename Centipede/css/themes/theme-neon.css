@@ -1,0 +1,14 @@
+body[data-theme="neon"] {
+  --c-bg: #0a0a14;
+  --c-surface: #17172a;
+  --c-primary: #39ff14;
+  --c-secondary: #ff4fd8;
+  --c-accent: #ffe66d;
+  --c-mushroom: #8df7ff;
+  --c-poison: #b56cff;
+  --c-text: #f7fff9;
+  --c-text-dim: #a8b8ad;
+  --c-danger: #ff3158;
+  --c-grid: rgba(141, 247, 255, 0.08);
+  --c-player-zone: rgba(57, 255, 20, 0.08);
+}

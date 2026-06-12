@@ -1,0 +1,49 @@
+:root {
+  color-scheme: dark;
+  --board-w: 600px;
+  --board-h: 720px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --dur-fast: 140ms;
+  --dur-med: 220ms;
+  --shadow-strong: 0 18px 44px rgba(0, 0, 0, 0.48);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+
+  --fs-title: 3rem;
+  --fs-menu: 1.45rem;
+  --fs-hud: 1.12rem;
+  --fs-body: 1rem;
+  --fs-label: 0.82rem;
+
+  --c-bg: #0a0a14;
+  --c-surface: #151628;
+  --c-primary: #39ff14;
+  --c-secondary: #ff4fd8;
+  --c-accent: #ffe66d;
+  --c-mushroom: #8df7ff;
+  --c-poison: #b56cff;
+  --c-text: #f7fff9;
+  --c-text-dim: #a8b8ad;
+  --c-danger: #ff3158;
+  --c-grid: rgba(255, 255, 255, 0.08);
+  --c-player-zone: rgba(57, 255, 20, 0.08);
+}
+
+body[data-font-size="compact"] {
+  --fs-title: 2.6rem;
+  --fs-menu: 1.25rem;
+  --fs-hud: 1rem;
+  --fs-body: 0.94rem;
+  --fs-label: 0.76rem;
+}
+
+body[data-font-size="large"] {
+  --fs-title: 3.4rem;
+  --fs-menu: 1.7rem;
+  --fs-hud: 1.28rem;
+  --fs-body: 1.12rem;
+  --fs-label: 0.92rem;
+}

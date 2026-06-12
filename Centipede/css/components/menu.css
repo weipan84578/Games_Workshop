@@ -1,0 +1,188 @@
+.screen {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: calc(20px + var(--safe-top)) calc(16px + var(--safe-right)) calc(20px + var(--safe-bottom)) calc(16px + var(--safe-left));
+  background: rgba(10, 10, 20, 0.78);
+  background: color-mix(in srgb, var(--c-bg) 78%, transparent);
+  backdrop-filter: blur(2px);
+}
+
+.screen--menu {
+  align-items: center;
+  justify-content: center;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.08), transparent 34%),
+    var(--c-bg);
+  background-size: 34px 34px, 34px 34px, auto, auto;
+  backdrop-filter: none;
+}
+
+.screen.is-active {
+  display: flex;
+}
+
+.menu-panel {
+  width: min(86vw, 440px);
+  padding: 22px;
+  border: 1px solid rgba(57, 255, 20, 0.55);
+  border: 1px solid color-mix(in srgb, var(--c-primary) 55%, transparent);
+  border-radius: var(--radius-md);
+  background: rgba(18, 18, 32, 0.96);
+  background: color-mix(in srgb, var(--c-surface) 91%, black);
+  box-shadow: var(--shadow-strong);
+}
+
+.menu-scene {
+  position: relative;
+  height: clamp(120px, 24dvh, 180px);
+  margin: 8px 0 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--radius-sm);
+  background:
+    linear-gradient(var(--c-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--c-grid) 1px, transparent 1px),
+    rgba(0, 0, 0, 0.28);
+  background-size: 20px 20px;
+}
+
+.menu-centipede,
+.menu-centipede::before,
+.menu-centipede::after {
+  position: absolute;
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--c-primary);
+  box-shadow:
+    22px 0 0 var(--c-primary),
+    44px 0 0 var(--c-primary),
+    66px 0 0 var(--c-primary),
+    88px 0 0 var(--c-secondary);
+}
+
+.menu-centipede--a {
+  left: 32px;
+  top: 28px;
+}
+
+.menu-centipede--b {
+  right: 132px;
+  bottom: 54px;
+  transform: scaleX(-1);
+  opacity: 0.75;
+}
+
+.menu-mushroom {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+}
+
+.menu-mushroom::before {
+  content: "";
+  position: absolute;
+  left: 1px;
+  top: 0;
+  width: 16px;
+  height: 10px;
+  border-radius: 10px 10px 3px 3px;
+  background: var(--c-mushroom);
+}
+
+.menu-mushroom::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  bottom: 0;
+  width: 7px;
+  height: 10px;
+  background: var(--c-text);
+}
+
+.menu-mushroom--a {
+  left: 58%;
+  top: 34px;
+}
+
+.menu-mushroom--b {
+  left: 22%;
+  bottom: 28px;
+}
+
+.menu-shooter {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  width: 0;
+  height: 0;
+  transform: translateX(-50%);
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 34px solid var(--c-accent);
+}
+
+.eyebrow {
+  margin-bottom: 4px;
+  color: var(--c-accent);
+  font-size: var(--fs-label);
+  font-weight: 800;
+}
+
+.menu-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.menu-button,
+.modal-button {
+  min-height: 56px;
+  border: 1px solid rgba(57, 255, 20, 0.45);
+  border: 1px solid color-mix(in srgb, var(--c-primary) 45%, transparent);
+  border-radius: var(--radius-sm);
+  color: var(--c-text);
+  background: rgba(15, 16, 28, 0.94);
+  background: color-mix(in srgb, var(--c-bg) 70%, var(--c-surface));
+  font-size: var(--fs-menu);
+  font-weight: 800;
+  transition: transform var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast), background var(--dur-fast);
+}
+
+.menu-button:hover,
+.menu-button:focus-visible,
+.menu-button.is-selected,
+.modal-button:hover,
+.modal-button:focus-visible {
+  border-color: var(--c-accent);
+  color: var(--c-bg);
+  background: var(--c-accent);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.menu-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  transform: none;
+}
+
+.menu-note {
+  margin-top: 16px;
+  min-height: 1.3em;
+  color: var(--c-text-dim);
+  font-size: var(--fs-label);
+}
+
+body[data-game-state="menu"] .hud,
+body[data-game-state="menu"] .game-shell,
+body[data-game-state="menu"] .touch-controls {
+  display: none;
+}

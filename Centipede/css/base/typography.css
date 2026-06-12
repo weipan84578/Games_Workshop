@@ -1,0 +1,32 @@
+body {
+  font-family: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", system-ui, sans-serif;
+  font-size: 18px;
+  line-height: 1.45;
+  letter-spacing: 0;
+  color: var(--c-text);
+  background: var(--c-bg);
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(2.8rem, 8vw, var(--fs-title));
+  line-height: 0.95;
+  font-weight: 900;
+}
+
+h2 {
+  font-size: 1.55rem;
+  line-height: 1.15;
+}
+
+.eyebrow,
+.hud__label,
+.menu-note,
+.setting__hint {
+  font-family: ui-monospace, "Courier New", monospace;
+}

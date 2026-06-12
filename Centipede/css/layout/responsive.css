@@ -1,0 +1,62 @@
+@media (min-width: 1024px) {
+  .app {
+    padding-inline: max(24px, var(--safe-left)) max(24px, var(--safe-right));
+  }
+
+  .stage-wrap {
+    width: min(72vh, var(--board-w));
+    max-height: calc(100dvh - 98px);
+  }
+}
+
+@media (min-width: 600px) and (max-width: 1023px) {
+  .stage-wrap {
+    width: min(90vw, 600px);
+    max-height: calc(100dvh - 112px - var(--safe-bottom));
+  }
+}
+
+@media (max-width: 599px) and (orientation: portrait) {
+  .app {
+    gap: 8px;
+    padding-inline: calc(8px + var(--safe-left)) calc(8px + var(--safe-right));
+    padding-bottom: calc(10px + var(--safe-bottom));
+  }
+
+  .game-shell {
+    align-items: start;
+  }
+
+  .stage-wrap {
+    width: min(96vw, 600px);
+    max-height: calc(100dvh - 214px - var(--safe-top) - var(--safe-bottom));
+  }
+
+  .menu-panel {
+    width: min(92vw, 360px);
+  }
+}
+
+@media (max-width: 1023px) and (orientation: landscape) {
+  .app {
+    display: grid;
+    grid-template-columns: minmax(120px, 18vw) 1fr minmax(96px, 16vw);
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 8px;
+    min-height: 100dvh;
+  }
+
+  .hud {
+    grid-column: 1 / -1;
+  }
+
+  .game-shell {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .stage-wrap {
+    width: min(78vh, 600px);
+    max-height: calc(100dvh - 68px - var(--safe-top) - var(--safe-bottom));
+  }
+}

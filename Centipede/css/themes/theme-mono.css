@@ -1,0 +1,14 @@
+body[data-theme="mono"] {
+  --c-bg: #000000;
+  --c-surface: #121212;
+  --c-primary: #ffffff;
+  --c-secondary: #bfbfbf;
+  --c-accent: #f6f6f6;
+  --c-mushroom: #d8d8d8;
+  --c-poison: #8b8b8b;
+  --c-text: #ffffff;
+  --c-text-dim: #bdbdbd;
+  --c-danger: #ffffff;
+  --c-grid: rgba(255, 255, 255, 0.13);
+  --c-player-zone: rgba(255, 255, 255, 0.08);
+}

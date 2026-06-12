@@ -1,0 +1,14 @@
+body[data-theme="sunset"] {
+  --c-bg: #2b1224;
+  --c-surface: #432035;
+  --c-primary: #ff7849;
+  --c-secondary: #ffc857;
+  --c-accent: #6fffe9;
+  --c-mushroom: #ffc2a1;
+  --c-poison: #9d72ff;
+  --c-text: #fff3ee;
+  --c-text-dim: #e0b4aa;
+  --c-danger: #ff3864;
+  --c-grid: rgba(255, 200, 87, 0.1);
+  --c-player-zone: rgba(255, 120, 73, 0.1);
+}
