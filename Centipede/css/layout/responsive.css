@@ -29,7 +29,7 @@
 
   .stage-wrap {
     width: min(96vw, 600px);
-    max-height: calc(100dvh - 214px - var(--safe-top) - var(--safe-bottom));
+    max-height: calc(100dvh - 258px - var(--safe-top) - var(--safe-bottom));
   }
 
   .menu-panel {
