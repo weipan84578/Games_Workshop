@@ -22,51 +22,51 @@
   <link rel="stylesheet" href="css/layout/responsive.css">
 </head>
 <body data-theme="neon" data-font-size="normal">
-  <main id="app" class="app" aria-label="Centipede Web Game">
+  <main id="app" class="app" aria-label="Centipede Web Game" data-i18n-aria="app.label">
     <header class="hud" id="hud">
       <div class="hud__group">
-        <span class="hud__label">SCORE</span>
+        <span class="hud__label" data-i18n="hud.score">分數</span>
         <strong id="hudScore">0</strong>
       </div>
       <div class="hud__group">
-        <span class="hud__label">HIGH</span>
+        <span class="hud__label" data-i18n="hud.high">最高</span>
         <strong id="hudHigh">0</strong>
       </div>
       <div class="hud__group">
-        <span class="hud__label">LIVES</span>
+        <span class="hud__label" data-i18n="hud.lives">生命</span>
         <strong id="hudLives">3</strong>
       </div>
       <div class="hud__group">
-        <span class="hud__label">LEVEL</span>
+        <span class="hud__label" data-i18n="hud.level">關卡</span>
         <strong id="hudLevel">1</strong>
       </div>
       <div class="hud__actions">
-        <button class="icon-button" id="pauseBtn" type="button" aria-label="暫停" title="暫停">
+        <button class="icon-button" id="pauseBtn" type="button" aria-label="暫停" title="暫停" data-i18n-aria="action.pause" data-i18n-title="action.pause">
           <span class="control-icon control-icon--pause" aria-hidden="true"></span>
         </button>
-        <button class="icon-button" id="settingsBtn" type="button" aria-label="設定" title="設定">
+        <button class="icon-button" id="settingsBtn" type="button" aria-label="設定" title="設定" data-i18n-aria="action.settings" data-i18n-title="action.settings">
           <span class="control-icon control-icon--gear" aria-hidden="true"></span>
         </button>
       </div>
     </header>
 
-    <section class="game-shell" aria-label="遊戲區">
+    <section class="game-shell" aria-label="遊戲區" data-i18n-aria="aria.gameArea">
       <div class="stage-wrap" id="stageWrap">
-        <canvas id="gameCanvas" width="600" height="720" aria-label="Centipede 遊戲畫布"></canvas>
+        <canvas id="gameCanvas" width="600" height="720" aria-label="Centipede 遊戲畫布" data-i18n-aria="aria.canvas"></canvas>
         <div class="status-ribbon" id="statusRibbon" hidden></div>
       </div>
     </section>
 
-    <section class="touch-controls" id="touchControls" aria-label="觸控控制">
-      <div class="stick" id="touchStick" aria-label="移動搖桿">
+    <section class="touch-controls" id="touchControls" aria-label="觸控控制" data-i18n-aria="aria.touchControls">
+      <div class="stick" id="touchStick" aria-label="移動搖桿" data-i18n-aria="aria.moveStick">
         <span class="stick__nub" id="touchNub"></span>
       </div>
-      <button class="fire-button" id="touchFire" type="button" aria-label="射擊">射擊</button>
+      <button class="fire-button" id="touchFire" type="button" aria-label="射擊" data-i18n="action.fire" data-i18n-aria="action.fire">射擊</button>
     </section>
 
-    <section class="screen screen--menu is-active" id="menuScreen" aria-label="主選單">
+    <section class="screen screen--menu is-active" id="menuScreen" aria-label="主選單" data-i18n-aria="aria.mainMenu">
       <div class="menu-panel">
-        <p class="eyebrow">ARCADE FIELD</p>
+        <p class="eyebrow" data-i18n="menu.eyebrow">街機戰場</p>
         <div class="menu-scene" aria-hidden="true">
           <span class="menu-centipede menu-centipede--a"></span>
           <span class="menu-centipede menu-centipede--b"></span>
@@ -76,10 +76,10 @@
         </div>
         <h1>CENTIPEDE</h1>
         <div class="menu-actions" role="menu">
-          <button type="button" class="menu-button is-selected" data-action="new">開始新遊戲</button>
-          <button type="button" class="menu-button" data-action="continue">繼續遊戲</button>
-          <button type="button" class="menu-button" data-action="help">操作說明</button>
-          <button type="button" class="menu-button" data-action="settings">設定</button>
+          <button type="button" class="menu-button is-selected" data-action="new" data-i18n="menu.new">開始新遊戲</button>
+          <button type="button" class="menu-button" data-action="continue" data-i18n="menu.continue">繼續遊戲</button>
+          <button type="button" class="menu-button" data-action="help" data-i18n="menu.help">操作說明</button>
+          <button type="button" class="menu-button" data-action="settings" data-i18n="menu.settings">設定</button>
         </div>
         <p class="menu-note" id="saveStatus">尚未偵測到可繼續的存檔</p>
       </div>
@@ -88,8 +88,8 @@
     <section class="modal" id="modal" aria-modal="true" role="dialog" hidden>
       <div class="modal__panel">
         <header class="modal__header">
-          <h2 id="modalTitle">訊息</h2>
-          <button type="button" class="icon-button" id="modalClose" aria-label="關閉">X</button>
+          <h2 id="modalTitle" data-i18n="modal.message">訊息</h2>
+          <button type="button" class="icon-button" id="modalClose" aria-label="關閉" data-i18n-aria="action.close">X</button>
         </header>
         <div class="modal__body" id="modalBody"></div>
         <footer class="modal__actions" id="modalActions"></footer>
@@ -101,6 +101,7 @@
 
   <script src="js/utils/helpers.js"></script>
   <script src="js/utils/storage.js"></script>
+  <script src="js/utils/i18n.js"></script>
   <script src="js/core/config.js"></script>
   <script src="js/systems/collision.js"></script>
   <script src="js/systems/score.js"></script>

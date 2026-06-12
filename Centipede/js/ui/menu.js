@@ -40,9 +40,13 @@
       continueBtn.disabled = !save;
       if (save) {
         const date = new Date(save.timestamp || Date.now());
-        this.saveStatus.textContent = `可繼續：第 ${save.level} 關，${Game.Helpers.formatScore(save.score)} 分，${date.toLocaleString()}`;
+        this.saveStatus.textContent = this.app.t("menu.saveFound", {
+          level: save.level,
+          score: Game.Helpers.formatScore(save.score),
+          date: date.toLocaleString(Game.I18n.getLocale())
+        });
       } else {
-        this.saveStatus.textContent = "尚未偵測到可繼續的存檔";
+        this.saveStatus.textContent = this.app.t("menu.noSave");
       }
     }
 

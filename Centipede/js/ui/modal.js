@@ -18,7 +18,7 @@
       this.title.textContent = title;
       this.body.innerHTML = body;
       this.actions.innerHTML = "";
-      (actions || [{ label: "關閉", action: () => this.close() }]).forEach((item) => {
+      (actions || [{ label: this.app.t("action.close"), action: () => this.close() }]).forEach((item) => {
         const button = document.createElement("button");
         button.type = "button";
         button.className = "modal-button";

@@ -19,7 +19,7 @@
         if (app.lives < Game.Config.MAX_LIVES) {
           app.lives += 1;
           app.playSfx("extra_life");
-          app.showRibbon("EXTRA LIFE", 900);
+          app.showRibbon(app.t("ribbon.extraLife"), 900);
         }
       }
       if (Math.floor(before / 1000) !== Math.floor(app.score / 1000)) {

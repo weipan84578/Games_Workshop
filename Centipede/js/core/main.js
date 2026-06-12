@@ -77,9 +77,14 @@
         return;
       }
       const isPaused = this.state.is("PAUSED");
-      this.pauseBtn.setAttribute("aria-label", isPaused ? "繼續" : "暫停");
-      this.pauseBtn.title = isPaused ? "繼續" : "暫停";
+      const label = this.t(isPaused ? "action.continue" : "action.pause");
+      this.pauseBtn.setAttribute("aria-label", label);
+      this.pauseBtn.title = label;
       this.pauseIcon.className = `control-icon control-icon--${isPaused ? "play" : "pause"}`;
+    }
+
+    t(key, values) {
+      return Game.I18n.t(key, values);
     }
 
     unlockAudio() {
@@ -90,12 +95,17 @@
 
     updateSettings(settings) {
       this.settings = Object.assign({}, Game.Storage.defaults, settings);
+      Game.I18n.setLanguage(this.settings.language);
       document.body.dataset.theme = this.settings.theme;
       document.body.dataset.fontSize = this.settings.fontSize;
       document.getElementById("touchControls").classList.toggle("is-left", this.settings.controlSide === "left");
       Game.Storage.saveSettings(this.settings);
       this.audio.applySettings(this.settings);
       this.syncPalette();
+      this.updateChromeState();
+      if (this.menu) {
+        this.menu.refreshSaveState();
+      }
       window.setTimeout(() => this.syncPalette(), 0);
     }
 
@@ -143,7 +153,7 @@
       this.unlockAudio();
       const save = Game.Storage.loadSave();
       if (!save) {
-        this.toast("沒有可用的存檔");
+        this.toast(this.t("toast.noSave"));
         this.playSfx("ui_error");
         this.menu.refreshSaveState();
         return;
@@ -410,14 +420,14 @@
       this.mushrooms.forEach((mushroom) => mushroom.repair(this));
       this.startRound();
       this.particles.burst(deathX, deathY, this.palette.danger, 36, 260);
-      this.showRibbon("READY", 700);
+      this.showRibbon(this.t("ribbon.ready"), 700);
       this.saveGame();
     }
 
     clearLevel() {
       this.levelClearPending = true;
       this.playSfx("level_clear");
-      this.showRibbon("LEVEL CLEAR", 900);
+      this.showRibbon(this.t("ribbon.levelClear"), 900);
       this.saveGame();
       this.state.set("LEVELCLEAR");
       window.setTimeout(() => {
@@ -439,12 +449,12 @@
       this.menu.refreshSaveState();
       Game.Music.gameOver(this.audio);
       this.hud.update();
-      this.modal.show("遊戲結束", `
-        <p>本次分數：<strong>${Game.Helpers.formatScore(this.score)}</strong></p>
-        <p>最高分：<strong>${Game.Helpers.formatScore(this.highScore)}</strong></p>
+      this.modal.show(this.t("modal.gameOver"), `
+        <p>${this.t("modal.finalScore")}<strong>${Game.Helpers.formatScore(this.score)}</strong></p>
+        <p>${this.t("modal.highScore")}<strong>${Game.Helpers.formatScore(this.highScore)}</strong></p>
       `, [
-        { label: "再玩一次", action: () => this.startNewGame() },
-        { label: "主選單", action: () => { this.modal.close(); this.menu.show(); } }
+        { label: this.t("action.playAgain"), action: () => this.startNewGame() },
+        { label: this.t("action.mainMenu"), action: () => { this.modal.close(); this.menu.show(); } }
       ]);
     }
 
@@ -455,9 +465,9 @@
       this.state.set("PAUSED");
       this.saveGame();
       Game.Music.pause(this.audio, true);
-      this.modal.show("暫停", "<p>目前進度已保存。</p>", [
-        { label: "繼續", action: () => this.resume() },
-        { label: "主選單", action: () => { this.modal.close(); this.menu.show(); } }
+      this.modal.show(this.t("modal.pause"), `<p>${this.t("modal.saved")}</p>`, [
+        { label: this.t("action.continue"), action: () => this.resume() },
+        { label: this.t("action.mainMenu"), action: () => { this.modal.close(); this.menu.show(); } }
       ]);
     }
 
@@ -481,43 +491,9 @@
     }
 
     showHelp() {
-      this.modal.show("操作說明", `
-        <div class="help-layout">
-          <section class="help-card">
-            <span class="help-icon help-icon--keyboard" aria-hidden="true"></span>
-            <div>
-              <h3>鍵盤</h3>
-              <p><span class="keycap">↑</span><span class="keycap">↓</span><span class="keycap">←</span><span class="keycap">→</span> 或 <span class="keycap">W</span><span class="keycap">A</span><span class="keycap">S</span><span class="keycap">D</span> 移動砲台。</p>
-              <p><span class="keycap keycap--wide">Space</span> 或 <span class="keycap keycap--wide">Enter</span> 射擊，<span class="keycap">Esc</span> 暫停。</p>
-            </div>
-          </section>
-          <section class="help-card">
-            <span class="help-icon help-icon--touch" aria-hidden="true"></span>
-            <div>
-              <h3>滑鼠與觸控</h3>
-              <p>滑鼠移到遊戲區內可牽引砲台，點擊畫布射擊。</p>
-              <p>手機使用虛擬搖桿移動，射擊按鈕可連續開火；可在設定中切換射擊鍵位置。</p>
-            </div>
-          </section>
-          <section class="help-card">
-            <span class="help-icon help-icon--mushroom" aria-hidden="true"></span>
-            <div>
-              <h3>場地與蘑菇</h3>
-              <p>蘑菇有 4 格耐久，會阻擋蜈蚣並讓牠轉向下移。</p>
-              <p>蠍子會把蘑菇變成毒蘑菇；蜈蚣碰到毒蘑菇會向玩家區俯衝。</p>
-            </div>
-          </section>
-          <section class="help-card">
-            <span class="help-icon help-icon--enemy" aria-hidden="true"></span>
-            <div>
-              <h3>敵人與得分</h3>
-              <p>蜈蚣身體 10 分，頭部 100 分；擊中身體會分裂成新的蜈蚣。</p>
-              <p>蜘蛛依距離給 300 / 600 / 900 分，跳蚤 200 分，蠍子 1000 分。</p>
-              <p>每 12000 分加 1 條生命，最多 6 條。死亡後蘑菇會修復並給少量分數。</p>
-            </div>
-          </section>
-        </div>
-      `, [{ label: "返回", action: () => this.modal.close() }]);
+      this.modal.show(this.t("help.title"), this.t("help.body"), [
+        { label: this.t("action.back"), action: () => this.modal.close() }
+      ]);
     }
 
     getMoveVector() {

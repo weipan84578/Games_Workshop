@@ -10,7 +10,8 @@
     theme: "neon",
     fontSize: "normal",
     shake: true,
-    controlSide: "right"
+    controlSide: "right",
+    language: "zh-Hant"
   };
 
   function read(key, fallback) {
