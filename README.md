@@ -58,6 +58,7 @@
 | `Bomberman_Lite` | 炸彈超人   | Bomberman Lite | ボンバーマン ライト   |
 | `Pong`           | 乒乓球     | Pong           | ポン                   |
 | `Asteroids`      | 小行星     | Asteroids      | アステロイド           |
+| `Centipede`      | 蜈蚣射擊   | Centipede      | センチピード           |
 
 ### 策略遊戲
 
