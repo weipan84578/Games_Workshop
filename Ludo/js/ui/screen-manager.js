@@ -33,18 +33,17 @@
     var layer = document.getElementById('modal-layer');
     var human = L.state.game.humanColor;
     var win = winnerOwner === human;
-    var cfg = L.config;
-    var colorName = cfg.COLOR_NAMES[cfg.COLORS[winnerOwner]];
+    var colorName = L.i18n.colorName(winnerOwner);
 
     layer.innerHTML =
       '<div class="modal-backdrop">' +
       '  <div class="modal result-modal player-' + (winnerOwner + 1) + '">' +
       '    <div class="result-emoji">' + (win ? '🏆' : '🤖') + '</div>' +
-      '    <h2 class="result-title">' + (win ? '你贏了!' : colorName + '方獲勝') + '</h2>' +
-      '    <p class="result-sub">' + (win ? '恭喜把 4 顆棋子全部送進終點!' : '再接再厲,下次一定行!') + '</p>' +
+      '    <h2 class="result-title">' + (win ? L.i18n.t('resultWinTitle') : L.i18n.t('resultLoseTitle', { color: colorName })) + '</h2>' +
+      '    <p class="result-sub">' + (win ? L.i18n.t('resultWinSub') : L.i18n.t('resultLoseSub')) + '</p>' +
       '    <div class="modal-actions">' +
-      '      <button class="btn btn-primary" id="result-again">再玩一局</button>' +
-      '      <button class="btn btn-secondary" id="result-menu">回主選單</button>' +
+      '      <button class="btn btn-primary" id="result-again">' + L.i18n.t('playAgain') + '</button>' +
+      '      <button class="btn btn-secondary" id="result-menu">' + L.i18n.t('backMenu') + '</button>' +
       '    </div>' +
       '  </div>' +
       '</div>';

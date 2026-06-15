@@ -1,4 +1,4 @@
-/* turn.js — 回合管理與遊戲流程控制器(狀態機核心)。
+﻿/* turn.js — 回合管理與遊戲流程控制器(狀態機核心)。
    串接擲骰、合法步、移動動畫、吃子、勝負、額外回合。 */
 (function (L) {
   'use strict';
@@ -72,11 +72,11 @@
     if (L.state.isHumanTurn()) {
       game.phase = PHASE.ROLL;
       L.ui.hud.setRollEnabled(true);
-      L.ui.hud.prompt('輪到你了 — 擲骰子');
+      L.ui.hud.promptKey('yourTurn');
       L.storage.saveGame();
     } else {
       L.ui.hud.setRollEnabled(false);
-      L.ui.hud.prompt(colorName(game.currentPlayer) + ' (AI) 思考中…');
+      L.ui.hud.promptKey('aiThinking', { color: colorName(game.currentPlayer) });
       L.storage.saveGame();
       busy = true;
       wait(aiDelay()).then(function () { busy = false; doRoll(); });
@@ -92,12 +92,12 @@
     if (L.state.isHumanTurn()) {
       game.phase = PHASE.ROLL;
       L.ui.hud.setRollEnabled(true);
-      L.ui.hud.prompt('輪到你了 — 擲骰子');
+      L.ui.hud.promptKey('yourTurn');
       busy = false;
     } else {
       game.phase = PHASE.ROLL;
       L.ui.hud.setRollEnabled(false);
-      L.ui.hud.prompt(colorName(game.currentPlayer) + ' (AI) 思考中…');
+      L.ui.hud.promptKey('aiThinking', { color: colorName(game.currentPlayer) });
       busy = true;
       wait(aiDelay()).then(function () { busy = false; doRoll(); });
     }
@@ -120,11 +120,11 @@
 
     if (L.state.isHumanTurn()) {
       L.ui.renderTokens.highlightMovable(pendingMoves);
-      L.ui.hud.prompt('選擇要移動的棋子');
+      L.ui.hud.promptKey('chooseToken');
       busy = false;
     } else {
       L.ui.renderTokens.clearHighlights();
-      L.ui.hud.prompt(colorName(game.currentPlayer) + ' (AI) 思考中…');
+      L.ui.hud.promptKey('aiThinking', { color: colorName(game.currentPlayer) });
       busy = true;
       wait(aiDelay()).then(function () {
         var choice = L.ai.chooseMove(game.currentPlayer, value, pendingMoves);
@@ -136,7 +136,7 @@
   }
 
   function colorName(owner) {
-    return L.config.COLOR_NAMES[L.config.COLORS[owner]];
+    return L.i18n.colorName(owner);
   }
 
   // ---- 擲骰(人類按鈕或 AI 自動觸發) ----
@@ -166,7 +166,7 @@
       if (value === 6) {
         game.dice.sixStreak = (game.dice.sixStreak || 0) + 1;
         if (L.config.rules.threeSixForfeit && game.dice.sixStreak >= 3) {
-          L.ui.hud.prompt('連續三次 6 — 本回合作廢!');
+          L.ui.hud.promptKey('tripleSix');
           L.audio.playSfx('sfx_illegal');
           return wait(900).then(function () { busy = false; nextPlayer(); });
         }
@@ -185,7 +185,7 @@
     var moves = L.engine.rules.getLegalMoves(game.currentPlayer, value);
 
     if (moves.length === 0) {
-      L.ui.hud.prompt('沒有可走的棋 — 跳過');
+      L.ui.hud.promptKey('noMoves');
       L.audio.playSfx('sfx_illegal');
       return wait(800).then(function () {
         busy = false;
@@ -199,7 +199,7 @@
     if (L.state.isHumanTurn()) {
       game.phase = PHASE.AWAIT_MOVE;
       L.ui.renderTokens.highlightMovable(moves);
-      L.ui.hud.prompt('選擇要移動的棋子');
+      L.ui.hud.promptKey('chooseToken');
       busy = false;
       L.storage.saveGame();
       // 僅一步可走時自動執行,降低操作負擔
@@ -263,7 +263,7 @@
       var capPromises = [];
       if (captured.length) {
         L.audio.playSfx('sfx_capture');
-        L.ui.hud.prompt('吃掉了對手棋子!');
+        L.ui.hud.promptKey('captured');
         for (var i = 0; i < captured.length; i++) {
           var victim = L.state.getToken(captured[i]);
           L.engine.token.sendHome(victim);
@@ -319,11 +319,11 @@
     if (L.state.isHumanTurn()) {
       game.phase = PHASE.ROLL;
       L.ui.hud.setRollEnabled(true);
-      L.ui.hud.prompt('額外回合 — 再擲一次!');
+      L.ui.hud.promptKey('bonusRoll');
       busy = false;
     } else {
       game.phase = PHASE.ROLL;
-      L.ui.hud.prompt(colorName(game.currentPlayer) + ' (AI) 再擲一次…');
+      L.ui.hud.promptKey('aiRollAgain', { color: colorName(game.currentPlayer) });
       busy = true;
       wait(aiDelay()).then(function () { busy = false; doRoll(); });
     }
@@ -358,3 +358,5 @@
 
   TURN.beginTurn = beginTurn;
 })(window.Ludo);
+
+

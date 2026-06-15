@@ -7,6 +7,8 @@ const L = loadLudo([
   'js/core/namespace.js',
   'js/core/config.js',
   'js/core/state.js',
+  'js/core/storage.js',
+  'js/core/i18n.js',
   'js/engine/board.js',
   'js/engine/rules.js',
   'js/engine/dice.js',
@@ -30,7 +32,8 @@ L.ui.renderTokens = {
 L.ui.hud = {
   update: function () {},
   setRollEnabled: function (enabled) { calls.rollEnabled = enabled; },
-  prompt: function (text) { calls.prompt = text; }
+  prompt: function (text) { calls.prompt = text; },
+  promptKey: function (key) { calls.prompt = key; }
 };
 L.ui.showResult = function () {};
 L.audio.playSfx = function () {};

@@ -30,17 +30,15 @@
       return;
     }
 
-    var el = closest(e.target, '[data-action], [data-ai], [data-diff], [data-color], [data-theme-name], [data-accordion]');
+    var el = closest(e.target, '[data-action], [data-ai], [data-diff], [data-color], [data-theme-name], [data-lang]');
     if (!el) return;
-
-    // 手風琴
-    if (el.hasAttribute('data-accordion')) { L.ui.instructions.toggle(el); return; }
 
     // 模式選擇
     if (el.hasAttribute('data-ai')) { L.audio.playSfx('sfx_button_click'); L.ui.menu.selectAi(parseInt(el.getAttribute('data-ai'), 10)); return; }
     if (el.hasAttribute('data-diff')) { L.audio.playSfx('sfx_button_click'); L.ui.menu.selectDiff(el.getAttribute('data-diff')); return; }
     if (el.hasAttribute('data-color')) { L.audio.playSfx('sfx_button_click'); L.ui.menu.selectColor(parseInt(el.getAttribute('data-color'), 10)); return; }
     if (el.hasAttribute('data-theme-name')) { L.audio.playSfx('sfx_button_click'); L.ui.settings.applyTheme(el.getAttribute('data-theme-name')); return; }
+    if (el.hasAttribute('data-lang')) { L.audio.playSfx('sfx_button_click'); L.ui.settings.setLanguage(el.getAttribute('data-lang')); return; }
 
     var action = el.getAttribute('data-action');
     if (!action) return;
@@ -75,11 +73,11 @@
     var layer = document.getElementById('modal-layer');
     layer.innerHTML =
       '<div class="modal-backdrop"><div class="modal">' +
-      '<h2 class="modal-title">離開對局?</h2>' +
-      '<p class="modal-text">目前進度已自動儲存,可從「繼續遊戲」回來。</p>' +
+      '<h2 class="modal-title">' + L.i18n.t('quitTitle') + '</h2>' +
+      '<p class="modal-text">' + L.i18n.t('quitText') + '</p>' +
       '<div class="modal-actions">' +
-      '<button class="btn btn-primary" id="q-yes">回主選單</button>' +
-      '<button class="btn btn-secondary" id="q-no">繼續對局</button>' +
+      '<button class="btn btn-primary" id="q-yes">' + L.i18n.t('quitYes') + '</button>' +
+      '<button class="btn btn-secondary" id="q-no">' + L.i18n.t('quitNo') + '</button>' +
       '</div></div></div>';
     layer.classList.add('show');
     document.getElementById('q-yes').onclick = function () {

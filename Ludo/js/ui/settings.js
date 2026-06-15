@@ -10,7 +10,7 @@
     document.documentElement.setAttribute('data-theme', name);
     L.state.settings.theme = name;
     L.storage.saveSettings();
-    refreshThemeButtons();
+    refreshUI();
   };
 
   SET.setBgmVolume = function (v) {
@@ -28,6 +28,9 @@
   SET.setAnimSpeed = function (v) {
     L.state.settings.animSpeed = parseInt(v, 10); L.storage.saveSettings(); refreshUI();
   };
+  SET.setLanguage = function (lang) {
+    L.i18n.setLanguage(lang);
+  };
 
   SET.refreshUI = refreshUI;
   function refreshUI() {
@@ -35,11 +38,13 @@
     var bgm = document.getElementById('set-bgm'); if (bgm) bgm.value = Math.round(s.bgmVolume * 100);
     var sfx = document.getElementById('set-sfx'); if (sfx) sfx.value = Math.round(s.sfxVolume * 100);
     var mute = document.getElementById('set-mute');
-    if (mute) { mute.textContent = s.muted ? '🔇 已靜音' : '🔊 開啟'; mute.classList.toggle('muted', s.muted); }
+    if (mute) { mute.textContent = s.muted ? ('🔇 ' + L.i18n.t('muted')) : ('🔊 ' + L.i18n.t('soundOn')); mute.classList.toggle('muted', s.muted); }
     var anim = document.getElementById('set-anim'); if (anim) anim.value = String(s.animSpeed);
     var animLabel = document.getElementById('set-anim-label');
-    if (animLabel) animLabel.textContent = ['關閉', '正常', '快速'][s.animSpeed] || '正常';
+    if (animLabel) animLabel.textContent = [L.i18n.t('animOff'), L.i18n.t('animNormal'), L.i18n.t('animFast')][s.animSpeed] || L.i18n.t('animNormal');
     refreshThemeButtons();
+    refreshLanguageButtons();
+    refreshThemeLabels();
   }
 
   function refreshThemeButtons() {
@@ -47,5 +52,28 @@
     var els = document.querySelectorAll('[data-theme-name]');
     for (var i = 0; i < els.length; i++)
       els[i].classList.toggle('selected', els[i].getAttribute('data-theme-name') === s.theme);
+  }
+
+  function refreshLanguageButtons() {
+    var s = L.state.settings;
+    var els = document.querySelectorAll('[data-lang]');
+    for (var i = 0; i < els.length; i++)
+      els[i].classList.toggle('selected', els[i].getAttribute('data-lang') === s.language);
+  }
+
+  function refreshThemeLabels() {
+    var labels = document.querySelectorAll('[data-theme-label]');
+    var names = {
+      classic: L.i18n.t('themeClassic'),
+      ocean: L.i18n.t('themeOcean'),
+      sunset: L.i18n.t('themeSunset'),
+      forest: L.i18n.t('themeForest'),
+      night: L.i18n.t('themeNight'),
+      'high-contrast': L.i18n.t('themeHighContrast')
+    };
+    for (var i = 0; i < labels.length; i++) {
+      var key = labels[i].getAttribute('data-theme-label');
+      labels[i].textContent = names[key] || key;
+    }
   }
 })(window.Ludo);

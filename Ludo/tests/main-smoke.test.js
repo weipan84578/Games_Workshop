@@ -58,6 +58,9 @@ function createDocument() {
   add('set-mute');
   add('set-anim');
   add('set-anim-label');
+  add('game-status');
+  add('label-start').setAttribute('data-i18n', 'startGame');
+  add('lang-en').setAttribute('data-lang', 'en');
   all.push(new Element('', 'board-area'));
   all.push(new Element('', 'theme-swatch'));
 
@@ -73,6 +76,11 @@ function createDocument() {
     querySelectorAll(selector) {
       if (selector === '.screen') return all.filter((el) => el.classList.contains('screen'));
       if (selector === '[data-theme-name]') return all.filter((el) => el.attributes['data-theme-name'] != null);
+      if (selector === '[data-theme-label]') return all.filter((el) => el.attributes['data-theme-label'] != null);
+      if (selector === '[data-lang]') return all.filter((el) => el.attributes['data-lang'] != null);
+      if (selector === '[data-i18n]') return all.filter((el) => el.attributes['data-i18n'] != null);
+      if (selector === '[data-i18n-title]') return all.filter((el) => el.attributes['data-i18n-title'] != null);
+      if (selector === '[data-i18n-aria]') return all.filter((el) => el.attributes['data-i18n-aria'] != null);
       if (selector === '.token.movable') return [];
       return [];
     }
@@ -95,6 +103,7 @@ const L = loadLudo([
   'js/core/config.js',
   'js/core/state.js',
   'js/core/storage.js',
+  'js/core/i18n.js',
   'js/engine/board.js',
   'js/engine/rules.js',
   'js/engine/dice.js',
@@ -109,7 +118,6 @@ const L = loadLudo([
   'js/ui/screen-manager.js',
   'js/ui/menu.js',
   'js/ui/settings.js',
-  'js/ui/instructions.js',
   'js/ui/render-board.js',
   'js/ui/render-tokens.js',
   'js/ui/hud.js',
@@ -123,5 +131,10 @@ assert.strictEqual(L.ui.screen.current(), 'screen-menu');
 assert.strictEqual(document.getElementById('screen-menu').classList.contains('active'), true);
 assert.strictEqual(document.getElementById('version-tag').textContent, L.config.VERSION);
 assert.strictEqual(document.getElementById('theme-stylesheet').attributes.href, 'css/themes/classic.css');
+
+L.i18n.setLanguage('en');
+assert.strictEqual(document.documentElement.attributes.lang, 'en');
+assert.strictEqual(document.getElementById('label-start').textContent, 'Start Game');
+assert.strictEqual(document.getElementById('lang-en').classList.contains('selected'), true);
 
 console.log('main-smoke.test.js passed');

@@ -34,6 +34,7 @@
     // 設定預設值
     defaults: {
       theme: 'classic',
+      language: 'zh-Hant',
       bgmVolume: 0.5,
       sfxVolume: 0.8,
       muted: false,
@@ -45,6 +46,7 @@
       classic: '經典', ocean: '海洋', sunset: '夕陽',
       forest: '森林', night: '夜間', 'high-contrast': '高對比'
     },
+    LANGUAGES: ['zh-Hant', 'en', 'ja'],
 
     SAVE_KEY: 'ludo_save',
     SETTINGS_KEY: 'ludo_settings',

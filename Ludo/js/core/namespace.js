@@ -5,6 +5,7 @@ window.Ludo = {
   config:  {},
   state:   {},
   storage: {},
+  i18n:    {},
   engine:  { board: {}, rules: {}, dice: {}, token: {}, turn: {} },
   ai:      {},
   audio:   {},

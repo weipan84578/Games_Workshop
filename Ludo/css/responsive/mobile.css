@@ -7,6 +7,12 @@
   .option-row { gap: var(--sp-2); }
   .opt { min-height: 64px; }
   .panel { padding: var(--sp-4); }
+  .instructions-hero { grid-template-columns: 1fr; }
+  .instructions-panel .panel-title { text-align: center; }
+  .rules-figure { order: -1; }
+  .rules-grid { grid-template-columns: 1fr; }
+  .rule-card-wide { grid-column: auto; }
+  .language-row { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) and (min-height: 640px) {
   .chip-home { display: inline; }          /* 高度足夠時恢復顯示 */

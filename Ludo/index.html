@@ -39,55 +39,55 @@
             <span class="logo-q player-1"></span><span class="logo-q player-2"></span>
             <span class="logo-q player-4"></span><span class="logo-q player-3"></span>
           </div>
-          <h1 class="game-title">Ludo<small>飛行棋</small></h1>
-          <p class="game-tag">擲骰子 · 繞棋盤 · 搶先回家</p>
+          <h1 class="game-title">Ludo<small data-i18n="appSubtitle">飛行棋</small></h1>
+          <p class="game-tag" data-i18n="menuTag">擲骰子 · 繞棋盤 · 搶先回家</p>
         </div>
         <nav class="menu-buttons">
-          <button class="btn btn-primary btn-block" data-action="nav-start">🎲 開始遊戲</button>
-          <button class="btn btn-secondary btn-block" id="btn-continue" data-action="nav-continue">▶️ 繼續遊戲</button>
-          <button class="btn btn-secondary btn-block" data-action="nav-instructions">📖 說明</button>
-          <button class="btn btn-secondary btn-block" data-action="nav-settings">⚙️ 設定</button>
+          <button class="btn btn-primary btn-block" data-action="nav-start"><span>🎲</span><span data-i18n="startGame">開始遊戲</span></button>
+          <button class="btn btn-secondary btn-block" id="btn-continue" data-action="nav-continue"><span>▶️</span><span data-i18n="continueGame">繼續遊戲</span></button>
+          <button class="btn btn-secondary btn-block" data-action="nav-instructions"><span>📖</span><span data-i18n="instructions">說明</span></button>
+          <button class="btn btn-secondary btn-block" data-action="nav-settings"><span>⚙️</span><span data-i18n="settings">設定</span></button>
         </nav>
-        <p class="menu-version">版本 <span id="version-tag">v1.0</span></p>
+        <p class="menu-version"><span data-i18n="version">版本</span> <span id="version-tag">v1.0</span></p>
       </div>
     </section>
 
     <!-- ===== 模式選擇 ===== -->
     <section id="screen-mode-select" class="screen">
       <div class="panel">
-        <h2 class="panel-title">開始新對局</h2>
+        <h2 class="panel-title" data-i18n="newMatch">開始新對局</h2>
 
         <div class="field">
-          <h3 class="field-label">對手數量</h3>
+          <h3 class="field-label" data-i18n="opponentCount">對手數量</h3>
           <div class="option-row">
-            <button class="opt" data-ai="1"><b>1</b><span>1 位 AI</span></button>
-            <button class="opt" data-ai="2"><b>2</b><span>2 位 AI</span></button>
-            <button class="opt" data-ai="3"><b>3</b><span>3 位 AI</span></button>
+            <button class="opt" data-ai="1"><b>1</b><span data-i18n="aiOne">1 位 AI</span></button>
+            <button class="opt" data-ai="2"><b>2</b><span data-i18n="aiTwo">2 位 AI</span></button>
+            <button class="opt" data-ai="3"><b>3</b><span data-i18n="aiThree">3 位 AI</span></button>
           </div>
         </div>
 
         <div class="field">
-          <h3 class="field-label">AI 難度</h3>
+          <h3 class="field-label" data-i18n="aiDifficulty">AI 難度</h3>
           <div class="option-row">
-            <button class="opt" data-diff="easy"><b>😊</b><span>簡單</span></button>
-            <button class="opt" data-diff="normal"><b>🙂</b><span>普通</span></button>
-            <button class="opt" data-diff="hard"><b>😈</b><span>困難</span></button>
+            <button class="opt" data-diff="easy"><b>😊</b><span data-i18n="easy">簡單</span></button>
+            <button class="opt" data-diff="normal"><b>🙂</b><span data-i18n="normal">普通</span></button>
+            <button class="opt" data-diff="hard"><b>😈</b><span data-i18n="hard">困難</span></button>
           </div>
         </div>
 
         <div class="field">
-          <h3 class="field-label">你的顏色</h3>
+          <h3 class="field-label" data-i18n="yourColor">你的顏色</h3>
           <div class="option-row color-row">
-            <button class="opt opt-color player-1" data-color="0"><span>紅</span></button>
-            <button class="opt opt-color player-2" data-color="1"><span>綠</span></button>
-            <button class="opt opt-color player-3" data-color="2"><span>黃</span></button>
-            <button class="opt opt-color player-4" data-color="3"><span>藍</span></button>
+            <button class="opt opt-color player-1" data-color="0"><span data-i18n="red">紅</span></button>
+            <button class="opt opt-color player-2" data-color="1"><span data-i18n="green">綠</span></button>
+            <button class="opt opt-color player-3" data-color="2"><span data-i18n="yellow">黃</span></button>
+            <button class="opt opt-color player-4" data-color="3"><span data-i18n="blue">藍</span></button>
           </div>
         </div>
 
         <div class="panel-actions">
-          <button class="btn btn-primary btn-block" data-action="mode-start">開始!</button>
-          <button class="btn btn-ghost btn-block" data-action="nav-menu">← 返回</button>
+          <button class="btn btn-primary btn-block" data-action="mode-start" data-i18n="start">開始!</button>
+          <button class="btn btn-ghost btn-block" data-action="nav-menu">← <span data-i18n="back">返回</span></button>
         </div>
       </div>
     </section>
@@ -96,7 +96,7 @@
     <section id="screen-game" class="screen">
       <header class="hud">
         <div class="hud-players" id="hud-players"></div>
-        <div class="hud-status" id="game-status">準備開始</div>
+        <div class="hud-status" id="game-status" data-i18n="ready">準備開始</div>
       </header>
 
       <div class="board-area">
@@ -105,48 +105,66 @@
 
       <footer class="control-dock">
         <div class="dock-side">
-          <button class="icon-btn" data-action="mute" id="dock-mute" title="靜音">🔊</button>
+          <button class="icon-btn" data-action="mute" id="dock-mute" title="靜音" data-i18n-title="muteTitle">🔊</button>
         </div>
         <div class="dock-center">
-          <div id="dice" class="dice disabled" data-action="roll" role="button" aria-label="擲骰子">
+          <div id="dice" class="dice disabled" data-action="roll" role="button" aria-label="擲骰子" data-i18n-aria="rollDiceAria">
             <span class="dice-q">?</span>
           </div>
           <span id="roll-hint" class="roll-hint"></span>
         </div>
         <div class="dock-side">
-          <button class="icon-btn" data-action="game-quit" title="選單">⏏️</button>
+          <button class="icon-btn" data-action="game-quit" title="選單" data-i18n-title="menuTitle">⏏️</button>
         </div>
       </footer>
     </section>
 
     <!-- ===== 說明 ===== -->
     <section id="screen-instructions" class="screen">
-      <div class="panel">
-        <h2 class="panel-title">遊戲說明</h2>
-        <div class="accordion">
-          <div class="acc-item open">
-            <button class="acc-head" data-accordion>🎯 目標<span class="acc-arrow">▾</span></button>
-            <div class="acc-body">擲骰子讓自己的 4 顆棋子從基地出發,順時針繞棋盤一圈,進入自家終點通道。率先讓 4 顆全部抵達中央終點者獲勝!</div>
+      <div class="panel instructions-panel">
+        <div class="instructions-hero">
+          <div>
+            <h2 class="panel-title" data-i18n="instructionsTitle">遊戲說明</h2>
+            <p class="instructions-lead" data-i18n="instructionsLead">目標很單純:把 4 顆棋子全部送回中央。關鍵在於何時出棋、何時追擊、何時躲進安全格。</p>
           </div>
-          <div class="acc-item">
-            <button class="acc-head" data-accordion>🎲 出棋與移動<span class="acc-arrow">▾</span></button>
-            <div class="acc-body">擲到 <b>6</b> 才能把一顆棋子放到起始格。棋子依骰子點數前進。擲到 6 可再擲一次(連三次 6 作廢)。進入終點需<b>精確點數</b>。</div>
-          </div>
-          <div class="acc-item">
-            <button class="acc-head" data-accordion>⚔️ 吃子<span class="acc-arrow">▾</span></button>
-            <div class="acc-body">停在對手單一棋子的格子上,可把它送回基地。被吃的棋子要重新擲 6 才能再出發。</div>
-          </div>
-          <div class="acc-item">
-            <button class="acc-head" data-accordion>⭐ 安全格<span class="acc-arrow">▾</span></button>
-            <div class="acc-body">起始格與星號格(★)為安全格,棋子停在上面<b>不會被吃</b>。同色兩顆疊在一起形成堡壘,也無法被擊落。</div>
-          </div>
-          <div class="acc-item">
-            <button class="acc-head" data-accordion>🕹️ 操作<span class="acc-arrow">▾</span></button>
-            <div class="acc-body">點擊下方骰子擲骰(桌面可按空白鍵),再點擊發光的棋子移動它。控制列固定在棋盤下方,絕不擋住棋盤。</div>
+          <div class="rules-figure" aria-hidden="true">
+            <div class="mini-board">
+              <span class="mini-cell p1"></span><span class="mini-cell safe"></span><span class="mini-cell p2"></span>
+              <span class="mini-cell route"></span><span class="mini-center"></span><span class="mini-cell route"></span>
+              <span class="mini-cell p4"></span><span class="mini-cell safe"></span><span class="mini-cell p3"></span>
+              <span class="mini-token t1"></span><span class="mini-token t2"></span>
+            </div>
           </div>
         </div>
+        <div class="rules-grid">
+          <article class="rule-card">
+            <span class="rule-num">01</span>
+            <h3 data-i18n="ruleGoalTitle">到家才算贏</h3>
+            <p data-i18n="ruleGoalBody">每位玩家有 4 顆棋子。從基地出發,繞外圈一圈後進入自己的終點通道,全部抵達中央即獲勝。</p>
+          </article>
+          <article class="rule-card">
+            <span class="rule-num">02</span>
+            <h3 data-i18n="ruleRollTitle">擲到 6 才能出棋</h3>
+            <p data-i18n="ruleRollBody">基地裡的棋子只有擲到 6 才能移到起點。擲到 6 可再擲一次,但連續三次 6 會讓本回合作廢。</p>
+          </article>
+          <article class="rule-card">
+            <span class="rule-num">03</span>
+            <h3 data-i18n="ruleCaptureTitle">追擊與安全格</h3>
+            <p data-i18n="ruleCaptureBody">停在對手單一棋子的格子上可以吃子。起點與星號格是安全格,棋子不會被吃。</p>
+          </article>
+          <article class="rule-card">
+            <span class="rule-num">04</span>
+            <h3 data-i18n="ruleFortressTitle">堡壘會阻擋路線</h3>
+            <p data-i18n="ruleFortressBody">兩顆以上同色棋子在同一格會形成堡壘。其他棋子不能停在上面,也不能穿越。</p>
+          </article>
+          <article class="rule-card rule-card-wide">
+            <span class="rule-num">05</span>
+            <h3 data-i18n="ruleFinishTitle">終點需要精準點數</h3>
+            <p data-i18n="ruleFinishBody">進入終點時必須剛好抵達中央。點數超過就不能移動該棋子。</p>
+          </article>
+        </div>
         <div class="panel-actions">
-          <button class="btn btn-primary btn-block" data-action="nav-menu">← 返回選單</button>
+          <button class="btn btn-primary btn-block" data-action="nav-menu">← <span data-i18n="backMenu">返回選單</span></button>
         </div>
       </div>
     </section>
@@ -154,39 +172,48 @@
     <!-- ===== 設定 ===== -->
     <section id="screen-settings" class="screen">
       <div class="panel">
-        <h2 class="panel-title">設定</h2>
+        <h2 class="panel-title" data-i18n="settings">設定</h2>
 
         <div class="field">
-          <h3 class="field-label">主題配色</h3>
+          <h3 class="field-label" data-i18n="theme">主題配色</h3>
           <div class="theme-grid">
-            <button class="theme-swatch theme-classic" data-theme-name="classic"><span>經典</span></button>
-            <button class="theme-swatch theme-ocean" data-theme-name="ocean"><span>海洋</span></button>
-            <button class="theme-swatch theme-sunset" data-theme-name="sunset"><span>夕陽</span></button>
-            <button class="theme-swatch theme-forest" data-theme-name="forest"><span>森林</span></button>
-            <button class="theme-swatch theme-night" data-theme-name="night"><span>夜間</span></button>
-            <button class="theme-swatch theme-hc" data-theme-name="high-contrast"><span>高對比</span></button>
+            <button class="theme-swatch theme-classic" data-theme-name="classic"><span data-theme-label="classic">經典</span></button>
+            <button class="theme-swatch theme-ocean" data-theme-name="ocean"><span data-theme-label="ocean">海洋</span></button>
+            <button class="theme-swatch theme-sunset" data-theme-name="sunset"><span data-theme-label="sunset">夕陽</span></button>
+            <button class="theme-swatch theme-forest" data-theme-name="forest"><span data-theme-label="forest">森林</span></button>
+            <button class="theme-swatch theme-night" data-theme-name="night"><span data-theme-label="night">夜間</span></button>
+            <button class="theme-swatch theme-hc" data-theme-name="high-contrast"><span data-theme-label="high-contrast">高對比</span></button>
           </div>
         </div>
 
         <div class="field">
-          <h3 class="field-label">背景音樂音量</h3>
+          <h3 class="field-label" data-i18n="language">語言</h3>
+          <div class="language-row" id="language-row">
+            <button class="lang-btn" data-lang="zh-Hant">繁中</button>
+            <button class="lang-btn" data-lang="en">English</button>
+            <button class="lang-btn" data-lang="ja">日本語</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <h3 class="field-label" data-i18n="bgmVolume">背景音樂音量</h3>
           <input type="range" id="set-bgm" min="0" max="100" value="50" class="slider">
         </div>
         <div class="field">
-          <h3 class="field-label">音效音量</h3>
+          <h3 class="field-label" data-i18n="sfxVolume">音效音量</h3>
           <input type="range" id="set-sfx" min="0" max="100" value="80" class="slider">
         </div>
         <div class="field">
-          <h3 class="field-label">靜音</h3>
+          <h3 class="field-label" data-i18n="mute">靜音</h3>
           <button class="btn btn-secondary" id="set-mute" data-action="mute">🔊 開啟</button>
         </div>
         <div class="field">
-          <h3 class="field-label">動畫速度:<span id="set-anim-label">正常</span></h3>
+          <h3 class="field-label"><span data-i18n="animSpeed">動畫速度:</span><span id="set-anim-label">正常</span></h3>
           <input type="range" id="set-anim" min="0" max="2" step="1" value="1" class="slider">
         </div>
 
         <div class="panel-actions">
-          <button class="btn btn-primary btn-block" data-action="nav-menu">← 返回選單</button>
+          <button class="btn btn-primary btn-block" data-action="nav-menu">← <span data-i18n="backMenu">返回選單</span></button>
         </div>
       </div>
     </section>
@@ -200,6 +227,7 @@
   <script src="js/core/config.js"></script>
   <script src="js/core/state.js"></script>
   <script src="js/core/storage.js"></script>
+  <script src="js/core/i18n.js"></script>
   <!-- 引擎 -->
   <script src="js/engine/board.js"></script>
   <script src="js/engine/rules.js"></script>
@@ -218,7 +246,6 @@
   <script src="js/ui/screen-manager.js"></script>
   <script src="js/ui/menu.js"></script>
   <script src="js/ui/settings.js"></script>
-  <script src="js/ui/instructions.js"></script>
   <script src="js/ui/render-board.js"></script>
   <script src="js/ui/render-tokens.js"></script>
   <script src="js/ui/hud.js"></script>

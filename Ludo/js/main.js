@@ -18,6 +18,7 @@
     // 4) 主選單初始化
     L.ui.menu.init();
     L.ui.settings.refreshUI();
+    L.i18n.apply();
 
     // 5) 顯示主選單
     L.ui.screen.show('screen-menu', true);

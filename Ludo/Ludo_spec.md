@@ -124,7 +124,6 @@ ludo/
 │   │   ├── screen-manager.js   ← 畫面切換(顯示/隱藏 section,不重載)
 │   │   ├── menu.js             ← 主選單行為
 │   │   ├── settings.js         ← 設定畫面
-│   │   ├── instructions.js     ← 說明畫面
 │   │   ├── render-board.js     ← 繪製棋盤格
 │   │   ├── render-tokens.js    ← 繪製/更新棋子位置
 │   │   ├── hud.js              ← 抬頭資訊更新
@@ -224,7 +223,6 @@ ludo/
 <script src="js/ui/screen-manager.js"></script>
 <script src="js/ui/menu.js"></script>
 <script src="js/ui/settings.js"></script>
-<script src="js/ui/instructions.js"></script>
 <script src="js/ui/render-board.js"></script>
 <script src="js/ui/render-tokens.js"></script>
 <script src="js/ui/hud.js"></script>
@@ -585,7 +583,7 @@ Ludo.audio.setMuted(true);                 // 總靜音
 | `screen-manager.js` | 顯示/隱藏 section、觸發切換音效、通知 audio-manager 換 BGM |
 | `menu.js` | 主選單按鈕事件、檢查存檔啟用「繼續遊戲」 |
 | `settings.js` | 主題切換、音量滑桿、靜音、動畫速度,即時生效並存檔 |
-| `instructions.js` | 顯示規則說明(可分頁/手風琴),圖示說明 |
+| 說明頁 | 由 `index.html` 的 `screen-instructions` 結構與 `css/layout/menu.css` 的卡片/圖形樣式承載,不需要額外 JS |
 | `render-board.js` | 依棋盤模型繪製格子(Grid)、標示安全格與各色區 |
 | `render-tokens.js` | 依 state 繪製/移動棋子 DOM,套用玩家顏色 |
 | `hud.js` | 更新目前玩家、各色已到家數量、骰子點數顯示 |

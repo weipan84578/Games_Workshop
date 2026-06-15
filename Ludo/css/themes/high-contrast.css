@@ -16,6 +16,12 @@
   --cell-track: #ffffff;
   --board-bg: #ffffff;
   --board-line: #000000;
+
+  --dice-bg: #ffffff;
+  --dice-bg-2: #ffffff;
+  --dice-pip: #000000;
+  --dice-border: #ffd400;
+  --dice-glow: rgba(255,212,0,.65);
 }
 /* 高對比:強化邊框 */
 :root[data-theme="high-contrast"] .cell { border-color: #000 !important; }

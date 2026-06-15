@@ -50,6 +50,7 @@
     var d = cfg.defaults;
     L.state.settings = {
       theme: s.theme || d.theme,
+      language: s.language || d.language,
       bgmVolume: s.bgmVolume != null ? s.bgmVolume : d.bgmVolume,
       sfxVolume: s.sfxVolume != null ? s.sfxVolume : d.sfxVolume,
       muted: s.muted != null ? s.muted : d.muted,

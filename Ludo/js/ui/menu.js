@@ -10,6 +10,7 @@
     M.selection.difficulty = (L.state.settings && L.state.settings.lastDifficulty) || 'normal';
     M.refreshContinue();
     syncModeUI();
+    M.refreshLabels();
     var ver = document.getElementById('version-tag');
     if (ver) ver.textContent = L.config.VERSION;
   };
@@ -43,6 +44,7 @@
   M.selectAi = function (n) { M.selection.aiCount = n; syncModeUI(); };
   M.selectDiff = function (d) { M.selection.difficulty = d; syncModeUI(); };
   M.selectColor = function (c) { M.selection.playerColor = c; syncModeUI(); };
+  M.refreshLabels = function () { syncModeUI(); };
 
   function syncModeUI() {
     setActive('[data-ai]', 'data-ai', String(M.selection.aiCount));

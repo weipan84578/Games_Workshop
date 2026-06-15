@@ -43,4 +43,10 @@
   --cell-track: #ffffff;
   --board-bg: #ffffff;
   --board-line: #d9d2c0;
+
+  --dice-bg: #ffffff;
+  --dice-bg-2: #e8e8e8;
+  --dice-pip: #1a1a1a;
+  --dice-border: var(--color-primary);
+  --dice-glow: rgba(230,57,70,.5);
 }

@@ -3,6 +3,7 @@
   'use strict';
 
   var HUD = L.ui.hud = L.ui.hud || {};
+  var lastPrompt = null;
 
   HUD.update = function () {
     var g = L.state.game;
@@ -24,18 +25,32 @@
       html +=
         '<div class="hud-chip player-' + (owner + 1) + (active ? ' active' : '') + '">' +
         '  <span class="chip-dot"></span>' +
-        '  <span class="chip-name">' + cfg.COLOR_NAMES[cfg.COLORS[owner]] +
-              (p.isHuman ? '（你）' : '') + '</span>' +
-        '  <span class="chip-home">🏠 ' + done + '/4</span>' +
+        '  <span class="chip-name">' + L.i18n.colorName(owner) +
+              (p.isHuman ? ' (' + L.i18n.t('you') + ')' : '') + '</span>' +
+        '  <span class="chip-home">🏠 ' + L.i18n.t('home') + ' ' + done + '/4</span>' +
         '</div>';
     }
     wrap.innerHTML = html;
   }
 
   HUD.prompt = function (text) {
+    lastPrompt = null;
+    setPromptText(text);
+  };
+
+  HUD.promptKey = function (key, vars) {
+    lastPrompt = { key: key, vars: vars || {} };
+    setPromptText(L.i18n.t(key, vars));
+  };
+
+  HUD.refreshPrompt = function () {
+    if (lastPrompt) setPromptText(L.i18n.t(lastPrompt.key, lastPrompt.vars));
+  };
+
+  function setPromptText(text) {
     var el = document.getElementById('game-status');
     if (el) el.textContent = text;
-  };
+  }
 
   HUD.setRollEnabled = function (enabled) {
     var dice = document.getElementById('dice');
@@ -43,7 +58,7 @@
     dice.classList.toggle('enabled', !!enabled);
     dice.classList.toggle('disabled', !enabled);
     var hint = document.getElementById('roll-hint');
-    if (hint) hint.textContent = enabled ? '點擊骰子' : '';
+    if (hint) hint.textContent = enabled ? L.i18n.t('clickDice') : '';
   };
 
   // 0 = 未擲(顯示問號)

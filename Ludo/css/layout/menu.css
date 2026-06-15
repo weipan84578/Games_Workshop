@@ -29,6 +29,26 @@
 .menu-buttons { width: 100%; display: grid; gap: var(--sp-3); }
 .menu-version { color: var(--color-muted); font-size: 1rem; }
 
+.language-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-2);
+}
+.lang-btn {
+  min-height: var(--tap);
+  border: 2px solid var(--board-line);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-weight: 800;
+}
+.lang-btn.selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
 /* 主題色塊預覽 */
 .theme-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-3); }
 .theme-swatch {
@@ -48,3 +68,90 @@
 .theme-forest  { background: conic-gradient(#2d6a4f 0 25%, #80b918 0 50%, #9c6644 0 75%, #707d3a 0); }
 .theme-night   { background: conic-gradient(#ff4d6d 0 25%, #39ff8b 0 50%, #ffe14d 0 75%, #4d9bff 0); }
 .theme-hc      { background: conic-gradient(#ff2a2a 0 25%, #00d000 0 50%, #ffe000 0 75%, #2a7bff 0); }
+
+/* 說明頁 */
+.instructions-panel { max-width: 880px; }
+.instructions-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 180px;
+  gap: var(--sp-5);
+  align-items: center;
+  margin-bottom: var(--sp-5);
+}
+.instructions-panel .panel-title {
+  text-align: left;
+  margin-bottom: var(--sp-3);
+}
+.instructions-lead {
+  color: var(--color-muted);
+  font-size: 1.08rem;
+  line-height: 1.7;
+}
+.rules-figure {
+  display: grid;
+  place-items: center;
+}
+.mini-board {
+  position: relative;
+  width: 168px;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 8px;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  background: var(--board-bg);
+  border: 2px solid var(--board-line);
+  box-shadow: var(--shadow-md);
+}
+.mini-cell,
+.mini-center {
+  border-radius: 8px;
+  border: 2px solid var(--board-line);
+}
+.mini-cell.route { background: var(--cell-track); }
+.mini-cell.safe { background: var(--cell-safe); }
+.mini-cell.p1 { background: var(--player-1); }
+.mini-cell.p2 { background: var(--player-2); }
+.mini-cell.p3 { background: var(--player-3); }
+.mini-cell.p4 { background: var(--player-4); }
+.mini-center {
+  background: conic-gradient(var(--player-2) 0 25%, var(--player-3) 0 50%, var(--player-4) 0 75%, var(--player-1) 0);
+}
+.mini-token {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 3px solid var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+.mini-token.t1 { right: 42px; top: 42px; background: var(--player-2); }
+.mini-token.t2 { left: 46px; bottom: 42px; background: var(--player-1); }
+.rules-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-3);
+}
+.rule-card {
+  border: 2px solid var(--board-line);
+  border-radius: var(--radius-md);
+  padding: var(--sp-4);
+  background: var(--color-bg);
+}
+.rule-card-wide { grid-column: 1 / -1; }
+.rule-num {
+  display: inline-block;
+  color: var(--color-primary);
+  font-weight: 900;
+  margin-bottom: var(--sp-2);
+}
+.rule-card h3 {
+  margin-bottom: var(--sp-2);
+  font-size: 1.08rem;
+}
+.rule-card p {
+  color: var(--color-muted);
+  line-height: 1.65;
+}
