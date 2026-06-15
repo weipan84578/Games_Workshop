@@ -1,0 +1,7 @@
+/* tablet.css — 平板(601–1024px) */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .dock-center .dice, .dice { width: 72px; height: 72px; }
+  .panel { max-width: 620px; }
+  .hud-chip { font-size: 1.1rem; }
+  .board { width: min(80vw, calc(100dvh - 240px)); }
+}

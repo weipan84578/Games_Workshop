@@ -1,0 +1,46 @@
+/* variables.css — 全域 CSS 變數(結構性:間距、圓角、陰影、字級基準)。
+   色彩變數由各主題檔覆寫。此處提供結構與後備值。 */
+:root {
+  /* 間距 */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 24px; --sp-6: 32px; --sp-7: 48px;
+
+  /* 圓角 */
+  --radius-sm: 8px; --radius-md: 14px; --radius-lg: 22px; --radius-pill: 999px;
+
+  /* 陰影 */
+  --shadow-sm: 0 2px 6px rgba(0,0,0,.18);
+  --shadow-md: 0 6px 18px rgba(0,0,0,.22);
+  --shadow-lg: 0 14px 40px rgba(0,0,0,.30);
+
+  /* 字體 */
+  --font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+                 "Heiti TC", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --line-height: 1.6;
+
+  /* 字級(clamp 流體,大字下限) */
+  --fs-title:    clamp(2rem, 7vw, 4rem);
+  --fs-subtitle: clamp(1.5rem, 5vw, 2.5rem);
+  --fs-button:   clamp(1.25rem, 4vw, 1.75rem);
+  --fs-body:     clamp(1.125rem, 3.5vw, 1.375rem);
+  --fs-hud:      clamp(1rem, 3vw, 1.25rem);
+
+  /* 互動最小可點區 */
+  --tap: 48px;
+
+  /* 後備色票(主題未載入時) */
+  --color-bg: #faf3e0;
+  --color-surface: #ffffff;
+  --color-text: #1a1a1a;
+  --color-muted: #6b6b6b;
+  --color-primary: #e63946;
+  --color-accent: #457b9d;
+  --player-1: #e63946;
+  --player-2: #2a9d8f;
+  --player-3: #e9c46a;
+  --player-4: #277da1;
+  --cell-safe: #ffd166;
+  --cell-track: #ffffff;
+  --board-bg: #ffffff;
+  --board-line: #d9d2c0;
+}

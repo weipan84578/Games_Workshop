@@ -1,0 +1,19 @@
+/* forest.css — 森林自然 */
+:root {
+  --color-bg: #e9ead0;
+  --color-surface: #f6f7e8;
+  --color-text: #20290f;
+  --color-muted: #5a6342;
+  --color-primary: #386641;
+  --color-accent: #6a994e;
+
+  --player-1: #2d6a4f; /* 墨綠 */
+  --player-2: #80b918; /* 草綠 */
+  --player-3: #9c6644; /* 土棕 */
+  --player-4: #707d3a; /* 橄欖 */
+
+  --cell-safe: #e9c46a;
+  --cell-track: #fbfcef;
+  --board-bg: #fbfcef;
+  --board-line: #cdd1a8;
+}

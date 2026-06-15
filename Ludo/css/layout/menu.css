@@ -1,0 +1,50 @@
+/* menu.css — 主選單版面 */
+.menu-wrap {
+  width: 100%; max-width: 440px;
+  margin: auto 0;
+  display: flex; flex-direction: column; align-items: center;
+  gap: var(--sp-5);
+  text-align: center;
+}
+.menu-logo { display: flex; flex-direction: column; align-items: center; gap: var(--sp-2); }
+.logo-board {
+  width: 96px; height: 96px;
+  display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+  gap: 6px; padding: 8px;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  transform: rotate(-6deg);
+}
+.logo-q { border-radius: 8px; }
+.logo-q.player-1 { background: var(--player-1); }
+.logo-q.player-2 { background: var(--player-2); }
+.logo-q.player-3 { background: var(--player-3); }
+.logo-q.player-4 { background: var(--player-4); }
+
+.game-title { color: var(--color-primary); display: flex; flex-direction: column; line-height: 1; }
+.game-title small { font-size: .4em; color: var(--color-text); letter-spacing: .3em; margin-top: .3em; }
+.game-tag { color: var(--color-muted); font-size: var(--fs-hud); }
+
+.menu-buttons { width: 100%; display: grid; gap: var(--sp-3); }
+.menu-version { color: var(--color-muted); font-size: 1rem; }
+
+/* 主題色塊預覽 */
+.theme-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-3); }
+.theme-swatch {
+  height: 64px; border-radius: var(--radius-md);
+  border: 3px solid transparent;
+  display: flex; align-items: flex-end; justify-content: center;
+  color: #fff; font-weight: 800; font-size: 1rem;
+  text-shadow: 0 1px 3px rgba(0,0,0,.6);
+  padding-bottom: 6px;
+  box-shadow: var(--shadow-sm);
+}
+.theme-swatch.selected { border-color: var(--color-text); transform: translateY(-2px); }
+.theme-classic { background: linear-gradient(135deg,#e63946 0 50%,#2a9d8f 50%),linear-gradient(135deg,#f4a300,#277da1); background-blend-mode: normal; }
+.theme-classic { background: conic-gradient(#e63946 0 25%, #2a9d8f 0 50%, #f4a300 0 75%, #277da1 0); }
+.theme-ocean   { background: conic-gradient(#14557a 0 25%, #1b9aaa 0 50%, #4cc9f0 0 75%, #2a9d8f 0); }
+.theme-sunset  { background: conic-gradient(#f3722c 0 25%, #f94144 0 50%, #f9c74f 0 75%, #f8755c 0); }
+.theme-forest  { background: conic-gradient(#2d6a4f 0 25%, #80b918 0 50%, #9c6644 0 75%, #707d3a 0); }
+.theme-night   { background: conic-gradient(#ff4d6d 0 25%, #39ff8b 0 50%, #ffe14d 0 75%, #4d9bff 0); }
+.theme-hc      { background: conic-gradient(#ff2a2a 0 25%, #00d000 0 50%, #ffe000 0 75%, #2a7bff 0); }

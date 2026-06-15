@@ -1,0 +1,22 @@
+/* high-contrast.css — 無障礙高對比 */
+:root {
+  --color-bg: #000000;
+  --color-surface: #111111;
+  --color-text: #ffffff;
+  --color-muted: #cccccc;
+  --color-primary: #ffd400;
+  --color-accent: #00e5ff;
+
+  --player-1: #ff2a2a; /* 純紅 */
+  --player-2: #00d000; /* 純綠 */
+  --player-3: #ffe000; /* 純黃 */
+  --player-4: #2a7bff; /* 純藍 */
+
+  --cell-safe: #ffd400;
+  --cell-track: #ffffff;
+  --board-bg: #ffffff;
+  --board-line: #000000;
+}
+/* 高對比:強化邊框 */
+:root[data-theme="high-contrast"] .cell { border-color: #000 !important; }
+:root[data-theme="high-contrast"] .token { border: 3px solid #000; }

@@ -1,0 +1,14 @@
+/* typography.css — 大字體規範 */
+body {
+  font-family: var(--font-family);
+  line-height: var(--line-height);
+  color: var(--color-text);
+  font-size: clamp(16px, 3.6vw, 18px); /* 全站下限不低於 16px */
+}
+h1, h2, h3 { line-height: 1.2; font-weight: 800; }
+.game-title { font-size: var(--fs-title); font-weight: 800; }
+.panel-title { font-size: var(--fs-subtitle); font-weight: 700; }
+.field-label { font-size: var(--fs-body); font-weight: 700; }
+.btn { font-size: var(--fs-button); font-weight: 700; }
+b, strong { font-weight: 800; }
+small { font-weight: 600; }

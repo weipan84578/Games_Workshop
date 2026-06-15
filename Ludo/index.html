@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="classic">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#1a1a1a">
+  <title>Ludo 飛行棋</title>
+
+  <!-- 基礎 -->
+  <link rel="stylesheet" href="css/base/reset.css">
+  <link rel="stylesheet" href="css/base/variables.css">
+  <link rel="stylesheet" href="css/base/typography.css">
+  <!-- 主題(預設 classic,可由設定動態切換) -->
+  <link rel="stylesheet" href="css/themes/classic.css" id="theme-stylesheet">
+  <!-- 版面 -->
+  <link rel="stylesheet" href="css/layout/app-shell.css">
+  <link rel="stylesheet" href="css/layout/menu.css">
+  <link rel="stylesheet" href="css/layout/board.css">
+  <link rel="stylesheet" href="css/layout/hud.css">
+  <link rel="stylesheet" href="css/layout/modal.css">
+  <!-- 元件 -->
+  <link rel="stylesheet" href="css/components/buttons.css">
+  <link rel="stylesheet" href="css/components/dice.css">
+  <link rel="stylesheet" href="css/components/tokens.css">
+  <link rel="stylesheet" href="css/components/controls.css">
+  <!-- 響應式(放最後,確保覆蓋) -->
+  <link rel="stylesheet" href="css/responsive/desktop.css">
+  <link rel="stylesheet" href="css/responsive/tablet.css">
+  <link rel="stylesheet" href="css/responsive/mobile.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- ===== 主選單 ===== -->
+    <section id="screen-menu" class="screen active">
+      <div class="menu-wrap">
+        <div class="menu-logo">
+          <div class="logo-board">
+            <span class="logo-q player-1"></span><span class="logo-q player-2"></span>
+            <span class="logo-q player-4"></span><span class="logo-q player-3"></span>
+          </div>
+          <h1 class="game-title">Ludo<small>飛行棋</small></h1>
+          <p class="game-tag">擲骰子 · 繞棋盤 · 搶先回家</p>
+        </div>
+        <nav class="menu-buttons">
+          <button class="btn btn-primary btn-block" data-action="nav-start">🎲 開始遊戲</button>
+          <button class="btn btn-secondary btn-block" id="btn-continue" data-action="nav-continue">▶️ 繼續遊戲</button>
+          <button class="btn btn-secondary btn-block" data-action="nav-instructions">📖 說明</button>
+          <button class="btn btn-secondary btn-block" data-action="nav-settings">⚙️ 設定</button>
+        </nav>
+        <p class="menu-version">版本 <span id="version-tag">v1.0</span></p>
+      </div>
+    </section>
+
+    <!-- ===== 模式選擇 ===== -->
+    <section id="screen-mode-select" class="screen">
+      <div class="panel">
+        <h2 class="panel-title">開始新對局</h2>
+
+        <div class="field">
+          <h3 class="field-label">對手數量</h3>
+          <div class="option-row">
+            <button class="opt" data-ai="1"><b>1</b><span>1 位 AI</span></button>
+            <button class="opt" data-ai="2"><b>2</b><span>2 位 AI</span></button>
+            <button class="opt" data-ai="3"><b>3</b><span>3 位 AI</span></button>
+          </div>
+        </div>
+
+        <div class="field">
+          <h3 class="field-label">AI 難度</h3>
+          <div class="option-row">
+            <button class="opt" data-diff="easy"><b>😊</b><span>簡單</span></button>
+            <button class="opt" data-diff="normal"><b>🙂</b><span>普通</span></button>
+            <button class="opt" data-diff="hard"><b>😈</b><span>困難</span></button>
+          </div>
+        </div>
+
+        <div class="field">
+          <h3 class="field-label">你的顏色</h3>
+          <div class="option-row color-row">
+            <button class="opt opt-color player-1" data-color="0"><span>紅</span></button>
+            <button class="opt opt-color player-2" data-color="1"><span>綠</span></button>
+            <button class="opt opt-color player-3" data-color="2"><span>黃</span></button>
+            <button class="opt opt-color player-4" data-color="3"><span>藍</span></button>
+          </div>
+        </div>
+
+        <div class="panel-actions">
+          <button class="btn btn-primary btn-block" data-action="mode-start">開始!</button>
+          <button class="btn btn-ghost btn-block" data-action="nav-menu">← 返回</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 遊戲 ===== -->
+    <section id="screen-game" class="screen">
+      <header class="hud">
+        <div class="hud-players" id="hud-players"></div>
+        <div class="hud-status" id="game-status">準備開始</div>
+      </header>
+
+      <div class="board-area">
+        <div id="board" class="board"></div>
+      </div>
+
+      <footer class="control-dock">
+        <div class="dock-side">
+          <button class="icon-btn" data-action="mute" id="dock-mute" title="靜音">🔊</button>
+        </div>
+        <div class="dock-center">
+          <div id="dice" class="dice disabled" data-action="roll" role="button" aria-label="擲骰子">
+            <span class="dice-q">?</span>
+          </div>
+          <span id="roll-hint" class="roll-hint"></span>
+        </div>
+        <div class="dock-side">
+          <button class="icon-btn" data-action="game-quit" title="選單">⏏️</button>
+        </div>
+      </footer>
+    </section>
+
+    <!-- ===== 說明 ===== -->
+    <section id="screen-instructions" class="screen">
+      <div class="panel">
+        <h2 class="panel-title">遊戲說明</h2>
+        <div class="accordion">
+          <div class="acc-item open">
+            <button class="acc-head" data-accordion>🎯 目標<span class="acc-arrow">▾</span></button>
+            <div class="acc-body">擲骰子讓自己的 4 顆棋子從基地出發,順時針繞棋盤一圈,進入自家終點通道。率先讓 4 顆全部抵達中央終點者獲勝!</div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-head" data-accordion>🎲 出棋與移動<span class="acc-arrow">▾</span></button>
+            <div class="acc-body">擲到 <b>6</b> 才能把一顆棋子放到起始格。棋子依骰子點數前進。擲到 6 可再擲一次(連三次 6 作廢)。進入終點需<b>精確點數</b>。</div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-head" data-accordion>⚔️ 吃子<span class="acc-arrow">▾</span></button>
+            <div class="acc-body">停在對手單一棋子的格子上,可把它送回基地。被吃的棋子要重新擲 6 才能再出發。</div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-head" data-accordion>⭐ 安全格<span class="acc-arrow">▾</span></button>
+            <div class="acc-body">起始格與星號格(★)為安全格,棋子停在上面<b>不會被吃</b>。同色兩顆疊在一起形成堡壘,也無法被擊落。</div>
+          </div>
+          <div class="acc-item">
+            <button class="acc-head" data-accordion>🕹️ 操作<span class="acc-arrow">▾</span></button>
+            <div class="acc-body">點擊下方骰子擲骰(桌面可按空白鍵),再點擊發光的棋子移動它。控制列固定在棋盤下方,絕不擋住棋盤。</div>
+          </div>
+        </div>
+        <div class="panel-actions">
+          <button class="btn btn-primary btn-block" data-action="nav-menu">← 返回選單</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 設定 ===== -->
+    <section id="screen-settings" class="screen">
+      <div class="panel">
+        <h2 class="panel-title">設定</h2>
+
+        <div class="field">
+          <h3 class="field-label">主題配色</h3>
+          <div class="theme-grid">
+            <button class="theme-swatch theme-classic" data-theme-name="classic"><span>經典</span></button>
+            <button class="theme-swatch theme-ocean" data-theme-name="ocean"><span>海洋</span></button>
+            <button class="theme-swatch theme-sunset" data-theme-name="sunset"><span>夕陽</span></button>
+            <button class="theme-swatch theme-forest" data-theme-name="forest"><span>森林</span></button>
+            <button class="theme-swatch theme-night" data-theme-name="night"><span>夜間</span></button>
+            <button class="theme-swatch theme-hc" data-theme-name="high-contrast"><span>高對比</span></button>
+          </div>
+        </div>
+
+        <div class="field">
+          <h3 class="field-label">背景音樂音量</h3>
+          <input type="range" id="set-bgm" min="0" max="100" value="50" class="slider">
+        </div>
+        <div class="field">
+          <h3 class="field-label">音效音量</h3>
+          <input type="range" id="set-sfx" min="0" max="100" value="80" class="slider">
+        </div>
+        <div class="field">
+          <h3 class="field-label">靜音</h3>
+          <button class="btn btn-secondary" id="set-mute" data-action="mute">🔊 開啟</button>
+        </div>
+        <div class="field">
+          <h3 class="field-label">動畫速度:<span id="set-anim-label">正常</span></h3>
+          <input type="range" id="set-anim" min="0" max="2" step="1" value="1" class="slider">
+        </div>
+
+        <div class="panel-actions">
+          <button class="btn btn-primary btn-block" data-action="nav-menu">← 返回選單</button>
+        </div>
+      </div>
+    </section>
+
+    <div id="modal-layer"></div>
+  </div>
+
+  <!-- ===== JS 載入(順序很重要) ===== -->
+  <!-- 核心 -->
+  <script src="js/core/namespace.js"></script>
+  <script src="js/core/config.js"></script>
+  <script src="js/core/state.js"></script>
+  <script src="js/core/storage.js"></script>
+  <!-- 引擎 -->
+  <script src="js/engine/board.js"></script>
+  <script src="js/engine/rules.js"></script>
+  <script src="js/engine/dice.js"></script>
+  <script src="js/engine/token.js"></script>
+  <script src="js/engine/turn.js"></script>
+  <!-- AI -->
+  <script src="js/ai/ai-easy.js"></script>
+  <script src="js/ai/ai-normal.js"></script>
+  <script src="js/ai/ai-hard.js"></script>
+  <script src="js/ai/ai-manager.js"></script>
+  <!-- 音訊 -->
+  <script src="js/audio/sound-list.js"></script>
+  <script src="js/audio/audio-manager.js"></script>
+  <!-- UI -->
+  <script src="js/ui/screen-manager.js"></script>
+  <script src="js/ui/menu.js"></script>
+  <script src="js/ui/settings.js"></script>
+  <script src="js/ui/instructions.js"></script>
+  <script src="js/ui/render-board.js"></script>
+  <script src="js/ui/render-tokens.js"></script>
+  <script src="js/ui/hud.js"></script>
+  <script src="js/ui/animations.js"></script>
+  <!-- 輸入 -->
+  <script src="js/input/pointer.js"></script>
+  <script src="js/input/mobile-controls.js"></script>
+  <!-- 啟動(最後) -->
+  <script src="js/main.js"></script>
+</body>
+</html>

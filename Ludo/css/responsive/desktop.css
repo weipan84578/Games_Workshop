@@ -1,0 +1,13 @@
+/* desktop.css — 桌面(≥1025px) */
+@media (min-width: 1025px) {
+  .control-dock { padding: var(--sp-4) var(--sp-6); }
+  .dock-center .dice, .dice { width: 80px; height: 80px; }
+  .hud-players { gap: var(--sp-3); }
+  .hud-chip { font-size: 1.15rem; padding: 6px 14px; }
+  .board-area { padding: var(--sp-4); }
+  /* hover 視覺 */
+  .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .opt:hover { border-color: var(--color-accent); }
+  .icon-btn:hover { transform: translateY(-2px); }
+  .token.movable:hover { transform: translate(-50%, -60%) scale(1.18); }
+}

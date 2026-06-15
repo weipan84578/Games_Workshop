@@ -1,0 +1,19 @@
+/* classic.css — 經典鮮明(紅綠黃藍) */
+:root {
+  --color-bg: #f5ecd6;
+  --color-surface: #fffdf7;
+  --color-text: #25201a;
+  --color-muted: #6b6256;
+  --color-primary: #e63946;
+  --color-accent: #1d6fb8;
+
+  --player-1: #e63946; /* 紅 */
+  --player-2: #2a9d8f; /* 綠 */
+  --player-3: #f4a300; /* 黃 */
+  --player-4: #277da1; /* 藍 */
+
+  --cell-safe: #ffd166;
+  --cell-track: #ffffff;
+  --board-bg: #ffffff;
+  --board-line: #d9cdb0;
+}

@@ -1,0 +1,19 @@
+/* mobile.css — 手機直式(≤600px,主要斷點) */
+@media (max-width: 600px) {
+  .hud { padding: var(--sp-2); }
+  .hud-chip { padding: 3px 8px; font-size: .95rem; }
+  .chip-home { display: none; }            /* 空間極窄時隱藏細節,點選棋子仍可見 */
+  .control-dock { padding-left: var(--sp-3); padding-right: var(--sp-3); }
+  .option-row { gap: var(--sp-2); }
+  .opt { min-height: 64px; }
+  .panel { padding: var(--sp-4); }
+}
+@media (max-width: 600px) and (min-height: 640px) {
+  .chip-home { display: inline; }          /* 高度足夠時恢復顯示 */
+}
+/* 橫向手機:壓縮高度 */
+@media (max-height: 480px) and (orientation: landscape) {
+  .hud-status { display: none; }
+  .control-dock { padding-top: var(--sp-2); padding-bottom: var(--sp-2); }
+  .dice { width: 52px; height: 52px; }
+}

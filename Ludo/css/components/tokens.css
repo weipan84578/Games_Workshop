@@ -1,0 +1,39 @@
+/* tokens.css — 棋子元件 */
+.token {
+  position: absolute;
+  width: calc(100% / 15 * 0.78);
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.9);
+  box-shadow: 0 2px 5px rgba(0,0,0,.4);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 5;
+  will-change: left, top, transform;
+}
+.token.player-1 { background: radial-gradient(circle at 35% 30%, #fff6, transparent 50%), var(--player-1); }
+.token.player-2 { background: radial-gradient(circle at 35% 30%, #fff6, transparent 50%), var(--player-2); }
+.token.player-3 { background: radial-gradient(circle at 35% 30%, #fff6, transparent 50%), var(--player-3); }
+.token.player-4 { background: radial-gradient(circle at 35% 30%, #fff6, transparent 50%), var(--player-4); }
+.token-dot { width: 30%; height: 30%; border-radius: 50%; background: rgba(255,255,255,.55); }
+
+.token-finished { opacity: .92; }
+
+/* 可移動高亮 */
+.token.movable {
+  cursor: pointer;
+  z-index: 20;
+  animation: token-bounce .8s ease-in-out infinite;
+  box-shadow: 0 0 0 3px var(--color-surface), 0 0 0 6px var(--color-primary), 0 4px 8px rgba(0,0,0,.4);
+}
+/* 放大點擊熱區 */
+.token.movable::after {
+  content: ''; position: absolute; inset: -45%;
+  border-radius: 50%;
+}
+.token.moving { z-index: 30; }
+.token.captured { z-index: 25; opacity: .5; }
+
+@keyframes token-bounce {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -62%) scale(1.12); }
+}

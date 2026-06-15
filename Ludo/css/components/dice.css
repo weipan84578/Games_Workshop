@@ -1,0 +1,69 @@
+/* dice.css — 骰子元件 */
+.dice {
+  width: 64px; height: 64px;
+  border-radius: 14px;
+  background: linear-gradient(145deg, #ffffff, #e8e8e8);
+  box-shadow: var(--shadow-md), inset 0 -3px 6px rgba(0,0,0,.15);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--color-primary);
+  position: relative;
+  transition: transform .15s ease, box-shadow .15s ease;
+  border: 3px solid transparent;
+}
+.dice.disabled { opacity: .55; filter: grayscale(.4); }
+.dice.enabled {
+  cursor: pointer;
+  border-color: var(--color-primary);
+  animation: dice-pulse 1.1s ease-in-out infinite;
+}
+.dice.enabled:active { transform: scale(.92); }
+.dice.rolling { animation: dice-shake .2s linear infinite; }
+
+.dice-q { font-size: 2rem; font-weight: 800; color: var(--color-muted); }
+
+.dice-face {
+  width: 100%; height: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  padding: 16%; gap: 2%;
+}
+.pip {
+  width: 80%; height: 80%;
+  border-radius: 50%;
+  background: var(--color-text);
+  align-self: center; justify-self: center;
+}
+.face-1 .pip:nth-child(1) { grid-area: 2/2; }
+.face-2 .pip:nth-child(1) { grid-area: 1/1; }
+.face-2 .pip:nth-child(2) { grid-area: 3/3; }
+.face-3 .pip:nth-child(1) { grid-area: 1/1; }
+.face-3 .pip:nth-child(2) { grid-area: 2/2; }
+.face-3 .pip:nth-child(3) { grid-area: 3/3; }
+.face-4 .pip:nth-child(1) { grid-area: 1/1; }
+.face-4 .pip:nth-child(2) { grid-area: 1/3; }
+.face-4 .pip:nth-child(3) { grid-area: 3/1; }
+.face-4 .pip:nth-child(4) { grid-area: 3/3; }
+.face-5 .pip:nth-child(1) { grid-area: 1/1; }
+.face-5 .pip:nth-child(2) { grid-area: 1/3; }
+.face-5 .pip:nth-child(3) { grid-area: 2/2; }
+.face-5 .pip:nth-child(4) { grid-area: 3/1; }
+.face-5 .pip:nth-child(5) { grid-area: 3/3; }
+.face-6 .pip:nth-child(1) { grid-area: 1/1; }
+.face-6 .pip:nth-child(2) { grid-area: 2/1; }
+.face-6 .pip:nth-child(3) { grid-area: 3/1; }
+.face-6 .pip:nth-child(4) { grid-area: 1/3; }
+.face-6 .pip:nth-child(5) { grid-area: 2/3; }
+.face-6 .pip:nth-child(6) { grid-area: 3/3; }
+
+@keyframes dice-pulse {
+  0%, 100% { box-shadow: var(--shadow-md), 0 0 0 0 rgba(230,57,70,.5); }
+  50% { box-shadow: var(--shadow-md), 0 0 0 10px rgba(230,57,70,0); }
+}
+@keyframes dice-shake {
+  0% { transform: rotate(-12deg) scale(1.05); }
+  25% { transform: rotate(10deg) scale(1.05); }
+  50% { transform: rotate(-8deg) scale(1.05); }
+  75% { transform: rotate(12deg) scale(1.05); }
+  100% { transform: rotate(0) scale(1.05); }
+}

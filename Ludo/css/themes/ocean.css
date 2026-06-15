@@ -1,0 +1,19 @@
+/* ocean.css — 海洋冷色 */
+:root {
+  --color-bg: #e3f2f4;
+  --color-surface: #f4fbfc;
+  --color-text: #0d2b35;
+  --color-muted: #4c6b73;
+  --color-primary: #0a7ea4;
+  --color-accent: #1b9aaa;
+
+  --player-1: #14557a; /* 深藍 */
+  --player-2: #1b9aaa; /* 青 */
+  --player-3: #4cc9f0; /* 天藍 */
+  --player-4: #2a9d8f; /* 藍綠 */
+
+  --cell-safe: #ffe08a;
+  --cell-track: #ffffff;
+  --board-bg: #f4fbfc;
+  --board-line: #bcd9de;
+}

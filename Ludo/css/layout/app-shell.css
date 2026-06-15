@@ -1,0 +1,56 @@
+/* app-shell.css — 整體版面骨架 */
+html, body, #app { height: 100%; }
+body { background: var(--color-bg); transition: background .3s ease, color .3s ease; }
+
+#app { position: relative; height: 100dvh; width: 100%; }
+
+/* 畫面切換:顯示/隱藏,不重載 */
+.screen {
+  position: absolute; inset: 0;
+  display: none;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.screen.active { display: block; }
+
+/* 置中型畫面(選單/面板) */
+#screen-menu, #screen-mode-select, #screen-instructions, #screen-settings {
+  display: none;
+}
+#screen-menu.active, #screen-mode-select.active,
+#screen-instructions.active, #screen-settings.active {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--sp-5) var(--sp-4) var(--sp-7);
+}
+
+/* 通用面板 */
+.panel {
+  width: 100%; max-width: 560px;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--sp-5) var(--sp-5) var(--sp-6);
+  margin: auto 0;
+}
+.panel-title { text-align: center; margin-bottom: var(--sp-5); color: var(--color-primary); }
+.field { margin-bottom: var(--sp-5); }
+.field-label { margin-bottom: var(--sp-3); }
+.option-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-3); }
+.color-row { grid-template-columns: repeat(4, 1fr); }
+.panel-actions { margin-top: var(--sp-5); display: grid; gap: var(--sp-3); }
+
+/* 遊戲畫面三段式 Grid(HUD / 棋盤 / 控制列) */
+#screen-game.active {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100dvh;
+  padding: 0;
+  overflow: hidden;
+}
+.board-area {
+  display: grid; place-items: center;
+  min-height: 0; min-width: 0;
+  padding: var(--sp-2);
+}

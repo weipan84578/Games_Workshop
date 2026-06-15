@@ -1,0 +1,19 @@
+/* sunset.css — 夕陽暖色 */
+:root {
+  --color-bg: #fdeede;
+  --color-surface: #fff7ef;
+  --color-text: #3a1e15;
+  --color-muted: #8a5a48;
+  --color-primary: #f3722c;
+  --color-accent: #f9844a;
+
+  --player-1: #f3722c; /* 橘 */
+  --player-2: #f94144; /* 桃紅 */
+  --player-3: #f9c74f; /* 金黃 */
+  --player-4: #f8755c; /* 珊瑚 */
+
+  --cell-safe: #ffd6a5;
+  --cell-track: #fffaf4;
+  --board-bg: #fffaf4;
+  --board-line: #f0cdb0;
+}
