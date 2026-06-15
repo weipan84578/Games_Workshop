@@ -20,6 +20,7 @@
 | `Shogi`              | 將棋     | Shogi           | 将棋             |
 | `Go_Game`            | 圍棋     | Go              | 囲碁             |
 | `Mancala`            | 播棋     | Mancala         | マンカラ         |
+| `Ludo`               | 飛行棋   | Ludo            | ルード           |
 
 ### 撲克牌遊戲
 
