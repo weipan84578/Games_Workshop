@@ -14,6 +14,7 @@ export function renderTubes(container, tubes, options = {}) {
     const classes = [
       'tube',
       selectedTube === idx ? 'tube--selected' : '',
+      isComplete(tube) ? 'tube--sealed' : '',
       isComplete(tube) ? 'tube--complete' : '',
       hintMove?.from === idx || hintMove?.to === idx ? 'tube--hint' : '',
       hintMove?.from === idx ? 'tube--source' : '',
@@ -26,6 +27,7 @@ export function renderTubes(container, tubes, options = {}) {
 
     return `
       <button class="${classes}" type="button" data-tube="${idx}" aria-label="${tubeLabel(tube, idx)}" aria-selected="${selectedTube === idx}">
+        ${isComplete(tube) ? '<span class="tube__cork" aria-hidden="true"></span>' : ''}
         <span class="tube__stack">${layers}</span>
         <span class="tube__base" aria-hidden="true"></span>
       </button>

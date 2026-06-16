@@ -58,6 +58,10 @@
   border-color: rgba(255, 255, 255, 0.5);
 }
 
+.tube--sealed {
+  overflow: visible;
+}
+
 .tube--hint {
   animation: hintPulse 0.9s ease-in-out infinite alternate;
 }
@@ -66,11 +70,22 @@
   transform: translateY(-10px) rotate(-3deg);
 }
 
+.tube--pour-right {
+  transform: translateY(-12px) rotate(18deg);
+  transition-duration: 0.22s;
+}
+
+.tube--pour-left {
+  transform: translateY(-12px) rotate(-18deg);
+  transition-duration: 0.22s;
+}
+
 .tube--target {
   box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.12), var(--shadow-glow);
 }
 
 .tube__stack {
+  border-radius: 0 0 31px 31px / 0 0 25px 25px;
   display: flex;
   flex-direction: column-reverse;
   height: 100%;
@@ -117,6 +132,128 @@
   position: absolute;
   right: 8%;
   z-index: 4;
+}
+
+.tube__cork {
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.2), transparent 34%),
+    linear-gradient(135deg, #8b5a2b, #c48a43 44%, #6f421f);
+  border: 2px solid rgba(61, 34, 14, 0.85);
+  border-radius: 50% 50% 42% 42%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35), inset 0 -3px 6px rgba(49, 28, 11, 0.45);
+  height: 18px;
+  left: 50%;
+  pointer-events: none;
+  position: absolute;
+  top: -13px;
+  transform: translateX(-50%);
+  width: 72%;
+  z-index: 8;
+}
+
+.tube__cork::after {
+  background: rgba(74, 42, 18, 0.48);
+  border-radius: 999px;
+  content: "";
+  height: 3px;
+  left: 18%;
+  position: absolute;
+  right: 18%;
+  top: 7px;
+}
+
+.pour-arc {
+  --pour-bend: 48px;
+  border-radius: 999px;
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.42);
+  height: 12px;
+  opacity: 0;
+  pointer-events: none;
+  position: fixed;
+  transform-origin: left center;
+  z-index: 220;
+  animation: pourArc 0.82s ease-in-out both;
+}
+
+.pour-arc::before,
+.pour-arc::after {
+  background: inherit;
+  border-radius: inherit;
+  content: "";
+  inset: 0;
+  opacity: 0.7;
+  position: absolute;
+}
+
+.pour-arc::before {
+  transform: translateY(calc(var(--pour-bend) * -0.18)) scaleY(0.68);
+}
+
+.pour-arc::after {
+  opacity: 0.34;
+  transform: translateY(calc(var(--pour-bend) * 0.16)) scaleY(0.5);
+}
+
+.pour-splash {
+  border-radius: 50%;
+  box-shadow:
+    -10px -4px 0 -3px currentColor,
+    9px -6px 0 -4px currentColor,
+    14px 5px 0 -4px currentColor,
+    -14px 6px 0 -5px currentColor,
+    0 0 12px rgba(255, 255, 255, 0.45);
+  height: 18px;
+  opacity: 0;
+  pointer-events: none;
+  position: fixed;
+  transform: translate(-50%, -50%) scale(0.4);
+  width: 18px;
+  z-index: 221;
+  animation: pourSplash 0.58s ease-out 0.24s both;
+}
+
+@keyframes pourArc {
+  0% {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+    transform: translateY(-18px) rotate(var(--pour-angle, 0deg)) scaleX(0.12);
+  }
+
+  18% {
+    opacity: 0.95;
+    clip-path: inset(0 42% 0 0);
+    transform: translateY(calc(var(--pour-bend) * -0.38)) rotate(var(--pour-angle, 0deg)) scaleX(0.45);
+  }
+
+  42%,
+  76% {
+    opacity: 0.92;
+    clip-path: inset(0 0 0 0);
+    transform: translateY(calc(var(--pour-bend) * -0.5)) rotate(var(--pour-angle, 0deg)) scaleX(1);
+  }
+
+  100% {
+    opacity: 0;
+    clip-path: inset(0 0 0 65%);
+    transform: translateY(calc(var(--pour-bend) * -0.32)) rotate(var(--pour-angle, 0deg)) scaleX(0.55);
+  }
+}
+
+@keyframes pourSplash {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.35);
+  }
+
+  34% {
+    opacity: 0.86;
+    transform: translate(-50%, -50%) scale(1.16);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.55);
+  }
 }
 
 @keyframes hintPulse {

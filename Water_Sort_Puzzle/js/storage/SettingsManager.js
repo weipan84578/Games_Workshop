@@ -1,8 +1,8 @@
 const KEY = 'wsp_settings';
 
 const DEFAULT_SETTINGS = {
-  bgmVolume: 0.75,
-  sfxVolume: 0.95,
+  bgmVolume: 1,
+  sfxVolume: 1,
   bgmEnabled: true,
   sfxEnabled: true,
   theme: 'ocean',

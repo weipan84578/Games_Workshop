@@ -31,7 +31,7 @@ function playStep(step) {
   const settings = getSettings?.();
   if (!settings?.bgmEnabled || !enabledAfterGesture) return;
   const notes = Array.isArray(step) ? step : [step];
-  const baseVolume = Math.max(0, Math.min(1, settings.bgmVolume)) * 0.06;
+  const baseVolume = Math.max(0, Math.min(1, settings.bgmVolume)) * 0.12;
   notes.forEach((freq, idx) => {
     playTone(freq, idx * 0.018, idx === 0 ? 0.34 : 0.24, idx === 0 ? 'triangle' : 'sine', baseVolume * (idx === 0 ? 1 : 0.58));
   });

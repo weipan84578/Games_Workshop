@@ -22,13 +22,14 @@
   var SETTINGS_KEY = 'wsp_settings';
   var SAVE_KEY = 'wsp_save';
   var DEFAULT_SETTINGS = {
-    bgmVolume: 0.75,
-    sfxVolume: 0.95,
+    bgmVolume: 1,
+    sfxVolume: 1,
     bgmEnabled: true,
     sfxEnabled: true,
     theme: 'ocean',
     vibration: true,
-    showTimer: true
+    showTimer: true,
+    language: detectLanguage()
   };
   var DEFAULT_SAVE = {
     version: '1.0.0',
@@ -37,6 +38,288 @@
       easy: { cleared: [], stars: {} },
       normal: { cleared: [], stars: {} },
       hard: { cleared: [], stars: {} }
+    }
+  };
+
+  var I18N = {
+    en: {
+      'diff.easy': 'Easy',
+      'diff.normal': 'Normal',
+      'diff.hard': 'Hard',
+      'home.kicker': 'Pour. Match. Clear.',
+      'home.copy': 'Move matching colors into the same tube. You can pour only onto empty tubes or matching top colors.',
+      'home.start': 'Start Game',
+      'home.continue': 'Continue',
+      'home.rules': 'Rules',
+      'home.settings': 'Settings',
+      'home.lastSave': 'Last save: {difficulty} level {level}, {moves} moves',
+      'home.noSave': 'No saved game yet',
+      'home.preview': 'Game preview',
+      'modal.difficulty.title': 'Choose Difficulty',
+      'modal.difficulty.body': 'Each difficulty has its own level progress.',
+      'levels.kicker': 'Level Select',
+      'levels.title': '{difficulty} Levels',
+      'levels.copy': '{total} levels. Cleared {cleared}.',
+      'levels.back': 'Back',
+      'levels.settings': 'Settings',
+      'levels.difficulty': 'Difficulty',
+      'levels.list': 'Levels',
+      'levels.stars': '{count} stars',
+      'levels.colors': '{count} colors',
+      'game.back': 'Back',
+      'game.title': '{difficulty} Level {level}',
+      'game.subtitle': '{colors} colors - best {moves} moves',
+      'game.subtitleHard': '{colors} colors - best {moves} moves - limit {time}',
+      'game.moves': 'Moves',
+      'game.time': 'Time',
+      'game.left': 'Left',
+      'game.hints': 'Hints',
+      'game.tubes': 'Tubes',
+      'game.controls': 'Game controls',
+      'game.undo': 'Undo',
+      'game.hint': 'Hint',
+      'game.restart': 'Restart',
+      'tube.empty': 'Tube {index}, empty',
+      'tube.top': 'Tube {index}, top {color}',
+      'toast.empty': 'This tube is empty',
+      'toast.invalid': 'Pour onto empty or matching color only',
+      'toast.undo': 'No undo available',
+      'toast.noHint': 'No hint found',
+      'toast.hint': 'Hint: tube {from} to tube {to}',
+      'win.title': 'Level Clear',
+      'win.stars': '{count} stars',
+      'win.replay': 'Replay',
+      'win.levels': 'Levels',
+      'win.next': 'Next',
+      'fail.time': 'Time Up',
+      'fail.stuck': 'No Moves Left',
+      'fail.body': 'Restart this level or choose another one.',
+      'instructions.kicker': 'How To Play',
+      'instructions.title': 'Rules',
+      'instructions.copy': 'Complete the puzzle by sorting each color into its own tube.',
+      'instructions.select.title': 'Select And Pour',
+      'instructions.select.body': 'Click a source tube, then click a target tube.',
+      'instructions.target.title': 'Legal Target',
+      'instructions.target.body': 'The target must be empty or have the same top color, and it must have space.',
+      'instructions.goal.title': 'Clear Goal',
+      'instructions.goal.body': 'Every non-empty tube must contain four layers of one color.',
+      'instructions.help.title': 'Help',
+      'instructions.help.body': 'Undo keeps up to 30 moves. Hint searches ahead with BFS and suggests a good move.',
+      'settings.kicker': 'Settings',
+      'settings.title': 'Settings',
+      'settings.bgmVolume': 'BGM Volume',
+      'settings.sfxVolume': 'SFX Volume',
+      'settings.language': 'Language',
+      'settings.theme': 'Theme',
+      'settings.bgm': 'BGM',
+      'settings.sfx': 'SFX',
+      'settings.vibration': 'Vibration',
+      'settings.timer': 'Show Timer',
+      'settings.on': 'On',
+      'settings.reset': 'Reset Settings',
+      'settings.clear': 'Clear Progress',
+      'clear.title': 'Clear Progress',
+      'clear.body': 'This removes level stars and the current saved game.',
+      'clear.cancel': 'Cancel',
+      'clear.confirm': 'Clear',
+      'color.red': 'Red',
+      'color.orange': 'Orange',
+      'color.yellow': 'Yellow',
+      'color.lime': 'Lime',
+      'color.green': 'Green',
+      'color.cyan': 'Cyan',
+      'color.blue': 'Blue',
+      'color.purple': 'Purple',
+      'color.pink': 'Pink',
+      'color.brown': 'Berry',
+      'color.gray': 'Gray',
+      'color.navy': 'Navy'
+    },
+    zh: {
+      'diff.easy': '簡單',
+      'diff.normal': '普通',
+      'diff.hard': '困難',
+      'home.kicker': '倒水、配色、清盤',
+      'home.copy': '把相同顏色集中到同一支試管。每次只能倒入空試管，或頂端顏色相同的試管。',
+      'home.start': '開始遊戲',
+      'home.continue': '繼續遊戲',
+      'home.rules': '玩法說明',
+      'home.settings': '設定',
+      'home.lastSave': '上次進度：{difficulty}第 {level} 關，{moves} 步',
+      'home.noSave': '尚無可繼續的進度',
+      'home.preview': '遊戲預覽',
+      'modal.difficulty.title': '選擇難度',
+      'modal.difficulty.body': '每個難度都有獨立的關卡進度。',
+      'levels.kicker': '關卡選擇',
+      'levels.title': '{difficulty}關卡',
+      'levels.copy': '共 {total} 關，已完成 {cleared} 關。',
+      'levels.back': '返回',
+      'levels.settings': '設定',
+      'levels.difficulty': '難度',
+      'levels.list': '關卡列表',
+      'levels.stars': '{count} 星',
+      'levels.colors': '{count} 色',
+      'game.back': '返回',
+      'game.title': '{difficulty} 第 {level} 關',
+      'game.subtitle': '{colors} 色 - 最佳 {moves} 步',
+      'game.subtitleHard': '{colors} 色 - 最佳 {moves} 步 - 限時 {time}',
+      'game.moves': '步數',
+      'game.time': '時間',
+      'game.left': '剩餘',
+      'game.hints': '提示',
+      'game.tubes': '試管區',
+      'game.controls': '遊戲操作',
+      'game.undo': '復原',
+      'game.hint': '提示',
+      'game.restart': '重開',
+      'tube.empty': '第 {index} 支試管，空白',
+      'tube.top': '第 {index} 支試管，頂端 {color}',
+      'toast.empty': '這支試管是空的',
+      'toast.invalid': '只能倒入空試管或同色試管',
+      'toast.undo': '沒有可復原的步驟',
+      'toast.noHint': '暫時找不到提示',
+      'toast.hint': '提示：第 {from} 支倒到第 {to} 支',
+      'win.title': '關卡完成',
+      'win.stars': '{count} 星',
+      'win.replay': '重玩',
+      'win.levels': '選關',
+      'win.next': '下一關',
+      'fail.time': '時間到',
+      'fail.stuck': '沒有可用倒法',
+      'fail.body': '可以重開本關，或回選關換一題。',
+      'instructions.kicker': '玩法',
+      'instructions.title': '玩法說明',
+      'instructions.copy': '目標是讓每支非空試管只留下同一種顏色。',
+      'instructions.select.title': '選取與倒水',
+      'instructions.select.body': '先點來源試管，再點目標試管。',
+      'instructions.target.title': '合法目標',
+      'instructions.target.body': '目標必須是空試管，或頂端顏色與來源相同，且仍有空位。',
+      'instructions.goal.title': '完成條件',
+      'instructions.goal.body': '所有非空試管都必須裝滿四層同色液體。',
+      'instructions.help.title': '輔助功能',
+      'instructions.help.body': '復原最多保存 30 步；提示會用 BFS 搜尋較佳下一步。',
+      'settings.kicker': 'Settings',
+      'settings.title': '設定',
+      'settings.bgmVolume': '音樂音量',
+      'settings.sfxVolume': '音效音量',
+      'settings.language': '語言',
+      'settings.theme': '主題',
+      'settings.bgm': '背景音樂',
+      'settings.sfx': '音效',
+      'settings.vibration': '震動回饋',
+      'settings.timer': '顯示計時',
+      'settings.on': '啟用',
+      'settings.reset': '重設設定',
+      'settings.clear': '清除進度',
+      'clear.title': '清除進度',
+      'clear.body': '這會刪除星等與目前續玩資料。',
+      'clear.cancel': '取消',
+      'clear.confirm': '清除',
+      'color.red': '紅色',
+      'color.orange': '橘色',
+      'color.yellow': '黃色',
+      'color.lime': '萊姆綠',
+      'color.green': '綠色',
+      'color.cyan': '青色',
+      'color.blue': '藍色',
+      'color.purple': '紫色',
+      'color.pink': '粉紅色',
+      'color.brown': '莓紫色',
+      'color.gray': '灰色',
+      'color.navy': '深藍色'
+    },
+    ja: {
+      'diff.easy': 'かんたん',
+      'diff.normal': 'ふつう',
+      'diff.hard': 'むずかしい',
+      'home.kicker': '注ぐ、そろえる、クリア',
+      'home.copy': '同じ色を同じ試験管に集めます。空の試験管、または上の色が同じ試験管にだけ注げます。',
+      'home.start': 'ゲーム開始',
+      'home.continue': '続きから',
+      'home.rules': '遊び方',
+      'home.settings': '設定',
+      'home.lastSave': '前回：{difficulty} レベル {level}、{moves} 手',
+      'home.noSave': '保存されたゲームはありません',
+      'home.preview': 'ゲームプレビュー',
+      'modal.difficulty.title': '難易度を選択',
+      'modal.difficulty.body': '難易度ごとに進行状況が保存されます。',
+      'levels.kicker': 'レベル選択',
+      'levels.title': '{difficulty} レベル',
+      'levels.copy': '全 {total} レベル。クリア済み {cleared}。',
+      'levels.back': '戻る',
+      'levels.settings': '設定',
+      'levels.difficulty': '難易度',
+      'levels.list': 'レベル一覧',
+      'levels.stars': '{count} 星',
+      'levels.colors': '{count} 色',
+      'game.back': '戻る',
+      'game.title': '{difficulty} レベル {level}',
+      'game.subtitle': '{colors} 色 - 最短 {moves} 手',
+      'game.subtitleHard': '{colors} 色 - 最短 {moves} 手 - 制限 {time}',
+      'game.moves': '手数',
+      'game.time': '時間',
+      'game.left': '残り',
+      'game.hints': 'ヒント',
+      'game.tubes': '試験管',
+      'game.controls': '操作',
+      'game.undo': '戻す',
+      'game.hint': 'ヒント',
+      'game.restart': '再開',
+      'tube.empty': '{index} 本目の試験管、空',
+      'tube.top': '{index} 本目の試験管、上は {color}',
+      'toast.empty': 'この試験管は空です',
+      'toast.invalid': '空か同じ色の試験管にだけ注げます',
+      'toast.undo': '戻せる手がありません',
+      'toast.noHint': 'ヒントが見つかりません',
+      'toast.hint': 'ヒント：{from} 本目から {to} 本目へ',
+      'win.title': 'レベルクリア',
+      'win.stars': '{count} 星',
+      'win.replay': 'もう一度',
+      'win.levels': 'レベル',
+      'win.next': '次へ',
+      'fail.time': '時間切れ',
+      'fail.stuck': '注げる手がありません',
+      'fail.body': 'このレベルをやり直すか、別のレベルを選んでください。',
+      'instructions.kicker': '遊び方',
+      'instructions.title': 'ルール',
+      'instructions.copy': '色ごとに試験管をそろえるとクリアです。',
+      'instructions.select.title': '選択と注水',
+      'instructions.select.body': '元の試験管を選び、次に注ぎ先を選びます。',
+      'instructions.target.title': '注げる場所',
+      'instructions.target.body': '注ぎ先は空、または上の色が同じで空きがある必要があります。',
+      'instructions.goal.title': 'クリア条件',
+      'instructions.goal.body': '空でない試験管は、同じ色 4 層で満たします。',
+      'instructions.help.title': '補助機能',
+      'instructions.help.body': 'Undo は最大 30 手保存。ヒントは BFS で次の手を探します。',
+      'settings.kicker': 'Settings',
+      'settings.title': '設定',
+      'settings.bgmVolume': '音楽音量',
+      'settings.sfxVolume': '効果音音量',
+      'settings.language': '言語',
+      'settings.theme': 'テーマ',
+      'settings.bgm': 'BGM',
+      'settings.sfx': '効果音',
+      'settings.vibration': '振動',
+      'settings.timer': 'タイマー表示',
+      'settings.on': 'オン',
+      'settings.reset': '設定をリセット',
+      'settings.clear': '進行状況を削除',
+      'clear.title': '進行状況を削除',
+      'clear.body': '星評価と現在の保存データを削除します。',
+      'clear.cancel': 'キャンセル',
+      'clear.confirm': '削除',
+      'color.red': '赤',
+      'color.orange': 'オレンジ',
+      'color.yellow': '黄',
+      'color.lime': 'ライム',
+      'color.green': '緑',
+      'color.cyan': 'シアン',
+      'color.blue': '青',
+      'color.purple': '紫',
+      'color.pink': 'ピンク',
+      'color.brown': 'ベリー',
+      'color.gray': '灰',
+      'color.navy': '紺'
     }
   };
 
@@ -89,10 +372,41 @@
     return Object.assign({}, DEFAULT_SETTINGS, loadJson(SETTINGS_KEY, DEFAULT_SETTINGS));
   }
 
+  function detectLanguage() {
+    var navLang = (navigator.language || navigator.userLanguage || 'en').toLowerCase();
+    if (navLang.indexOf('ja') === 0) return 'ja';
+    if (navLang.indexOf('zh') === 0) return 'zh';
+    return 'en';
+  }
+
+  function getLanguage() {
+    return I18N[settings.language] ? settings.language : 'en';
+  }
+
+  function t(key) {
+    var lang = getLanguage();
+    return (I18N[lang] && I18N[lang][key]) || I18N.en[key] || key;
+  }
+
+  function fmt(key, values) {
+    return t(key).replace(/\{(\w+)\}/g, function (match, name) {
+      return Object.prototype.hasOwnProperty.call(values || {}, name) ? values[name] : match;
+    });
+  }
+
+  function diffLabel(diff) {
+    return t('diff.' + diff);
+  }
+
+  function colorLabel(color) {
+    return t('color.' + color);
+  }
+
   function updateSettings(patch) {
     settings = Object.assign({}, settings, patch);
     saveJson(SETTINGS_KEY, settings);
     applyTheme(settings.theme);
+    applyLanguage(settings.language);
     if (!settings.bgmEnabled) stopBgm();
     if (settings.bgmEnabled) switchBgmForRoute(location.hash || '#home');
     return settings;
@@ -102,6 +416,7 @@
     settings = clone(DEFAULT_SETTINGS);
     saveJson(SETTINGS_KEY, settings);
     applyTheme(settings.theme);
+    applyLanguage(settings.language);
     switchBgmForRoute(location.hash || '#home');
     return settings;
   }
@@ -155,6 +470,11 @@
     var safeTheme = THEMES.indexOf(theme) >= 0 ? theme : 'ocean';
     document.documentElement.dataset.theme = safeTheme;
     app.dataset.theme = safeTheme;
+  }
+
+  function applyLanguage(language) {
+    var safeLanguage = I18N[language] ? language : 'en';
+    document.documentElement.lang = safeLanguage === 'zh' ? 'zh-Hant' : safeLanguage;
   }
 
   function rng(seed) {
@@ -476,13 +796,13 @@
       this.state.selectedTube = null;
       if (isSolved(this.state.tubes)) {
         this.status = 'WIN';
-        return { type: 'win', from: selected, to: idx, stars: calculateStars(this.level, this.state) };
+        return { type: 'win', from: selected, to: idx, color: result.color, stars: calculateStars(this.level, this.state) };
       }
       if (validMoves(this.state.tubes).length === 0) {
         this.status = 'FAIL';
         return { type: 'fail', reason: 'stuck' };
       }
-      return { type: 'pour', from: selected, to: idx };
+      return { type: 'pour', from: selected, to: idx, color: result.color };
     }
     if (tube && tube.length) {
       this.state.selectedTube = idx;
@@ -579,7 +899,7 @@
 
   function beep(id) {
     if (!settings.sfxEnabled) return;
-    var v = audioVolume('sfx', 0.18);
+    var v = audioVolume('sfx', 0.36);
     if (id === 'select') {
       playOsc(520, 0, 0.055, 'sine', v * 0.55);
       playOsc(660, 0.045, 0.07, 'sine', v * 0.45);
@@ -619,7 +939,7 @@
   function playBgmStep(step) {
     if (!audioUnlocked || !settings.bgmEnabled) return;
     var notes = Array.isArray(step) ? step : [step];
-    var baseVolume = audioVolume('bgm', 0.06);
+    var baseVolume = audioVolume('bgm', 0.12);
     notes.forEach(function (freq, idx) {
       playOsc(freq, idx * 0.018, idx === 0 ? 0.34 : 0.24, idx === 0 ? 'triangle' : 'sine', baseVolume * (idx === 0 ? 1 : 0.58));
     });
@@ -725,23 +1045,26 @@
 
   function renderHome() {
     var lastSave = loadSave().lastPlayed;
+    var saveSummary = lastSave
+      ? fmt('home.lastSave', { difficulty: diffLabel(lastSave.difficulty), level: lastSave.levelId, moves: lastSave.moves })
+      : t('home.noSave');
     app.className = 'screen home-screen';
     app.innerHTML = [
       '<main class="app-shell">',
       '<div class="content-width home-layout">',
       '<section class="home-copy">',
-      '<p class="kicker">Pour. Match. Clear.</p>',
+      '<p class="kicker">' + t('home.kicker') + '</p>',
       '<h1 class="app-title">Water Sort Puzzle</h1>',
-      '<p>Move matching colors into the same tube. You can pour only onto empty tubes or matching top colors.</p>',
+      '<p>' + t('home.copy') + '</p>',
       '<div class="home-actions">',
-      '<button class="btn btn--primary" data-action="play"><span class="btn__icon">P</span>Start Game</button>',
-      '<button class="btn" data-action="continue" ' + (lastSave ? '' : 'disabled') + '><span class="btn__icon">C</span>Continue</button>',
-      '<button class="btn" data-nav="instructions"><span class="btn__icon">?</span>Rules</button>',
-      '<button class="btn" data-nav="settings"><span class="btn__icon">S</span>Settings</button>',
+      '<button class="btn btn--primary" data-action="play"><span class="btn__icon">P</span>' + t('home.start') + '</button>',
+      '<button class="btn" data-action="continue" ' + (lastSave ? '' : 'disabled') + '><span class="btn__icon">C</span>' + t('home.continue') + '</button>',
+      '<button class="btn" data-nav="instructions"><span class="btn__icon">?</span>' + t('home.rules') + '</button>',
+      '<button class="btn" data-nav="settings"><span class="btn__icon">S</span>' + t('home.settings') + '</button>',
       '</div>',
-      '<div class="save-summary">' + (lastSave ? 'Last save: ' + lastSave.difficulty + ' level ' + lastSave.levelId + ', ' + lastSave.moves + ' moves' : 'No saved game yet') + '</div>',
+      '<div class="save-summary">' + saveSummary + '</div>',
       '</section>',
-      '<section class="preview-rack" aria-label="Game preview">',
+      '<section class="preview-rack" aria-label="' + t('home.preview') + '">',
       LEVELS.easy[0].tubes.slice(0, 4).map(previewTube).join(''),
       '</section>',
       '</div>',
@@ -749,12 +1072,12 @@
     ].join('');
     app.querySelector('[data-action="play"]').addEventListener('click', function () {
       showModal({
-        title: 'Choose Difficulty',
-        body: '<p>Each difficulty has its own level progress.</p>',
+        title: t('modal.difficulty.title'),
+        body: '<p>' + t('modal.difficulty.body') + '</p>',
         actions: [
-          { label: 'Easy', primary: true, handler: function () { navigate('levels', { diff: 'easy' }); } },
-          { label: 'Normal', handler: function () { navigate('levels', { diff: 'normal' }); } },
-          { label: 'Hard', handler: function () { navigate('levels', { diff: 'hard' }); } }
+          { label: diffLabel('easy'), primary: true, handler: function () { navigate('levels', { diff: 'easy' }); } },
+          { label: diffLabel('normal'), handler: function () { navigate('levels', { diff: 'normal' }); } },
+          { label: diffLabel('hard'), handler: function () { navigate('levels', { diff: 'hard' }); } }
         ]
       });
     });
@@ -781,29 +1104,29 @@
       '<div class="content-width">',
       '<header class="screen__header">',
       '<div>',
-      '<p class="kicker">Level Select</p>',
-      '<h1 class="section-title">' + DIFF_LABEL[diff] + ' Levels</h1>',
-      '<p class="screen__copy">' + LEVELS[diff].length + ' levels. Cleared ' + progress.cleared.length + '.</p>',
+      '<p class="kicker">' + t('levels.kicker') + '</p>',
+      '<h1 class="section-title">' + fmt('levels.title', { difficulty: diffLabel(diff) }) + '</h1>',
+      '<p class="screen__copy">' + fmt('levels.copy', { total: LEVELS[diff].length, cleared: progress.cleared.length }) + '</p>',
       '</div>',
       '<div class="top-bar__actions">',
-      '<button class="btn btn--ghost" data-nav="home" aria-label="Home">Back</button>',
-      '<button class="btn btn--ghost" data-nav="settings" aria-label="Settings">Settings</button>',
+      '<button class="btn btn--ghost" data-nav="home" aria-label="' + t('levels.back') + '">' + t('levels.back') + '</button>',
+      '<button class="btn btn--ghost" data-nav="settings" aria-label="' + t('levels.settings') + '">' + t('levels.settings') + '</button>',
       '</div>',
       '</header>',
       '<div class="level-toolbar">',
-      '<div class="segmented" aria-label="Difficulty">',
+      '<div class="segmented" aria-label="' + t('levels.difficulty') + '">',
       Object.keys(DIFF_LABEL).map(function (key) {
-        return '<button class="btn" data-diff="' + key + '" aria-pressed="' + (key === diff) + '">' + DIFF_LABEL[key] + '</button>';
+        return '<button class="btn" data-diff="' + key + '" aria-pressed="' + (key === diff) + '">' + diffLabel(key) + '</button>';
       }).join(''),
       '</div>',
       '</div>',
-      '<section class="level-grid" aria-label="Levels">',
+      '<section class="level-grid" aria-label="' + t('levels.list') + '">',
       LEVELS[diff].map(function (level) {
         return [
           '<button class="level-tile" data-level="' + level.id + '">',
           '<strong>' + level.id + '</strong>',
-          '<span aria-label="' + (progress.stars[level.id] || 0) + ' stars">' + starsText(progress.stars[level.id]) + '</span>',
-          '<small>' + level.colors + ' colors</small>',
+          '<span aria-label="' + fmt('levels.stars', { count: progress.stars[level.id] || 0 }) + '">' + starsText(progress.stars[level.id]) + '</span>',
+          '<small>' + fmt('levels.colors', { count: level.colors }) + '</small>',
           '</button>'
         ].join('');
       }).join(''),
@@ -836,6 +1159,7 @@
     container.innerHTML = game.state.tubes.map(function (tube, idx) {
       var classes = ['tube'];
       if (game.state.selectedTube === idx) classes.push('tube--selected');
+      if (isComplete(tube)) classes.push('tube--sealed');
       if (isComplete(tube)) classes.push('tube--complete');
       if (hintMove && (hintMove.from === idx || hintMove.to === idx)) classes.push('tube--hint');
       if (hintMove && hintMove.from === idx) classes.push('tube--source');
@@ -843,9 +1167,12 @@
       var layers = tube.map(function (color) {
         return '<span class="tube__layer tube__layer--' + color + '" aria-hidden="true"></span>';
       }).join('');
-      var label = tube.length ? 'Tube ' + (idx + 1) + ', top ' + COLOR_NAMES[topColor(tube)] : 'Tube ' + (idx + 1) + ', empty';
+      var label = tube.length
+        ? fmt('tube.top', { index: idx + 1, color: colorLabel(topColor(tube)) })
+        : fmt('tube.empty', { index: idx + 1 });
       return [
         '<button class="' + classes.join(' ') + '" type="button" data-tube="' + idx + '" aria-label="' + label + '" aria-selected="' + (game.state.selectedTube === idx) + '">',
+        isComplete(tube) ? '<span class="tube__cork" aria-hidden="true"></span>' : '',
         '<span class="tube__stack">' + layers + '</span>',
         '<span class="tube__base" aria-hidden="true"></span>',
         '</button>'
@@ -858,6 +1185,50 @@
         clickHandler(Number(button.dataset.tube));
       }, { passive: false });
     });
+  }
+
+  function animatePour(container, from, to, color) {
+    var source = container.querySelector('[data-tube="' + from + '"]');
+    var target = container.querySelector('[data-tube="' + to + '"]');
+    if (!source || !target) return;
+
+    var sourceRect = source.getBoundingClientRect();
+    var targetRect = target.getBoundingClientRect();
+    var direction = targetRect.left >= sourceRect.left ? 1 : -1;
+    var startX = sourceRect.left + sourceRect.width * (direction > 0 ? 0.72 : 0.28);
+    var startY = sourceRect.top + sourceRect.height * 0.08;
+    var endX = targetRect.left + targetRect.width * 0.5;
+    var endY = targetRect.top + targetRect.height * 0.11;
+    var dx = endX - startX;
+    var dy = endY - startY;
+    var length = Math.max(36, Math.sqrt(dx * dx + dy * dy));
+    var angle = Math.atan2(dy, dx) * 180 / Math.PI;
+    var stream = document.createElement('span');
+    var splash = document.createElement('span');
+    var bend = Math.min(96, Math.max(34, Math.abs(dx) * 0.22 + 18));
+
+    source.classList.add(direction > 0 ? 'tube--pour-right' : 'tube--pour-left');
+    target.classList.add('tube--target');
+    stream.className = 'pour-arc tube__layer--' + (color || 'cyan');
+    stream.style.left = startX + 'px';
+    stream.style.top = startY + 'px';
+    stream.style.width = length + 'px';
+    stream.style.setProperty('--pour-bend', bend + 'px');
+    stream.style.setProperty('--pour-angle', angle + 'deg');
+    splash.className = 'pour-splash tube__layer--' + (color || 'cyan');
+    splash.style.left = endX + 'px';
+    splash.style.top = endY + 'px';
+    document.body.appendChild(stream);
+    splash.style.color = getComputedStyle(stream).backgroundColor;
+    document.body.appendChild(splash);
+
+    window.setTimeout(function () {
+      stream.remove();
+      splash.remove();
+      source.classList.remove('tube--pour-right');
+      source.classList.remove('tube--pour-left');
+      target.classList.remove('tube--target');
+    }, 820);
   }
 
   function confetti() {
@@ -952,23 +1323,25 @@
     app.innerHTML = [
       '<main class="app-shell app-shell--game">',
       '<header class="game-hud">',
-      '<button class="btn btn--ghost" data-action="back" aria-label="Back">Back</button>',
+      '<button class="btn btn--ghost" data-action="back" aria-label="' + t('game.back') + '">' + t('game.back') + '</button>',
       '<div class="game-hud__title">',
-      '<strong>' + DIFF_LABEL[diff] + ' Level ' + level.id + '</strong>',
-      '<span>' + level.colors + ' colors - best ' + level.optimalMoves + ' moves' + (diff === 'hard' ? ' - limit ' + formatTime(game.timeLimit()) : '') + '</span>',
+      '<strong>' + fmt('game.title', { difficulty: diffLabel(diff), level: level.id }) + '</strong>',
+      '<span>' + (diff === 'hard'
+        ? fmt('game.subtitleHard', { colors: level.colors, moves: level.optimalMoves, time: formatTime(game.timeLimit()) })
+        : fmt('game.subtitle', { colors: level.colors, moves: level.optimalMoves })) + '</span>',
       '</div>',
       '<div class="game-hud__stats">',
-      '<div class="stat-pill" data-stat="moves"><span>Moves</span><strong>0</strong></div>',
-      '<div class="stat-pill" data-stat="time"><span>' + (diff === 'hard' ? 'Left' : 'Time') + '</span><strong>0:00</strong></div>',
-      '<div class="stat-pill" data-stat="hints"><span>Hints</span><strong>0</strong></div>',
+      '<div class="stat-pill" data-stat="moves"><span>' + t('game.moves') + '</span><strong>0</strong></div>',
+      '<div class="stat-pill" data-stat="time"><span>' + (diff === 'hard' ? t('game.left') : t('game.time')) + '</span><strong>0:00</strong></div>',
+      '<div class="stat-pill" data-stat="hints"><span>' + t('game.hints') + '</span><strong>0</strong></div>',
       '</div>',
       '</header>',
-      '<section class="tubes-area"><div class="tubes-grid" aria-label="Tubes"></div></section>',
+      '<section class="tubes-area"><div class="tubes-grid" aria-label="' + t('game.tubes') + '"></div></section>',
       '<div class="toast" role="status"></div>',
-      '<nav class="game-controls" aria-label="Game controls">',
-      '<button class="btn" data-action="undo"><span class="btn__icon">U</span>Undo</button>',
-      '<button class="btn" data-action="hint"><span class="btn__icon">H</span>Hint</button>',
-      '<button class="btn" data-action="restart"><span class="btn__icon">R</span>Restart</button>',
+      '<nav class="game-controls" aria-label="' + t('game.controls') + '">',
+      '<button class="btn" data-action="undo"><span class="btn__icon">U</span>' + t('game.undo') + '</button>',
+      '<button class="btn" data-action="hint"><span class="btn__icon">H</span>' + t('game.hint') + '</button>',
+      '<button class="btn" data-action="restart"><span class="btn__icon">R</span>' + t('game.restart') + '</button>',
       '</nav>',
       '</main>'
     ].join('');
@@ -998,13 +1371,18 @@
         if (result.type === 'select' || result.type === 'deselect') beep('select');
         if (result.type === 'invalid') {
           beep('invalid');
-          showToast(result.reason === 'empty' ? 'This tube is empty' : 'Pour onto empty or matching color only');
+          showToast(result.reason === 'empty' ? t('toast.empty') : t('toast.invalid'));
         }
-        if (result.type === 'pour') beep('pour');
-        if (result.type === 'win') showWin(result.stars);
-        if (result.type === 'fail') showFail(result.reason);
+        if (result.type === 'pour' || result.type === 'win') beep('pour');
         if (game.status !== 'WIN' && game.status !== 'FAIL') saveGameState(game.state);
         renderBoard();
+        if (result.type === 'pour' || result.type === 'win') {
+          animatePour(grid, result.from, result.to, result.color);
+        }
+        if (result.type === 'win') {
+          window.setTimeout(function () { showWin(result.stars); }, 420);
+        }
+        if (result.type === 'fail') showFail(result.reason);
       });
       updateHud();
     }
@@ -1016,20 +1394,20 @@
       confetti();
       var nextLevel = LEVELS[diff].find(function (item) { return item.id === level.id + 1; });
       showModal({
-        title: 'Level Clear',
+        title: t('win.title'),
         body: [
-          '<div class="stars" aria-label="' + stars + ' stars">' + Array(stars + 1).join('*') + '</div>',
+          '<div class="stars" aria-label="' + fmt('win.stars', { count: stars }) + '">' + Array(stars + 1).join('*') + '</div>',
           '<div class="result-summary">',
-          '<div><span>Moves</span><strong>' + game.state.moves + '</strong></div>',
-          '<div><span>Time</span><strong>' + formatTime(game.state.time) + '</strong></div>',
-          '<div><span>Hints</span><strong>' + game.state.hintsUsed + '</strong></div>',
+          '<div><span>' + t('game.moves') + '</span><strong>' + game.state.moves + '</strong></div>',
+          '<div><span>' + t('game.time') + '</span><strong>' + formatTime(game.state.time) + '</strong></div>',
+          '<div><span>' + t('game.hints') + '</span><strong>' + game.state.hintsUsed + '</strong></div>',
           '<div><span>Undo</span><strong>' + game.state.undoCount + '</strong></div>',
           '</div>'
         ].join(''),
         actions: [
-          { label: 'Replay', handler: function () { game.restart(); renderBoard(); saveGameState(game.state); } },
-          { label: 'Levels', handler: function () { navigate('levels', { diff: diff }); } },
-          nextLevel ? { label: 'Next', primary: true, handler: function () { navigate('game', { diff: diff, level: nextLevel.id }); } } : null
+          { label: t('win.replay'), handler: function () { game.restart(); renderBoard(); saveGameState(game.state); } },
+          { label: t('win.levels'), handler: function () { navigate('levels', { diff: diff }); } },
+          nextLevel ? { label: t('win.next'), primary: true, handler: function () { navigate('game', { diff: diff, level: nextLevel.id }); } } : null
         ].filter(Boolean)
       });
     }
@@ -1037,11 +1415,11 @@
     function showFail(reason) {
       beep('fail');
       showModal({
-        title: reason === 'time' ? 'Time Up' : 'No Moves Left',
-        body: '<p>Restart this level or choose another one.</p>',
+        title: reason === 'time' ? t('fail.time') : t('fail.stuck'),
+        body: '<p>' + t('fail.body') + '</p>',
         actions: [
-          { label: 'Levels', handler: function () { navigate('levels', { diff: diff }); } },
-          { label: 'Restart', primary: true, handler: function () { game.restart(); renderBoard(); saveGameState(game.state); } }
+          { label: t('win.levels'), handler: function () { navigate('levels', { diff: diff }); } },
+          { label: t('game.restart'), primary: true, handler: function () { game.restart(); renderBoard(); saveGameState(game.state); } }
         ]
       });
     }
@@ -1055,20 +1433,20 @@
         saveGameState(game.state);
       } else {
         beep('invalid');
-        showToast('No undo available');
+        showToast(t('toast.undo'));
       }
     });
     app.querySelector('[data-action="hint"]').addEventListener('click', function () {
       var move = findHint(game.state.tubes);
       if (!move) {
         beep('invalid');
-        showToast('No hint found');
+        showToast(t('toast.noHint'));
         return;
       }
       game.state.hintsUsed += 1;
       hintMove = move;
       beep('hint');
-      showToast('Hint: tube ' + (move.from + 1) + ' to tube ' + (move.to + 1));
+      showToast(fmt('toast.hint', { from: move.from + 1, to: move.to + 1 }));
       saveGameState(game.state);
       renderBoard();
     });
@@ -1101,15 +1479,15 @@
       '<main class="app-shell">',
       '<div class="content-width">',
       '<header class="screen__header">',
-      '<div><p class="kicker">How To Play</p><h1 class="section-title">Rules</h1>',
-      '<p class="screen__copy">Complete the puzzle by sorting each color into its own tube.</p></div>',
-      '<button class="btn btn--ghost" data-nav="home" aria-label="Home">Back</button>',
+      '<div><p class="kicker">' + t('instructions.kicker') + '</p><h1 class="section-title">' + t('instructions.title') + '</h1>',
+      '<p class="screen__copy">' + t('instructions.copy') + '</p></div>',
+      '<button class="btn btn--ghost" data-nav="home" aria-label="' + t('game.back') + '">' + t('game.back') + '</button>',
       '</header>',
       '<section class="rules-grid">',
-      '<article class="rule-card"><h2>Select And Pour</h2><p>Click a source tube, then click a target tube.</p></article>',
-      '<article class="rule-card"><h2>Legal Target</h2><p>The target must be empty or have the same top color, and it must have space.</p></article>',
-      '<article class="rule-card"><h2>Clear Goal</h2><p>Every non-empty tube must contain four layers of one color.</p></article>',
-      '<article class="rule-card"><h2>Help</h2><p>Undo keeps up to 30 moves. Hint searches ahead with BFS and suggests a good move.</p></article>',
+      '<article class="rule-card"><h2>' + t('instructions.select.title') + '</h2><p>' + t('instructions.select.body') + '</p></article>',
+      '<article class="rule-card"><h2>' + t('instructions.target.title') + '</h2><p>' + t('instructions.target.body') + '</p></article>',
+      '<article class="rule-card"><h2>' + t('instructions.goal.title') + '</h2><p>' + t('instructions.goal.body') + '</p></article>',
+      '<article class="rule-card"><h2>' + t('instructions.help.title') + '</h2><p>' + t('instructions.help.body') + '</p></article>',
       '</section>',
       '</div>',
       '</main>'
@@ -1123,27 +1501,32 @@
         '<main class="app-shell">',
         '<div class="content-width">',
         '<header class="screen__header">',
-        '<div><p class="kicker">Settings</p><h1 class="section-title">Settings</h1></div>',
-        '<button class="btn btn--ghost" data-nav="home" aria-label="Home">Back</button>',
+        '<div><p class="kicker">' + t('settings.kicker') + '</p><h1 class="section-title">' + t('settings.title') + '</h1></div>',
+        '<button class="btn btn--ghost" data-nav="home" aria-label="' + t('game.back') + '">' + t('game.back') + '</button>',
         '</header>',
         '<section class="panel panel--padded">',
         '<div class="settings-list">',
-        '<div class="setting-row"><label for="bgmVolume">BGM Volume</label><input id="bgmVolume" type="range" min="0" max="1" step="0.05" value="' + settings.bgmVolume + '"></div>',
-        '<div class="setting-row"><label for="sfxVolume">SFX Volume</label><input id="sfxVolume" type="range" min="0" max="1" step="0.05" value="' + settings.sfxVolume + '"></div>',
-        '<div class="setting-row"><div class="setting-row__label">Theme</div><div class="theme-swatches">',
+        '<div class="setting-row"><label for="bgmVolume">' + t('settings.bgmVolume') + '</label><input id="bgmVolume" type="range" min="0" max="1" step="0.05" value="' + settings.bgmVolume + '"></div>',
+        '<div class="setting-row"><label for="sfxVolume">' + t('settings.sfxVolume') + '</label><input id="sfxVolume" type="range" min="0" max="1" step="0.05" value="' + settings.sfxVolume + '"></div>',
+        '<div class="setting-row"><label for="languageSelect">' + t('settings.language') + '</label><select id="languageSelect" class="select-control">',
+        '<option value="en" ' + (settings.language === 'en' ? 'selected' : '') + '>English</option>',
+        '<option value="zh" ' + (settings.language === 'zh' ? 'selected' : '') + '>繁體中文</option>',
+        '<option value="ja" ' + (settings.language === 'ja' ? 'selected' : '') + '>日本語</option>',
+        '</select></div>',
+        '<div class="setting-row"><div class="setting-row__label">' + t('settings.theme') + '</div><div class="theme-swatches">',
         THEMES.map(function (theme) {
           return '<button class="theme-swatch theme-swatch--' + theme + '" data-theme-choice="' + theme + '" aria-pressed="' + (settings.theme === theme) + '" aria-label="' + theme + '"><span></span></button>';
         }).join(''),
         '</div></div>',
-        checkboxRow('BGM', 'bgmEnabled'),
-        checkboxRow('SFX', 'sfxEnabled'),
-        checkboxRow('Vibration', 'vibration'),
-        checkboxRow('Show Timer', 'showTimer'),
+        checkboxRow(t('settings.bgm'), 'bgmEnabled'),
+        checkboxRow(t('settings.sfx'), 'sfxEnabled'),
+        checkboxRow(t('settings.vibration'), 'vibration'),
+        checkboxRow(t('settings.timer'), 'showTimer'),
         '</div>',
         '</section>',
         '<div class="btn-group" style="margin-top: 16px;">',
-        '<button class="btn" data-action="reset-settings">Reset Settings</button>',
-        '<button class="btn btn--danger" data-action="clear-save">Clear Progress</button>',
+        '<button class="btn" data-action="reset-settings">' + t('settings.reset') + '</button>',
+        '<button class="btn btn--danger" data-action="clear-save">' + t('settings.clear') + '</button>',
         '</div>',
         '</div>',
         '</main>'
@@ -1151,7 +1534,7 @@
     }
 
     function checkboxRow(label, key) {
-      return '<div class="setting-row"><span class="setting-row__label">' + label + '</span><label class="switch"><input type="checkbox" data-setting="' + key + '" ' + (settings[key] ? 'checked' : '') + '>On</label></div>';
+      return '<div class="setting-row"><span class="setting-row__label">' + label + '</span><label class="switch"><input type="checkbox" data-setting="' + key + '" ' + (settings[key] ? 'checked' : '') + '>' + t('settings.on') + '</label></div>';
     }
 
     function bind() {
@@ -1160,6 +1543,11 @@
       app.querySelector('#sfxVolume').addEventListener('input', function (event) {
         updateSettings({ sfxVolume: Number(event.target.value) });
         beep('click');
+      });
+      app.querySelector('#languageSelect').addEventListener('change', function (event) {
+        updateSettings({ language: event.target.value });
+        beep('click');
+        renderSettings();
       });
       app.querySelectorAll('[data-setting]').forEach(function (input) {
         input.addEventListener('change', function () {
@@ -1184,11 +1572,11 @@
       });
       app.querySelector('[data-action="clear-save"]').addEventListener('click', function () {
         showModal({
-          title: 'Clear Progress',
-          body: '<p>This removes level stars and the current saved game.</p>',
+          title: t('clear.title'),
+          body: '<p>' + t('clear.body') + '</p>',
           actions: [
-            { label: 'Cancel' },
-            { label: 'Clear', primary: true, handler: function () { clearAllSave(); } }
+            { label: t('clear.cancel') },
+            { label: t('clear.confirm'), primary: true, handler: function () { clearAllSave(); } }
           ]
         });
       });
@@ -1213,6 +1601,7 @@
   }
 
   applyTheme(settings.theme);
+  applyLanguage(settings.language);
   addEventListener('hashchange', renderRoute);
   if (!location.hash) location.hash = '#home';
   renderRoute();

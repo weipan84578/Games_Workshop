@@ -27,6 +27,20 @@
   width: 100%;
 }
 
+.select-control {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  min-height: 44px;
+  padding: 8px 10px;
+}
+
+.select-control option {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+
 .switch {
   align-items: center;
   display: inline-flex;

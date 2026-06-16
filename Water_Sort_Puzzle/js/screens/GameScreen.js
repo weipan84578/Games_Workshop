@@ -136,7 +136,7 @@ function bindEngine() {
   });
   engine.addEventListener('pour-end', (event) => {
     AudioManager.play('pour_end');
-    AnimationManager.markPour(document.querySelector('.tubes-grid'), event.detail.from, event.detail.to);
+    AnimationManager.markPour(document.querySelector('.tubes-grid'), event.detail.from, event.detail.to, event.detail.color);
   });
   engine.addEventListener('hint', (event) => {
     AudioManager.play('hint');

@@ -51,7 +51,7 @@ export const SFXController = {
     const ctx = getContext?.();
     if (!ctx) return;
 
-    const base = volume(settings, 0.18);
+    const base = volume(settings, 0.36);
     if (id === 'select') {
       playOsc(ctx, 520, 0, 0.055, 'sine', base * 0.55);
       playOsc(ctx, 660, 0.045, 0.07, 'sine', base * 0.45);
