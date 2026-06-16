@@ -1,0 +1,91 @@
+.btn {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: inline-flex;
+  font-weight: 900;
+  gap: 10px;
+  justify-content: center;
+  min-height: 48px;
+  min-width: 80px;
+  padding: 11px 16px;
+  touch-action: manipulation;
+  transition: background var(--duration-fast) ease, border-color var(--duration-fast) ease, transform var(--duration-fast) ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.32);
+  transform: translateY(-1px);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.btn--primary {
+  background: var(--btn-primary);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: var(--btn-hover);
+}
+
+.btn--ghost {
+  background: transparent;
+}
+
+.btn--danger {
+  background: #b4233a;
+  color: white;
+}
+
+.btn--icon {
+  aspect-ratio: 1;
+  min-width: 48px;
+  padding: 0;
+}
+
+.btn__icon {
+  display: inline-grid;
+  font-size: 20px;
+  line-height: 1;
+  place-items: center;
+  width: 22px;
+}
+
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.segmented {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+}
+
+.segmented .btn {
+  border-color: transparent;
+  min-height: 40px;
+}
+
+.segmented .btn[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--on-accent, #071018);
+}

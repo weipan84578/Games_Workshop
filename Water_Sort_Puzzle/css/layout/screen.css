@@ -1,0 +1,42 @@
+.screen {
+  animation: screenIn var(--duration-normal) ease both;
+  min-height: 100svh;
+}
+
+.screen__header {
+  align-items: flex-start;
+  display: flex;
+  gap: var(--space-md);
+  justify-content: space-between;
+  margin-bottom: var(--space-lg);
+}
+
+.screen__copy {
+  color: var(--text-muted);
+  font-size: var(--text-md);
+  margin: var(--space-sm) 0 0;
+  max-width: 680px;
+}
+
+.panel {
+  background: rgba(var(--bg-card-rgb), 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.panel--padded {
+  padding: clamp(16px, 3vw, 28px);
+}
+
+@keyframes screenIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

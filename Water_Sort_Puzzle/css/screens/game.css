@@ -1,0 +1,52 @@
+.game-screen {
+  min-height: 100svh;
+}
+
+.tubes-area {
+  min-height: calc(100svh - var(--hud-height));
+  padding-bottom: calc(var(--controls-height) + env(safe-area-inset-bottom, 0px));
+}
+
+.toast {
+  background: rgba(var(--bg-card-rgb), 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  color: var(--text-primary);
+  font-weight: 900;
+  left: 50%;
+  max-width: min(90vw, 420px);
+  opacity: 0;
+  padding: 10px 14px;
+  pointer-events: none;
+  position: fixed;
+  text-align: center;
+  top: calc(var(--hud-height) + 12px);
+  transform: translate(-50%, -8px);
+  transition: opacity var(--duration-normal) ease, transform var(--duration-normal) ease;
+  z-index: 150;
+}
+
+.toast--show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.result-summary {
+  display: grid;
+  gap: var(--space-sm);
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: var(--space-md);
+}
+
+.result-summary div {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  text-align: center;
+}
+
+.result-summary strong {
+  display: block;
+  font-size: var(--text-md);
+}

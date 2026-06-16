@@ -1,0 +1,14 @@
+[data-theme="sunset"] {
+  --bg-primary: #1a0a0a;
+  --bg-primary-rgb: 26, 10, 10;
+  --bg-secondary: #2d1515;
+  --bg-card: #3d2020;
+  --bg-card-rgb: 61, 32, 32;
+  --accent: #ff6b35;
+  --accent-glow: #f95738;
+  --text-primary: #fff0e8;
+  --text-muted: #f4c7b5;
+  --btn-primary: #c1440e;
+  --btn-hover: #8f2f0b;
+  --on-accent: #190704;
+}

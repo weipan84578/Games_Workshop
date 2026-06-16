@@ -1,0 +1,14 @@
+[data-theme="ocean"] {
+  --bg-primary: #0a1628;
+  --bg-primary-rgb: 10, 22, 40;
+  --bg-secondary: #142849;
+  --bg-card: #1e3a5f;
+  --bg-card-rgb: 30, 58, 95;
+  --accent: #00b4d8;
+  --accent-glow: #0096c7;
+  --text-primary: #e8f4f8;
+  --text-muted: #a8c8d8;
+  --btn-primary: #0077b6;
+  --btn-hover: #023e8a;
+  --on-accent: #04141c;
+}

@@ -1,0 +1,53 @@
+body {
+  background: var(--bg-primary);
+}
+
+#app {
+  min-height: 100svh;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.04), transparent 34%),
+    linear-gradient(180deg, var(--bg-secondary), var(--bg-primary));
+  color: var(--text-primary);
+  isolation: isolate;
+  position: relative;
+}
+
+.app-shell {
+  min-height: 100svh;
+  padding: clamp(16px, 3vw, 32px);
+  position: relative;
+}
+
+.app-shell--game {
+  padding: 0;
+}
+
+.content-width {
+  margin: 0 auto;
+  max-width: 1120px;
+  width: min(100%, 1120px);
+}
+
+.top-bar {
+  align-items: center;
+  display: flex;
+  gap: var(--space-md);
+  justify-content: space-between;
+  min-height: 48px;
+}
+
+.top-bar__actions {
+  align-items: center;
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.sr-only {
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}

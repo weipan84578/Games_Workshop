@@ -1,0 +1,11 @@
+@media (min-width: 1025px) {
+  .game-controls {
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(760px, calc(100% - 48px));
+  }
+
+  .level-grid {
+    grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+  }
+}

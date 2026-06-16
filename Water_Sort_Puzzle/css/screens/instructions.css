@@ -1,0 +1,22 @@
+.rules-grid {
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.rule-card {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+}
+
+.rule-card h2 {
+  font-size: var(--text-md);
+  margin: 0 0 var(--space-sm);
+}
+
+.rule-card p {
+  color: var(--text-muted);
+  margin: 0;
+}

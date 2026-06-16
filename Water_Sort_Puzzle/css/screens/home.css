@@ -1,0 +1,53 @@
+.home-screen .app-shell {
+  align-items: center;
+  display: grid;
+}
+
+.home-layout {
+  align-items: center;
+  display: grid;
+  gap: clamp(28px, 6vw, 72px);
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
+}
+
+.home-copy {
+  max-width: 620px;
+}
+
+.home-copy p {
+  color: var(--text-muted);
+  font-size: var(--text-md);
+  margin: var(--space-md) 0 var(--space-xl);
+}
+
+.home-actions {
+  display: grid;
+  gap: var(--space-sm);
+  max-width: 320px;
+}
+
+.preview-rack {
+  align-items: end;
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(4, var(--tube-width));
+  justify-content: center;
+  min-height: calc(var(--tube-height) + 32px);
+  padding: var(--space-xl) var(--space-md);
+}
+
+.preview-rack .tube {
+  cursor: default;
+}
+
+.preview-rack .tube:nth-child(1) { transform: translateY(4px) rotate(-3deg); }
+.preview-rack .tube:nth-child(2) { transform: translateY(-10px) rotate(2deg); }
+.preview-rack .tube:nth-child(3) { transform: translateY(6px) rotate(3deg); }
+.preview-rack .tube:nth-child(4) { transform: translateY(-4px) rotate(-2deg); }
+
+.save-summary {
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-weight: 800;
+  margin-top: var(--space-sm);
+}

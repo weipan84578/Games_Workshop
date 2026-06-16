@@ -1,0 +1,14 @@
+[data-theme="forest"] {
+  --bg-primary: #0d2818;
+  --bg-primary-rgb: 13, 40, 24;
+  --bg-secondary: #1a3a28;
+  --bg-card: #265038;
+  --bg-card-rgb: 38, 80, 56;
+  --accent: #52b788;
+  --accent-glow: #40916c;
+  --text-primary: #ecf8f0;
+  --text-muted: #b9d8c5;
+  --btn-primary: #2d6a4f;
+  --btn-hover: #1b4332;
+  --on-accent: #06140c;
+}

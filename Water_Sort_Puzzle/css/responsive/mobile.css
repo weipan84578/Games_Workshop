@@ -1,0 +1,59 @@
+@media (max-width: 480px) {
+  :root {
+    --tube-width: 44px;
+    --tube-height: 160px;
+    --hud-height: 76px;
+    --controls-height: 88px;
+  }
+
+  .app-shell {
+    padding: 16px;
+  }
+
+  .home-layout,
+  .rules-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .preview-rack {
+    gap: 10px;
+    grid-template-columns: repeat(4, var(--tube-width));
+    order: -1;
+    padding: 8px 0;
+  }
+
+  .home-actions {
+    max-width: none;
+  }
+
+  .game-hud {
+    grid-template-columns: auto 1fr;
+  }
+
+  .game-hud__stats {
+    grid-column: 1 / -1;
+    justify-content: stretch;
+  }
+
+  .stat-pill {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .tubes-grid {
+    gap: 10px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .game-controls .btn {
+    flex: 1;
+    min-width: 0;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .setting-row {
+    grid-template-columns: 1fr;
+  }
+}

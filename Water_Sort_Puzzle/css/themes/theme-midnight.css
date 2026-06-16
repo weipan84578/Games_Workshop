@@ -1,0 +1,14 @@
+[data-theme="midnight"] {
+  --bg-primary: #050508;
+  --bg-primary-rgb: 5, 5, 8;
+  --bg-secondary: #0d0d1a;
+  --bg-card: #14142b;
+  --bg-card-rgb: 20, 20, 43;
+  --accent: #7b61ff;
+  --accent-glow: #5c45d8;
+  --text-primary: #e0e0ff;
+  --text-muted: #b7b7dd;
+  --btn-primary: #4a3bcc;
+  --btn-hover: #332895;
+  --on-accent: #0a071c;
+}

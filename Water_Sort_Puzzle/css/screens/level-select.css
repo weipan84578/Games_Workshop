@@ -1,0 +1,49 @@
+.level-toolbar {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  justify-content: space-between;
+  margin-bottom: var(--space-lg);
+}
+
+.level-grid {
+  display: grid;
+  gap: var(--space-sm);
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+}
+
+.level-tile {
+  align-content: center;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: grid;
+  min-height: 90px;
+  padding: var(--space-sm);
+  text-align: center;
+  transition: background var(--duration-fast) ease, border-color var(--duration-fast) ease, transform var(--duration-fast) ease;
+}
+
+.level-tile:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.level-tile strong {
+  font-size: var(--text-md);
+  font-weight: 900;
+}
+
+.level-tile span {
+  color: #ffc312;
+  min-height: 20px;
+}
+
+.level-tile small {
+  color: var(--text-muted);
+  font-weight: 800;
+}

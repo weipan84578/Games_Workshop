@@ -1,0 +1,51 @@
+:root {
+  --font-display: "Orbitron", "Arial Black", sans-serif;
+  --font-body: "Nunito", "Segoe UI", system-ui, sans-serif;
+
+  --text-xs: 14px;
+  --text-sm: 16px;
+  --text-md: 20px;
+  --text-lg: 24px;
+  --text-xl: 32px;
+  --text-2xl: 42px;
+  --text-3xl: 56px;
+
+  --duration-fast: 0.15s;
+  --duration-normal: 0.3s;
+  --duration-slow: 0.6s;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 8px;
+  --radius-xl: 8px;
+  --radius-pill: 9999px;
+
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 6px 24px rgba(0, 0, 0, 0.38);
+  --shadow-glow: 0 0 20px var(--accent);
+
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+
+  --color-liq-red: #ff4757;
+  --color-liq-orange: #ff6b35;
+  --color-liq-yellow: #ffc312;
+  --color-liq-lime: #a3cb38;
+  --color-liq-green: #009432;
+  --color-liq-cyan: #12cbc4;
+  --color-liq-blue: #0652dd;
+  --color-liq-purple: #9980fa;
+  --color-liq-pink: #fda7df;
+  --color-liq-brown: #9b59b6;
+  --color-liq-gray: #7f8c8d;
+  --color-liq-navy: #1b1464;
+
+  --tube-width: clamp(46px, 8vw, 66px);
+  --tube-height: clamp(160px, 28vw, 238px);
+  --hud-height: 68px;
+  --controls-height: 84px;
+}
