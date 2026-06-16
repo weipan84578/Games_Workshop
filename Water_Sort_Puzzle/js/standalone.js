@@ -22,8 +22,8 @@
   var SETTINGS_KEY = 'wsp_settings';
   var SAVE_KEY = 'wsp_save';
   var DEFAULT_SETTINGS = {
-    bgmVolume: 0.5,
-    sfxVolume: 0.8,
+    bgmVolume: 0.75,
+    sfxVolume: 0.95,
     bgmEnabled: true,
     sfxEnabled: true,
     theme: 'ocean',
@@ -533,30 +533,82 @@
     return audioContext;
   }
 
-  function beep(id) {
-    if (!settings.sfxEnabled) return;
+  function audioVolume(kind, scale) {
+    var key = kind === 'bgm' ? settings.bgmVolume : settings.sfxVolume;
+    return Math.max(0, Math.min(1, key)) * scale;
+  }
+
+  function playOsc(freq, delay, duration, type, volume) {
     var ctx = getAudioContext();
     if (!ctx) return;
-    var profiles = {
-      select: [520, 0.06],
-      invalid: [130, 0.12],
-      pour: [700, 0.08],
-      win: [1040, 0.18],
-      fail: [160, 0.2],
-      undo: [300, 0.09],
-      hint: [760, 0.1],
-      click: [460, 0.05]
-    };
-    var profile = profiles[id] || profiles.click;
+    var start = ctx.currentTime + delay;
     var gain = ctx.createGain();
     var osc = ctx.createOscillator();
-    osc.type = 'sine';
-    osc.frequency.value = profile[0];
-    gain.gain.value = Math.max(0, Math.min(1, settings.sfxVolume)) * 0.08;
-    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + profile[1]);
+    osc.type = type || 'sine';
+    osc.frequency.setValueAtTime(freq, start);
+    gain.gain.setValueAtTime(0.0001, start);
+    gain.gain.exponentialRampToValueAtTime(Math.max(0.0001, volume), start + 0.012);
+    gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
     osc.connect(gain).connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + profile[1]);
+    osc.start(start);
+    osc.stop(start + duration + 0.03);
+  }
+
+  function playNoise(delay, duration, volume, filterFreq) {
+    var ctx = getAudioContext();
+    if (!ctx) return;
+    var sampleCount = Math.max(1, Math.floor(ctx.sampleRate * duration));
+    var buffer = ctx.createBuffer(1, sampleCount, ctx.sampleRate);
+    var data = buffer.getChannelData(0);
+    for (var i = 0; i < sampleCount; i += 1) {
+      data[i] = (Math.random() * 2 - 1) * (1 - i / sampleCount);
+    }
+    var source = ctx.createBufferSource();
+    var filter = ctx.createBiquadFilter();
+    var gain = ctx.createGain();
+    var start = ctx.currentTime + delay;
+    source.buffer = buffer;
+    filter.type = 'bandpass';
+    filter.frequency.value = filterFreq || 1200;
+    filter.Q.value = 0.8;
+    gain.gain.setValueAtTime(volume, start);
+    gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+    source.connect(filter).connect(gain).connect(ctx.destination);
+    source.start(start);
+  }
+
+  function beep(id) {
+    if (!settings.sfxEnabled) return;
+    var v = audioVolume('sfx', 0.18);
+    if (id === 'select') {
+      playOsc(520, 0, 0.055, 'sine', v * 0.55);
+      playOsc(660, 0.045, 0.07, 'sine', v * 0.45);
+    } else if (id === 'invalid') {
+      playOsc(180, 0, 0.08, 'square', v * 0.45);
+      playOsc(120, 0.07, 0.11, 'square', v * 0.35);
+    } else if (id === 'pour') {
+      playNoise(0, 0.32, v * 0.45, 900);
+      playOsc(430, 0, 0.16, 'triangle', v * 0.25);
+      playOsc(620, 0.18, 0.09, 'sine', v * 0.35);
+    } else if (id === 'undo') {
+      playOsc(420, 0, 0.06, 'triangle', v * 0.4);
+      playOsc(300, 0.055, 0.08, 'triangle', v * 0.45);
+    } else if (id === 'hint') {
+      playOsc(760, 0, 0.08, 'sine', v * 0.42);
+      playOsc(960, 0.08, 0.12, 'sine', v * 0.36);
+    } else if (id === 'win') {
+      playOsc(523, 0, 0.14, 'triangle', v * 0.55);
+      playOsc(659, 0.12, 0.14, 'triangle', v * 0.55);
+      playOsc(784, 0.24, 0.16, 'triangle', v * 0.55);
+      playOsc(1047, 0.38, 0.28, 'sine', v * 0.65);
+      playOsc(1319, 0.55, 0.36, 'sine', v * 0.45);
+      playNoise(0.08, 0.72, v * 0.25, 2600);
+    } else if (id === 'fail') {
+      playOsc(220, 0, 0.16, 'sawtooth', v * 0.35);
+      playOsc(160, 0.15, 0.24, 'sawtooth', v * 0.35);
+    } else {
+      playOsc(460, 0, 0.045, 'sine', v * 0.38);
+    }
   }
 
   function stopBgm() {
@@ -564,19 +616,13 @@
     bgmTimer = null;
   }
 
-  function playBgmTone(freq) {
+  function playBgmStep(step) {
     if (!audioUnlocked || !settings.bgmEnabled) return;
-    var ctx = getAudioContext();
-    if (!ctx) return;
-    var gain = ctx.createGain();
-    var osc = ctx.createOscillator();
-    osc.type = 'triangle';
-    osc.frequency.value = freq;
-    gain.gain.value = Math.max(0, Math.min(1, settings.bgmVolume)) * 0.025;
-    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.24);
-    osc.connect(gain).connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + 0.24);
+    var notes = Array.isArray(step) ? step : [step];
+    var baseVolume = audioVolume('bgm', 0.06);
+    notes.forEach(function (freq, idx) {
+      playOsc(freq, idx * 0.018, idx === 0 ? 0.34 : 0.24, idx === 0 ? 'triangle' : 'sine', baseVolume * (idx === 0 ? 1 : 0.58));
+    });
   }
 
   function switchBgm(track) {
@@ -584,17 +630,18 @@
     stopBgm();
     if (!settings.bgmEnabled) return;
     var tracks = {
-      menu: [220, 277, 330, 277],
-      easy: [262, 330, 392, 330],
-      normal: [196, 247, 294, 370],
-      hard: [147, 185, 220, 277]
+      menu: [[220, 330], [277], [330, 440], [277]],
+      easy: [[262, 392], [330], [392, 523], [330], [294, 440], [349]],
+      normal: [[196, 294], [247], [294, 370], [247], [220, 330], [277]],
+      hard: [[147, 220], [185], [220, 277], [165], [196, 247], [185]]
     };
     var notes = tracks[track] || tracks.menu;
     var idx = 0;
     bgmTimer = setInterval(function () {
-      playBgmTone(notes[idx % notes.length]);
+      playBgmStep(notes[idx % notes.length]);
       idx += 1;
-    }, 760);
+    }, track === 'hard' ? 480 : 620);
+    playBgmStep(notes[0]);
   }
 
   function switchBgmForRoute(hash) {
@@ -816,9 +863,10 @@
   function confetti() {
     var canvas = document.createElement('canvas');
     var ctx = canvas.getContext('2d');
-    var colors = ['#ff4757', '#ffc312', '#12cbc4', '#9980fa', '#a3cb38', '#fda7df'];
+    var colors = ['#ff4757', '#ffc312', '#12cbc4', '#9980fa', '#a3cb38', '#fda7df', '#00b4d8', '#ff6b35'];
     var pieces = [];
     var start = performance.now();
+    var duration = 2600;
     canvas.className = 'confetti-canvas';
     function resize() {
       canvas.width = innerWidth * devicePixelRatio;
@@ -828,32 +876,53 @@
     resize();
     addEventListener('resize', resize);
     document.body.appendChild(canvas);
-    for (var i = 0; i < 120; i += 1) {
+
+    function addPiece(originX, originY, burst) {
+      var angle = burst ? Math.random() * Math.PI * 2 : Math.PI * 0.5 + (Math.random() - 0.5) * 0.9;
+      var speed = burst ? 4 + Math.random() * 8 : 1.5 + Math.random() * 4;
+      var streamer = Math.random() > 0.62;
       pieces.push({
-        x: Math.random() * innerWidth,
-        y: -20 - Math.random() * innerHeight * 0.35,
-        vx: -2 + Math.random() * 4,
-        vy: 2 + Math.random() * 4,
-        size: 5 + Math.random() * 7,
-        color: colors[i % colors.length],
-        spin: Math.random() * Math.PI
+        x: originX,
+        y: originY,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - (burst ? 5 : 0),
+        width: streamer ? 5 + Math.random() * 5 : 5 + Math.random() * 8,
+        height: streamer ? 22 + Math.random() * 26 : 5 + Math.random() * 8,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        spin: Math.random() * Math.PI,
+        spinSpeed: -0.22 + Math.random() * 0.44,
+        wave: Math.random() * Math.PI * 2,
+        gravity: streamer ? 0.035 : 0.055,
+        alpha: 0.82 + Math.random() * 0.18
       });
     }
+
+    for (var i = 0; i < 150; i += 1) {
+      addPiece(Math.random() * innerWidth, -24 - Math.random() * innerHeight * 0.25, false);
+    }
+    for (var j = 0; j < 110; j += 1) {
+      addPiece(innerWidth * 0.5, innerHeight * 0.38, true);
+    }
+
     function frame(now) {
+      var elapsed = now - start;
       ctx.clearRect(0, 0, innerWidth, innerHeight);
       pieces.forEach(function (piece) {
+        piece.wave += 0.08;
         piece.x += piece.vx;
         piece.y += piece.vy;
-        piece.vy += 0.035;
-        piece.spin += 0.18;
+        piece.x += Math.sin(piece.wave) * 0.55;
+        piece.vy += piece.gravity;
+        piece.spin += piece.spinSpeed;
         ctx.save();
+        ctx.globalAlpha = piece.alpha * Math.max(0, 1 - elapsed / duration);
         ctx.translate(piece.x, piece.y);
         ctx.rotate(piece.spin);
         ctx.fillStyle = piece.color;
-        ctx.fillRect(-piece.size / 2, -piece.size / 2, piece.size, piece.size * 0.55);
+        ctx.fillRect(-piece.width / 2, -piece.height / 2, piece.width, piece.height);
         ctx.restore();
       });
-      if (now - start < 1600) {
+      if (elapsed < duration) {
         requestAnimationFrame(frame);
       } else {
         removeEventListener('resize', resize);
