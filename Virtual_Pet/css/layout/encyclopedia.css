@@ -90,6 +90,17 @@
   transition: transform 0.3s;
 }
 
+.dex-icon .pet-art {
+  height: 58px;
+  width: 58px;
+}
+
+.dex-icon .pet-art-svg {
+  height: 58px;
+  width: 58px;
+  filter: drop-shadow(0 6px 8px rgba(31, 25, 36, 0.12));
+}
+
 .dex-card:hover .dex-icon {
   transform: scale(1.1) rotate(5deg);
 }

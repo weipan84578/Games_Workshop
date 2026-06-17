@@ -30,8 +30,10 @@ VP.EncyclopediaPanel = (function () {
       var family = raised ? VP.i18n.t("families." + pet.family) : "???";
       var raisedAt = raised ? VP.TimeUtils.formatClock(entry.raisedAt) : "";
 
+      var icon = raised && VP.PetArt ? VP.PetArt.thumbnail(pet, "prime") : "?";
+
       card.innerHTML = [
-        '<div class="dex-icon" aria-hidden="true">' + (raised ? pet.icon : "?") + "</div>",
+        '<div class="dex-icon" aria-hidden="true">' + icon + "</div>",
         '<div class="dex-copy">',
         "<strong>#" + number + " " + name + "</strong>",
         "<span>" + family + "</span>",

@@ -17,7 +17,7 @@ VP.PetAnimation = (function () {
     element.setAttribute("aria-label", species ? VP.PetCatalog.getPetName(species) : VP.i18n.t("eggSelection.mysteryEgg"));
   }
 
-  function setVisual(stage, mood, species, eggType) {
+  function setVisual(stage, mood, species, eggType, hiddenSpecies) {
     var element = sprite();
     if (!element) {
       return;
@@ -25,6 +25,15 @@ VP.PetAnimation = (function () {
     applyColors(element, species, eggType);
     element.setAttribute("data-stage", stage || "egg");
     element.setAttribute("data-mood", mood || "normal");
+    if (VP.PetArt && VP.PetArt.render) {
+      VP.PetArt.render(element, {
+        stage: stage || "egg",
+        mood: mood || "normal",
+        species: species,
+        hiddenSpecies: hiddenSpecies,
+        eggType: eggType
+      });
+    }
     if (mood === "sleeping") {
       element.className = "pet-sprite is-sleep";
       return;

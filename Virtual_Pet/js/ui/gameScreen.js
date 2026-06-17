@@ -1,6 +1,8 @@
 window.VP = window.VP || {};
 
 VP.GameScreen = (function () {
+  var activityRenderKey = "";
+
   function levelName(value) {
     if (value < 30) {
       return "low";
@@ -26,15 +28,30 @@ VP.GameScreen = (function () {
 
   function renderActivity(state) {
     var log = VP.dom.$("#activity-log");
+    var activity = state.activity || [];
+    var lang = VP.i18n && VP.i18n.getLang ? VP.i18n.getLang() : "";
+    var renderKey = lang + "|" + activity.map(function (item) {
+      return [
+        item.at,
+        item.messageKey,
+        JSON.stringify(item.params || {})
+      ].join(":");
+    }).join("|");
+
     if (!log) {
       return;
     }
+    if (activityRenderKey === renderKey && log.getAttribute("data-render-key") === renderKey) {
+      return;
+    }
     log.innerHTML = "";
-    (state.activity || []).forEach(function (item) {
+    activity.forEach(function (item) {
       var li = document.createElement("li");
       li.textContent = VP.i18n.t(item.messageKey, item.params || {}) + " · " + VP.TimeUtils.formatClock(item.at);
       log.appendChild(li);
     });
+    log.setAttribute("data-render-key", renderKey);
+    activityRenderKey = renderKey;
   }
 
   function renderActions(state) {
@@ -52,7 +69,8 @@ VP.GameScreen = (function () {
       return;
     }
     var mood = VP.PetModel.getMoodState(state.stats, state.isSleeping, state.isDead);
-    var species = state.isRevealed ? VP.PetCatalog.getPet(state.speciesId) : null;
+    var hiddenSpecies = VP.PetCatalog.getPet(state.speciesId);
+    var species = state.isRevealed ? hiddenSpecies : null;
     VP.dom.$("#pet-name").textContent = VP.PetCatalog.getDisplayName(state);
     VP.dom.$("#stage-label").textContent = VP.i18n.t("stages." + state.stage);
     VP.dom.$("#species-label").textContent = species ? VP.i18n.t("families." + species.family) : "???";
@@ -65,7 +83,7 @@ VP.GameScreen = (function () {
     renderStats(state);
     renderActivity(state);
     renderActions(state);
-    VP.PetAnimation.setVisual(state.stage, mood, species, state.eggType);
+    VP.PetAnimation.setVisual(state.stage, mood, species, state.eggType, hiddenSpecies);
     VP.PetAnimation.setSpeech("speech." + mood);
 
     if (state.stats.health <= 0 || state.isDead) {
@@ -99,6 +117,7 @@ VP.GameScreen = (function () {
     });
 
     VP.EventBus.on("i18n:changed", function () {
+      activityRenderKey = "";
       render(VP.GameState.getState());
     });
   }
