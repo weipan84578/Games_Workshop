@@ -1,0 +1,101 @@
+.settings-screen {
+  display: grid;
+  gap: var(--space-5);
+  padding: var(--space-5) var(--space-6) var(--space-7);
+}
+
+.settings-form {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0 auto;
+  max-width: 980px;
+  width: 100%;
+}
+
+.setting-group {
+  background: color-mix(in srgb, var(--color-surface) 90%, transparent);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-small);
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  min-width: 0;
+  padding: var(--space-4);
+}
+
+.setting-group legend {
+  font-weight: 900;
+  padding: 0 var(--space-2);
+}
+
+.segmented,
+.theme-swatches {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.segmented {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.theme-swatches {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.segmented label,
+.theme-swatches label {
+  align-items: center;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  display: flex;
+  gap: var(--space-2);
+  min-height: var(--tap-min);
+  padding: 10px 12px;
+}
+
+.segmented input,
+.theme-swatches input {
+  accent-color: var(--color-primary);
+  height: 20px;
+  width: 20px;
+}
+
+.swatch {
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  border-radius: 999px;
+  display: inline-block;
+  height: 28px;
+  width: 28px;
+}
+
+.swatch.candy { background: linear-gradient(135deg, #ff8fb1, #43a5a1); }
+.swatch.ocean { background: linear-gradient(135deg, #2e9fce, #42b985); }
+.swatch.forest { background: linear-gradient(135deg, #3fa75c, #5b78c7); }
+.swatch.night { background: linear-gradient(135deg, #9b7ede, #7bd6cf); }
+.swatch.sunset { background: linear-gradient(135deg, #ff8c42, #377c88); }
+
+.range-row,
+.toggle-row {
+  align-items: center;
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: minmax(96px, 1fr) minmax(160px, 2fr) minmax(52px, auto);
+}
+
+.toggle-row {
+  grid-template-columns: 1fr auto;
+}
+
+.range-row input[type="range"] {
+  accent-color: var(--color-primary);
+  min-height: 32px;
+  width: 100%;
+}
+
+.toggle-row input {
+  accent-color: var(--color-primary);
+  height: 28px;
+  width: 48px;
+}

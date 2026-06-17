@@ -1,0 +1,60 @@
+.info-screen {
+  display: grid;
+  gap: var(--space-5);
+  padding: var(--space-5) var(--space-6) var(--space-7);
+}
+
+.screen-header {
+  align-items: center;
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: var(--tap-min) 1fr;
+  margin: 0 auto;
+  max-width: 980px;
+  width: 100%;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin: 0 auto;
+  max-width: 980px;
+  width: 100%;
+}
+
+.instruction-grid {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0 auto;
+  max-width: 980px;
+  width: 100%;
+}
+
+.instruction-card {
+  background: color-mix(in srgb, var(--color-surface) 90%, transparent);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-small);
+  display: grid;
+  gap: var(--space-2);
+  min-height: 150px;
+  padding: var(--space-4);
+}
+
+.instruction-icon {
+  align-items: center;
+  background: color-mix(in srgb, var(--color-secondary) 72%, var(--color-surface));
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  font-size: 30px;
+  height: 54px;
+  justify-content: center;
+  width: 54px;
+}
+
+.instruction-card p {
+  color: var(--color-muted);
+  font-size: calc(var(--font-size-sm) * var(--text-scale));
+}

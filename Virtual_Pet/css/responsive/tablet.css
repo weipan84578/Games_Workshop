@@ -1,0 +1,39 @@
+@media (min-width: 576px) and (max-width: 1024px) {
+  :root {
+    --font-size-xl: 34px;
+    --font-size-lg: 24px;
+    --font-size-base: 20px;
+    --font-size-sm: 17px;
+    --panel-width: 220px;
+  }
+
+  .game-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pet-summary,
+  .activity-panel {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .activity-panel {
+    grid-template-rows: auto;
+  }
+
+  .activity-panel h3,
+  .last-saved {
+    grid-column: 1 / -1;
+  }
+
+  .status-grid {
+    grid-template-columns: repeat(3, minmax(150px, 1fr));
+  }
+
+  .instruction-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .theme-swatches {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

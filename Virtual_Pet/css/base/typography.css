@@ -1,0 +1,46 @@
+body {
+  font-family: var(--font-family-base);
+  font-size: calc(var(--font-size-base) * var(--text-scale));
+  line-height: 1.45;
+  letter-spacing: 0;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: calc(var(--font-size-xl) * var(--text-scale));
+  line-height: 1.05;
+}
+
+h2 {
+  font-size: calc(var(--font-size-lg) * var(--text-scale));
+  line-height: 1.1;
+}
+
+h3 {
+  font-size: calc(var(--font-size-base) * var(--text-scale));
+  line-height: 1.15;
+}
+
+.eyebrow {
+  color: var(--color-muted);
+  font-size: calc(var(--font-size-sm) * var(--text-scale));
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 0;
+  box-shadow: var(--focus-ring);
+}

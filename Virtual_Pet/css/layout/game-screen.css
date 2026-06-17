@@ -1,0 +1,119 @@
+.game-screen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-5) 0 var(--space-6);
+}
+
+.game-topbar {
+  align-items: center;
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: var(--tap-min) 1fr var(--tap-min);
+  margin: 0 auto;
+  max-width: 1180px;
+  padding: 0 var(--space-6);
+  width: 100%;
+}
+
+.pet-title {
+  min-width: 0;
+  text-align: center;
+}
+
+.pet-title h2 {
+  overflow-wrap: anywhere;
+}
+
+.game-layout {
+  align-items: stretch;
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: minmax(220px, var(--panel-width)) minmax(380px, var(--stage-max-width)) minmax(220px, var(--panel-width));
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 1180px;
+  padding: 0 var(--space-6);
+  width: 100%;
+}
+
+.pet-panel {
+  background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-small);
+  min-width: 0;
+  padding: var(--space-4);
+}
+
+.pet-summary {
+  align-content: start;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.panel-row,
+.xp-meter-meta {
+  align-items: center;
+  display: flex;
+  gap: var(--space-3);
+  justify-content: space-between;
+}
+
+.panel-row span,
+.xp-meter-meta span,
+.last-saved {
+  color: var(--color-muted);
+  font-size: calc(var(--font-size-sm) * var(--text-scale));
+}
+
+.panel-row strong,
+.xp-meter-meta strong {
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.xp-meter {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.activity-panel {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-rows: auto 1fr auto;
+}
+
+.activity-log {
+  display: grid;
+  gap: var(--space-2);
+  list-style: none;
+  min-height: 160px;
+}
+
+.activity-log li {
+  background: color-mix(in srgb, var(--color-bg) 70%, var(--color-surface));
+  border-radius: var(--radius-sm);
+  color: var(--color-muted);
+  font-size: calc(var(--font-size-sm) * var(--text-scale));
+  padding: 8px 10px;
+}
+
+.last-saved {
+  text-align: right;
+}
+
+.action-bar {
+  background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-small);
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 860px;
+  padding: var(--space-3);
+  width: min(calc(100% - 48px), 860px);
+}

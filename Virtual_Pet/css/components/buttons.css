@@ -1,0 +1,134 @@
+.btn,
+.icon-btn,
+.action-btn,
+.tab {
+  align-items: center;
+  border: 0;
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  font-weight: 900;
+  gap: var(--space-3);
+  justify-content: center;
+  min-height: var(--tap-min);
+  transition:
+    transform var(--transition-fast),
+    background var(--transition-fast),
+    color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.btn {
+  padding: 12px 18px;
+  width: 100%;
+}
+
+.btn:hover,
+.icon-btn:hover,
+.action-btn:hover,
+.tab:hover {
+  transform: translateY(-1px);
+}
+
+.btn:active,
+.icon-btn:active,
+.action-btn:active,
+.tab:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  box-shadow: var(--shadow-small);
+  color: var(--color-button-text);
+}
+
+.btn-secondary {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.btn-danger {
+  background: var(--color-danger);
+  color: #fff;
+}
+
+.btn:disabled {
+  background: color-mix(in srgb, var(--color-muted) 20%, var(--color-surface));
+  box-shadow: none;
+  color: var(--color-muted);
+  opacity: 0.8;
+}
+
+.btn-icon,
+.action-icon {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 1.12em;
+  justify-content: center;
+  line-height: 1;
+  width: 1.5em;
+}
+
+.icon-btn {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  height: var(--tap-min);
+  padding: 0;
+  position: relative;
+  width: var(--tap-min);
+}
+
+.icon-btn[data-tooltip]::after {
+  background: var(--color-text);
+  border-radius: var(--radius-sm);
+  bottom: calc(100% + 6px);
+  color: var(--color-surface);
+  content: attr(data-tooltip);
+  font-size: 13px;
+  left: 50%;
+  opacity: 0;
+  padding: 4px 7px;
+  pointer-events: none;
+  position: absolute;
+  transform: translateX(-50%) translateY(4px);
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+  white-space: nowrap;
+}
+
+.icon-btn[data-tooltip]:hover::after,
+.icon-btn[data-tooltip]:focus-visible::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.action-btn {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  flex-direction: column;
+  min-width: 76px;
+  padding: 10px 12px;
+}
+
+.action-btn .action-icon {
+  font-size: 28px;
+}
+
+.action-btn:disabled {
+  opacity: 0.52;
+}
+
+.tab {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 10px 14px;
+}
+
+.tab.is-active {
+  background: var(--color-primary);
+  color: var(--color-button-text);
+}

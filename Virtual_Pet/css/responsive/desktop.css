@@ -1,0 +1,8 @@
+@media (min-width: 1025px) {
+  :root {
+    --font-size-xl: 40px;
+    --font-size-lg: 28px;
+    --font-size-base: 22px;
+    --font-size-sm: 18px;
+  }
+}

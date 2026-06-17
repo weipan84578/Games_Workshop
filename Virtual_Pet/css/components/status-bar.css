@@ -1,0 +1,56 @@
+.status-grid {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: repeat(5, minmax(140px, 1fr));
+  margin: 0 auto;
+  max-width: 1180px;
+  padding: 0 var(--space-6);
+  width: 100%;
+}
+
+.stat-card {
+  background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-small);
+  min-height: 82px;
+  padding: var(--space-3);
+}
+
+.stat-meta {
+  align-items: center;
+  display: flex;
+  font-size: calc(var(--font-size-sm) * var(--text-scale));
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+.stat-meta strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-track,
+.xp-track {
+  background: var(--color-track);
+  border-radius: 999px;
+  height: 14px;
+  overflow: hidden;
+}
+
+.stat-track span,
+.xp-track span {
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  border-radius: inherit;
+  display: block;
+  height: 100%;
+  transition: width 0.4s ease-out, background var(--transition-med);
+  width: 0%;
+}
+
+.stat-card[data-level="low"] .stat-track span {
+  background: linear-gradient(90deg, var(--color-danger), var(--color-warning));
+}
+
+.stat-card[data-level="mid"] .stat-track span {
+  background: linear-gradient(90deg, var(--color-warning), var(--color-accent-2));
+}

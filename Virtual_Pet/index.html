@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="zh-Hant" data-theme="candy">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <title>Virtual Pet</title>
+  <link rel="icon" href="assets/images/icons/favicon.svg" type="image/svg+xml">
+
+  <link rel="stylesheet" href="css/base/reset.css">
+  <link rel="stylesheet" href="css/base/variables.css">
+  <link rel="stylesheet" href="css/base/typography.css">
+  <link rel="stylesheet" href="css/themes/theme-candy.css" id="theme-style">
+  <link rel="stylesheet" href="css/layout/main-menu.css">
+  <link rel="stylesheet" href="css/layout/game-screen.css">
+  <link rel="stylesheet" href="css/layout/instructions.css">
+  <link rel="stylesheet" href="css/layout/settings.css">
+  <link rel="stylesheet" href="css/components/buttons.css">
+  <link rel="stylesheet" href="css/components/modal.css">
+  <link rel="stylesheet" href="css/components/pet-stage.css">
+  <link rel="stylesheet" href="css/components/status-bar.css">
+  <link rel="stylesheet" href="css/components/toast.css">
+  <link rel="stylesheet" href="css/responsive/desktop.css">
+  <link rel="stylesheet" href="css/responsive/tablet.css">
+  <link rel="stylesheet" href="css/responsive/mobile.css">
+</head>
+<body>
+  <div class="app-shell" id="app">
+    <section class="scene scene-active main-menu" id="main-menu" data-scene="main-menu" aria-labelledby="menu-title">
+      <div class="menu-card">
+        <div class="brand-lockup">
+          <div class="brand-pet" aria-hidden="true">
+            <span class="brand-pet-face">•ᴗ•</span>
+          </div>
+          <p class="eyebrow" data-i18n="app.kicker">Pocket Companion</p>
+          <h1 id="menu-title" data-i18n="app.title">Virtual Pet</h1>
+          <p class="menu-tagline" data-i18n="app.tagline">照顧牠的日常，陪牠慢慢長大。</p>
+        </div>
+
+        <nav class="menu-actions" aria-label="Main menu">
+          <button class="btn btn-primary" type="button" id="start-game-btn">
+            <span class="btn-icon" aria-hidden="true">▶</span>
+            <span data-i18n="menu.start">開始遊戲</span>
+          </button>
+          <button class="btn btn-secondary" type="button" id="continue-game-btn">
+            <span class="btn-icon" aria-hidden="true">↻</span>
+            <span data-i18n="menu.continue">繼續遊戲</span>
+          </button>
+          <button class="btn btn-secondary" type="button" data-go-scene="instructions">
+            <span class="btn-icon" aria-hidden="true">?</span>
+            <span data-i18n="menu.instructions">說明</span>
+          </button>
+          <button class="btn btn-secondary" type="button" data-go-scene="settings">
+            <span class="btn-icon" aria-hidden="true">⚙</span>
+            <span data-i18n="menu.settings">設定</span>
+          </button>
+        </nav>
+
+        <p class="save-hint" id="save-hint" data-i18n="menu.noSave">尚無存檔</p>
+      </div>
+    </section>
+
+    <section class="scene game-screen" id="game-screen" data-scene="game-screen" aria-labelledby="game-title" hidden>
+      <header class="game-topbar">
+        <button class="icon-btn" type="button" data-go-scene="main-menu" data-tooltip="Menu" aria-label="Menu">
+          <span aria-hidden="true">←</span>
+        </button>
+        <div class="pet-title">
+          <p class="eyebrow" data-i18n="game.petRoom">Pet Room</p>
+          <h2 id="game-title"><span id="pet-name">Mochi</span></h2>
+        </div>
+        <button class="icon-btn" type="button" data-go-scene="settings" data-tooltip="Settings" aria-label="Settings">
+          <span aria-hidden="true">⚙</span>
+        </button>
+      </header>
+
+      <div class="status-grid" aria-label="Pet status">
+        <article class="stat-card" data-stat="hunger">
+          <div class="stat-meta"><span data-i18n="status.hunger">飽足</span><strong>80</strong></div>
+          <div class="stat-track"><span></span></div>
+        </article>
+        <article class="stat-card" data-stat="mood">
+          <div class="stat-meta"><span data-i18n="status.mood">心情</span><strong>80</strong></div>
+          <div class="stat-track"><span></span></div>
+        </article>
+        <article class="stat-card" data-stat="clean">
+          <div class="stat-meta"><span data-i18n="status.clean">清潔</span><strong>80</strong></div>
+          <div class="stat-track"><span></span></div>
+        </article>
+        <article class="stat-card" data-stat="energy">
+          <div class="stat-meta"><span data-i18n="status.energy">體力</span><strong>80</strong></div>
+          <div class="stat-track"><span></span></div>
+        </article>
+        <article class="stat-card" data-stat="health">
+          <div class="stat-meta"><span data-i18n="status.health">健康</span><strong>100</strong></div>
+          <div class="stat-track"><span></span></div>
+        </article>
+      </div>
+
+      <main class="game-layout">
+        <aside class="pet-panel pet-summary" aria-label="Pet summary">
+          <div class="panel-row">
+            <span data-i18n="game.stage">階段</span>
+            <strong id="stage-label">Egg</strong>
+          </div>
+          <div class="panel-row">
+            <span data-i18n="game.level">等級</span>
+            <strong id="level-label">1</strong>
+          </div>
+          <div class="panel-row">
+            <span data-i18n="game.age">年齡</span>
+            <strong id="age-label">0m</strong>
+          </div>
+          <div class="xp-meter" aria-label="Experience">
+            <div class="xp-meter-meta"><span data-i18n="game.growth">成長</span><strong id="xp-label">0%</strong></div>
+            <div class="xp-track"><span id="xp-fill"></span></div>
+          </div>
+        </aside>
+
+        <section class="pet-stage" id="pet-stage" aria-live="polite">
+          <div class="weather-orbit" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="speech-bubble" id="speech-bubble" data-i18n="speech.ready">今天也想和你待在一起。</div>
+          <div class="pet-sprite" id="pet-sprite" data-stage="egg" data-mood="happy" role="img" aria-label="Virtual pet">
+            <div class="pet-ears" aria-hidden="true"><span></span><span></span></div>
+            <div class="pet-body">
+              <div class="pet-face">
+                <span class="pet-eye pet-eye-left"></span>
+                <span class="pet-eye pet-eye-right"></span>
+                <span class="pet-mouth"></span>
+              </div>
+              <span class="pet-cheek pet-cheek-left"></span>
+              <span class="pet-cheek pet-cheek-right"></span>
+            </div>
+            <div class="pet-feet" aria-hidden="true"><span></span><span></span></div>
+          </div>
+          <div class="pet-shadow" aria-hidden="true"></div>
+        </section>
+
+        <aside class="pet-panel activity-panel" aria-label="Recent activity">
+          <h3 data-i18n="game.activity">照顧紀錄</h3>
+          <ol class="activity-log" id="activity-log"></ol>
+          <p class="last-saved" id="last-saved">--</p>
+        </aside>
+      </main>
+
+      <nav class="action-bar" aria-label="Pet actions">
+        <button class="action-btn" type="button" data-pet-action="feed">
+          <span class="action-icon" aria-hidden="true">🍙</span>
+          <span data-i18n="actions.feed">餵食</span>
+        </button>
+        <button class="action-btn" type="button" data-pet-action="play">
+          <span class="action-icon" aria-hidden="true">🎾</span>
+          <span data-i18n="actions.play">玩耍</span>
+        </button>
+        <button class="action-btn" type="button" data-pet-action="clean">
+          <span class="action-icon" aria-hidden="true">🫧</span>
+          <span data-i18n="actions.clean">清潔</span>
+        </button>
+        <button class="action-btn" type="button" data-pet-action="sleep">
+          <span class="action-icon" aria-hidden="true">🌙</span>
+          <span data-i18n="actions.sleep">睡覺</span>
+        </button>
+        <button class="action-btn" type="button" data-pet-action="pet">
+          <span class="action-icon" aria-hidden="true">🤍</span>
+          <span data-i18n="actions.pet">摸摸</span>
+        </button>
+      </nav>
+    </section>
+
+    <section class="scene info-screen" id="instructions" data-scene="instructions" aria-labelledby="instructions-title" hidden>
+      <header class="screen-header">
+        <button class="icon-btn" type="button" data-go-scene="main-menu" aria-label="Back"><span aria-hidden="true">←</span></button>
+        <div>
+          <p class="eyebrow" data-i18n="menu.instructions">說明</p>
+          <h2 id="instructions-title" data-i18n="instructions.title">照顧手冊</h2>
+        </div>
+      </header>
+
+      <div class="tabs" role="tablist" aria-label="Instruction tabs">
+        <button class="tab is-active" type="button" data-tab="actions" role="tab" aria-selected="true" data-i18n="instructions.tabs.actions">照顧</button>
+        <button class="tab" type="button" data-tab="stats" role="tab" aria-selected="false" data-i18n="instructions.tabs.stats">狀態</button>
+        <button class="tab" type="button" data-tab="growth" role="tab" aria-selected="false" data-i18n="instructions.tabs.growth">成長</button>
+        <button class="tab" type="button" data-tab="save" role="tab" aria-selected="false" data-i18n="instructions.tabs.save">存檔</button>
+      </div>
+
+      <div class="instruction-grid" id="instruction-grid"></div>
+    </section>
+
+    <section class="scene settings-screen" id="settings" data-scene="settings" aria-labelledby="settings-title" hidden>
+      <header class="screen-header">
+        <button class="icon-btn" type="button" data-go-scene="main-menu" aria-label="Back"><span aria-hidden="true">←</span></button>
+        <div>
+          <p class="eyebrow" data-i18n="menu.settings">設定</p>
+          <h2 id="settings-title" data-i18n="settings.title">遊戲設定</h2>
+        </div>
+      </header>
+
+      <form class="settings-form" id="settings-form">
+        <fieldset class="setting-group">
+          <legend data-i18n="settings.language">語言</legend>
+          <div class="segmented" role="radiogroup" aria-label="Language">
+            <label><input type="radio" name="lang" value="zh"><span>繁中</span></label>
+            <label><input type="radio" name="lang" value="en"><span>English</span></label>
+            <label><input type="radio" name="lang" value="ja"><span>日本語</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="setting-group">
+          <legend data-i18n="settings.theme">主題</legend>
+          <div class="theme-swatches" role="radiogroup" aria-label="Theme">
+            <label><input type="radio" name="theme" value="candy"><span class="swatch candy"></span><b data-i18n="themes.candy">糖果</b></label>
+            <label><input type="radio" name="theme" value="ocean"><span class="swatch ocean"></span><b data-i18n="themes.ocean">海洋</b></label>
+            <label><input type="radio" name="theme" value="forest"><span class="swatch forest"></span><b data-i18n="themes.forest">森林</b></label>
+            <label><input type="radio" name="theme" value="night"><span class="swatch night"></span><b data-i18n="themes.night">夜晚</b></label>
+            <label><input type="radio" name="theme" value="sunset"><span class="swatch sunset"></span><b data-i18n="themes.sunset">夕陽</b></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="setting-group">
+          <legend data-i18n="settings.audio">音量</legend>
+          <label class="range-row">
+            <span data-i18n="settings.bgm">BGM</span>
+            <input type="range" min="0" max="100" step="1" name="bgmVolume">
+            <strong id="bgm-volume-label">60%</strong>
+          </label>
+          <label class="range-row">
+            <span data-i18n="settings.sfx">SFX</span>
+            <input type="range" min="0" max="100" step="1" name="sfxVolume">
+            <strong id="sfx-volume-label">80%</strong>
+          </label>
+        </fieldset>
+
+        <fieldset class="setting-group">
+          <legend data-i18n="settings.accessibility">輔助</legend>
+          <label class="toggle-row">
+            <span data-i18n="settings.reducedMotion">減少動畫</span>
+            <input type="checkbox" name="reducedMotion">
+          </label>
+          <label class="range-row">
+            <span data-i18n="settings.textScale">文字大小</span>
+            <input type="range" min="90" max="120" step="5" name="textScale">
+            <strong id="text-scale-label">100%</strong>
+          </label>
+        </fieldset>
+
+        <button class="btn btn-danger" type="button" id="reset-save-btn">
+          <span class="btn-icon" aria-hidden="true">!</span>
+          <span data-i18n="settings.resetSave">清除存檔</span>
+        </button>
+      </form>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="modal-backdrop" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <h2 id="modal-title">Confirm</h2>
+      <p id="modal-message"></p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" type="button" id="modal-cancel" data-i18n="common.cancel">取消</button>
+        <button class="btn btn-primary" type="button" id="modal-confirm" data-i18n="common.confirm">確認</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast-region" id="toast-region" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="js/utils/domHelpers.js"></script>
+  <script src="js/utils/eventBus.js"></script>
+  <script src="js/utils/timeUtils.js"></script>
+  <script src="js/i18n/lang-zh.js"></script>
+  <script src="js/i18n/lang-en.js"></script>
+  <script src="js/i18n/lang-ja.js"></script>
+  <script src="js/i18n/i18n.js"></script>
+  <script src="js/audio/sfxLibrary.js"></script>
+  <script src="js/audio/bgmPlaylist.js"></script>
+  <script src="js/audio/audioManager.js"></script>
+  <script src="js/pet/petModel.js"></script>
+  <script src="js/pet/petAnimation.js"></script>
+  <script src="js/pet/petActions.js"></script>
+  <script src="js/core/gameState.js"></script>
+  <script src="js/core/saveManager.js"></script>
+  <script src="js/core/sceneManager.js"></script>
+  <script src="js/ui/mainMenu.js"></script>
+  <script src="js/ui/gameScreen.js"></script>
+  <script src="js/ui/instructionsPanel.js"></script>
+  <script src="js/ui/settingsPanel.js"></script>
+  <script src="js/core/app.js"></script>
+</body>
+</html>
