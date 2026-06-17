@@ -84,10 +84,13 @@ VP.App = (function () {
   }
 
   function startNewGame() {
+    VP.SceneManager.show("egg-selection");
+  }
+
+  function beginEggGame(eggType) {
     VP.AudioManager.unlock().then(function () {
-      VP.GameState.newGame(settings);
+      VP.GameState.newGame(settings, eggType);
       VP.SceneManager.show("game-screen");
-      VP.App.toast(VP.i18n.t("speech.ready"));
     });
   }
 
@@ -152,8 +155,10 @@ VP.App = (function () {
     wireAudioGestures();
     VP.SceneManager.init();
     VP.MainMenu.init();
+    VP.EggSelection.init();
     VP.GameScreen.init();
     VP.InstructionsPanel.init();
+    VP.EncyclopediaPanel.init();
     VP.SettingsPanel.init(settings);
 
     VP.EventBus.on("i18n:changed", function () {
@@ -169,6 +174,7 @@ VP.App = (function () {
   return {
     applySettings: applySettings,
     startNewGame: startNewGame,
+    beginEggGame: beginEggGame,
     continueGame: continueGame,
     confirm: confirm,
     toast: toast

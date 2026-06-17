@@ -9,8 +9,12 @@ Double-click `index.html`, or open it in a browser through the local filesystem.
 ## Features
 
 - Main menu, game room, instructions, and settings screens.
+- Egg selection before a new game; the hatched pet remains unknown until it hatches.
+- 50 possible pets across multiple families, including dragons, fish, cats, dogs, cows, birds, rabbits, foxes, turtles, and unicorns.
+- Care encyclopedia that unlocks pets successfully raised to elder age.
+- Five life stages: egg, juvenile, mature, prime, and elder.
 - Five switchable themes.
 - Traditional Chinese, English, and Japanese UI strings.
 - Web Audio API synthesized BGM/SFX with browser gesture unlock.
-- `localStorage` save, autosave, elapsed-time recovery, and settings persistence.
+- `localStorage` save, autosave, elapsed-time recovery, collection records, and settings persistence.
 - Responsive layout with fixed mobile action bar and desktop/tablet adaptive panels.

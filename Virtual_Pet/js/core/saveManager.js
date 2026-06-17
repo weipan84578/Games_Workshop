@@ -46,6 +46,10 @@ VP.SaveManager = (function () {
     return {
       version: "1.0",
       petName: state.petName,
+      speciesId: state.speciesId,
+      eggType: state.eggType,
+      isRevealed: state.isRevealed,
+      isDead: state.isDead,
       stage: state.stage,
       level: state.level,
       exp: state.exp,

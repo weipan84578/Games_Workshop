@@ -14,6 +14,7 @@ VP.LANG_ZH = {
   menu: {
     start: "開始遊戲",
     continue: "繼續遊戲",
+    encyclopedia: "圖鑑",
     instructions: "說明",
     settings: "設定",
     noSave: "尚無存檔",
@@ -29,20 +30,28 @@ VP.LANG_ZH = {
     health: "健康"
   },
   actions: {
+    warm: "加熱",
     feed: "餵食",
     play: "玩耍",
     clean: "清潔",
     sleep: "睡覺",
-    pet: "摸摸"
+    pet: "摸摸",
+    train: "訓練"
   },
   actionMessages: {
+    eggChosen: "選好蛋了。先保持溫暖，慢慢等待孵化。",
+    warm: "蛋變暖了，裡面有東西在動。",
+    hatched: "{pet} 孵化了！",
     feed: "吃飽了，精神也亮起來。",
     play: "玩得很開心，但有點累。",
     clean: "乾乾淨淨，舒服多了。",
     sleep: "小睡一下，體力回來了。",
     pet: "牠很喜歡這樣的陪伴。",
+    train: "訓練完成，成長速度提高了。",
     blocked: "牠現在需要先恢復一下。",
     levelup: "長大了！新的階段開啟。",
+    elder: "牠進入老年期了，健康會逐漸下降。",
+    death: "牠安靜地結束了這一生。",
     warning: "牠的狀態偏低，需要照顧。"
   },
   speech: {
@@ -51,11 +60,13 @@ VP.LANG_ZH = {
     normal: "今天過得平穩。",
     sad: "有點沒精神，想被照顧。",
     sick: "狀態不好，需要你幫忙。",
-    sleeping: "Zzz..."
+    sleeping: "Zzz...",
+    dead: "這段生命旅程已經結束。"
   },
   game: {
     petRoom: "Pet Room",
     stage: "階段",
+    species: "種族",
     level: "等級",
     age: "年齡",
     growth: "成長",
@@ -66,9 +77,43 @@ VP.LANG_ZH = {
   },
   stages: {
     egg: "蛋",
-    baby: "幼年",
-    child: "童年",
-    adult: "成年"
+    juvenile: "幼年期",
+    mature: "成熟期",
+    prime: "壯年期",
+    elder: "老年期"
+  },
+  eggSelection: {
+    kicker: "New Life",
+    title: "選一顆蛋",
+    lede: "每顆蛋都藏著未知的生命。選好以後，孵出什麼才會揭曉。",
+    mysteryEgg: "神祕蛋",
+    unknown: "孵化前未知",
+    eggs: {
+      ember: "餘燼蛋",
+      tide: "潮汐蛋",
+      meadow: "草原蛋",
+      moon: "月影蛋",
+      crystal: "稜晶蛋"
+    }
+  },
+  encyclopedia: {
+    title: "養成圖鑑",
+    summary: "成功養成到老年期的寵物會在這裡解鎖。",
+    lockedName: "未解鎖",
+    lockedHint: "成功養成後顯示",
+    raisedAt: "解鎖 {time}"
+  },
+  families: {
+    dragon: "龍",
+    fish: "魚",
+    cat: "貓",
+    dog: "狗",
+    cow: "牛",
+    bird: "鳥",
+    rabbit: "兔",
+    fox: "狐",
+    turtle: "龜",
+    unicorn: "獨角獸"
   },
   instructions: {
     title: "照顧手冊",
@@ -80,11 +125,13 @@ VP.LANG_ZH = {
     },
     cards: {
       actions: [
-        { icon: "🍙", title: "餵食", body: "飽足提高 30，適合在飢餓偏低時使用。" },
+        { icon: "🔥", title: "加熱", body: "蛋期只能加熱與摸摸，加熱能推進孵化。" },
+        { icon: "🍙", title: "餵食", body: "孵化後可餵食，飽足提高 30。" },
         { icon: "🎾", title: "玩耍", body: "心情提高 25，但體力與清潔會下降。" },
         { icon: "🫧", title: "清潔", body: "清潔提高 40，也會讓心情微幅變好。" },
         { icon: "🌙", title: "睡覺", body: "體力提高 50，短暫進入睡眠狀態。" },
         { icon: "🤍", title: "摸摸", body: "心情提高 10，是最溫和的互動。" },
+        { icon: "⭐", title: "訓練", body: "成熟期後解鎖，成長較快但消耗體力。" },
         { icon: "⚠", title: "提醒", body: "狀態過低會影響健康，健康歸零會結束本輪。" }
       ],
       stats: [
@@ -95,10 +142,11 @@ VP.LANG_ZH = {
         { icon: "❤", title: "健康", body: "由其他狀態共同影響，是最重要的指標。" }
       ],
       growth: [
-        { icon: "🥚", title: "蛋", body: "新遊戲的起點，開始照顧後會孵化。" },
-        { icon: "🌱", title: "幼年", body: "等級 2 進入幼年，開始有更多動作。" },
-        { icon: "⭐", title: "童年", body: "等級 4 進入童年，體型變大。" },
-        { icon: "🏅", title: "成年", body: "等級 7 進入成年，完成主要成長。" }
+        { icon: "🥚", title: "蛋", body: "新遊戲先選蛋，孵化前不知道會是什麼寵物。" },
+        { icon: "🌱", title: "幼年期", body: "體力消耗很慢，適合多互動。" },
+        { icon: "⭐", title: "成熟期", body: "能力最平均，訓練開始解鎖。" },
+        { icon: "🏅", title: "壯年期", body: "成長穩定，照顧節奏變得更重要。" },
+        { icon: "🍂", title: "老年期", body: "健康會慢慢下降，最後自然死亡並重新開始。" }
       ],
       save: [
         { icon: "💾", title: "自動存檔", body: "照顧動作、設定變更與每 30 秒會寫入存檔。" },

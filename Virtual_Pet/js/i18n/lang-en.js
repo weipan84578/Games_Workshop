@@ -14,6 +14,7 @@ VP.LANG_EN = {
   menu: {
     start: "New Game",
     continue: "Continue",
+    encyclopedia: "Dex",
     instructions: "Instructions",
     settings: "Settings",
     noSave: "No save data",
@@ -29,20 +30,28 @@ VP.LANG_EN = {
     health: "Health"
   },
   actions: {
+    warm: "Warm",
     feed: "Feed",
     play: "Play",
     clean: "Clean",
     sleep: "Sleep",
-    pet: "Pet"
+    pet: "Pet",
+    train: "Train"
   },
   actionMessages: {
+    eggChosen: "Egg chosen. Keep it warm and wait for it to hatch.",
+    warm: "The egg warmed up. Something moved inside.",
+    hatched: "{pet} hatched!",
     feed: "A good meal brightened the room.",
     play: "That was fun, but it used some energy.",
     clean: "Fresh and clean.",
     sleep: "A short nap restored energy.",
     pet: "Your pet likes the attention.",
+    train: "Training complete. Growth moved faster.",
     blocked: "Your pet needs a moment first.",
     levelup: "Growth stage unlocked.",
+    elder: "Your pet entered elder age. Health will slowly fall.",
+    death: "Your pet quietly finished its life.",
     warning: "Some stats are low. Your pet needs care."
   },
   speech: {
@@ -51,11 +60,13 @@ VP.LANG_EN = {
     normal: "A calm day in the room.",
     sad: "A little low. Care would help.",
     sick: "Not feeling well. Please help.",
-    sleeping: "Zzz..."
+    sleeping: "Zzz...",
+    dead: "This life journey has ended."
   },
   game: {
     petRoom: "Pet Room",
     stage: "Stage",
+    species: "Species",
     level: "Level",
     age: "Age",
     growth: "Growth",
@@ -66,9 +77,43 @@ VP.LANG_EN = {
   },
   stages: {
     egg: "Egg",
-    baby: "Baby",
-    child: "Child",
-    adult: "Adult"
+    juvenile: "Juvenile",
+    mature: "Mature",
+    prime: "Prime",
+    elder: "Elder"
+  },
+  eggSelection: {
+    kicker: "New Life",
+    title: "Choose an Egg",
+    lede: "Each egg hides an unknown life. You will only know what it is after it hatches.",
+    mysteryEgg: "Mystery Egg",
+    unknown: "Unknown until hatch",
+    eggs: {
+      ember: "Ember Egg",
+      tide: "Tide Egg",
+      meadow: "Meadow Egg",
+      moon: "Moon Egg",
+      crystal: "Crystal Egg"
+    }
+  },
+  encyclopedia: {
+    title: "Care Dex",
+    summary: "Pets successfully raised to elder age unlock here.",
+    lockedName: "Locked",
+    lockedHint: "Raise one successfully",
+    raisedAt: "Unlocked {time}"
+  },
+  families: {
+    dragon: "Dragon",
+    fish: "Fish",
+    cat: "Cat",
+    dog: "Dog",
+    cow: "Cow",
+    bird: "Bird",
+    rabbit: "Rabbit",
+    fox: "Fox",
+    turtle: "Turtle",
+    unicorn: "Unicorn"
   },
   instructions: {
     title: "Care Guide",
@@ -80,11 +125,13 @@ VP.LANG_EN = {
     },
     cards: {
       actions: [
-        { icon: "🍙", title: "Feed", body: "Fullness rises by 30. Best when hunger is low." },
+        { icon: "🔥", title: "Warm", body: "Eggs can only be warmed and petted. Warmth moves hatching forward." },
+        { icon: "🍙", title: "Feed", body: "After hatching, fullness rises by 30." },
         { icon: "🎾", title: "Play", body: "Mood rises by 25, while energy and clean drop." },
         { icon: "🫧", title: "Clean", body: "Clean rises by 40 and mood improves slightly." },
         { icon: "🌙", title: "Sleep", body: "Energy rises by 50 and the pet rests briefly." },
         { icon: "🤍", title: "Pet", body: "Mood rises by 10 with a gentle interaction." },
+        { icon: "⭐", title: "Train", body: "Unlocked from mature age. It grows fast but costs energy." },
         { icon: "⚠", title: "Warning", body: "Low stats affect health. Zero health ends the run." }
       ],
       stats: [
@@ -95,10 +142,11 @@ VP.LANG_EN = {
         { icon: "❤", title: "Health", body: "The most important stat, shaped by all others." }
       ],
       growth: [
-        { icon: "🥚", title: "Egg", body: "Every new game starts here." },
-        { icon: "🌱", title: "Baby", body: "Unlocked at level 2 after early care." },
-        { icon: "⭐", title: "Child", body: "Unlocked at level 4 with a larger body." },
-        { icon: "🏅", title: "Adult", body: "Unlocked at level 7 as the main growth goal." }
+        { icon: "🥚", title: "Egg", body: "Choose an egg first. The pet stays unknown until hatch." },
+        { icon: "🌱", title: "Juvenile", body: "Energy drains slowly, so it can play often." },
+        { icon: "⭐", title: "Mature", body: "The most balanced phase. Training unlocks here." },
+        { icon: "🏅", title: "Prime", body: "Stable growth, but care rhythm matters more." },
+        { icon: "🍂", title: "Elder", body: "Health slowly falls until natural death and a new start." }
       ],
       save: [
         { icon: "💾", title: "Autosave", body: "Care actions, settings, and 30-second intervals save progress." },

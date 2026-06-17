@@ -13,7 +13,9 @@
   <link rel="stylesheet" href="css/themes/theme-candy.css" id="theme-style">
   <link rel="stylesheet" href="css/layout/main-menu.css">
   <link rel="stylesheet" href="css/layout/game-screen.css">
+  <link rel="stylesheet" href="css/layout/egg-selection.css">
   <link rel="stylesheet" href="css/layout/instructions.css">
+  <link rel="stylesheet" href="css/layout/encyclopedia.css">
   <link rel="stylesheet" href="css/layout/settings.css">
   <link rel="stylesheet" href="css/components/buttons.css">
   <link rel="stylesheet" href="css/components/modal.css">
@@ -46,6 +48,10 @@
             <span class="btn-icon" aria-hidden="true">↻</span>
             <span data-i18n="menu.continue">繼續遊戲</span>
           </button>
+          <button class="btn btn-secondary" type="button" data-go-scene="encyclopedia">
+            <span class="btn-icon" aria-hidden="true">▦</span>
+            <span data-i18n="menu.encyclopedia">圖鑑</span>
+          </button>
           <button class="btn btn-secondary" type="button" data-go-scene="instructions">
             <span class="btn-icon" aria-hidden="true">?</span>
             <span data-i18n="menu.instructions">說明</span>
@@ -58,6 +64,18 @@
 
         <p class="save-hint" id="save-hint" data-i18n="menu.noSave">尚無存檔</p>
       </div>
+    </section>
+
+    <section class="scene egg-selection-screen" id="egg-selection" data-scene="egg-selection" aria-labelledby="egg-selection-title" hidden>
+      <header class="screen-header">
+        <button class="icon-btn" type="button" data-go-scene="main-menu" aria-label="Back"><span aria-hidden="true">←</span></button>
+        <div>
+          <p class="eyebrow" data-i18n="eggSelection.kicker">New Life</p>
+          <h2 id="egg-selection-title" data-i18n="eggSelection.title">選一顆蛋</h2>
+        </div>
+      </header>
+      <p class="screen-lede" data-i18n="eggSelection.lede">每顆蛋都藏著未知的生命。選好以後，孵出什麼才會揭曉。</p>
+      <div class="egg-grid" id="egg-grid"></div>
     </section>
 
     <section class="scene game-screen" id="game-screen" data-scene="game-screen" aria-labelledby="game-title" hidden>
@@ -104,6 +122,10 @@
             <strong id="stage-label">Egg</strong>
           </div>
           <div class="panel-row">
+            <span data-i18n="game.species">種族</span>
+            <strong id="species-label">???</strong>
+          </div>
+          <div class="panel-row">
             <span data-i18n="game.level">等級</span>
             <strong id="level-label">1</strong>
           </div>
@@ -146,6 +168,10 @@
       </main>
 
       <nav class="action-bar" aria-label="Pet actions">
+        <button class="action-btn" type="button" data-pet-action="warm">
+          <span class="action-icon" aria-hidden="true">🔥</span>
+          <span data-i18n="actions.warm">加熱</span>
+        </button>
         <button class="action-btn" type="button" data-pet-action="feed">
           <span class="action-icon" aria-hidden="true">🍙</span>
           <span data-i18n="actions.feed">餵食</span>
@@ -165,6 +191,10 @@
         <button class="action-btn" type="button" data-pet-action="pet">
           <span class="action-icon" aria-hidden="true">🤍</span>
           <span data-i18n="actions.pet">摸摸</span>
+        </button>
+        <button class="action-btn" type="button" data-pet-action="train">
+          <span class="action-icon" aria-hidden="true">⭐</span>
+          <span data-i18n="actions.train">訓練</span>
         </button>
       </nav>
     </section>
@@ -186,6 +216,21 @@
       </div>
 
       <div class="instruction-grid" id="instruction-grid"></div>
+    </section>
+
+    <section class="scene encyclopedia-screen" id="encyclopedia" data-scene="encyclopedia" aria-labelledby="encyclopedia-title" hidden>
+      <header class="screen-header">
+        <button class="icon-btn" type="button" data-go-scene="main-menu" aria-label="Back"><span aria-hidden="true">←</span></button>
+        <div>
+          <p class="eyebrow" data-i18n="menu.encyclopedia">圖鑑</p>
+          <h2 id="encyclopedia-title" data-i18n="encyclopedia.title">養成圖鑑</h2>
+        </div>
+      </header>
+      <div class="encyclopedia-summary">
+        <strong id="encyclopedia-count">0 / 50</strong>
+        <span data-i18n="encyclopedia.summary">成功養成的寵物會在這裡解鎖。</span>
+      </div>
+      <div class="encyclopedia-grid" id="encyclopedia-grid"></div>
     </section>
 
     <section class="scene settings-screen" id="settings" data-scene="settings" aria-labelledby="settings-title" hidden>
@@ -276,6 +321,7 @@
   <script src="js/audio/sfxLibrary.js"></script>
   <script src="js/audio/bgmPlaylist.js"></script>
   <script src="js/audio/audioManager.js"></script>
+  <script src="js/pet/petCatalog.js"></script>
   <script src="js/pet/petModel.js"></script>
   <script src="js/pet/petAnimation.js"></script>
   <script src="js/pet/petActions.js"></script>
@@ -283,8 +329,10 @@
   <script src="js/core/saveManager.js"></script>
   <script src="js/core/sceneManager.js"></script>
   <script src="js/ui/mainMenu.js"></script>
+  <script src="js/ui/eggSelection.js"></script>
   <script src="js/ui/gameScreen.js"></script>
   <script src="js/ui/instructionsPanel.js"></script>
+  <script src="js/ui/encyclopediaPanel.js"></script>
   <script src="js/ui/settingsPanel.js"></script>
   <script src="js/core/app.js"></script>
 </body>

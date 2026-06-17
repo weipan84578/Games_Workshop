@@ -6,8 +6,12 @@ VP.SceneManager = (function () {
 
   function syncBgm(sceneId) {
     var state = VP.GameState.getState && VP.GameState.getState();
-    if (sceneId === "main-menu") {
+    if (sceneId === "main-menu" || sceneId === "egg-selection") {
       VP.AudioManager.playBgm("main-menu");
+      return;
+    }
+    if (sceneId === "encyclopedia") {
+      VP.AudioManager.playBgm("settings");
       return;
     }
     if (sceneId === "game-screen" && state) {

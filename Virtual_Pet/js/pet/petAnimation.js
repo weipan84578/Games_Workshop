@@ -7,11 +7,22 @@ VP.PetAnimation = (function () {
     return VP.dom.$("#pet-sprite");
   }
 
-  function setVisual(stage, mood) {
+  function applyColors(element, species, eggType) {
+    var egg = VP.PetCatalog.getEggType(eggType);
+    var colors = species ? species.colors : [egg.colors[0], egg.colors[1], "#ffffff"];
+    element.style.setProperty("--pet-primary", colors[0]);
+    element.style.setProperty("--pet-secondary", colors[1]);
+    element.style.setProperty("--pet-accent", colors[2] || colors[1]);
+    element.setAttribute("data-family", species ? species.family : "egg");
+    element.setAttribute("aria-label", species ? VP.PetCatalog.getPetName(species) : VP.i18n.t("eggSelection.mysteryEgg"));
+  }
+
+  function setVisual(stage, mood, species, eggType) {
     var element = sprite();
     if (!element) {
       return;
     }
+    applyColors(element, species, eggType);
     element.setAttribute("data-stage", stage || "egg");
     element.setAttribute("data-mood", mood || "normal");
     if (mood === "sleeping") {
@@ -22,7 +33,7 @@ VP.PetAnimation = (function () {
       element.className = "pet-sprite is-idle";
       return;
     }
-    if (!/(is-feed|is-play|is-clean|is-pet|is-levelup|is-warning)/.test(element.className)) {
+    if (!/(is-warm|is-feed|is-play|is-clean|is-pet|is-levelup|is-warning)/.test(element.className)) {
       element.classList.add("is-idle");
     }
   }

@@ -5,7 +5,7 @@
     --font-size-base: 18px;
     --font-size-sm: 16px;
     --space-6: 18px;
-    --mobile-action-height: 112px;
+    --mobile-action-height: 150px;
   }
 
   body {
@@ -74,7 +74,7 @@
     bottom: 0;
     display: grid;
     gap: var(--space-2);
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     left: 0;
     margin: 0;
     max-width: none;
@@ -102,6 +102,8 @@
   .tabs,
   .segmented,
   .theme-swatches,
+  .egg-grid,
+  .encyclopedia-grid,
   .instruction-grid {
     grid-template-columns: minmax(0, 1fr);
   }

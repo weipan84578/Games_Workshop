@@ -32,8 +32,18 @@ VP.GameScreen = (function () {
     log.innerHTML = "";
     (state.activity || []).forEach(function (item) {
       var li = document.createElement("li");
-      li.textContent = VP.i18n.t(item.messageKey) + " · " + VP.TimeUtils.formatClock(item.at);
+      li.textContent = VP.i18n.t(item.messageKey, item.params || {}) + " · " + VP.TimeUtils.formatClock(item.at);
       log.appendChild(li);
+    });
+  }
+
+  function renderActions(state) {
+    var available = VP.PetActions.availableForStage(state.stage);
+    VP.dom.$$(".action-btn").forEach(function (button) {
+      var action = button.getAttribute("data-pet-action");
+      var visible = available.indexOf(action) >= 0;
+      button.hidden = !visible;
+      button.disabled = !visible || state.stats.health <= 0 || state.isDead;
     });
   }
 
@@ -41,9 +51,11 @@ VP.GameScreen = (function () {
     if (!state) {
       return;
     }
-    var mood = VP.PetModel.getMoodState(state.stats, state.isSleeping);
-    VP.dom.$("#pet-name").textContent = state.petName;
+    var mood = VP.PetModel.getMoodState(state.stats, state.isSleeping, state.isDead);
+    var species = state.isRevealed ? VP.PetCatalog.getPet(state.speciesId) : null;
+    VP.dom.$("#pet-name").textContent = VP.PetCatalog.getDisplayName(state);
     VP.dom.$("#stage-label").textContent = VP.i18n.t("stages." + state.stage);
+    VP.dom.$("#species-label").textContent = species ? VP.i18n.t("families." + species.family) : "???";
     VP.dom.$("#level-label").textContent = String(state.level);
     VP.dom.$("#age-label").textContent = VP.TimeUtils.formatDuration(Date.now() - state.bornAt);
     VP.dom.$("#xp-label").textContent = Math.round(state.exp) + "%";
@@ -52,14 +64,11 @@ VP.GameScreen = (function () {
 
     renderStats(state);
     renderActivity(state);
-    VP.PetAnimation.setVisual(state.stage, mood);
+    renderActions(state);
+    VP.PetAnimation.setVisual(state.stage, mood, species, state.eggType);
     VP.PetAnimation.setSpeech("speech." + mood);
 
-    VP.dom.$$(".action-btn").forEach(function (button) {
-      button.disabled = state.stats.health <= 0;
-    });
-
-    if (state.stats.health <= 0) {
+    if (state.stats.health <= 0 || state.isDead) {
       VP.PetAnimation.setSpeech("game.gameOver");
       VP.AudioManager.playBgm("ending");
     } else if (VP.SceneManager.getCurrent() === "game-screen") {
@@ -73,7 +82,7 @@ VP.GameScreen = (function () {
         var action = button.getAttribute("data-pet-action");
         VP.AudioManager.unlock().then(function () {
           if (!VP.GameState.performAction(action)) {
-            VP.App.toast(VP.i18n.t("actionMessages.blocked"));
+            VP.PetAnimation.setSpeech("actionMessages.blocked");
           }
         });
       });
@@ -81,14 +90,10 @@ VP.GameScreen = (function () {
 
     VP.EventBus.on("state:changed", function (payload) {
       render(payload.state);
-      if (payload.reason === "action") {
-        VP.App.toast(VP.i18n.t("actionMessages." + payload.state.lastAction));
-      }
     });
 
     VP.EventBus.on("game:saved", function (reason) {
       if (reason === "autosave") {
-        VP.App.toast(VP.i18n.t("game.autosaved"));
         VP.AudioManager.playSfx("save");
       }
     });
