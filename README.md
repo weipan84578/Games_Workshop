@@ -76,3 +76,4 @@
 | `horse_racing` | 賽馬王   | Horse Racing | 競馬王         |
 | `Whack_A_Mole` | 打地鼠   | Whack-A-Mole | もぐら叩き     |
 | `Typing_Game`  | 打字練習 | Typing Game  | タイピング練習 |
+| `Virtual_Pet`  | 電子寵物 | Virtual Pet  | 電子ペット     |
