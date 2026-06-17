@@ -7,13 +7,15 @@
 .settings-form {
   display: grid;
   gap: var(--space-4);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   margin: 0 auto;
-  max-width: 980px;
+  max-width: 1040px;
   width: 100%;
 }
 
 .setting-group {
-  background: color-mix(in srgb, var(--color-surface) 90%, transparent);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--color-surface) 96%, transparent), color-mix(in srgb, var(--color-surface) 84%, var(--color-bg)));
   border: 1px solid var(--color-border);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-small);
@@ -21,12 +23,26 @@
   gap: var(--space-4);
   margin: 0;
   min-width: 0;
-  padding: var(--space-4);
+  padding: var(--space-5);
+  position: relative;
+}
+
+.setting-group::before {
+  background: var(--color-primary);
+  border-radius: 999px;
+  content: "";
+  height: 4px;
+  left: var(--space-5);
+  position: absolute;
+  right: var(--space-5);
+  top: 0;
 }
 
 .setting-group legend {
+  color: var(--color-text);
+  font-size: calc(var(--font-size-sm) * var(--text-scale));
   font-weight: 900;
-  padding: 0 var(--space-2);
+  padding: 0;
 }
 
 .segmented,
@@ -36,7 +52,11 @@
 }
 
 .segmented {
+  background: color-mix(in srgb, var(--color-bg) 64%, var(--color-surface));
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding: 5px;
 }
 
 .theme-swatches {
@@ -46,28 +66,99 @@
 .segmented label,
 .theme-swatches label {
   align-items: center;
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
+  color: var(--color-text);
+  cursor: pointer;
   display: flex;
+  font-weight: 900;
   gap: var(--space-2);
+  justify-content: center;
   min-height: var(--tap-min);
-  padding: 10px 12px;
+  min-width: 0;
+  position: relative;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    color var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.segmented label {
+  border: 1px solid transparent;
+  color: var(--color-muted);
+  padding: 9px 10px;
+}
+
+.segmented label:hover {
+  background: color-mix(in srgb, var(--color-surface) 80%, transparent);
+  color: var(--color-text);
+}
+
+.theme-swatches label {
+  background: color-mix(in srgb, var(--color-surface) 72%, var(--color-bg));
+  border: 1px solid var(--color-border);
+  flex-direction: column;
+  min-height: 96px;
+  padding: 12px 8px;
+  text-align: center;
+}
+
+.theme-swatches label:hover {
+  border-color: color-mix(in srgb, var(--color-primary) 52%, var(--color-border));
+  box-shadow: 0 10px 18px color-mix(in srgb, var(--color-primary) 12%, transparent);
+  transform: translateY(-2px);
 }
 
 .segmented input,
 .theme-swatches input {
-  accent-color: var(--color-primary);
-  height: 20px;
-  width: 20px;
+  height: 1px;
+  opacity: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.segmented label:has(input:checked) {
+  background: var(--color-primary);
+  border-color: var(--color-primary-strong);
+  box-shadow: 0 8px 16px color-mix(in srgb, var(--color-primary) 24%, transparent);
+  color: var(--color-button-text);
+}
+
+.theme-swatches label:has(input:checked) {
+  background: color-mix(in srgb, var(--color-primary) 12%, var(--color-surface));
+  border-color: var(--color-primary);
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--color-primary) 34%, transparent),
+    0 12px 20px color-mix(in srgb, var(--color-primary) 16%, transparent);
+  color: var(--color-text);
+}
+
+.segmented label:has(input:focus-visible),
+.theme-swatches label:has(input:focus-visible) {
+  box-shadow: var(--focus-ring);
 }
 
 .swatch {
-  border: 2px solid rgba(0, 0, 0, 0.08);
+  border: 3px solid color-mix(in srgb, var(--color-surface) 86%, #ffffff);
   border-radius: 999px;
+  box-shadow:
+    0 8px 14px rgba(0, 0, 0, 0.12),
+    inset -5px -5px 0 rgba(0, 0, 0, 0.12);
   display: inline-block;
-  height: 28px;
-  width: 28px;
+  height: 34px;
+  width: 34px;
+}
+
+.theme-swatches label:has(input:checked) .swatch {
+  border-color: #ffffff;
+  transform: scale(1.08);
+}
+
+.theme-swatches b {
+  font-size: calc(14px * var(--text-scale));
+  line-height: 1.1;
+  overflow-wrap: anywhere;
 }
 
 .swatch.candy { background: linear-gradient(135deg, #ff8fb1, #43a5a1); }
@@ -79,23 +170,182 @@
 .range-row,
 .toggle-row {
   align-items: center;
+  background: color-mix(in srgb, var(--color-bg) 42%, var(--color-surface));
+  border: 1px solid color-mix(in srgb, var(--color-border) 74%, transparent);
+  border-radius: var(--radius-md);
   display: grid;
   gap: var(--space-3);
-  grid-template-columns: minmax(96px, 1fr) minmax(160px, 2fr) minmax(52px, auto);
+  min-height: 62px;
+  padding: 12px 14px;
+}
+
+.range-row {
+  grid-template-columns: minmax(84px, 0.8fr) minmax(170px, 2fr) minmax(58px, auto);
 }
 
 .toggle-row {
   grid-template-columns: 1fr auto;
 }
 
+.range-row span,
+.toggle-row span {
+  color: var(--color-text);
+  font-weight: 900;
+}
+
+.range-row strong {
+  color: var(--color-primary);
+  font-size: calc(var(--font-size-sm) * var(--text-scale));
+  font-variant-numeric: tabular-nums;
+  font-weight: 900;
+  min-width: 58px;
+  text-align: right;
+}
+
 .range-row input[type="range"] {
-  accent-color: var(--color-primary);
-  min-height: 32px;
+  appearance: none;
+  background: transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  height: 28px;
+  min-height: 28px;
+  outline: none;
+  overflow: hidden;
   width: 100%;
 }
 
-.toggle-row input {
-  accent-color: var(--color-primary);
-  height: 28px;
-  width: 48px;
+.range-row input[type="range"]::-webkit-slider-runnable-track {
+  background: var(--color-track);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  height: 12px;
+}
+
+.range-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--color-primary);
+  border: 4px solid #ffffff;
+  border-radius: 50%;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.18),
+    -411px 0 0 400px var(--color-primary);
+  height: 22px;
+  margin-top: -6px;
+  width: 22px;
+}
+
+.range-row input[type="range"]::-moz-range-track {
+  background: var(--color-track);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  height: 12px;
+}
+
+.range-row input[type="range"]::-moz-range-progress {
+  background: var(--color-primary);
+  border-radius: 999px;
+  height: 12px;
+}
+
+.range-row input[type="range"]::-moz-range-thumb {
+  background: var(--color-primary);
+  border: 4px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  height: 14px;
+  width: 14px;
+}
+
+.range-row input[type="range"]:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+.toggle-row input[type="checkbox"] {
+  appearance: none;
+  background: var(--color-track);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  height: 32px;
+  position: relative;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast);
+  width: 56px;
+}
+
+.toggle-row input[type="checkbox"]::before {
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.22);
+  content: "";
+  height: 24px;
+  left: 3px;
+  position: absolute;
+  top: 3px;
+  transition: transform var(--transition-fast);
+  width: 24px;
+}
+
+.toggle-row input[type="checkbox"]:checked {
+  background: var(--color-primary);
+  border-color: var(--color-primary-strong);
+}
+
+.toggle-row input[type="checkbox"]:checked::before {
+  transform: translateX(24px);
+}
+
+.toggle-row input[type="checkbox"]:focus-visible {
+  box-shadow: var(--focus-ring);
+}
+
+#reset-save-btn {
+  justify-self: end;
+  max-width: 240px;
+}
+
+@media (max-width: 860px) {
+  .settings-form {
+    grid-template-columns: 1fr;
+    max-width: 680px;
+  }
+}
+
+@media (max-width: 575px) {
+  .settings-screen {
+    padding: var(--space-5) var(--space-4) var(--space-7);
+  }
+
+  .settings-form {
+    gap: var(--space-4);
+  }
+
+  .setting-group {
+    padding: var(--space-4);
+  }
+
+  .setting-group::before {
+    left: var(--space-4);
+    right: var(--space-4);
+  }
+
+  .theme-swatches {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .range-row {
+    grid-template-columns: 1fr;
+  }
+
+  .range-row strong {
+    text-align: left;
+  }
+
+  #reset-save-btn {
+    max-width: none;
+    width: 100%;
+  }
 }

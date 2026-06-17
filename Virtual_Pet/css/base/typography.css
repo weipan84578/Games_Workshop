@@ -1,8 +1,8 @@
 body {
   font-family: var(--font-family-base);
   font-size: calc(var(--font-size-base) * var(--text-scale));
-  line-height: 1.45;
-  letter-spacing: 0;
+  line-height: 1.5;
+  letter-spacing: -0.011em;
 }
 
 h1,
@@ -12,27 +12,53 @@ p {
   margin: 0;
 }
 
+h1,
+h2,
+h3,
+.btn,
+.tab,
+.action-btn,
+.eyebrow,
+#stage-label,
+#species-label,
+#level-label,
+#age-label,
+.stat-meta strong,
+#xp-label,
+.brand-pet-face,
+.save-hint,
+.last-saved,
+#encyclopedia-count {
+  font-family: var(--font-family-display);
+}
+
 h1 {
   font-size: calc(var(--font-size-xl) * var(--text-scale));
-  line-height: 1.05;
+  line-height: 1.15;
+  font-weight: 900;
+  letter-spacing: -0.02em;
 }
 
 h2 {
   font-size: calc(var(--font-size-lg) * var(--text-scale));
-  line-height: 1.1;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: -0.015em;
 }
 
 h3 {
   font-size: calc(var(--font-size-base) * var(--text-scale));
-  line-height: 1.15;
+  line-height: 1.25;
+  font-weight: 700;
 }
 
 .eyebrow {
-  color: var(--color-muted);
+  color: var(--color-primary);
   font-size: calc(var(--font-size-sm) * var(--text-scale));
   font-weight: 800;
-  letter-spacing: 0;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
+  margin-bottom: 2px;
 }
 
 a,
@@ -44,3 +70,4 @@ button {
   outline: 0;
   box-shadow: var(--focus-ring);
 }
+

@@ -2,11 +2,13 @@
   align-items: center;
   aspect-ratio: 1.15 / 1;
   background:
-    linear-gradient(180deg, color-mix(in srgb, var(--color-surface) 78%, transparent), color-mix(in srgb, var(--color-secondary) 46%, transparent)),
+    linear-gradient(180deg, color-mix(in srgb, var(--color-surface) 60%, transparent), color-mix(in srgb, var(--color-secondary) 30%, transparent)),
     url("../../assets/images/backgrounds/playroom.svg") center / cover no-repeat;
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: var(--radius-card);
-  box-shadow: var(--shadow-soft);
+  box-shadow: 
+    0 24px 60px rgba(27, 22, 40, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
   display: flex;
   filter: var(--stage-filter);
   justify-content: center;
@@ -17,6 +19,15 @@
   width: 100%;
 }
 
+.pet-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 40%, rgba(0, 0, 0, 0.04) 100%);
+  pointer-events: none;
+  z-index: 3;
+}
+
 .weather-orbit {
   inset: 0;
   pointer-events: none;
@@ -24,46 +35,79 @@
 }
 
 .weather-orbit span {
-  background: color-mix(in srgb, var(--color-surface) 76%, transparent);
-  border: 1px solid color-mix(in srgb, var(--color-primary) 12%, transparent);
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
   border-radius: 999px;
   height: 18px;
   position: absolute;
-  width: 54px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+  transition: transform 0.5s;
 }
 
 .weather-orbit span:nth-child(1) {
   left: 12%;
   top: 16%;
+  width: 54px;
+  animation: cloud-float-slow 22s infinite alternate linear;
 }
 
 .weather-orbit span:nth-child(2) {
   right: 14%;
   top: 24%;
   width: 72px;
+  animation: cloud-float-slow 28s infinite alternate-reverse linear;
 }
 
 .weather-orbit span:nth-child(3) {
   bottom: 24%;
   left: 18%;
   width: 46px;
+  animation: cloud-float-slow 18s infinite alternate linear;
+}
+
+@keyframes cloud-float-slow {
+  from { transform: translateX(0); }
+  to { transform: translateX(30px); }
 }
 
 .speech-bubble {
   background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+  backdrop-filter: blur(16px);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-card);
-  box-shadow: var(--shadow-small);
+  border-radius: var(--radius-md);
+  box-shadow: 0 10px 25px rgba(27, 22, 40, 0.06);
   color: var(--color-text);
-  font-size: calc(var(--font-size-sm) * var(--text-scale));
+  font-size: calc((var(--font-size-sm) + 1px) * var(--text-scale));
+  font-weight: 700;
   left: 50%;
   max-width: min(84%, 520px);
-  padding: 10px 14px;
+  padding: 12px 18px;
   position: absolute;
   text-align: center;
   top: 8%;
   transform: translateX(-50%);
   z-index: 2;
+  animation: speech-bounce-float 3s infinite ease-in-out;
+}
+
+.speech-bubble::before {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 14px;
+  height: 14px;
+  background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+  border-right: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: 4px 4px 6px rgba(27, 22, 40, 0.02);
+}
+
+@keyframes speech-bounce-float {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, -6px); }
 }
 
 .pet-sprite {
@@ -82,14 +126,18 @@
 
 .pet-body {
   background:
-    radial-gradient(circle at 38% 32%, rgba(255, 255, 255, 0.9), transparent 14%),
-    linear-gradient(145deg, var(--pet-secondary), color-mix(in srgb, var(--pet-primary) 66%, #fff));
-  border: 5px solid color-mix(in srgb, var(--pet-primary) 70%, var(--color-text));
-  border-radius: 48% 52% 44% 44%;
-  box-shadow: inset -22px -22px 0 rgba(0, 0, 0, 0.06), var(--shadow-soft);
+    radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.45), transparent 40%),
+    linear-gradient(135deg, var(--pet-secondary) 10%, var(--pet-primary) 90%);
+  border: 5px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a);
+  border-radius: 50% 50% 45% 45% / 55% 55% 45% 45%;
+  box-shadow: 
+    inset -18px -18px 0 rgba(0, 0, 0, 0.07),
+    inset 12px 12px 0 rgba(255, 255, 255, 0.22),
+    0 12px 28px rgba(0, 0, 0, 0.12);
   height: 172px;
   position: relative;
   width: 194px;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .pet-body::before,
@@ -107,23 +155,25 @@
 }
 
 .pet-ears span {
-  background: linear-gradient(145deg, var(--pet-secondary), var(--pet-primary));
-  border: 5px solid color-mix(in srgb, var(--pet-primary) 70%, var(--color-text));
+  background: linear-gradient(135deg, var(--pet-secondary), var(--pet-primary));
+  border: 5px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a);
   display: block;
   height: 84px;
   position: absolute;
   top: 7px;
   width: 62px;
+  box-shadow: inset -6px -6px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .pet-ears span:first-child {
-  border-radius: 70% 20% 65% 25%;
+  border-radius: 70% 30% 65% 35%;
   left: 4px;
   transform: rotate(-22deg);
 }
 
 .pet-ears span:last-child {
-  border-radius: 20% 70% 25% 65%;
+  border-radius: 30% 70% 35% 65%;
   right: 4px;
   transform: rotate(22deg);
 }
@@ -131,55 +181,53 @@
 .pet-face {
   inset: 0;
   position: absolute;
+  z-index: 2;
 }
 
 .pet-eye {
-  background: var(--color-text);
-  border-radius: 999px;
-  height: 17px;
+  background: 
+    radial-gradient(circle at 35% 30%, #ffffff 0 3px, transparent 4px),
+    radial-gradient(circle at 65% 65%, #ffffff 0 1.5px, transparent 2px),
+    var(--color-text);
+  border-radius: 50%;
+  height: 25px;
+  width: 20px;
   position: absolute;
-  top: 66px;
-  width: 17px;
+  top: 62px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
 }
 
-.pet-eye-left {
-  left: 54px;
-}
-
-.pet-eye-right {
-  right: 54px;
-}
+.pet-eye-left { left: 50px; }
+.pet-eye-right { right: 50px; }
 
 .pet-mouth {
-  border: 4px solid var(--color-text);
-  border-left: 0;
-  border-top: 0;
-  border-radius: 0 0 28px 0;
-  height: 22px;
+  border: 3.5px solid var(--color-text);
+  border-top: 0; border-left: 0; border-right: 0;
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+  height: 10px;
+  width: 14px;
   left: 50%;
   position: absolute;
-  top: 94px;
-  transform: translateX(-50%) rotate(45deg);
-  width: 22px;
+  top: 96px;
+  transform: translateX(-50%);
+  transition: all 0.2s ease;
 }
 
 .pet-cheek {
-  background: color-mix(in srgb, var(--pet-accent) 62%, #fff);
-  border-radius: 999px;
-  height: 20px;
-  opacity: 0.76;
+  background: radial-gradient(circle, rgba(255, 105, 180, 0.55) 0%, transparent 70%);
+  border-radius: 50%;
+  height: 24px;
+  width: 36px;
+  filter: blur(1px);
   position: absolute;
-  top: 92px;
-  width: 28px;
+  top: 86px;
+  opacity: 0.85;
+  transition: all 0.3s ease;
 }
 
-.pet-cheek-left {
-  left: 28px;
-}
-
-.pet-cheek-right {
-  right: 28px;
-}
+.pet-cheek-left { left: 24px; }
+.pet-cheek-right { right: 24px; }
 
 .pet-feet {
   bottom: 22px;
@@ -191,186 +239,721 @@
 }
 
 .pet-feet span {
-  background: color-mix(in srgb, var(--pet-primary) 68%, #fff);
-  border: 4px solid color-mix(in srgb, var(--pet-primary) 70%, var(--color-text));
+  background: color-mix(in srgb, var(--pet-primary) 80%, #fff);
+  border: 4px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a);
   border-radius: 999px;
   height: 36px;
   width: 54px;
+  box-shadow: 
+    inset -4px -4px 0 rgba(0, 0, 0, 0.06),
+    0 4px 8px rgba(0,0,0,0.1);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .pet-shadow {
-  background: rgba(23, 32, 43, 0.16);
+  background: rgba(23, 32, 43, 0.12);
   border-radius: 999px;
   bottom: 18%;
-  filter: blur(2px);
-  height: 28px;
+  filter: blur(3px);
+  height: 24px;
   left: 50%;
   position: absolute;
   transform: translateX(-50%);
   width: 190px;
+  transition: all 0.3s ease;
 }
 
-.pet-sprite[data-stage="egg"] {
-  height: 224px;
-}
-
+/* ==========================================
+   EGG STAGES (蛋期)
+   ========================================== */
+.pet-sprite[data-stage="egg"] { height: 224px; }
 .pet-sprite[data-stage="egg"] .pet-body {
-  border-radius: 52% 52% 48% 48%;
+  border-radius: 52% 52% 48% 48% / 60% 60% 40% 40%;
   height: 188px;
   width: 156px;
-}
-
-.pet-sprite[data-stage="egg"] .pet-ears,
-.pet-sprite[data-stage="egg"] .pet-feet {
-  display: none;
-}
-
-.pet-sprite[data-stage="baby"] {
-  transform: scale(0.82);
-}
-
-.pet-sprite[data-stage="child"] {
-  transform: scale(0.94);
-}
-
-.pet-sprite[data-stage="adult"] {
-  transform: scale(1.08);
-}
-
-.pet-sprite[data-stage="juvenile"] {
-  transform: scale(0.84);
-}
-
-.pet-sprite[data-stage="mature"] {
-  transform: scale(0.98);
-}
-
-.pet-sprite[data-stage="prime"] {
-  transform: scale(1.1);
-}
-
-.pet-sprite[data-stage="elder"] {
-  filter: saturate(0.78);
-  transform: scale(0.95);
-}
-
-.pet-sprite[data-family="dragon"] .pet-ears span {
-  border-radius: 12px 12px 60% 60%;
-  height: 70px;
-  width: 36px;
-}
-
-.pet-sprite[data-family="dragon"] .pet-body::after {
-  background: var(--pet-accent);
-  clip-path: polygon(0 50%, 100% 0, 78% 50%, 100% 100%);
-  height: 62px;
-  right: -42px;
-  top: 82px;
-  width: 56px;
-}
-
-.pet-sprite[data-family="fish"] .pet-ears {
-  display: none;
-}
-
-.pet-sprite[data-family="fish"] .pet-body {
-  border-radius: 58% 42% 48% 52%;
-  width: 214px;
-}
-
-.pet-sprite[data-family="fish"] .pet-body::after {
-  background: var(--pet-accent);
-  clip-path: polygon(0 50%, 100% 0, 100% 100%);
-  height: 88px;
-  right: -52px;
-  top: 42px;
-  width: 64px;
-}
-
-.pet-sprite[data-family="dog"] .pet-ears span {
-  border-radius: 45% 45% 70% 70%;
-  height: 96px;
-  top: 26px;
-  width: 48px;
-}
-
-.pet-sprite[data-family="cow"] .pet-body {
   background:
-    radial-gradient(circle at 34% 36%, var(--pet-accent) 0 10%, transparent 11%),
-    radial-gradient(circle at 68% 58%, var(--pet-accent) 0 12%, transparent 13%),
-    linear-gradient(145deg, #fff, var(--pet-secondary));
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.82), transparent 20%),
+    radial-gradient(circle at 50% 60%, var(--pet-accent) 0 10px, transparent 11px),
+    radial-gradient(circle at 28% 78%, var(--pet-accent) 0 8px, transparent 9px),
+    radial-gradient(circle at 72% 44%, var(--pet-accent) 0 9px, transparent 10px),
+    radial-gradient(circle at 25% 42%, var(--pet-accent) 0 7px, transparent 8px),
+    radial-gradient(circle at 75% 78%, var(--pet-accent) 0 7px, transparent 8px),
+    linear-gradient(135deg, var(--pet-secondary), var(--pet-primary));
+  box-shadow: inset -16px -16px 0 rgba(0,0,0,0.08), inset 12px 12px 0 rgba(255,255,255,0.22), 0 12px 28px rgba(0,0,0,0.12);
+}
+.pet-sprite[data-stage="egg"] .pet-ears,
+.pet-sprite[data-stage="egg"] .pet-feet,
+.pet-sprite[data-stage="egg"] .pet-face { display: none; }
+
+/* ==========================================
+   GROWTH SCALES (成長縮放)
+   ========================================== */
+.pet-sprite[data-stage="baby"] { transform: scale(0.82); }
+.pet-sprite[data-stage="child"] { transform: scale(0.94); }
+.pet-sprite[data-stage="adult"] { transform: scale(1.08); }
+.pet-sprite[data-stage="juvenile"] { transform: scale(0.84); }
+.pet-sprite[data-stage="mature"] { transform: scale(0.98); }
+.pet-sprite[data-stage="prime"] { transform: scale(1.12); }
+.pet-sprite[data-stage="elder"] { filter: saturate(0.72) contrast(0.95); transform: scale(0.96); }
+
+/* ==========================================
+   1. DRAGON FAMILY (龍族)
+   ========================================== */
+.pet-sprite[data-family="dragon"] .pet-body {
+  border-radius: 50% 50% 45% 45% / 55% 55% 45% 45%;
+}
+.pet-sprite[data-family="dragon"] .pet-ears span {
+  border-radius: 35% 65% 15% 85% / 35% 65% 15% 85%;
+  background: linear-gradient(to top, var(--pet-accent), var(--pet-primary));
+  top: 20px;
+}
+.pet-sprite[data-family="dragon"] .pet-ears span:first-child { transform: rotate(-30deg) skewX(-8deg); left: 10px; }
+.pet-sprite[data-family="dragon"] .pet-ears span:last-child { transform: rotate(30deg) skewX(8deg); right: 10px; }
+
+/* Dragon Stages */
+.pet-sprite[data-family="dragon"][data-stage="juvenile"] .pet-ears span { border-radius: 50%; height: 28px; width: 28px; top: 36px; transform: none; }
+.pet-sprite[data-family="dragon"][data-stage="juvenile"] .pet-body::before { display: none; }
+.pet-sprite[data-family="dragon"][data-stage="juvenile"] .pet-body::after {
+  background: var(--pet-accent); border: 4px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a);
+  border-radius: 50% 50% 0 50%; height: 22px; width: 22px; right: -10px; top: 115px; transform: rotate(45deg);
 }
 
-.pet-sprite[data-family="cow"] .pet-ears span {
-  border-radius: 60% 60% 30% 30%;
-  height: 52px;
-  top: 18px;
-  width: 42px;
+.pet-sprite[data-family="dragon"][data-stage="mature"] .pet-ears span { height: 54px; width: 28px; }
+.pet-sprite[data-family="dragon"][data-stage="mature"] .pet-body {
+  background: radial-gradient(circle at 35% 25%, rgba(255,255,255,0.45), transparent 40%),
+              radial-gradient(ellipse at 50% 88%, var(--pet-accent) 0 32%, transparent 33%),
+              linear-gradient(135deg, var(--pet-secondary), var(--pet-primary));
+}
+.pet-sprite[data-family="dragon"][data-stage="mature"] .pet-ears::before,
+.pet-sprite[data-family="dragon"][data-stage="mature"] .pet-ears::after {
+  content: ""; position: absolute; top: 50px; width: 44px; height: 30px; background: var(--pet-accent);
+  border: 4px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a); z-index: -2;
+}
+.pet-sprite[data-family="dragon"][data-stage="mature"] .pet-ears::before { left: -28px; border-radius: 30px 10px 30px 10px; transform: rotate(-15deg); animation: wing-flap-left 1.5s ease-in-out infinite alternate; }
+.pet-sprite[data-family="dragon"][data-stage="mature"] .pet-ears::after { right: -28px; border-radius: 10px 30px 10px 30px; transform: rotate(15deg); animation: wing-flap-right 1.5s ease-in-out infinite alternate; }
+.pet-sprite[data-family="dragon"][data-stage="mature"] .pet-body::after {
+  background: var(--pet-accent); border: 4px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a);
+  border-radius: 50% 50% 0 50%; height: 36px; width: 36px; right: -24px; top: 96px; transform: rotate(45deg);
 }
 
+.pet-sprite[data-family="dragon"][data-stage="prime"] .pet-ears span {
+  height: 78px; width: 38px; top: 4px;
+  background: repeating-linear-gradient(to top, rgba(255,255,255,0.08), rgba(255,255,255,0.08) 8px, transparent 8px, transparent 16px), linear-gradient(to top, var(--pet-accent), var(--pet-primary));
+}
+.pet-sprite[data-family="dragon"][data-stage="prime"] .pet-body {
+  background: radial-gradient(circle at 35% 25%, rgba(255,255,255,0.45), transparent 40%),
+              radial-gradient(ellipse at 50% 86%, var(--pet-accent) 0 45%, transparent 46%),
+              linear-gradient(135deg, var(--pet-secondary), var(--pet-primary));
+}
+.pet-sprite[data-family="dragon"][data-stage="prime"] .pet-ears::before,
+.pet-sprite[data-family="dragon"][data-stage="prime"] .pet-ears::after {
+  content: ""; position: absolute; top: 42px; width: 68px; height: 46px; background: var(--pet-accent);
+  border: 4px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a); z-index: -2;
+}
+.pet-sprite[data-family="dragon"][data-stage="prime"] .pet-ears::before { left: -44px; border-radius: 40px 12px 40px 12px; transform: rotate(-15deg); transform-origin: right bottom; animation: wing-flap-left 1.2s ease-in-out infinite alternate; }
+.pet-sprite[data-family="dragon"][data-stage="prime"] .pet-ears::after { right: -44px; border-radius: 12px 40px 12px 40px; transform: rotate(15deg); transform-origin: left bottom; animation: wing-flap-right 1.2s ease-in-out infinite alternate; }
+.pet-sprite[data-family="dragon"][data-stage="prime"] .pet-body::after {
+  background: var(--pet-accent); border: 4px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a);
+  border-radius: 50% 50% 0 50%; height: 50px; width: 50px; right: -36px; top: 86px; transform: rotate(45deg);
+}
+
+.pet-sprite[data-family="dragon"][data-stage="elder"] .pet-ears span { height: 72px; width: 36px; background: linear-gradient(to top, var(--color-muted), var(--pet-primary)); top: 15px; }
+.pet-sprite[data-family="dragon"][data-stage="elder"] .pet-ears span:first-child { transform: rotate(-55deg) skewX(-12deg); left: 2px; }
+.pet-sprite[data-family="dragon"][data-stage="elder"] .pet-ears span:last-child { transform: rotate(55deg) skewX(12deg); right: 2px; }
+.pet-sprite[data-family="dragon"][data-stage="elder"] .pet-body {
+  background: radial-gradient(circle at 35% 25%, rgba(255,255,255,0.25), transparent 40%),
+              radial-gradient(ellipse at 50% 86%, var(--color-muted) 0 45%, transparent 46%),
+              linear-gradient(135deg, var(--pet-secondary), var(--pet-primary));
+}
+.pet-sprite[data-family="dragon"][data-stage="elder"] .pet-ears::before,
+.pet-sprite[data-family="dragon"][data-stage="elder"] .pet-ears::after {
+  content: ""; position: absolute; top: 55px; width: 64px; height: 44px; background: var(--color-muted); border: 4px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a); z-index: -2; opacity: 0.75;
+}
+.pet-sprite[data-family="dragon"][data-stage="elder"] .pet-ears::before { left: -38px; border-radius: 40px 10px 40px 10px; transform: rotate(15deg); }
+.pet-sprite[data-family="dragon"][data-stage="elder"] .pet-ears::after { right: -38px; border-radius: 10px 40px 10px 40px; transform: rotate(-15deg); }
+.pet-sprite[data-family="dragon"][data-stage="elder"] .pet-body::after {
+  background: var(--color-muted); border: 4px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a);
+  border-radius: 50% 50% 0 50%; height: 44px; width: 44px; right: -30px; top: 100px; transform: rotate(55deg);
+}
+.pet-sprite[data-family="dragon"][data-stage="elder"] .pet-face::before,
+.pet-sprite[data-family="dragon"][data-stage="elder"] .pet-face::after {
+  content: ""; position: absolute; top: 48px; width: 26px; height: 6px; background: #ffffff; border-radius: 999px;
+}
+.pet-sprite[data-family="dragon"][data-stage="elder"] .pet-face::before { left: 40px; transform: rotate(-15deg); }
+.pet-sprite[data-family="dragon"][data-stage="elder"] .pet-face::after { right: 40px; transform: rotate(15deg); }
+
+
+/* ==========================================
+   2. FISH FAMILY (魚族)
+   ========================================== */
+.pet-sprite[data-family="fish"] .pet-ears { display: none; }
+.pet-sprite[data-family="fish"] .pet-body::before {
+  content: ""; position: absolute; background: var(--pet-accent); border: 4px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a); border-radius: 50% 50% 0 0; z-index: -1;
+}
+.pet-sprite[data-family="fish"] .pet-body::after {
+  background: linear-gradient(135deg, var(--pet-accent), var(--pet-primary)); border: 4px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a); border-radius: 50% 0 0 50%; z-index: -1; transform: rotate(-45deg);
+}
+
+/* Fish Stages */
+.pet-sprite[data-family="fish"][data-stage="juvenile"] .pet-body {
+  border-radius: 50%; width: 164px; height: 144px;
+  background: radial-gradient(circle at 35% 25%, rgba(255,255,255,0.45), transparent 40%), linear-gradient(135deg, var(--pet-secondary), var(--pet-primary));
+}
+.pet-sprite[data-family="fish"][data-stage="juvenile"] .pet-body::before { display: none; }
+.pet-sprite[data-family="fish"][data-stage="juvenile"] .pet-body::after { width: 32px; height: 52px; right: -24px; top: 46px; }
+
+.pet-sprite[data-family="fish"][data-stage="mature"] .pet-body {
+  border-radius: 54% 46% 46% 54% / 50% 50% 50% 50%; width: 194px; height: 150px;
+  background: radial-gradient(circle at 35% 25%, rgba(255,255,255,0.45), transparent 40%), radial-gradient(circle at 50% 50%, rgba(255,255,255,0.12) 30%, transparent 31%) 0 0 / 25px 25px, linear-gradient(135deg, var(--pet-secondary), var(--pet-primary));
+}
+.pet-sprite[data-family="fish"][data-stage="mature"] .pet-body::before { top: -16px; left: 65px; width: 50px; height: 24px; transform: rotate(5deg); }
+.pet-sprite[data-family="fish"][data-stage="mature"] .pet-body::after { width: 42px; height: 68px; right: -32px; top: 41px; }
+
+.pet-sprite[data-family="fish"][data-stage="prime"] .pet-body {
+  border-radius: 54% 46% 46% 54% / 50% 50% 50% 50%; width: 214px; height: 154px;
+  background: radial-gradient(circle at 35% 25%, rgba(255,255,255,0.45), transparent 40%), radial-gradient(circle at 50% 50%, rgba(255,255,255,0.16) 30%, transparent 31%) 0 0 / 20px 20px, radial-gradient(circle at 50% 50%, rgba(255,255,255,0.16) 30%, transparent 31%) 10px 10px / 20px 20px, linear-gradient(135deg, var(--pet-secondary), var(--pet-primary));
+}
+.pet-sprite[data-family="fish"][data-stage="prime"] .pet-body::before { top: -24px; left: 70px; width: 60px; height: 35px; transform: rotate(10deg); }
+.pet-sprite[data-family="fish"][data-stage="prime"] .pet-body::after { width: 50px; height: 80px; right: -42px; top: 40px; }
+
+.pet-sprite[data-family="fish"][data-stage="elder"] .pet-body {
+  border-radius: 54% 46% 46% 54% / 50% 50% 50% 50%; width: 204px; height: 152px;
+  background: radial-gradient(circle at 35% 25%, rgba(255,255,255,0.25), transparent 40%), radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.08) 35%, transparent 36%) 0 0 / 22px 22px, linear-gradient(135deg, var(--pet-secondary), var(--pet-primary));
+}
+.pet-sprite[data-family="fish"][data-stage="elder"] .pet-body::before { background: var(--color-muted); top: -15px; left: 60px; width: 54px; height: 26px; transform: rotate(-5deg); }
+.pet-sprite[data-family="fish"][data-stage="elder"] .pet-body::after { background: linear-gradient(135deg, var(--color-muted), var(--pet-primary)); width: 44px; height: 74px; right: -38px; top: 42px; transform: rotate(-35deg); }
+
+
+/* ==========================================
+   3. CAT FAMILY (貓族)
+   ========================================== */
+.pet-sprite[data-family="cat"] .pet-ears span {
+  border-radius: 12% 88% 28% 72% / 12% 88% 20% 80%;
+  background: radial-gradient(circle at 50% 70%, #ffcbd4 0 45%, transparent 48%), linear-gradient(135deg, var(--pet-secondary), var(--pet-primary));
+  top: 10px;
+}
+.pet-sprite[data-family="cat"] .pet-ears span:first-child { transform: rotate(-15deg); left: 8px; }
+.pet-sprite[data-family="cat"] .pet-ears span:last-child { transform: rotate(15deg); right: 8px; }
+.pet-sprite[data-family="cat"] .pet-mouth { border: 0; background: transparent; width: 24px; height: 12px; left: 50%; transform: translateX(-50%); }
+.pet-sprite[data-family="cat"] .pet-mouth::before,
+.pet-sprite[data-family="cat"] .pet-mouth::after {
+  content: ""; position: absolute; top: 0; width: 12px; height: 8px; border: 3.5px solid var(--color-text); border-top: 0; border-radius: 0 0 8px 8px;
+}
+.pet-sprite[data-family="cat"] .pet-mouth::before { left: 0; border-right: 0; }
+.pet-sprite[data-family="cat"] .pet-mouth::after { right: 0; border-left: 0; }
+.pet-sprite[data-family="cat"] .pet-body::after {
+  content: ""; position: absolute; border: 12px solid var(--pet-primary); border-left: 0; border-bottom: 0; border-radius: 0 40px 40px 0; transform: rotate(15deg); z-index: -1;
+}
+
+/* Cat Stages */
+.pet-sprite[data-family="cat"][data-stage="juvenile"] .pet-ears span { border-radius: 50% 50% 20% 20%; height: 38px; width: 32px; top: 30px; background: radial-gradient(circle at 50% 80%, #ffcbd4 0 40%, transparent 45%), linear-gradient(135deg, var(--pet-secondary), var(--pet-primary)); }
+.pet-sprite[data-family="cat"][data-stage="juvenile"] .pet-ears span:first-child { transform: rotate(-12deg); left: 24px; }
+.pet-sprite[data-family="cat"][data-stage="juvenile"] .pet-ears span:last-child { transform: rotate(12deg); right: 24px; }
+.pet-sprite[data-family="cat"][data-stage="juvenile"] .pet-face::before,
+.pet-sprite[data-family="cat"][data-stage="juvenile"] .pet-face::after { display: none; }
+.pet-sprite[data-family="cat"][data-stage="juvenile"] .pet-body::after { width: 14px; height: 35px; border-width: 7px; bottom: 25px; right: -10px; }
+
+.pet-sprite[data-family="cat"][data-stage="mature"] .pet-ears span { height: 58px; width: 44px; top: 20px; }
+.pet-sprite[data-family="cat"][data-stage="mature"] .pet-ears span:first-child { transform: rotate(-15deg); left: 16px; }
+.pet-sprite[data-family="cat"][data-stage="mature"] .pet-ears span:last-child { transform: rotate(15deg); right: 16px; }
+.pet-sprite[data-family="cat"][data-stage="mature"] .pet-face::before,
+.pet-sprite[data-family="cat"][data-stage="mature"] .pet-face::after {
+  content: ""; position: absolute; top: 96px; width: 32px; height: 3px; background: color-mix(in srgb, var(--pet-primary) 80%, #1a171a); border-radius: 999px;
+}
+.pet-sprite[data-family="cat"][data-stage="mature"] .pet-face::before { left: 18px; transform: rotate(5deg); }
+.pet-sprite[data-family="cat"][data-stage="mature"] .pet-face::after { right: 18px; transform: rotate(-5deg); }
+.pet-sprite[data-family="cat"][data-stage="mature"] .pet-body::after { width: 28px; height: 55px; border-width: 9px; bottom: 28px; right: -20px; }
+
+.pet-sprite[data-family="cat"][data-stage="prime"] .pet-face::before,
+.pet-sprite[data-family="cat"][data-stage="prime"] .pet-face::after {
+  content: ""; position: absolute; top: 96px; width: 45px; height: 12px; border-top: 3px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a); border-bottom: 3px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a); border-radius: 999px;
+}
+.pet-sprite[data-family="cat"][data-stage="prime"] .pet-face::before { left: 12px; transform: rotate(8deg); }
+.pet-sprite[data-family="cat"][data-stage="prime"] .pet-face::after { right: 12px; transform: rotate(-8deg); }
+.pet-sprite[data-family="cat"][data-stage="prime"] .pet-body::after { width: 44px; height: 76px; border-width: 12px; bottom: 30px; right: -32px; animation: cat-tail-wiggle 1.5s ease-in-out infinite alternate; }
+
+.pet-sprite[data-family="cat"][data-stage="elder"] .pet-ears span {
+  border-radius: 20% 70% 30% 60%; height: 72px; width: 54px; top: 15px; background: radial-gradient(circle at 45% 65%, #ffdae0 0 35%, transparent 38%), linear-gradient(135deg, var(--pet-secondary), var(--pet-primary));
+}
+.pet-sprite[data-family="cat"][data-stage="elder"] .pet-ears span:first-child { transform: rotate(-25deg); left: 10px; }
+.pet-sprite[data-family="cat"][data-stage="elder"] .pet-ears span:last-child { transform: rotate(25deg); right: 10px; }
+.pet-sprite[data-family="cat"][data-stage="elder"] .pet-face::before,
+.pet-sprite[data-family="cat"][data-stage="elder"] .pet-face::after {
+  content: ""; position: absolute; top: 98px; width: 46px; height: 10px; border-top: 3px solid #ffffff; border-bottom: 3px solid #ffffff; border-radius: 999px;
+}
+.pet-sprite[data-family="cat"][data-stage="elder"] .pet-face::before { left: 10px; transform: rotate(-10deg); }
+.pet-sprite[data-family="cat"][data-stage="elder"] .pet-face::after { right: 10px; transform: rotate(10deg); }
+.pet-sprite[data-family="cat"][data-stage="elder"] .pet-mouth::before,
+.pet-sprite[data-family="cat"][data-stage="elder"] .pet-mouth::after { border-color: #ffffff; }
+.pet-sprite[data-family="cat"][data-stage="elder"] .pet-body::after { border-color: var(--color-muted); border-width: 10px; width: 24px; height: 65px; bottom: 15px; right: -24px; transform: rotate(50deg); }
+
+
+/* ==========================================
+   4. DOG FAMILY (狗族)
+   ========================================== */
+.pet-sprite[data-family="dog"] .pet-ears span {
+  border-radius: 40% 40% 65% 65%;
+  background: linear-gradient(to bottom, var(--pet-secondary) 15%, var(--pet-primary) 85%);
+  top: 26px;
+}
+.pet-sprite[data-family="dog"] .pet-body::before {
+  content: ""; position: absolute; background: var(--pet-accent); border-radius: 50%; opacity: 0.8;
+}
+.pet-sprite[data-family="dog"] .pet-body::after {
+  content: ""; position: absolute; background: var(--pet-primary); border: 4px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a); border-radius: 50% 50% 0 0; transform: rotate(45deg); transform-origin: bottom left; z-index: -1;
+}
+
+/* Dog Stages */
+.pet-sprite[data-family="dog"][data-stage="juvenile"] .pet-ears span { border-radius: 40% 40% 50% 50%; height: 48px; width: 28px; top: 36px; background: var(--pet-primary); }
+.pet-sprite[data-family="dog"][data-stage="juvenile"] .pet-ears span:first-child { left: 24px; }
+.pet-sprite[data-family="dog"][data-stage="juvenile"] .pet-ears span:last-child { right: 24px; }
+.pet-sprite[data-family="dog"][data-stage="juvenile"] .pet-body::before { display: none; }
+.pet-sprite[data-family="dog"][data-stage="juvenile"] .pet-body::after { width: 14px; height: 24px; bottom: 25px; right: -10px; transform: rotate(45deg); animation: none; }
+
+.pet-sprite[data-family="dog"][data-stage="mature"] .pet-ears span { height: 72px; width: 38px; top: 30px; }
+.pet-sprite[data-family="dog"][data-stage="mature"] .pet-ears span:first-child { left: 16px; }
+.pet-sprite[data-family="dog"][data-stage="mature"] .pet-ears span:last-child { right: 16px; }
+.pet-sprite[data-family="dog"][data-stage="mature"] .pet-body::before { top: 54px; left: 48px; width: 28px; height: 28px; }
+.pet-sprite[data-family="dog"][data-stage="mature"] .pet-body::after { width: 22px; height: 34px; bottom: 22px; right: -16px; animation: dog-tail-wag 0.8s ease-in-out infinite alternate; }
+
+.pet-sprite[data-family="dog"][data-stage="prime"] .pet-ears span { height: 96px; width: 48px; }
+.pet-sprite[data-family="dog"][data-stage="prime"] .pet-body::before { top: 50px; left: 40px; width: 44px; height: 44px; }
+.pet-sprite[data-family="dog"][data-stage="prime"] .pet-body::after { width: 32px; height: 48px; bottom: 20px; right: -24px; animation: dog-tail-wag 0.8s ease-in-out infinite alternate; }
+
+.pet-sprite[data-family="dog"][data-stage="elder"] .pet-ears span { height: 90px; width: 46px; top: 30px; background: linear-gradient(to bottom, var(--color-muted) 15%, var(--pet-primary) 85%); }
+.pet-sprite[data-family="dog"][data-stage="elder"] .pet-body::before { top: 50px; left: 40px; width: 44px; height: 44px; background: var(--color-muted); opacity: 0.6; }
+.pet-sprite[data-family="dog"][data-stage="elder"] .pet-face::before,
+.pet-sprite[data-family="dog"][data-stage="elder"] .pet-face::after {
+  content: ""; position: absolute; top: 52px; width: 18px; height: 6px; background: #ffffff; border-radius: 999px;
+}
+.pet-sprite[data-family="dog"][data-stage="elder"] .pet-face::before { left: 45px; transform: rotate(-10deg); }
+.pet-sprite[data-family="dog"][data-stage="elder"] .pet-face::after { right: 45px; transform: rotate(10deg); }
+.pet-sprite[data-family="dog"][data-stage="elder"] .pet-body::after { background: var(--color-muted); width: 24px; height: 38px; bottom: 12px; right: -20px; transform: rotate(15deg); animation: dog-tail-wag 1.6s ease-in-out infinite alternate; }
+
+
+/* ==========================================
+   5. COW FAMILY (牛族)
+   ========================================== */
+.pet-sprite[data-family="cow"] .pet-ears span::before {
+  content: ""; position: absolute; width: 16px; height: 36px; background: #f2e2bd; border: 3px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a); border-radius: 80% 80% 0 0;
+}
+.pet-sprite[data-family="cow"] .pet-ears span:first-child::before { left: 20px; transform: rotate(25deg); }
+.pet-sprite[data-family="cow"] .pet-ears span:last-child::before { right: 20px; transform: rotate(-25deg); }
+.pet-sprite[data-family="cow"] .pet-body::before {
+  content: ""; position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); background: #ffb8c6; border: 4px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a); border-radius: 50%; z-index: 1;
+}
+
+/* Cow Stages */
+.pet-sprite[data-family="cow"][data-stage="juvenile"] .pet-ears span { border-radius: 50%; height: 32px; width: 26px; top: 30px; }
+.pet-sprite[data-family="cow"][data-stage="juvenile"] .pet-ears span::before { display: none; }
+.pet-sprite[data-family="cow"][data-stage="juvenile"] .pet-body {
+  background: radial-gradient(circle at 35% 25%, rgba(255,255,255,0.45), transparent 40%), radial-gradient(circle at 34% 36%, var(--pet-accent) 0 8%, transparent 9%), linear-gradient(135deg, #ffffff, var(--pet-secondary));
+}
+.pet-sprite[data-family="cow"][data-stage="juvenile"] .pet-body::before { width: 66px; height: 36px; bottom: 26px; }
+
+.pet-sprite[data-family="cow"][data-stage="mature"] .pet-ears span { border-radius: 60% 60% 30% 30%; height: 42px; top: 22px; width: 34px; }
+.pet-sprite[data-family="cow"][data-stage="mature"] .pet-ears span::before { width: 10px; height: 20px; top: -12px; }
+.pet-sprite[data-family="cow"][data-stage="mature"] .pet-ears span:first-child::before { left: 14px; transform: rotate(18deg); }
+.pet-sprite[data-family="cow"][data-stage="mature"] .pet-ears span:last-child::before { right: 14px; transform: rotate(-18deg); }
+.pet-sprite[data-family="cow"][data-stage="mature"] .pet-body {
+  background: radial-gradient(circle at 35% 25%, rgba(255,255,255,0.45), transparent 40%), radial-gradient(circle at 34% 36%, var(--pet-accent) 0 12%, transparent 13%), radial-gradient(circle at 68% 58%, var(--pet-accent) 0 13%, transparent 14%), linear-gradient(135deg, #ffffff, var(--pet-secondary));
+}
+.pet-sprite[data-family="cow"][data-stage="mature"] .pet-body::before {
+  width: 82px; height: 44px; background-image: radial-gradient(circle at 35% 50%, #d88fa0 0 2.5px, transparent 3.5px), radial-gradient(circle at 65% 50%, #d88fa0 0 2.5px, transparent 3.5px);
+}
+
+.pet-sprite[data-family="cow"][data-stage="prime"] .pet-ears span { border-radius: 60% 60% 30% 30%; height: 52px; top: 18px; width: 42px; }
+.pet-sprite[data-family="cow"][data-stage="prime"] .pet-body {
+  background: radial-gradient(circle at 35% 25%, rgba(255,255,255,0.45), transparent 40%), radial-gradient(circle at 34% 36%, var(--pet-accent) 0 14%, transparent 15%), radial-gradient(circle at 68% 58%, var(--pet-accent) 0 16%, transparent 17%), radial-gradient(circle at 20% 70%, var(--pet-accent) 0 10%, transparent 11%), radial-gradient(circle at 80% 30%, var(--pet-accent) 0 12%, transparent 13%), linear-gradient(135deg, #ffffff, var(--pet-secondary));
+}
+.pet-sprite[data-family="cow"][data-stage="prime"] .pet-body::before {
+  width: 96px; height: 52px; background-image: radial-gradient(circle at 35% 50%, #d88fa0 0 3px, transparent 4px), radial-gradient(circle at 65% 50%, #d88fa0 0 3px, transparent 4px);
+}
+
+.pet-sprite[data-family="cow"][data-stage="elder"] .pet-ears span { border-radius: 70% 50% 30% 30%; height: 50px; top: 24px; width: 40px; }
+.pet-sprite[data-family="cow"][data-stage="elder"] .pet-ears span::before { top: -28px; width: 14px; height: 42px; background: #dfd5be; }
+.pet-sprite[data-family="cow"][data-stage="elder"] .pet-ears span:first-child::before { left: 16px; transform: rotate(40deg); }
+.pet-sprite[data-family="cow"][data-stage="elder"] .pet-ears span:last-child::before { right: 16px; transform: rotate(-40deg); }
+.pet-sprite[data-family="cow"][data-stage="elder"] .pet-body {
+  background: radial-gradient(circle at 35% 25%, rgba(255,255,255,0.25), transparent 40%), radial-gradient(circle at 34% 36%, var(--color-muted) 0 12%, transparent 13%), radial-gradient(circle at 68% 58%, var(--color-muted) 0 14%, transparent 15%), linear-gradient(135deg, #efefef, var(--pet-secondary));
+}
+.pet-sprite[data-family="cow"][data-stage="elder"] .pet-body::before {
+  width: 92px; height: 50px; background-image: radial-gradient(circle at 35% 50%, #d88fa0 0 3px, transparent 4px), radial-gradient(circle at 65% 50%, #d88fa0 0 3px, transparent 4px);
+}
+
+
+/* ==========================================
+   6. BIRD FAMILY (鳥族)
+   ========================================== */
 .pet-sprite[data-family="bird"] .pet-mouth {
-  background: var(--pet-accent);
-  border: 0;
-  clip-path: polygon(0 0, 100% 50%, 0 100%);
-  height: 20px;
-  left: 50%;
-  top: 88px;
-  transform: translateX(-8px);
-  width: 30px;
+  background: var(--pet-accent); border: 3px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a); border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; z-index: 2;
 }
-
 .pet-sprite[data-family="bird"] .pet-body::before {
-  background: color-mix(in srgb, var(--pet-primary) 76%, #fff);
-  border-radius: 60% 40% 60% 40%;
-  height: 64px;
-  left: -32px;
-  top: 72px;
-  transform: rotate(-18deg);
-  width: 72px;
+  content: ""; position: absolute; background: color-mix(in srgb, var(--pet-primary) 76%, #fff); border: 4px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a); border-radius: 60% 40% 60% 40%;
+}
+.pet-sprite[data-family="bird"] .pet-body::after {
+  content: ""; position: absolute; background: color-mix(in srgb, var(--pet-primary) 70%, #fff); border: 4px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a); border-radius: 40% 60% 40% 60%; z-index: -1;
 }
 
+/* Bird Stages */
+.pet-sprite[data-family="bird"][data-stage="juvenile"] .pet-ears { display: none; }
+.pet-sprite[data-family="bird"][data-stage="juvenile"] .pet-mouth { height: 12px; width: 14px; left: 50%; top: 92px; transform: translateX(-5px); border-width: 3px; }
+.pet-sprite[data-family="bird"][data-stage="juvenile"] .pet-body::before { border-radius: 50%; height: 36px; left: -14px; top: 76px; width: 32px; border-width: 3px; }
+.pet-sprite[data-family="bird"][data-stage="juvenile"] .pet-body::after { display: none; }
+
+.pet-sprite[data-family="bird"][data-stage="mature"] .pet-ears span { border-radius: 100% 0 100% 0; height: 38px; width: 18px; background: var(--pet-accent); top: 25px; border: 3px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a); }
+.pet-sprite[data-family="bird"][data-stage="mature"] .pet-ears span:first-child { transform: rotate(-25deg); left: 52px; }
+.pet-sprite[data-family="bird"][data-stage="mature"] .pet-ears span:last-child { transform: rotate(25deg); right: 52px; }
+.pet-sprite[data-family="bird"][data-stage="mature"] .pet-mouth { height: 16px; width: 20px; left: 50%; top: 90px; transform: translateX(-7px); }
+.pet-sprite[data-family="bird"][data-stage="mature"] .pet-body::before { height: 52px; left: -20px; top: 68px; transform: rotate(-15deg); width: 44px; animation: bird-wing-flap-left 1.6s ease-in-out infinite alternate; }
+.pet-sprite[data-family="bird"][data-stage="mature"] .pet-body::after { height: 52px; right: -20px; top: 68px; transform: rotate(15deg); width: 44px; animation: bird-wing-flap-right 1.6s ease-in-out infinite alternate; }
+
+.pet-sprite[data-family="bird"][data-stage="prime"] .pet-mouth { height: 18px; width: 24px; left: 50%; top: 88px; transform: translateX(-8px); }
+.pet-sprite[data-family="bird"][data-stage="prime"] .pet-body::before { height: 68px; left: -28px; top: 64px; transform: rotate(-20deg); width: 58px; animation: bird-wing-flap-left 1.2s ease-in-out infinite alternate; }
+.pet-sprite[data-family="bird"][data-stage="prime"] .pet-body::after { height: 68px; right: -28px; top: 64px; transform: rotate(20deg); width: 58px; animation: bird-wing-flap-right 1.2s ease-in-out infinite alternate; }
+.pet-sprite[data-family="bird"][data-stage="prime"] .pet-ears span { border-radius: 100% 0 100% 0; height: 54px; width: 24px; background: var(--pet-accent); top: 15px; border: 4px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a); }
+.pet-sprite[data-family="bird"][data-stage="prime"] .pet-ears span:first-child { transform: rotate(-35deg); left: 45px; }
+.pet-sprite[data-family="bird"][data-stage="prime"] .pet-ears span:last-child { transform: rotate(35deg); right: 45px; }
+
+.pet-sprite[data-family="bird"][data-stage="elder"] .pet-ears span { border-radius: 100% 0 100% 0; height: 48px; width: 20px; background: var(--color-muted); top: 24px; border: 3px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a); }
+.pet-sprite[data-family="bird"][data-stage="elder"] .pet-ears span:first-child { transform: rotate(-65deg); left: 35px; }
+.pet-sprite[data-family="bird"][data-stage="elder"] .pet-ears span:last-child { display: none; }
+.pet-sprite[data-family="bird"][data-stage="elder"] .pet-mouth { background: var(--color-muted); border-radius: 50% 50% 10% 90%; height: 22px; width: 22px; left: 50%; top: 88px; transform: translateX(-8px); }
+.pet-sprite[data-family="bird"][data-stage="elder"] .pet-body::before { background: color-mix(in srgb, var(--pet-primary) 70%, #eee); height: 66px; left: -20px; top: 74px; transform: rotate(-5deg); width: 48px; }
+.pet-sprite[data-family="bird"][data-stage="elder"] .pet-body::after { background: color-mix(in srgb, var(--pet-primary) 65%, #eee); height: 66px; right: -20px; top: 74px; transform: rotate(5deg); width: 48px; }
+
+
+/* ==========================================
+   7. RABBIT FAMILY (兔族)
+   ========================================== */
 .pet-sprite[data-family="rabbit"] .pet-ears span {
-  height: 124px;
-  top: -30px;
-  width: 42px;
+  background: linear-gradient(to bottom, #ffcbd4 28%, transparent 80%), linear-gradient(135deg, var(--pet-secondary), var(--pet-primary));
+}
+.pet-sprite[data-family="rabbit"] .pet-mouth::before {
+  content: ""; position: absolute; background: #ffffff; border: 2.5px solid var(--color-text); border-top: 0;
+}
+.pet-sprite[data-family="rabbit"] .pet-body::after {
+  content: ""; position: absolute; background: #ffffff; border: 4px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a); border-radius: 50%; z-index: -1;
 }
 
+/* Rabbit Stages */
+.pet-sprite[data-family="rabbit"][data-stage="juvenile"] .pet-ears span { height: 52px; width: 24px; top: 25px; background: linear-gradient(to bottom, #ffcbd4 20%, transparent 80%), linear-gradient(135deg, var(--pet-secondary), var(--pet-primary)); }
+.pet-sprite[data-family="rabbit"][data-stage="juvenile"] .pet-ears span:first-child { transform: rotate(-12deg); left: 30px; }
+.pet-sprite[data-family="rabbit"][data-stage="juvenile"] .pet-ears span:last-child { transform: rotate(12deg); right: 30px; }
+.pet-sprite[data-family="rabbit"][data-stage="juvenile"] .pet-mouth::before { display: none; }
+.pet-sprite[data-family="rabbit"][data-stage="juvenile"] .pet-body::after { width: 22px; height: 22px; bottom: 25px; right: -8px; border-width: 3px; }
+
+.pet-sprite[data-family="rabbit"][data-stage="mature"] .pet-ears span { height: 88px; width: 34px; top: 0px; background: linear-gradient(to bottom, #ffcbd4 25%, transparent 80%), linear-gradient(135deg, var(--pet-secondary), var(--pet-primary)); }
+.pet-sprite[data-family="rabbit"][data-stage="mature"] .pet-ears span:first-child { transform: rotate(-15deg); left: 20px; }
+.pet-sprite[data-family="rabbit"][data-stage="mature"] .pet-ears span:last-child { transform: rotate(15deg); right: 20px; }
+.pet-sprite[data-family="rabbit"][data-stage="mature"] .pet-mouth::before { bottom: -6px; left: 5px; width: 7px; height: 6px; }
+.pet-sprite[data-family="rabbit"][data-stage="mature"] .pet-body::after { width: 30px; height: 30px; bottom: 23px; right: -14px; border-width: 3px; }
+
+.pet-sprite[data-family="rabbit"][data-stage="prime"] .pet-ears span { height: 124px; top: -38px; width: 42px; }
+.pet-sprite[data-family="rabbit"][data-stage="prime"] .pet-ears span:first-child { transform: rotate(-22deg); left: 4px; }
+.pet-sprite[data-family="rabbit"][data-stage="prime"] .pet-ears span:last-child { transform: rotate(22deg); right: 4px; }
+.pet-sprite[data-family="rabbit"][data-stage="prime"] .pet-mouth::before { bottom: -8px; left: 4px; width: 10px; height: 8px; box-shadow: 6px 0 0 #ffffff; }
+.pet-sprite[data-family="rabbit"][data-stage="prime"] .pet-body::after { width: 38px; height: 38px; bottom: 22px; right: -20px; }
+
+.pet-sprite[data-family="rabbit"][data-stage="elder"] .pet-ears span { height: 110px; width: 40px; top: -15px; background: linear-gradient(to bottom, var(--color-muted) 20%, transparent 80%), linear-gradient(135deg, var(--pet-secondary), var(--pet-primary)); }
+.pet-sprite[data-family="rabbit"][data-stage="elder"] .pet-ears span:first-child { transform: rotate(-100deg); left: -10px; }
+.pet-sprite[data-family="rabbit"][data-stage="elder"] .pet-ears span:last-child { transform: rotate(28deg); right: 10px; }
+.pet-sprite[data-family="rabbit"][data-stage="elder"] .pet-mouth::before { background: #f7eed3; bottom: -9px; left: 4px; width: 9px; height: 9px; box-shadow: 5px 0 0 #f7eed3; }
+.pet-sprite[data-family="rabbit"][data-stage="elder"] .pet-body::after { background: #e2e2e2; width: 36px; height: 36px; bottom: 18px; right: -18px; border-width: 3px; }
+
+
+/* ==========================================
+   8. FOX FAMILY (狐族)
+   ========================================== */
 .pet-sprite[data-family="fox"] .pet-ears span {
-  border-radius: 12% 88% 20% 80%;
-  height: 86px;
+  border-radius: 15% 85% 25% 75%;
+  background: radial-gradient(circle at 50% 60%, var(--pet-accent) 0 40%, transparent 43%), linear-gradient(135deg, var(--pet-secondary), var(--pet-primary));
+}
+.pet-sprite[data-family="fox"] .pet-body::after {
+  content: ""; position: absolute; border: 4px solid color-mix(in srgb, var(--pet-primary) 80%, #1a171a); border-radius: 60% 20% 60% 20%; z-index: -1;
+}
+
+/* Fox Stages */
+.pet-sprite[data-family="fox"][data-stage="juvenile"] .pet-ears span { border-radius: 20% 80% 20% 80%; height: 48px; width: 32px; top: 36px; background: var(--pet-primary); }
+.pet-sprite[data-family="fox"][data-stage="juvenile"] .pet-ears span:first-child { transform: rotate(-12deg); left: 24px; }
+.pet-sprite[data-family="fox"][data-stage="juvenile"] .pet-ears span:last-child { transform: rotate(12deg); right: 24px; }
+.pet-sprite[data-family="fox"][data-stage="juvenile"] .pet-body { background: radial-gradient(circle at 38% 32%, rgba(255,255,255,0.9), transparent 14%), linear-gradient(135deg, var(--pet-secondary), var(--pet-primary)); }
+.pet-sprite[data-family="fox"][data-stage="juvenile"] .pet-body::after { background: var(--pet-accent); border-width: 3px; height: 42px; width: 24px; right: -18px; top: 104px; transform: rotate(35deg); }
+
+.pet-sprite[data-family="fox"][data-stage="mature"] .pet-ears span { height: 68px; width: 44px; top: 22px; }
+.pet-sprite[data-family="fox"][data-stage="mature"] .pet-ears span:first-child { transform: rotate(-15deg); left: 16px; }
+.pet-sprite[data-family="fox"][data-stage="mature"] .pet-ears span:last-child { transform: rotate(15deg); right: 16px; }
+.pet-sprite[data-family="fox"][data-stage="mature"] .pet-body {
+  background: radial-gradient(circle at 38% 32%, rgba(255,255,255,0.9), transparent 14%), radial-gradient(ellipse at 25% 78%, #ffffff 0 20%, transparent 22%), radial-gradient(ellipse at 75% 78%, #ffffff 0 20%, transparent 22%), linear-gradient(135deg, var(--pet-secondary), var(--pet-primary));
+}
+.pet-sprite[data-family="fox"][data-stage="mature"] .pet-body::after { background: linear-gradient(-45deg, #ffffff 20%, var(--pet-accent) 21%); border-width: 3px; height: 65px; width: 32px; right: -28px; top: 98px; transform: rotate(28deg); }
+
+.pet-sprite[data-family="fox"][data-stage="prime"] .pet-ears span { height: 86px; width: 58px; background: linear-gradient(135deg, var(--color-text) 15%, transparent 16%), radial-gradient(circle at 50% 60%, var(--pet-accent) 0 40%, transparent 43%), linear-gradient(135deg, var(--pet-secondary), var(--pet-primary)); }
+.pet-sprite[data-family="fox"][data-stage="prime"] .pet-ears span:first-child { transform: rotate(-15deg); left: 8px; }
+.pet-sprite[data-family="fox"][data-stage="prime"] .pet-ears span:last-child { transform: rotate(15deg); right: 8px; }
+.pet-sprite[data-family="fox"][data-stage="prime"] .pet-body {
+  background: radial-gradient(circle at 38% 32%, rgba(255, 255, 255, 0.9), transparent 14%), radial-gradient(ellipse at 25% 75%, #ffffff 0 28%, transparent 30%), radial-gradient(ellipse at 75% 75%, #ffffff 0 28%, transparent 30%), linear-gradient(135deg, var(--pet-secondary), var(--pet-primary));
+}
+.pet-sprite[data-family="fox"][data-stage="prime"] .pet-body::after { background: radial-gradient(circle at 90% 10%, #ffffff 0 25px, transparent 26px), var(--pet-accent); height: 88px; right: -42px; top: 92px; transform: rotate(22deg); width: 42px; }
+
+.pet-sprite[data-family="fox"][data-stage="elder"] .pet-ears span {
+  border-radius: 20% 80% 30% 70%; height: 82px; width: 54px; background: linear-gradient(135deg, #ffffff 15%, transparent 16%), radial-gradient(circle at 50% 60%, var(--color-muted) 0 35%, transparent 38%), linear-gradient(135deg, var(--pet-secondary), var(--pet-primary));
+}
+.pet-sprite[data-family="fox"][data-stage="elder"] .pet-ears span:first-child { transform: rotate(-25deg); left: 10px; }
+.pet-sprite[data-family="fox"][data-stage="elder"] .pet-ears span:last-child { transform: rotate(25deg); right: 10px; }
+.pet-sprite[data-family="fox"][data-stage="elder"] .pet-body {
+  background:
+    radial-gradient(circle at 38% 32%, rgba(255, 255, 255, 0.6), transparent 14%),
+    /* Fully white mask extending up */
+    radial-gradient(ellipse at 50% 70%, #ffffff 0 55%, transparent 58%),
+    linear-gradient(145deg, var(--pet-secondary), var(--pet-primary));
+}
+.pet-sprite[data-family="fox"][data-stage="elder"] .pet-body::after {
+  background: linear-gradient(-45deg, #ffffff 40%, var(--color-muted) 41%);
+  border: 3px solid color-mix(in srgb, var(--pet-primary) 70%, var(--color-text));
+  border-radius: 60% 20% 60% 20%;
+  height: 80px;
+  right: -36px;
+  top: 102px;
+  transform: rotate(40deg);
+  width: 38px;
+}
+
+
+/* ==========================================
+   9. TURTLE FAMILY (烏龜族)
+   ========================================= */
+
+/* JUVENILE (幼年龜): 無龜殼紋，短腳掌 */
+.pet-sprite[data-family="turtle"][data-stage="juvenile"] .pet-body {
+  border-radius: 48% 48% 40% 40%;
+}
+.pet-sprite[data-family="turtle"][data-stage="juvenile"] .pet-body::before {
+  display: none; /* No shell pattern */
+}
+.pet-sprite[data-family="turtle"][data-stage="juvenile"] .pet-feet span {
+  height: 24px;
+  width: 44px;
+}
+
+/* MATURE (成長龜): 單圈龜殼紋，中腳掌 */
+.pet-sprite[data-family="turtle"][data-stage="mature"] .pet-body {
+  border-radius: 48% 48% 38% 38%;
+}
+.pet-sprite[data-family="turtle"][data-stage="mature"] .pet-body::before {
+  content: "";
+  position: absolute;
+  inset: 22px;
+  border: 4px solid color-mix(in srgb, var(--pet-accent) 76%, var(--color-text));
+  border-radius: 50%;
+  opacity: 0.8;
+}
+.pet-sprite[data-family="turtle"][data-stage="mature"] .pet-feet span {
+  height: 32px;
+  width: 50px;
+}
+
+/* PRIME (成年龜): Hex龜甲紋，大長鰭 */
+.pet-sprite[data-family="turtle"][data-stage="prime"] .pet-body {
+  border-radius: 48% 48% 36% 36%;
+}
+.pet-sprite[data-family="turtle"][data-stage="prime"] .pet-body::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  background: 
+    repeating-linear-gradient(30deg, transparent, transparent 15px, rgba(0,0,0,0.1) 15px, rgba(0,0,0,0.1) 17px),
+    repeating-linear-gradient(-30deg, transparent, transparent 15px, rgba(0,0,0,0.1) 15px, rgba(0,0,0,0.1) 17px);
+  border: 6px dashed color-mix(in srgb, var(--pet-accent) 76%, var(--color-text));
+  border-radius: 50%;
+  opacity: 0.8;
+}
+.pet-sprite[data-family="turtle"][data-stage="prime"] .pet-feet span {
+  border-radius: 50% 50% 40% 40%;
+  height: 38px;
   width: 58px;
 }
 
-.pet-sprite[data-family="fox"] .pet-body::after {
-  background: var(--pet-accent);
-  border-radius: 60% 20% 60% 20%;
-  height: 88px;
-  right: -42px;
-  top: 92px;
-  transform: rotate(22deg);
-  width: 42px;
-}
-
-.pet-sprite[data-family="turtle"] .pet-body {
+/* ELDER (老年龜): 深青古老龜殼紋，厚重長腳 */
+.pet-sprite[data-family="turtle"][data-stage="elder"] .pet-body {
   border-radius: 48% 48% 36% 36%;
 }
-
-.pet-sprite[data-family="turtle"] .pet-body::before {
-  border: 4px solid color-mix(in srgb, var(--pet-accent) 76%, var(--color-text));
+.pet-sprite[data-family="turtle"][data-stage="elder"] .pet-body::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  background: 
+    /* Aging mossy dots */
+    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1) 0 4px, transparent 5px),
+    radial-gradient(circle at 70% 60%, rgba(255, 255, 255, 0.1) 0 6px, transparent 7%),
+    repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(0,0,0,0.15) 20px, rgba(0,0,0,0.15) 23px),
+    repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(0,0,0,0.15) 20px, rgba(0,0,0,0.15) 23px);
+  border: 6px solid color-mix(in srgb, var(--color-muted) 80%, var(--color-text));
   border-radius: 50%;
-  inset: 22px 30px 32px;
+  opacity: 0.85;
+}
+.pet-sprite[data-family="turtle"][data-stage="elder"] .pet-feet span {
+  border-radius: 50% 50% 35% 35%;
+  height: 35px;
+  width: 56px;
+  background: color-mix(in srgb, var(--pet-primary) 50%, var(--color-muted));
 }
 
-.pet-sprite[data-family="unicorn"] .pet-body::before {
-  background: linear-gradient(180deg, var(--pet-accent), #fff);
-  clip-path: polygon(50% 0, 100% 100%, 0 100%);
-  height: 64px;
+
+/* ==========================================
+   10. UNICORN FAMILY (獨角獸族)
+   ========================================= */
+
+/* JUVENILE (幼年獨角獸): 無角（僅發光小粉斑），無鬃毛，短尾巴 */
+.pet-sprite[data-family="unicorn"][data-stage="juvenile"] .pet-ears::before {
+  display: none; /* No mane */
+}
+.pet-sprite[data-family="unicorn"][data-stage="juvenile"] .pet-body::before {
+  content: "";
+  position: absolute;
+  background: var(--pet-accent);
+  border-radius: 50%;
+  height: 12px;
+  width: 12px;
   left: 50%;
-  top: -58px;
+  top: -6px;
   transform: translateX(-50%);
-  width: 30px;
+  box-shadow: 0 0 6px var(--pet-accent); /* tiny glow nub */
+}
+.pet-sprite[data-family="unicorn"][data-stage="juvenile"] .pet-body::after {
+  content: "";
+  position: absolute;
+  bottom: 25px;
+  right: -12px;
+  width: 18px;
+  height: 36px;
+  background: var(--pet-secondary);
+  border: 3px solid color-mix(in srgb, var(--pet-primary) 70%, var(--color-text));
+  border-radius: 50%;
+  transform: rotate(20deg);
+  z-index: -1;
 }
 
+/* MATURE (成長獨角獸): 短金角，微鬃毛，中尾 */
+.pet-sprite[data-family="unicorn"][data-stage="mature"] .pet-ears::before {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 35%;
+  width: 50px;
+  height: 55px;
+  background: linear-gradient(to bottom, var(--pet-accent), var(--pet-secondary));
+  border-radius: 20px 5px 20px 5px;
+  transform: rotate(-8deg);
+  z-index: -1;
+}
+.pet-sprite[data-family="unicorn"][data-stage="mature"] .pet-body::before {
+  content: "";
+  position: absolute;
+  background: linear-gradient(180deg, var(--pet-accent), #fff);
+  border: 2px solid color-mix(in srgb, var(--pet-primary) 70%, var(--color-text));
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  height: 44px;
+  left: 50%;
+  top: -38px;
+  transform: translateX(-50%);
+  width: 18px;
+}
+.pet-sprite[data-family="unicorn"][data-stage="mature"] .pet-body::after {
+  content: "";
+  position: absolute;
+  bottom: 24px;
+  right: -24px;
+  width: 32px;
+  height: 58px;
+  background: linear-gradient(180deg, var(--pet-accent), var(--pet-secondary));
+  border: 3px solid color-mix(in srgb, var(--pet-primary) 70%, var(--color-text));
+  border-radius: 15px 35px 15px 35px;
+  transform: rotate(15deg);
+  z-index: -1;
+}
+
+/* PRIME (成年獨角獸): 螺旋紋大光角，全鬃毛，長彩尾 */
+.pet-sprite[data-family="unicorn"][data-stage="prime"] .pet-body::before {
+  content: "";
+  position: absolute;
+  background: repeating-linear-gradient(45deg, var(--pet-accent), var(--pet-accent) 8px, #ffffff 8px, #ffffff 16px);
+  border: 3px solid color-mix(in srgb, var(--pet-primary) 70%, var(--color-text));
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  height: 72px;
+  left: 50%;
+  top: -66px;
+  transform: translateX(-50%);
+  width: 26px;
+  filter: drop-shadow(0 0 4px var(--pet-accent));
+}
+.pet-sprite[data-family="unicorn"][data-stage="prime"] .pet-body::after {
+  content: "";
+  position: absolute;
+  bottom: 24px;
+  right: -36px;
+  width: 48px;
+  height: 84px;
+  background: linear-gradient(180deg, var(--pet-accent), var(--pet-secondary), var(--pet-primary));
+  border: 4px solid color-mix(in srgb, var(--pet-primary) 70%, var(--color-text));
+  border-radius: 20px 50px 20px 50px;
+  transform: rotate(15deg);
+  z-index: -1;
+}
+.pet-sprite[data-family="unicorn"][data-stage="prime"] .pet-ears::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 30%;
+  width: 80px;
+  height: 90px;
+  background: linear-gradient(to bottom, var(--pet-accent), var(--pet-secondary));
+  border-radius: 40px 10px 40px 10px;
+  transform: rotate(-10deg);
+  z-index: -1;
+}
+
+/* ELDER (老年獨角獸): 長銀角，垂白鬃毛，長落馬尾 */
+.pet-sprite[data-family="unicorn"][data-stage="elder"] .pet-body::before {
+  content: "";
+  position: absolute;
+  background: repeating-linear-gradient(45deg, var(--color-muted), var(--color-muted) 8px, #ffffff 8px, #ffffff 16px);
+  border: 3px solid color-mix(in srgb, var(--pet-primary) 70%, var(--color-text));
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  height: 78px;
+  left: 50%;
+  top: -72px;
+  transform: translateX(-50%);
+  width: 24px;
+  filter: drop-shadow(0 0 2px #fff);
+}
+.pet-sprite[data-family="unicorn"][data-stage="elder"] .pet-body::after {
+  content: "";
+  position: absolute;
+  bottom: 15px;
+  right: -32px;
+  width: 42px;
+  height: 88px;
+  background: linear-gradient(180deg, var(--color-muted), #ffffff);
+  border: 3px solid color-mix(in srgb, var(--pet-primary) 70%, var(--color-text));
+  border-radius: 20px 40px 20px 40px;
+  transform: rotate(35deg);
+  z-index: -1;
+}
+.pet-sprite[data-family="unicorn"][data-stage="elder"] .pet-ears::before {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 28%;
+  width: 84px;
+  height: 96px;
+  background: linear-gradient(to bottom, var(--color-muted), #ffffff);
+  border-radius: 50px 10px 50px 10px;
+  transform: rotate(-15deg);
+  z-index: -1;
+}
+
+/* --- MOOD & INTERACTIVE STYLES --- */
 .pet-sprite[data-mood="sad"] .pet-mouth,
 .pet-sprite[data-mood="sick"] .pet-mouth {
   border-left: 4px solid var(--color-text);
@@ -387,6 +970,39 @@
 
 .pet-sprite[data-mood="dead"] {
   filter: grayscale(0.9) saturate(0.4);
+}
+
+/* Dead X-Eyes and Straight Flat Mouth */
+.pet-sprite[data-mood="dead"] .pet-eye {
+  background: transparent;
+  border-radius: 0;
+  height: 18px;
+  width: 18px;
+}
+.pet-sprite[data-mood="dead"] .pet-eye::before,
+.pet-sprite[data-mood="dead"] .pet-eye::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 0;
+  width: 18px;
+  height: 3px;
+  background: var(--color-text);
+}
+.pet-sprite[data-mood="dead"] .pet-eye::before {
+  transform: rotate(45deg);
+}
+.pet-sprite[data-mood="dead"] .pet-eye::after {
+  transform: rotate(-45deg);
+}
+.pet-sprite[data-mood="dead"] .pet-mouth {
+  border: 0;
+  border-top: 4px solid var(--color-text);
+  border-radius: 0;
+  height: 0;
+  top: 100px;
+  transform: translateX(-50%);
+  width: 20px;
 }
 
 .pet-sprite[data-mood="sleeping"] .pet-eye {
@@ -480,4 +1096,20 @@
   25% { translate: -8px 0; }
   50% { translate: 8px 0; }
   75% { translate: -5px 0; }
+}
+
+/* Custom extra keyframes for animations */
+@keyframes dog-tail-wag {
+  0% { transform: rotate(35deg); }
+  100% { transform: rotate(55deg); }
+}
+
+@keyframes bird-wing-flap-left {
+  0% { transform: rotate(-20deg); }
+  100% { transform: rotate(-35deg); }
+}
+
+@keyframes bird-wing-flap-right {
+  0% { transform: rotate(20deg); }
+  100% { transform: rotate(35deg); }
 }

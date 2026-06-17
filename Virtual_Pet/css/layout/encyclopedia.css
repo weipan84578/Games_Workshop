@@ -6,27 +6,38 @@
 
 .encyclopedia-summary {
   align-items: center;
-  background: color-mix(in srgb, var(--color-surface) 90%, transparent);
+  background: color-mix(in srgb, var(--color-surface) 75%, transparent);
+  backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-card);
-  box-shadow: var(--shadow-small);
+  box-shadow: 
+    0 12px 28px rgba(27, 22, 40, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
   display: flex;
   gap: var(--space-4);
   justify-content: space-between;
   margin: 0 auto;
   max-width: 1080px;
-  padding: var(--space-4);
+  padding: var(--space-4) var(--space-5);
   width: 100%;
+}
+
+.encyclopedia-summary strong {
+  font-size: calc(24px * var(--text-scale));
+  font-weight: 900;
+  color: var(--color-primary);
+  font-family: var(--font-family-display);
 }
 
 .encyclopedia-summary span {
   color: var(--color-muted);
   font-size: calc(var(--font-size-sm) * var(--text-scale));
+  font-weight: 700;
 }
 
 .encyclopedia-grid {
   display: grid;
-  gap: var(--space-3);
+  gap: var(--space-4);
   grid-template-columns: repeat(5, minmax(0, 1fr));
   margin: 0 auto;
   max-width: 1080px;
@@ -34,33 +45,76 @@
 }
 
 .dex-card {
-  background: color-mix(in srgb, var(--color-surface) 90%, transparent);
+  background: color-mix(in srgb, var(--color-surface) 75%, transparent);
+  backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-card);
-  box-shadow: var(--shadow-small);
-  display: grid;
-  gap: var(--space-2);
-  min-height: 148px;
-  padding: var(--space-3);
+  box-shadow: 
+    0 8px 20px rgba(27, 22, 40, 0.03),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-height: 168px;
+  padding: var(--space-4);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s, box-shadow 0.3s;
+}
+
+.dex-card:hover {
+  transform: translateY(-5px) scale(1.03);
+  border-color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-surface) 80%, transparent);
+  box-shadow: 
+    0 15px 30px rgba(27, 22, 40, 0.06),
+    0 0 12px color-mix(in srgb, var(--color-primary) 12%, transparent);
 }
 
 .dex-icon {
   align-items: center;
   background:
-    radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.85), transparent 16%),
-    linear-gradient(145deg, var(--pet-secondary), var(--pet-primary));
+    radial-gradient(circle at 35% 25%, rgba(255, 255, 255, 0.85), transparent 20%),
+    linear-gradient(135deg, var(--pet-secondary), var(--pet-primary));
   border-radius: var(--radius-md);
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 
+    0 4px 10px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
   color: var(--color-text);
   display: flex;
-  font-size: 32px;
-  height: 58px;
+  font-size: 34px;
+  height: 64px;
   justify-content: center;
-  width: 58px;
+  width: 64px;
+  transition: transform 0.3s;
+}
+
+.dex-card:hover .dex-icon {
+  transform: scale(1.1) rotate(5deg);
 }
 
 .dex-card.is-locked {
-  filter: grayscale(0.92);
-  opacity: 0.58;
+  filter: grayscale(0.85) contrast(0.9);
+  opacity: 0.65;
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.06);
+  box-shadow: none;
+}
+
+.dex-card.is-locked .dex-icon {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.12));
+  border-color: transparent;
+  color: rgba(0, 0, 0, 0.3);
+}
+
+.dex-card.is-locked::after {
+  content: "🔒";
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  font-size: 16px;
+  opacity: 0.6;
 }
 
 .dex-copy {
@@ -69,12 +123,20 @@
 }
 
 .dex-copy strong {
-  font-size: calc(var(--font-size-sm) * var(--text-scale));
+  font-size: calc((var(--font-size-sm) + 1px) * var(--text-scale));
+  font-weight: 800;
+  color: var(--color-text);
   overflow-wrap: anywhere;
 }
 
-.dex-copy span,
+.dex-copy span {
+  color: color-mix(in srgb, var(--color-text) 78%, transparent);
+  font-size: 13px;
+  font-weight: 700;
+}
+
 .dex-copy small {
-  color: var(--color-muted);
-  font-size: 14px;
+  color: color-mix(in srgb, var(--color-text) 60%, transparent);
+  font-size: 11px;
+  font-weight: 700;
 }
