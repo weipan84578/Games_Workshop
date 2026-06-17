@@ -121,17 +121,18 @@ VP.LANG_EN = {
       actions: "Care",
       stats: "Stats",
       growth: "Growth",
+      encyclopedia: "Dex",
       save: "Save"
     },
     cards: {
       actions: [
-        { icon: "🔥", title: "Warm", body: "Eggs can only be warmed and petted. Warmth moves hatching forward." },
+        { icon: "🔥", title: "Warm", body: "Eggs can only be warmed and petted. Other care actions unlock after hatching." },
         { icon: "🍙", title: "Feed", body: "After hatching, fullness rises by 30." },
         { icon: "🎾", title: "Play", body: "Mood rises by 25, while energy and clean drop." },
         { icon: "🫧", title: "Clean", body: "Clean rises by 40 and mood improves slightly." },
         { icon: "🌙", title: "Sleep", body: "Energy rises by 50 and the pet rests briefly." },
         { icon: "🤍", title: "Pet", body: "Mood rises by 10 with a gentle interaction." },
-        { icon: "⭐", title: "Train", body: "Unlocked from mature age. It grows fast but costs energy." },
+        { icon: "⭐", title: "Train", body: "Unlocked from mature age. It grows fast but costs extra energy and fullness." },
         { icon: "⚠", title: "Warning", body: "Low stats affect health. Zero health ends the run." }
       ],
       stats: [
@@ -139,17 +140,22 @@ VP.LANG_EN = {
         { icon: "😊", title: "Mood", body: "Controls expression, BGM, and growth rhythm." },
         { icon: "✨", title: "Clean", body: "Low clean will slowly reduce health." },
         { icon: "⚡", title: "Energy", body: "Play consumes it. Sleep restores it." },
-        { icon: "❤", title: "Health", body: "The most important stat, shaped by all others." }
+        { icon: "❤", title: "Health", body: "The most important stat. Once elder age begins, health naturally starts falling." }
       ],
       growth: [
         { icon: "🥚", title: "Egg", body: "Choose an egg first. The pet stays unknown until hatch." },
         { icon: "🌱", title: "Juvenile", body: "Energy drains slowly, so it can play often." },
         { icon: "⭐", title: "Mature", body: "The most balanced phase. Training unlocks here." },
         { icon: "🏅", title: "Prime", body: "Stable growth, but care rhythm matters more." },
-        { icon: "🍂", title: "Elder", body: "Health slowly falls until natural death and a new start." }
+        { icon: "🍂", title: "Elder", body: "Health starts falling as soon as elder age begins, ending in natural death and a new start." }
+      ],
+      encyclopedia: [
+        { icon: "▦", title: "Care Dex", body: "Pets unlock in the dex after being successfully raised to elder age." },
+        { icon: "❓", title: "Unknown Pet", body: "You will not know what an egg contains until it hatches. Locked pets stay hidden." },
+        { icon: "50", title: "50 Pets", body: "There are 50 pets across 10 families, including dragons, fish, cats, dogs, and cows." }
       ],
       save: [
-        { icon: "💾", title: "Autosave", body: "Care actions, settings, and 30-second intervals save progress." },
+        { icon: "💾", title: "Autosave", body: "Egg choice, hatch result, care actions, dex records, and settings are saved." },
         { icon: "⏱", title: "Offline Time", body: "Elapsed time is applied when reopening, capped at 12 hours." },
         { icon: "⚙", title: "Settings", body: "Language, theme, audio, and accessibility are stored." }
       ]

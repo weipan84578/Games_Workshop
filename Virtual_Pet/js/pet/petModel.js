@@ -55,7 +55,7 @@ VP.PetModel = (function () {
       energyCost: 1.75,
       energyGain: 0.72,
       growth: 0.4,
-      passiveHealthLoss: 0.004
+      passiveHealthLoss: 0.025
     }
   ];
 
