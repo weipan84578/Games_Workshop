@@ -2,7 +2,7 @@ window.YZ = window.YZ || {};
 YZ.LANG = YZ.LANG || {};
 
 YZ.LANG.ja = {
-  "app.title": "ヨットダイス Yahtzee",
+  "app.title": "ヨットダイス",
   "app.subtitle": "13 ラウンドのダイス対戦。キープ、振り直し、得点で AI に勝とう。",
   "app.version": "ビルド不要オフライン版",
   "common.back": "戻る",

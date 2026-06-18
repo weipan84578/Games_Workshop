@@ -2,7 +2,7 @@ window.YZ = window.YZ || {};
 YZ.LANG = YZ.LANG || {};
 
 YZ.LANG.zh = {
-  "app.title": "快艇骰子 Yahtzee",
+  "app.title": "快艇骰子",
   "app.subtitle": "13 回合制骰子對決，保留、重擲、填分，擊敗 AI。",
   "app.version": "零建置離線版",
 

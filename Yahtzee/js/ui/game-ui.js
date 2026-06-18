@@ -1,6 +1,9 @@
 window.YZ = window.YZ || {};
 
 YZ.GameUI = (function () {
+  var resultDialogOpen = false;
+  var lastResultId = null;
+
   function t(key, args) {
     return YZ.I18n.t(key, args);
   }
@@ -17,7 +20,6 @@ YZ.GameUI = (function () {
 
     root.innerHTML = [
       '<div class="game-shell">',
-      renderResult(state),
       '<header class="game-topbar">',
       '<button class="btn btn--ghost" id="game-pause">⏸ ' + YZ.Effects.esc(t("game.pause")) + "</button>",
       '<div class="game-stats">',
@@ -45,20 +47,6 @@ YZ.GameUI = (function () {
 
   function stat(label, value) {
     return '<div class="stat-tile"><span class="stat-label">' + YZ.Effects.esc(label) + '</span><span class="stat-value number">' + YZ.Effects.esc(value) + "</span></div>";
-  }
-
-  function renderResult(state) {
-    if (state.turn !== "result" || !state.result) return "";
-    return [
-      '<section class="result-banner">',
-      '<h2>' + YZ.Effects.esc(t("result." + state.result.outcome)) + "</h2>",
-      '<p>' + YZ.Effects.esc(t("result.body", { player: state.result.player, ai: state.result.ai })) + "</p>",
-      '<div class="result-banner__actions">',
-      '<button class="btn btn--secondary" id="result-new">↻ ' + YZ.Effects.esc(t("result.playAgain")) + "</button>",
-      '<button class="btn" id="result-menu">⌂ ' + YZ.Effects.esc(t("common.menu")) + "</button>",
-      "</div>",
-      "</section>"
-    ].join("");
   }
 
   function renderTurnBanner(state) {
@@ -200,16 +188,31 @@ YZ.GameUI = (function () {
         YZ.Game.scorePlayer(button.getAttribute("data-score-key"));
       });
     });
-    var resultMenu = root.querySelector("#result-menu");
-    if (resultMenu) resultMenu.addEventListener("click", function () { YZ.ScreenManager.show("menu"); });
-    var resultNew = root.querySelector("#result-new");
-    if (resultNew) resultNew.addEventListener("click", function () {
+  }
+
+  async function showResultDialog(result) {
+    if (!result || resultDialogOpen || lastResultId === result.finishedAt) return;
+    resultDialogOpen = true;
+    lastResultId = result.finishedAt;
+    var choice = await YZ.Effects.choice(
+      t("result." + result.outcome),
+      t("result.body", { player: result.player, ai: result.ai }),
+      [
+        { label: "↻ " + t("result.playAgain"), value: "new", className: "btn--secondary" },
+        { label: "⌂ " + t("common.menu"), value: "menu", className: "btn--primary" }
+      ]
+    );
+    resultDialogOpen = false;
+    if (choice === "new") {
       YZ.Game.newGame(YZ.Settings.get("difficulty"));
       YZ.ScreenManager.show("game");
-    });
+    } else {
+      YZ.ScreenManager.show("menu");
+    }
   }
 
   return {
-    render: render
+    render: render,
+    showResultDialog: showResultDialog
   };
 })();

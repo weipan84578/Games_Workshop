@@ -59,6 +59,14 @@ YZ.Settings = (function () {
 })();
 
 YZ.SettingsUI = (function () {
+  var themeIcons = {
+    ocean: "🌊",
+    sunset: "🌅",
+    forest: "🌲",
+    grape: "🍇",
+    dark: "🌙"
+  };
+
   function t(key) {
     return YZ.I18n.t(key);
   }
@@ -100,7 +108,7 @@ YZ.SettingsUI = (function () {
       '<h2 class="settings-card__title">🎨 ' + YZ.Effects.esc(t("settings.appearance")) + "</h2>",
       '<div class="setting-row"><strong>' + YZ.Effects.esc(t("settings.theme")) + '</strong><div class="swatch-row">',
       YZ.Constants.THEMES.map(function (theme) {
-        return '<button class="theme-swatch ' + (YZ.Settings.get("theme") === theme ? "is-active" : "") + '" data-set-theme="' + theme + '" aria-label="' + theme + '"></button>';
+        return '<button class="theme-swatch ' + (YZ.Settings.get("theme") === theme ? "is-active" : "") + '" data-set-theme="' + theme + '" aria-label="' + theme + '"><span aria-hidden="true">' + themeIcons[theme] + "</span></button>";
       }).join(""),
       "</div></div>",
       segmented("fontScale", [

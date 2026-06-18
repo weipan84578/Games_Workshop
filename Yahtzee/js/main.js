@@ -10,12 +10,15 @@ document.addEventListener("DOMContentLoaded", function () {
     document.removeEventListener("pointerdown", unlockAudio);
   });
 
-  YZ.Game.subscribe(function () {
+  YZ.Game.subscribe(function (event) {
     if (YZ.ScreenManager && YZ.ScreenManager.getCurrent() === "game") {
       YZ.GameUI.render();
     }
     if (YZ.ScreenManager && YZ.ScreenManager.getCurrent() === "menu") {
       YZ.MainMenu.render();
+    }
+    if (event && event.type === "result") {
+      YZ.GameUI.showResultDialog(event.result);
     }
   });
 

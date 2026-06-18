@@ -49,7 +49,7 @@ YZ.MainMenu = (function () {
       '<div class="menu-brand">',
       '<div class="menu-logo-row">',
       '<div class="menu-logo" aria-hidden="true">⚂</div>',
-      '<div><h1>' + YZ.Effects.esc(t("app.title")) + '</h1><div class="app-badge">' + YZ.Effects.esc(t("app.version")) + "</div></div>",
+      '<div><h1>' + YZ.Effects.esc(t("app.title")) + "</h1></div>",
       "</div>",
       '<p class="menu-subtitle">' + YZ.Effects.esc(t("app.subtitle")) + "</p>",
       '<p class="save-note">' + YZ.Effects.esc(hasSave ? t("menu.hasSave") : t("menu.noSave")) + "</p>",
@@ -60,16 +60,6 @@ YZ.MainMenu = (function () {
       '<button class="btn btn--wide" id="menu-instructions">📖 ' + YZ.Effects.esc(t("menu.instructions")) + "</button>",
       '<button class="btn btn--wide" id="menu-settings">⚙ ' + YZ.Effects.esc(t("menu.settings")) + "</button>",
       "</div>",
-      '<div class="menu-footer">',
-      '<div class="quick-group"><span class="muted">' + YZ.Effects.esc(t("menu.quickLang")) + '</span><div class="segmented">',
-      langButton("zh", "繁中") + langButton("en", "EN") + langButton("ja", "日本語"),
-      "</div></div>",
-      '<div class="quick-group"><span class="muted">' + YZ.Effects.esc(t("menu.quickTheme")) + '</span><div class="swatch-row">',
-      YZ.Constants.THEMES.map(function (theme) {
-        return '<button class="theme-swatch ' + (YZ.Settings.get("theme") === theme ? "is-active" : "") + '" data-theme="' + theme + '" aria-label="' + theme + '"></button>';
-      }).join(""),
-      "</div></div>",
-      "</div>",
       "</section>",
       "</div>"
     ].join("");
@@ -78,22 +68,6 @@ YZ.MainMenu = (function () {
     root.querySelector("#menu-continue").addEventListener("click", continueGame);
     root.querySelector("#menu-instructions").addEventListener("click", function () { YZ.ScreenManager.show("instructions"); });
     root.querySelector("#menu-settings").addEventListener("click", function () { YZ.ScreenManager.show("settings"); });
-    root.querySelectorAll("[data-lang]").forEach(function (button) {
-      button.addEventListener("click", function () {
-        YZ.Settings.set("lang", button.getAttribute("data-lang"));
-        YZ.I18n.set(button.getAttribute("data-lang"));
-      });
-    });
-    root.querySelectorAll("[data-theme]").forEach(function (button) {
-      button.addEventListener("click", function () {
-        YZ.Settings.set("theme", button.getAttribute("data-theme"));
-        render();
-      });
-    });
-  }
-
-  function langButton(lang, label) {
-    return '<button class="btn ' + (YZ.I18n.get() === lang ? "is-active" : "") + '" data-lang="' + lang + '">' + label + "</button>";
   }
 
   return {
