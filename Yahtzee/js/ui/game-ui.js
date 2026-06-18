@@ -134,7 +134,7 @@ YZ.GameUI = (function () {
     var isBest = best && best.key === key && canPreview;
     return [
       '<tr class="scorecard__row ' + (playerValue !== null ? "is-used " : "") + (isBest ? "is-best" : "") + '">',
-      '<td><div class="scorecard__label"><span class="scorecard__name">' + YZ.Effects.esc(t("score." + key)) + (isBest ? ' <span class="app-badge">' + YZ.Effects.esc(t("game.hintBest")) + "</span>" : "") + '</span><span class="scorecard__rule">' + YZ.Effects.esc(t("rule." + key)) + "</span></div></td>",
+      '<td><div class="scorecard__label"><span class="scorecard__name">' + YZ.Effects.scoreIcon(key) + '<span>' + YZ.Effects.esc(t("score." + key)) + "</span>" + (isBest ? ' <span class="app-badge">' + YZ.Effects.esc(t("game.hintBest")) + "</span>" : "") + '</span><span class="scorecard__rule">' + YZ.Effects.esc(t("rule." + key)) + "</span></div></td>",
       '<td>' + playerScoreButton(key, playerValue, preview, canPreview) + "</td>",
       '<td><span class="score-button ' + (aiValue !== null ? "is-filled" : "") + '">' + (aiValue === null ? "–" : aiValue) + "</span></td>",
       "</tr>"

@@ -64,6 +64,24 @@
   background: color-mix(in srgb, var(--c-surface-2), transparent 20%);
 }
 
+.score-example__label {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: min(100%, 14rem);
+}
+
+.score-example__label small {
+  display: block;
+  color: var(--c-text-dim);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.score-example--bonus {
+  justify-content: flex-start;
+}
+
 .highlight-number {
   color: var(--c-accent);
   font-weight: 930;

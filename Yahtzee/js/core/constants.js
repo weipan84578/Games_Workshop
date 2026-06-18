@@ -2,19 +2,19 @@ window.YZ = window.YZ || {};
 
 YZ.Constants = (function () {
   var SCORE_CATEGORIES = [
-    { key: "ones", section: "upper", face: 1, icon: "1" },
-    { key: "twos", section: "upper", face: 2, icon: "2" },
-    { key: "threes", section: "upper", face: 3, icon: "3" },
-    { key: "fours", section: "upper", face: 4, icon: "4" },
-    { key: "fives", section: "upper", face: 5, icon: "5" },
-    { key: "sixes", section: "upper", face: 6, icon: "6" },
-    { key: "threeKind", section: "lower", icon: "3K" },
-    { key: "fourKind", section: "lower", icon: "4K" },
-    { key: "fullHouse", section: "lower", icon: "FH" },
-    { key: "smallStraight", section: "lower", icon: "SS" },
-    { key: "largeStraight", section: "lower", icon: "LS" },
-    { key: "yahtzee", section: "lower", icon: "YZ" },
-    { key: "chance", section: "lower", icon: "CH" }
+    { key: "ones", section: "upper", face: 1, icon: "⚀" },
+    { key: "twos", section: "upper", face: 2, icon: "⚁" },
+    { key: "threes", section: "upper", face: 3, icon: "⚂" },
+    { key: "fours", section: "upper", face: 4, icon: "⚃" },
+    { key: "fives", section: "upper", face: 5, icon: "⚄" },
+    { key: "sixes", section: "upper", face: 6, icon: "⚅" },
+    { key: "threeKind", section: "lower", icon: "3×" },
+    { key: "fourKind", section: "lower", icon: "4×" },
+    { key: "fullHouse", section: "lower", icon: "⌂" },
+    { key: "smallStraight", section: "lower", icon: "↗4" },
+    { key: "largeStraight", section: "lower", icon: "↗5" },
+    { key: "yahtzee", section: "lower", icon: "★" },
+    { key: "chance", section: "lower", icon: "?" }
   ];
 
   var UPPER_KEYS = SCORE_CATEGORIES.filter(function (item) {

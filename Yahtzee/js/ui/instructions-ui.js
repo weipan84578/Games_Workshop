@@ -17,7 +17,7 @@ YZ.InstructionsUI = (function () {
       '<div class="instructions-grid">',
       card("🎯", t("instructions.goal"), t("instructions.goalBody"), YZ.Effects.diceSample([6, 6, 6, 5, 5])),
       card("🎲", t("instructions.how"), t("instructions.howBody"), YZ.Effects.diceSample([1, 2, 3, 4, 5])),
-      card("🔢", t("instructions.upper"), t("instructions.upperBody"), '<span class="highlight-number">63 + 35</span>'),
+      card("🔢", t("instructions.upper"), t("instructions.upperBody"), upperExamples()),
       card("🃏", t("instructions.lower"), t("instructions.lowerBody"), lowerExamples()),
       card("⭐", t("instructions.yahtzee"), t("instructions.yahtzeeBody"), YZ.Effects.diceSample([4, 4, 4, 4, 4]) + ' <span class="highlight-number">50 / +100</span>'),
       card("🤖", t("instructions.ai"), t("instructions.aiBody"), difficultyBadges()),
@@ -40,14 +40,31 @@ YZ.InstructionsUI = (function () {
   }
 
   function lowerExamples() {
-    var items = [
-      ["score.fullHouse", [5, 5, 5, 2, 2], "25"],
-      ["score.smallStraight", [1, 2, 3, 4, 6], "30"],
-      ["score.largeStraight", [2, 3, 4, 5, 6], "40"],
-      ["score.yahtzee", [6, 6, 6, 6, 6], "50"]
-    ];
-    return '<div class="score-examples">' + items.map(function (item) {
-      return '<div class="score-example"><span>' + YZ.Effects.esc(t(item[0])) + '</span>' + YZ.Effects.diceSample(item[1]) + '<strong class="highlight-number">' + item[2] + "</strong></div>";
+    return scoreLegend(YZ.Constants.LOWER_KEYS, {
+      threeKind: [5, 5, 5, 2, 6],
+      fourKind: [4, 4, 4, 4, 1],
+      fullHouse: [5, 5, 5, 2, 2],
+      smallStraight: [1, 2, 3, 4, 6],
+      largeStraight: [2, 3, 4, 5, 6],
+      yahtzee: [6, 6, 6, 6, 6],
+      chance: [1, 3, 4, 5, 6]
+    });
+  }
+
+  function upperExamples() {
+    return '<div class="score-examples"><div class="score-example score-example--bonus"><span class="score-example__label"><strong class="highlight-number">63 + 35</strong></span><span>' + YZ.Effects.esc(t("score.upperBonus")) + "</span></div></div>" + scoreLegend(YZ.Constants.UPPER_KEYS, {
+      ones: [1, 1, 3, 4, 6],
+      twos: [2, 2, 2, 5, 6],
+      threes: [3, 3, 3, 1, 5],
+      fours: [4, 4, 4, 2, 6],
+      fives: [5, 5, 5, 1, 2],
+      sixes: [6, 6, 6, 4, 1]
+    });
+  }
+
+  function scoreLegend(keys, samples) {
+    return '<div class="score-examples">' + keys.map(function (key) {
+      return '<div class="score-example"><span class="score-example__label">' + YZ.Effects.scoreIcon(key) + '<span><strong>' + YZ.Effects.esc(t("score." + key)) + '</strong><small>' + YZ.Effects.esc(t("rule." + key)) + "</small></span></span>" + YZ.Effects.diceSample(samples[key]) + "</div>";
     }).join("") + "</div>";
   }
 

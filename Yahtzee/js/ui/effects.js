@@ -21,6 +21,12 @@ YZ.Effects = (function () {
     }).join("") + "</span>";
   }
 
+  function scoreIcon(key) {
+    var meta = YZ.Scoring && YZ.Scoring.categoryMeta ? YZ.Scoring.categoryMeta(key) : null;
+    var icon = meta && meta.icon ? meta.icon : "?";
+    return '<span class="score-icon score-icon--' + esc(key) + '" aria-hidden="true">' + esc(icon) + "</span>";
+  }
+
   function closeModal() {
     var root = document.getElementById("modal-root");
     if (root) root.innerHTML = "";
@@ -83,6 +89,7 @@ YZ.Effects = (function () {
     esc: esc,
     die: die,
     diceSample: diceSample,
+    scoreIcon: scoreIcon,
     closeModal: closeModal,
     modal: modal,
     confirm: confirm,

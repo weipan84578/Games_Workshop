@@ -1,4 +1,14 @@
 @media (max-width: 599px) {
+  .instructions-shell .section-header {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .instructions-shell .section-header .btn {
+    width: 100%;
+  }
+
   .game-content {
     padding-bottom: calc(150px + env(safe-area-inset-bottom));
   }
