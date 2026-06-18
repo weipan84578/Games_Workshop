@@ -41,6 +41,7 @@
 | `Crossword`      | 猜字遊戲 | Crossword    | クロスワード       |
 | `sokoban_puzzle` | 推箱子   | Sokoban      | 倉庫番             |
 | `Water_Sort_Puzzle` | 倒水排色 | Water Sort Puzzle | ウォーターソートパズル |
+| `Yahtzee`         | 快艇骰子 | Yahtzee      | ヤッツィー         |
 
 ### 動作遊戲
 
