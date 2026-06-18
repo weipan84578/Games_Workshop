@@ -1,0 +1,47 @@
+.modal-backdrop {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: rgba(0, 0, 0, 0.62);
+}
+
+.modal {
+  width: min(100%, 520px);
+  border: var(--border-strong);
+  border-radius: var(--radius);
+  color: var(--c-text);
+  background: var(--c-surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.modal__body {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+}
+
+.modal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: 0 var(--space-5) var(--space-5);
+}
+
+.toast {
+  position: fixed;
+  z-index: 120;
+  right: calc(16px + env(safe-area-inset-right));
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  max-width: min(420px, calc(100vw - 32px));
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius);
+  color: var(--c-text);
+  background: var(--c-surface);
+  box-shadow: var(--shadow-tight);
+  font-weight: 760;
+}

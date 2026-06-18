@@ -1,0 +1,86 @@
+@media (max-width: 599px) {
+  .game-content {
+    padding-bottom: calc(150px + env(safe-area-inset-bottom));
+  }
+
+  .game-actionbar {
+    position: fixed;
+    z-index: 35;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 0.75rem calc(12px + env(safe-area-inset-right)) calc(0.75rem + env(safe-area-inset-bottom)) calc(12px + env(safe-area-inset-left));
+    border-top: 2px solid var(--c-line);
+    background: color-mix(in srgb, var(--c-surface), #000 4%);
+    box-shadow: 0 -10px 24px rgba(0, 0, 0, 0.28);
+  }
+
+  .game-topbar {
+    grid-template-columns: 1fr;
+  }
+
+  .game-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .scorecard th,
+  .scorecard td {
+    padding: 0.42rem 0.35rem;
+  }
+
+  .scorecard__rule {
+    display: none;
+  }
+
+  .slider-row {
+    grid-template-columns: 1fr;
+  }
+
+  .slider-value {
+    text-align: left;
+  }
+}
+
+@media (min-width: 600px) {
+  .menu-board {
+    grid-template-columns: 1.05fr 0.95fr;
+    align-items: center;
+  }
+
+  .menu-footer {
+    grid-column: 1 / -1;
+  }
+
+  .instructions-grid,
+  .settings-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .game-content {
+    grid-template-columns: minmax(280px, 0.82fr) minmax(380px, 1.18fr);
+    align-items: start;
+  }
+
+  .dice-panel {
+    position: sticky;
+    top: 96px;
+  }
+
+  .game-actionbar {
+    position: static;
+  }
+}
+
+@media (min-width: 980px) {
+  .screen {
+    padding-inline: calc(28px + env(safe-area-inset-left)) calc(28px + env(safe-area-inset-right));
+  }
+
+  .game-content {
+    grid-template-columns: minmax(350px, 0.78fr) minmax(560px, 1.22fr);
+  }
+
+  .dice-tray {
+    grid-template-columns: repeat(5, minmax(62px, 1fr));
+  }
+}

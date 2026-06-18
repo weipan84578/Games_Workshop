@@ -1,0 +1,20 @@
+body.theme-dark {
+  --c-bg: #101318;
+  --c-bg-2: #18211f;
+  --c-surface: #1b222c;
+  --c-surface-2: #263241;
+  --c-primary: #f7f7f2;
+  --c-on-primary: #11141a;
+  --c-secondary: #72efdd;
+  --c-on-secondary: #0c2326;
+  --c-accent: #ffd166;
+  --c-danger: #ff5b7f;
+  --c-warning: #f7b267;
+  --c-text: #f7f7f2;
+  --c-text-dim: #cfd7df;
+  --c-muted: #9da9b6;
+  --c-line: rgba(247, 247, 242, 0.25);
+  --c-focus: #ffffff;
+  --c-dice: #f7f7f2;
+  --c-dice-dot: #101318;
+}

@@ -1,0 +1,70 @@
+.instructions-shell {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.instructions-grid {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.info-card {
+  overflow: hidden;
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--c-surface), transparent 5%);
+}
+
+.info-card summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap-min);
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  font-weight: 860;
+}
+
+.info-card summary::-webkit-details-marker {
+  display: none;
+}
+
+.info-card summary::after {
+  content: "+";
+  margin-left: auto;
+  font-size: 1.3rem;
+  font-weight: 900;
+}
+
+.info-card[open] summary::after {
+  content: "-";
+}
+
+.info-card__body {
+  display: grid;
+  gap: var(--space-3);
+  padding: 0 1rem 1rem;
+  color: var(--c-text-dim);
+}
+
+.score-examples {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.score-example {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: 0.55rem;
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius-small);
+  background: color-mix(in srgb, var(--c-surface-2), transparent 20%);
+}
+
+.highlight-number {
+  color: var(--c-accent);
+  font-weight: 930;
+}

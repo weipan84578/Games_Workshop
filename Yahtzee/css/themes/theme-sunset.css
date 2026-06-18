@@ -1,0 +1,20 @@
+body.theme-sunset {
+  --c-bg: #4d2337;
+  --c-bg-2: #2f4355;
+  --c-surface: #67314a;
+  --c-surface-2: #8f4960;
+  --c-primary: #ffbd59;
+  --c-on-primary: #31172a;
+  --c-secondary: #8ce7ff;
+  --c-on-secondary: #172737;
+  --c-accent: #b7f769;
+  --c-danger: #ff6b6b;
+  --c-warning: #ffd166;
+  --c-text: #fff7ed;
+  --c-text-dim: #f1d2c1;
+  --c-muted: #d5afa6;
+  --c-line: rgba(255, 247, 237, 0.24);
+  --c-focus: #ffffff;
+  --c-dice: #fffdf8;
+  --c-dice-dot: #5b283e;
+}

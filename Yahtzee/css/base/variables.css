@@ -1,0 +1,65 @@
+:root {
+  --fs-display: clamp(2.15rem, 5.2vw, 4rem);
+  --fs-h1: clamp(1.75rem, 3.8vw, 3rem);
+  --fs-h2: clamp(1.35rem, 2.8vw, 2.1rem);
+  --fs-h3: clamp(1.1rem, 2.2vw, 1.45rem);
+  --fs-body: 1.08rem;
+  --fs-small: 0.95rem;
+  --fs-button: 1.08rem;
+  --fs-score: 1.25rem;
+  --fs-dice: 1.7rem;
+
+  --font-main: "Noto Sans TC", "Noto Sans JP", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --tap-min: 48px;
+  --radius: 8px;
+  --radius-small: 6px;
+  --space-1: 0.45rem;
+  --space-2: 0.75rem;
+  --space-3: 1rem;
+  --space-4: 1.35rem;
+  --space-5: 1.75rem;
+  --space-6: 2.25rem;
+  --shadow-soft: 0 18px 48px rgba(0, 0, 0, 0.26);
+  --shadow-tight: 0 10px 24px rgba(0, 0, 0, 0.22);
+  --border-strong: 2px solid color-mix(in srgb, var(--c-line), var(--c-text) 24%);
+  --content-max: 1180px;
+  --game-max: 1320px;
+
+  --c-bg: #0e2a47;
+  --c-bg-2: #142f35;
+  --c-surface: #173b63;
+  --c-surface-2: #214d73;
+  --c-primary: #ffd166;
+  --c-on-primary: #17253b;
+  --c-secondary: #63d2ff;
+  --c-on-secondary: #092233;
+  --c-accent: #06d6a0;
+  --c-danger: #ef476f;
+  --c-warning: #f7b267;
+  --c-text: #f2f7ff;
+  --c-text-dim: #c2d1e2;
+  --c-muted: #8ca7c1;
+  --c-line: rgba(255, 255, 255, 0.2);
+  --c-focus: #ffffff;
+  --c-dice: #ffffff;
+  --c-dice-dot: #183755;
+  --c-disabled: rgba(255, 255, 255, 0.36);
+}
+
+body.font-scale-small {
+  --fs-body: 1rem;
+  --fs-button: 1rem;
+  --fs-score: 1.15rem;
+}
+
+body.font-scale-large {
+  --fs-body: 1.12rem;
+  --fs-button: 1.13rem;
+  --fs-score: 1.35rem;
+}
+
+body.font-scale-extra {
+  --fs-body: 1.22rem;
+  --fs-button: 1.22rem;
+  --fs-score: 1.5rem;
+}

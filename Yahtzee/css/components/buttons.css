@@ -1,0 +1,92 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: var(--tap-min);
+  padding: 0.65rem 1rem;
+  border: 2px solid transparent;
+  border-radius: var(--radius);
+  color: var(--c-text);
+  background: color-mix(in srgb, var(--c-surface-2), #fff 4%);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.22);
+  font-size: var(--fs-button);
+  font-weight: 820;
+  letter-spacing: 0;
+  text-align: center;
+  text-decoration: none;
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease, opacity 120ms ease;
+}
+
+.btn:not(:disabled):hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--c-primary), #fff 16%);
+}
+
+.btn:not(:disabled):active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+.btn:disabled,
+.btn.is-disabled {
+  color: color-mix(in srgb, var(--c-text), transparent 34%);
+  background: color-mix(in srgb, var(--c-surface), #000 18%);
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.btn--primary {
+  color: var(--c-on-primary);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--c-primary), #fff 12%), var(--c-primary));
+}
+
+.btn--secondary {
+  color: var(--c-on-secondary);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--c-secondary), #fff 10%), var(--c-secondary));
+}
+
+.btn--danger {
+  color: #fff;
+  background: var(--c-danger);
+}
+
+.btn--ghost {
+  border-color: var(--c-line);
+  color: var(--c-text);
+  background: transparent;
+  box-shadow: none;
+}
+
+.btn--wide {
+  width: 100%;
+}
+
+.btn--icon {
+  width: var(--tap-min);
+  padding: 0;
+  font-size: 1.25rem;
+}
+
+.segmented {
+  display: inline-grid;
+  grid-auto-flow: column;
+  gap: 0;
+  overflow: hidden;
+  border: 2px solid var(--c-line);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--c-surface), #000 8%);
+}
+
+.segmented .btn {
+  min-height: 44px;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.segmented .btn.is-active {
+  color: var(--c-on-primary);
+  background: var(--c-primary);
+}

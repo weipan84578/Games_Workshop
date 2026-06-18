@@ -1,0 +1,20 @@
+body.theme-forest {
+  --c-bg: #102d24;
+  --c-bg-2: #24354d;
+  --c-surface: #1d4937;
+  --c-surface-2: #2f684f;
+  --c-primary: #9be564;
+  --c-on-primary: #102716;
+  --c-secondary: #ffd166;
+  --c-on-secondary: #26300f;
+  --c-accent: #64d2ff;
+  --c-danger: #ff6f91;
+  --c-warning: #ffcb77;
+  --c-text: #f3fff7;
+  --c-text-dim: #c8e5d4;
+  --c-muted: #94bba3;
+  --c-line: rgba(243, 255, 247, 0.22);
+  --c-focus: #ffffff;
+  --c-dice: #ffffff;
+  --c-dice-dot: #1c4332;
+}

@@ -1,0 +1,20 @@
+body.theme-ocean {
+  --c-bg: #0e2a47;
+  --c-bg-2: #153b3e;
+  --c-surface: #16395f;
+  --c-surface-2: #24567b;
+  --c-primary: #ffd166;
+  --c-on-primary: #142033;
+  --c-secondary: #60d8ff;
+  --c-on-secondary: #09283b;
+  --c-accent: #2cf2ad;
+  --c-danger: #ff5b7f;
+  --c-warning: #f7b267;
+  --c-text: #f3f8ff;
+  --c-text-dim: #c8d7e8;
+  --c-muted: #8eb0cc;
+  --c-line: rgba(242, 247, 255, 0.22);
+  --c-focus: #ffffff;
+  --c-dice: #ffffff;
+  --c-dice-dot: #17395d;
+}

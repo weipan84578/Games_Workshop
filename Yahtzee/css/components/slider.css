@@ -1,0 +1,23 @@
+.slider-row {
+  display: grid;
+  grid-template-columns: minmax(120px, 1fr) minmax(150px, 2fr) 4ch;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.slider-row input[type="range"] {
+  width: 100%;
+  height: 14px;
+  accent-color: var(--c-primary);
+}
+
+.slider-row input[type="range"]::-webkit-slider-thumb {
+  width: 30px;
+  height: 30px;
+}
+
+.slider-value {
+  font-weight: 850;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}

@@ -1,0 +1,20 @@
+body.theme-grape {
+  --c-bg: #301b4d;
+  --c-bg-2: #0b4151;
+  --c-surface: #472763;
+  --c-surface-2: #604083;
+  --c-primary: #72efdd;
+  --c-on-primary: #17243b;
+  --c-secondary: #ffd166;
+  --c-on-secondary: #2f2045;
+  --c-accent: #f6a6ff;
+  --c-danger: #ff6b6b;
+  --c-warning: #ffc857;
+  --c-text: #fbf7ff;
+  --c-text-dim: #dacbed;
+  --c-muted: #b4a3cf;
+  --c-line: rgba(251, 247, 255, 0.24);
+  --c-focus: #ffffff;
+  --c-dice: #ffffff;
+  --c-dice-dot: #452961;
+}
