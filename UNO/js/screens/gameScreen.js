@@ -83,7 +83,6 @@
       }
       if (!action) return;
 
-      SFX.play("button");
       if (action === "menu") {
         GameState.saveState();
         Toast.show(I18n.t("game.saved"), "success");

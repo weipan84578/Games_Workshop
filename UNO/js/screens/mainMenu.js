@@ -36,13 +36,11 @@
         const action = event.target.closest("[data-action]")?.dataset.action;
         const lang = event.target.closest("[data-lang]")?.dataset.lang;
         if (lang) {
-          SFX.play("button");
           I18n.setLang(lang);
           App.renderCurrent();
           return;
         }
         if (!action) return;
-        SFX.play("button");
         if (action === "start") {
           const difficulty = await Modal.chooseDifficulty(settings.difficulty);
           if (difficulty) App.startNewGame(difficulty);

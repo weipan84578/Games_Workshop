@@ -74,33 +74,28 @@
         const difficulty = event.target.closest("[data-difficulty]")?.dataset.difficulty;
 
         if (back) {
-          SFX.play("button");
           App.showScreen("main-menu");
           return;
         }
         if (lang) {
-          SFX.play("button");
           I18n.setLang(lang);
           App.renderCurrent();
           Toast.show(I18n.t("settings.saved"), "success");
           return;
         }
         if (theme) {
-          SFX.play("button");
           Themes.set(theme);
           App.renderCurrent();
           Toast.show(I18n.t("settings.saved"), "success");
           return;
         }
         if (difficulty) {
-          SFX.play("button");
           UnoStorage.saveSettings({ difficulty });
           App.renderCurrent();
           Toast.show(I18n.t("settings.saved"), "success");
           return;
         }
         if (clear) {
-          SFX.play("button");
           const ok = await Modal.confirm(I18n.t("settings.clearSaveConfirm"));
           if (ok) {
             UnoStorage.clearSave();

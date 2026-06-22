@@ -61,13 +61,11 @@
 
       root.onclick = (event) => {
         if (event.target.closest('[data-action="back"]')) {
-          SFX.play("button");
           App.showScreen("main-menu");
           return;
         }
         const id = event.target.closest("[data-scroll]")?.dataset.scroll;
         if (id) {
-          SFX.play("button");
           Helpers.qs(`#${id}`, root)?.scrollIntoView({ behavior: "smooth", block: "start" });
         }
       };

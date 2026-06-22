@@ -16,6 +16,7 @@
       AudioManager.init();
       AudioManager.setVolumes(settings);
       this.bindAudioUnlock();
+      this.bindGlobalClickSound();
       this.bindGlobalUpdates();
       this.showScreen("main-menu");
     },
@@ -29,6 +30,19 @@
       };
       document.addEventListener("pointerdown", unlock, { once: true });
       document.addEventListener("keydown", unlock, { once: true });
+    },
+
+    bindGlobalClickSound() {
+      let lastSoundAt = 0;
+      document.addEventListener("pointerdown", (event) => {
+        const inGameUi = event.target.closest("#app, #modal-overlay");
+        if (!inGameUi) return;
+        const now = performance.now();
+        if (now - lastSoundAt < 45) return;
+        lastSoundAt = now;
+        AudioManager.resume();
+        SFX.click();
+      });
     },
 
     bindGlobalUpdates() {
