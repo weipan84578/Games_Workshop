@@ -1,0 +1,99 @@
+.btn {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border-radius: var(--radius-md);
+  padding: 0 var(--space-5);
+  background: var(--surface-strong);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+  transition: transform var(--anim-fast) var(--ease-smooth),
+    box-shadow var(--anim-fast) var(--ease-smooth),
+    background var(--anim-fast) var(--ease-smooth);
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md), var(--glow-color);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-red), var(--accent-gold));
+  color: #fff;
+  border-color: transparent;
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #b91c1c, #ef4444);
+  color: #fff;
+  border-color: transparent;
+}
+
+.btn-ghost {
+  background: transparent;
+  box-shadow: none;
+}
+
+.btn-full {
+  width: 100%;
+}
+
+.btn-icon {
+  width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: var(--radius-md);
+}
+
+.btn-menu {
+  width: min(100%, 420px);
+  min-height: 64px;
+  justify-content: flex-start;
+  padding: 0 var(--space-6);
+  font-size: var(--font-size-md);
+}
+
+.btn-tag {
+  min-height: 40px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+}
+
+.btn-tag.is-active,
+.theme-tile.is-active {
+  background: var(--accent-gold);
+  color: #111827;
+  border-color: transparent;
+}
+
+.screen-header {
+  min-height: 64px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) clamp(var(--space-4), 4vw, var(--space-8));
+  border-bottom: 1px solid var(--border-color);
+  background: rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(12px);
+}
+
+.screen-header h1 {
+  justify-self: center;
+  margin: 0;
+  font-size: var(--font-size-lg);
+}

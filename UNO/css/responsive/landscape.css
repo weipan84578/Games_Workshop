@@ -1,0 +1,35 @@
+@media (max-width: 900px) and (orientation: landscape) {
+  .main-menu-screen {
+    padding: var(--space-4);
+  }
+
+  .menu-panel {
+    gap: var(--space-3);
+  }
+
+  .uno-logo {
+    font-size: clamp(46px, 8vw, 72px);
+  }
+
+  .game-screen {
+    grid-template-rows: auto auto 1fr auto;
+  }
+
+  .player-zone {
+    min-height: 128px;
+  }
+
+  .player-hand {
+    height: 118px;
+    min-height: 118px;
+  }
+
+  .player-hand .uno-card {
+    width: 62px;
+    height: 93px;
+  }
+
+  .table-surface {
+    min-height: 168px;
+  }
+}

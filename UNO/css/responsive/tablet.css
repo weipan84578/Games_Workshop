@@ -1,0 +1,23 @@
+@media (max-width: 1023px) {
+  :root {
+    --font-size-3xl: 56px;
+  }
+
+  .uno-card {
+    width: 84px;
+    height: 126px;
+  }
+
+  .table-surface {
+    min-height: 240px;
+  }
+
+  .ai-panel {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .ai-summary {
+    justify-content: center;
+  }
+}

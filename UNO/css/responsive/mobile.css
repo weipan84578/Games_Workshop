@@ -1,0 +1,153 @@
+@media (max-width: 767px) {
+  body {
+    font-size: var(--font-size-sm);
+  }
+
+  .screen-header,
+  .game-header {
+    min-height: 56px;
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .screen-header h1 {
+    font-size: var(--font-size-md);
+  }
+
+  .btn-menu {
+    min-height: 58px;
+    font-size: var(--font-size-base);
+  }
+
+  .game-screen {
+    grid-template-rows: auto auto 1fr 188px auto auto;
+    min-height: 100dvh;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .game-stats {
+    justify-content: flex-start;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
+  .stat-pill {
+    white-space: nowrap;
+  }
+
+  .ai-zone {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .ai-avatar {
+    width: 44px;
+    height: 44px;
+    font-size: var(--font-size-md);
+  }
+
+  .ai-card-stack {
+    min-height: 52px;
+  }
+
+  .uno-card.card-mini {
+    width: 34px;
+    height: 51px;
+    border-radius: 7px;
+  }
+
+  .table-zone {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .table-surface {
+    min-height: 210px;
+    grid-template-columns: 1fr 72px 1fr;
+    gap: var(--space-2);
+    padding: var(--space-3);
+  }
+
+  .direction-indicator {
+    min-width: 64px;
+    font-size: var(--font-size-xl);
+  }
+
+  .uno-card.card-table {
+    width: 72px;
+    height: 108px;
+    border-radius: 12px;
+  }
+
+  .player-zone {
+    min-height: 188px;
+    padding: 0;
+  }
+
+  .player-hand-header {
+    padding: 0 var(--space-3);
+    margin-bottom: 0;
+  }
+
+  .player-hand {
+    position: relative;
+    max-width: none;
+    min-height: 150px;
+    height: 150px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    align-items: center;
+    padding: var(--space-2) var(--space-4);
+    background: rgba(0, 0, 0, 0.18);
+  }
+
+  .player-hand .uno-card {
+    width: 70px;
+    height: 105px;
+    border-radius: 12px;
+  }
+
+  .player-hand.compact .uno-card {
+    margin-right: -14px;
+  }
+
+  .action-bar {
+    min-height: 64px;
+    position: sticky;
+    bottom: 0;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .action-bar .btn {
+    min-width: 0;
+    padding: 0 var(--space-3);
+  }
+
+  .theme-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .help-toc {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 420px) {
+  .game-header {
+    grid-template-columns: auto 1fr;
+  }
+
+  .game-header .btn-icon:last-child {
+    grid-column: 2;
+    justify-self: end;
+  }
+
+  .table-surface {
+    grid-template-columns: 1fr 54px 1fr;
+  }
+
+  .direction-indicator {
+    min-width: 54px;
+    font-size: var(--font-size-lg);
+  }
+}

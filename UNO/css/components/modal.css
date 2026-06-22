@@ -1,0 +1,76 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  background: rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(8px);
+}
+
+.modal-content {
+  width: min(100%, 460px);
+  max-height: min(86dvh, 720px);
+  overflow: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  background: color-mix(in srgb, var(--bg-secondary) 92%, #000 8%);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-lg);
+  animation: popIn var(--anim-normal) var(--ease-bounce);
+}
+
+.modal-title {
+  margin: 0 0 var(--space-5);
+  font-size: var(--font-size-lg);
+  text-align: center;
+}
+
+.modal-actions {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.modal-actions.modal-actions-row {
+  grid-template-columns: 1fr 1fr;
+}
+
+.color-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.color-choice {
+  min-height: 92px;
+  flex-direction: column;
+  font-weight: var(--font-weight-black);
+}
+
+.color-choice::before {
+  content: "";
+  width: 32px;
+  height: 32px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+}
+
+.color-choice[data-color="red"]::before {
+  background: var(--card-red);
+}
+
+.color-choice[data-color="blue"]::before {
+  background: var(--card-blue);
+}
+
+.color-choice[data-color="green"]::before {
+  background: var(--card-green);
+}
+
+.color-choice[data-color="yellow"]::before {
+  background: var(--card-yellow);
+}

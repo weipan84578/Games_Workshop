@@ -1,0 +1,108 @@
+.uno-card {
+  position: relative;
+  width: 100px;
+  height: 150px;
+  flex: 0 0 auto;
+  border-radius: 16px;
+  background: #111827;
+  box-shadow: var(--shadow-card);
+  transform-origin: 50% 92%;
+  transition: transform var(--anim-normal) var(--ease-bounce),
+    filter var(--anim-fast) var(--ease-smooth),
+    box-shadow var(--anim-fast) var(--ease-smooth);
+}
+
+.uno-card svg {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.uno-card.card-mini {
+  width: 40px;
+  height: 60px;
+  border-radius: 8px;
+}
+
+.uno-card.card-table {
+  width: clamp(84px, 10vw, 112px);
+  height: clamp(126px, 15vw, 168px);
+}
+
+.uno-card.card-help {
+  width: 60px;
+  height: 90px;
+  border-radius: 10px;
+}
+
+.uno-card.card-hand {
+  border: 2px solid transparent;
+}
+
+.uno-card.card-hand.is-playable {
+  cursor: pointer;
+}
+
+.uno-card.card-hand.is-playable:hover {
+  transform: translateY(-12px);
+  box-shadow: var(--shadow-card), var(--glow-color);
+}
+
+.uno-card.card-hand.is-selected {
+  transform: translateY(-20px);
+  border-color: var(--accent-gold);
+  box-shadow: var(--shadow-card), 0 0 0 3px rgba(245, 166, 35, 0.38);
+}
+
+.uno-card.card-hand.is-disabled {
+  filter: brightness(0.55) saturate(0.8);
+  cursor: not-allowed;
+}
+
+.ai-card-stack {
+  display: flex;
+  align-items: center;
+  min-height: 68px;
+  padding-left: 16px;
+}
+
+.ai-card-stack .uno-card {
+  margin-left: -16px;
+}
+
+.card-count-badge {
+  min-width: 36px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  background: var(--accent-gold);
+  color: #111827;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-black);
+}
+
+.color-chip {
+  width: 22px;
+  height: 22px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+}
+
+.color-chip.red {
+  background: var(--card-red);
+}
+
+.color-chip.blue {
+  background: var(--card-blue);
+}
+
+.color-chip.green {
+  background: var(--card-green);
+}
+
+.color-chip.yellow {
+  background: var(--card-yellow);
+}

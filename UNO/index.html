@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="classic">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#1a1a2e">
+  <title>UNO Web</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Noto+Sans+TC:wght@400;700;900&family=Noto+Sans+SC:wght@400;700;900&family=Noto+Sans+JP:wght@400;700;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/base/reset.css">
+  <link rel="stylesheet" href="css/base/variables.css">
+  <link rel="stylesheet" href="css/base/typography.css">
+  <link rel="stylesheet" href="css/base/animations.css">
+
+  <link rel="stylesheet" href="css/components/buttons.css">
+  <link rel="stylesheet" href="css/components/cards.css">
+  <link rel="stylesheet" href="css/components/modal.css">
+  <link rel="stylesheet" href="css/components/toast.css">
+  <link rel="stylesheet" href="css/components/slider.css">
+  <link rel="stylesheet" href="css/components/toggle.css">
+
+  <link rel="stylesheet" href="css/screens/mainMenu.css">
+  <link rel="stylesheet" href="css/screens/game.css">
+  <link rel="stylesheet" href="css/screens/help.css">
+  <link rel="stylesheet" href="css/screens/settings.css">
+
+  <link rel="stylesheet" href="css/responsive/tablet.css">
+  <link rel="stylesheet" href="css/responsive/mobile.css">
+  <link rel="stylesheet" href="css/responsive/landscape.css">
+</head>
+<body>
+  <div id="app">
+    <main id="screen-main-menu" class="screen" hidden></main>
+    <main id="screen-game" class="screen" hidden></main>
+    <main id="screen-help" class="screen" hidden></main>
+    <main id="screen-settings" class="screen" hidden></main>
+  </div>
+
+  <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <div id="modal-overlay" class="modal-overlay" hidden>
+    <section id="modal-content" class="modal-content" role="dialog" aria-modal="true"></section>
+  </div>
+
+  <script src="js/utils/helpers.js"></script>
+  <script src="js/utils/storage.js"></script>
+  <script src="js/utils/i18n.js"></script>
+
+  <script src="js/config/constants.js"></script>
+  <script src="js/config/themes.js"></script>
+  <script src="js/config/locales/zh-TW.js"></script>
+  <script src="js/config/locales/zh-CN.js"></script>
+  <script src="js/config/locales/en.js"></script>
+  <script src="js/config/locales/ja.js"></script>
+
+  <script src="js/audio/audioManager.js"></script>
+  <script src="js/audio/sfx.js"></script>
+
+  <script src="js/game/deck.js"></script>
+  <script src="js/game/card.js"></script>
+  <script src="js/game/player.js"></script>
+  <script src="js/game/rules.js"></script>
+  <script src="js/game/ai.js"></script>
+  <script src="js/game/gameState.js"></script>
+
+  <script src="js/ui/cardRenderer.js"></script>
+  <script src="js/ui/handRenderer.js"></script>
+  <script src="js/ui/tableRenderer.js"></script>
+  <script src="js/ui/animationController.js"></script>
+  <script src="js/ui/modal.js"></script>
+  <script src="js/ui/toast.js"></script>
+
+  <script src="js/screens/mainMenu.js"></script>
+  <script src="js/screens/gameScreen.js"></script>
+  <script src="js/screens/helpScreen.js"></script>
+  <script src="js/screens/settingsScreen.js"></script>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
