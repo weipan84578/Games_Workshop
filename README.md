@@ -21,6 +21,7 @@
 | `Go_Game`            | 圍棋     | Go              | 囲碁             |
 | `Mancala`            | 播棋     | Mancala         | マンカラ         |
 | `Ludo`               | 飛行棋   | Ludo            | ルード           |
+| `Backgammon`         | 雙陸棋   | Backgammon      | バックギャモン   |
 
 ### 撲克牌遊戲
 
