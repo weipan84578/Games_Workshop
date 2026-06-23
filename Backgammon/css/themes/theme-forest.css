@@ -1,0 +1,22 @@
+[data-theme="forest"] {
+  --color-bg-gradient: linear-gradient(135deg, #1b3a2d 0%, #2d5a3d 100%);
+  --color-board-dark: #2e7d32;
+  --color-board-light: #a5d6a7;
+  --color-board-surface: #c8e6c9;
+  --color-border: #1b5e20;
+  --color-bar: #143322;
+  --color-primary: #388e3c;
+  --color-on-primary: #fff;
+  --color-secondary: #7cb342;
+  --color-on-secondary: #102618;
+  --color-title: #e8f5e9;
+  --color-subtitle: #c8e6c9;
+  --color-text: #1b3a2d;
+  --color-text-light: #456b57;
+  --color-surface: #e8f5e9;
+  --color-panel-bg: #1b3a2d;
+  --color-piece-white: #f1f8e9;
+  --color-piece-black: #1b3a2d;
+  --color-highlight: #aeea00;
+  --color-slider-track: #388e3c;
+}

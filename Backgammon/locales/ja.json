@@ -1,0 +1,88 @@
+{
+  "menu": {
+    "title": "バックギャモン",
+    "start_game": "ゲーム開始",
+    "continue_game": "続きから",
+    "instructions": "説明",
+    "settings": "設定"
+  },
+  "game": {
+    "menu": "メニュー",
+    "player": "プレイヤー",
+    "ai": "AI",
+    "your_turn": "あなたの番",
+    "ai_turn": "AI の番",
+    "roll": "ダイス",
+    "move": "移動",
+    "opening": "開始ロール",
+    "over": "ゲーム終了",
+    "roll_dice": "振る",
+    "end_turn": "手番終了",
+    "bear_off": "ベアオフ",
+    "undo": "戻す",
+    "double": "ゾロ目：4 回移動",
+    "no_moves": "合法手なし。手番を渡します。",
+    "waiting_ai": "AI 思考中",
+    "choose_piece": "動かす白チェッカーを選択",
+    "choose_target": "強調された行き先を選択",
+    "bar_first": "バーの駒を先に戻します",
+    "saved": "保存しました",
+    "invalid": "不正な手です",
+    "use_dice": "残りダイス",
+    "opening_result": "開始：プレイヤー {player}、AI {ai}",
+    "winner_player": "あなたの勝ち",
+    "winner_ai": "AI の勝ち"
+  },
+  "result": {
+    "win": "勝利",
+    "lose": "AI 勝利",
+    "gammon": "ギャモン",
+    "backgammon": "バックギャモン",
+    "normal": "通常勝ち",
+    "play_again": "もう一度",
+    "back_to_menu": "メニューへ"
+  },
+  "settings": {
+    "title": "設定",
+    "language": "言語",
+    "theme": "テーマ",
+    "volume": "音量",
+    "bgm_volume": "BGM 音量",
+    "sfx_volume": "効果音",
+    "difficulty": "AI 難易度",
+    "easy": "簡単",
+    "normal": "普通",
+    "hard": "難しい",
+    "animation_speed": "アニメ速度",
+    "slow": "遅い",
+    "normal_speed": "普通",
+    "fast": "速い",
+    "save": "設定を保存",
+    "reset": "初期化",
+    "saved": "保存しました"
+  },
+  "themes": {
+    "classic_short": "古典",
+    "ocean_short": "海",
+    "forest_short": "森",
+    "sunset_short": "夕日",
+    "night_short": "夜"
+  },
+  "help": {
+    "title": "遊び方",
+    "tabs": {
+      "overview": "概要",
+      "movement": "移動",
+      "bar": "バー",
+      "bear_off": "ベアオフ",
+      "winning": "勝利",
+      "terms": "用語"
+    }
+  },
+  "common": {
+    "back": "戻る",
+    "close": "閉じる",
+    "cancel": "取消",
+    "ok": "OK"
+  }
+}

@@ -1,0 +1,22 @@
+[data-theme="sunset"] {
+  --color-bg-gradient: linear-gradient(135deg, #4a1942 0%, #c0392b 50%, #e67e22 100%);
+  --color-board-dark: #c0392b;
+  --color-board-light: #f8c291;
+  --color-board-surface: #fdebd0;
+  --color-border: #7b241c;
+  --color-bar: #4a1942;
+  --color-primary: #e74c3c;
+  --color-on-primary: #fff;
+  --color-secondary: #f39c12;
+  --color-on-secondary: #321100;
+  --color-title: #fdebd0;
+  --color-subtitle: #f8c291;
+  --color-text: #4a1942;
+  --color-text-light: #875a73;
+  --color-surface: #fdebd0;
+  --color-panel-bg: #4a1942;
+  --color-piece-white: #fdfefe;
+  --color-piece-black: #4a1942;
+  --color-highlight: #f1c40f;
+  --color-slider-track: #e74c3c;
+}

@@ -1,0 +1,79 @@
+.game-screen {
+  position: relative;
+  flex-direction: column;
+  color: var(--color-title);
+}
+
+.game-topbar {
+  height: 58px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.game-title {
+  font-weight: var(--font-weight-black);
+  color: var(--color-title);
+}
+
+.game-topbar .topbar-actions {
+  justify-content: flex-end;
+}
+
+.game-sidebar {
+  min-width: 0;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.game-sidebar-left {
+  align-content: stretch;
+}
+
+.game-sidebar-right {
+  align-content: start;
+  justify-items: center;
+}
+
+.player-panel,
+.turn-panel {
+  display: grid;
+  gap: var(--space-1);
+  align-content: center;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--color-title);
+  min-width: 0;
+}
+
+.panel-label,
+.phase-label,
+.message-label {
+  font-size: var(--font-xs);
+}
+
+.player-panel strong,
+.turn-label {
+  font-size: var(--font-md);
+  line-height: 1.1;
+}
+
+.message-label {
+  min-height: 42px;
+  color: var(--color-subtitle);
+}
+
+.game-controls {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(120px, 1fr));
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-5) var(--space-4);
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 2px solid rgba(255, 255, 255, 0.14);
+}

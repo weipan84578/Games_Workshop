@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="zh-Hant" data-theme="classic">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Backgammon | 雙陸棋</title>
+  <link rel="stylesheet" href="css/base/reset.css">
+  <link rel="stylesheet" href="css/base/variables.css">
+  <link rel="stylesheet" href="css/base/typography.css">
+  <link rel="stylesheet" href="css/layout/main.css">
+  <link rel="stylesheet" href="css/layout/responsive.css">
+  <link rel="stylesheet" href="css/components/board.css">
+  <link rel="stylesheet" href="css/components/pieces.css">
+  <link rel="stylesheet" href="css/components/dice.css">
+  <link rel="stylesheet" href="css/components/buttons.css">
+  <link rel="stylesheet" href="css/components/modal.css">
+  <link rel="stylesheet" href="css/screens/menu.css">
+  <link rel="stylesheet" href="css/screens/game.css">
+  <link rel="stylesheet" href="css/screens/settings.css">
+  <link rel="stylesheet" href="css/screens/help.css">
+  <link rel="stylesheet" href="css/themes/theme-classic.css">
+  <link rel="stylesheet" href="css/themes/theme-ocean.css">
+  <link rel="stylesheet" href="css/themes/theme-forest.css">
+  <link rel="stylesheet" href="css/themes/theme-sunset.css">
+  <link rel="stylesheet" href="css/themes/theme-night.css">
+  <link rel="stylesheet" href="css/animations/transitions.css">
+  <link rel="stylesheet" href="css/animations/dice-roll.css">
+  <link rel="stylesheet" href="css/animations/piece-move.css">
+</head>
+<body>
+  <main id="app" class="app-shell" aria-live="polite">
+    <section id="menuScreen" class="screen menu-screen active">
+      <div class="language-rail" aria-label="Language">
+        <button class="icon-pill" type="button" data-locale="zh-TW" title="繁體中文">中</button>
+        <button class="icon-pill" type="button" data-locale="en" title="English">EN</button>
+        <button class="icon-pill" type="button" data-locale="ja" title="日本語">日</button>
+      </div>
+      <div class="menu-brand">
+        <div class="menu-dice-mark" aria-hidden="true">
+          <span></span><span></span>
+        </div>
+        <h1 class="menu-title" data-i18n="menu.title">雙陸棋</h1>
+        <p class="menu-subtitle">Backgammon / バックギャモン</p>
+      </div>
+      <nav class="menu-actions" aria-label="Main menu">
+        <button id="startGameBtn" class="menu-btn menu-btn-primary" type="button" data-i18n="menu.start_game">開始遊戲</button>
+        <button id="continueGameBtn" class="menu-btn menu-btn-secondary" type="button" data-i18n="menu.continue_game">繼續遊戲</button>
+        <button id="helpBtn" class="menu-btn menu-btn-secondary" type="button" data-i18n="menu.instructions">說明</button>
+        <button id="settingsBtn" class="menu-btn menu-btn-secondary" type="button" data-i18n="menu.settings">設定</button>
+      </nav>
+      <p class="version-label">v1.0.0</p>
+    </section>
+
+    <section id="gameScreen" class="screen game-screen" aria-label="Game board">
+      <header class="game-topbar">
+        <button id="backToMenuBtn" class="btn btn-ghost" type="button" data-i18n="game.menu">主選單</button>
+        <div class="game-title">Backgammon</div>
+        <div class="topbar-actions">
+          <button id="quickSettingsBtn" class="icon-button" type="button" title="Settings" aria-label="Settings">⚙</button>
+          <button id="soundToggleBtn" class="icon-button" type="button" title="Sound" aria-label="Sound">♪</button>
+        </div>
+      </header>
+      <div class="game-layout">
+        <aside class="game-sidebar game-sidebar-left">
+          <div class="player-panel ai-panel">
+            <span class="panel-label" data-i18n="game.ai">AI</span>
+            <strong id="aiPiecesLabel">15</strong>
+            <span id="aiBarLabel">BAR: 0</span>
+            <span id="aiHomeLabel">HOME: 0</span>
+          </div>
+          <div class="turn-panel">
+            <span id="turnLabel" class="turn-label">你的回合</span>
+            <span id="phaseLabel" class="phase-label">擲骰</span>
+            <span id="messageLabel" class="message-label"></span>
+          </div>
+          <div class="player-panel human-panel">
+            <span class="panel-label" data-i18n="game.player">玩家</span>
+            <strong id="playerPiecesLabel">15</strong>
+            <span id="playerBarLabel">BAR: 0</span>
+            <span id="playerHomeLabel">HOME: 0</span>
+          </div>
+        </aside>
+        <div class="game-board-container">
+          <canvas id="gameCanvas" class="game-canvas" width="900" height="620"></canvas>
+        </div>
+        <aside class="game-sidebar game-sidebar-right">
+          <canvas id="diceCanvas" class="dice-canvas" width="220" height="130"></canvas>
+          <div id="diceText" class="dice-text">--</div>
+          <div class="move-note" id="moveNote"></div>
+        </aside>
+      </div>
+      <div class="game-controls">
+        <button id="rollDiceBtn" class="btn btn-primary" type="button" data-i18n="game.roll_dice">擲骰</button>
+        <button id="bearOffBtn" class="btn btn-secondary" type="button" data-i18n="game.bear_off">熊入</button>
+        <button id="undoBtn" class="btn btn-secondary" type="button" data-i18n="game.undo">悔棋</button>
+        <button id="endTurnBtn" class="btn btn-secondary" type="button" data-i18n="game.end_turn">結束回合</button>
+      </div>
+    </section>
+
+    <section id="settingsScreen" class="screen settings-screen">
+      <header class="screen-header">
+        <h2 data-i18n="settings.title">設定</h2>
+        <button class="btn btn-ghost" type="button" data-back data-i18n="common.back">返回</button>
+      </header>
+      <div class="settings-content">
+        <section class="settings-block">
+          <h3 data-i18n="settings.language">語言</h3>
+          <div class="btn-group" role="group" aria-label="Language">
+            <button class="btn-group-item" type="button" data-setting="language" data-value="zh-TW">繁體中文</button>
+            <button class="btn-group-item" type="button" data-setting="language" data-value="en">English</button>
+            <button class="btn-group-item" type="button" data-setting="language" data-value="ja">日本語</button>
+          </div>
+        </section>
+        <section class="settings-block">
+          <h3 data-i18n="settings.theme">配色主題</h3>
+          <div class="theme-picker" role="group" aria-label="Theme">
+            <button class="theme-swatch theme-classic" type="button" data-setting="theme" data-value="classic" data-i18n="themes.classic_short">古典</button>
+            <button class="theme-swatch theme-ocean" type="button" data-setting="theme" data-value="ocean" data-i18n="themes.ocean_short">海洋</button>
+            <button class="theme-swatch theme-forest" type="button" data-setting="theme" data-value="forest" data-i18n="themes.forest_short">森林</button>
+            <button class="theme-swatch theme-sunset" type="button" data-setting="theme" data-value="sunset" data-i18n="themes.sunset_short">夕陽</button>
+            <button class="theme-swatch theme-night" type="button" data-setting="theme" data-value="night" data-i18n="themes.night_short">深夜</button>
+          </div>
+        </section>
+        <section class="settings-block">
+          <h3 data-i18n="settings.volume">音量控制</h3>
+          <label class="range-row">
+            <span data-i18n="settings.bgm_volume">BGM 音量</span>
+            <input id="bgmVolumeInput" class="volume-slider" type="range" min="0" max="100" step="1">
+            <output id="bgmVolumeValue">75%</output>
+          </label>
+          <label class="range-row">
+            <span data-i18n="settings.sfx_volume">音效音量</span>
+            <input id="sfxVolumeInput" class="volume-slider" type="range" min="0" max="100" step="1">
+            <output id="sfxVolumeValue">100%</output>
+          </label>
+        </section>
+        <section class="settings-block">
+          <h3 data-i18n="settings.difficulty">AI 難度</h3>
+          <div class="btn-group" role="group" aria-label="Difficulty">
+            <button class="btn-group-item" type="button" data-setting="difficulty" data-value="easy" data-i18n="settings.easy">簡單</button>
+            <button class="btn-group-item" type="button" data-setting="difficulty" data-value="normal" data-i18n="settings.normal">普通</button>
+            <button class="btn-group-item" type="button" data-setting="difficulty" data-value="hard" data-i18n="settings.hard">困難</button>
+          </div>
+        </section>
+        <section class="settings-block">
+          <h3 data-i18n="settings.animation_speed">動畫速度</h3>
+          <div class="btn-group" role="group" aria-label="Animation speed">
+            <button class="btn-group-item" type="button" data-setting="animationSpeed" data-value="slow" data-i18n="settings.slow">慢</button>
+            <button class="btn-group-item" type="button" data-setting="animationSpeed" data-value="normal" data-i18n="settings.normal_speed">普通</button>
+            <button class="btn-group-item" type="button" data-setting="animationSpeed" data-value="fast" data-i18n="settings.fast">快</button>
+          </div>
+        </section>
+        <div class="settings-actions">
+          <button id="saveSettingsBtn" class="btn btn-primary wide" type="button" data-i18n="settings.save">儲存設定</button>
+          <button id="resetSettingsBtn" class="btn btn-ghost wide" type="button" data-i18n="settings.reset">重設預設值</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="helpScreen" class="screen help-screen">
+      <header class="screen-header">
+        <h2 data-i18n="help.title">遊戲說明</h2>
+        <button class="btn btn-ghost" type="button" data-back data-i18n="common.back">返回</button>
+      </header>
+      <div id="helpTabs" class="help-tabs" role="tablist"></div>
+      <article id="helpContent" class="help-content"></article>
+    </section>
+  </main>
+
+  <div id="modalRoot" class="modal-root" aria-hidden="true">
+    <div class="modal-scrim" data-modal-close></div>
+    <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <header class="modal-header">
+        <h2 id="modalTitle"></h2>
+        <button class="icon-button" type="button" data-modal-close aria-label="Close">×</button>
+      </header>
+      <div id="modalBody" class="modal-body"></div>
+      <footer id="modalActions" class="modal-actions"></footer>
+    </section>
+  </div>
+
+  <script src="js/lib/audio-engine.js"></script>
+  <script src="js/core/constants.js"></script>
+  <script src="js/core/i18n.js"></script>
+  <script src="js/core/state.js"></script>
+  <script src="js/core/storage.js"></script>
+  <script src="js/game/rules.js"></script>
+  <script src="js/game/board.js"></script>
+  <script src="js/game/dice.js"></script>
+  <script src="js/game/pieces.js"></script>
+  <script src="js/game/ai-easy.js"></script>
+  <script src="js/game/ai-normal.js"></script>
+  <script src="js/game/ai-hard.js"></script>
+  <script src="js/game/ai-manager.js"></script>
+  <script src="js/render/canvas-board.js"></script>
+  <script src="js/render/canvas-pieces.js"></script>
+  <script src="js/render/canvas-dice.js"></script>
+  <script src="js/render/animations.js"></script>
+  <script src="js/ui/menu.js"></script>
+  <script src="js/ui/game-ui.js"></script>
+  <script src="js/ui/settings-ui.js"></script>
+  <script src="js/ui/help-ui.js"></script>
+  <script src="js/ui/modal.js"></script>
+  <script src="js/ui/theme.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+[data-theme="ocean"] {
+  --color-bg-gradient: linear-gradient(135deg, #0a2342 0%, #1b4f8a 100%);
+  --color-board-dark: #1565c0;
+  --color-board-light: #90caf9;
+  --color-board-surface: #bbdefb;
+  --color-border: #0d3b6e;
+  --color-bar: #0a2342;
+  --color-primary: #1976d2;
+  --color-on-primary: #fff;
+  --color-secondary: #03a9f4;
+  --color-on-secondary: #003366;
+  --color-title: #e3f2fd;
+  --color-subtitle: #bbdefb;
+  --color-text: #0a2342;
+  --color-text-light: #33658d;
+  --color-surface: #e3f2fd;
+  --color-panel-bg: #0a2342;
+  --color-piece-white: #eceff1;
+  --color-piece-black: #1a237e;
+  --color-highlight: #00e5ff;
+  --color-slider-track: #1976d2;
+}

@@ -1,0 +1,56 @@
+.help-tabs {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  padding: 0 var(--space-5) var(--space-3);
+  display: flex;
+  gap: var(--space-2);
+  overflow-x: auto;
+}
+
+.help-tab {
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+  opacity: 0.72;
+}
+
+.help-tab.active {
+  opacity: 1;
+  box-shadow: var(--shadow-md);
+}
+
+.help-content {
+  width: min(980px, 100%);
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-5) var(--space-8);
+  color: var(--color-text);
+}
+
+.help-panel {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+}
+
+.help-panel ul,
+.help-panel ol {
+  margin: 0;
+  padding-left: var(--space-6);
+}
+
+.help-diagram {
+  overflow: auto;
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  color: var(--color-title);
+  background: var(--color-panel-bg);
+  font-family: Consolas, "Courier New", monospace;
+  font-size: var(--font-xs);
+  line-height: 1.45;
+}

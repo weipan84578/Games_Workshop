@@ -1,0 +1,68 @@
+.modal-root {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-5);
+}
+
+.modal-root.active {
+  display: flex;
+}
+
+.modal-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.58);
+}
+
+.modal-card {
+  position: relative;
+  width: min(520px, 100%);
+  max-height: min(720px, 92dvh);
+  overflow: auto;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  color: var(--color-text);
+  box-shadow: var(--shadow-xl);
+}
+
+.modal-header,
+.modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+}
+
+.modal-body {
+  padding: 0 var(--space-4) var(--space-4);
+}
+
+.modal-actions {
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.difficulty-list {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.difficulty-card {
+  width: 100%;
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  text-align: left;
+  color: var(--color-on-primary);
+  background: var(--color-primary);
+}
+
+.difficulty-card strong {
+  display: block;
+  margin-bottom: var(--space-1);
+}

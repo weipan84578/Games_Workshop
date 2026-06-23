@@ -1,0 +1,88 @@
+{
+  "menu": {
+    "title": "Backgammon",
+    "start_game": "Start Game",
+    "continue_game": "Continue",
+    "instructions": "How to Play",
+    "settings": "Settings"
+  },
+  "game": {
+    "menu": "Menu",
+    "player": "Player",
+    "ai": "AI",
+    "your_turn": "Your Turn",
+    "ai_turn": "AI Turn",
+    "roll": "Roll Phase",
+    "move": "Move Phase",
+    "opening": "Opening Roll",
+    "over": "Game Over",
+    "roll_dice": "Roll",
+    "end_turn": "End Turn",
+    "bear_off": "Bear Off",
+    "undo": "Undo",
+    "double": "Double: 4 moves",
+    "no_moves": "No legal moves. Turn skipped.",
+    "waiting_ai": "AI is thinking",
+    "choose_piece": "Choose a movable white checker",
+    "choose_target": "Choose a highlighted target",
+    "bar_first": "Enter from the bar first",
+    "saved": "Saved",
+    "invalid": "Illegal move",
+    "use_dice": "Dice left",
+    "opening_result": "Opening: Player {player}, AI {ai}",
+    "winner_player": "You win",
+    "winner_ai": "AI wins"
+  },
+  "result": {
+    "win": "You Win",
+    "lose": "AI Wins",
+    "gammon": "Gammon",
+    "backgammon": "Backgammon",
+    "normal": "Normal Win",
+    "play_again": "Play Again",
+    "back_to_menu": "Back to Menu"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "theme": "Theme",
+    "volume": "Volume",
+    "bgm_volume": "BGM",
+    "sfx_volume": "SFX",
+    "difficulty": "AI Difficulty",
+    "easy": "Easy",
+    "normal": "Normal",
+    "hard": "Hard",
+    "animation_speed": "Animation Speed",
+    "slow": "Slow",
+    "normal_speed": "Normal",
+    "fast": "Fast",
+    "save": "Save Settings",
+    "reset": "Reset Defaults",
+    "saved": "Settings saved"
+  },
+  "themes": {
+    "classic_short": "Classic",
+    "ocean_short": "Ocean",
+    "forest_short": "Forest",
+    "sunset_short": "Sunset",
+    "night_short": "Night"
+  },
+  "help": {
+    "title": "How to Play",
+    "tabs": {
+      "overview": "Overview",
+      "movement": "Move",
+      "bar": "Bar",
+      "bear_off": "Bear Off",
+      "winning": "Win",
+      "terms": "Terms"
+    }
+  },
+  "common": {
+    "back": "Back",
+    "close": "Close",
+    "cancel": "Cancel",
+    "ok": "OK"
+  }
+}

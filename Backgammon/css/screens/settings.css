@@ -1,0 +1,118 @@
+.settings-screen,
+.help-screen {
+  flex-direction: column;
+}
+
+.settings-content {
+  width: min(860px, 100%);
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-5) var(--space-8);
+  display: grid;
+  gap: var(--space-4);
+}
+
+.settings-block {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-group {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.btn-group-item {
+  flex: 1;
+  min-width: 112px;
+  padding: var(--space-3) var(--space-4);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.58);
+  color: var(--color-text);
+  font-weight: var(--font-weight-bold);
+}
+
+.btn-group-item.active {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.range-row {
+  display: grid;
+  grid-template-columns: 150px 1fr 64px;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.volume-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--color-slider-track);
+  outline: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.volume-slider::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--color-primary);
+  cursor: pointer;
+}
+
+.theme-picker {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.theme-swatch {
+  width: 76px;
+  height: 76px;
+  border-radius: var(--radius-md);
+  border: 3px solid transparent;
+  color: #fff;
+  font-size: var(--font-xs);
+  font-weight: var(--font-weight-bold);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
+}
+
+.theme-swatch.active {
+  border-color: var(--color-highlight);
+  transform: scale(1.05);
+}
+
+.theme-classic { background: linear-gradient(135deg, #3d2b1f, #deb887); }
+.theme-ocean { background: linear-gradient(135deg, #0a2342, #90caf9); }
+.theme-forest { background: linear-gradient(135deg, #1b3a2d, #a5d6a7); }
+.theme-sunset { background: linear-gradient(135deg, #4a1942, #e67e22); }
+.theme-night { background: linear-gradient(135deg, #0d0d0d, #7c4dff); }
+
+.settings-actions {
+  display: grid;
+  gap: var(--space-3);
+}
+
+@media (max-width: 600px) {
+  .range-row {
+    grid-template-columns: 1fr;
+  }
+}

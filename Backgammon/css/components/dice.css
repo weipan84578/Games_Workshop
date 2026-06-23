@@ -1,0 +1,16 @@
+.dice-canvas {
+  width: 100%;
+  max-width: 220px;
+  aspect-ratio: 220 / 130;
+  height: auto;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.12);
+  border: 2px solid rgba(255, 255, 255, 0.18);
+}
+
+.dice-text {
+  min-height: 36px;
+  color: var(--color-title);
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+}

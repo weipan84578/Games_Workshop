@@ -1,0 +1,22 @@
+[data-theme="classic"] {
+  --color-bg-gradient: linear-gradient(135deg, #3d2b1f 0%, #5c4033 100%);
+  --color-board-dark: #8b4513;
+  --color-board-light: #deb887;
+  --color-board-surface: #c8a96e;
+  --color-border: #4a2c1a;
+  --color-bar: #2d1b0e;
+  --color-primary: #8b5e3c;
+  --color-on-primary: #fff8f0;
+  --color-secondary: #d2691e;
+  --color-on-secondary: #fff8f0;
+  --color-title: #f5deb3;
+  --color-subtitle: #deb887;
+  --color-text: #3d2b1f;
+  --color-text-light: #8b7355;
+  --color-surface: #f5e6d3;
+  --color-panel-bg: #3d2b1f;
+  --color-piece-white: #f5f0e8;
+  --color-piece-black: #2c2416;
+  --color-highlight: #ffd700;
+  --color-slider-track: #8b5e3c;
+}

@@ -1,0 +1,9 @@
+.game-canvas.piece-flash {
+  animation: piece-flash 260ms ease-out;
+}
+
+@keyframes piece-flash {
+  0% { filter: brightness(1); }
+  45% { filter: brightness(1.14); }
+  100% { filter: brightness(1); }
+}

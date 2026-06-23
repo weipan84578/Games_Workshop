@@ -1,0 +1,7 @@
+.move-note {
+  min-height: 48px;
+  color: var(--color-title);
+  font-size: var(--font-xs);
+  line-height: 1.35;
+  text-align: center;
+}
