@@ -54,3 +54,37 @@
   font-size: var(--font-xs);
   line-height: 1.45;
 }
+
+@media (max-width: 700px) {
+  .help-tabs {
+    width: 100%;
+    padding: 0 var(--space-4) var(--space-3);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-2);
+    overflow: visible;
+  }
+
+  .help-tab {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 38px;
+    padding: var(--space-2);
+    border-radius: var(--radius-md);
+    font-size: 0.86rem;
+    line-height: 1.1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .help-content {
+    padding: var(--space-3) var(--space-4) var(--space-6);
+  }
+}
+
+@media (max-width: 360px) {
+  .help-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

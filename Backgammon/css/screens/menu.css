@@ -87,3 +87,50 @@
   top: 13px;
   box-shadow: -18px 18px 0 #8b0000;
 }
+
+@media (max-width: 700px), (max-height: 680px) {
+  .menu-screen {
+    justify-content: flex-start;
+    min-height: 100dvh;
+    padding: calc(env(safe-area-inset-top, 0px) + var(--space-16)) var(--space-4) var(--space-5);
+    gap: var(--space-4);
+    overflow-y: auto;
+  }
+
+  .language-rail {
+    top: calc(env(safe-area-inset-top, 0px) + var(--space-2));
+    left: var(--space-3);
+    right: var(--space-3);
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+
+  .menu-brand {
+    gap: var(--space-2);
+    width: 100%;
+  }
+
+  .menu-title {
+    font-size: clamp(2.15rem, 11vw, var(--font-3xl));
+  }
+
+  .menu-subtitle {
+    font-size: var(--font-sm);
+  }
+
+  .menu-actions {
+    gap: var(--space-3);
+  }
+
+  .menu-btn {
+    min-height: 48px;
+    padding: var(--space-3) var(--space-5);
+    border-radius: var(--radius-md);
+    font-size: var(--font-sm);
+  }
+
+  .menu-dice-mark span {
+    width: 44px;
+    height: 44px;
+  }
+}

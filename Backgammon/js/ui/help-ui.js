@@ -44,6 +44,7 @@ Player: 12 11 10  9  8  7 |BAR|  6  5  4  3  2  1</pre><ol><li>Roll dice.</li><l
         button.className = "help-tab";
         button.dataset.tab = tab;
         button.addEventListener("click", () => {
+          BG.AudioEngine.playSfx("btn_click");
           this.active = tab;
           this.render();
         });
