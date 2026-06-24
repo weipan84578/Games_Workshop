@@ -1,0 +1,189 @@
+﻿@media (max-width: 1023px) {
+  .game-content {
+    grid-template-columns: 1fr;
+  }
+
+  .side-panel {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .wheel-panel {
+    grid-column: 1 / -1;
+    order: -1;
+  }
+
+  #wheelCanvas {
+    max-width: min(420px, 75vw);
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --action-bar-height: 78px;
+  }
+
+  body {
+    overflow: hidden;
+  }
+
+  .screen-tools {
+    left: var(--space-4);
+    right: var(--space-4);
+    justify-content: space-between;
+  }
+
+  .game-header {
+    gap: var(--space-2);
+  }
+
+  .game-header h2 {
+    font-size: 1.35rem;
+  }
+
+  .game-header-actions {
+    gap: var(--space-1);
+  }
+
+  .game-header-actions .btn.compact {
+    display: none;
+  }
+
+  .game-content {
+    padding: var(--space-3);
+    padding-bottom: calc(var(--action-bar-height) + var(--space-4));
+  }
+
+  .side-panel {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+  }
+
+  .status-card {
+    padding: var(--space-3);
+  }
+
+  .status-card h3,
+  .board-toolbar h3 {
+    font-size: 1.1rem;
+  }
+
+  .ai-reveal,
+  .thinking-meter {
+    display: none;
+  }
+
+  #wheelCanvas {
+    max-width: min(340px, calc(100vw - 32px));
+  }
+
+  .table-section {
+    gap: var(--space-3);
+  }
+
+  .betting-board-scroll {
+    min-height: 250px;
+  }
+
+  .betting-board {
+    min-width: 1010px;
+    padding: var(--space-3);
+  }
+
+  .history-bar {
+    min-height: 48px;
+    font-size: 0.9rem;
+  }
+
+  .action-bar {
+    gap: var(--space-2);
+    padding-top: var(--space-2);
+    padding-bottom: calc(var(--space-2) + env(safe-area-inset-bottom));
+  }
+
+  .chip {
+    width: 48px;
+    height: 48px;
+    font-size: 0.9rem;
+  }
+
+  .round-actions {
+    gap: var(--space-2);
+  }
+
+  .round-actions .btn {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .round-actions .btn.primary {
+    min-width: 92px;
+  }
+
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .utility-screen {
+    padding: var(--space-3);
+  }
+
+  .utility-header,
+  .setting-block,
+  .help-card {
+    padding: var(--space-3);
+  }
+
+  .help-card p,
+  .help-card li {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 479px) {
+  .menu-stage {
+    justify-content: flex-end;
+    padding-top: 4rem;
+  }
+
+  h1 {
+    font-size: 3rem;
+  }
+
+  .menu-actions {
+    width: 100%;
+  }
+
+  .difficulty-group {
+    flex-wrap: wrap;
+  }
+
+  .side-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .board-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .bet-list-shell {
+    display: none;
+  }
+
+  .toast-host {
+    right: var(--space-3);
+    left: var(--space-3);
+    width: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+}

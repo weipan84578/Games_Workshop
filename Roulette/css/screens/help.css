@@ -1,0 +1,60 @@
+﻿.help-content {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.help-card {
+  padding: var(--space-5);
+}
+
+.help-card p,
+.help-card li {
+  font-size: var(--text-base);
+}
+
+.help-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: var(--space-4);
+}
+
+.mini-diagram {
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+}
+
+.bet-type-card {
+  border: 1px solid rgba(var(--color-ui-primary-rgb), 0.32);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+  background: rgba(0, 0, 0, 0.24);
+}
+
+.bet-type-card h4 {
+  margin: var(--space-2) 0;
+  font-size: var(--text-base);
+}
+
+.calculator {
+  padding: var(--space-4);
+  display: grid;
+  gap: var(--space-4);
+}
+
+.calculator-controls {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.calculator select,
+.calculator input {
+  min-height: 44px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(var(--color-ui-primary-rgb), 0.45);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--color-text-primary);
+  padding: 0 var(--space-3);
+}
+
