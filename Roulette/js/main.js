@@ -91,15 +91,27 @@
       "settings.sfx": "音效",
       "settings.theme": "主題顏色",
       "settings.game": "遊戲",
+      "settings.kicker": "偏好設定",
       "settings.save": "儲存設定",
+      "settings.wheelType": "輪盤類型",
+      "settings.wheelTypeHelp": "歐式輪盤只有 0；美式輪盤多 00，外注勝率較低、風險較高。",
+      "settings.animationSpeed": "輪盤動畫速度",
+      "settings.animationSpeedHelp": "慢、普通、快只影響轉盤演出時間，不改變中獎機率或派彩。",
       "settings.slow": "慢",
       "settings.normal": "普通",
       "settings.fast": "快",
+      "settings.speedSlowDesc": "慢：轉盤演出較久，適合想看完整鋼球滾動效果。",
+      "settings.speedNormalDesc": "普通：標準節奏，兼顧演出與等待時間。",
+      "settings.speedFastDesc": "快：縮短等待，適合連續下注。",
       "theme.classic": "經典",
       "theme.royal": "皇家",
       "theme.neon": "霓虹",
       "theme.rose": "玫瑰",
       "theme.midnight": "深夜",
+      "wheel.european": "歐式輪盤",
+      "wheel.american": "美式輪盤",
+      "wheel.europeanDesc": "歐式輪盤：0 到 36，共 37 格，沒有 00。",
+      "wheel.americanDesc": "美式輪盤：0 到 36 加上 00，共 38 格，莊家優勢較高。",
       "game.spin": "轉動",
       "game.spinning": "轉動中",
       "game.thinking": "AI 思考中",
@@ -124,6 +136,7 @@
       "game.saved": "遊戲已存檔",
       "game.noSave": "沒有可讀取的存檔",
       "game.settingsSaved": "設定已儲存",
+      "game.storageUnavailable": "瀏覽器本機儲存不可用",
       "game.loaded": "已讀取存檔",
       "game.winTitle": "恭喜獲勝",
       "game.loseTitle": "遊戲結束",
@@ -131,6 +144,7 @@
       "game.aiBankrupt": "AI 籌碼歸零，你贏得對局。",
       "game.playerBankrupt": "你的籌碼已用完。",
       "game.net": "淨額 {amount}",
+      "game.target": "目標 {amount}",
       "ai.panel": "AI 對手",
       "ai.ready": "等待下注",
       "ai.thinking": "AI 思考中...",
@@ -142,14 +156,26 @@
       "bet.even": "偶",
       "bet.low": "1-18",
       "bet.high": "19-36",
-      "bet.dozen1": "1st 12",
-      "bet.dozen2": "2nd 12",
-      "bet.dozen3": "3rd 12",
+      "bet.dozen1": "第1打",
+      "bet.dozen2": "第2打",
+      "bet.dozen3": "第3打",
       "bet.columnTop": "上列",
       "bet.columnMiddle": "中列",
       "bet.columnBottom": "下列",
       "bet.number": "直注 {number}",
+      "betType.straight": "直注",
+      "betType.redBlack": "紅 / 黑",
+      "betType.oddEven": "奇 / 偶",
+      "betType.lowHigh": "低 / 高",
+      "betType.dozen": "打注",
+      "betType.column": "直列",
+      "betType.split": "分注",
+      "betType.street": "街注",
+      "betType.corner": "角注",
+      "betType.sixLine": "線注",
+      "betType.outside": "外注",
       "help.title": "遊戲說明",
+      "help.kicker": "教學指南",
       "help.goal": "遊戲目標",
       "help.wheel": "輪盤介紹",
       "help.bets": "下注類型",
@@ -162,6 +188,16 @@
       "help.wheelBody": "歐式輪盤有 0 到 36 共 37 格，美式輪盤多一個 00。0 與 00 為綠色，外注在綠色結果時皆失利。",
       "help.aiBody": "簡單 AI 保守下注；普通 AI 混合外注與打注；困難 AI 會參考近期結果與玩家下注偏好，偶爾採用倍投策略。",
       "help.controlsBody": "先選擇籌碼，再點擊下注桌面板。可在轉動前清除下注；輪盤旋轉期間下注區會鎖定。",
+      "help.wheelColors": "紅色、黑色、綠色依標準輪盤規則標示；0 與 00 都是綠色。",
+      "help.aiEasy": "簡單：每輪約下注餘額 3-5%，通常只押一種外注。",
+      "help.aiNormal": "普通：每輪約下注餘額 5-8%，混合外注、打注或直列。",
+      "help.aiHard": "困難：每輪最高約下注餘額 12%，會參考歷史與玩家偏好。",
+      "help.controlClear": "清除：轉動前退回目前所有玩家下注。",
+      "help.controlSave": "存檔：把目前對局與設定寫入瀏覽器本機儲存。",
+      "help.controlTheme": "主題顏色：立即切換五種視覺風格，不影響玩法。",
+      "help.settingsReference": "設定項目說明",
+      "help.settingSpeed": "慢、普通、快是輪盤動畫速度，只改變等待時間，不改變結果。",
+      "help.settingWheel": "歐式輪盤只有 0；美式輪盤多 00，外注命中率較低。",
       "help.coverage": "覆蓋",
       "help.payoutRatio": "賠率",
       "help.winAmount": "贏得",
@@ -184,15 +220,27 @@
       "settings.sfx": "Sound Effects",
       "settings.theme": "Color Theme",
       "settings.game": "Game",
+      "settings.kicker": "Preferences",
       "settings.save": "Save Settings",
+      "settings.wheelType": "Wheel Type",
+      "settings.wheelTypeHelp": "European uses only 0. American adds 00, which lowers outside-bet odds.",
+      "settings.animationSpeed": "Wheel Animation Speed",
+      "settings.animationSpeedHelp": "Slow, Normal, and Fast only change spin presentation time. Odds and payouts do not change.",
       "settings.slow": "Slow",
       "settings.normal": "Normal",
       "settings.fast": "Fast",
+      "settings.speedSlowDesc": "Slow: longer spin presentation for the full ball-roll effect.",
+      "settings.speedNormalDesc": "Normal: balanced timing for regular play.",
+      "settings.speedFastDesc": "Fast: shorter wait for repeated betting.",
       "theme.classic": "Classic",
       "theme.royal": "Royal",
       "theme.neon": "Neon",
       "theme.rose": "Rose",
       "theme.midnight": "Midnight",
+      "wheel.european": "European Wheel",
+      "wheel.american": "American Wheel",
+      "wheel.europeanDesc": "European wheel: 0-36, 37 pockets, no 00.",
+      "wheel.americanDesc": "American wheel: 0-36 plus 00, 38 pockets, higher house edge.",
       "game.spin": "Spin",
       "game.spinning": "Spinning",
       "game.thinking": "AI Thinking",
@@ -217,6 +265,7 @@
       "game.saved": "Game saved",
       "game.noSave": "No saved game found",
       "game.settingsSaved": "Settings saved",
+      "game.storageUnavailable": "Browser local storage is unavailable",
       "game.loaded": "Save loaded",
       "game.winTitle": "Victory",
       "game.loseTitle": "Game Over",
@@ -224,6 +273,7 @@
       "game.aiBankrupt": "The AI is out of chips. You win.",
       "game.playerBankrupt": "You are out of chips.",
       "game.net": "Net {amount}",
+      "game.target": "Target {amount}",
       "ai.panel": "AI Opponent",
       "ai.ready": "Ready",
       "ai.thinking": "AI Thinking...",
@@ -242,7 +292,19 @@
       "bet.columnMiddle": "Middle row",
       "bet.columnBottom": "Bottom row",
       "bet.number": "Straight {number}",
+      "betType.straight": "Straight",
+      "betType.redBlack": "Red / Black",
+      "betType.oddEven": "Odd / Even",
+      "betType.lowHigh": "Low / High",
+      "betType.dozen": "Dozen",
+      "betType.column": "Column",
+      "betType.split": "Split",
+      "betType.street": "Street",
+      "betType.corner": "Corner",
+      "betType.sixLine": "Six Line",
+      "betType.outside": "Outside",
       "help.title": "How to Play",
+      "help.kicker": "Guide",
       "help.goal": "Goal",
       "help.wheel": "Wheel",
       "help.bets": "Bet Types",
@@ -255,6 +317,16 @@
       "help.wheelBody": "European roulette has 37 pockets from 0 to 36. American roulette adds 00. Zero pockets are green, and outside bets lose on green.",
       "help.aiBody": "Easy AI bets conservatively. Normal AI mixes outside bets and dozens. Hard AI reads recent history and player patterns, sometimes using martingale pressure.",
       "help.controlsBody": "Choose a chip, then select a betting area. Clear bets before spinning; the board locks while the wheel spins.",
+      "help.wheelColors": "Red, black, and green follow standard roulette color mapping. 0 and 00 are both green.",
+      "help.aiEasy": "Easy: bets about 3-5% of balance and usually chooses one outside bet.",
+      "help.aiNormal": "Normal: bets about 5-8% of balance and mixes outside, dozen, or column bets.",
+      "help.aiHard": "Hard: bets up to about 12% of balance and considers history plus player patterns.",
+      "help.controlClear": "Clear: refunds every active player bet before the wheel spins.",
+      "help.controlSave": "Save: writes the current match and settings to browser local storage.",
+      "help.controlTheme": "Color Theme: switches among five visual styles without changing gameplay.",
+      "help.settingsReference": "Settings Reference",
+      "help.settingSpeed": "Slow, Normal, and Fast are wheel animation speeds. They change wait time, not the result.",
+      "help.settingWheel": "European has only 0. American adds 00, which lowers outside-bet hit rates.",
       "help.coverage": "Coverage",
       "help.payoutRatio": "Payout",
       "help.winAmount": "Win",
@@ -277,15 +349,27 @@
       "settings.sfx": "効果音",
       "settings.theme": "テーマカラー",
       "settings.game": "ゲーム",
+      "settings.kicker": "設定",
       "settings.save": "設定を保存",
+      "settings.wheelType": "ホイール種類",
+      "settings.wheelTypeHelp": "ヨーロピアンは 0 のみ。アメリカンは 00 が追加され、外側ベットの勝率が下がります。",
+      "settings.animationSpeed": "ホイール演出速度",
+      "settings.animationSpeedHelp": "遅い・普通・速いは演出時間だけを変えます。確率や配当は変わりません。",
       "settings.slow": "遅い",
       "settings.normal": "普通",
       "settings.fast": "速い",
+      "settings.speedSlowDesc": "遅い：ボールの動きを長く見られる演出です。",
+      "settings.speedNormalDesc": "普通：待ち時間と演出の標準バランスです。",
+      "settings.speedFastDesc": "速い：連続プレイ向けに待ち時間を短くします。",
       "theme.classic": "クラシック",
       "theme.royal": "ロイヤル",
       "theme.neon": "ネオン",
       "theme.rose": "ローズ",
       "theme.midnight": "ミッドナイト",
+      "wheel.european": "ヨーロピアン",
+      "wheel.american": "アメリカン",
+      "wheel.europeanDesc": "ヨーロピアン：0 から 36、合計 37 ポケット。00 はありません。",
+      "wheel.americanDesc": "アメリカン：0 から 36 に 00 を追加した 38 ポケット。ハウスエッジが高くなります。",
       "game.spin": "スピン",
       "game.spinning": "回転中",
       "game.thinking": "AI考慮中",
@@ -310,6 +394,7 @@
       "game.saved": "保存しました",
       "game.noSave": "保存データがありません",
       "game.settingsSaved": "設定を保存しました",
+      "game.storageUnavailable": "ブラウザのローカル保存を使用できません",
       "game.loaded": "保存データを読み込みました",
       "game.winTitle": "勝利",
       "game.loseTitle": "ゲーム終了",
@@ -317,6 +402,7 @@
       "game.aiBankrupt": "AI のチップがなくなりました。",
       "game.playerBankrupt": "チップがなくなりました。",
       "game.net": "収支 {amount}",
+      "game.target": "目標 {amount}",
       "ai.panel": "AI相手",
       "ai.ready": "待機中",
       "ai.thinking": "AI考慮中...",
@@ -328,14 +414,26 @@
       "bet.even": "偶数",
       "bet.low": "1-18",
       "bet.high": "19-36",
-      "bet.dozen1": "1st 12",
-      "bet.dozen2": "2nd 12",
-      "bet.dozen3": "3rd 12",
+      "bet.dozen1": "第1ダズン",
+      "bet.dozen2": "第2ダズン",
+      "bet.dozen3": "第3ダズン",
       "bet.columnTop": "上段",
       "bet.columnMiddle": "中段",
       "bet.columnBottom": "下段",
       "bet.number": "ストレート {number}",
+      "betType.straight": "ストレート",
+      "betType.redBlack": "赤 / 黒",
+      "betType.oddEven": "奇数 / 偶数",
+      "betType.lowHigh": "ロー / ハイ",
+      "betType.dozen": "ダズン",
+      "betType.column": "コラム",
+      "betType.split": "スプリット",
+      "betType.street": "ストリート",
+      "betType.corner": "コーナー",
+      "betType.sixLine": "シックスライン",
+      "betType.outside": "外側ベット",
       "help.title": "遊び方",
+      "help.kicker": "ガイド",
       "help.goal": "目標",
       "help.wheel": "ルーレット",
       "help.bets": "ベット種類",
@@ -348,6 +446,16 @@
       "help.wheelBody": "ヨーロピアンは 0 から 36 の 37 ポケット。アメリカンは 00 が追加されます。0/00 は緑で、外側ベットは負けになります。",
       "help.aiBody": "簡単AIは保守的、普通AIは外側とダズンを混ぜ、難しいAIは履歴とプレイヤー傾向を参考にします。",
       "help.controlsBody": "チップを選び、ベットエリアを押します。スピン前にクリアでき、回転中はボードがロックされます。",
+      "help.wheelColors": "赤・黒・緑は標準ルーレットの色分けです。0 と 00 はどちらも緑です。",
+      "help.aiEasy": "簡単：約 3-5% の残高を賭け、通常は外側ベットを 1 種類だけ選びます。",
+      "help.aiNormal": "普通：約 5-8% の残高を賭け、外側・ダズン・コラムを組み合わせます。",
+      "help.aiHard": "難しい：最大約 12% の残高を賭け、履歴とプレイヤー傾向を参考にします。",
+      "help.controlClear": "クリア：スピン前にプレイヤーの現在ベットをすべて返金します。",
+      "help.controlSave": "保存：現在の対局と設定をブラウザのローカル保存に書き込みます。",
+      "help.controlTheme": "テーマカラー：ゲーム性を変えずに 5 種類の見た目を切り替えます。",
+      "help.settingsReference": "設定項目の説明",
+      "help.settingSpeed": "遅い・普通・速いはホイール演出速度です。待ち時間だけが変わり、結果は変わりません。",
+      "help.settingWheel": "ヨーロピアンは 0 のみ。アメリカンは 00 が追加され、外側ベットの命中率が下がります。",
       "help.coverage": "範囲",
       "help.payoutRatio": "配当",
       "help.winAmount": "勝利額",
@@ -992,10 +1100,10 @@
       const outsideY = dozenY + H;
       [
         ["outside:low", "1-18", "outside"],
-        ["outside:even", "EVEN", "outside"],
-        ["outside:red", "RED", "red"],
-        ["outside:black", "BLACK", "black"],
-        ["outside:odd", "ODD", "outside"],
+        ["outside:even", i18n.t("bet.even"), "outside"],
+        ["outside:red", i18n.t("bet.red"), "red"],
+        ["outside:black", i18n.t("bet.black"), "black"],
+        ["outside:odd", i18n.t("bet.odd"), "outside"],
         ["outside:high", "19-36", "outside"],
       ].forEach(([id, label, fill], index) => {
         addCell(id, left + index * W * 2, outsideY, W * 2, H, label, fill);
@@ -1031,7 +1139,7 @@
         </g>
       ` : "";
       return `
-        <g class="bet-cell ${cell.winning ? "winning" : ""}" data-bet-id="${cell.id}" tabindex="0" role="button" aria-label="${cell.label}">
+        <g class="bet-cell fill-${cell.fill} ${cell.winning ? "winning" : ""}" data-bet-id="${cell.id}" tabindex="0" role="button" aria-label="${cell.label}">
           <rect x="${cell.x}" y="${cell.y}" width="${cell.w}" height="${cell.h}" rx="4" fill="${fillMap[cell.fill] || fillMap.outside}"></rect>
           <text x="${centerX}" y="${centerY - (cell.subLabel ? 7 : 0)}" text-anchor="middle" dominant-baseline="middle">${cell.label}</text>
           ${cell.subLabel ? `<text class="sub-label" x="${centerX}" y="${centerY + 15}" text-anchor="middle" dominant-baseline="middle">${cell.subLabel}</text>` : ""}
@@ -1367,6 +1475,8 @@
       this.lastResult = null;
       this.els.resultNumber.textContent = "--";
       this.els.resultText.textContent = i18n.t("game.placeBets");
+      this.els.resultNumber.className = "";
+      this.els.resultDisplay.classList.remove("win", "result-red", "result-black", "result-green");
       this.els.aiReveal.textContent = i18n.t("ai.hidden");
       this.wheel.setWheelType(this.state.wheel.type);
       this.route("game");
@@ -1393,7 +1503,7 @@
 
     saveGame(showToast) {
       const saved = this.saveManager.save(this.settingsManager.settings, this.state);
-      if (showToast) this.toast.show(saved ? i18n.t("game.saved") : "localStorage unavailable", saved ? "success" : "warning");
+      if (showToast) this.toast.show(saved ? i18n.t("game.saved") : i18n.t("game.storageUnavailable"), saved ? "success" : "warning");
     }
 
     updateSetting(key, value) {
@@ -1483,13 +1593,13 @@
       this.els.roundLabel.textContent = i18n.t("game.round", { round: state.round });
       this.els.aiDifficultyBadge.textContent = difficultyText;
       this.els.aiDifficultyBadge.className = `badge ${config.labelColor}`;
-      this.els.targetBadge.textContent = `Target ${formatMoney(state.targetBalance)}`;
+      this.els.targetBadge.textContent = i18n.t("game.target", { amount: formatMoney(state.targetBalance) });
       this.els.aiBalance.textContent = formatMoney(state.ai.balance);
       this.els.aiBetTotal.textContent = formatMoney(state.ai.totalBet);
       this.els.playerBalance.textContent = formatMoney(state.player.balance);
       this.els.playerBetTotal.textContent = formatMoney(state.player.totalBet);
       this.els.selectedChipLabel.textContent = `$${this.selectedChip}`;
-      this.els.wheelTypeLabel.textContent = state.wheel.type === "american" ? "American" : "European";
+      this.els.wheelTypeLabel.textContent = i18n.t(state.wheel.type === "american" ? "wheel.american" : "wheel.european");
       this.els.activeBetCount.textContent = String(state.player.bets.length);
       this.renderActiveBets();
       this.renderHistory();
@@ -1656,7 +1766,8 @@
       this.els.resultNumber.textContent = String(result);
       this.els.resultNumber.className = color;
       this.els.resultText.textContent = i18n.t(playerNet > 0 ? "game.result.win" : playerNet < 0 ? "game.result.lose" : "game.result.push");
-      this.els.resultDisplay.classList.remove("win");
+      this.els.resultDisplay.classList.remove("win", "result-red", "result-black", "result-green");
+      this.els.resultDisplay.classList.add(`result-${color}`);
       requestAnimationFrame(() => this.els.resultDisplay.classList.add("win"));
 
       const aiDetails = state.ai.bets.length
@@ -1770,9 +1881,9 @@
               <h3>${i18n.t("help.wheel")}</h3>
               <p>${i18n.t("help.wheelBody")}</p>
               <ul>
-                <li>European: 0-36, 37 pockets.</li>
-                <li>American: 0-36 + 00, 38 pockets.</li>
-                <li>Red / Black / Green color mapping follows standard roulette.</li>
+                <li>${i18n.t("wheel.europeanDesc")}</li>
+                <li>${i18n.t("wheel.americanDesc")}</li>
+                <li>${i18n.t("help.wheelColors")}</li>
               </ul>
             </div>
           </div>
@@ -1782,23 +1893,23 @@
 
     helpBets() {
       const cards = [
-        ["Straight", "1", "35:1", "number:17"],
-        ["Red / Black", "18", "1:1", "outside:red"],
-        ["Odd / Even", "18", "1:1", "outside:odd"],
-        ["Low / High", "18", "1:1", "outside:low"],
-        ["Dozen", "12", "2:1", "dozen:1"],
-        ["Column", "12", "2:1", "column:top"],
-        ["Split", "2", "17:1", "split"],
-        ["Corner", "4", "8:1", "corner"],
+        ["betType.straight", "1", "35:1", "neutral"],
+        ["betType.redBlack", "18", "1:1", "red"],
+        ["betType.oddEven", "18", "1:1", "neutral"],
+        ["betType.lowHigh", "18", "1:1", "neutral"],
+        ["betType.dozen", "12", "2:1", "neutral"],
+        ["betType.column", "12", "2:1", "neutral"],
+        ["betType.split", "2", "17:1", "neutral"],
+        ["betType.corner", "4", "8:1", "neutral"],
       ];
       return `
         <article class="help-card">
           <h3>${i18n.t("help.bets")}</h3>
           <div class="help-grid">
-            ${cards.map(([name, coverage, payout]) => `
+            ${cards.map(([nameKey, coverage, payout, tone]) => `
               <section class="bet-type-card">
-                ${miniBetSvg(name)}
-                <h4>${name}</h4>
+                ${miniBetSvg(tone)}
+                <h4>${i18n.t(nameKey)}</h4>
                 <p>${i18n.t("help.coverage")}: ${coverage}</p>
                 <p>${i18n.t("help.payoutRatio")}: ${payout}</p>
               </section>
@@ -1809,19 +1920,22 @@
     }
 
     helpPayout() {
+      const options = [
+        ["35", "2.70", "betType.straight", "35:1"],
+        ["17", "5.40", "betType.split", "17:1"],
+        ["11", "8.10", "betType.street", "11:1"],
+        ["8", "10.81", "betType.corner", "8:1"],
+        ["5", "16.21", "betType.sixLine", "5:1"],
+        ["2", "32.43", "betType.dozen", "2:1"],
+        ["1", "48.65", "betType.outside", "1:1"],
+      ];
       return `
         <article class="help-card">
           <h3>${i18n.t("help.payout")}</h3>
           <div class="calculator">
             <div class="calculator-controls">
               <select id="payoutType">
-                <option value="35" data-prob="2.70">Straight 35:1</option>
-                <option value="17" data-prob="5.40">Split 17:1</option>
-                <option value="11" data-prob="8.10">Street 11:1</option>
-                <option value="8" data-prob="10.81">Corner 8:1</option>
-                <option value="5" data-prob="16.21">Six Line 5:1</option>
-                <option value="2" data-prob="32.43">Dozen / Column 2:1</option>
-                <option value="1" data-prob="48.65">Outside 1:1</option>
+                ${options.map(([value, probability, key, ratio]) => `<option value="${value}" data-prob="${probability}">${i18n.t(key)} ${ratio}</option>`).join("")}
               </select>
               <input id="payoutAmount" type="number" min="5" step="5" value="100">
             </div>
@@ -1837,9 +1951,9 @@
           <h3>${i18n.t("help.ai")}</h3>
           <p>${i18n.t("help.aiBody")}</p>
           <div class="help-grid">
-            <section class="bet-type-card"><h4>${i18n.t("difficulty.easy")}</h4><p>3-5% balance, one outside bet.</p></section>
-            <section class="bet-type-card"><h4>${i18n.t("difficulty.normal")}</h4><p>5-8% balance, mixed outside and dozen bets.</p></section>
-            <section class="bet-type-card"><h4>${i18n.t("difficulty.hard")}</h4><p>Up to 12% balance, adaptive and history-aware.</p></section>
+            <section class="bet-type-card"><h4>${i18n.t("difficulty.easy")}</h4><p>${i18n.t("help.aiEasy")}</p></section>
+            <section class="bet-type-card"><h4>${i18n.t("difficulty.normal")}</h4><p>${i18n.t("help.aiNormal")}</p></section>
+            <section class="bet-type-card"><h4>${i18n.t("difficulty.hard")}</h4><p>${i18n.t("help.aiHard")}</p></section>
           </div>
         </article>
       `;
@@ -1851,9 +1965,14 @@
           <h3>${i18n.t("help.controls")}</h3>
           <p>${i18n.t("help.controlsBody")}</p>
           <ul>
-            <li>${i18n.t("game.clear")}: refund every active bet before spin.</li>
-            <li>${i18n.t("game.save")}: write current state to localStorage.</li>
-            <li>${i18n.t("settings.theme")}: switch one of five visual themes instantly.</li>
+            <li>${i18n.t("help.controlClear")}</li>
+            <li>${i18n.t("help.controlSave")}</li>
+            <li>${i18n.t("help.controlTheme")}</li>
+          </ul>
+          <h4>${i18n.t("help.settingsReference")}</h4>
+          <ul>
+            <li>${i18n.t("help.settingSpeed")}</li>
+            <li>${i18n.t("help.settingWheel")}</li>
           </ul>
         </article>
       `;
@@ -1899,8 +2018,8 @@
     };
   }
 
-  function miniBetSvg(label) {
-    const fill = label.includes("Red") ? "var(--color-number-red)" : label.includes("Black") ? "var(--color-number-black)" : "rgba(0,0,0,0.3)";
+  function miniBetSvg(tone) {
+    const fill = tone === "red" ? "var(--color-number-red)" : tone === "black" ? "var(--color-number-black)" : "rgba(0,0,0,0.3)";
     return `
       <svg class="mini-diagram" viewBox="0 0 180 80" aria-hidden="true">
         <rect x="8" y="8" width="164" height="64" rx="8" fill="rgba(0,0,0,0.25)" stroke="rgba(255,255,255,0.35)"></rect>

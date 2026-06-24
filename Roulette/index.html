@@ -78,7 +78,7 @@
           <span aria-hidden="true">←</span>
         </button>
         <div>
-          <p class="kicker" id="roundLabel">Round 1</p>
+          <p class="kicker" id="roundLabel">第 1 輪</p>
           <h2 id="gameTitle">ROULETTE</h2>
         </div>
         <div class="game-header-actions">
@@ -119,7 +119,7 @@
           <section class="status-card">
             <div class="status-card-header">
               <h3 data-i18n="game.player">玩家</h3>
-              <span id="targetBadge" class="badge">Target $8,000</span>
+              <span id="targetBadge" class="badge">目標 $8,000</span>
             </div>
             <dl class="stat-list">
               <div>
@@ -152,7 +152,7 @@
             </div>
             <div class="board-summary">
               <span id="selectedChipLabel">$25</span>
-              <span id="wheelTypeLabel">European</span>
+              <span id="wheelTypeLabel">歐式輪盤</span>
             </div>
           </div>
           <div class="betting-board-scroll">
@@ -189,7 +189,7 @@
             <span aria-hidden="true">×</span>
           </button>
           <div>
-            <p class="kicker">Settings</p>
+            <p class="kicker" data-i18n="settings.kicker">偏好設定</p>
             <h2 id="settingsTitle" data-i18n="settings.title">設定</h2>
           </div>
         </header>
@@ -245,14 +245,31 @@
                 <span data-i18n="difficulty.hard">困難</span>
               </button>
             </div>
-            <div class="segmented" id="wheelTypeGroup" role="radiogroup" aria-label="Wheel type">
-              <button type="button" data-setting="wheelType" data-value="european">European</button>
-              <button type="button" data-setting="wheelType" data-value="american">American</button>
+            <div class="setting-subsection">
+              <h4 data-i18n="settings.wheelType">輪盤類型</h4>
+              <p class="setting-help" data-i18n="settings.wheelTypeHelp">歐式只有 0；美式多 00，風險更高。</p>
+              <div class="segmented" id="wheelTypeGroup" role="radiogroup" aria-label="Wheel type">
+                <button type="button" data-setting="wheelType" data-value="european" data-i18n="wheel.european">歐式輪盤</button>
+                <button type="button" data-setting="wheelType" data-value="american" data-i18n="wheel.american">美式輪盤</button>
+              </div>
+              <ul class="setting-detail-list">
+                <li data-i18n="wheel.europeanDesc">歐式輪盤：0 到 36，共 37 格，沒有 00。</li>
+                <li data-i18n="wheel.americanDesc">美式輪盤：0 到 36 加上 00，共 38 格，莊家優勢較高。</li>
+              </ul>
             </div>
-            <div class="segmented" id="animationSpeedGroup" role="radiogroup" aria-label="Animation speed">
-              <button type="button" data-setting="animationSpeed" data-value="slow" data-i18n="settings.slow">慢</button>
-              <button type="button" data-setting="animationSpeed" data-value="normal" data-i18n="settings.normal">普通</button>
-              <button type="button" data-setting="animationSpeed" data-value="fast" data-i18n="settings.fast">快</button>
+            <div class="setting-subsection">
+              <h4 data-i18n="settings.animationSpeed">輪盤動畫速度</h4>
+              <p class="setting-help" data-i18n="settings.animationSpeedHelp">只影響轉盤演出時間，不改變中獎機率。</p>
+              <div class="segmented" id="animationSpeedGroup" role="radiogroup" aria-label="Animation speed">
+                <button type="button" data-setting="animationSpeed" data-value="slow" data-i18n="settings.slow">慢</button>
+                <button type="button" data-setting="animationSpeed" data-value="normal" data-i18n="settings.normal">普通</button>
+                <button type="button" data-setting="animationSpeed" data-value="fast" data-i18n="settings.fast">快</button>
+              </div>
+              <ul class="setting-detail-list">
+                <li data-i18n="settings.speedSlowDesc">慢：轉盤演出較久，適合想看完整鋼球滾動效果。</li>
+                <li data-i18n="settings.speedNormalDesc">普通：標準節奏，兼顧演出與等待時間。</li>
+                <li data-i18n="settings.speedFastDesc">快：縮短等待，適合連續下注。</li>
+              </ul>
             </div>
           </section>
         </div>
@@ -270,7 +287,7 @@
             <span aria-hidden="true">×</span>
           </button>
           <div>
-            <p class="kicker">Guide</p>
+            <p class="kicker" data-i18n="help.kicker">教學指南</p>
             <h2 id="helpTitle" data-i18n="help.title">遊戲說明</h2>
           </div>
         </header>
