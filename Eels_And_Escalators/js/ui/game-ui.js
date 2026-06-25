@@ -32,6 +32,13 @@
       document.querySelectorAll(".roll-button").forEach((button) => {
         button.addEventListener("click", () => this.takePlayerTurn());
       });
+      document.querySelectorAll(".btn-open-log").forEach((button) => {
+        button.addEventListener("click", () => {
+          this.sfx.playClick();
+          this._renderLog();
+          this.screenManager.showModal("modal-turn-log");
+        });
+      });
       document.getElementById("btn-game-home").addEventListener("click", () => this.requestHome());
       document.getElementById("btn-confirm-exit").addEventListener("click", () => this.leaveToHome());
       document.getElementById("btn-game-settings").addEventListener("click", () => {
@@ -150,7 +157,6 @@
         round: this.engine.state.round
       });
       window.setTimeout(() => this.screenManager.showModal(modalId), 450);
-      if (this.onReturnHome) this.onReturnHome();
     }
 
     requestHome() {
@@ -203,6 +209,7 @@
       this._setStatus(this._statusText(lastResult));
       this._syncRollButtons();
       this.updateMuteButton();
+      this._syncLogButtons();
     }
 
     updateMuteButton() {
@@ -223,9 +230,16 @@
     }
 
     _renderLog() {
-      const log = document.getElementById("turn-log");
+      const log = document.getElementById("turn-log-modal-list");
       log.innerHTML = "";
-      this.engine.state.log.slice(0, 6).forEach((entry) => {
+      if (!this.engine.state.log.length) {
+        const li = document.createElement("li");
+        li.className = "turn-log-empty";
+        li.textContent = this.i18n.t("game.log.empty");
+        log.appendChild(li);
+        return;
+      }
+      this.engine.state.log.slice(0, 20).forEach((entry) => {
         const li = document.createElement("li");
         li.textContent = this.i18n.t("game.log.entry", {
           round: entry.round,
@@ -235,6 +249,14 @@
           event: this._formatEvent(entry.event)
         });
         log.appendChild(li);
+      });
+    }
+
+    _syncLogButtons() {
+      document.querySelectorAll(".btn-open-log").forEach((button) => {
+        const label = this.i18n.t("game.log.button");
+        button.setAttribute("aria-label", label);
+        button.setAttribute("title", label);
       });
     }
 

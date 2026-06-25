@@ -1,10 +1,7 @@
 @media (max-width: 480px) {
-  body {
-    overflow: hidden;
-  }
-
   .home-screen {
     padding: var(--space-md);
+    align-items: flex-start;
   }
 
   .logo-badge {
@@ -16,14 +13,18 @@
   }
 
   .game-screen.active {
-    grid-template-rows: 48px 36px minmax(0, 1fr) 44px 64px;
+    grid-template-rows: auto auto auto auto auto;
     gap: 0;
-    height: 100dvh;
-    padding: 0;
-    overflow: hidden;
+    min-height: 100dvh;
+    height: auto;
+    padding: 0 0 env(safe-area-inset-bottom, 0px);
+    overflow: visible;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
   }
 
   .game-topbar {
+    top: 0;
     height: 48px;
     padding: 0 var(--space-sm);
     border-radius: 0;
@@ -50,17 +51,17 @@
 
   .game-layout {
     display: block;
-    min-height: 0;
+    min-height: auto;
   }
 
   .board-stage {
     width: 100%;
-    height: 100%;
+    height: auto;
     padding: var(--space-sm);
   }
 
   .board-container {
-    width: min(calc(100vw - 16px), calc(100dvh - 208px));
+    width: min(calc(100vw - 16px), 560px);
   }
 
   .game-panel {
@@ -69,16 +70,19 @@
 
   .mobile-status {
     display: grid;
-    height: 44px;
+    min-height: 44px;
     border-radius: 0;
     border-width: 2px 0;
   }
 
   .action-bar {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
     display: flex;
     align-items: center;
     gap: var(--space-sm);
-    height: 64px;
+    min-height: 64px;
     padding: 7px var(--space-sm);
     background: rgba(0, 0, 0, 0.32);
     backdrop-filter: blur(8px);
@@ -94,6 +98,7 @@
 
   .page-screen.active {
     grid-template-rows: 56px minmax(0, 1fr);
+    height: 100dvh;
     padding: 0;
     gap: 0;
   }
@@ -105,6 +110,7 @@
 
   .page-scroll {
     padding: var(--space-md);
+    padding-bottom: calc(var(--space-2xl) + env(safe-area-inset-bottom, 0px));
   }
 
   .help-grid {

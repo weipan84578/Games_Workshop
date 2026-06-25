@@ -21,6 +21,7 @@
     let homeUI;
     let gameUI;
     let settingsUI;
+    let audioUnlocked = false;
 
     function showToast(message) {
       const toast = document.getElementById("toast");
@@ -38,10 +39,18 @@
       sfx.setVolume(settings.sfxVolume);
       sfx.setEnabled(settings.sfxEnabled);
       bgm.setVolume(settings.bgmVolume);
-      bgm.setEnabled(settings.bgmEnabled, screenManager.current === "game" || (screenManager.current === "settings" && settingsUI && settingsUI.backTarget === "game"));
+      bgm.setEnabled(settings.bgmEnabled, audioUnlocked);
       if (settingsUI) settingsUI.sync();
       if (gameUI) gameUI.updateUI();
       if (homeUI) homeUI.updateContinue();
+    }
+
+    function unlockAmbientAudio() {
+      if (audioUnlocked) return;
+      audioUnlocked = true;
+      sfx.resume();
+      bgm.resume();
+      applySettings(saveManager.loadSettings());
     }
 
     function persistSettings(settings) {
@@ -85,6 +94,7 @@
       showToast: showToast,
       onReturnHome: function () {
         if (homeUI) homeUI.updateContinue();
+        applySettings(saveManager.loadSettings());
       }
     });
 
@@ -129,8 +139,10 @@
     });
 
     document.addEventListener("keydown", function (event) {
+      unlockAmbientAudio();
       if (event.key === "Escape") screenManager.hideAllModals();
     });
+    document.addEventListener("pointerdown", unlockAmbientAudio, { once: true });
 
     settingsUI.init();
     gameUI.init();

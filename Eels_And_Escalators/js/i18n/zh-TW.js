@@ -2,6 +2,7 @@
   window.EAE = window.EAE || {};
   window.EAE.zhTW = {
     "common.cancel": "取消",
+    "common.close": "關閉",
     "home.title": "鰻魚與電扶梯",
     "home.subtitle": "比奇堡的桌遊傳說",
     "home.btn.start": "開始遊戲",
@@ -14,6 +15,8 @@
     "game.turn.ai": "電腦回合",
     "game.btn.roll": "擲骰子！",
     "game.log.title": "回合紀錄",
+    "game.log.button": "查看回合紀錄",
+    "game.log.empty": "還沒有回合紀錄",
     "game.round": "第 {n} 回合",
     "game.position": "位置：格 {n}",
     "game.last": "上一次：骰到 {n}",

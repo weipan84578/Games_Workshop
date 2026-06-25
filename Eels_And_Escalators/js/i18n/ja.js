@@ -2,6 +2,7 @@
   window.EAE = window.EAE || {};
   window.EAE.ja = {
     "common.cancel": "キャンセル",
+    "common.close": "閉じる",
     "home.title": "ウナギとエスカレーター",
     "home.subtitle": "ビキニボトムの伝説ボードゲーム",
     "home.btn.start": "ゲームスタート",
@@ -14,6 +15,8 @@
     "game.turn.ai": "コンピューターの番",
     "game.btn.roll": "サイコロ！",
     "game.log.title": "ターン記録",
+    "game.log.button": "ターン記録を見る",
+    "game.log.empty": "まだ記録はありません",
     "game.round": "第 {n} ラウンド",
     "game.position": "位置：{n}",
     "game.last": "前回：{n}",

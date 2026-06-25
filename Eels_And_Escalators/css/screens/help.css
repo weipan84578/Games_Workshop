@@ -1,8 +1,10 @@
 .page-screen.active {
   display: grid;
   grid-template-rows: 64px minmax(0, 1fr);
+  height: 100dvh;
   padding: var(--space-md);
   gap: var(--space-md);
+  overflow: hidden;
 }
 
 .page-header {
@@ -26,8 +28,13 @@
 
 .page-scroll {
   min-height: 0;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
   padding: var(--space-md);
+  padding-bottom: calc(var(--space-2xl) + env(safe-area-inset-bottom, 0px));
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
 }
 
 .help-grid {
@@ -39,7 +46,7 @@
 }
 
 .help-card {
-  min-height: 170px;
+  min-height: 150px;
   display: grid;
   gap: var(--space-sm);
   align-content: center;
@@ -50,6 +57,17 @@
   border: 2px solid var(--color-border);
   border-radius: 16px;
   box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 720px) {
+  .help-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .help-card,
+  .help-section {
+    padding: var(--space-md);
+  }
 }
 
 .help-card > span {

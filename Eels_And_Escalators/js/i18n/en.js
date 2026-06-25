@@ -2,6 +2,7 @@
   window.EAE = window.EAE || {};
   window.EAE.en = {
     "common.cancel": "Cancel",
+    "common.close": "Close",
     "home.title": "Eels and Escalators",
     "home.subtitle": "Bikini Bottom's legendary board game",
     "home.btn.start": "Start Game",
@@ -14,6 +15,8 @@
     "game.turn.ai": "Computer Turn",
     "game.btn.roll": "Roll Dice!",
     "game.log.title": "Turn Log",
+    "game.log.button": "View Turn Log",
+    "game.log.empty": "No turns recorded yet",
     "game.round": "Round {n}",
     "game.position": "Position: {n}",
     "game.last": "Last roll: {n}",

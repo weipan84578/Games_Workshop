@@ -3,6 +3,7 @@
   justify-self: center;
   display: grid;
   gap: var(--space-md);
+  padding-bottom: calc(var(--space-2xl) + env(safe-area-inset-bottom, 0px));
 }
 
 .settings-group {
@@ -78,4 +79,19 @@
   gap: var(--space-md);
   justify-content: center;
   padding-bottom: var(--space-lg);
+}
+
+@media (max-width: 720px) {
+  .settings-group {
+    padding: var(--space-md);
+  }
+
+  .setting-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .theme-options {
+    justify-content: center;
+  }
 }
