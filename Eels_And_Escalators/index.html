@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="ocean">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>鰻魚與電扶梯 | Eels and Escalators</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/base/reset.css" />
+  <link rel="stylesheet" href="css/base/variables.css" />
+  <link rel="stylesheet" href="css/base/typography.css" />
+  <link rel="stylesheet" href="css/components/button.css" />
+  <link rel="stylesheet" href="css/components/modal.css" />
+  <link rel="stylesheet" href="css/components/dice.css" />
+  <link rel="stylesheet" href="css/components/board.css" />
+  <link rel="stylesheet" href="css/components/piece.css" />
+  <link rel="stylesheet" href="css/components/slider.css" />
+  <link rel="stylesheet" href="css/components/toggle.css" />
+  <link rel="stylesheet" href="css/screens/home.css" />
+  <link rel="stylesheet" href="css/screens/game.css" />
+  <link rel="stylesheet" href="css/screens/help.css" />
+  <link rel="stylesheet" href="css/screens/settings.css" />
+  <link rel="stylesheet" href="css/responsive/mobile.css" />
+  <link rel="stylesheet" href="css/responsive/tablet.css" />
+  <link rel="stylesheet" href="css/responsive/desktop.css" />
+</head>
+<body>
+  <div class="ambient" aria-hidden="true">
+    <span class="bubble"></span><span class="bubble"></span><span class="bubble"></span><span class="bubble"></span><span class="bubble"></span>
+    <span class="bubble"></span><span class="bubble"></span><span class="bubble"></span><span class="bubble"></span><span class="bubble"></span>
+    <span class="bubble"></span><span class="bubble"></span><span class="bubble"></span><span class="bubble"></span><span class="bubble"></span>
+    <span class="bubble"></span><span class="bubble"></span><span class="bubble"></span><span class="bubble"></span><span class="bubble"></span>
+    <div class="reef reef-left"></div>
+    <div class="reef reef-right"></div>
+  </div>
+
+  <div id="app">
+    <section id="screen-home" class="screen home-screen active" aria-labelledby="home-title">
+      <div class="home-content">
+        <div class="logo-badge" aria-hidden="true">
+          <svg viewBox="0 0 220 110" role="img">
+            <path d="M24 80c30-58 84 34 120-22 18-28 44-22 56 4" class="logo-eel" />
+            <g class="logo-escalator">
+              <path d="M37 90 178 25" />
+              <path d="M50 97 191 32" />
+              <path d="M62 72h32M91 59h32M120 45h32M149 32h32" />
+            </g>
+          </svg>
+        </div>
+        <h1 id="home-title" class="home-title" data-i18n="home.title">鰻魚與電扶梯</h1>
+        <p class="home-subtitle" data-i18n="home.subtitle">比奇堡的桌遊傳說</p>
+
+        <div class="home-actions" aria-label="主選單">
+          <button id="btn-start" class="btn-main btn-start">
+            <span aria-hidden="true">🎮</span><span data-i18n="home.btn.start">開始遊戲</span>
+          </button>
+          <button id="btn-continue" class="btn-main btn-continue" disabled>
+            <span aria-hidden="true">▶</span><span data-i18n="home.btn.continue">繼續遊戲</span>
+          </button>
+          <button id="btn-help" class="btn-main btn-help">
+            <span aria-hidden="true">?</span><span data-i18n="home.btn.help">遊戲說明</span>
+          </button>
+          <button id="btn-settings" class="btn-main btn-settings">
+            <span aria-hidden="true">⚙</span><span data-i18n="home.btn.settings">遊戲設定</span>
+          </button>
+        </div>
+
+        <div class="locale-bar" aria-label="語系切換">
+          <button class="locale-btn" data-locale="zh-TW">繁中</button>
+          <button class="locale-btn" data-locale="en">EN</button>
+          <button class="locale-btn" data-locale="ja">日本語</button>
+        </div>
+        <p class="version">v1.0.0</p>
+      </div>
+    </section>
+
+    <section id="screen-game" class="screen game-screen" aria-labelledby="round-label">
+      <header class="game-topbar">
+        <button id="btn-game-home" class="btn-icon" aria-label="返回首頁" title="返回首頁">←</button>
+        <strong id="round-label" class="round-label">第 1 回合</strong>
+        <div class="topbar-actions">
+          <button id="btn-game-settings" class="btn-icon" aria-label="設定" title="設定">⚙</button>
+          <button id="btn-mute" class="btn-icon" aria-label="靜音" title="靜音">🔊</button>
+        </div>
+      </header>
+
+      <div id="mobile-scoreline" class="mobile-scoreline">👤 格 1 vs 🤖 格 1</div>
+
+      <main class="game-layout">
+        <div class="board-stage" aria-describedby="board-desc">
+          <p id="board-desc" class="sr-only">100 格蛇形棋盤，含電扶梯入口與鰻魚頭部特殊格。</p>
+          <div id="board-container" class="board-container"></div>
+        </div>
+
+        <aside class="game-panel">
+          <article id="player-card" class="player-card player-human">
+            <div class="card-head"><span aria-hidden="true">👤</span><strong data-i18n="game.player">玩家</strong></div>
+            <p id="player-position">位置：格 1</p>
+            <p id="player-last">上一次：-</p>
+            <p id="player-event">狀態：等待開始</p>
+          </article>
+
+          <article id="ai-card" class="player-card player-ai">
+            <div class="card-head"><span aria-hidden="true">🤖</span><strong id="ai-name">電腦</strong></div>
+            <p id="ai-position">位置：格 1</p>
+            <p id="ai-last">上一次：-</p>
+            <p id="ai-event">狀態：等待開始</p>
+          </article>
+
+          <section class="turn-log-section" aria-labelledby="turn-log-title">
+            <h2 id="turn-log-title" data-i18n="game.log.title">回合紀錄</h2>
+            <ol id="turn-log" class="turn-log"></ol>
+          </section>
+
+          <div id="status-message" class="status-message panel-status" data-i18n="game.turn.player">玩家回合</div>
+
+          <div class="dice-station">
+            <div class="dice dice-large" data-face="1" aria-hidden="true">
+              <div class="face one"><span></span></div>
+              <div class="face two"><span></span><span></span></div>
+              <div class="face three"><span></span><span></span><span></span></div>
+              <div class="face four"><span></span><span></span><span></span><span></span></div>
+              <div class="face five"><span></span><span></span><span></span><span></span><span></span></div>
+              <div class="face six"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+            <button class="btn-roll roll-button" data-i18n="game.btn.roll">擲骰子！</button>
+          </div>
+        </aside>
+      </main>
+
+      <div id="mobile-status-message" class="status-message mobile-status" data-i18n="game.turn.player">玩家回合</div>
+      <div class="action-bar">
+        <div class="dice dice-small" data-face="1" aria-hidden="true">
+          <div class="face one"><span></span></div>
+          <div class="face two"><span></span><span></span></div>
+          <div class="face three"><span></span><span></span><span></span></div>
+          <div class="face four"><span></span><span></span><span></span><span></span></div>
+          <div class="face five"><span></span><span></span><span></span><span></span><span></span></div>
+          <div class="face six"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        </div>
+        <button class="btn-roll roll-button" data-i18n="game.btn.roll">擲骰子！</button>
+      </div>
+    </section>
+
+    <section id="screen-help" class="screen page-screen help-screen" aria-labelledby="help-title">
+      <header class="page-header">
+        <button id="btn-help-back" class="btn-icon" aria-label="返回">←</button>
+        <h2 id="help-title" data-i18n="help.title">遊戲說明</h2>
+      </header>
+      <div class="page-scroll">
+        <div class="help-grid">
+          <article class="help-card goal"><span aria-hidden="true">🎯</span><h3 data-i18n="help.goal.title">遊戲目標</h3><p data-i18n="help.goal.desc">先將棋子移動到第 100 格的玩家獲勝！</p></article>
+          <article class="help-card dice-card"><span aria-hidden="true">🎲</span><h3 data-i18n="help.dice.title">骰子</h3><p data-i18n="help.dice.desc">擲出 1–6 點，決定前進步數</p></article>
+          <article class="help-card escalator-card"><span aria-hidden="true">⚡</span><h3 data-i18n="help.escalator.title">電扶梯</h3><p data-i18n="help.escalator.desc">踩到入口格，立即傳送到上方出口！</p></article>
+          <article class="help-card eel-card"><span aria-hidden="true">🐍</span><h3 data-i18n="help.eel.title">鰻魚</h3><p data-i18n="help.eel.desc">踩到鰻魚頭，立即滑回到鰻魚尾！</p></article>
+        </div>
+        <section class="help-section">
+          <h3 data-i18n="help.board.title">棋盤示意</h3>
+          <div id="help-board-mini" class="mini-board"></div>
+        </section>
+        <section class="help-section">
+          <h3 data-i18n="help.ai.title">AI 難度</h3>
+          <div class="difficulty-list">
+            <p><strong>😊 <span data-i18n="difficulty.easy">簡單</span></strong><span data-i18n="help.ai.easy">完全隨機的電腦</span></p>
+            <p><strong>😐 <span data-i18n="difficulty.normal">普通</span></strong><span data-i18n="help.ai.normal">會稍微避開鰻魚</span></p>
+            <p><strong>😈 <span data-i18n="difficulty.hard">困難</span></strong><span data-i18n="help.ai.hard">偏好電扶梯與最佳落點</span></p>
+          </div>
+        </section>
+        <section class="help-section">
+          <h3 data-i18n="help.rules.title">特殊規則</h3>
+          <ul class="rules-list">
+            <li data-i18n="help.rules.bounce">超過第 100 格時原地不動。</li>
+            <li data-i18n="help.rules.exact">必須精確落在第 100 格才會獲勝。</li>
+            <li data-i18n="help.rules.save">每回合後會自動儲存進度。</li>
+          </ul>
+        </section>
+      </div>
+    </section>
+
+    <section id="screen-settings" class="screen page-screen settings-screen" aria-labelledby="settings-title">
+      <header class="page-header">
+        <button id="btn-settings-back" class="btn-icon" aria-label="返回">←</button>
+        <h2 id="settings-title" data-i18n="settings.title">遊戲設定</h2>
+      </header>
+      <div class="page-scroll settings-content">
+        <section class="settings-group">
+          <h3 data-i18n="settings.music.title">音樂設定</h3>
+          <label class="setting-row">
+            <span data-i18n="settings.volume.bgm">BGM 音量</span>
+            <output id="bgm-volume-output">75%</output>
+          </label>
+          <input id="bgm-volume" class="volume-slider" type="range" min="0" max="1" step="0.01" value="0.75" />
+          <div class="setting-row">
+            <span data-i18n="settings.bgm">背景音樂</span>
+            <button id="bgm-toggle" class="toggle-switch" role="switch" aria-checked="true"><span class="toggle-knob"></span></button>
+          </div>
+        </section>
+
+        <section class="settings-group">
+          <h3 data-i18n="settings.sfx.title">音效設定</h3>
+          <label class="setting-row">
+            <span data-i18n="settings.volume.sfx">音效音量</span>
+            <output id="sfx-volume-output">80%</output>
+          </label>
+          <input id="sfx-volume" class="volume-slider" type="range" min="0" max="1" step="0.01" value="0.8" />
+          <div class="setting-row">
+            <span data-i18n="settings.sfx">遊戲音效</span>
+            <button id="sfx-toggle" class="toggle-switch" role="switch" aria-checked="true"><span class="toggle-knob"></span></button>
+          </div>
+        </section>
+
+        <section class="settings-group">
+          <h3 data-i18n="settings.language">語系選擇</h3>
+          <div class="language-options">
+            <button class="language-option" data-locale="zh-TW">繁體中文</button>
+            <button class="language-option" data-locale="en">English</button>
+            <button class="language-option" data-locale="ja">日本語</button>
+          </div>
+        </section>
+
+        <section class="settings-group">
+          <h3 data-i18n="settings.theme">顏色主題</h3>
+          <div class="theme-options" aria-label="顏色主題">
+            <button class="theme-dot ocean" data-theme-value="ocean" aria-label="海洋藍"></button>
+            <button class="theme-dot coral" data-theme-value="coral" aria-label="珊瑚橘"></button>
+            <button class="theme-dot tropical" data-theme-value="tropical" aria-label="熱帶綠"></button>
+            <button class="theme-dot deep" data-theme-value="deep" aria-label="深海紫"></button>
+            <button class="theme-dot sunset" data-theme-value="sunset" aria-label="日落橘紅"></button>
+          </div>
+        </section>
+
+        <div class="settings-actions">
+          <button id="btn-reset-settings" class="btn-secondary" data-i18n="settings.reset">重置所有設定</button>
+          <button id="btn-clear-save" class="btn-secondary danger" data-i18n="settings.clear_save">清除存檔</button>
+        </div>
+      </div>
+    </section>
+
+    <div id="modal-difficulty" class="modal" aria-hidden="true">
+      <div class="modal-panel difficulty-modal" role="dialog" aria-modal="true" aria-labelledby="difficulty-title">
+        <h2 id="difficulty-title" data-i18n="modal.difficulty.title">選擇難度</h2>
+        <div class="difficulty-options">
+          <button class="difficulty-option" data-difficulty="easy"><strong>😊 <span data-i18n="difficulty.easy">簡單</span></strong><span data-i18n="modal.difficulty.easy">純隨機，適合暖身。</span></button>
+          <button class="difficulty-option" data-difficulty="normal"><strong>😐 <span data-i18n="difficulty.normal">普通</span></strong><span data-i18n="modal.difficulty.normal">偶爾避開危險格。</span></button>
+          <button class="difficulty-option" data-difficulty="hard"><strong>😈 <span data-i18n="difficulty.hard">困難</span></strong><span data-i18n="modal.difficulty.hard">偏好最佳落點。</span></button>
+        </div>
+        <button class="btn-secondary modal-close" data-modal-close="modal-difficulty" data-i18n="common.cancel">取消</button>
+      </div>
+    </div>
+
+    <div id="modal-victory" class="modal" aria-hidden="true">
+      <div class="modal-panel result-panel victory-panel" role="dialog" aria-modal="true" aria-labelledby="victory-title">
+        <div class="result-icon" aria-hidden="true">🎉</div>
+        <h2 id="victory-title" data-i18n="modal.victory.title">恭喜獲勝！</h2>
+        <p id="victory-subtitle" data-i18n="modal.victory.subtitle">你比章魚哥更厲害！</p>
+        <p id="victory-summary" class="result-summary"></p>
+        <div class="modal-actions">
+          <button class="btn-secondary btn-play-again" data-i18n="modal.victory.btn.again">再玩一次</button>
+          <button class="btn-secondary btn-result-home" data-i18n="modal.victory.btn.home">回主畫面</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-defeat" class="modal" aria-hidden="true">
+      <div class="modal-panel result-panel defeat-panel" role="dialog" aria-modal="true" aria-labelledby="defeat-title">
+        <div class="result-icon" aria-hidden="true">☔</div>
+        <h2 id="defeat-title" data-i18n="modal.defeat.title">這次輸了...</h2>
+        <p id="defeat-subtitle" data-i18n="modal.defeat.subtitle">下次換你搭上最快的電扶梯！</p>
+        <p id="defeat-summary" class="result-summary"></p>
+        <div class="modal-actions">
+          <button class="btn-secondary btn-play-again" data-i18n="modal.defeat.btn.again">再試一次</button>
+          <button class="btn-secondary btn-result-home" data-i18n="modal.defeat.btn.home">回主畫面</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-confirm-exit" class="modal" aria-hidden="true">
+      <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="confirm-exit-title">
+        <h2 id="confirm-exit-title" data-i18n="confirm.exit.title">離開遊戲？</h2>
+        <p data-i18n="confirm.exit.desc">目前進度將自動儲存</p>
+        <div class="modal-actions">
+          <button id="btn-confirm-exit" class="btn-secondary" data-i18n="confirm.exit.yes">儲存並離開</button>
+          <button class="btn-secondary modal-close" data-modal-close="modal-confirm-exit" data-i18n="confirm.exit.no">繼續遊戲</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </div>
+
+  <script src="js/i18n/zh-TW.js"></script>
+  <script src="js/i18n/en.js"></script>
+  <script src="js/i18n/ja.js"></script>
+  <script src="js/i18n/i18n-manager.js"></script>
+  <script src="js/core/board-data.js"></script>
+  <script src="js/core/dice.js"></script>
+  <script src="js/core/save-manager.js"></script>
+  <script src="js/ai/ai-engine.js"></script>
+  <script src="js/core/game-engine.js"></script>
+  <script src="js/audio/sfx-engine.js"></script>
+  <script src="js/audio/bgm-engine.js"></script>
+  <script src="js/ui/screen-manager.js"></script>
+  <script src="js/ui/board-renderer.js"></script>
+  <script src="js/ui/piece-animator.js"></script>
+  <script src="js/ui/dice-animator.js"></script>
+  <script src="js/ui/home-ui.js"></script>
+  <script src="js/ui/game-ui.js"></script>
+  <script src="js/ui/help-ui.js"></script>
+  <script src="js/ui/settings-ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

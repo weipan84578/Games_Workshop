@@ -1,0 +1,95 @@
+:root {
+  --color-primary: #00b4d8;
+  --color-primary-dark: #0077b6;
+  --color-primary-light: #90e0ef;
+  --color-accent: #ffb703;
+  --color-accent-dark: #fb8500;
+  --color-danger: #ff4757;
+  --color-success: #2ed573;
+  --color-bg-start: #023e8a;
+  --color-bg-mid: #0077b6;
+  --color-bg-end: #00b4d8;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.78);
+  --color-surface: rgba(255, 255, 255, 0.14);
+  --color-surface-strong: rgba(255, 255, 255, 0.22);
+  --color-surface-hover: rgba(255, 255, 255, 0.26);
+  --color-border: rgba(255, 255, 255, 0.28);
+  --font-display: "Fredoka One", "Baloo 2", cursive;
+  --font-body: "Nunito", "Noto Sans JP", system-ui, sans-serif;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.22);
+  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.28);
+  --shadow-lg: 0 14px 40px rgba(0, 0, 0, 0.38);
+  --shadow-glow: 0 0 20px currentColor;
+  --text-xs: 0.85rem;
+  --text-sm: 1rem;
+  --text-md: 1.1rem;
+  --text-lg: 1.3rem;
+  --text-xl: 1.65rem;
+  --text-2xl: 2.25rem;
+  --text-3xl: 3.4rem;
+}
+
+[data-theme="coral"] {
+  --color-primary: #ff6b6b;
+  --color-primary-dark: #b5153d;
+  --color-primary-light: #ffb5a7;
+  --color-accent: #ffd166;
+  --color-accent-dark: #ff8e53;
+  --color-bg-start: #7b1d1d;
+  --color-bg-mid: #b5153d;
+  --color-bg-end: #ff8e53;
+}
+
+[data-theme="tropical"] {
+  --color-primary: #52b788;
+  --color-primary-dark: #2d6a4f;
+  --color-primary-light: #95d5b2;
+  --color-accent: #f9c74f;
+  --color-accent-dark: #f8961e;
+  --color-bg-start: #1b4332;
+  --color-bg-mid: #2d6a4f;
+  --color-bg-end: #52b788;
+}
+
+[data-theme="deep"] {
+  --color-primary: #7b2fbe;
+  --color-primary-dark: #5a189a;
+  --color-primary-light: #c77dff;
+  --color-accent: #ffd166;
+  --color-accent-dark: #ff9f1c;
+  --color-bg-start: #240046;
+  --color-bg-mid: #3c096c;
+  --color-bg-end: #5a189a;
+}
+
+[data-theme="sunset"] {
+  --color-primary: #fb8500;
+  --color-primary-dark: #7b1d1d;
+  --color-primary-light: #ffb703;
+  --color-accent: #ffd166;
+  --color-accent-dark: #ff6b35;
+  --color-bg-start: #7b1d1d;
+  --color-bg-mid: #c44536;
+  --color-bg-end: #fb8500;
+}
+
+@media (max-width: 480px) {
+  :root {
+    --text-md: 1rem;
+    --text-lg: 1.15rem;
+    --text-xl: 1.35rem;
+    --text-2xl: 1.8rem;
+    --text-3xl: 2.35rem;
+  }
+}

@@ -1,0 +1,42 @@
+.piece {
+  transition: filter 160ms ease;
+}
+
+.piece-core {
+  filter: drop-shadow(0 5px 5px rgba(0, 0, 0, 0.38));
+}
+
+.piece.is-active {
+  filter: drop-shadow(0 0 12px #fff);
+}
+
+.piece.is-hopping,
+.piece-art.is-hopping {
+  animation: piece-hop 120ms ease-in-out;
+}
+
+.piece.is-escalating,
+.piece-art.is-escalating {
+  animation: piece-escalate 600ms ease-in-out;
+}
+
+.piece.is-sliding,
+.piece-art.is-sliding {
+  animation: piece-slide 800ms ease-in-out;
+}
+
+@keyframes piece-hop {
+  50% { transform: translateY(-16px); }
+}
+
+@keyframes piece-escalate {
+  0% { filter: drop-shadow(0 0 0 #ffd60a); }
+  50% { filter: drop-shadow(0 0 18px #ffd60a); }
+  100% { filter: drop-shadow(0 0 0 #ffd60a); }
+}
+
+@keyframes piece-slide {
+  0% { filter: drop-shadow(0 0 0 #b57cff); }
+  50% { filter: drop-shadow(0 0 18px #b57cff); }
+  100% { filter: drop-shadow(0 0 0 #b57cff); }
+}

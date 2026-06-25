@@ -1,0 +1,128 @@
+.game-screen.active {
+  display: grid;
+  grid-template-rows: 56px minmax(0, 1fr);
+  padding: var(--space-md);
+  gap: var(--space-md);
+}
+
+.game-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: 0 var(--space-md);
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(8px);
+}
+
+.round-label {
+  font-size: var(--text-lg);
+}
+
+.topbar-actions {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.mobile-scoreline,
+.mobile-status,
+.action-bar {
+  display: none;
+}
+
+.game-layout {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(320px, 1fr) minmax(300px, 380px);
+  gap: var(--space-lg);
+  align-items: center;
+}
+
+.board-stage {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+}
+
+.game-panel {
+  max-height: calc(100dvh - 88px);
+  display: grid;
+  gap: var(--space-md);
+  align-content: start;
+  padding: var(--space-md);
+  overflow: auto;
+  background: rgba(255, 255, 255, 0.12);
+  border: 2px solid var(--color-border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(10px);
+}
+
+.player-card {
+  display: grid;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  background: rgba(255, 255, 255, 0.15);
+  border: 2px solid rgba(255, 255, 255, 0.28);
+  border-radius: 12px;
+}
+
+.player-card.is-active {
+  border-color: #fff;
+  box-shadow: var(--shadow-glow);
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-lg);
+}
+
+.player-card p {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+
+.turn-log-section {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.turn-log-section h2 {
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  font-weight: 800;
+}
+
+.turn-log {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.turn-log li {
+  list-style: none;
+  padding: var(--space-sm);
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.95rem;
+  background: rgba(0, 0, 0, 0.16);
+  border-left: 4px solid var(--color-accent);
+  border-radius: 8px;
+}
+
+.status-message {
+  min-height: 44px;
+  display: grid;
+  place-items: center;
+  padding: var(--space-sm) var(--space-md);
+  color: #fff;
+  font-weight: 800;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.24);
+  border: 2px solid var(--color-border);
+  border-radius: 12px;
+}

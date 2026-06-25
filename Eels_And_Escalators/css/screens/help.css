@@ -1,0 +1,101 @@
+.page-screen.active {
+  display: grid;
+  grid-template-rows: 64px minmax(0, 1fr);
+  padding: var(--space-md);
+  gap: var(--space-md);
+}
+
+.page-header {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 0 var(--space-md);
+  background: var(--color-surface);
+  border: 2px solid var(--color-border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(8px);
+}
+
+.page-header h2 {
+  grid-column: 2;
+  justify-self: center;
+  font-size: var(--text-xl);
+}
+
+.page-scroll {
+  min-height: 0;
+  overflow: auto;
+  padding: var(--space-md);
+}
+
+.help-grid {
+  width: min(760px, 100%);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(160px, 1fr));
+  gap: var(--space-md);
+  margin: 0 auto var(--space-lg);
+}
+
+.help-card {
+  min-height: 170px;
+  display: grid;
+  gap: var(--space-sm);
+  align-content: center;
+  justify-items: center;
+  padding: var(--space-lg);
+  text-align: center;
+  background: rgba(255, 255, 255, 0.16);
+  border: 2px solid var(--color-border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.help-card > span {
+  font-size: 3rem;
+}
+
+.help-card p {
+  color: var(--color-text-secondary);
+}
+
+.help-section {
+  width: min(760px, 100%);
+  display: grid;
+  gap: var(--space-md);
+  margin: 0 auto var(--space-lg);
+  padding: var(--space-lg);
+  background: rgba(255, 255, 255, 0.12);
+  border: 2px solid var(--color-border);
+  border-radius: 16px;
+}
+
+.mini-board {
+  width: min(360px, 100%);
+  aspect-ratio: 1;
+  justify-self: center;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.difficulty-list {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.difficulty-list p {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  justify-content: space-between;
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(0, 0, 0, 0.16);
+  border-radius: 8px;
+}
+
+.rules-list {
+  display: grid;
+  gap: var(--space-sm);
+}

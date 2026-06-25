@@ -1,0 +1,14 @@
+@media (min-width: 481px) and (max-width: 1024px) {
+  .game-layout {
+    grid-template-columns: minmax(360px, 1fr) minmax(280px, 340px);
+    gap: var(--space-md);
+  }
+
+  .board-container {
+    width: min(60vw, calc(100dvh - 120px));
+  }
+
+  .game-panel {
+    max-height: calc(100dvh - 96px);
+  }
+}
