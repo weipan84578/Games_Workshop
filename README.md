@@ -22,6 +22,7 @@
 | `Mancala`            | 播棋     | Mancala         | マンカラ         |
 | `Ludo`               | 飛行棋   | Ludo            | ルード           |
 | `Backgammon`         | 雙陸棋   | Backgammon      | バックギャモン   |
+| `Eels_And_Escalators`| 比奇保電梯與電鰻 | Eels and Escalators | イールズ・アンド・エスカレーター |
 
 ### 撲克牌遊戲
 
