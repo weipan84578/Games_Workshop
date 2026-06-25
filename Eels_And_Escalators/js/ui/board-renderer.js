@@ -60,11 +60,17 @@
             <linearGradient id="cell-finish" x1="0" x2="1" y1="0" y2="1">
               <stop stop-color="#ff595e"></stop><stop offset=".28" stop-color="#ffca3a"></stop><stop offset=".55" stop-color="#8ac926"></stop><stop offset=".78" stop-color="#1982c4"></stop><stop offset="1" stop-color="#6a4c93"></stop>
             </linearGradient>
-            <linearGradient id="escalator-gradient" x1="0" x2="1">
-              <stop stop-color="#f8fafc"></stop><stop offset=".5" stop-color="#94a3b8"></stop><stop offset="1" stop-color="#e2e8f0"></stop>
+            <linearGradient id="escalator-gradient" x1="0" x2="1" y1="0" y2="1">
+              <stop stop-color="#fff7ad"></stop><stop offset=".45" stop-color="#ff9ed8"></stop><stop offset="1" stop-color="#8be9ff"></stop>
+            </linearGradient>
+            <linearGradient id="escalator-rail-gradient" x1="0" x2="1" y1="0" y2="1">
+              <stop stop-color="#ffffff"></stop><stop offset="1" stop-color="#ffe0f1"></stop>
             </linearGradient>
             <linearGradient id="eel-gradient" x1="0" x2="1">
-              <stop stop-color="#c77dff"></stop><stop offset=".55" stop-color="#7b2fbe"></stop><stop offset="1" stop-color="#3a0ca3"></stop>
+              <stop stop-color="#ffcfec"></stop><stop offset=".5" stop-color="#b57cff"></stop><stop offset="1" stop-color="#62d8ff"></stop>
+            </linearGradient>
+            <linearGradient id="eel-belly-gradient" x1="0" x2="1">
+              <stop stop-color="#fff7ad"></stop><stop offset="1" stop-color="#ffffff"></stop>
             </linearGradient>
           </defs>
           <g class="cells">${cells}</g>
@@ -102,9 +108,25 @@
       const path = `M ${start.x} ${start.y} L ${end.x} ${end.y}`;
       const midX = (start.x + end.x) / 2;
       const midY = (start.y + end.y) / 2;
-      return `<g>
+      const steps = Array.from({ length: 5 }, (_, index) => {
+        const t = (index + 1) / 6;
+        const x = start.x + (end.x - start.x) * t;
+        const y = start.y + (end.y - start.y) * t;
+        return `<circle class="escalator-step-bubble" cx="${x}" cy="${y}" r="13"></circle>`;
+      }).join("");
+      return `<g class="cute-escalator">
+        <path class="escalator-cloud-path" d="${path}"></path>
         <path class="escalator-track" d="${path}"></path>
         <path class="escalator-highlight" d="${path}"></path>
+        ${steps}
+        <g class="escalator-cloud" transform="translate(${start.x} ${start.y})">
+          <circle cx="-18" cy="8" r="16"></circle><circle cx="0" cy="0" r="22"></circle><circle cx="22" cy="8" r="15"></circle>
+          <path d="M-9 5 Q0 14 10 5" class="cloud-smile"></path>
+        </g>
+        <g class="escalator-cloud top" transform="translate(${end.x} ${end.y})">
+          <circle cx="-20" cy="8" r="16"></circle><circle cx="0" cy="0" r="24"></circle><circle cx="24" cy="8" r="16"></circle>
+          <path d="M-10 5 Q0 16 12 5" class="cloud-smile"></path>
+        </g>
         <text class="board-label" x="${midX + 8}" y="${midY - 8}">${item.id}</text>
       </g>`;
     }
@@ -112,14 +134,21 @@
     _renderEel(item, index) {
       const path = this._curvePath(item.start, item.end, index);
       const head = this.boardData.getCellCenter(item.start);
+      const cheekY = head.y + 5;
       return `<g>
         <path class="eel-body" d="${path}"></path>
+        <path class="eel-belly" d="${path}"></path>
         <path class="eel-spark" d="${path}"></path>
-        <circle class="eel-head" cx="${head.x}" cy="${head.y}" r="24"></circle>
-        <circle class="eel-eye" cx="${head.x - 8}" cy="${head.y - 5}" r="5"></circle>
-        <circle class="eel-eye" cx="${head.x + 8}" cy="${head.y - 5}" r="5"></circle>
-        <circle class="eel-pupil" cx="${head.x - 7}" cy="${head.y - 5}" r="2"></circle>
-        <circle class="eel-pupil" cx="${head.x + 7}" cy="${head.y - 5}" r="2"></circle>
+        <circle class="eel-head" cx="${head.x}" cy="${head.y}" r="28"></circle>
+        <circle class="eel-cheek" cx="${head.x - 15}" cy="${cheekY}" r="6"></circle>
+        <circle class="eel-cheek" cx="${head.x + 15}" cy="${cheekY}" r="6"></circle>
+        <circle class="eel-eye" cx="${head.x - 9}" cy="${head.y - 7}" r="6"></circle>
+        <circle class="eel-eye" cx="${head.x + 9}" cy="${head.y - 7}" r="6"></circle>
+        <circle class="eel-pupil" cx="${head.x - 8}" cy="${head.y - 7}" r="2"></circle>
+        <circle class="eel-pupil" cx="${head.x + 10}" cy="${head.y - 7}" r="2"></circle>
+        <path class="eel-smile" d="M ${head.x - 8} ${head.y + 8} Q ${head.x} ${head.y + 15} ${head.x + 10} ${head.y + 8}"></path>
+        <path class="eel-fin" d="M ${head.x - 28} ${head.y + 4} q -16 10 0 22"></path>
+        <path class="eel-fin right" d="M ${head.x + 28} ${head.y + 4} q 16 10 0 22"></path>
         <text class="board-label" x="${head.x + 24}" y="${head.y + 34}">${item.id}</text>
       </g>`;
     }

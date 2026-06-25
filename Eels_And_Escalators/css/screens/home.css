@@ -88,27 +88,98 @@
 }
 
 .logo-badge {
-  width: min(220px, 54vw);
+  width: min(240px, 58vw);
   filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.26));
 }
 
-.logo-eel {
+.logo-eel-body {
   fill: none;
-  stroke: #b57cff;
-  stroke-width: 16;
+  stroke: url(#home-eel-gradient);
+  stroke-width: 18;
   stroke-linecap: round;
 }
 
-.logo-escalator path {
+.logo-eel-belly {
   fill: none;
-  stroke: #ffd166;
-  stroke-width: 8;
+  stroke: rgba(255, 247, 173, 0.85);
+  stroke-width: 5;
+  stroke-dasharray: 10 14;
   stroke-linecap: round;
 }
 
-.logo-escalator path:last-child {
-  stroke: #fff;
+.logo-eel-head {
+  fill: #b57cff;
+  stroke: #fff7ad;
   stroke-width: 4;
+}
+
+.logo-eye {
+  fill: #fff;
+}
+
+.logo-pupil {
+  fill: #111;
+}
+
+.logo-cheek {
+  fill: #ff9ed8;
+  opacity: 0.85;
+}
+
+.logo-smile,
+.logo-cloud path {
+  fill: none;
+  stroke: #3a0ca3;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+}
+
+.logo-cloud-path {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.7);
+  stroke-width: 22;
+  stroke-linecap: round;
+}
+
+.logo-rail {
+  fill: none;
+  stroke: url(#home-escalator-gradient);
+  stroke-width: 12;
+  stroke-linecap: round;
+}
+
+.logo-step {
+  fill: #fff;
+  stroke: #ff9ed8;
+  stroke-width: 3;
+}
+
+.logo-cloud circle {
+  fill: #fff7fb;
+  stroke: #fff;
+  stroke-width: 3;
+}
+
+.logo-cloud.top circle {
+  fill: #fff7ad;
+}
+
+.logo-bubble {
+  fill: rgba(255, 255, 255, 0.45);
+  stroke: rgba(255, 255, 255, 0.85);
+  stroke-width: 2;
+}
+
+.logo-bubble.b1 {
+  animation: logo-float 3.4s ease-in-out infinite;
+}
+
+.logo-bubble.b2 {
+  animation: logo-float 4s ease-in-out infinite -1.1s;
+}
+
+.logo-bubble.b3 {
+  animation: logo-float 3s ease-in-out infinite -0.5s;
 }
 
 .home-title {
@@ -172,6 +243,10 @@
 @keyframes screen-enter {
   from { opacity: 0; transform: translateX(28px); }
   to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes logo-float {
+  50% { transform: translateY(-6px); opacity: 0.8; }
 }
 
 @media (max-height: 720px) {

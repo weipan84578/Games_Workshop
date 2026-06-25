@@ -40,12 +40,47 @@
     <section id="screen-home" class="screen home-screen active" aria-labelledby="home-title">
       <div class="home-content">
         <div class="logo-badge" aria-hidden="true">
-          <svg viewBox="0 0 220 110" role="img">
-            <path d="M24 80c30-58 84 34 120-22 18-28 44-22 56 4" class="logo-eel" />
+          <svg viewBox="0 0 240 132" role="img">
+            <defs>
+              <linearGradient id="home-eel-gradient" x1="0" x2="1">
+                <stop stop-color="#ffcfec"></stop>
+                <stop offset=".5" stop-color="#b57cff"></stop>
+                <stop offset="1" stop-color="#62d8ff"></stop>
+              </linearGradient>
+              <linearGradient id="home-escalator-gradient" x1="0" x2="1" y1="0" y2="1">
+                <stop stop-color="#fff7ad"></stop>
+                <stop offset=".5" stop-color="#ff9ed8"></stop>
+                <stop offset="1" stop-color="#8be9ff"></stop>
+              </linearGradient>
+            </defs>
+            <circle class="logo-bubble b1" cx="36" cy="28" r="8"></circle>
+            <circle class="logo-bubble b2" cx="212" cy="42" r="10"></circle>
+            <circle class="logo-bubble b3" cx="190" cy="20" r="5"></circle>
+            <path class="logo-eel-body" d="M22 88 C54 28, 92 118, 132 58 S196 48, 218 88"></path>
+            <path class="logo-eel-belly" d="M24 88 C54 30, 92 116, 132 58 S196 48, 216 86"></path>
+            <circle class="logo-eel-head" cx="218" cy="88" r="24"></circle>
+            <circle class="logo-cheek" cx="204" cy="94" r="5"></circle>
+            <circle class="logo-cheek" cx="231" cy="94" r="5"></circle>
+            <circle class="logo-eye" cx="210" cy="82" r="5"></circle>
+            <circle class="logo-eye" cx="226" cy="82" r="5"></circle>
+            <circle class="logo-pupil" cx="211" cy="82" r="2"></circle>
+            <circle class="logo-pupil" cx="227" cy="82" r="2"></circle>
+            <path class="logo-smile" d="M209 99 Q218 107 228 99"></path>
             <g class="logo-escalator">
-              <path d="M37 90 178 25" />
-              <path d="M50 97 191 32" />
-              <path d="M62 72h32M91 59h32M120 45h32M149 32h32" />
+              <path class="logo-cloud-path" d="M44 104 L174 26"></path>
+              <path class="logo-rail" d="M44 104 L174 26"></path>
+              <circle class="logo-step" cx="70" cy="88" r="9"></circle>
+              <circle class="logo-step" cx="96" cy="73" r="9"></circle>
+              <circle class="logo-step" cx="122" cy="57" r="9"></circle>
+              <circle class="logo-step" cx="148" cy="42" r="9"></circle>
+              <g class="logo-cloud" transform="translate(42 104)">
+                <circle cx="-13" cy="3" r="12"></circle><circle cx="2" cy="-5" r="17"></circle><circle cx="19" cy="4" r="12"></circle>
+                <path d="M-6 2 Q2 10 11 2"></path>
+              </g>
+              <g class="logo-cloud top" transform="translate(174 26)">
+                <circle cx="-15" cy="4" r="12"></circle><circle cx="2" cy="-6" r="18"></circle><circle cx="21" cy="4" r="13"></circle>
+                <path d="M-6 2 Q3 11 13 2"></path>
+              </g>
             </g>
           </svg>
         </div>

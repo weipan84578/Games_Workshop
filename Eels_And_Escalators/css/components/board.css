@@ -59,40 +59,80 @@
 .escalator-track {
   fill: none;
   stroke: url(#escalator-gradient);
-  stroke-width: 22;
+  stroke-width: 24;
   stroke-linecap: round;
-  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.35));
+  filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.25));
+}
+
+.escalator-cloud-path {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.72);
+  stroke-width: 38;
+  stroke-linecap: round;
 }
 
 .escalator-highlight {
   fill: none;
-  stroke: rgba(255, 255, 255, 0.75);
+  stroke: rgba(255, 255, 255, 0.9);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-dasharray: 18 14;
+  animation: escalator-move 1.4s linear infinite;
+}
+
+.escalator-step-bubble {
+  fill: #ffffff;
+  stroke: #ff9ed8;
+  stroke-width: 4;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+}
+
+.escalator-cloud circle {
+  fill: url(#escalator-rail-gradient);
+  stroke: #ffffff;
+  stroke-width: 4;
+}
+
+.escalator-cloud.top circle {
+  fill: #fff7ad;
+}
+
+.cloud-smile {
+  fill: none;
+  stroke: #7b2fbe;
   stroke-width: 4;
   stroke-linecap: round;
-  stroke-dasharray: 22 16;
-  animation: escalator-move 1.4s linear infinite;
 }
 
 .eel-body {
   fill: none;
   stroke: url(#eel-gradient);
-  stroke-width: 24;
+  stroke-width: 28;
   stroke-linecap: round;
-  filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.32));
+  filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.25));
+}
+
+.eel-belly {
+  fill: none;
+  stroke: url(#eel-belly-gradient);
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-dasharray: 14 18;
+  opacity: 0.9;
 }
 
 .eel-spark {
   fill: none;
-  stroke: #ffd60a;
+  stroke: #fff176;
   stroke-width: 4;
   stroke-linecap: round;
-  stroke-dasharray: 12 24;
+  stroke-dasharray: 8 24;
   animation: eel-spark 1s linear infinite;
 }
 
 .eel-head {
-  fill: #7b2fbe;
-  stroke: #f3d5ff;
+  fill: #b57cff;
+  stroke: #fff7ad;
   stroke-width: 4;
 }
 
@@ -102,6 +142,29 @@
 
 .eel-pupil {
   fill: #111;
+}
+
+.eel-cheek {
+  fill: #ff9ed8;
+  opacity: 0.85;
+}
+
+.eel-smile {
+  fill: none;
+  stroke: #3a0ca3;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.eel-fin {
+  fill: none;
+  stroke: #62d8ff;
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.eel-fin.right {
+  stroke: #ffcfec;
 }
 
 .board-label {
