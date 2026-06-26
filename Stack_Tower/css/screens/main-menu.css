@@ -1,0 +1,114 @@
+.screen-menu {
+  place-items: center;
+}
+
+.menu-shell {
+  display: grid;
+  width: min(680px, 100%);
+  justify-items: center;
+  gap: var(--space-5);
+  text-align: center;
+}
+
+.brand-mark {
+  position: relative;
+  width: 220px;
+  height: 172px;
+  margin-bottom: -8px;
+}
+
+.crane-boom {
+  position: absolute;
+  left: 26px;
+  top: 18px;
+  width: 158px;
+  height: 10px;
+  border-radius: 3px;
+  background: repeating-linear-gradient(90deg, var(--color-warning) 0 14px, #2b3348 14px 20px);
+  transform: rotate(-10deg);
+  transform-origin: left center;
+}
+
+.crane-cable {
+  position: absolute;
+  left: 142px;
+  top: 24px;
+  width: 2px;
+  height: 54px;
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.crane-hook {
+  position: absolute;
+  left: 134px;
+  top: 75px;
+  width: 18px;
+  height: 18px;
+  border: 3px solid var(--color-warning);
+  border-top: 0;
+  border-radius: 0 0 14px 14px;
+}
+
+.mini-floor {
+  position: absolute;
+  left: 52px;
+  width: 116px;
+  height: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 4px;
+  background:
+    linear-gradient(90deg, transparent 14px, rgba(255, 255, 255, 0.28) 14px 22px, transparent 22px 38px, rgba(255, 255, 255, 0.28) 38px 46px, transparent 46px),
+    linear-gradient(180deg, #80E8D6, #397BA3);
+  box-shadow: var(--shadow-md);
+}
+
+.floor-one {
+  bottom: 6px;
+}
+
+.floor-two {
+  bottom: 44px;
+  left: 44px;
+  animation: floor-swing 3.2s ease-in-out infinite;
+}
+
+.floor-three {
+  bottom: 82px;
+  left: 59px;
+  background:
+    linear-gradient(90deg, transparent 14px, rgba(255, 255, 255, 0.32) 14px 22px, transparent 22px 38px, rgba(255, 255, 255, 0.32) 38px 46px, transparent 46px),
+    linear-gradient(180deg, #FFD166, #D56B4F);
+}
+
+.menu-shell h1 span {
+  display: block;
+  margin-top: 4px;
+  color: var(--color-warning);
+  font-size: var(--text-lg);
+}
+
+.menu-tagline {
+  max-width: 620px;
+  color: var(--color-ui-text-muted);
+}
+
+.menu-actions {
+  display: grid;
+  gap: var(--space-4);
+  width: min(320px, 86vw);
+}
+
+.menu-actions .btn {
+  width: 100%;
+}
+
+@keyframes floor-swing {
+  0%,
+  100% {
+    transform: translateX(-8px);
+  }
+
+  50% {
+    transform: translateX(10px);
+  }
+}

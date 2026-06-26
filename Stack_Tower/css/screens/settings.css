@@ -1,0 +1,42 @@
+.setting-row {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-5) 0;
+  border-top: 1px solid var(--color-ui-border);
+}
+
+.setting-row:first-of-type {
+  border-top: 0;
+}
+
+.setting-row > label,
+.setting-row > span {
+  font-weight: 800;
+}
+
+.settings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  justify-content: center;
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-ui-border);
+}
+
+.settings-actions .btn {
+  min-width: min(260px, 100%);
+}
+
+@media (max-width: 640px) {
+  .setting-row {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+
+  .segmented {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}

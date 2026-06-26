@@ -1,0 +1,22 @@
+.segmented {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.segmented button {
+  min-height: 44px;
+  border: 1px solid var(--color-ui-border);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.segmented button {
+  min-width: 118px;
+  padding: 8px 14px;
+  font-weight: 800;
+}
+
+.segmented button.is-active {
+  background: var(--color-primary);
+  color: #fff;
+}

@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Noto+Sans+JP:wght@400;700;900&family=Noto+Sans:wght@400;700;900&display=swap');
+
+:root {
+  --font-zh: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  --font-ja: 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', sans-serif;
+  --font-en: 'Noto Sans', 'Segoe UI', Arial, sans-serif;
+  --text-xs: 14px;
+  --text-sm: 16px;
+  --text-base: 20px;
+  --text-md: 24px;
+  --text-lg: 32px;
+  --text-xl: 42px;
+  --text-2xl: 56px;
+  --text-3xl: 72px;
+  --line-height-tight: 1.18;
+  --line-height-normal: 1.55;
+}
+
+:lang(zh-TW) {
+  font-family: var(--font-zh);
+}
+
+:lang(ja) {
+  font-family: var(--font-ja);
+}
+
+:lang(en) {
+  font-family: var(--font-en);
+}
+
+body {
+  color: var(--color-ui-text);
+  font-family: var(--font-zh);
+  font-size: var(--text-base);
+  line-height: var(--line-height-normal);
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(44px, 8vh, var(--text-3xl));
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: var(--line-height-tight);
+}
+
+h2 {
+  font-size: var(--text-xl);
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: var(--line-height-tight);
+}
+
+h3 {
+  font-size: var(--text-md);
+  font-weight: 800;
+  letter-spacing: 0;
+}

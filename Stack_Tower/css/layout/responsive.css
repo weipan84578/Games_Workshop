@@ -1,0 +1,99 @@
+@media (max-width: 480px) {
+  body {
+    font-size: var(--text-sm);
+  }
+
+  .screen {
+    padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  }
+
+  .screen-panel {
+    padding: var(--space-4);
+  }
+
+  h1 {
+    font-size: 44px;
+  }
+
+  h2 {
+    font-size: 34px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) and (orientation: landscape) {
+  .screen-game {
+    padding: 0;
+  }
+
+  .game-hud {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: calc(100% - var(--action-size));
+    z-index: 2;
+  }
+
+  .game-shell {
+    grid-template-columns: minmax(0, 1fr) var(--action-size);
+    grid-template-rows: 100dvh;
+    padding-top: 0;
+  }
+
+  .canvas-wrap {
+    height: 100dvh;
+    padding-top: var(--hud-height);
+  }
+
+  .action-bar {
+    width: var(--action-size);
+    height: 100dvh;
+    border-top: 0;
+    border-left: 1px solid var(--color-ui-border);
+  }
+
+  .place-btn {
+    width: 56px;
+    height: min(280px, 78dvh);
+    min-width: 56px;
+    writing-mode: vertical-rl;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .game-shell {
+    width: 75vw;
+    height: min(85dvh, calc(100dvh - var(--hud-height) - 18px));
+    align-self: center;
+    justify-self: center;
+    overflow: hidden;
+    border: 1px solid var(--color-ui-border);
+    border-radius: var(--radius-md);
+    background: rgba(7, 12, 26, 0.42);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+@media (min-width: 1025px) {
+  .game-shell {
+    width: min(480px, 60vw);
+    height: min(792px, calc(100dvh - var(--hud-height) - 18px));
+    align-self: center;
+    justify-self: center;
+    overflow: hidden;
+    border: 1px solid var(--color-ui-border);
+    border-radius: var(--radius-md);
+    background: rgba(7, 12, 26, 0.42);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

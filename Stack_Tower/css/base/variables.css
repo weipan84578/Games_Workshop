@@ -1,0 +1,36 @@
+:root {
+  --color-primary: #6C63FF;
+  --color-primary-dark: #4B44CC;
+  --color-accent: #FF6584;
+  --color-success: #43D9AD;
+  --color-warning: #FFD166;
+  --color-danger: #FF4D4F;
+  --color-brick: #D56B4F;
+  --color-steel: #73D2DE;
+  --color-bg-sky-top: #0D1B2A;
+  --color-bg-sky-mid: #172C46;
+  --color-bg-sky-bottom: #2D1B4E;
+  --color-ui-bg: rgba(15, 20, 40, 0.92);
+  --color-ui-card: rgba(255, 255, 255, 0.08);
+  --color-ui-border: rgba(255, 255, 255, 0.16);
+  --color-ui-text: #F0F4FF;
+  --color-ui-text-muted: #AFC0D8;
+  --color-ui-text-dim: #6D7A98;
+  --block-hue-start: 200;
+  --block-saturation: 72%;
+  --block-lightness: 58%;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --hud-height: 56px;
+  --action-size: 72px;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.42);
+  --shadow-lg: 0 18px 54px rgba(0, 0, 0, 0.55);
+  --shadow-glow: 0 0 22px rgba(108, 99, 255, 0.48);
+}
