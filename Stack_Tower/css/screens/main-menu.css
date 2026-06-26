@@ -1,13 +1,41 @@
 .screen-menu {
-  place-items: center;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  grid-template-rows: minmax(min-content, 1fr);
+  place-items: start center;
+  scrollbar-color: rgba(255, 255, 255, 0.42) rgba(255, 255, 255, 0.08);
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
 }
 
 .menu-shell {
   display: grid;
   width: min(680px, 100%);
+  margin-block: auto;
+  padding-block: var(--space-5);
   justify-items: center;
   gap: var(--space-5);
   text-align: center;
+}
+
+.screen-menu::-webkit-scrollbar {
+  width: 10px;
+}
+
+.screen-menu::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.screen-menu::-webkit-scrollbar-thumb {
+  border: 2px solid rgba(10, 16, 32, 0.72);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.42);
+}
+
+.screen-menu::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.62);
 }
 
 .brand-mark {
