@@ -65,6 +65,7 @@
 | `Pong`           | 乒乓球     | Pong           | ポン                   |
 | `Asteroids`      | 小行星     | Asteroids      | アステロイド           |
 | `Centipede`      | 蜈蚣射擊   | Centipede      | センチピード           |
+| `Stack_Tower`    | 堆疊高塔   | Stack Tower    | スタックタワー         |
 
 ### 策略遊戲
 
