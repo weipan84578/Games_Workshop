@@ -126,7 +126,10 @@
     place() {
       if (this.state !== 'playing' || !this.currentBlock) return;
       const base = this.tower.topBlock();
-      const cut = Physics.calculateCut(this.currentBlock, base);
+      const isTutorialFloor = this.floors < 10;
+      const cut = Physics.calculateCut(this.currentBlock, base, {
+        perfectThreshold: isTutorialFloor ? 12 : 2
+      });
 
       if (cut.type === 'miss') {
         this.createMissFragment(this.currentBlock);
@@ -230,6 +233,7 @@
         fragments: this.fragments,
         state: this.state,
         score: this.score,
+        floors: this.floors,
         deltaTime
       });
     }

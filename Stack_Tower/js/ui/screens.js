@@ -92,13 +92,42 @@
               <article class="guide-item">
                 <h3><span aria-hidden="true">◎</span><span data-i18n="help.goalTitle">遊戲目標</span></h3>
                 <p data-i18n="help.goal">抓準時機放置樓層，未對齊的部分會被切掉。越高、越準，分數越高。</p>
+                <div class="goal-demo" aria-hidden="true">
+                  <span class="goal-floor goal-floor-a"></span>
+                  <span class="goal-floor goal-floor-b"></span>
+                  <span class="goal-floor goal-floor-c"></span>
+                  <span class="goal-spark spark-one"></span>
+                  <span class="goal-spark spark-two"></span>
+                </div>
               </article>
               <article class="guide-item">
                 <h3><span aria-hidden="true">⌨</span><span data-i18n="help.controlsTitle">操作方式</span></h3>
                 <div class="control-map">
-                  <span data-i18n="help.desktop">電腦：空白鍵、Enter 或點擊畫面</span>
-                  <span data-i18n="help.mobile">手機：點擊畫面或底部按鈕</span>
+                  <span><span aria-hidden="true">⌨</span><span data-i18n="help.desktop">電腦：空白鍵、Enter 或點擊畫面</span></span>
+                  <span><span aria-hidden="true">▣</span><span data-i18n="help.mobile">手機：點擊畫面或底部按鈕</span></span>
                 </div>
+              </article>
+              <article class="guide-item assist-card">
+                <h3><span aria-hidden="true">╋</span><span data-i18n="help.assistTitle">前 10 層輔助</span></h3>
+                <div class="assist-demo" aria-hidden="true">
+                  <span class="assist-guide"></span>
+                  <span class="assist-edge assist-left"></span>
+                  <span class="assist-edge assist-right"></span>
+                  <span class="assist-base"></span>
+                  <span class="assist-moving"></span>
+                  <span class="assist-badge">1-10F</span>
+                </div>
+                <p data-i18n="help.assist">前 10 層會顯示淡藍色對照線，幫你抓中心與左右邊界；第 11 層開始隱藏。</p>
+              </article>
+              <article class="guide-item">
+                <h3><span aria-hidden="true">✓</span><span data-i18n="help.perfectTitle">新手完美判定</span></h3>
+                <div class="perfect-demo" aria-hidden="true">
+                  <span class="perfect-base"></span>
+                  <span class="perfect-zone"></span>
+                  <span class="perfect-moving"></span>
+                  <span class="perfect-label">Perfect</span>
+                </div>
+                <p data-i18n="help.perfect">前 10 層 Perfect 判定比較寬鬆，偏差小於 12px 也會自動對齊；第 11 層恢復正常 2px。</p>
               </article>
               <article class="guide-item flow-demo">
                 <h3><span aria-hidden="true">▤</span><span data-i18n="help.mechanicTitle">方塊機制</span></h3>
@@ -112,9 +141,9 @@
               <article class="guide-item">
                 <h3><span aria-hidden="true">★</span><span data-i18n="help.scoringTitle">計分規則</span></h3>
                 <ul class="score-rules">
-                  <li data-i18n="help.scoreNormal">一般放置 +10</li>
-                  <li data-i18n="help.scoreGood">精準放置 +15</li>
-                  <li data-i18n="help.scorePerfect">完美放置 +25，連續完美會累加倍率</li>
+                  <li><span aria-hidden="true">◆</span><span data-i18n="help.scoreNormal">一般放置 +10</span></li>
+                  <li><span aria-hidden="true">◇</span><span data-i18n="help.scoreGood">精準放置 +15</span></li>
+                  <li><span aria-hidden="true">✦</span><span data-i18n="help.scorePerfect">完美放置 +25，連續完美會累加倍率</span></li>
                 </ul>
               </article>
             </div>

@@ -2,14 +2,15 @@
   'use strict';
 
   const Physics = {
-    calculateCut(currentBlock, baseBlock) {
+    calculateCut(currentBlock, baseBlock, options = {}) {
       const overlapLeft = Math.max(currentBlock.x, baseBlock.x);
       const overlapRight = Math.min(currentBlock.x + currentBlock.width, baseBlock.x + baseBlock.width);
       const overlapWidth = overlapRight - overlapLeft;
 
       if (overlapWidth <= 0) return { type: 'miss' };
 
-      const isPerfect = Math.abs(currentBlock.x - baseBlock.x) < 2;
+      const perfectThreshold = options.perfectThreshold ?? 2;
+      const isPerfect = Math.abs(currentBlock.x - baseBlock.x) < perfectThreshold;
       const newWidth = isPerfect ? baseBlock.width : overlapWidth;
       const newX = isPerfect ? baseBlock.x : overlapLeft;
 

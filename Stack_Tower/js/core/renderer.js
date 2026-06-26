@@ -40,6 +40,7 @@
       this.drawFoundation(scene.tower);
 
       scene.tower.blocks.forEach((block) => this.drawBlock(block, scene.tower.cameraY, { placed: true }));
+      this.drawAlignmentGuide(scene.currentBlock, scene.tower, scene.floors || 0, scene.state);
       if (scene.currentBlock && scene.state === 'playing') {
         this.drawBlock(scene.currentBlock, scene.tower.cameraY, { active: true });
       }
@@ -135,6 +136,47 @@
       ctx.moveTo(hookX, 32);
       ctx.lineTo(hookX, Math.max(40, blockY - 12));
       ctx.stroke();
+      ctx.restore();
+    }
+
+    drawAlignmentGuide(currentBlock, tower, floors, state) {
+      if (!currentBlock || state !== 'playing' || floors >= 10) return;
+      const base = tower.topBlock();
+      if (!base) return;
+
+      const ctx = this.ctx;
+      const targetX = base.x + base.width / 2;
+      const currentY = this.worldY(currentBlock.y, currentBlock.height, tower.cameraY);
+      const baseY = this.worldY(base.y, base.height, tower.cameraY);
+      const topY = Math.max(42, currentY - 16);
+      const bottomY = Math.min(this.height - 40, baseY + base.height + 16);
+      const alpha = Helpers.clamp(0.72 - floors * 0.045, 0.22, 0.72);
+
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.strokeStyle = 'rgba(140, 236, 255, 0.95)';
+      ctx.fillStyle = 'rgba(140, 236, 255, 0.95)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([7, 7]);
+      ctx.beginPath();
+      ctx.moveTo(targetX, topY);
+      ctx.lineTo(targetX, bottomY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.globalAlpha = alpha * 0.78;
+      ctx.lineWidth = 1.5;
+      [base.x, base.x + base.width].forEach((x) => {
+        ctx.beginPath();
+        ctx.moveTo(x, baseY - 8);
+        ctx.lineTo(x, baseY + base.height + 8);
+        ctx.stroke();
+      });
+
+      ctx.globalAlpha = alpha;
+      ctx.beginPath();
+      ctx.arc(targetX, baseY - 6, 4, 0, Math.PI * 2);
+      ctx.fill();
       ctx.restore();
     }
 
