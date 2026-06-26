@@ -13,14 +13,18 @@
     },
 
     get() {
-      return Storage.get('leaderboard', []);
+      const items = Storage.get('leaderboard', []);
+      return items
+        .slice()
+        .sort((a, b) => b.score - a.score || b.floors - a.floors)
+        .slice(0, 5);
     },
 
     add(score, floors) {
       const items = this.get();
       items.push({ score, floors, date: Helpers.formatDate() });
       items.sort((a, b) => b.score - a.score || b.floors - a.floors);
-      Storage.set('leaderboard', items.slice(0, 10));
+      Storage.set('leaderboard', items.slice(0, 5));
     },
 
     clear() {

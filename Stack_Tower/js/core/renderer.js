@@ -38,7 +38,6 @@
       this.drawBackground(scene.score || 0, scene.tower.cameraY);
       this.drawCrane(scene.currentBlock, scene.tower);
       this.drawFoundation(scene.tower);
-      this.drawScaffold(scene.tower, scene.currentBlock);
 
       scene.tower.blocks.forEach((block) => this.drawBlock(block, scene.tower.cameraY, { placed: true }));
       if (scene.currentBlock && scene.state === 'playing') {
@@ -130,56 +129,12 @@
       const hookX = currentBlock.x + currentBlock.width / 2;
 
       ctx.save();
-      ctx.strokeStyle = 'rgba(255, 209, 102, 0.86)';
-      ctx.lineWidth = 5;
-      ctx.beginPath();
-      ctx.moveTo(this.width * 0.12, 32);
-      ctx.lineTo(this.width * 0.82, 32);
-      ctx.stroke();
-
       ctx.strokeStyle = 'rgba(255,255,255,0.55)';
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(hookX, 32);
       ctx.lineTo(hookX, Math.max(40, blockY - 12));
       ctx.stroke();
-
-      ctx.strokeStyle = 'rgba(255, 209, 102, 0.9)';
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.arc(hookX, Math.max(48, blockY - 9), 8, 0, Math.PI);
-      ctx.stroke();
-      ctx.restore();
-    }
-
-    drawScaffold(tower, currentBlock) {
-      const top = currentBlock || tower.topBlock();
-      const base = tower.blocks[0];
-      if (!top || !base) return;
-      const ctx = this.ctx;
-      const left = Math.min(base.x, top.x) - 22;
-      const right = Math.max(base.x + base.width, top.x + top.width) + 22;
-      const topY = this.worldY(top.y + top.height, 0, tower.cameraY) - 6;
-      const bottomY = this.worldY(0, 0, tower.cameraY) + 6;
-
-      ctx.save();
-      ctx.globalAlpha = 0.64;
-      ctx.strokeStyle = '#FFD166';
-      ctx.lineWidth = 2;
-      [left, right].forEach((x) => {
-        ctx.beginPath();
-        ctx.moveTo(x, topY);
-        ctx.lineTo(x, bottomY);
-        ctx.stroke();
-      });
-      for (let y = topY; y < bottomY; y += 34) {
-        ctx.beginPath();
-        ctx.moveTo(left, y);
-        ctx.lineTo(right, y + 20);
-        ctx.moveTo(right, y);
-        ctx.lineTo(left, y + 20);
-        ctx.stroke();
-      }
       ctx.restore();
     }
 
@@ -258,12 +213,9 @@
       }
 
       if (active) {
-        ctx.globalAlpha = 0.9;
-        ctx.strokeStyle = '#FFD166';
-        ctx.lineWidth = 2;
-        ctx.setLineDash([6, 5]);
-        ctx.strokeRect(block.x + 3, frontY + 3, Math.max(0, block.width - 6), Math.max(0, frontH - 6));
-        ctx.setLineDash([]);
+        ctx.globalAlpha = 0.2;
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(block.x + 3, frontY + 3, Math.max(0, block.width - 6), 2);
       }
       ctx.restore();
     }

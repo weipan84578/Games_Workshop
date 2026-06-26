@@ -109,7 +109,7 @@
       const floorIndex = this.tower.blocks.length;
       const direction = floorIndex % 2 === 0 ? -1 : 1;
       const width = base.width;
-      const x = direction === 1 ? -width : this.renderer.width;
+      const x = direction === 1 ? 0 : this.renderer.width - width;
       this.currentBlock = new Block({
         x,
         y: base.y + this.tower.blockHeight,

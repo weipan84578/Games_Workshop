@@ -71,18 +71,22 @@
 
     function startGame(loadSave = false) {
       ensureAudio();
-      if (loadSave) {
-        const save = Storage.get('save', null);
-        if (!game.load(save)) {
-          ScreenManager.toast(I18n.t('leaderboard.empty'));
-          updateMenuState();
-          return;
-        }
-      } else {
-        game.startNew();
-      }
       ScreenManager.show('game');
-      window.setTimeout(() => canvas.focus(), 0);
+      requestAnimationFrame(() => {
+        resizeGame();
+        if (loadSave) {
+          const save = Storage.get('save', null);
+          if (!game.load(save)) {
+            ScreenManager.show('menu');
+            ScreenManager.toast(I18n.t('leaderboard.empty'));
+            updateMenuState();
+            return;
+          }
+        } else {
+          game.startNew();
+        }
+        canvas.focus();
+      });
     }
 
     function handlePlace({ isPerfect, combo, points }) {
