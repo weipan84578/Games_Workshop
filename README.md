@@ -30,7 +30,7 @@
 | ----------- | ------------------------------ | ------------ | ------------------ |
 | `Blackjack` | 21 點                          | Blackjack    | ブラックジャック   |
 | `Slapjack`  | 心臟病                         | Slapjack     | スラップジャック   |
-| `Solitaire` | 撲克牌接龍 _(npm run preview)_ | Solitaire    | ソリティア         |
+| `Solitaire` | 撲克牌接龍                     | Solitaire    | ソリティア         |
 | `UNO`       | UNO 牌                        | UNO          | ウノ               |
 
 ### 益智遊戲
