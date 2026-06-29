@@ -23,25 +23,25 @@
       .map(function (entry) { return entry.move; });
   }
 
-  function minimax(state, depth, alpha, beta, maximizing) {
+  function minimax(state, depth, alpha, beta, maximizing, aiSymbol) {
     assertTime();
     if (depth === 0 || state.phase === "ended") {
-      return window.AIEvaluator.scoreState(state, "O");
+      return window.AIEvaluator.scoreState(state, aiSymbol);
     }
 
-    var player = maximizing ? "O" : "X";
+    var player = maximizing ? aiSymbol : window.AIEvaluator.opponent(aiSymbol);
     var moves = orderedMoves(state, player, state.moveCount < 12 ? 18 : 14);
     var i;
     var next;
     var score;
 
-    if (!moves.length) return window.AIEvaluator.scoreState(state, "O");
+    if (!moves.length) return window.AIEvaluator.scoreState(state, aiSymbol);
 
     if (maximizing) {
       var best = -Infinity;
       for (i = 0; i < moves.length; i += 1) {
         next = window.BoardUtils.applyMove(state, moves[i].br, moves[i].bc, moves[i].cr, moves[i].cc, { player: player });
-        score = minimax(next, depth - 1, alpha, beta, false);
+        score = minimax(next, depth - 1, alpha, beta, false, aiSymbol);
         best = Math.max(best, score);
         alpha = Math.max(alpha, score);
         if (beta <= alpha) break;
@@ -52,7 +52,7 @@
     var worst = Infinity;
     for (i = 0; i < moves.length; i += 1) {
       next = window.BoardUtils.applyMove(state, moves[i].br, moves[i].bc, moves[i].cr, moves[i].cc, { player: player });
-      score = minimax(next, depth - 1, alpha, beta, true);
+      score = minimax(next, depth - 1, alpha, beta, true, aiSymbol);
       worst = Math.min(worst, score);
       beta = Math.min(beta, score);
       if (beta <= alpha) break;
@@ -62,14 +62,15 @@
 
   function getMove(state) {
     startedAt = Date.now();
+    var aiSymbol = state.aiSymbol || "O";
     var depth = state.moveCount < 12 ? 3 : 4;
-    var moves = orderedMoves(state, "O", 20);
+    var moves = orderedMoves(state, aiSymbol, 20);
     var bestMove = moves[0] || null;
     var bestScore = -Infinity;
 
     moves.forEach(function (move) {
-      var next = window.BoardUtils.applyMove(state, move.br, move.bc, move.cr, move.cc, { player: "O" });
-      var score = minimax(next, depth - 1, -Infinity, Infinity, false);
+      var next = window.BoardUtils.applyMove(state, move.br, move.bc, move.cr, move.cc, { player: aiSymbol });
+      var score = minimax(next, depth - 1, -Infinity, Infinity, false, aiSymbol);
       if (score > bestScore) {
         bestScore = score;
         bestMove = move;

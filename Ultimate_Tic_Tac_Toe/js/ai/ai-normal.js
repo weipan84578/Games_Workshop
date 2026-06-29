@@ -9,8 +9,8 @@
 
   function getMove(state) {
     var moves = window.BoardUtils.getValidMoves(state);
-    var player = "O";
-    var other = "X";
+    var player = state.aiSymbol || "O";
+    var other = window.AIEvaluator.opponent(player);
     var bestMove = null;
     var bestScore = -Infinity;
 

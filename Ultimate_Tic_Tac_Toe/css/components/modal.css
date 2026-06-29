@@ -27,12 +27,14 @@
   padding: 1.35rem;
 }
 
-.difficulty-list {
+.difficulty-list,
+.symbol-list {
   display: grid;
   gap: 0.65rem;
 }
 
-.difficulty-option {
+.difficulty-option,
+.symbol-option {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 0.75rem;
@@ -47,12 +49,14 @@
   border: 2px solid transparent;
 }
 
-.difficulty-option.selected {
+.difficulty-option.selected,
+.symbol-option.selected {
   border-color: var(--color-btn-primary);
   background: rgba(244, 201, 93, 0.18);
 }
 
-.difficulty-icon {
+.difficulty-icon,
+.symbol-mark {
   display: grid;
   width: 42px;
   height: 42px;
@@ -61,6 +65,16 @@
   color: var(--color-text-inverse);
   background: var(--color-btn-primary);
   font-weight: 900;
+}
+
+.symbol-mark.x {
+  color: #fff;
+  background: var(--color-player-x);
+}
+
+.symbol-mark.o {
+  color: #081119;
+  background: var(--color-player-o);
 }
 
 .modal-actions {

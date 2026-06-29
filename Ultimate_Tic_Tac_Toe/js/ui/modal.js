@@ -2,6 +2,7 @@
   "use strict";
 
   var selectedDifficulty = "normal";
+  var selectedSymbol = "X";
 
   function overlay() {
     return document.getElementById("modal-overlay");
@@ -34,15 +35,30 @@
     ].join("");
   }
 
+  function symbolOption(symbol, label, desc) {
+    return [
+      '<button class="symbol-option' + (symbol === selectedSymbol ? " selected" : "") + '" type="button" data-symbol="' + symbol + '">',
+      '<span class="symbol-mark ' + symbol.toLowerCase() + '">' + symbol + '</span>',
+      '<span><strong>' + label + '</strong><br><small>' + desc + '</small></span>',
+      '</button>'
+    ].join("");
+  }
+
   function showDifficulty(onConfirm) {
     selectedDifficulty = "normal";
+    selectedSymbol = "X";
     show([
       '<div class="modal-body">',
       '<h2>' + window.I18n.t("difficulty.title") + '</h2>',
       '<div class="difficulty-list">',
-      difficultyOption("easy", window.I18n.t("difficulty.easy"), window.I18n.t("difficulty.easyDesc"), "E"),
-      difficultyOption("normal", window.I18n.t("difficulty.normal"), window.I18n.t("difficulty.normalDesc"), "N"),
-      difficultyOption("hard", window.I18n.t("difficulty.hard"), window.I18n.t("difficulty.hardDesc"), "H"),
+      difficultyOption("easy", window.I18n.t("difficulty.easy"), window.I18n.t("difficulty.easyDesc"), "1"),
+      difficultyOption("normal", window.I18n.t("difficulty.normal"), window.I18n.t("difficulty.normalDesc"), "2"),
+      difficultyOption("hard", window.I18n.t("difficulty.hard"), window.I18n.t("difficulty.hardDesc"), "3"),
+      '</div>',
+      '<h3>' + window.I18n.t("symbol.title") + '</h3>',
+      '<div class="symbol-list">',
+      symbolOption("X", window.I18n.t("symbol.useX"), window.I18n.t("symbol.xDesc")),
+      symbolOption("O", window.I18n.t("symbol.useO"), window.I18n.t("symbol.oDesc")),
       '</div>',
       '<div class="modal-actions">',
       '<button class="btn btn-secondary" type="button" data-modal-cancel>' + window.I18n.t("difficulty.cancel") + '</button>',
@@ -59,10 +75,21 @@
         });
       });
     });
+    content().querySelectorAll("[data-symbol]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        selectedSymbol = button.getAttribute("data-symbol");
+        content().querySelectorAll("[data-symbol]").forEach(function (node) {
+          node.classList.toggle("selected", node === button);
+        });
+      });
+    });
     content().querySelector("[data-modal-cancel]").addEventListener("click", close);
     content().querySelector("[data-modal-confirm]").addEventListener("click", function () {
       close();
-      onConfirm(selectedDifficulty);
+      onConfirm({
+        difficulty: selectedDifficulty,
+        playerSymbol: selectedSymbol
+      });
     });
   }
 

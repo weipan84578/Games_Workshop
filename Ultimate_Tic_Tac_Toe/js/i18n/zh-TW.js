@@ -23,9 +23,16 @@
       normal: "普通",
       normalDesc: "策略 AI",
       hard: "困難",
-      hardDesc: "Minimax + Alpha-Beta",
+      hardDesc: "深度搜尋 AI",
       confirm: "確認",
       cancel: "取消"
+    },
+    symbol: {
+      title: "選擇你的棋子",
+      useX: "使用 X",
+      useO: "使用 O",
+      xDesc: "X 先手，由玩家先下。",
+      oDesc: "O 後手，由 AI 使用 X 先下。"
     },
     game: {
       player: "玩家",

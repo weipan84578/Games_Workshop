@@ -23,9 +23,16 @@
       normal: "Normal",
       normalDesc: "Strategic AI",
       hard: "Hard",
-      hardDesc: "Minimax + Alpha-Beta",
+      hardDesc: "Deep Search AI",
       confirm: "Confirm",
       cancel: "Cancel"
+    },
+    symbol: {
+      title: "Choose Your Mark",
+      useX: "Play X",
+      useO: "Play O",
+      xDesc: "X moves first, so you open the game.",
+      oDesc: "O moves second, so the AI opens as X."
     },
     game: {
       player: "Player",

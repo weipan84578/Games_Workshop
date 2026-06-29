@@ -35,7 +35,13 @@
     return JSON.parse(JSON.stringify(value));
   }
 
-  function create(difficulty) {
+  function normalizeSymbol(symbol) {
+    return symbol === "O" ? "O" : "X";
+  }
+
+  function create(difficulty, playerSymbol) {
+    var normalizedPlayer = normalizeSymbol(playerSymbol);
+    var aiSymbol = normalizedPlayer === "X" ? "O" : "X";
     return {
       version: "1.0",
       boards: createBoards(),
@@ -43,6 +49,8 @@
       smallWinLines: createLineBoard(),
       megaWinLine: null,
       currentPlayer: "X",
+      playerSymbol: normalizedPlayer,
+      aiSymbol: aiSymbol,
       nextBoard: null,
       phase: "playing",
       winner: null,
@@ -96,6 +104,7 @@
 
   window.GameState = {
     create: create,
+    normalizeSymbol: normalizeSymbol,
     clone: clone,
     snapshot: snapshot,
     toSave: toSave,

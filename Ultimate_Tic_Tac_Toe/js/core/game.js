@@ -34,11 +34,13 @@
   function recordStatsIfNeeded(nextState) {
     if (nextState.phase !== "ended" || nextState.statsRecorded) return nextState;
     var stats = window.StorageManager.loadStats();
+    var playerSymbol = nextState.playerSymbol || "X";
+    var aiSymbol = nextState.aiSymbol || "O";
     stats.totalGames += 1;
-    if (nextState.winner === "X") {
+    if (nextState.winner === playerSymbol) {
       stats.wins += 1;
       if (!stats.bestMoves || nextState.moveCount < stats.bestMoves) stats.bestMoves = nextState.moveCount;
-    } else if (nextState.winner === "O") {
+    } else if (nextState.winner === aiSymbol) {
       stats.losses += 1;
     } else {
       stats.draws += 1;
@@ -76,13 +78,13 @@
 
   function scheduleAiTurn() {
     if (aiTimer) window.clearTimeout(aiTimer);
-    if (state.phase !== "playing" || state.currentPlayer !== "O") return;
+    if (state.phase !== "playing" || state.currentPlayer !== state.aiSymbol) return;
 
     state.aiThinking = true;
     emit("ai-thinking");
     aiTimer = window.setTimeout(function () {
       var move;
-      if (state.phase !== "playing" || state.currentPlayer !== "O") return;
+      if (state.phase !== "playing" || state.currentPlayer !== state.aiSymbol) return;
       try {
         move = chooseAiMove(window.GameState.snapshot(state));
       } catch (error) {
@@ -95,31 +97,34 @@
         move = window.AIEasy.getMove(state);
       }
       if (move) {
-        window.AudioManager.play("moveO");
-        applyGameMove(move, "O");
+        window.AudioManager.play(state.aiSymbol === "X" ? "moveX" : "moveO");
+        applyGameMove(move, state.aiSymbol);
       }
     }, 360);
   }
 
-  function start(difficulty) {
+  function start(difficulty, playerSymbol) {
     if (aiTimer) window.clearTimeout(aiTimer);
-    var nextState = window.GameState.create(difficulty || "normal");
+    var nextState = window.GameState.create(difficulty || "normal", playerSymbol || "X");
     window.StorageManager.clearSave();
     window.AudioManager.startBgm();
     setState(nextState, "start");
     window.StorageManager.saveGame(nextState);
+    if (nextState.currentPlayer === nextState.aiSymbol) {
+      scheduleAiTurn();
+    }
   }
 
   function makeMove(br, bc, cr, cc) {
-    if (state.aiThinking || state.currentPlayer !== "X") return false;
+    if (state.aiThinking || state.currentPlayer !== state.playerSymbol) return false;
     if (!window.Rules.isValidMove(state, br, bc, cr, cc)) {
       window.AudioManager.play("invalid");
       return false;
     }
 
-    window.AudioManager.play("moveX");
-    applyGameMove({ br: br, bc: bc, cr: cr, cc: cc }, "X");
-    if (state.phase === "playing" && state.currentPlayer === "O") {
+    window.AudioManager.play(state.playerSymbol === "X" ? "moveX" : "moveO");
+    applyGameMove({ br: br, bc: bc, cr: cr, cc: cc }, state.playerSymbol);
+    if (state.phase === "playing" && state.currentPlayer === state.aiSymbol) {
       scheduleAiTurn();
     }
     return true;
@@ -132,7 +137,7 @@
 
     while (history.length) {
       target = history.pop();
-      if (target.currentPlayer === "X" && target.phase === "playing") break;
+      if (target.currentPlayer === (target.playerSymbol || "X") && target.phase === "playing") break;
     }
 
     if (!target) return false;
@@ -146,7 +151,7 @@
   }
 
   function restart() {
-    start(state.difficulty || "normal");
+    start(state.difficulty || "normal", state.playerSymbol || "X");
   }
 
   function saveProgress() {
@@ -157,9 +162,11 @@
     var save = window.StorageManager.loadGame();
     if (!save) return false;
     var loaded = window.GameState.fromSave(save);
+    if (!loaded.playerSymbol) loaded.playerSymbol = "X";
+    if (!loaded.aiSymbol) loaded.aiSymbol = loaded.playerSymbol === "X" ? "O" : "X";
     setState(loaded, "load");
     window.AudioManager.startBgm();
-    if (loaded.currentPlayer === "O") scheduleAiTurn();
+    if (loaded.currentPlayer === loaded.aiSymbol) scheduleAiTurn();
     return true;
   }
 

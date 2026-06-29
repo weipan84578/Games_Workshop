@@ -15,7 +15,7 @@
 
   function createCell(state, br, bc, cr, cc) {
     var value = state.boards[br][bc][cr][cc];
-    var valid = state.currentPlayer === "X" && !state.aiThinking && window.Rules.isValidMove(state, br, bc, cr, cc);
+    var valid = state.currentPlayer === state.playerSymbol && !state.aiThinking && window.Rules.isValidMove(state, br, bc, cr, cc);
     var button = document.createElement("button");
     button.type = "button";
     button.className = "cell" + (isLastMove(state, br, bc, cr, cc) ? " last-move" : "");
@@ -34,7 +34,7 @@
     } else {
       var preview = document.createElement("span");
       preview.className = "piece-preview";
-      preview.textContent = "X";
+      preview.textContent = state.playerSymbol || "X";
       button.appendChild(preview);
     }
     return button;

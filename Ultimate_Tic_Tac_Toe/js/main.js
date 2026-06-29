@@ -32,8 +32,8 @@
   }
 
   function syncSettingsControls() {
-    document.querySelectorAll("[data-lang], [data-setting-lang]").forEach(function (button) {
-      var lang = button.getAttribute("data-lang") || button.getAttribute("data-setting-lang");
+    document.querySelectorAll("[data-setting-lang]").forEach(function (button) {
+      var lang = button.getAttribute("data-setting-lang");
       button.classList.toggle("active", lang === settings.lang);
     });
     document.querySelectorAll("[data-theme-choice]").forEach(function (button) {
@@ -101,14 +101,14 @@
 
   function showResult() {
     var state = window.Game.getState();
-    var title = state.winner === "X" ? window.I18n.t("result.playerWin") :
-      state.winner === "O" ? window.I18n.t("result.aiWin") : window.I18n.t("result.draw");
+    var title = state.winner === state.playerSymbol ? window.I18n.t("result.playerWin") :
+      state.winner === state.aiSymbol ? window.I18n.t("result.aiWin") : window.I18n.t("result.draw");
     byId("result-title").textContent = title;
     byId("result-detail").textContent = window.I18n.t("result.detail", {
       moves: state.moveCount,
       time: window.HUD.formatTime(window.Game.getElapsedSeconds())
     });
-    if (state.winner === "X") window.Animations.confetti();
+    if (state.winner === state.playerSymbol) window.Animations.confetti();
     showScene("scene-result");
   }
 
@@ -124,9 +124,11 @@
     }
   }
 
-  function startGame(difficulty) {
+  function startGame(config) {
+    var gameConfig = typeof config === "string" ? { difficulty: config, playerSymbol: "X" } :
+      (config || { difficulty: "normal", playerSymbol: "X" });
     resultScheduled = false;
-    window.Game.start(difficulty);
+    window.Game.start(gameConfig.difficulty, gameConfig.playerSymbol);
     showScene("scene-game");
   }
 
@@ -148,7 +150,10 @@
     });
     byId("btn-settings-ingame").addEventListener("click", function () { openSettings("scene-game"); });
     byId("btn-play-again").addEventListener("click", function () {
-      startGame(window.Game.getState().difficulty);
+      startGame({
+        difficulty: window.Game.getState().difficulty,
+        playerSymbol: window.Game.getState().playerSymbol || "X"
+      });
     });
     byId("btn-result-home").addEventListener("click", function () {
       showScene("scene-home");
@@ -182,9 +187,9 @@
   }
 
   function bindSettings() {
-    document.querySelectorAll("[data-lang], [data-setting-lang]").forEach(function (button) {
+    document.querySelectorAll("[data-setting-lang]").forEach(function (button) {
       button.addEventListener("click", function () {
-        var lang = button.getAttribute("data-lang") || button.getAttribute("data-setting-lang");
+        var lang = button.getAttribute("data-setting-lang");
         updateSettings({ lang: lang });
       });
     });

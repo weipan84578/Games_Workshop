@@ -23,9 +23,16 @@
       normal: "ふつう",
       normalDesc: "戦略 AI",
       hard: "むずかしい",
-      hardDesc: "Minimax + Alpha-Beta",
+      hardDesc: "深読み AI",
       confirm: "決定",
       cancel: "キャンセル"
+    },
+    symbol: {
+      title: "自分の記号を選択",
+      useX: "X で遊ぶ",
+      useO: "O で遊ぶ",
+      xDesc: "X は先手なので、プレイヤーから始めます。",
+      oDesc: "O は後手なので、AI が X で先に打ちます。"
     },
     game: {
       player: "プレイヤー",
