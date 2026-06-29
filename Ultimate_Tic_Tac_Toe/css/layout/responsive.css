@@ -1,0 +1,44 @@
+@media (max-width: 760px) {
+  :root {
+    --font-size-title: 2.2rem;
+    --font-size-heading: 1.45rem;
+    --font-size-button: 1rem;
+    --font-size-piece: 1.45rem;
+    --font-size-winner: 3.25rem;
+  }
+
+  .game-header,
+  .panel-header {
+    padding: 0.65rem 0.75rem;
+  }
+
+  .game-footer {
+    gap: 0.75rem;
+    padding: 0.65rem 0.75rem max(0.65rem, env(safe-area-inset-bottom));
+  }
+
+  .game-footer .btn {
+    flex: 1;
+    min-width: 0;
+    padding-inline: 0.85rem;
+  }
+
+  .game-board-container {
+    align-items: start;
+    padding-top: 0.65rem;
+  }
+}
+
+@media (max-height: 700px) and (orientation: landscape) {
+  .game-hud {
+    padding-block: 0.35rem;
+  }
+
+  .game-board-container {
+    padding-block: 0.45rem;
+  }
+
+  .mega-board {
+    width: min(62vh, 82vw);
+  }
+}

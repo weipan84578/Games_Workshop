@@ -1,0 +1,77 @@
+.home-shell {
+  display: grid;
+  gap: 2rem;
+  width: min(560px, 100%);
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.brand-lockup > div {
+  min-width: 0;
+}
+
+.brand-mark {
+  display: grid;
+  flex: 0 0 auto;
+  width: 76px;
+  height: 76px;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--color-text-inverse);
+  background:
+    linear-gradient(135deg, var(--color-player-x) 0 50%, var(--color-player-o) 50% 100%);
+  font-size: 1.55rem;
+  font-weight: 900;
+  box-shadow: 0 0 26px rgba(107, 215, 201, 0.35);
+}
+
+.brand-lockup p {
+  font-size: 1.12rem;
+}
+
+.home-nav {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.home-secondary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.home-secondary .btn {
+  min-width: 0;
+}
+
+.lang-switcher {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.lang-btn {
+  min-height: 42px;
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.lang-btn.active {
+  color: var(--color-text-inverse);
+  background: var(--color-btn-primary);
+  border-color: var(--color-btn-primary);
+}

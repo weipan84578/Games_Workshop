@@ -1,0 +1,64 @@
+.game-hud {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  padding: 0.75rem clamp(0.75rem, 3vw, 2rem);
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.hud-card {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+  padding: 0.7rem 0.85rem;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: var(--shadow-inset);
+}
+
+.hud-label {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-label);
+}
+
+.hud-value {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-weight: 800;
+}
+
+.game-hud .piece {
+  display: inline-block;
+  font-size: 1.15rem;
+  line-height: 1;
+  animation: none;
+  transform: none;
+  vertical-align: -0.08em;
+}
+
+.hud-card.active {
+  background: rgba(107, 215, 201, 0.16);
+}
+
+.hud-status {
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .game-hud {
+    grid-template-columns: 1fr;
+    gap: 0.45rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .hud-card {
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.48rem 0.65rem;
+  }
+
+  .hud-status {
+    text-align: left;
+  }
+}

@@ -1,0 +1,16 @@
+html[data-theme="neon"] {
+  --color-bg-primary: #100b25;
+  --color-bg-secondary: #25133d;
+  --color-surface: rgba(26, 17, 54, 0.94);
+  --color-surface-strong: rgba(14, 9, 34, 0.97);
+  --color-board-bg: #21154a;
+  --color-board-line: #080710;
+  --color-board-active: #ff3df2;
+  --color-board-free: #00f5ff;
+  --color-board-inactive: #423366;
+  --color-player-x: #ff4d9d;
+  --color-player-o: #00e5ff;
+  --color-btn-primary: #00f5ff;
+  --color-btn-secondary: #392a68;
+  --color-accent: #ff3df2;
+}

@@ -1,0 +1,73 @@
+#app,
+.scene {
+  min-height: 100vh;
+}
+
+.scene {
+  display: none;
+}
+
+.scene.active {
+  display: flex;
+}
+
+.scene-home,
+.scene-result {
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 3vh, 2.5rem);
+}
+
+.scene-game {
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.scene-panel {
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.game-header,
+.panel-header,
+.game-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.85rem clamp(1rem, 4vw, 2rem);
+  background: rgba(21, 25, 32, 0.92);
+  box-shadow: var(--shadow-inset);
+}
+
+.game-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-hud);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.game-board-container {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem clamp(0.75rem, 3vw, 2rem);
+}
+
+.game-footer {
+  justify-content: center;
+  padding-bottom: max(0.85rem, env(safe-area-inset-bottom));
+}
+
+.panel-body {
+  width: min(920px, 100%);
+  margin: 0 auto;
+  padding: 1.25rem clamp(1rem, 4vw, 2rem) 2rem;
+}

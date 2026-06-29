@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-TW" data-theme="classic">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title data-i18n="app.title">終極井字棋</title>
+  <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/base/reset.css">
+  <link rel="stylesheet" href="css/base/variables.css">
+  <link rel="stylesheet" href="css/base/typography.css">
+  <link rel="stylesheet" href="css/layout/grid.css">
+  <link rel="stylesheet" href="css/layout/responsive.css">
+  <link rel="stylesheet" href="css/components/board.css">
+  <link rel="stylesheet" href="css/components/buttons.css">
+  <link rel="stylesheet" href="css/components/modal.css">
+  <link rel="stylesheet" href="css/components/menu.css">
+  <link rel="stylesheet" href="css/components/settings.css">
+  <link rel="stylesheet" href="css/components/help.css">
+  <link rel="stylesheet" href="css/components/hud.css">
+  <link rel="stylesheet" href="css/components/animations.css">
+  <link rel="stylesheet" href="css/themes/theme-classic.css" id="theme-stylesheet">
+</head>
+<body>
+  <div id="app">
+    <div id="scene-home" class="scene scene-home active">
+      <div class="home-shell">
+        <div class="brand-lockup" aria-label="Ultimate Tic-Tac-Toe">
+          <div class="brand-mark" aria-hidden="true">XO</div>
+          <div>
+            <h1 data-i18n="app.title">終極井字棋</h1>
+            <p data-i18n="app.subtitle">Ultimate Tic-Tac-Toe</p>
+          </div>
+        </div>
+
+        <nav class="home-nav" aria-label="主選單">
+          <button id="btn-start" class="btn btn-primary" type="button" data-i18n="menu.start" data-i18n-aria="menu.startAria">開始遊戲</button>
+          <button id="btn-continue" class="btn btn-secondary" type="button" disabled data-i18n="menu.continue" data-i18n-aria="menu.continueAria">繼續遊戲</button>
+          <div class="home-secondary">
+            <button id="btn-help" class="btn btn-quiet" type="button" data-i18n="menu.help" data-i18n-aria="menu.helpAria">說明</button>
+            <button id="btn-settings" class="btn btn-quiet" type="button" data-i18n="menu.settings" data-i18n-aria="menu.settingsAria">設定</button>
+          </div>
+        </nav>
+
+        <div class="lang-switcher" role="group" aria-label="Language">
+          <button class="lang-btn" type="button" data-lang="zh-TW">繁中</button>
+          <button class="lang-btn" type="button" data-lang="en">EN</button>
+          <button class="lang-btn" type="button" data-lang="ja">日本語</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="scene-game" class="scene scene-game">
+      <header class="game-header">
+        <button id="btn-back" class="icon-btn" type="button" aria-label="返回">←</button>
+        <strong data-i18n="app.title">終極井字棋</strong>
+        <div class="header-actions">
+          <button id="btn-mute" class="icon-btn" type="button" aria-label="切換靜音">🔊</button>
+          <button id="btn-settings-ingame" class="icon-btn" type="button" aria-label="設定">⚙</button>
+        </div>
+      </header>
+      <div id="game-hud" class="game-hud" aria-live="polite"></div>
+      <main class="game-board-container" aria-label="遊戲棋盤">
+        <div id="mega-board" class="mega-board"></div>
+      </main>
+      <footer class="game-footer">
+        <button id="btn-restart" class="btn btn-secondary" type="button" data-i18n="game.restart">重新開始</button>
+        <button id="btn-undo" class="btn btn-secondary" type="button" data-i18n="game.undo">悔棋</button>
+      </footer>
+    </div>
+
+    <div id="scene-help" class="scene scene-panel">
+      <header class="panel-header">
+        <button id="btn-help-back" class="icon-btn" type="button" aria-label="返回">←</button>
+        <h2 data-i18n="help.title">遊戲說明</h2>
+      </header>
+      <main class="panel-body help-content">
+        <section class="accordion-item open">
+          <button class="accordion-toggle" type="button" aria-expanded="true">
+            <span data-i18n="help.goalTitle">遊戲目標</span>
+          </button>
+          <div class="accordion-panel">
+            <div class="diagram mega-demo" aria-hidden="true">
+              <span class="demo-cell win">X</span><span></span><span></span>
+              <span></span><span class="demo-cell win">X</span><span></span>
+              <span></span><span></span><span class="demo-cell win">X</span>
+            </div>
+            <p data-i18n="help.goalBody">在 3×3 的大棋盤中，率先佔領連成一線的三個小棋盤即可獲勝。</p>
+          </div>
+        </section>
+        <section class="accordion-item">
+          <button class="accordion-toggle" type="button" aria-expanded="false">
+            <span data-i18n="help.boardTitle">棋盤介紹</span>
+          </button>
+          <div class="accordion-panel">
+            <p data-i18n="help.boardBody">大棋盤由 9 個小棋盤組成；每個小棋盤有 9 格，整局共有 81 個格子。</p>
+          </div>
+        </section>
+        <section class="accordion-item">
+          <button class="accordion-toggle" type="button" aria-expanded="false">
+            <span data-i18n="help.rulesTitle">落子規則</span>
+          </button>
+          <div class="accordion-panel">
+            <p data-i18n="help.rulesBody">你落在小棋盤的哪一格，就會把 AI 送到大棋盤中相同位置的小棋盤。若指定棋盤已結束，就能自由選擇任何未完成的小棋盤。</p>
+          </div>
+        </section>
+        <section class="accordion-item">
+          <button class="accordion-toggle" type="button" aria-expanded="false">
+            <span data-i18n="help.winTitle">勝利條件</span>
+          </button>
+          <div class="accordion-panel">
+            <p data-i18n="help.winBody">小棋盤內連成三子即可佔領該盤；大棋盤中連成三個已佔領的小棋盤即可取得最終勝利。</p>
+          </div>
+        </section>
+        <section class="accordion-item">
+          <button class="accordion-toggle" type="button" aria-expanded="false">
+            <span data-i18n="help.strategyTitle">策略提示</span>
+          </button>
+          <div class="accordion-panel">
+            <ul>
+              <li data-i18n="help.tipCenter">優先爭取中央小棋盤。</li>
+              <li data-i18n="help.tipSend">把 AI 送往不利或已堵住的位置。</li>
+              <li data-i18n="help.tipFork">建立多條潛在連線，迫使 AI 防守。</li>
+            </ul>
+          </div>
+        </section>
+        <section class="accordion-item">
+          <button class="accordion-toggle" type="button" aria-expanded="false">
+            <span data-i18n="help.aiTitle">AI 難度</span>
+          </button>
+          <div class="accordion-panel">
+            <p data-i18n="help.aiBody">簡單為隨機行動，普通會攻防判斷，困難使用 Minimax 與 Alpha-Beta 剪枝。</p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="scene-settings" class="scene scene-panel">
+      <header class="panel-header">
+        <button id="btn-settings-back" class="icon-btn" type="button" aria-label="返回">←</button>
+        <h2 data-i18n="settings.title">設定</h2>
+      </header>
+      <main class="panel-body settings-content">
+        <section class="setting-group">
+          <h3 data-i18n="settings.language">語言</h3>
+          <div class="segmented" role="group" aria-label="Language">
+            <button type="button" data-setting-lang="zh-TW">繁中</button>
+            <button type="button" data-setting-lang="en">EN</button>
+            <button type="button" data-setting-lang="ja">日本語</button>
+          </div>
+        </section>
+        <section class="setting-group">
+          <h3 data-i18n="settings.theme">主題</h3>
+          <div class="theme-picker" role="group" aria-label="Theme">
+            <button type="button" data-theme-choice="classic"><span class="swatch classic"></span><span data-i18n="theme.classic">經典</span></button>
+            <button type="button" data-theme-choice="neon"><span class="swatch neon"></span><span data-i18n="theme.neon">霓虹</span></button>
+            <button type="button" data-theme-choice="ocean"><span class="swatch ocean"></span><span data-i18n="theme.ocean">海洋</span></button>
+            <button type="button" data-theme-choice="sakura"><span class="swatch sakura"></span><span data-i18n="theme.sakura">櫻花</span></button>
+          </div>
+        </section>
+        <section class="setting-group">
+          <h3 data-i18n="settings.sound">聲音</h3>
+          <label class="range-row">
+            <span data-i18n="settings.bgmVolume">BGM 音量</span>
+            <input id="bgm-volume" class="volume-slider" type="range" min="0" max="100" value="80">
+            <output id="bgm-volume-value">80%</output>
+          </label>
+          <label class="range-row">
+            <span data-i18n="settings.sfxVolume">音效音量</span>
+            <input id="sfx-volume" class="volume-slider" type="range" min="0" max="100" value="100">
+            <output id="sfx-volume-value">100%</output>
+          </label>
+          <button id="btn-toggle-muted" class="btn btn-secondary" type="button" data-i18n="settings.mute">靜音切換</button>
+        </section>
+        <section class="setting-group danger-zone">
+          <button id="btn-reset-settings" class="btn btn-danger" type="button" data-i18n="settings.reset">重置所有設定</button>
+        </section>
+      </main>
+    </div>
+
+    <div id="scene-result" class="scene scene-result">
+      <div class="result-box">
+        <h2 id="result-title">玩家獲勝！</h2>
+        <p id="result-detail"></p>
+        <div class="result-actions">
+          <button id="btn-play-again" class="btn btn-primary" type="button" data-i18n="result.playAgain">再玩一次</button>
+          <button id="btn-result-home" class="btn btn-secondary" type="button" data-i18n="result.home">返回主選單</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-overlay" class="modal-overlay hidden" aria-hidden="true">
+    <div id="modal-content" class="modal-content" role="dialog" aria-modal="true"></div>
+  </div>
+  <div id="live-region" class="visually-hidden" aria-live="polite"></div>
+
+  <script src="js/core/state.js"></script>
+  <script src="js/core/board.js"></script>
+  <script src="js/core/rules.js"></script>
+  <script src="js/core/game.js"></script>
+  <script src="js/ai/ai-evaluator.js"></script>
+  <script src="js/ai/ai-easy.js"></script>
+  <script src="js/ai/ai-normal.js"></script>
+  <script src="js/ai/ai-hard.js"></script>
+  <script src="js/i18n/zh-TW.js"></script>
+  <script src="js/i18n/en.js"></script>
+  <script src="js/i18n/ja.js"></script>
+  <script src="js/i18n/i18n.js"></script>
+  <script src="js/storage/storage.js"></script>
+  <script src="js/audio/bgm-generator.js"></script>
+  <script src="js/audio/sfx-generator.js"></script>
+  <script src="js/audio/audio-manager.js"></script>
+  <script src="js/ui/animations.js"></script>
+  <script src="js/ui/modal.js"></script>
+  <script src="js/ui/hud.js"></script>
+  <script src="js/ui/renderer.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

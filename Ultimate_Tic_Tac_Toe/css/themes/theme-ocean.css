@@ -1,0 +1,16 @@
+html[data-theme="ocean"] {
+  --color-bg-primary: #052a38;
+  --color-bg-secondary: #0a5168;
+  --color-surface: rgba(9, 54, 70, 0.94);
+  --color-surface-strong: rgba(5, 34, 45, 0.97);
+  --color-board-bg: #1b7a86;
+  --color-board-line: #04313d;
+  --color-board-active: #ffd166;
+  --color-board-free: #64dfdf;
+  --color-board-inactive: #276274;
+  --color-player-x: #ff6b6b;
+  --color-player-o: #9bf6ff;
+  --color-btn-primary: #ffd166;
+  --color-btn-secondary: #174f63;
+  --color-accent: #80ffdb;
+}

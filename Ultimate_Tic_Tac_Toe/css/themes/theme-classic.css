@@ -1,0 +1,16 @@
+html[data-theme="classic"] {
+  --color-bg-primary: #171a22;
+  --color-bg-secondary: #26313a;
+  --color-surface: rgba(35, 42, 51, 0.94);
+  --color-surface-strong: rgba(22, 27, 34, 0.96);
+  --color-board-bg: #85643f;
+  --color-board-line: #25292f;
+  --color-board-active: #f4c95d;
+  --color-board-free: #5cb8aa;
+  --color-board-inactive: #424a52;
+  --color-player-x: #ff596d;
+  --color-player-o: #36b5ff;
+  --color-btn-primary: #f4c95d;
+  --color-btn-secondary: #334350;
+  --color-accent: #6bd7c9;
+}

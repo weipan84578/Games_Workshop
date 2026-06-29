@@ -1,0 +1,67 @@
+.help-content {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.accordion-item {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+}
+
+.accordion-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 56px;
+  padding: 0.85rem 1rem;
+  color: var(--color-text-primary);
+  background: transparent;
+  font-weight: 800;
+  text-align: left;
+}
+
+.accordion-toggle::after {
+  content: "＋";
+  font-weight: 900;
+}
+
+.accordion-item.open .accordion-toggle::after {
+  content: "−";
+}
+
+.accordion-panel {
+  display: none;
+  gap: 0.85rem;
+  padding: 0 1rem 1rem;
+}
+
+.accordion-item.open .accordion-panel {
+  display: grid;
+}
+
+.diagram {
+  width: 150px;
+  aspect-ratio: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.35rem;
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+  background: var(--color-board-line);
+}
+
+.diagram span {
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  background: var(--color-board-bg);
+  font-weight: 900;
+}
+
+.diagram .win {
+  color: var(--color-player-x);
+  box-shadow: inset 0 0 0 2px var(--color-win-highlight);
+}
