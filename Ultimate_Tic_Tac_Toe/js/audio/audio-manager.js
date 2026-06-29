@@ -4,6 +4,7 @@
   var AudioContextCtor = window.AudioContext || window.webkitAudioContext;
   var context = null;
   var bgm = null;
+  var wantsBgm = false;
   var settings = Object.assign({}, window.AppDefaults.settings);
 
   function ensureContext() {
@@ -24,13 +25,22 @@
   }
 
   function startBgm() {
+    wantsBgm = true;
     if (settings.muted) return;
     ensureContext();
     if (bgm) bgm.start();
   }
 
   function stopBgm() {
+    wantsBgm = false;
     if (bgm) bgm.stop();
+  }
+
+  function unlockAudio() {
+    ensureContext();
+    if (wantsBgm && !settings.muted && bgm) {
+      bgm.start();
+    }
   }
 
   function play(name) {
@@ -47,7 +57,8 @@
     return settings.muted;
   }
 
-  document.addEventListener("pointerdown", ensureContext, { once: true });
+  document.addEventListener("pointerdown", unlockAudio, { once: true });
+  document.addEventListener("keydown", unlockAudio, { once: true });
 
   window.AudioManager = {
     configure: configure,

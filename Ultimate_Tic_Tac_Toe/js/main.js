@@ -239,6 +239,7 @@
   function init() {
     settings = window.StorageManager.loadSettings();
     window.AudioManager.configure(settings);
+    window.AudioManager.startBgm();
     applyTheme(settings.theme);
     window.I18n.setLanguage(settings.lang);
     bindNavigation();
