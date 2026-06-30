@@ -66,14 +66,16 @@
   function renderLog(state) {
     var list = byId("move-log");
     var count = byId("move-count");
-    var entries = state.history.slice(-16).reverse();
+    var entries = state.history.slice(-16);
     list.textContent = "";
     count.textContent = String(state.history.length);
+    list.start = Math.max(1, state.history.length - entries.length + 1);
     for (var i = 0; i < entries.length; i += 1) {
       var item = document.createElement("li");
       item.textContent = formatLog(entries[i]);
       list.appendChild(item);
     }
+    list.scrollTop = list.scrollHeight;
   }
 
   function render(state, ui) {
