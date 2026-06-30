@@ -1,0 +1,21 @@
+body.theme-ocean {
+  --app-bg: #e5f3f2;
+  --app-fg: #14292d;
+  --muted-fg: #577075;
+  --surface: #f8fffd;
+  --surface-2: #cfe7e6;
+  --surface-3: #9fc4c6;
+  --line: #236f7b;
+  --line-soft: rgba(35, 111, 123, 0.32);
+  --accent: #1c7c89;
+  --accent-strong: #145e68;
+  --accent-fg: #ffffff;
+  --player: #f4fbfb;
+  --player-edge: #4b95a0;
+  --ai: #22384d;
+  --ai-edge: #e5b75a;
+  --board-bg: #8db9b7;
+  --board-bg-2: #c8ddd8;
+  --board-line: #163f48;
+  --board-point: #1b4e59;
+}

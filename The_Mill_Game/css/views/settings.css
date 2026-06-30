@@ -1,0 +1,107 @@
+.settings-list {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.setting-row,
+.setting-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding: var(--space-5);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.48);
+  box-shadow: inset 0 0 0 1px var(--line-soft);
+}
+
+.setting-row > div:first-child {
+  max-width: 560px;
+}
+
+.setting-row p {
+  margin-top: 3px;
+  color: var(--muted-fg);
+}
+
+.select-control {
+  min-width: 180px;
+  min-height: 44px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--app-fg);
+  padding: 0 12px;
+}
+
+.segmented {
+  display: inline-grid;
+  grid-template-columns: repeat(3, 1fr);
+  min-width: min(340px, 100%);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.segmented button {
+  min-height: 44px;
+  padding: 0 12px;
+  background: var(--surface);
+  color: var(--app-fg);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.segmented button.is-active {
+  background: var(--accent);
+  color: var(--accent-fg);
+}
+
+.theme-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  justify-content: flex-end;
+}
+
+.swatch {
+  width: 46px;
+  height: 46px;
+  border: 3px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.22);
+}
+
+.swatch.is-active {
+  border-color: var(--focus);
+}
+
+.swatch-classic {
+  background: linear-gradient(135deg, #f4efe5 0 34%, #2f7d58 34% 68%, #9d353a 68%);
+}
+
+.swatch-ocean {
+  background: linear-gradient(135deg, #e5f3f2 0 34%, #1c7c89 34% 68%, #e5b75a 68%);
+}
+
+.swatch-sunset {
+  background: linear-gradient(135deg, #fff1dc 0 34%, #b55236 34% 68%, #2f5d63 68%);
+}
+
+.swatch-forest {
+  background: linear-gradient(135deg, #eef0df 0 34%, #3b6b45 34% 68%, #6e3f2f 68%);
+}
+
+.swatch-night {
+  background: linear-gradient(135deg, #20252e 0 34%, #79a7d3 34% 68%, #d79c45 68%);
+}
+
+.range-control {
+  width: min(260px, 100%);
+  accent-color: var(--accent);
+}
+
+.setting-actions {
+  justify-content: flex-end;
+}

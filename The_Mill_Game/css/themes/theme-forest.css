@@ -1,0 +1,21 @@
+body.theme-forest {
+  --app-bg: #eef0df;
+  --app-fg: #17241b;
+  --muted-fg: #5f705d;
+  --surface: #fbfff0;
+  --surface-2: #dce4be;
+  --surface-3: #b5c18c;
+  --line: #4e6b43;
+  --line-soft: rgba(78, 107, 67, 0.34);
+  --accent: #3b6b45;
+  --accent-strong: #294d31;
+  --accent-fg: #ffffff;
+  --player: #f7f1df;
+  --player-edge: #8b8448;
+  --ai: #253326;
+  --ai-edge: #8b4a36;
+  --board-bg: #87714c;
+  --board-bg-2: #b1a06a;
+  --board-line: #172a1d;
+  --board-point: #243828;
+}

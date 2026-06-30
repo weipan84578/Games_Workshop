@@ -1,0 +1,102 @@
+@media (max-width: 980px) {
+  .main-menu {
+    grid-template-columns: 1fr;
+    align-content: center;
+  }
+
+  .menu-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .game-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .hud-panel {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    order: 2;
+  }
+
+  .board-section {
+    order: 1;
+  }
+
+  .log-panel {
+    order: 3;
+  }
+
+  .board-shell {
+    width: min(76vh, 100%);
+  }
+}
+
+@media (max-width: 680px) {
+  .app-shell {
+    padding-right: max(10px, env(safe-area-inset-right));
+    padding-left: max(10px, env(safe-area-inset-left));
+  }
+
+  .view,
+  .view-stack {
+    min-height: calc(100vh - 20px);
+  }
+
+  .main-menu,
+  .subpage,
+  .game-screen {
+    padding-top: var(--space-3);
+    padding-bottom: var(--space-3);
+  }
+
+  .menu-actions,
+  .menu-strip,
+  .howto-grid,
+  .hud-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .menu-strip {
+    gap: var(--space-2);
+  }
+
+  .game-topbar,
+  .setting-row,
+  .setting-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .game-title-group {
+    justify-content: space-between;
+  }
+
+  .game-toolbar {
+    display: grid;
+    grid-template-columns: repeat(3, 44px);
+    justify-content: end;
+  }
+
+  .board-shell {
+    width: min(94vw, 560px);
+  }
+
+  .board-point {
+    width: clamp(30px, 8.5vw, 42px);
+    height: clamp(30px, 8.5vw, 42px);
+  }
+
+  .setting-row {
+    gap: var(--space-3);
+  }
+
+  .select-control,
+  .segmented,
+  .range-control {
+    width: 100%;
+  }
+
+  .modal-actions {
+    flex-direction: column-reverse;
+  }
+}

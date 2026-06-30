@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#243829">
+  <title>Nine Men's Morris</title>
+
+  <link rel="stylesheet" href="css/base/reset.css">
+  <link rel="stylesheet" href="css/base/variables.css">
+  <link rel="stylesheet" href="css/base/typography.css">
+  <link rel="stylesheet" href="css/layout/safe-area.css">
+  <link rel="stylesheet" href="css/layout/app-shell.css">
+  <link rel="stylesheet" href="css/components/buttons.css">
+  <link rel="stylesheet" href="css/components/switch.css">
+  <link rel="stylesheet" href="css/components/modal.css">
+  <link rel="stylesheet" href="css/components/toast.css">
+  <link rel="stylesheet" href="css/components/board.css">
+  <link rel="stylesheet" href="css/components/hud.css">
+  <link rel="stylesheet" href="css/views/main-menu.css">
+  <link rel="stylesheet" href="css/views/game.css">
+  <link rel="stylesheet" href="css/views/howto.css">
+  <link rel="stylesheet" href="css/views/settings.css">
+  <link rel="stylesheet" href="css/themes/theme-classic.css">
+  <link rel="stylesheet" href="css/themes/theme-ocean.css">
+  <link rel="stylesheet" href="css/themes/theme-sunset.css">
+  <link rel="stylesheet" href="css/themes/theme-forest.css">
+  <link rel="stylesheet" href="css/themes/theme-night.css">
+  <link rel="stylesheet" href="css/layout/responsive.css">
+</head>
+<body class="theme-classic">
+  <noscript>
+    <div class="noscript">This game requires JavaScript.</div>
+  </noscript>
+
+  <div class="app-shell" id="app">
+    <main class="view-stack" aria-live="polite">
+      <section class="view view-main active" id="view-main-menu" aria-labelledby="main-title">
+        <div class="main-menu">
+          <div class="brand-block">
+            <div class="brand-board" aria-hidden="true">
+              <span></span><span></span><span></span>
+            </div>
+            <div>
+              <p class="eyebrow" data-i18n="menu_eyebrow">策略棋盤遊戲</p>
+              <h1 id="main-title">Nine Men's Morris</h1>
+              <p class="menu-subtitle" data-i18n="menu_subtitle">布子、成線、移動與飛行，在 24 個交點上壓制 AI。</p>
+            </div>
+          </div>
+
+          <div class="menu-actions" aria-label="Main menu">
+            <button class="btn btn-primary btn-large" type="button" id="btn-new-game">
+              <span class="btn-icon" aria-hidden="true">+</span>
+              <span data-i18n="menu_start">新遊戲</span>
+            </button>
+            <button class="btn btn-secondary btn-large" type="button" id="btn-continue-game">
+              <span class="btn-icon" aria-hidden="true">↻</span>
+              <span data-i18n="menu_continue">繼續遊戲</span>
+            </button>
+            <button class="btn btn-secondary btn-large" type="button" data-route="view-howto">
+              <span class="btn-icon" aria-hidden="true">?</span>
+              <span data-i18n="menu_howto">玩法說明</span>
+            </button>
+            <button class="btn btn-secondary btn-large" type="button" data-route="view-settings">
+              <span class="btn-icon" aria-hidden="true">⚙</span>
+              <span data-i18n="menu_settings">設定</span>
+            </button>
+          </div>
+
+          <div class="menu-strip">
+            <div>
+              <span class="metric-label" data-i18n="settings_difficulty">難度</span>
+              <strong id="menu-difficulty">Normal</strong>
+            </div>
+            <div>
+              <span class="metric-label" data-i18n="settings_theme">主題</span>
+              <strong id="menu-theme">Classic</strong>
+            </div>
+            <div>
+              <span class="metric-label" data-i18n="save_status">存檔</span>
+              <strong id="menu-save-status">--</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view view-game" id="view-game" aria-labelledby="game-title">
+        <div class="game-screen">
+          <header class="game-topbar">
+            <div class="game-title-group">
+              <button class="icon-btn" type="button" data-route="view-main-menu" data-i18n-attr="aria-label:nav_home" aria-label="回主選單">⌂</button>
+              <div>
+                <p class="eyebrow" data-i18n="game_mode">玩家 vs AI</p>
+                <h2 id="game-title">Nine Men's Morris</h2>
+              </div>
+            </div>
+            <div class="game-toolbar" aria-label="Game tools">
+              <button class="icon-btn" type="button" id="btn-undo" data-i18n-attr="aria-label:game_undo" aria-label="復原">↶</button>
+              <button class="icon-btn" type="button" id="btn-reset-game" data-i18n-attr="aria-label:game_restart" aria-label="重新開始">↺</button>
+              <button class="icon-btn" type="button" id="btn-music-toggle" data-i18n-attr="aria-label:audio_toggle" aria-label="音樂">♪</button>
+            </div>
+          </header>
+
+          <div class="status-banner" id="game-status" role="status">--</div>
+
+          <div class="game-layout">
+            <aside class="hud-panel" aria-label="Game status">
+              <section class="player-panel is-player" id="panel-player">
+                <div class="panel-head">
+                  <span class="piece-dot player-dot" aria-hidden="true"></span>
+                  <h3 data-i18n="player_label">玩家</h3>
+                </div>
+                <div class="stats-grid">
+                  <div><span data-i18n="pieces_hand">手上</span><strong id="player-hand">9</strong></div>
+                  <div><span data-i18n="pieces_board">盤上</span><strong id="player-board">0</strong></div>
+                </div>
+              </section>
+
+              <section class="phase-panel">
+                <span class="metric-label" data-i18n="phase_label">階段</span>
+                <strong id="phase-label">--</strong>
+                <p id="turn-label">--</p>
+              </section>
+
+              <section class="player-panel is-ai" id="panel-ai">
+                <div class="panel-head">
+                  <span class="piece-dot ai-dot" aria-hidden="true"></span>
+                  <h3 data-i18n="ai_label">AI</h3>
+                </div>
+                <div class="stats-grid">
+                  <div><span data-i18n="pieces_hand">手上</span><strong id="ai-hand">9</strong></div>
+                  <div><span data-i18n="pieces_board">盤上</span><strong id="ai-board">0</strong></div>
+                </div>
+              </section>
+            </aside>
+
+            <section class="board-section" aria-label="Nine Men's Morris board">
+              <div class="board-shell" id="board-shell">
+                <svg class="board-lines" id="board-lines" viewBox="0 0 100 100" role="img" aria-label="Game board"></svg>
+                <div class="board-points" id="board-points"></div>
+              </div>
+            </section>
+
+            <aside class="log-panel">
+              <div class="log-head">
+                <h3 data-i18n="move_log">紀錄</h3>
+                <span id="move-count">0</span>
+              </div>
+              <ol id="move-log" class="move-log"></ol>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section class="view view-howto" id="view-howto" aria-labelledby="howto-title">
+        <div class="subpage">
+          <header class="subpage-head">
+            <button class="icon-btn" type="button" data-route="view-main-menu" data-i18n-attr="aria-label:nav_back" aria-label="返回">‹</button>
+            <div>
+              <p class="eyebrow" data-i18n="menu_howto">玩法說明</p>
+              <h2 id="howto-title" data-i18n="howto_title">在三個階段建立優勢</h2>
+            </div>
+          </header>
+          <div class="howto-grid" id="howto-content"></div>
+        </div>
+      </section>
+
+      <section class="view view-settings" id="view-settings" aria-labelledby="settings-title">
+        <div class="subpage">
+          <header class="subpage-head">
+            <button class="icon-btn" type="button" data-route="view-main-menu" data-i18n-attr="aria-label:nav_back" aria-label="返回">‹</button>
+            <div>
+              <p class="eyebrow" data-i18n="menu_settings">設定</p>
+              <h2 id="settings-title" data-i18n="settings_title">遊戲偏好</h2>
+            </div>
+          </header>
+
+          <div class="settings-list">
+            <section class="setting-row">
+              <div>
+                <h3 data-i18n="settings_language">語言</h3>
+                <p data-i18n="settings_language_hint">切換介面文字。</p>
+              </div>
+              <select id="setting-language" class="select-control">
+                <option value="zh">繁體中文</option>
+                <option value="en">English</option>
+                <option value="ja">日本語</option>
+              </select>
+            </section>
+
+            <section class="setting-row">
+              <div>
+                <h3 data-i18n="settings_difficulty">難度</h3>
+                <p data-i18n="settings_difficulty_hint">影響 AI 搜尋深度與失誤率。</p>
+              </div>
+              <div class="segmented" id="setting-difficulty" role="radiogroup" aria-label="Difficulty">
+                <button type="button" data-value="easy" role="radio" aria-checked="false" data-i18n="difficulty_easy">簡單</button>
+                <button type="button" data-value="normal" role="radio" aria-checked="true" data-i18n="difficulty_normal">普通</button>
+                <button type="button" data-value="hard" role="radio" aria-checked="false" data-i18n="difficulty_hard">困難</button>
+              </div>
+            </section>
+
+            <section class="setting-row setting-row-wide">
+              <div>
+                <h3 data-i18n="settings_theme">主題</h3>
+                <p data-i18n="settings_theme_hint">五組棋盤與介面配色。</p>
+              </div>
+              <div class="theme-swatches" id="setting-theme" role="radiogroup" aria-label="Theme">
+                <button type="button" data-value="classic" class="swatch swatch-classic" aria-label="Classic"></button>
+                <button type="button" data-value="ocean" class="swatch swatch-ocean" aria-label="Ocean"></button>
+                <button type="button" data-value="sunset" class="swatch swatch-sunset" aria-label="Sunset"></button>
+                <button type="button" data-value="forest" class="swatch swatch-forest" aria-label="Forest"></button>
+                <button type="button" data-value="night" class="swatch swatch-night" aria-label="Night"></button>
+              </div>
+            </section>
+
+            <section class="setting-row">
+              <div>
+                <h3 data-i18n="settings_music">背景音樂</h3>
+                <p data-i18n="settings_music_hint">使用 Web Audio API 即時合成。</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="setting-music" checked>
+                <span></span>
+              </label>
+            </section>
+
+            <section class="setting-row">
+              <div>
+                <h3 data-i18n="settings_sfx">音效</h3>
+                <p data-i18n="settings_sfx_hint">落子、成線、移除與勝負提示。</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="setting-sfx" checked>
+                <span></span>
+              </label>
+            </section>
+
+            <section class="setting-row">
+              <div>
+                <h3 data-i18n="settings_volume">音量</h3>
+                <p data-i18n="settings_volume_hint">同時控制音樂與音效。</p>
+              </div>
+              <input type="range" min="0" max="100" value="55" id="setting-volume" class="range-control">
+            </section>
+
+            <section class="setting-actions">
+              <button class="btn btn-secondary" type="button" id="btn-clear-save" data-i18n="settings_clear_save">清除存檔</button>
+              <button class="btn btn-primary" type="button" data-route="view-main-menu" data-i18n="settings_done">完成</button>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="modal-backdrop" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <h2 id="modal-title">--</h2>
+      <p id="modal-body">--</p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" type="button" id="modal-cancel">Cancel</button>
+        <button class="btn btn-primary" type="button" id="modal-confirm">OK</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast-stack" id="toast-stack" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="js/core/constants.js"></script>
+  <script src="js/core/game-state.js"></script>
+  <script src="js/core/rules-engine.js"></script>
+  <script src="js/core/move-validator.js"></script>
+  <script src="js/ai/ai-evaluator.js"></script>
+  <script src="js/ai/ai-easy.js"></script>
+  <script src="js/ai/ai-normal.js"></script>
+  <script src="js/ai/ai-hard.js"></script>
+  <script src="js/ai/ai-dispatcher.js"></script>
+  <script src="js/audio/audio-engine.js"></script>
+  <script src="js/audio/sfx-synth.js"></script>
+  <script src="js/audio/bgm-synth.js"></script>
+  <script src="js/i18n/lang-zh.js"></script>
+  <script src="js/i18n/lang-en.js"></script>
+  <script src="js/i18n/lang-ja.js"></script>
+  <script src="js/i18n/i18n-manager.js"></script>
+  <script src="assets/icons/icons.js"></script>
+  <script src="js/ui/router.js"></script>
+  <script src="js/ui/board-renderer.js"></script>
+  <script src="js/ui/hud-controller.js"></script>
+  <script src="js/ui/modal-controller.js"></script>
+  <script src="js/ui/theme-manager.js"></script>
+  <script src="js/ui/settings-controller.js"></script>
+  <script src="js/ui/howto-controller.js"></script>
+  <script src="js/storage/save-manager.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

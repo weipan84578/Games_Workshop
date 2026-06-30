@@ -1,0 +1,21 @@
+body.theme-sunset {
+  --app-bg: #fff1dc;
+  --app-fg: #2c2521;
+  --muted-fg: #75665b;
+  --surface: #fff9ef;
+  --surface-2: #f0d2b4;
+  --surface-3: #d9aa87;
+  --line: #75534f;
+  --line-soft: rgba(117, 83, 79, 0.32);
+  --accent: #b55236;
+  --accent-strong: #8d3f2b;
+  --accent-fg: #ffffff;
+  --player: #fff2d7;
+  --player-edge: #be7c3f;
+  --ai: #283d44;
+  --ai-edge: #cf5e59;
+  --board-bg: #c97850;
+  --board-bg-2: #efc287;
+  --board-line: #2f4f51;
+  --board-point: #2f4f51;
+}

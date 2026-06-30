@@ -1,0 +1,90 @@
+.view-main {
+  align-items: center;
+  justify-content: center;
+}
+
+.main-menu {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+  align-items: center;
+  gap: clamp(24px, 8vw, 96px);
+  width: 100%;
+  padding: var(--space-8) 0;
+}
+
+.brand-block {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.brand-board {
+  position: relative;
+  width: min(220px, 46vw);
+  aspect-ratio: 1;
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(var(--line) 0 0) 14% 14% / 72% 3px no-repeat,
+    linear-gradient(var(--line) 0 0) 14% 86% / 72% 3px no-repeat,
+    linear-gradient(var(--line) 0 0) 14% 14% / 3px 72% no-repeat,
+    linear-gradient(var(--line) 0 0) 86% 14% / 3px 72% no-repeat,
+    linear-gradient(var(--line) 0 0) 28% 28% / 44% 3px no-repeat,
+    linear-gradient(var(--line) 0 0) 28% 72% / 44% 3px no-repeat,
+    linear-gradient(var(--line) 0 0) 28% 28% / 3px 44% no-repeat,
+    linear-gradient(var(--line) 0 0) 72% 28% / 3px 44% no-repeat,
+    linear-gradient(135deg, var(--board-bg-2), var(--board-bg));
+  box-shadow: var(--shadow-soft);
+}
+
+.brand-board span {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--player);
+  box-shadow: inset 0 0 0 3px var(--player-edge), var(--shadow-tight);
+}
+
+.brand-board span:nth-child(1) {
+  top: 10%;
+  left: 10%;
+}
+
+.brand-board span:nth-child(2) {
+  top: 10%;
+  left: calc(50% - 14px);
+}
+
+.brand-board span:nth-child(3) {
+  top: 10%;
+  right: 10%;
+  background: var(--ai);
+  box-shadow: inset 0 0 0 3px var(--ai-edge), var(--shadow-tight);
+}
+
+.menu-subtitle {
+  max-width: 620px;
+  margin-top: var(--space-4);
+  color: var(--muted-fg);
+  font-size: 1.05rem;
+}
+
+.menu-actions {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.menu-strip {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+.menu-strip > div {
+  display: grid;
+  gap: 4px;
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.44);
+  box-shadow: inset 0 0 0 1px var(--line-soft);
+}

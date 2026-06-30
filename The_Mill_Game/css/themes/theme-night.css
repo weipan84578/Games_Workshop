@@ -1,0 +1,21 @@
+body.theme-night {
+  --app-bg: #20252e;
+  --app-fg: #edf1f6;
+  --muted-fg: #a7b3c2;
+  --surface: #2c3440;
+  --surface-2: #3a4654;
+  --surface-3: #526171;
+  --line: #79a7d3;
+  --line-soft: rgba(121, 167, 211, 0.34);
+  --accent: #d79c45;
+  --accent-strong: #b47d2e;
+  --accent-fg: #1c1f25;
+  --player: #f2eee4;
+  --player-edge: #d79c45;
+  --ai: #171b22;
+  --ai-edge: #79a7d3;
+  --board-bg: #596b7a;
+  --board-bg-2: #8296a2;
+  --board-line: #10151c;
+  --board-point: #202b37;
+}

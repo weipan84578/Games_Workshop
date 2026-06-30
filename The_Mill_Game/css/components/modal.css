@@ -1,0 +1,32 @@
+.modal-backdrop {
+  position: fixed;
+  z-index: 40;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--space-5);
+  background: rgba(11, 16, 14, 0.48);
+}
+
+.modal {
+  width: min(420px, 100%);
+  padding: var(--space-6);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.modal h2 {
+  margin-bottom: var(--space-3);
+}
+
+.modal p {
+  color: var(--muted-fg);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}

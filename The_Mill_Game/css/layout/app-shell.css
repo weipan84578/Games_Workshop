@@ -1,0 +1,60 @@
+body {
+  overflow-x: hidden;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0) 42%),
+    var(--app-bg);
+}
+
+.app-shell {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.view-stack {
+  position: relative;
+  width: min(1180px, 100%);
+  min-height: calc(100vh - 28px);
+  margin: 0 auto;
+}
+
+.view {
+  display: none;
+  min-height: calc(100vh - 28px);
+  animation: viewIn var(--speed-normal) ease both;
+}
+
+.view.active {
+  display: flex;
+}
+
+.subpage {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-6);
+  width: 100%;
+  padding: var(--space-5) 0;
+}
+
+.subpage-head,
+.game-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.subpage-head {
+  justify-content: flex-start;
+}
+
+@keyframes viewIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
