@@ -58,6 +58,7 @@
       button.style.left = pos.x + "%";
       button.style.top = pos.y + "%";
       button.setAttribute("data-position", String(pos.id));
+      button.setAttribute("data-label", String(pos.id + 1));
       button.addEventListener("click", function (event) {
         if (onPointClick) {
           onPointClick(Number(event.currentTarget.getAttribute("data-position")));
