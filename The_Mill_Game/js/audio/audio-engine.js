@@ -9,9 +9,14 @@
     musicEnabled: true,
     volume: 0.55
   };
+  var OUTPUT_MULTIPLIER = 5;
   var bgmTimer = null;
   var bgmStep = 0;
   var bgmTrack = 0;
+
+  function effectiveVolume() {
+    return Math.max(0, Number(settings.volume || 0) * OUTPUT_MULTIPLIER);
+  }
 
   function getContext() {
     if (!context) {
@@ -21,7 +26,7 @@
       }
       context = new AudioContext();
       master = context.createGain();
-      master.gain.value = settings.volume;
+      master.gain.value = effectiveVolume();
       master.connect(context.destination);
     }
     return context;
@@ -37,7 +42,7 @@
   function applySettings(nextSettings) {
     settings = Object.assign({}, settings, nextSettings || {});
     if (master) {
-      master.gain.value = Number(settings.volume || 0);
+      master.gain.value = effectiveVolume();
     }
     if (!settings.musicEnabled) {
       stopBgm();

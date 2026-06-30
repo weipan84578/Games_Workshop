@@ -8,13 +8,18 @@
     root.textContent = "";
     for (var i = 1; i <= 7; i += 1) {
       var section = document.createElement("section");
+      var icon = document.createElement("div");
       var number = document.createElement("span");
       var title = document.createElement("h3");
       var body = document.createElement("p");
       section.className = "howto-item";
+      icon.className = "howto-icon howto-icon-" + i;
+      icon.setAttribute("aria-hidden", "true");
+      number.className = "howto-number";
       number.textContent = String(i);
       title.textContent = NMM.I18n.t("howto_" + i + "_title");
       body.textContent = NMM.I18n.t("howto_" + i + "_body");
+      section.appendChild(icon);
       section.appendChild(number);
       section.appendChild(title);
       section.appendChild(body);
