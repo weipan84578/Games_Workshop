@@ -24,6 +24,7 @@
 | `Backgammon`         | 雙陸棋   | Backgammon      | バックギャモン   |
 | `Eels_And_Escalators`| 比奇保電梯與電鰻 | Eels and Escalators | イールズ・アンド・エスカレーター |
 | `Ultimate_Tic_Tac_Toe` | 終極井字棋 | Ultimate Tic-Tac-Toe | 究極の三目並べ |
+| `The_Mill_Game`        | 九子棋     | Nine Men's Morris    | ナインメンズモリス |
 
 ### 撲克牌遊戲
 
