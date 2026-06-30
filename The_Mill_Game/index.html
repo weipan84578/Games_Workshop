@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="css/views/main-menu.css">
   <link rel="stylesheet" href="css/views/game.css">
   <link rel="stylesheet" href="css/views/howto.css">
+  <link rel="stylesheet" href="css/views/replays.css">
   <link rel="stylesheet" href="css/views/settings.css">
   <link rel="stylesheet" href="css/themes/theme-classic.css">
   <link rel="stylesheet" href="css/themes/theme-ocean.css">
@@ -61,6 +62,10 @@
               <span class="btn-icon" aria-hidden="true">?</span>
               <span data-i18n="menu_howto">玩法說明</span>
             </button>
+            <button class="btn btn-secondary btn-large" type="button" data-route="view-replays">
+              <span class="btn-icon" aria-hidden="true">▶</span>
+              <span data-i18n="menu_replays">複盤</span>
+            </button>
             <button class="btn btn-secondary btn-large" type="button" data-route="view-settings">
               <span class="btn-icon" aria-hidden="true">⚙</span>
               <span data-i18n="menu_settings">設定</span>
@@ -97,11 +102,26 @@
             <div class="game-toolbar" aria-label="Game tools">
               <button class="icon-btn" type="button" id="btn-undo" data-i18n-attr="aria-label:game_undo" aria-label="復原">↶</button>
               <button class="icon-btn" type="button" id="btn-reset-game" data-i18n-attr="aria-label:game_restart" aria-label="重新開始">↺</button>
+              <button class="icon-btn" type="button" id="btn-save-replay" data-i18n-attr="aria-label:replay_save,title:replay_save" aria-label="儲存複盤" title="儲存複盤" hidden>▣</button>
               <button class="icon-btn" type="button" id="btn-music-toggle" data-i18n-attr="aria-label:audio_toggle" aria-label="音樂">♪</button>
             </div>
           </header>
 
           <div class="status-banner" id="game-status" role="status">--</div>
+
+          <section class="replay-controls" id="replay-controls" aria-label="Replay controls" hidden>
+            <div class="replay-progress">
+              <strong id="replay-step-label">0 / 0</strong>
+              <span id="replay-caption">--</span>
+            </div>
+            <div class="replay-buttons">
+              <button class="icon-btn" type="button" id="btn-replay-start" data-i18n-attr="aria-label:replay_start" aria-label="回到開局">|‹</button>
+              <button class="icon-btn" type="button" id="btn-replay-prev" data-i18n-attr="aria-label:replay_prev" aria-label="上一步">‹</button>
+              <button class="btn btn-primary" type="button" id="btn-replay-play" data-i18n="replay_play_button">播放</button>
+              <button class="icon-btn" type="button" id="btn-replay-next" data-i18n-attr="aria-label:replay_next" aria-label="下一步">›</button>
+              <button class="icon-btn" type="button" id="btn-replay-end" data-i18n-attr="aria-label:replay_end" aria-label="跳到結束">›|</button>
+            </div>
+          </section>
 
           <div class="game-layout">
             <aside class="hud-panel" aria-label="Game status">
@@ -162,6 +182,20 @@
             </div>
           </header>
           <div class="howto-grid" id="howto-content"></div>
+        </div>
+      </section>
+
+      <section class="view view-replays" id="view-replays" aria-labelledby="replays-title">
+        <div class="subpage">
+          <header class="subpage-head">
+            <button class="icon-btn" type="button" data-route="view-main-menu" data-i18n-attr="aria-label:nav_back" aria-label="返回">‹</button>
+            <div>
+              <p class="eyebrow" data-i18n="menu_replays">複盤</p>
+              <h2 id="replays-title" data-i18n="replays_title">已儲存的棋局</h2>
+            </div>
+          </header>
+          <div class="replay-list" id="replay-list"></div>
+          <p class="replay-empty" id="replay-empty" data-i18n="replays_empty">目前沒有已儲存的複盤。</p>
         </div>
       </section>
 
@@ -290,6 +324,7 @@
   <script src="js/ui/theme-manager.js"></script>
   <script src="js/ui/settings-controller.js"></script>
   <script src="js/ui/howto-controller.js"></script>
+  <script src="js/ui/replay-controller.js"></script>
   <script src="js/storage/save-manager.js"></script>
   <script src="js/main.js"></script>
 </body>

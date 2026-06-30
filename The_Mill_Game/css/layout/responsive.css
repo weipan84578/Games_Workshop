@@ -61,6 +61,8 @@
   }
 
   .game-topbar,
+  .replay-controls,
+  .replay-item,
   .setting-row,
   .setting-actions {
     align-items: stretch;

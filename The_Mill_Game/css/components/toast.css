@@ -9,12 +9,38 @@
 }
 
 .toast {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
   padding: 12px 14px;
   border-radius: var(--radius-md);
   background: var(--surface);
   box-shadow: var(--shadow-tight);
   color: var(--app-fg);
   animation: toastIn 180ms ease both;
+}
+
+.toast-text {
+  min-width: 0;
+}
+
+.toast-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.toast[data-toast-count="1"] .toast-count {
+  display: none;
 }
 
 @keyframes toastIn {

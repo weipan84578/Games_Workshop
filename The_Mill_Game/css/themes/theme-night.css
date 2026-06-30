@@ -26,6 +26,9 @@ body.theme-night .player-panel,
 body.theme-night .phase-panel,
 body.theme-night .log-panel,
 body.theme-night .howto-item,
+body.theme-night .replay-item,
+body.theme-night .replay-empty,
+body.theme-night .replay-controls,
 body.theme-night .setting-row,
 body.theme-night .setting-actions {
   background: rgba(21, 27, 36, 0.78);
@@ -38,6 +41,9 @@ body.theme-night .move-log li {
 }
 
 body.theme-night .howto-item p,
+body.theme-night .replay-meta,
+body.theme-night .replay-empty,
+body.theme-night .replay-progress span,
 body.theme-night .setting-row p,
 body.theme-night .stats-grid span,
 body.theme-night .phase-panel p {
