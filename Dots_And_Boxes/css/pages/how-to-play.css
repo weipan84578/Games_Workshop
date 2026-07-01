@@ -1,0 +1,122 @@
+.how-page {
+  align-items: center;
+}
+
+.how-nav {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-2) var(--space-4);
+  background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.how-nav a {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  text-decoration: none;
+  font-weight: 800;
+}
+
+.how-content {
+  display: grid;
+  gap: var(--space-4);
+  width: min(100%, 860px);
+  padding: var(--space-4);
+}
+
+.rule-card {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: var(--space-4);
+  align-items: center;
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-elevation-1);
+}
+
+.rule-card h2 {
+  margin-bottom: var(--space-2);
+}
+
+.rule-card__visual {
+  width: 150px;
+  height: 116px;
+  border-radius: var(--radius-md);
+  background:
+    radial-gradient(circle, var(--color-text-primary) 0 5px, transparent 6px) 18px 18px / 44px 44px,
+    color-mix(in srgb, var(--color-board) 76%, white);
+  border: 2px solid color-mix(in srgb, var(--color-text-primary) 12%, transparent);
+}
+
+.mini-board--draw {
+  background:
+    linear-gradient(90deg, transparent 18px, var(--color-player) 18px 106px, transparent 106px) 0 37px / 150px 12px no-repeat,
+    radial-gradient(circle, var(--color-text-primary) 0 5px, transparent 6px) 18px 18px / 44px 44px,
+    color-mix(in srgb, var(--color-board) 76%, white);
+}
+
+.mini-board--score,
+.mini-board--chain,
+.mini-board--win {
+  background:
+    linear-gradient(var(--color-player-soft), var(--color-player-soft)) 28px 28px / 44px 44px no-repeat,
+    linear-gradient(90deg, var(--color-player), var(--color-player)) 18px 37px / 98px 10px no-repeat,
+    linear-gradient(90deg, var(--color-player), var(--color-player)) 18px 81px / 98px 10px no-repeat,
+    linear-gradient(var(--color-player), var(--color-player)) 37px 18px / 10px 98px no-repeat,
+    linear-gradient(var(--color-player), var(--color-player)) 81px 18px / 10px 98px no-repeat,
+    radial-gradient(circle, var(--color-text-primary) 0 5px, transparent 6px) 18px 18px / 44px 44px,
+    color-mix(in srgb, var(--color-board) 76%, white);
+}
+
+.difficulty-stack {
+  display: grid;
+  place-items: center;
+  gap: 4px;
+  padding: var(--space-3);
+  background: var(--color-surface-strong);
+}
+
+.difficulty-stack span {
+  width: 100%;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  font-size: var(--font-size-caption);
+  font-weight: 800;
+}
+
+.difficulty-stack span:nth-child(1) {
+  background: var(--color-player-soft);
+}
+
+.difficulty-stack span:nth-child(2) {
+  background: color-mix(in srgb, var(--color-accent) 20%, transparent);
+}
+
+.difficulty-stack span:nth-child(3) {
+  background: var(--color-ai-soft);
+}
+
+.tip-mark {
+  display: grid;
+  place-items: center;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-size: 72px;
+  font-weight: 900;
+}
+
+.how-start-button {
+  justify-self: center;
+}

@@ -1,0 +1,19 @@
+body[data-theme="candy"] {
+  --color-bg-primary: #fbe7f1;
+  --color-bg-secondary: #bfe8ff;
+  --color-surface: #ffffff;
+  --color-surface-strong: #fff8fd;
+  --color-text-primary: #26152c;
+  --color-text-secondary: #5d4264;
+  --color-accent: #c026d3;
+  --color-accent-hover: #a21caf;
+  --color-on-accent: #ffffff;
+  --color-player: #0476d0;
+  --color-ai: #dc2626;
+  --color-player-soft: rgba(4, 118, 208, 0.18);
+  --color-ai-soft: rgba(220, 38, 38, 0.18);
+  --color-board: #fffafe;
+  --color-board-grid: rgba(99, 44, 112, 0.2);
+  --color-line-empty: rgba(38, 21, 44, 0.32);
+  --color-line-hover: #f59e0b;
+}

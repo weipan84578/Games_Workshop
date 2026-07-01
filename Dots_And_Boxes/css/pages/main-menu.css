@@ -1,0 +1,52 @@
+.main-menu {
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-4);
+}
+
+.menu-utility {
+  position: absolute;
+  top: max(var(--space-4), env(safe-area-inset-top));
+  right: max(var(--space-4), env(safe-area-inset-right));
+  display: flex;
+  gap: var(--space-2);
+}
+
+.menu-stage {
+  display: grid;
+  place-items: center;
+  gap: var(--space-4);
+  width: min(100%, 520px);
+  text-align: center;
+}
+
+.logo-mark {
+  width: min(58vw, 260px);
+  max-width: 260px;
+  animation: float-soft 5s ease-in-out infinite;
+}
+
+.logo-lines path {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 12;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.logo-dots circle {
+  fill: var(--color-text-primary);
+}
+
+.menu-subtitle {
+  color: var(--color-text-secondary);
+}
+
+.menu-actions {
+  display: grid;
+  gap: var(--space-3);
+  width: 100%;
+  place-items: center;
+  margin-top: var(--space-3);
+}

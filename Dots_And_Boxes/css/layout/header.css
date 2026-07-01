@@ -1,0 +1,23 @@
+.top-bar {
+  display: grid;
+  grid-template-columns: minmax(86px, auto) 1fr minmax(52px, auto);
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 66px;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-text-primary) 16%, transparent);
+  background: color-mix(in srgb, var(--color-surface) 90%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+.top-bar h1 {
+  justify-self: center;
+  font-size: var(--font-size-h2);
+  text-align: center;
+}
+
+.top-bar__spacer {
+  width: 52px;
+  height: 44px;
+}

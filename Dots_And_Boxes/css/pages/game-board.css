@@ -1,0 +1,197 @@
+.game-page {
+  min-height: 100svh;
+}
+
+.score-strip {
+  display: grid;
+  grid-template-columns: minmax(112px, 1fr) auto minmax(112px, 1fr);
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 70px;
+  padding: var(--space-3) var(--space-4);
+}
+
+.score-pill {
+  --turn-glow: color-mix(in srgb, var(--owner-color) 34%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 48px;
+  padding: 8px 12px;
+  border: 2px solid color-mix(in srgb, var(--owner-color) 42%, transparent);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--owner-color) 10%, var(--color-surface));
+  color: var(--color-text-primary);
+}
+
+.score-pill[data-owner="player"] {
+  --owner-color: var(--color-player);
+}
+
+.score-pill[data-owner="ai"] {
+  --owner-color: var(--color-ai);
+}
+
+.score-pill.is-current {
+  animation: pulse-turn 1.2s ease-in-out infinite;
+}
+
+.score-avatar {
+  color: var(--color-player);
+}
+
+.score-avatar--ai {
+  color: var(--color-ai);
+}
+
+.turn-status {
+  min-width: 168px;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  text-align: center;
+  font-size: var(--font-size-caption);
+  font-weight: 800;
+}
+
+.board-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 1;
+  min-height: 0;
+  padding: var(--space-3) var(--space-4);
+}
+
+.board-shell {
+  position: relative;
+  width: var(--board-size);
+  height: var(--board-size);
+  min-width: 260px;
+  min-height: 260px;
+  border: 2px solid color-mix(in srgb, var(--color-text-primary) 12%, transparent);
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--color-board-grid) 24%, transparent) 0 1px, transparent 1px 24px),
+    var(--color-board);
+  box-shadow: var(--shadow-elevation-1);
+}
+
+.board-root,
+.board-root svg {
+  width: 100%;
+  height: 100%;
+}
+
+.box-fill {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.box-fill--player {
+  fill: var(--color-player-soft);
+  opacity: 1;
+  animation: pop-in 180ms ease-out both;
+}
+
+.box-fill--ai {
+  fill: var(--color-ai-soft);
+  opacity: 1;
+  animation: pop-in 180ms ease-out both;
+}
+
+.board-line {
+  stroke-width: 18;
+  stroke-linecap: round;
+  fill: none;
+}
+
+.board-line--empty {
+  stroke: var(--color-line-empty);
+  stroke-width: 6;
+}
+
+.board-line--player {
+  stroke: var(--color-player);
+  animation: draw-line 160ms ease-out both;
+}
+
+.board-line--ai {
+  stroke: var(--color-ai);
+  stroke-dasharray: 26 8;
+  animation: draw-line 160ms ease-out both;
+}
+
+.line-hit {
+  stroke: transparent;
+  stroke-width: 44;
+  stroke-linecap: round;
+  fill: none;
+  cursor: pointer;
+  pointer-events: stroke;
+}
+
+.line-hit:hover + .board-line--empty,
+.line-hit:focus + .board-line--empty {
+  stroke: var(--color-line-hover);
+  stroke-width: 12;
+}
+
+.board-dot {
+  fill: var(--color-text-primary);
+  stroke: var(--color-surface-strong);
+  stroke-width: 5;
+  pointer-events: none;
+}
+
+.owner-marker--player {
+  fill: var(--color-player);
+  pointer-events: none;
+}
+
+.owner-marker--ai {
+  fill: var(--color-ai);
+  pointer-events: none;
+}
+
+.board-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  gap: var(--space-3);
+  border-radius: var(--radius-md);
+  background: rgba(0, 0, 0, 0.28);
+  color: #fff;
+  font-weight: 800;
+}
+
+.board-shell.is-disabled .line-hit {
+  cursor: not-allowed;
+}
+
+.toast {
+  position: absolute;
+  left: 50%;
+  bottom: var(--space-6);
+  min-width: 220px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  text-align: center;
+  box-shadow: var(--shadow-elevation-1);
+  animation: toast-rise 2s ease both;
+}
+
+.mobile-action-bar {
+  display: none;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--color-text-primary) 14%, transparent);
+}

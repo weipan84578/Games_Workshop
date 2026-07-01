@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#2b2438">
+  <title>點格棋 Dots and Boxes</title>
+
+  <!-- Base -->
+  <link rel="stylesheet" href="css/base/reset.css">
+  <link rel="stylesheet" href="css/base/variables.css">
+  <link rel="stylesheet" href="css/base/typography.css">
+  <link rel="stylesheet" href="css/base/animations.css">
+
+  <!-- Layout -->
+  <link rel="stylesheet" href="css/layout/header.css">
+  <link rel="stylesheet" href="css/layout/safe-area.css">
+  <link rel="stylesheet" href="css/layout/responsive.css">
+
+  <!-- Components -->
+  <link rel="stylesheet" href="css/components/buttons.css">
+  <link rel="stylesheet" href="css/components/modal.css">
+  <link rel="stylesheet" href="css/components/toggle-switch.css">
+  <link rel="stylesheet" href="css/components/slider.css">
+  <link rel="stylesheet" href="css/components/dropdown.css">
+  <link rel="stylesheet" href="css/components/loading.css">
+
+  <!-- Pages -->
+  <link rel="stylesheet" href="css/pages/main-menu.css">
+  <link rel="stylesheet" href="css/pages/game-board.css">
+  <link rel="stylesheet" href="css/pages/settings.css">
+  <link rel="stylesheet" href="css/pages/how-to-play.css">
+  <link rel="stylesheet" href="css/pages/result-modal.css">
+
+  <!-- Themes -->
+  <link rel="stylesheet" href="css/themes/theme-classic.css">
+  <link rel="stylesheet" href="css/themes/theme-candy.css">
+  <link rel="stylesheet" href="css/themes/theme-ocean.css">
+  <link rel="stylesheet" href="css/themes/theme-forest.css">
+  <link rel="stylesheet" href="css/themes/theme-night.css">
+  <link rel="stylesheet" href="css/themes/theme-sakura.css">
+</head>
+<body data-theme="classic" data-page="menu">
+  <div class="app-shell" id="app">
+    <section class="page page--active main-menu" id="page-menu" data-route="menu" aria-labelledby="menu-title">
+      <div class="menu-utility" aria-label="Quick controls">
+        <div class="dropdown">
+          <button class="icon-button" id="menu-language-button" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Language">
+            <span aria-hidden="true">◎</span>
+            <span id="menu-language-code">中</span>
+          </button>
+          <div class="dropdown__menu" id="menu-language-menu" hidden>
+            <button type="button" data-language="zh-TW">中文</button>
+            <button type="button" data-language="en-US">English</button>
+            <button type="button" data-language="ja-JP">日本語</button>
+          </div>
+        </div>
+        <button class="icon-button" id="menu-sound-button" type="button" aria-label="Sound">
+          <span id="menu-sound-icon" aria-hidden="true">♪</span>
+        </button>
+      </div>
+
+      <div class="menu-stage">
+        <div class="logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 220 160" role="img" aria-label="Dots and Boxes board mark">
+            <g class="logo-lines">
+              <path d="M35 35 H110 V85 H160 V125 H70 V85 H35 Z"></path>
+              <path d="M110 35 H185 V85 H160"></path>
+              <path d="M70 125 V85"></path>
+            </g>
+            <g class="logo-dots">
+              <circle cx="35" cy="35" r="7"></circle>
+              <circle cx="110" cy="35" r="7"></circle>
+              <circle cx="185" cy="35" r="7"></circle>
+              <circle cx="35" cy="85" r="7"></circle>
+              <circle cx="70" cy="85" r="7"></circle>
+              <circle cx="110" cy="85" r="7"></circle>
+              <circle cx="160" cy="85" r="7"></circle>
+              <circle cx="185" cy="85" r="7"></circle>
+              <circle cx="70" cy="125" r="7"></circle>
+              <circle cx="160" cy="125" r="7"></circle>
+            </g>
+          </svg>
+        </div>
+        <h1 id="menu-title" data-i18n="app.title">點格棋</h1>
+        <p class="menu-subtitle" data-i18n="app.subtitle">連線、圈地、再下一手。</p>
+        <div class="menu-actions">
+          <button class="button button--primary button--xl" id="start-game-button" type="button">
+            <span aria-hidden="true">▶</span>
+            <span data-i18n="common.start">開始遊戲</span>
+          </button>
+          <button class="button button--secondary button--xl" id="continue-game-button" type="button" hidden>
+            <span aria-hidden="true">↺</span>
+            <span data-i18n="common.continue">繼續遊戲</span>
+          </button>
+          <button class="button button--secondary button--xl" id="how-to-button" type="button">
+            <span aria-hidden="true">?</span>
+            <span data-i18n="common.howToPlay">遊戲說明</span>
+          </button>
+          <button class="button button--secondary button--xl" id="settings-button" type="button">
+            <span aria-hidden="true">⚙</span>
+            <span data-i18n="common.settings">設定</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="page game-page" id="page-game" data-route="game" aria-labelledby="game-title">
+      <header class="top-bar">
+        <button class="icon-button" id="game-back-button" type="button" aria-label="Back">
+          <span aria-hidden="true">←</span>
+          <span class="button-label" data-i18n="common.back">返回</span>
+        </button>
+        <h1 id="game-title" data-i18n="app.title">點格棋</h1>
+        <button class="icon-button" id="game-settings-button" type="button" aria-label="Settings">
+          <span aria-hidden="true">⚙</span>
+        </button>
+      </header>
+
+      <div class="score-strip" aria-live="polite">
+        <div class="score-pill" id="player-score-pill" data-owner="player">
+          <span class="score-avatar" aria-hidden="true">●</span>
+          <span data-i18n="game.you">你</span>
+          <strong><span data-i18n="game.score">比分</span>: <span id="player-score">0</span></strong>
+        </div>
+        <div class="turn-status" id="turn-status" data-i18n="game.yourTurn">輪到你了</div>
+        <div class="score-pill" id="ai-score-pill" data-owner="ai">
+          <span class="score-avatar score-avatar--ai" aria-hidden="true">■</span>
+          <span id="ai-difficulty-label">AI</span>
+          <strong><span data-i18n="game.score">比分</span>: <span id="ai-score">0</span></strong>
+        </div>
+      </div>
+
+      <main class="board-stage" id="board-stage">
+        <div class="board-shell" id="board-shell">
+          <div id="board-root" class="board-root" aria-label="Dots and boxes board"></div>
+          <div class="board-overlay" id="board-overlay" hidden>
+            <div class="loading-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+            <span id="ai-thinking-label" data-i18n="game.aiThinking">AI 思考中...</span>
+          </div>
+        </div>
+        <div class="toast" id="game-toast" role="status" aria-live="polite" hidden></div>
+      </main>
+
+      <div class="mobile-action-bar" aria-label="Mobile game actions">
+        <button class="button button--compact" id="pause-button" type="button">
+          <span aria-hidden="true">Ⅱ</span>
+          <span data-i18n="game.pause">暫停</span>
+        </button>
+        <button class="button button--compact" id="game-mute-button" type="button">
+          <span id="game-mute-icon" aria-hidden="true">♪</span>
+          <span data-i18n="settings.sound">音效</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="page settings-page" id="page-settings" data-route="settings" aria-labelledby="settings-title">
+      <header class="top-bar">
+        <button class="icon-button" data-route-back type="button" aria-label="Back">
+          <span aria-hidden="true">←</span>
+          <span class="button-label" data-i18n="common.back">返回</span>
+        </button>
+        <h1 id="settings-title" data-i18n="settings.title">設定</h1>
+        <span class="top-bar__spacer" aria-hidden="true"></span>
+      </header>
+
+      <main class="settings-list">
+        <section class="setting-row">
+          <div class="setting-row__title"><span aria-hidden="true">◎</span><span data-i18n="settings.language">語言</span></div>
+          <select id="language-select" class="select-control" aria-label="Language">
+            <option value="zh-TW">中文</option>
+            <option value="en-US">English</option>
+            <option value="ja-JP">日本語</option>
+          </select>
+        </section>
+
+        <section class="setting-row">
+          <div class="setting-row__title"><span aria-hidden="true">◐</span><span data-i18n="settings.theme">主題色彩</span></div>
+          <div class="theme-grid" id="theme-grid" role="radiogroup" aria-label="Theme"></div>
+        </section>
+
+        <section class="setting-row">
+          <div class="setting-row__title"><span aria-hidden="true">♪</span><span data-i18n="settings.bgmVolume">背景音樂音量</span></div>
+          <div class="slider-row">
+            <span aria-hidden="true">◖</span>
+            <input id="bgm-volume" class="range-control" type="range" min="0" max="100" step="1" value="65">
+            <span aria-hidden="true">◗</span>
+            <output id="bgm-volume-output">65%</output>
+          </div>
+        </section>
+
+        <section class="setting-row">
+          <div class="setting-row__title"><span aria-hidden="true">◇</span><span data-i18n="settings.sfxVolume">音效音量</span></div>
+          <div class="slider-row">
+            <span aria-hidden="true">◖</span>
+            <input id="sfx-volume" class="range-control" type="range" min="0" max="100" step="1" value="80">
+            <span aria-hidden="true">◗</span>
+            <output id="sfx-volume-output">80%</output>
+          </div>
+        </section>
+
+        <section class="setting-row mobile-only">
+          <div class="setting-row__title"><span aria-hidden="true">▣</span><span data-i18n="settings.vibration">震動回饋</span></div>
+          <label class="toggle-switch">
+            <input id="vibration-toggle" type="checkbox">
+            <span></span>
+          </label>
+        </section>
+
+        <section class="setting-row">
+          <div class="setting-row__title"><span aria-hidden="true">!</span><span data-i18n="settings.resetSave">清除存檔進度</span></div>
+          <button class="button button--danger" id="clear-save-button" type="button" data-i18n="settings.clearSaveButton">清除</button>
+        </section>
+      </main>
+    </section>
+
+    <section class="page how-page" id="page-how" data-route="how" aria-labelledby="how-title">
+      <header class="top-bar">
+        <button class="icon-button" data-route-back type="button" aria-label="Back">
+          <span aria-hidden="true">←</span>
+          <span class="button-label" data-i18n="common.back">返回</span>
+        </button>
+        <h1 id="how-title" data-i18n="howToPlay.title">遊戲說明</h1>
+        <span class="top-bar__spacer" aria-hidden="true"></span>
+      </header>
+
+      <nav class="how-nav" aria-label="Rule sections">
+        <a href="#rule-intro">1</a>
+        <a href="#rule-line">2</a>
+        <a href="#rule-score">3</a>
+        <a href="#rule-extra">4</a>
+        <a href="#rule-win">5</a>
+        <a href="#rule-ai">6</a>
+        <a href="#rule-tips">7</a>
+      </nav>
+
+      <main class="how-content">
+        <article class="rule-card" id="rule-intro">
+          <div class="rule-card__visual mini-board mini-board--intro" aria-hidden="true"></div>
+          <h2 data-i18n="howToPlay.introTitle">什麼是點格棋？</h2>
+          <p data-i18n="howToPlay.introBody">在點和點之間畫線，完成格子就能佔領得分。</p>
+        </article>
+        <article class="rule-card" id="rule-line">
+          <div class="rule-card__visual mini-board mini-board--draw" aria-hidden="true"></div>
+          <h2 data-i18n="howToPlay.lineTitle">基本規則：如何畫線</h2>
+          <p data-i18n="howToPlay.lineBody">每回合選一條還沒畫過的相鄰點邊線。</p>
+        </article>
+        <article class="rule-card" id="rule-score">
+          <div class="rule-card__visual mini-board mini-board--score" aria-hidden="true"></div>
+          <h2 data-i18n="howToPlay.scoreTitle">如何得分：完成格子</h2>
+          <p data-i18n="howToPlay.scoreBody">誰畫下第四條邊，該格子就歸誰。</p>
+        </article>
+        <article class="rule-card" id="rule-extra">
+          <div class="rule-card__visual mini-board mini-board--chain" aria-hidden="true"></div>
+          <h2 data-i18n="howToPlay.extraTitle">額外回合規則</h2>
+          <p data-i18n="howToPlay.extraBody">完成格子後可以再下一手，連續吃格是逆轉關鍵。</p>
+        </article>
+        <article class="rule-card" id="rule-win">
+          <div class="rule-card__visual mini-board mini-board--win" aria-hidden="true"></div>
+          <h2 data-i18n="howToPlay.winTitle">獲勝條件</h2>
+          <p data-i18n="howToPlay.winBody">所有格子被填滿後，格子數更多的一方獲勝。</p>
+        </article>
+        <article class="rule-card" id="rule-ai">
+          <div class="rule-card__visual difficulty-stack" aria-hidden="true">
+            <span>Easy</span><span>Normal</span><span>Hard</span>
+          </div>
+          <h2 data-i18n="howToPlay.aiTitle">AI 難度說明</h2>
+          <p data-i18n="howToPlay.aiBody">簡單偏隨機，普通會避開明顯送分，困難會用鏈路策略控盤。</p>
+        </article>
+        <article class="rule-card" id="rule-tips">
+          <div class="rule-card__visual tip-mark" aria-hidden="true">!</div>
+          <h2 data-i18n="howToPlay.tipsTitle">小技巧提示</h2>
+          <p data-i18n="howToPlay.tipsBody">避免讓對手看到三邊已滿的格子，除非你已經準備好後續連鎖。</p>
+        </article>
+        <button class="button button--primary button--xl how-start-button" id="how-start-button" type="button">
+          <span aria-hidden="true">▶</span>
+          <span data-i18n="howToPlay.startNow">我懂了，開始遊戲！</span>
+        </button>
+      </main>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="start-modal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="start-modal-title">
+      <button class="modal__close" type="button" data-close-modal="start-modal" aria-label="Close">×</button>
+      <h2 id="start-modal-title" data-i18n="menu.startSetup">開始對戰</h2>
+      <div class="modal-section">
+        <h3 data-i18n="menu.selectBoardSize">選擇棋盤大小</h3>
+        <div class="segmented" id="size-options">
+          <button type="button" data-size="3">3×3<span data-i18n="menu.sizeShort">短局</span></button>
+          <button type="button" data-size="4" aria-pressed="true">4×4<span data-i18n="menu.sizeRecommended">推薦</span></button>
+          <button type="button" data-size="5">5×5<span data-i18n="menu.sizeLong">長局</span></button>
+          <button type="button" data-size="6">6×6<span data-i18n="menu.sizeExpert">挑戰</span></button>
+        </div>
+      </div>
+      <div class="modal-section">
+        <h3 data-i18n="menu.selectDifficulty">選擇 AI 難度</h3>
+        <div class="segmented" id="difficulty-options">
+          <button type="button" data-difficulty="easy" data-i18n="menu.difficultyEasy">簡單</button>
+          <button type="button" data-difficulty="normal" aria-pressed="true" data-i18n="menu.difficultyNormal">普通</button>
+          <button type="button" data-difficulty="hard" data-i18n="menu.difficultyHard">困難</button>
+        </div>
+      </div>
+      <div class="modal-section">
+        <h3 data-i18n="menu.selectFirstPlayer">選擇先手</h3>
+        <div class="segmented" id="first-player-options">
+          <button type="button" data-first="player" aria-pressed="true" data-i18n="menu.goFirst">我先手</button>
+          <button type="button" data-first="ai" data-i18n="menu.aiFirst">AI 先手</button>
+        </div>
+      </div>
+      <button class="button button--primary button--xl modal__action" id="confirm-start-button" type="button" data-i18n="menu.startMatch">開始對戰</button>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="result-modal" hidden>
+    <div class="modal modal--result" role="dialog" aria-modal="true" aria-labelledby="result-title">
+      <div class="confetti" aria-hidden="true"></div>
+      <div class="result-icon" id="result-icon" aria-hidden="true">🏆</div>
+      <h2 id="result-title">你獲勝了！</h2>
+      <p id="result-message"></p>
+      <div class="result-score">
+        <span><span data-i18n="game.you">你</span>: <strong id="result-player-score">0</strong></span>
+        <span>AI: <strong id="result-ai-score">0</strong></span>
+      </div>
+      <div class="modal-actions">
+        <button class="button button--primary" id="play-again-button" type="button" data-i18n="game.playAgain">再來一局</button>
+        <button class="button button--secondary" id="result-menu-button" type="button" data-i18n="game.backToMenu">返回主畫面</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="confirm-clear-modal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="confirm-clear-title">
+      <h2 id="confirm-clear-title" data-i18n="settings.confirmClearTitle">確定清除？</h2>
+      <p data-i18n="settings.confirmClearBody">目前的對局進度將被清除，此動作無法復原。</p>
+      <div class="modal-actions">
+        <button class="button button--secondary" type="button" data-close-modal="confirm-clear-modal" data-i18n="common.cancel">取消</button>
+        <button class="button button--danger" id="confirm-clear-button" type="button" data-i18n="settings.confirmClearAction">確定清除</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="pause-modal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="pause-title">
+      <h2 id="pause-title" data-i18n="game.pause">暫停</h2>
+      <div class="modal-actions modal-actions--stack">
+        <button class="button button--primary" type="button" data-close-modal="pause-modal" data-i18n="game.resume">繼續</button>
+        <button class="button button--secondary" id="pause-settings-button" type="button" data-i18n="common.settings">設定</button>
+        <button class="button button--secondary" id="pause-menu-button" type="button" data-i18n="game.backToMenu">返回主畫面</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Utils -->
+  <script src="js/utils/dom-utils.js"></script>
+  <script src="js/utils/storage-utils.js"></script>
+  <script src="js/utils/math-utils.js"></script>
+  <script src="js/utils/event-emitter.js"></script>
+
+  <!-- Data -->
+  <script src="js/data/constants.js"></script>
+  <script src="js/data/i18n/zh-TW.js"></script>
+  <script src="js/data/i18n/en-US.js"></script>
+  <script src="js/data/i18n/ja-JP.js"></script>
+  <script src="js/data/themes.js"></script>
+
+  <!-- Core -->
+  <script src="js/core/board-model.js"></script>
+  <script src="js/core/rules-validator.js"></script>
+  <script src="js/core/game-engine.js"></script>
+  <script src="js/core/save-manager.js"></script>
+
+  <!-- AI -->
+  <script src="js/ai/chain-analyzer.js"></script>
+  <script src="js/ai/ai-easy.js"></script>
+  <script src="js/ai/ai-normal.js"></script>
+  <script src="js/ai/ai-hard.js"></script>
+  <script src="js/ai/ai-controller.js"></script>
+
+  <!-- Audio -->
+  <script src="js/audio/sound-map.js"></script>
+  <script src="js/audio/audio-manager.js"></script>
+
+  <!-- i18n -->
+  <script src="js/i18n/i18n-manager.js"></script>
+
+  <!-- UI -->
+  <script src="js/ui/router.js"></script>
+  <script src="js/ui/theme-switcher.js"></script>
+  <script src="js/ui/board-renderer.js"></script>
+  <script src="js/ui/main-menu-ui.js"></script>
+  <script src="js/ui/game-ui.js"></script>
+  <script src="js/ui/settings-ui.js"></script>
+  <script src="js/ui/how-to-play-ui.js"></script>
+  <script src="js/ui/result-modal-ui.js"></script>
+
+  <!-- Entry -->
+  <script src="js/main.js"></script>
+</body>
+</html>

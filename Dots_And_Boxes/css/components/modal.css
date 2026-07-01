@@ -1,0 +1,80 @@
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: rgba(0, 0, 0, 0.48);
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.modal {
+  position: relative;
+  width: min(100%, 560px);
+  max-height: min(88svh, 760px);
+  overflow: auto;
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-strong);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-elevation-2);
+  animation: pop-in 170ms ease-out both;
+}
+
+.modal__close {
+  position: absolute;
+  top: var(--space-3);
+  right: var(--space-3);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-text-primary) 10%, transparent);
+  color: var(--color-text-primary);
+  font-size: 30px;
+  line-height: 1;
+}
+
+.modal h2 {
+  padding-right: 48px;
+}
+
+.modal-section {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+.modal__action {
+  width: 100%;
+  margin-top: var(--space-6);
+}
+
+.modal-actions {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+  margin-top: var(--space-5);
+}
+
+.modal-actions--stack {
+  flex-direction: column;
+}
+
+@media (max-width: 520px) {
+  .modal {
+    align-self: end;
+    width: 100%;
+    max-height: 92svh;
+    padding: var(--space-5);
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+}

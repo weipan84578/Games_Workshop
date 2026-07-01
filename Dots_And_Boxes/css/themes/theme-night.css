@@ -1,0 +1,19 @@
+body[data-theme="night"] {
+  --color-bg-primary: #101827;
+  --color-bg-secondary: #31215c;
+  --color-surface: #192339;
+  --color-surface-strong: #1f2a44;
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #cbd5e1;
+  --color-accent: #22d3ee;
+  --color-accent-hover: #67e8f9;
+  --color-on-accent: #0f172a;
+  --color-player: #38bdf8;
+  --color-ai: #fb7185;
+  --color-player-soft: rgba(56, 189, 248, 0.24);
+  --color-ai-soft: rgba(251, 113, 133, 0.22);
+  --color-board: #111827;
+  --color-board-grid: rgba(248, 250, 252, 0.18);
+  --color-line-empty: rgba(248, 250, 252, 0.42);
+  --color-line-hover: #fde047;
+}

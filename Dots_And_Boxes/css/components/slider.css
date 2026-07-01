@@ -1,0 +1,22 @@
+.slider-row {
+  display: grid;
+  grid-template-columns: auto minmax(120px, 1fr) auto 60px;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.range-control {
+  width: 100%;
+  accent-color: var(--color-accent);
+}
+
+.range-control::-webkit-slider-thumb {
+  width: 28px;
+  height: 28px;
+}
+
+.slider-row output {
+  text-align: right;
+  color: var(--color-text-secondary);
+}

@@ -1,0 +1,57 @@
+.modal--result {
+  text-align: center;
+}
+
+.result-icon {
+  font-size: 52px;
+  line-height: 1;
+}
+
+.result-score {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-5);
+  margin-top: var(--space-4);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-accent) 10%, var(--color-surface));
+}
+
+.confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.65;
+}
+
+.confetti::before,
+.confetti::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--color-player);
+  box-shadow:
+    44px 32px 0 var(--color-ai),
+    120px 18px 0 var(--color-accent),
+    210px 58px 0 var(--color-player),
+    320px 28px 0 var(--color-ai),
+    410px 62px 0 var(--color-accent);
+  animation: confetti-fall 2.4s linear infinite;
+}
+
+.confetti::after {
+  left: 80px;
+  animation-delay: 900ms;
+}
+
+@keyframes confetti-fall {
+  from {
+    transform: translateY(-40px) rotate(0deg);
+  }
+  to {
+    transform: translateY(380px) rotate(180deg);
+  }
+}

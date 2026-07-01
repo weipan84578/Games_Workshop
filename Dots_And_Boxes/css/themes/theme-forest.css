@@ -1,0 +1,19 @@
+body[data-theme="forest"] {
+  --color-bg-primary: #e7f6df;
+  --color-bg-secondary: #2f6f4e;
+  --color-surface: #fbfff7;
+  --color-surface-strong: #ffffff;
+  --color-text-primary: #102417;
+  --color-text-secondary: #335442;
+  --color-accent: #ca8a04;
+  --color-accent-hover: #a16207;
+  --color-on-accent: #ffffff;
+  --color-player: #0f766e;
+  --color-ai: #b91c1c;
+  --color-player-soft: rgba(15, 118, 110, 0.22);
+  --color-ai-soft: rgba(185, 28, 28, 0.18);
+  --color-board: #fbfff7;
+  --color-board-grid: rgba(16, 36, 23, 0.22);
+  --color-line-empty: rgba(16, 36, 23, 0.36);
+  --color-line-hover: #f59e0b;
+}

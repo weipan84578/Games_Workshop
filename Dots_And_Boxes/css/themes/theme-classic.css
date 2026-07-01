@@ -1,0 +1,19 @@
+body[data-theme="classic"] {
+  --color-bg-primary: #f6eadb;
+  --color-bg-secondary: #d9c0a0;
+  --color-surface: #fff8ec;
+  --color-surface-strong: #fffdf8;
+  --color-text-primary: #251f1a;
+  --color-text-secondary: #5c4533;
+  --color-accent: #0f766e;
+  --color-accent-hover: #115e59;
+  --color-on-accent: #ffffff;
+  --color-player: #0b62a4;
+  --color-ai: #b42318;
+  --color-player-soft: rgba(11, 98, 164, 0.22);
+  --color-ai-soft: rgba(180, 35, 24, 0.19);
+  --color-board: #fff8ec;
+  --color-board-grid: rgba(93, 60, 36, 0.26);
+  --color-line-empty: rgba(55, 40, 29, 0.34);
+  --color-line-hover: #d97706;
+}
