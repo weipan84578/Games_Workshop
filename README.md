@@ -25,6 +25,7 @@
 | `Eels_And_Escalators`| 比奇保電梯與電鰻 | Eels and Escalators | イールズ・アンド・エスカレーター |
 | `Ultimate_Tic_Tac_Toe` | 終極井字棋 | Ultimate Tic-Tac-Toe | 究極の三目並べ |
 | `The_Mill_Game`        | 九子棋     | Nine Men's Morris    | ナインメンズモリス |
+| `Dots_And_Boxes`       | 點格棋     | Dots and Boxes       | ドットアンドボックス |
 
 ### 撲克牌遊戲
 
