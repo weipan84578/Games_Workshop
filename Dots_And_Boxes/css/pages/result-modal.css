@@ -55,3 +55,11 @@
     transform: translateY(380px) rotate(180deg);
   }
 }
+
+@media (max-width: 520px) {
+  .modal--result {
+    align-self: center;
+    width: min(100%, 420px);
+    border-radius: var(--radius-lg);
+  }
+}

@@ -9,6 +9,9 @@
     });
     ns.$$(".modal-backdrop").forEach(function (backdrop) {
       backdrop.addEventListener("click", function (event) {
+        if (backdrop.dataset.dismissible === "false") {
+          return;
+        }
         if (event.target === backdrop) {
           ns.closeModal(backdrop.id);
         }

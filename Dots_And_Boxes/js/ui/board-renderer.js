@@ -13,6 +13,65 @@
     };
   }
 
+  function distanceToSegment(pointValue, start, end) {
+    var dx = end.x - start.x;
+    var dy = end.y - start.y;
+    var lengthSquared = dx * dx + dy * dy;
+    if (lengthSquared === 0) {
+      return Math.hypot(pointValue.x - start.x, pointValue.y - start.y);
+    }
+    var t = ((pointValue.x - start.x) * dx + (pointValue.y - start.y) * dy) / lengthSquared;
+    var clamped = Math.max(0, Math.min(1, t));
+    var closest = {
+      x: start.x + clamped * dx,
+      y: start.y + clamped * dy
+    };
+    return Math.hypot(pointValue.x - closest.x, pointValue.y - closest.y);
+  }
+
+  function movePoints(model, move) {
+    if (move.type === "h") {
+      return {
+        start: point(model, move.row, move.col),
+        end: point(model, move.row, move.col + 1)
+      };
+    }
+    return {
+      start: point(model, move.row, move.col),
+      end: point(model, move.row + 1, move.col)
+    };
+  }
+
+  function looseHitRadius(model) {
+    var spacing = 840 / Math.max(model.rows, model.cols);
+    return Math.min(96, Math.max(64, spacing * 0.48));
+  }
+
+  function svgPointFromEvent(svg, event) {
+    var rect = svg.getBoundingClientRect();
+    return {
+      x: ((event.clientX - rect.left) / rect.width) * 1000,
+      y: ((event.clientY - rect.top) / rect.height) * 1000
+    };
+  }
+
+  function findNearestMove(model, svg, event) {
+    var clickPoint = svgPointFromEvent(svg, event);
+    var moves = ns.BoardModel.getLegalMoves(model);
+    var threshold = looseHitRadius(model);
+    var bestMove = null;
+    var bestDistance = Infinity;
+    moves.forEach(function (move) {
+      var segment = movePoints(model, move);
+      var distance = distanceToSegment(clickPoint, segment.start, segment.end);
+      if (distance < bestDistance) {
+        bestDistance = distance;
+        bestMove = move;
+      }
+    });
+    return bestDistance <= threshold ? bestMove : null;
+  }
+
   function appendOwnerMarker(svg, model, move, owner) {
     if (!owner) {
       return;
@@ -58,7 +117,16 @@
       end = point(model, move.row + 1, move.col);
     }
 
-    var group = ns.createSvg("g", {});
+    var group = ns.createSvg("g", {
+      class: "board-edge"
+    });
+    group.appendChild(ns.createSvg("line", {
+      class: "board-line board-line--" + (owner || "empty"),
+      x1: start.x,
+      y1: start.y,
+      x2: end.x,
+      y2: end.y
+    }));
     if (!owner && !disabled) {
       var hit = ns.createSvg("line", {
         class: "line-hit",
@@ -70,9 +138,6 @@
         role: "button",
         "aria-label": move.type === "h" ? "horizontal line" : "vertical line"
       });
-      hit.addEventListener("click", function () {
-        onMove(move);
-      });
       hit.addEventListener("keydown", function (event) {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
@@ -81,13 +146,6 @@
       });
       group.appendChild(hit);
     }
-    group.appendChild(ns.createSvg("line", {
-      class: "board-line board-line--" + (owner || "empty"),
-      x1: start.x,
-      y1: start.y,
-      x2: end.x,
-      y2: end.y
-    }));
     return group;
   }
 
@@ -108,6 +166,18 @@
         role: "application",
         "aria-label": "Dots and Boxes board"
       });
+      if (!disabled) {
+        svg.addEventListener("pointerup", function (event) {
+          if (event.pointerType === "mouse" && event.button !== 0) {
+            return;
+          }
+          var move = findNearestMove(model, svg, event);
+          if (move) {
+            event.preventDefault();
+            onMove(move);
+          }
+        });
+      }
 
       for (var row = 0; row < model.rows; row += 1) {
         for (var col = 0; col < model.cols; col += 1) {

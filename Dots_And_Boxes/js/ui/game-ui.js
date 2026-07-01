@@ -57,7 +57,9 @@
     if (model.status === "finished") {
       ns.SaveManager.clearGame();
       render();
-      ns.ResultModalUI.show(model);
+      window.requestAnimationFrame(function () {
+        ns.ResultModalUI.show(model);
+      });
       return;
     }
     ns.SaveManager.saveGame(model);

@@ -1,11 +1,15 @@
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 30;
+  z-index: 1000;
   display: grid;
   place-items: center;
   padding: var(--space-4);
   background: rgba(0, 0, 0, 0.48);
+}
+
+.modal-backdrop--locked {
+  background: rgba(0, 0, 0, 0.62);
 }
 
 body.modal-open {

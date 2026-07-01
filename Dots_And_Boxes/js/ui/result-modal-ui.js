@@ -20,6 +20,8 @@
       var titleKey = player > ai ? "game.win" : player < ai ? "game.lose" : "game.draw";
       var icon = player > ai ? "🏆" : player < ai ? "◆" : "◇";
       var sfx = player > ai ? "victory" : player < ai ? "defeat" : "draw";
+      var modal = document.getElementById("result-modal");
+      modal.dataset.dismissible = "false";
       document.getElementById("result-icon").textContent = icon;
       document.getElementById("result-title").textContent = ns.I18n.t(titleKey);
       document.getElementById("result-message").textContent = ns.I18n.t(titleKey);
