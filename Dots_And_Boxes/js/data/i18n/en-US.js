@@ -41,6 +41,44 @@ window.DAB_I18N["en-US"] = {
     win: "You win!",
     lose: "Close match! Try again?",
     draw: "Draw! Even match!",
+    resultMessages: {
+      win: [
+        "Clean finish! You made every line count.",
+        "Great control! You opened the AI defense one edge at a time.",
+        "Strong board sense! Those chained boxes came at the perfect moment.",
+        "Victory secured! That match had real strategy behind it.",
+        "You protected the key edges and closed the board with confidence.",
+        "You kept the risk low and won with steady control.",
+        "Every move looked decisive, and the score shows it.",
+        "You found the AI's weak point and turned the chain into points.",
+        "Well played! You took the initiative from the middle game onward.",
+        "That win was not luck; you counted the key boxes at the right time."
+      ],
+      lose: [
+        "So close to a comeback! Watch for three-sided box traps next time.",
+        "The AI caught a chain opportunity this round, but the rematch is open.",
+        "No rush. This one turned on a box chain, and the next board can be steadier.",
+        "Almost there! One fewer three-sided gift could have changed the result.",
+        "The AI owned the tempo this time. Try saving the long chains for yourself.",
+        "Not far off. The key is avoiding early openings that feed long chains.",
+        "The AI handled the final boxes well; next time, you can use that pattern back.",
+        "You had several strong moves, but the late chain swung the match.",
+        "Try keeping more safe moves available before adding a third side.",
+        "This was a tempo loss, not a skill gap. The rematch is worth playing."
+      ],
+      draw: [
+        "A draw! Neither side gave away much.",
+        "Even match. The next board is perfect for settling it.",
+        "You split the board almost perfectly. That was a tight one.",
+        "Nobody got the easy path; that was a sharp defensive game.",
+        "A draw still takes skill. Both sides found the key boxes.",
+        "Attack and defense stayed balanced from start to finish.",
+        "A draw means you shut down the AI's main scoring routes.",
+        "The final moves mattered, and neither side made a major mistake.",
+        "That was a tug-of-war; one bolder move next time may decide it.",
+        "The board was divided cleanly. This was a very steady match."
+      ]
+    },
     playAgain: "Play Again",
     backToMenu: "Main Menu",
     pause: "Pause",
