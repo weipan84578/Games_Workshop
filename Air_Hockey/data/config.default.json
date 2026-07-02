@@ -5,7 +5,5 @@
   "sfxVolume": 80,
   "muted": false,
   "effectsQuality": "medium",
-  "touchSensitivity": "medium",
-  "keyboardEnabled": true,
   "targetScore": 7
 }

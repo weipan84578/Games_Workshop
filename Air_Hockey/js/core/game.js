@@ -243,7 +243,7 @@
       this.spawnParticles(this.puck.x, this.puck.y, "hit");
     }
 
-    var events = ns.Physics.updatePuck(this.puck, dt);
+    var events = ns.Physics.updatePuck(this.puck, dt, ns.Constants.DIFFICULTY[this.difficulty]);
     for (var i = 0; i < events.length; i += 1) {
       if (events[i].type === "wall") {
         this.handleWall(events[i]);
@@ -257,32 +257,29 @@
 
   Game.prototype.updatePlayer = function (dt) {
     var target = this.pointerTarget || { x: this.playerMallet.x, y: this.playerMallet.y };
-    if (this.settings.keyboardEnabled) {
-      var dx = 0;
-      var dy = 0;
-      if (this.keyboardState.ArrowLeft || this.keyboardState.a || this.keyboardState.A) {
-        dx -= 1;
-      }
-      if (this.keyboardState.ArrowRight || this.keyboardState.d || this.keyboardState.D) {
-        dx += 1;
-      }
-      if (this.keyboardState.ArrowUp || this.keyboardState.w || this.keyboardState.W) {
-        dy -= 1;
-      }
-      if (this.keyboardState.ArrowDown || this.keyboardState.s || this.keyboardState.S) {
-        dy += 1;
-      }
-      if (dx || dy) {
-        target = {
-          x: this.playerMallet.x + dx * 560 * dt,
-          y: this.playerMallet.y + dy * 560 * dt
-        };
-        this.pointerTarget = target;
-      }
+    var dx = 0;
+    var dy = 0;
+    if (this.keyboardState.ArrowLeft || this.keyboardState.a || this.keyboardState.A) {
+      dx -= 1;
+    }
+    if (this.keyboardState.ArrowRight || this.keyboardState.d || this.keyboardState.D) {
+      dx += 1;
+    }
+    if (this.keyboardState.ArrowUp || this.keyboardState.w || this.keyboardState.W) {
+      dy -= 1;
+    }
+    if (this.keyboardState.ArrowDown || this.keyboardState.s || this.keyboardState.S) {
+      dy += 1;
+    }
+    if (dx || dy) {
+      target = {
+        x: this.playerMallet.x + dx * 560 * dt,
+        y: this.playerMallet.y + dy * 560 * dt
+      };
+      this.pointerTarget = target;
     }
 
-    var sensitivity = ns.Constants.TOUCH_MULTIPLIER[this.settings.touchSensitivity] || 1;
-    var speed = this.pointerSource === "touch" ? 1500 * sensitivity : 1700;
+    var speed = this.pointerSource === "touch" ? 1500 : 1700;
     this.playerMallet.moveToward(target, speed, dt);
   };
 

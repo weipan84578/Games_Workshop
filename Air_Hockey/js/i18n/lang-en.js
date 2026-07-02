@@ -32,7 +32,7 @@
       playing: "Playing",
       scored: "Goal!",
       pause: "Pause",
-      rotate: "Rotate your phone to landscape"
+      rotate: "Rotate your device to landscape"
     },
     pause: {
       title: "Paused",
@@ -56,7 +56,7 @@
       rulesTitle: "Rules",
       rulesText: "After each goal, a 3-second countdown restarts play. Pausing or closing the page preserves unfinished progress.",
       difficultyTitle: "Difficulty",
-      difficultyText: "Easy reacts late, Normal predicts briefly, and Hard predicts bounces while pressuring forward.",
+      difficultyText: "Easy keeps the puck speed capped lower with gentler AI. Normal raises speed and prediction. Hard accelerates quickly, predicts bounces, and pressures forward.",
       interfaceTitle: "Interface",
       interfaceText: "The top HUD shows scores, status, and countdown. Pause is at top left, quick mute at top right.",
       tipsTitle: "Tips",
@@ -69,10 +69,9 @@
       sfxVolume: "SFX Volume",
       mute: "Mute",
       display: "Display",
-      controls: "Controls",
-      keyboard: "Keyboard Assist",
+      effectsQuality: "Effects Quality",
       language: "Language",
-      rules: "Rules",
+      targetScore: "Winning Score",
       other: "Other",
       resetProgress: "Reset Progress",
       confirmResetTitle: "Reset progress?",
@@ -85,11 +84,6 @@
       ice: "Ice"
     },
     quality: {
-      low: "Low",
-      medium: "Medium",
-      high: "High"
-    },
-    sensitivity: {
       low: "Low",
       medium: "Medium",
       high: "High"

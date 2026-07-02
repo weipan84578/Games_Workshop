@@ -32,7 +32,7 @@
       playing: "プレイ中",
       scored: "ゴール！",
       pause: "一時停止",
-      rotate: "横向きでプレイしてください"
+      rotate: "端末を横向きにしてください"
     },
     pause: {
       title: "一時停止",
@@ -56,7 +56,7 @@
       rulesTitle: "ルール",
       rulesText: "得点後は 3 秒カウントして再開します。一時停止またはページを閉じると途中経過を保存します。",
       difficultyTitle: "難易度",
-      difficultyText: "かんたんは反応遅め、ふつうは短く予測、むずかしいは反射も予測して攻めます。",
+      difficultyText: "かんたんは速度上限が低く AI も控えめです。ふつうは速度と予測力が上がります。むずかしいは素早く加速し、反射を読んで攻めます。",
       interfaceTitle: "画面",
       interfaceText: "上部 HUD に得点、状態、カウントを表示します。左上は一時停止、右上はミュートです。",
       tipsTitle: "ヒント",
@@ -69,10 +69,9 @@
       sfxVolume: "効果音 音量",
       mute: "ミュート",
       display: "表示",
-      controls: "操作",
-      keyboard: "キーボード補助",
+      effectsQuality: "エフェクト品質",
       language: "言語",
-      rules: "ルール",
+      targetScore: "勝利スコア",
       other: "その他",
       resetProgress: "進行をリセット",
       confirmResetTitle: "リセットしますか？",
@@ -85,11 +84,6 @@
       ice: "アイス"
     },
     quality: {
-      low: "低",
-      medium: "中",
-      high: "高"
-    },
-    sensitivity: {
       low: "低",
       medium: "中",
       high: "高"

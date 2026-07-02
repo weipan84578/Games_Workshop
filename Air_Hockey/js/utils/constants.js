@@ -15,15 +15,12 @@
       sfxVolume: 80,
       muted: false,
       effectsQuality: "medium",
-      touchSensitivity: "medium",
-      keyboardEnabled: true,
       targetScore: 7
     },
     VALID: {
       languages: ["zh", "en", "ja"],
       themes: ["neon", "classic", "sunset", "ice"],
       effectsQuality: ["low", "medium", "high"],
-      touchSensitivity: ["low", "medium", "high"],
       targetScore: [5, 7, 10]
     },
     TABLE: {
@@ -38,44 +35,49 @@
       AI_START_Y: 225,
       PLAYER_MIN_Y: 450,
       AI_MAX_Y: 450,
-      FRICTION_PER_SECOND: 0.985,
-      WALL_RESTITUTION: 0.93,
-      MALLET_RESTITUTION: 1.08,
-      MAX_PUCK_SPEED: 1220,
-      SERVE_SPEED: 420
+      RALLY_ACCELERATION_PER_SECOND: 1.12,
+      MIN_PUCK_SPEED: 360,
+      WALL_RESTITUTION: 1.02,
+      MALLET_RESTITUTION: 1.12,
+      MAX_PUCK_SPEED: 1650,
+      SERVE_SPEED: 430
     },
     DIFFICULTY: {
       easy: {
-        reactionDelay: 0.4,
-        speed: 330,
-        predictionTime: 0,
-        mistakeRate: 0.25,
-        attackBias: 0.18
+        reactionDelay: 0.28,
+        speed: 430,
+        predictionTime: 0.12,
+        mistakeRate: 0.16,
+        attackBias: 0.24,
+        rallyAcceleration: 1.035,
+        minPuckSpeed: 340,
+        maxPuckSpeed: 860
       },
       normal: {
-        reactionDelay: 0.2,
-        speed: 470,
-        predictionTime: 0.3,
-        mistakeRate: 0.1,
-        attackBias: 0.35
+        reactionDelay: 0.14,
+        speed: 590,
+        predictionTime: 0.42,
+        mistakeRate: 0.06,
+        attackBias: 0.44,
+        rallyAcceleration: 1.065,
+        minPuckSpeed: 380,
+        maxPuckSpeed: 1220
       },
       hard: {
-        reactionDelay: 0.06,
-        speed: 650,
-        predictionTime: 0.62,
-        mistakeRate: 0.02,
-        attackBias: 0.55
+        reactionDelay: 0.035,
+        speed: 800,
+        predictionTime: 0.82,
+        mistakeRate: 0.01,
+        attackBias: 0.68,
+        rallyAcceleration: 1.12,
+        minPuckSpeed: 420,
+        maxPuckSpeed: 1700
       }
     },
     EFFECT_LIMITS: {
       low: 34,
       medium: 72,
       high: 120
-    },
-    TOUCH_MULTIPLIER: {
-      low: 0.82,
-      medium: 1,
-      high: 1.18
     },
     AUDIO: {
       BASE_BGM_VOLUME: 0.05,

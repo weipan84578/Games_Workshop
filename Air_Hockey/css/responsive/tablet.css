@@ -10,4 +10,10 @@
   .table-frame {
     width: min(72vw, calc((100dvh - 5.25rem) * 0.666));
   }
+
+  @media (orientation: portrait) {
+    .orientation-prompt {
+      display: grid;
+    }
+  }
 }

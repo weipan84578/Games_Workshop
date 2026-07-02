@@ -8,7 +8,7 @@ Build the Air Hockey web game described in `air-hockey-spec.md` as a zero-build 
 - Main menu has only Start, Continue, How To Play, and Settings.
 - Canvas game supports player vs AI, scoring, pause, resume, restart, and result screens.
 - AI has easy, normal, and hard behavior differences without teleporting.
-- Settings cover language, theme, audio, mute, touch sensitivity, keyboard assist, effects quality, and target score.
+- Settings cover language, theme, audio, mute, effects quality, and target score.
 - Traditional Chinese, English, and Japanese strings cover all visible screens.
 - Four themes are available: neon, classic, sunset, and ice.
 - `localStorage` persists settings and in-progress games; completed games clear progress.
@@ -27,7 +27,7 @@ Build the Air Hockey web game described in `air-hockey-spec.md` as a zero-build 
 - Audio uses generated Web Audio tones because no binary audio source assets are present in the repo.
 
 ## Working Notes
-- The repo started with only `AGENTS.md` and `air-hockey-spec.md`.
+- The folder started from the provided Air Hockey specification and currently does not keep an `AGENTS.md` file.
 - Use `script defer` files attached to `window.AirHockey` for better direct `file://` compatibility than ES modules.
 - Keep `index.html` as structure/imports only: no inline styles or inline game logic.
 - Do not create `README.md`.
@@ -56,3 +56,98 @@ Build the Air Hockey web game described in `air-hockey-spec.md` as a zero-build 
   - DOM startup VM check: `DOM_BOOT_OK`.
   - Headless Edge browser screenshot/DOM verification attempted, but the local headless environment failed in GPU/profile handling before producing output. No generated artifacts were kept.
 - No correction/postmortem lesson was recorded because no user correction or production-impacting mistake occurred during this task.
+
+## Follow-up 2026-07-02 settings-and-puck-flow
+
+### Goal
+Clarify settings labels, remove unnecessary control settings, and keep the puck moving with gradual acceleration so matches resolve reliably.
+
+### Acceptance Criteria
+- Settings page shows `特效品質` for the low/medium/high display setting.
+- Settings page shows `勝利分數` instead of vague `遊戲規則`.
+- Operation/touch sensitivity/keyboard assist settings are removed from the settings page.
+- Puck does not slow to a stop during active play.
+- Puck gradually accelerates during rallies while still capped by a maximum speed.
+
+### Checklist
+- [x] Update settings page markup and i18n labels
+- [x] Remove unused control setting UI handling
+- [x] Adjust puck physics constants and update logic
+- [x] Run JS syntax and static reference checks
+- [x] Summarize verification
+
+### Results
+- Renamed the settings page target score section to `勝利分數`.
+- Added the `特效品質` label above the low/medium/high display setting.
+- Removed operation settings from the settings page and removed persisted control-setting use from runtime settings.
+- Changed active-play puck physics to enforce a minimum speed and apply gradual rally acceleration up to a maximum cap.
+- Verification run:
+  - `node --check` on every `js/**/*.js` file: passed.
+  - Static `index.html` CSS/JS reference existence check: `ALL_REFS_EXIST`.
+  - DOM startup VM check: `DOM_BOOT_OK`.
+  - Puck acceleration check: `PUCK_ACCELERATION_OK`.
+  - Confirmed no `README.md` and no `AGENTS.md` in `Air_Hockey/`.
+
+## Follow-up 2026-07-02 landscape-rwd-scroll
+
+### Goal
+Fix responsive behavior so the app is treated as a landscape-first game and the main menu can scroll when horizontal mobile height is limited.
+
+### Acceptance Criteria
+- Main menu uses its own vertical scroll area instead of clipping content.
+- Portrait mobile/tablet orientation shows a landscape prompt across the whole app, not only inside the game screen.
+- Landscape mobile menu spacing is compressed enough to remain usable, with scroll as fallback.
+- Orientation prompt text is updated in Traditional Chinese, English, and Japanese.
+
+### Checklist
+- [x] Move orientation prompt to global app scope
+- [x] Make main menu screen vertically scrollable
+- [x] Add landscape mobile menu spacing adjustments
+- [x] Update i18n orientation prompt text
+- [x] Run JS syntax, static reference, and startup checks
+- [x] Summarize verification
+
+### Results
+- Moved the landscape orientation prompt to global app scope so mobile/tablet portrait is blocked across menu, settings, instructions, and gameplay.
+- Changed the main menu from centered grid-only layout to a vertically scrollable screen, with compressed spacing for short landscape mobile viewports.
+- Updated the orientation prompt text in Traditional Chinese, English, and Japanese.
+- Verification run:
+  - `node --check` on every `js/**/*.js` file: passed.
+  - Static `index.html` CSS/JS reference existence check: `ALL_REFS_EXIST`.
+  - Orientation prompt count check: `ORIENTATION_PROMPT_COUNT=1`.
+  - DOM startup VM check: `DOM_BOOT_OK`.
+  - RWD static rule check: `RWD_RULES_OK`.
+
+## Follow-up 2026-07-02 hud-difficulty-ai-rwd
+
+### Goal
+Improve in-game HUD layout, difficulty-based speed scaling, AI strength, help content, and landscape difficulty selection layout.
+
+### Acceptance Criteria
+- In-game top HUD stays inside the viewport and contains pause/mute buttons without awkward floating controls.
+- Puck acceleration has difficulty-specific caps: easy slower, normal faster, hard fastest.
+- AI reaction feels stronger across all difficulties while still respecting mallet movement limits.
+- How-to-play content explains difficulty speed/AI differences.
+- Landscape difficulty selection keeps the back button and title visible, with scrolling as fallback.
+
+### Checklist
+- [x] Move pause/mute controls into HUD layout
+- [x] Add difficulty-specific puck acceleration and max speed
+- [x] Strengthen AI reaction, speed, and targeting
+- [x] Update how-to-play i18n text
+- [x] Fix difficulty selection landscape RWD
+- [x] Run verification and summarize results
+
+### Results
+- Reworked the in-game HUD into a five-column top bar with pause and mute controls inside the HUD boundary.
+- Added difficulty-specific puck speed profiles: easy caps low, normal caps higher, hard caps highest and accelerates fastest.
+- Strengthened AI behavior by reducing reaction delays, raising mallet speeds, increasing prediction, and lowering mistake rates.
+- Updated how-to-play difficulty text in Traditional Chinese, English, and Japanese to explain speed caps and AI differences.
+- Improved landscape difficulty selection on mobile with a sticky header/back button and compact three-column cards.
+- Verification run:
+  - `node --check` on every `js/**/*.js` file: passed.
+  - Static `index.html` CSS/JS reference existence check: `ALL_REFS_EXIST`.
+  - HUD button count check: one pause button and one mute button.
+  - DOM startup VM check: `DOM_BOOT_OK`.
+  - Difficulty speed cap check: `DIFFICULTY_SPEED_CAPS_OK easy=860 normal=1220 hard=1700`.
+  - HUD/RWD static rule check: `HUD_AND_DIFFICULTY_RWD_OK`.

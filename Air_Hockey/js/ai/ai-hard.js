@@ -31,7 +31,7 @@
             this.timer = config.reactionDelay;
             var predictedX = predictXWithWallBounce(state.puck.x, state.puck.vx, config.predictionTime);
             var puckComingUp = state.puck.vy < -40;
-            var attackY = puckComingUp ? state.puck.y - 80 : ns.Constants.TABLE.AI_START_Y;
+            var attackY = puckComingUp ? state.puck.y - 115 : ns.Constants.TABLE.AI_START_Y + 35;
             if (Math.random() < config.mistakeRate) {
               predictedX += ns.Helpers.randomBetween(-35, 35);
             }

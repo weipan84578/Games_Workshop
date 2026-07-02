@@ -18,26 +18,80 @@
     min-height: 9rem;
   }
 
-  .game-hud {
-    grid-template-columns: 1fr 1.2fr 1fr;
-  }
-
   .table-frame {
     width: min(92vw, calc((100dvh - 5.25rem) * 0.666));
     min-width: 240px;
   }
 
   @media (orientation: portrait) {
-    #screen-game.screen-active .orientation-prompt {
+    .orientation-prompt {
       display: grid;
     }
   }
 
   @media (orientation: landscape) {
-    .floating-control {
-      width: 2.65rem;
-      height: 2.65rem;
-      font-size: 1.2rem;
+    .menu-screen {
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+
+    .menu-panel {
+      min-height: calc(100dvh - 1rem);
+      padding: 0.5rem 0;
+    }
+
+    .game-title {
+      margin-bottom: 1rem;
+      font-size: clamp(2.4rem, 8vh, 3.5rem);
+    }
+
+    .menu-actions {
+      gap: 0.55rem;
+    }
+
+    .button {
+      min-height: 3.2rem;
+    }
+
+    .compact-page {
+      justify-content: flex-start;
+      overflow-y: auto;
+    }
+
+    .compact-page .page-header {
+      position: sticky;
+      top: 0;
+      z-index: 6;
+      min-height: 3rem;
+      margin-bottom: 0.5rem;
+      padding: 0.25rem 0;
+      background: linear-gradient(180deg, var(--color-bg-1) 0%, rgba(0, 0, 0, 0.72) 72%, rgba(0, 0, 0, 0) 100%);
+    }
+
+    .compact-page .page-header h2 {
+      font-size: clamp(1.7rem, 8vh, 2.4rem);
+    }
+
+    .difficulty-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.55rem;
+    }
+
+    .difficulty-card {
+      min-height: 7.5rem;
+      padding: 0.55rem;
+    }
+
+    .difficulty-face {
+      font-size: clamp(2rem, 9vh, 3rem);
+    }
+
+    .difficulty-card strong {
+      font-size: clamp(1.15rem, 5vh, 1.55rem);
+    }
+
+    .difficulty-card span:not(.difficulty-face) {
+      font-size: clamp(0.78rem, 3.4vh, 1rem);
     }
   }
 }

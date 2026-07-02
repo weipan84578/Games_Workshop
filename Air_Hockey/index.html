@@ -23,6 +23,11 @@
   </head>
   <body class="theme-neon">
     <main id="app" class="app-shell" aria-live="polite">
+      <div id="orientation-prompt" class="orientation-prompt">
+        <span aria-hidden="true">↻</span>
+        <strong data-i18n-key="game.rotate">請將裝置橫向使用</strong>
+      </div>
+
       <section id="screen-menu" class="screen screen-active menu-screen" data-screen="menu">
         <div class="ambient-pucks" aria-hidden="true">
           <span></span><span></span><span></span><span></span><span></span>
@@ -82,11 +87,10 @@
       </section>
 
       <section id="screen-game" class="screen game-screen" data-screen="game">
-        <div id="orientation-prompt" class="orientation-prompt">
-          <span aria-hidden="true">↻</span>
-          <strong data-i18n-key="game.rotate">請將手機橫向遊玩</strong>
-        </div>
         <header class="game-hud">
+          <button id="pause-button" class="hud-control" type="button" data-i18n-aria="game.pause" aria-label="暫停">
+            <span aria-hidden="true">Ⅱ</span>
+          </button>
           <div class="hud-block">
             <span data-i18n-key="hud.ai">電腦</span>
             <strong id="ai-score">0</strong>
@@ -99,19 +103,14 @@
             <span data-i18n-key="hud.player">玩家</span>
             <strong id="player-score">0</strong>
           </div>
+          <button id="mute-button" class="hud-control" type="button" data-i18n-aria="settings.mute" aria-label="靜音">
+            <span id="mute-icon" aria-hidden="true">♪</span>
+          </button>
         </header>
         <div class="game-stage">
           <div id="table-frame" class="table-frame">
             <canvas id="game-canvas" width="600" height="900" aria-label="Air Hockey table"></canvas>
           </div>
-        </div>
-        <div class="touch-controls" aria-label="Game controls">
-          <button id="pause-button" class="floating-control control-left" type="button" data-i18n-aria="game.pause" aria-label="暫停">
-            <span aria-hidden="true">Ⅱ</span>
-          </button>
-          <button id="mute-button" class="floating-control control-right" type="button" data-i18n-aria="settings.mute" aria-label="靜音">
-            <span id="mute-icon" aria-hidden="true">♪</span>
-          </button>
         </div>
       </section>
 
@@ -195,23 +194,12 @@
                 <button class="theme-swatch swatch-sunset" type="button" data-theme="sunset"><span data-i18n-key="theme.sunset">日落橘</span></button>
                 <button class="theme-swatch swatch-ice" type="button" data-theme="ice"><span data-i18n-key="theme.ice">冰藍</span></button>
               </div>
+              <p class="setting-label" data-i18n-key="settings.effectsQuality">特效品質</p>
               <div class="segmented" role="group" aria-label="Effects">
                 <button type="button" data-setting="effectsQuality" data-value="low" data-i18n-key="quality.low">低</button>
                 <button type="button" data-setting="effectsQuality" data-value="medium" data-i18n-key="quality.medium">中</button>
                 <button type="button" data-setting="effectsQuality" data-value="high" data-i18n-key="quality.high">高</button>
               </div>
-            </section>
-            <section class="settings-card">
-              <h3 data-i18n-key="settings.controls">操作設定</h3>
-              <div class="segmented" role="group" aria-label="Touch sensitivity">
-                <button type="button" data-setting="touchSensitivity" data-value="low" data-i18n-key="sensitivity.low">低</button>
-                <button type="button" data-setting="touchSensitivity" data-value="medium" data-i18n-key="sensitivity.medium">中</button>
-                <button type="button" data-setting="touchSensitivity" data-value="high" data-i18n-key="sensitivity.high">高</button>
-              </div>
-              <button id="keyboard-toggle" class="toggle-button" type="button" aria-pressed="true">
-                <span data-i18n-key="settings.keyboard">鍵盤輔助操作</span>
-                <i aria-hidden="true"></i>
-              </button>
             </section>
             <section class="settings-card">
               <h3 data-i18n-key="settings.language">語言設定</h3>
@@ -222,7 +210,7 @@
               </div>
             </section>
             <section class="settings-card">
-              <h3 data-i18n-key="settings.rules">遊戲規則</h3>
+              <h3 data-i18n-key="settings.targetScore">勝利分數</h3>
               <div class="segmented" role="group" aria-label="Target score">
                 <button type="button" data-setting="targetScore" data-value="5">5</button>
                 <button type="button" data-setting="targetScore" data-value="7">7</button>

@@ -18,9 +18,10 @@
             if (Math.random() < config.mistakeRate) {
               predictedX += ns.Helpers.randomBetween(-90, 90);
             }
+            var defensiveY = state.puck.vy < 0 ? predictedY : ns.Constants.TABLE.AI_START_Y;
             this.target = {
               x: predictedX,
-              y: ns.Helpers.lerp(ns.Constants.TABLE.AI_START_Y, predictedY, config.attackBias)
+              y: ns.Helpers.lerp(ns.Constants.TABLE.AI_START_Y, defensiveY, config.attackBias)
             };
           }
           return {

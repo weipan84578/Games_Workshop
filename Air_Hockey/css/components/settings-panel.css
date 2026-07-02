@@ -46,6 +46,12 @@
   accent-color: var(--color-primary);
 }
 
+.setting-label {
+  margin: 1rem 0 0.45rem;
+  color: var(--color-muted);
+  font-size: clamp(1rem, 2vw, 1.2rem);
+}
+
 .range-row input[type="range"] {
   height: 2.4rem;
   cursor: pointer;

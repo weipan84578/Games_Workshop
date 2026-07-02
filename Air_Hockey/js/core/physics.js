@@ -1,13 +1,39 @@
 (function (ns) {
   "use strict";
 
-  function capVelocity(puck) {
-    var max = ns.Constants.TABLE.MAX_PUCK_SPEED;
+  function getSpeedProfile(profile) {
+    var table = ns.Constants.TABLE;
+    return {
+      minPuckSpeed: profile && profile.minPuckSpeed ? profile.minPuckSpeed : table.MIN_PUCK_SPEED,
+      maxPuckSpeed: profile && profile.maxPuckSpeed ? profile.maxPuckSpeed : table.MAX_PUCK_SPEED,
+      rallyAcceleration: profile && profile.rallyAcceleration ? profile.rallyAcceleration : table.RALLY_ACCELERATION_PER_SECOND
+    };
+  }
+
+  function capVelocity(puck, profile) {
+    var max = getSpeedProfile(profile).maxPuckSpeed;
     var speed = Math.sqrt(puck.vx * puck.vx + puck.vy * puck.vy);
     if (speed > max) {
       puck.vx = (puck.vx / speed) * max;
       puck.vy = (puck.vy / speed) * max;
     }
+  }
+
+  function maintainActiveSpeed(puck, dt, profile) {
+    var speedProfile = getSpeedProfile(profile);
+    var speed = Math.sqrt(puck.vx * puck.vx + puck.vy * puck.vy);
+    if (speed < 0.001) {
+      var angle = Math.random() * Math.PI * 2;
+      puck.vx = Math.cos(angle) * speedProfile.minPuckSpeed;
+      puck.vy = Math.sin(angle) * speedProfile.minPuckSpeed;
+      return;
+    }
+
+    var targetSpeed = Math.max(speed, speedProfile.minPuckSpeed);
+    targetSpeed *= Math.pow(speedProfile.rallyAcceleration, dt);
+    targetSpeed = Math.min(targetSpeed, speedProfile.maxPuckSpeed);
+    puck.vx = (puck.vx / speed) * targetSpeed;
+    puck.vy = (puck.vy / speed) * targetSpeed;
   }
 
   function collideMallet(puck, mallet) {
@@ -44,20 +70,18 @@
     return true;
   }
 
-  function updatePuck(puck, dt) {
+  function updatePuck(puck, dt, profile) {
     var table = ns.Constants.TABLE;
     var events = [];
-    var friction = Math.pow(table.FRICTION_PER_SECOND, dt * 60);
 
     puck.trail.push({ x: puck.x, y: puck.y, life: 1 });
     if (puck.trail.length > 14) {
       puck.trail.shift();
     }
 
+    maintainActiveSpeed(puck, dt, profile);
     puck.x += puck.vx * dt;
     puck.y += puck.vy * dt;
-    puck.vx *= friction;
-    puck.vy *= friction;
 
     var insideGoal = ns.Table.isInsideGoalX(puck.x);
     if (puck.x - puck.radius <= 0) {
@@ -87,13 +111,14 @@
       events.push({ type: "goal", scorer: "ai", x: puck.x, y: table.HEIGHT });
     }
 
-    capVelocity(puck);
+    capVelocity(puck, profile);
     return events;
   }
 
   ns.Physics = {
     updatePuck: updatePuck,
     collideMallet: collideMallet,
+    maintainActiveSpeed: maintainActiveSpeed,
     capVelocity: capVelocity
   };
 })(window.AirHockey = window.AirHockey || {});

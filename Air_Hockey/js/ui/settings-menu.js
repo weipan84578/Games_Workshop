@@ -8,7 +8,6 @@
     this.bgmOutput = ns.Helpers.$("#bgm-volume-value");
     this.sfxOutput = ns.Helpers.$("#sfx-volume-value");
     this.muteToggle = ns.Helpers.$("#mute-toggle");
-    this.keyboardToggle = ns.Helpers.$("#keyboard-toggle");
   }
 
   SettingsMenu.prototype.init = function () {
@@ -23,10 +22,6 @@
     this.muteToggle.addEventListener("click", function () {
       var settings = ns.SaveManager.loadSettings();
       self.updateSetting({ muted: !settings.muted });
-    });
-    this.keyboardToggle.addEventListener("click", function () {
-      var settings = ns.SaveManager.loadSettings();
-      self.updateSetting({ keyboardEnabled: !settings.keyboardEnabled });
     });
 
     ns.Helpers.$$("[data-theme]").forEach(function (button) {
@@ -97,7 +92,6 @@
     this.bgmOutput.textContent = settings.bgmVolume + "%";
     this.sfxOutput.textContent = settings.sfxVolume + "%";
     this.muteToggle.setAttribute("aria-pressed", String(settings.muted));
-    this.keyboardToggle.setAttribute("aria-pressed", String(settings.keyboardEnabled));
 
     ns.Helpers.$$("[data-theme]").forEach(function (button) {
       button.classList.toggle("is-selected", button.getAttribute("data-theme") === settings.theme);

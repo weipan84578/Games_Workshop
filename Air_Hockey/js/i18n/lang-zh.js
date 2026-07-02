@@ -32,7 +32,7 @@
       playing: "進行中",
       scored: "得分！",
       pause: "暫停",
-      rotate: "請將手機橫向遊玩"
+      rotate: "請將裝置橫向使用"
     },
     pause: {
       title: "暫停",
@@ -56,7 +56,7 @@
       rulesTitle: "遊戲規則",
       rulesText: "得分後會倒數 3 秒重新開球。暫停或關閉頁面時會保留未完成進度。",
       difficultyTitle: "難度說明",
-      difficultyText: "簡單延遲較高，普通會短距離預測，困難會預判反彈並主動壓迫。",
+      difficultyText: "簡單速度上限較低、AI 反應較溫和；普通速度與預測能力提高；困難會快速加速、預判反彈並主動壓迫。",
       interfaceTitle: "介面導覽",
       interfaceText: "上方 HUD 顯示比分、狀態與倒數。左上暫停，右上可快速靜音。",
       tipsTitle: "小技巧",
@@ -69,10 +69,9 @@
       sfxVolume: "音效音量",
       mute: "靜音",
       display: "顯示設定",
-      controls: "操作設定",
-      keyboard: "鍵盤輔助操作",
+      effectsQuality: "特效品質",
       language: "語言設定",
-      rules: "遊戲規則",
+      targetScore: "勝利分數",
       other: "其他",
       resetProgress: "重置進度",
       confirmResetTitle: "確認重置？",
@@ -85,11 +84,6 @@
       ice: "冰藍"
     },
     quality: {
-      low: "低",
-      medium: "中",
-      high: "高"
-    },
-    sensitivity: {
       low: "低",
       medium: "中",
       high: "高"

@@ -13,10 +13,12 @@
           this.timer -= dt;
           if (this.timer <= 0) {
             this.timer = config.reactionDelay;
+            var predictedX = state.puck.x + state.puck.vx * config.predictionTime;
+            var predictedY = state.puck.y + state.puck.vy * config.predictionTime;
             var wrongWay = Math.random() < config.mistakeRate;
             this.target = {
-              x: wrongWay ? ns.Constants.TABLE.WIDTH - state.puck.x : state.puck.x,
-              y: ns.Helpers.lerp(ns.Constants.TABLE.AI_START_Y, state.puck.y, config.attackBias)
+              x: wrongWay ? ns.Constants.TABLE.WIDTH - predictedX : predictedX,
+              y: ns.Helpers.lerp(ns.Constants.TABLE.AI_START_Y, predictedY, config.attackBias)
             };
           }
           return {

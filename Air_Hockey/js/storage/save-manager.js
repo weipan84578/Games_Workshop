@@ -36,9 +36,6 @@
     if (valid.effectsQuality.indexOf(settings.effectsQuality) === -1) {
       settings.effectsQuality = constants.DEFAULT_SETTINGS.effectsQuality;
     }
-    if (valid.touchSensitivity.indexOf(settings.touchSensitivity) === -1) {
-      settings.touchSensitivity = constants.DEFAULT_SETTINGS.touchSensitivity;
-    }
     if (valid.targetScore.indexOf(Number(settings.targetScore)) === -1) {
       settings.targetScore = constants.DEFAULT_SETTINGS.targetScore;
     }
@@ -46,8 +43,9 @@
     settings.bgmVolume = ns.Helpers.clamp(Number(settings.bgmVolume), 0, 100);
     settings.sfxVolume = ns.Helpers.clamp(Number(settings.sfxVolume), 0, 100);
     settings.muted = Boolean(settings.muted);
-    settings.keyboardEnabled = Boolean(settings.keyboardEnabled);
     settings.targetScore = Number(settings.targetScore);
+    delete settings.touchSensitivity;
+    delete settings.keyboardEnabled;
     return settings;
   }
 
