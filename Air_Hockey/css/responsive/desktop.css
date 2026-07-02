@@ -1,0 +1,14 @@
+@media (min-width: 1025px) {
+  .menu-panel {
+    transform: translateY(-1rem);
+  }
+
+  .settings-card,
+  .info-card {
+    padding: 1.25rem;
+  }
+
+  .page-shell {
+    padding-top: 0.5rem;
+  }
+}

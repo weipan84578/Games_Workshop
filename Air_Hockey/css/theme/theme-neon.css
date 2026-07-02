@@ -1,0 +1,26 @@
+body.theme-neon {
+  --color-bg-1: #09071b;
+  --color-bg-2: #101a3d;
+  --color-bg-glow: rgba(0, 229, 255, 0.25);
+  --color-surface: rgba(16, 21, 51, var(--surface-alpha));
+  --color-surface-strong: rgba(27, 31, 76, 0.95);
+  --color-text: #ffffff;
+  --color-muted: #d8e5ff;
+  --color-heading: #ffffff;
+  --color-primary: #00e5ff;
+  --color-primary-hover: #72f3ff;
+  --color-accent: #ff4fd8;
+  --color-warn: #ffd447;
+  --color-danger: #ff4e6a;
+  --color-border: rgba(160, 240, 255, 0.55);
+  --color-button-text: #06111f;
+  --color-disabled: #586078;
+  --color-table: #12315c;
+  --color-table-line: #f8fbff;
+  --color-table-rail: #0bf2ff;
+  --color-goal: #ff4fd8;
+  --color-mallet-player: #ff4fd8;
+  --color-mallet-ai: #00e5ff;
+  --color-puck: #f7fbff;
+  --color-hud-bg: rgba(5, 8, 25, 0.82);
+}

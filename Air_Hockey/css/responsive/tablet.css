@@ -1,0 +1,13 @@
+@media (min-width: 768px) and (max-width: 1024px) {
+  .button {
+    font-size: 1.75rem;
+  }
+
+  .difficulty-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .table-frame {
+    width: min(72vw, calc((100dvh - 5.25rem) * 0.666));
+  }
+}

@@ -1,0 +1,112 @@
+.menu-screen {
+  display: none;
+  place-items: center;
+}
+
+.menu-screen.screen-active {
+  display: grid;
+}
+
+.menu-panel {
+  position: relative;
+  z-index: 2;
+  width: min(560px, 100%);
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0 0 0.25rem;
+  color: var(--color-muted);
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  letter-spacing: 0;
+}
+
+.game-title {
+  margin: 0 0 2rem;
+  color: var(--color-heading);
+  font-size: clamp(3rem, 10vw, 5rem);
+  line-height: 1;
+}
+
+.menu-actions {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.version-label {
+  margin: 1rem 0 0;
+  color: var(--color-muted);
+  font-size: 1rem;
+}
+
+.ambient-pucks {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ambient-pucks span {
+  position: absolute;
+  width: 5rem;
+  height: 5rem;
+  border: 0.45rem solid var(--color-border);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ffffff, var(--color-primary) 42%, transparent 46%);
+  opacity: 0.16;
+  animation: drift 10s ease-in-out infinite alternate;
+}
+
+.ambient-pucks span:nth-child(1) { left: 8%; top: 12%; }
+.ambient-pucks span:nth-child(2) { right: 12%; top: 18%; animation-duration: 12s; }
+.ambient-pucks span:nth-child(3) { left: 15%; bottom: 15%; animation-duration: 14s; }
+.ambient-pucks span:nth-child(4) { right: 16%; bottom: 10%; animation-duration: 11s; }
+.ambient-pucks span:nth-child(5) { left: 48%; top: 6%; animation-duration: 16s; }
+
+.difficulty-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.difficulty-card {
+  min-height: 16rem;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  color: var(--color-text);
+  background: var(--color-surface);
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+  transition: transform 160ms ease, border-color 160ms ease;
+}
+
+.difficulty-card:hover,
+.difficulty-card:focus-visible {
+  transform: translateY(-4px);
+  border-color: var(--color-primary);
+}
+
+.difficulty-card strong,
+.difficulty-card span {
+  display: block;
+}
+
+.difficulty-card strong {
+  margin: 0.35rem 0;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+}
+
+.difficulty-card span:not(.difficulty-face) {
+  color: var(--color-muted);
+  font-size: clamp(1.05rem, 2vw, 1.3rem);
+}
+
+.difficulty-face {
+  font-size: clamp(3rem, 6vw, 4.25rem);
+}
+
+@keyframes drift {
+  from { transform: translate3d(-0.8rem, -0.4rem, 0) rotate(0deg); }
+  to { transform: translate3d(1rem, 1.3rem, 0) rotate(22deg); }
+}

@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#07111f">
+    <title>Air Hockey</title>
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/layout.css">
+    <link rel="stylesheet" href="./css/theme/theme-neon.css">
+    <link rel="stylesheet" href="./css/theme/theme-classic.css">
+    <link rel="stylesheet" href="./css/theme/theme-sunset.css">
+    <link rel="stylesheet" href="./css/theme/theme-ice.css">
+    <link rel="stylesheet" href="./css/components/button.css">
+    <link rel="stylesheet" href="./css/components/modal.css">
+    <link rel="stylesheet" href="./css/components/menu.css">
+    <link rel="stylesheet" href="./css/components/hud.css">
+    <link rel="stylesheet" href="./css/components/touch-controls.css">
+    <link rel="stylesheet" href="./css/components/settings-panel.css">
+    <link rel="stylesheet" href="./css/responsive/mobile.css">
+    <link rel="stylesheet" href="./css/responsive/tablet.css">
+    <link rel="stylesheet" href="./css/responsive/desktop.css">
+  </head>
+  <body class="theme-neon">
+    <main id="app" class="app-shell" aria-live="polite">
+      <section id="screen-menu" class="screen screen-active menu-screen" data-screen="menu">
+        <div class="ambient-pucks" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="menu-panel">
+          <p class="eyebrow" data-i18n-key="app.subtitle">玩家 VS AI</p>
+          <h1 class="game-title">Air Hockey</h1>
+          <nav class="menu-actions" aria-label="Main menu">
+            <button class="button button-primary" type="button" data-action="start-menu">
+              <span class="button-icon" aria-hidden="true">▶</span>
+              <span data-i18n-key="menu.start">開始遊戲</span>
+            </button>
+            <button id="continue-button" class="button" type="button" data-action="continue-game" disabled>
+              <span class="button-icon" aria-hidden="true">⏵</span>
+              <span data-i18n-key="menu.continue">繼續遊戲</span>
+              <small data-i18n-key="menu.noProgress">尚無進度</small>
+            </button>
+            <button class="button" type="button" data-action="show-howto">
+              <span class="button-icon" aria-hidden="true">?</span>
+              <span data-i18n-key="menu.howToPlay">說明</span>
+            </button>
+            <button class="button" type="button" data-action="show-settings">
+              <span class="button-icon" aria-hidden="true">⚙</span>
+              <span data-i18n-key="menu.settings">設定</span>
+            </button>
+          </nav>
+          <p class="version-label">v1.0</p>
+        </div>
+      </section>
+
+      <section id="screen-difficulty" class="screen" data-screen="difficulty">
+        <div class="page-shell compact-page">
+          <header class="page-header">
+            <button class="icon-button" type="button" data-action="show-menu" data-i18n-aria="actions.back" aria-label="返回">
+              <span aria-hidden="true">←</span>
+            </button>
+            <h2 data-i18n-key="difficulty.title">選擇難度</h2>
+          </header>
+          <div class="difficulty-grid">
+            <button class="difficulty-card easy" type="button" data-difficulty="easy">
+              <span class="difficulty-face" aria-hidden="true">☺</span>
+              <strong data-i18n-key="difficulty.easy">簡單</strong>
+              <span data-i18n-key="difficulty.easyDesc">反應較慢，適合熟悉操作。</span>
+            </button>
+            <button class="difficulty-card normal" type="button" data-difficulty="normal">
+              <span class="difficulty-face" aria-hidden="true">◐</span>
+              <strong data-i18n-key="difficulty.normal">普通</strong>
+              <span data-i18n-key="difficulty.normalDesc">具備基礎預測，節奏均衡。</span>
+            </button>
+            <button class="difficulty-card hard" type="button" data-difficulty="hard">
+              <span class="difficulty-face" aria-hidden="true">◆</span>
+              <strong data-i18n-key="difficulty.hard">困難</strong>
+              <span data-i18n-key="difficulty.hardDesc">快速封堵與主動進攻。</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="screen-game" class="screen game-screen" data-screen="game">
+        <div id="orientation-prompt" class="orientation-prompt">
+          <span aria-hidden="true">↻</span>
+          <strong data-i18n-key="game.rotate">請將手機橫向遊玩</strong>
+        </div>
+        <header class="game-hud">
+          <div class="hud-block">
+            <span data-i18n-key="hud.ai">電腦</span>
+            <strong id="ai-score">0</strong>
+          </div>
+          <div class="hud-center">
+            <span id="game-status" data-i18n-key="game.ready">準備開球</span>
+            <strong id="countdown-display">3</strong>
+          </div>
+          <div class="hud-block">
+            <span data-i18n-key="hud.player">玩家</span>
+            <strong id="player-score">0</strong>
+          </div>
+        </header>
+        <div class="game-stage">
+          <div id="table-frame" class="table-frame">
+            <canvas id="game-canvas" width="600" height="900" aria-label="Air Hockey table"></canvas>
+          </div>
+        </div>
+        <div class="touch-controls" aria-label="Game controls">
+          <button id="pause-button" class="floating-control control-left" type="button" data-i18n-aria="game.pause" aria-label="暫停">
+            <span aria-hidden="true">Ⅱ</span>
+          </button>
+          <button id="mute-button" class="floating-control control-right" type="button" data-i18n-aria="settings.mute" aria-label="靜音">
+            <span id="mute-icon" aria-hidden="true">♪</span>
+          </button>
+        </div>
+      </section>
+
+      <section id="screen-howto" class="screen" data-screen="howto">
+        <div class="page-shell">
+          <header class="page-header sticky-header">
+            <button class="icon-button" type="button" data-action="show-menu" data-i18n-aria="actions.back" aria-label="返回">
+              <span aria-hidden="true">←</span>
+            </button>
+            <h2 data-i18n-key="howto.title">遊戲說明</h2>
+          </header>
+          <div class="info-grid">
+            <article class="info-card">
+              <h3><span aria-hidden="true">◎</span><span data-i18n-key="howto.goalTitle">遊戲目標</span></h3>
+              <div class="mini-table" aria-hidden="true">
+                <span class="mini-goal top"></span>
+                <span class="mini-line"></span>
+                <span class="mini-puck"></span>
+                <span class="mini-goal bottom"></span>
+              </div>
+              <p data-i18n-key="howto.goalText">控制下方球拍，把冰球打進電腦球門。先達到目標分數者獲勝。</p>
+            </article>
+            <article class="info-card">
+              <h3><span aria-hidden="true">↔</span><span data-i18n-key="howto.controlsTitle">操作方式</span></h3>
+              <p data-i18n-key="howto.controlsText">桌機用滑鼠或鍵盤，手機與平板用手指拖曳。球拍會被限制在己方半場。</p>
+              <div class="gesture-strip" aria-hidden="true">
+                <span>🖱</span><span class="gesture-line"></span><span>☝</span>
+              </div>
+            </article>
+            <article class="info-card">
+              <h3><span aria-hidden="true">①</span><span data-i18n-key="howto.rulesTitle">遊戲規則</span></h3>
+              <p data-i18n-key="howto.rulesText">得分後會倒數 3 秒重新開球。暫停或關閉頁面時會保留未完成進度。</p>
+            </article>
+            <article class="info-card">
+              <h3><span aria-hidden="true">◇</span><span data-i18n-key="howto.difficultyTitle">難度說明</span></h3>
+              <p data-i18n-key="howto.difficultyText">簡單延遲較高，普通會短距離預測，困難會預判反彈並主動壓迫。</p>
+            </article>
+            <article class="info-card">
+              <h3><span aria-hidden="true">☰</span><span data-i18n-key="howto.interfaceTitle">介面導覽</span></h3>
+              <p data-i18n-key="howto.interfaceText">上方 HUD 顯示比分、狀態與倒數。左上暫停，右上可快速靜音。</p>
+            </article>
+            <article class="info-card">
+              <h3><span aria-hidden="true">!</span><span data-i18n-key="howto.tipsTitle">小技巧</span></h3>
+              <p data-i18n-key="howto.tipsText">善用邊牆反彈製造角度，擊中球拍邊緣可以讓冰球偏折。</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="screen-settings" class="screen" data-screen="settings">
+        <div class="page-shell">
+          <header class="page-header sticky-header">
+            <button class="icon-button" type="button" data-action="show-menu" data-i18n-aria="actions.back" aria-label="返回">
+              <span aria-hidden="true">←</span>
+            </button>
+            <h2 data-i18n-key="settings.title">設定</h2>
+          </header>
+          <div class="settings-grid">
+            <section class="settings-card">
+              <h3 data-i18n-key="settings.audio">音訊設定</h3>
+              <label class="range-row">
+                <span data-i18n-key="settings.bgmVolume">BGM 音量</span>
+                <output id="bgm-volume-value">70%</output>
+                <input id="bgm-volume" type="range" min="0" max="100" step="1">
+              </label>
+              <label class="range-row">
+                <span data-i18n-key="settings.sfxVolume">音效音量</span>
+                <output id="sfx-volume-value">80%</output>
+                <input id="sfx-volume" type="range" min="0" max="100" step="1">
+              </label>
+              <button id="mute-toggle" class="toggle-button" type="button" aria-pressed="false">
+                <span data-i18n-key="settings.mute">靜音</span>
+                <i aria-hidden="true"></i>
+              </button>
+            </section>
+            <section class="settings-card">
+              <h3 data-i18n-key="settings.display">顯示設定</h3>
+              <div class="theme-picker" role="group" aria-label="Theme">
+                <button class="theme-swatch swatch-neon" type="button" data-theme="neon"><span data-i18n-key="theme.neon">霓虹</span></button>
+                <button class="theme-swatch swatch-classic" type="button" data-theme="classic"><span data-i18n-key="theme.classic">經典藍</span></button>
+                <button class="theme-swatch swatch-sunset" type="button" data-theme="sunset"><span data-i18n-key="theme.sunset">日落橘</span></button>
+                <button class="theme-swatch swatch-ice" type="button" data-theme="ice"><span data-i18n-key="theme.ice">冰藍</span></button>
+              </div>
+              <div class="segmented" role="group" aria-label="Effects">
+                <button type="button" data-setting="effectsQuality" data-value="low" data-i18n-key="quality.low">低</button>
+                <button type="button" data-setting="effectsQuality" data-value="medium" data-i18n-key="quality.medium">中</button>
+                <button type="button" data-setting="effectsQuality" data-value="high" data-i18n-key="quality.high">高</button>
+              </div>
+            </section>
+            <section class="settings-card">
+              <h3 data-i18n-key="settings.controls">操作設定</h3>
+              <div class="segmented" role="group" aria-label="Touch sensitivity">
+                <button type="button" data-setting="touchSensitivity" data-value="low" data-i18n-key="sensitivity.low">低</button>
+                <button type="button" data-setting="touchSensitivity" data-value="medium" data-i18n-key="sensitivity.medium">中</button>
+                <button type="button" data-setting="touchSensitivity" data-value="high" data-i18n-key="sensitivity.high">高</button>
+              </div>
+              <button id="keyboard-toggle" class="toggle-button" type="button" aria-pressed="true">
+                <span data-i18n-key="settings.keyboard">鍵盤輔助操作</span>
+                <i aria-hidden="true"></i>
+              </button>
+            </section>
+            <section class="settings-card">
+              <h3 data-i18n-key="settings.language">語言設定</h3>
+              <div class="segmented language-buttons" role="group" aria-label="Language">
+                <button type="button" data-language="zh">中文</button>
+                <button type="button" data-language="en">English</button>
+                <button type="button" data-language="ja">日本語</button>
+              </div>
+            </section>
+            <section class="settings-card">
+              <h3 data-i18n-key="settings.rules">遊戲規則</h3>
+              <div class="segmented" role="group" aria-label="Target score">
+                <button type="button" data-setting="targetScore" data-value="5">5</button>
+                <button type="button" data-setting="targetScore" data-value="7">7</button>
+                <button type="button" data-setting="targetScore" data-value="10">10</button>
+              </div>
+            </section>
+            <section class="settings-card">
+              <h3 data-i18n-key="settings.other">其他</h3>
+              <button id="reset-progress" class="button danger-button" type="button">
+                <span aria-hidden="true">×</span>
+                <span data-i18n-key="settings.resetProgress">重置進度</span>
+              </button>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="language-modal" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="language-title">
+      <div class="modal-panel">
+        <h2 id="language-title">Language / 語言 / 言語</h2>
+        <div class="language-choice">
+          <button type="button" data-language="zh">中文</button>
+          <button type="button" data-language="en">English</button>
+          <button type="button" data-language="ja">日本語</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="pause-modal" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="pause-title">
+      <div class="modal-panel">
+        <h2 id="pause-title" data-i18n-key="pause.title">暫停</h2>
+        <div class="modal-actions">
+          <button class="button button-primary" type="button" data-action="resume-game" data-i18n-key="pause.resume">繼續</button>
+          <button class="button" type="button" data-action="restart-game" data-i18n-key="pause.restart">重新開始</button>
+          <button class="button" type="button" data-action="exit-game" data-i18n-key="pause.menu">回主畫面</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="result-modal" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="result-title">
+      <div class="modal-panel result-panel">
+        <h2 id="result-title" data-i18n-key="result.win">你贏了！</h2>
+        <p id="result-detail" data-i18n-key="result.detail">精彩的一局。</p>
+        <div class="modal-actions">
+          <button class="button button-primary" type="button" data-action="play-again" data-i18n-key="result.playAgain">再玩一次</button>
+          <button class="button" type="button" data-action="exit-game" data-i18n-key="pause.menu">回主畫面</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="confirm-modal" class="modal is-hidden" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+      <div class="modal-panel">
+        <h2 id="confirm-title" data-i18n-key="settings.confirmResetTitle">確認重置？</h2>
+        <p data-i18n-key="settings.confirmResetText">這會清除目前未完成的對戰進度。</p>
+        <div class="modal-actions">
+          <button class="button danger-button" type="button" data-action="confirm-reset" data-i18n-key="actions.confirm">確認</button>
+          <button class="button" type="button" data-action="cancel-reset" data-i18n-key="actions.cancel">取消</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script defer src="./js/utils/constants.js"></script>
+    <script defer src="./js/utils/helpers.js"></script>
+    <script defer src="./js/utils/vector2d.js"></script>
+    <script defer src="./js/storage/save-manager.js"></script>
+    <script defer src="./js/i18n/lang-zh.js"></script>
+    <script defer src="./js/i18n/lang-en.js"></script>
+    <script defer src="./js/i18n/lang-ja.js"></script>
+    <script defer src="./js/i18n/i18n-manager.js"></script>
+    <script defer src="./js/audio/sfx-map.js"></script>
+    <script defer src="./js/audio/audio-manager.js"></script>
+    <script defer src="./js/core/table.js"></script>
+    <script defer src="./js/core/mallet.js"></script>
+    <script defer src="./js/core/puck.js"></script>
+    <script defer src="./js/core/physics.js"></script>
+    <script defer src="./js/core/score.js"></script>
+    <script defer src="./js/ai/ai-easy.js"></script>
+    <script defer src="./js/ai/ai-normal.js"></script>
+    <script defer src="./js/ai/ai-hard.js"></script>
+    <script defer src="./js/input/mouse-input.js"></script>
+    <script defer src="./js/input/touch-input.js"></script>
+    <script defer src="./js/input/keyboard-input.js"></script>
+    <script defer src="./js/ui/screen-manager.js"></script>
+    <script defer src="./js/ui/hud-controller.js"></script>
+    <script defer src="./js/ui/main-menu.js"></script>
+    <script defer src="./js/ui/settings-menu.js"></script>
+    <script defer src="./js/ui/how-to-play.js"></script>
+    <script defer src="./js/core/game.js"></script>
+    <script defer src="./js/main.js"></script>
+  </body>
+</html>

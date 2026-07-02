@@ -1,0 +1,43 @@
+@media (max-width: 767px) {
+  .screen {
+    padding: max(0.75rem, env(safe-area-inset-top)) max(0.75rem, env(safe-area-inset-right)) max(0.75rem, env(safe-area-inset-bottom)) max(0.75rem, env(safe-area-inset-left));
+  }
+
+  .button {
+    min-height: 3.8rem;
+    font-size: 1.5rem;
+  }
+
+  .difficulty-grid,
+  .settings-grid,
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .difficulty-card {
+    min-height: 9rem;
+  }
+
+  .game-hud {
+    grid-template-columns: 1fr 1.2fr 1fr;
+  }
+
+  .table-frame {
+    width: min(92vw, calc((100dvh - 5.25rem) * 0.666));
+    min-width: 240px;
+  }
+
+  @media (orientation: portrait) {
+    #screen-game.screen-active .orientation-prompt {
+      display: grid;
+    }
+  }
+
+  @media (orientation: landscape) {
+    .floating-control {
+      width: 2.65rem;
+      height: 2.65rem;
+      font-size: 1.2rem;
+    }
+  }
+}

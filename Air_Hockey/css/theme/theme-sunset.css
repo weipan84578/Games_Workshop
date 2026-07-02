@@ -1,0 +1,26 @@
+body.theme-sunset {
+  --color-bg-1: #0c1931;
+  --color-bg-2: #32173d;
+  --color-bg-glow: rgba(255, 136, 59, 0.26);
+  --color-surface: rgba(21, 27, 49, var(--surface-alpha));
+  --color-surface-strong: rgba(40, 29, 52, 0.95);
+  --color-text: #ffffff;
+  --color-muted: #ffe6d0;
+  --color-heading: #fff7ef;
+  --color-primary: #ffb347;
+  --color-primary-hover: #ffd28a;
+  --color-accent: #ff5f6d;
+  --color-warn: #ffe066;
+  --color-danger: #ff4365;
+  --color-border: rgba(255, 207, 129, 0.58);
+  --color-button-text: #241100;
+  --color-disabled: #756677;
+  --color-table: #243f73;
+  --color-table-line: #fff6dc;
+  --color-table-rail: #ff8a45;
+  --color-goal: #ffe066;
+  --color-mallet-player: #ff5f6d;
+  --color-mallet-ai: #ffb347;
+  --color-puck: #fffaf0;
+  --color-hud-bg: rgba(17, 16, 33, 0.84);
+}
