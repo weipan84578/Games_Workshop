@@ -181,3 +181,31 @@ Prevent the in-game score row from overflowing and show the HUD in the requested
   - I18n key check: `I18N_KEYS_OK`.
   - HUD HTML key check: `HUD_HTML_KEYS_OK`.
   - Confirmed no `README.md` and no `AGENTS.md` in `Air_Hockey/`.
+
+## Follow-up 2026-07-02 multilingual-readme
+
+### Goal
+Create a detailed project `README.md` with English, Japanese, and Traditional Chinese content.
+
+### Acceptance Criteria
+- README includes fast navigation to major sections and languages.
+- README documents game overview, gameplay, rules, settings, difficulty, program architecture, and file classification.
+- README uses clear tables and icons where helpful.
+- README reflects the implemented project, not outdated spec-only details.
+
+### Checklist
+- [x] Confirm whether README already exists
+- [x] Inspect implemented files and feature behavior
+- [x] Add multilingual README content
+- [x] Run README verification and summarize results
+
+### Results
+- Added `README.md` with English, Japanese, and Traditional Chinese sections.
+- Added a top quick-navigation table for language and topic jumps.
+- Documented game overview, execution, gameplay, rules, difficulty tuning, settings, architecture, runtime flow, state model, rendering/audio/storage behavior, and file classification.
+- Verification run:
+  - Required README section check: `README_REQUIRED_SECTIONS_OK`.
+  - Internal README anchor check: `README_ANCHORS_OK count=24`.
+  - Local README file link check: `README_FILE_LINKS_OK count=1`.
+  - `node --check` on every `js/**/*.js` file: passed.
+  - `git diff --check -- Air_Hockey`: passed.
