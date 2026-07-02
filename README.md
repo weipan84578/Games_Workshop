@@ -69,6 +69,7 @@
 | `Asteroids`      | 小行星     | Asteroids          | アステロイド         |
 | `Centipede`      | 蜈蚣射擊   | Centipede          | センチピード         |
 | `Stack_Tower`    | 堆疊高塔   | Stack Tower        | スタックタワー       |
+| `Air_Hockey`     | 空氣曲棍球 | Air Hockey         | エアホッケー         |
 
 ### 策略遊戲
 
