@@ -20,3 +20,10 @@
 - Detection signal: User reported that RWD was incomplete, the main screen needs a scrollbar, and the game should be landscape-oriented.
 - Prevention rule: For landscape-first games, orientation enforcement must be global for mobile/tablet portrait, and every full-screen menu must have an overflow path for short landscape heights.
 - Tripwire: Test or inspect mobile landscape at low heights and confirm the first screen can scroll without clipping primary actions.
+
+## 2026-07-02 hud_icon_preservation
+
+- Failure mode: HUD button layout work can accidentally replace or hide familiar control icons when adding text labels.
+- Detection signal: User explicitly clarified that the original icons should not be changed.
+- Prevention rule: When converting icon-only controls into icon-plus-text controls, preserve the existing icon glyphs and add labels around them instead of replacing the symbols.
+- Tripwire: Before finalizing HUD changes, grep the HTML for the expected glyphs (`Ⅱ` and `♪`) and verify each appears exactly once.

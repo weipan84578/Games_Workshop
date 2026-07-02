@@ -23,8 +23,8 @@
       hardDesc: "すばやい守備と積極的な攻撃。"
     },
     hud: {
-      player: "プレイヤー",
-      ai: "AI"
+      player: "プレイヤー:",
+      ai: "AI:"
     },
     game: {
       ready: "準備中",
@@ -32,6 +32,7 @@
       playing: "プレイ中",
       scored: "ゴール！",
       pause: "一時停止",
+      pauseGame: "一時停止",
       rotate: "端末を横向きにしてください"
     },
     pause: {
@@ -68,6 +69,7 @@
       bgmVolume: "BGM 音量",
       sfxVolume: "効果音 音量",
       mute: "ミュート",
+      musicSettings: "音楽設定",
       display: "表示",
       effectsQuality: "エフェクト品質",
       language: "言語",

@@ -1,13 +1,13 @@
 .game-hud {
   z-index: 12;
   display: grid;
-  grid-template-columns: auto minmax(4.5rem, 1fr) minmax(7rem, 1.25fr) minmax(4.5rem, 1fr) auto;
-  align-items: center;
-  gap: 0.5rem;
+  grid-template-columns: minmax(4.9rem, 1fr) minmax(4.4rem, 0.8fr) minmax(5.2rem, 0.95fr) minmax(4.4rem, 0.8fr) minmax(4.9rem, 1fr);
+  align-items: stretch;
+  gap: clamp(0.25rem, 1vw, 0.5rem);
   min-height: 0;
-  width: min(100%, 760px);
+  width: min(100%, 820px);
   justify-self: center;
-  padding: 0.35rem clamp(0.35rem, 1.5vw, 0.75rem);
+  padding: 0.35rem clamp(0.3rem, 1.2vw, 0.65rem);
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   background: var(--color-hud-bg);
@@ -16,44 +16,64 @@
 
 .hud-block,
 .hud-center {
-  display: grid;
-  justify-items: center;
+  display: flex;
+  justify-content: center;
   align-items: center;
+  gap: 0.25rem;
   min-width: 0;
+  height: 100%;
+  padding: 0.15rem 0;
+  white-space: nowrap;
 }
 
 .hud-block span,
 .hud-center span {
   color: var(--color-muted);
-  font-size: clamp(0.8rem, 1.9vw, 1rem);
+  font-size: clamp(0.72rem, 1.65vw, 1rem);
   white-space: nowrap;
 }
 
 .hud-block strong {
   color: var(--color-heading);
-  font-size: clamp(1.55rem, 4vw, 3rem);
+  font-size: clamp(1.1rem, 3.2vw, 2.35rem);
   line-height: 1;
 }
 
 .hud-center strong {
-  min-height: 1.35em;
+  min-width: 1.1em;
   color: var(--color-warn);
-  font-size: clamp(1.35rem, 3.5vw, 2.7rem);
+  font-size: clamp(1rem, 2.7vw, 2.1rem);
   line-height: 1;
 }
 
 .hud-control {
-  display: grid;
-  place-items: center;
-  width: clamp(2.25rem, 5vw, 3.25rem);
-  height: clamp(2.25rem, 5vw, 3.25rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  width: 100%;
+  min-width: 0;
+  min-height: clamp(2.35rem, 6vh, 3.25rem);
+  height: 100%;
+  padding: 0.2rem 0.35rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   color: var(--color-text);
   background: rgba(0, 0, 0, 0.22);
   cursor: pointer;
-  font-size: clamp(1.1rem, 2.7vw, 1.65rem);
+  font-size: clamp(0.78rem, 1.7vw, 1.05rem);
+  line-height: 1.1;
+  text-align: center;
   transition: transform 140ms ease, background 140ms ease;
+}
+
+.hud-control span {
+  display: inline-block;
+}
+
+.hud-control span[aria-hidden="true"] {
+  flex: 0 0 auto;
+  font-size: 1.15em;
 }
 
 .hud-control:hover,

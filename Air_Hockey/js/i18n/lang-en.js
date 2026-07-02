@@ -23,8 +23,8 @@
       hardDesc: "Fast blocking and active attacks."
     },
     hud: {
-      player: "Player",
-      ai: "AI"
+      player: "Player:",
+      ai: "AI:"
     },
     game: {
       ready: "Ready",
@@ -32,6 +32,7 @@
       playing: "Playing",
       scored: "Goal!",
       pause: "Pause",
+      pauseGame: "Pause Game",
       rotate: "Rotate your device to landscape"
     },
     pause: {
@@ -68,6 +69,7 @@
       bgmVolume: "BGM Volume",
       sfxVolume: "SFX Volume",
       mute: "Mute",
+      musicSettings: "Music",
       display: "Display",
       effectsQuality: "Effects Quality",
       language: "Language",

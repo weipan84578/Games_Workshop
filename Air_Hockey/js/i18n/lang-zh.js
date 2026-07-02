@@ -23,8 +23,8 @@
       hardDesc: "快速封堵與主動進攻。"
     },
     hud: {
-      player: "玩家",
-      ai: "電腦"
+      player: "玩家:",
+      ai: "電腦:"
     },
     game: {
       ready: "準備開球",
@@ -32,6 +32,7 @@
       playing: "進行中",
       scored: "得分！",
       pause: "暫停",
+      pauseGame: "暫停遊戲",
       rotate: "請將裝置橫向使用"
     },
     pause: {
@@ -68,6 +69,7 @@
       bgmVolume: "BGM 音量",
       sfxVolume: "音效音量",
       mute: "靜音",
+      musicSettings: "音樂設定",
       display: "顯示設定",
       effectsQuality: "特效品質",
       language: "語言設定",

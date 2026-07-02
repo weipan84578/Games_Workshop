@@ -53,6 +53,33 @@
       min-height: 3.2rem;
     }
 
+    .game-hud {
+      gap: 0.2rem;
+      padding-inline: 0.25rem;
+    }
+
+    .hud-control {
+      flex-direction: column;
+      gap: 0.05rem;
+      padding: 0.15rem 0.2rem;
+      font-size: clamp(0.62rem, 3vh, 0.82rem);
+    }
+
+    .hud-block,
+    .hud-center {
+      gap: 0.12rem;
+    }
+
+    .hud-block span,
+    .hud-center span {
+      font-size: clamp(0.62rem, 2.8vh, 0.78rem);
+    }
+
+    .hud-block strong,
+    .hud-center strong {
+      font-size: clamp(0.9rem, 4vh, 1.15rem);
+    }
+
     .compact-page {
       justify-content: flex-start;
       overflow-y: auto;

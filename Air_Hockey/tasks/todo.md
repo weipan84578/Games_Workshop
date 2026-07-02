@@ -151,3 +151,33 @@ Improve in-game HUD layout, difficulty-based speed scaling, AI strength, help co
   - DOM startup VM check: `DOM_BOOT_OK`.
   - Difficulty speed cap check: `DIFFICULTY_SPEED_CAPS_OK easy=860 normal=1220 hard=1700`.
   - HUD/RWD static rule check: `HUD_AND_DIFFICULTY_RWD_OK`.
+
+## Follow-up 2026-07-02 hud-score-labels
+
+### Goal
+Prevent the in-game score row from overflowing and show the HUD in the requested order: pause button, AI score, game status, player score, music button.
+
+### Acceptance Criteria
+- HUD reads as `暫停遊戲 / 電腦: 分數 / 進行中 / 玩家: 分數 / 音樂設定`.
+- Existing button icons remain unchanged (`Ⅱ` for pause and `♪` for music/mute).
+- Pause and music buttons are vertically centered inside the HUD.
+- HUD columns use responsive sizing and do not overflow the screen.
+
+### Checklist
+- [x] Add visible pause/music labels while preserving original icons
+- [x] Change score labels to include colons
+- [x] Update HUD grid and mobile sizing to prevent overflow
+- [x] Run verification and summarize results
+
+### Results
+- Updated the game HUD to read pause, AI score, game status, player score, and music settings in a single responsive row.
+- Preserved the existing pause and music icons (`Ⅱ` and `♪`) while adding visible labels beside/under them.
+- Centered the pause/music buttons vertically in the HUD and tightened mobile landscape sizing to reduce overflow risk.
+- Verification run:
+  - `node --check` on every `js/**/*.js` file: passed.
+  - Static `index.html` CSS/JS reference existence check: `ALL_REFS_EXIST`.
+  - HUD icon/button count check: `HUD_ICONS_OK pauseIcon=1 musicIcon=1 pauseButton=1 muteButton=1`.
+  - HUD CSS rule check: `HUD_CSS_OK`.
+  - I18n key check: `I18N_KEYS_OK`.
+  - HUD HTML key check: `HUD_HTML_KEYS_OK`.
+  - Confirmed no `README.md` and no `AGENTS.md` in `Air_Hockey/`.
