@@ -87,3 +87,4 @@
 | `Typing_Game`  | 打字練習 | Typing Game  | タイピング練習 |
 | `Virtual_Pet`  | 電子寵物 | Virtual Pet  | 電子ペット     |
 | `Roulette`     | 輪盤     | Roulette     | ルーレット     |
+| `Sic_Bo`       | 骰寶     | Sic Bo       | シックボー     |
