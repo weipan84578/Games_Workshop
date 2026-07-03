@@ -57,6 +57,7 @@
     if (bet.kind === "double") return t("bets.double.name", { value: bet.value });
     if (bet.kind === "triple") return t("bets.triple.name", { value: bet.value });
     if (bet.kind === "combo") return t("bets.combo.name", { a: bet.values[0], b: bet.values[1] });
+    if (bet.kind === "anyTriple") return t("bets.anyTriple.name");
     return t("bets." + bet.id + ".name");
   }
 
@@ -66,6 +67,7 @@
     if (bet.kind === "double") return t("bets.double.desc", { value: bet.value });
     if (bet.kind === "triple") return t("bets.triple.desc", { value: bet.value });
     if (bet.kind === "combo") return t("bets.combo.desc", { a: bet.values[0], b: bet.values[1] });
+    if (bet.kind === "anyTriple") return t("bets.anyTriple.desc");
     return t("bets." + bet.id + ".desc");
   }
 

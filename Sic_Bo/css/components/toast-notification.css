@@ -11,12 +11,61 @@
 
 .toast {
   animation: toast-in 260ms ease both;
-  background: color-mix(in srgb, var(--color-bg-panel) 92%, #000000 8%);
+  background: color-mix(in srgb, var(--color-bg-panel) 96%, #000000 4%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   border-left: 5px solid var(--color-secondary);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-soft);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.46);
   color: var(--color-text-main);
+  display: grid;
+  gap: var(--space-2);
+  grid-template-columns: minmax(0, 1fr) auto;
+  isolation: isolate;
+  overflow: visible;
   padding: var(--space-3);
+  position: relative;
+}
+
+.toast::before,
+.toast::after {
+  background: color-mix(in srgb, var(--color-bg-panel) 90%, #000000 10%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-left: 5px solid currentColor;
+  border-radius: inherit;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22);
+  content: "";
+  inset: 0;
+  opacity: 0;
+  position: absolute;
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+  z-index: -1;
+}
+
+.toast.is-stacked::before {
+  opacity: 0.72;
+  transform: translate(6px, 6px);
+}
+
+.toast.is-stacked[data-stack-count="3"]::after {
+  opacity: 0.42;
+  transform: translate(12px, 12px);
+}
+
+.toast-message {
+  min-width: 0;
+}
+
+.toast-count {
+  align-self: start;
+  background: var(--color-secondary);
+  border-radius: 999px;
+  color: #18110e;
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1;
+  min-width: 38px;
+  padding: 6px 8px;
+  text-align: center;
 }
 
 .toast.success { border-left-color: var(--color-success); }

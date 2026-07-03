@@ -4,7 +4,23 @@
   }
 
   .game-layout {
+    max-height: calc(100dvh - var(--action-bar-height) - 88px);
     grid-template-columns: minmax(280px, 0.8fr) minmax(390px, 1.2fr);
+    overflow: auto;
+  }
+
+  .dice-arena {
+    min-height: 360px;
+  }
+
+  .betting-area {
+    max-height: calc(100dvh - var(--action-bar-height) - 112px);
+  }
+
+  .bet-board {
+    max-height: calc(100dvh - var(--action-bar-height) - 238px);
+    min-height: 0;
+    overflow-y: auto;
   }
 
   .history-panel {

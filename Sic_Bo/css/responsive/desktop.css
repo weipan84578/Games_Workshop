@@ -1,4 +1,9 @@
 @media (min-width: 1025px) {
+  .game-layout {
+    max-height: calc(100dvh - var(--action-bar-height) - 96px);
+    overflow: auto;
+  }
+
   .history-panel {
     min-width: 220px;
   }

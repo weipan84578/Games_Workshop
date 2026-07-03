@@ -6,6 +6,7 @@
 }
 
 .game-layout {
+  align-items: start;
   display: grid;
   gap: var(--space-5);
   grid-template-columns: minmax(280px, 0.78fr) minmax(430px, 1.34fr) minmax(220px, 0.52fr);

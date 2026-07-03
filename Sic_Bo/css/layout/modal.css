@@ -105,14 +105,31 @@
   gap: var(--space-5);
 }
 
-.help-tabs {
+.help-tabs,
+.odds-category-tabs {
   display: flex;
   gap: var(--space-2);
   overflow-x: auto;
   padding-bottom: var(--space-1);
-  position: sticky;
-  top: 0;
-  z-index: 2;
+}
+
+.help-tabs {
+  align-items: center;
+  background: var(--color-bg-panel);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-3);
+  min-height: 58px;
+  overflow: visible;
+  padding: var(--space-2) 0;
+}
+
+.odds-wrap {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.odds-table-scroll {
+  overflow-x: auto;
 }
 
 .help-panel {
@@ -135,6 +152,55 @@
   padding: var(--space-4);
 }
 
+.map-card {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.bet-map {
+  background: color-mix(in srgb, var(--color-bg-table) 72%, #091d15 28%);
+  border: 3px solid var(--color-secondary);
+  border-radius: var(--radius-md);
+  box-shadow: inset 0 0 28px rgba(0, 0, 0, 0.25);
+  display: grid;
+  gap: var(--space-2);
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  padding: var(--space-3);
+}
+
+.bet-map-section {
+  background: rgba(0, 0, 0, 0.2);
+  border: 2px solid color-mix(in srgb, var(--color-text-main) 78%, var(--color-secondary) 22%);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-main);
+  display: grid;
+  gap: var(--space-1);
+  min-height: 72px;
+  padding: var(--space-3);
+}
+
+.bet-map-section strong {
+  color: var(--color-secondary);
+  font-size: 18px;
+}
+
+.bet-map-section span {
+  color: var(--color-text-main);
+  font-size: 17px;
+  line-height: 1.35;
+}
+
+.map-basic,
+.map-total {
+  grid-column: span 3;
+}
+
+.map-single,
+.map-triple,
+.map-combo {
+  grid-column: span 2;
+}
+
 .odds-table {
   border-collapse: collapse;
   min-width: 720px;
@@ -150,6 +216,29 @@
 
 .odds-table th {
   color: var(--color-secondary);
+}
+
+.odds-visual {
+  align-items: center;
+  color: var(--color-secondary);
+  display: inline-flex;
+  font-weight: 800;
+  gap: 4px;
+  min-width: 72px;
+}
+
+.mini-die {
+  align-items: center;
+  background: #fff7ec;
+  border: 1px solid #e7d8c5;
+  border-radius: 4px;
+  color: #1b1412;
+  display: inline-flex;
+  font-size: 16px;
+  height: 28px;
+  justify-content: center;
+  line-height: 1;
+  width: 28px;
 }
 
 .result-summary {

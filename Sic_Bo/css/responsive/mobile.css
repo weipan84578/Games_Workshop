@@ -1,6 +1,6 @@
 @media (max-width: 767px) {
   :root {
-    --action-bar-height: 202px;
+    --action-bar-height: 260px;
   }
 
   .main-menu {
@@ -37,13 +37,17 @@
     margin-bottom: var(--space-3);
   }
 
+  .betting-area {
+    margin-top: calc(var(--action-bar-height) + 12px);
+  }
+
   .dice-arena {
     min-height: 300px;
   }
 
   .bet-board {
     display: grid;
-    grid-auto-columns: minmax(190px, 76vw);
+    grid-auto-columns: calc(100% + 32px);
     grid-auto-flow: column;
     grid-template-columns: none;
     min-height: 176px;
