@@ -10,15 +10,43 @@
     6: [1, 3, 4, 6, 7, 9]
   };
 
-  function makeDie(value, rolling) {
-    const die = document.createElement("div");
-    die.className = "die" + (rolling ? " is-rolling" : "");
-    die.setAttribute("aria-label", String(value));
+  const cubeFaces = [
+    { side: "front", value: 1 },
+    { side: "right", value: 2 },
+    { side: "top", value: 3 },
+    { side: "bottom", value: 4 },
+    { side: "left", value: 5 },
+    { side: "back", value: 6 }
+  ];
+
+  function appendPips(root, value) {
     pipMap[value].forEach(function (position) {
       const pip = document.createElement("span");
       pip.className = "pip pip-pos-" + position + ((value === 1 || value === 4) ? " pip-red" : "");
-      die.appendChild(pip);
+      root.appendChild(pip);
     });
+  }
+
+  function makeDieFace(face) {
+    const node = document.createElement("span");
+    node.className = "die-face die-face-" + face.side + " die-face-value-" + face.value;
+    node.setAttribute("aria-hidden", "true");
+    appendPips(node, face.value);
+    return node;
+  }
+
+  function makeDie(value, rolling) {
+    const die = document.createElement("div");
+    die.className = "die" + (rolling ? " is-rolling" : "");
+    die.dataset.value = String(value);
+    die.setAttribute("aria-label", String(value));
+
+    const cube = document.createElement("div");
+    cube.className = "die-cube";
+    cubeFaces.forEach(function (face) {
+      cube.appendChild(makeDieFace(face));
+    });
+    die.appendChild(cube);
     return die;
   }
 

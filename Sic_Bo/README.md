@@ -43,6 +43,7 @@
 | 💾 自動存檔 | 每局結算後寫入 LocalStorage，可從主選單繼續遊戲 |
 | 📱 RWD | 桌機、平板、手機皆可操作，手機下注區支援橫向滑動 |
 | 🔊 音訊體驗 | 使用 Web Audio API 產生 BGM 與清脆互動音效 |
+| ✨ 互動主畫面 | 主畫面 3D 骰子會慢速旋轉，點擊後以隨機 360 度以上的 3D 方向高速翻轉並鎖定到停下；背景有多個具正反面與厚度的半透明 3D 籌碼，以不規則方向慢慢旋轉 |
 
 ## 快速開始
 
@@ -77,6 +78,7 @@
 |---|---|
 | 開始遊戲 | 建立新局，餘額回到 10,000 |
 | 繼續遊戲 | 讀取 `sicbo.save.v1` 的有效存檔 |
+| 主畫面 3D 骰子 | 未點擊時慢慢旋轉；點擊後以隨機 360 度以上的 3D 方向高速翻轉，旋轉完全停止前不能再次點擊 |
 | 重複上局 | 用上一局下注內容再次下注 |
 | 取消最後一注 | 還原最近一次下注 |
 | 清除下注 | 退回本局所有尚未鎖定的下注 |
@@ -87,7 +89,7 @@
 
 | 設定 | 說明 |
 |---|---|
-| 音樂音量 | 控制 BGM；進入遊戲畫面後會套用 10 倍遊戲模式增益並限制最高值 |
+| 音樂音量 | 控制 BGM；主畫面與遊戲畫面使用同一音量值 |
 | 音效音量 | 控制按鈕、籌碼、骰子、勝負提示音 |
 | 語言 | 繁體中文 / English / 日本語 |
 | 主題 | 五種色彩主題即時切換 |
@@ -234,6 +236,7 @@ Sic_Bo/
 | 💾 Auto save | Saves after settlement and enables Continue Game |
 | 📱 Responsive UI | Desktop, tablet, and mobile layouts |
 | 🔊 Audio | Web Audio API generated BGM and sound effects |
+| ✨ Interactive menu | The 3D menu die rotates slowly, then spins through random multi-turn 3D angles when clicked and locks until it stops; the background uses multiple semi-transparent 3D chips with front faces, back faces, and thickness, rotating slowly in irregular directions |
 
 ## Quick Start
 
@@ -268,6 +271,7 @@ No `npm install`, build command, local server, or CDN is required.
 |---|---|
 | Start Game | Starts a new game with 10,000 balance |
 | Continue Game | Loads the LocalStorage save at `sicbo.save.v1` |
+| 3D menu die | Rotates slowly when idle; on click, it spins through random multi-turn 3D angles and cannot be clicked again until it stops |
 | Repeat Bet | Replays the previous round's bet layout |
 | Undo Bet | Reverts the latest bet action |
 | Clear Bet | Refunds all unlocked bets in the current round |
@@ -278,7 +282,7 @@ No `npm install`, build command, local server, or CDN is required.
 
 | Setting | Description |
 |---|---|
-| BGM volume | Controls background music; game mode applies a 10x gain with a safe clamp |
+| BGM volume | Controls background music; the menu and game screen use the same volume value |
 | SFX volume | Controls button, chip, dice, win, and lose sounds |
 | Language | Traditional Chinese / English / Japanese |
 | Theme | Switches between five visual themes instantly |
@@ -425,6 +429,7 @@ Sic_Bo/
 | 💾 自動保存 | 精算後に LocalStorage へ保存し、続きから遊べる |
 | 📱 レスポンシブ | デスクトップ、タブレット、スマートフォンに対応 |
 | 🔊 音声 | Web Audio API で BGM と効果音を生成 |
+| ✨ インタラクティブメニュー | メイン画面の 3D ダイスはゆっくり回転し、クリックするとランダムな複数回転 3D 角度で高速回転して停止までロックされる。背景には表面・裏面・厚みを持つ半透明 3D チップが複数あり、不規則な方向へゆっくり回転する |
 
 ## クイックスタート
 
@@ -459,6 +464,7 @@ Sic_Bo/
 |---|---|
 | Start Game | 残高 10,000 で新規ゲーム開始 |
 | Continue Game | `sicbo.save.v1` の保存データを読み込む |
+| 3D メニューダイス | 未クリック時はゆっくり回転し、クリック後はランダムな複数回転 3D 角度で高速回転する。停止するまで再クリック不可 |
 | Repeat Bet | 前回ラウンドのベットを再利用 |
 | Undo Bet | 直近のベット操作を取り消す |
 | Clear Bet | 未確定ベットをすべて払い戻す |
@@ -469,7 +475,7 @@ Sic_Bo/
 
 | 設定 | 説明 |
 |---|---|
-| BGM 音量 | 背景音楽を調整。ゲーム画面では 10 倍ゲインを安全に制限して適用 |
+| BGM 音量 | 背景音楽を調整。メニュー画面とゲーム画面で同じ音量値を使用 |
 | 効果音音量 | ボタン、チップ、ダイス、勝敗音を調整 |
 | 言語 | 繁体字中国語 / 英語 / 日本語 |
 | テーマ | 五つの見た目テーマを即時切り替え |

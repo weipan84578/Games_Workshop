@@ -239,10 +239,12 @@
       const intro = document.createElement("section");
       intro.id = "helpIntro";
       intro.className = "help-panel";
-      intro.innerHTML = '<h3></h3><p></p><h3></h3><div class="steps-grid"></div><h3></h3><div class="help-card map-card"><div class="bet-map" aria-hidden="true"></div><p></p></div>';
+      intro.innerHTML = '<h3></h3><p></p><div class="help-card menu-die-help"><h3></h3><p></p></div><h3></h3><div class="steps-grid"></div><h3></h3><div class="help-card map-card"><div class="bet-map" aria-hidden="true"></div><p></p></div>';
       intro.querySelectorAll("h3")[0].textContent = window.SicBo.I18n.t("help.introTitle");
       intro.querySelector("p").textContent = window.SicBo.I18n.t("help.introText");
-      intro.querySelectorAll("h3")[1].textContent = window.SicBo.I18n.t("help.stepsTitle");
+      intro.querySelector(".menu-die-help h3").textContent = window.SicBo.I18n.t("help.menuDieTitle");
+      intro.querySelector(".menu-die-help p").textContent = window.SicBo.I18n.t("help.menuDieText");
+      intro.querySelectorAll("h3")[2].textContent = window.SicBo.I18n.t("help.stepsTitle");
       ["help.step1", "help.step2", "help.step3", "help.step4"].forEach(function (key, index) {
         const card = document.createElement("div");
         card.className = "help-card";
@@ -251,7 +253,7 @@
         card.querySelector("p").textContent = window.SicBo.I18n.t(key);
         intro.querySelector(".steps-grid").appendChild(card);
       });
-      intro.querySelectorAll("h3")[2].textContent = window.SicBo.I18n.t("help.mapTitle");
+      intro.querySelectorAll("h3")[3].textContent = window.SicBo.I18n.t("help.mapTitle");
       renderBetMap(intro.querySelector(".bet-map"));
       intro.querySelector(".map-card p").textContent = window.SicBo.I18n.t("help.mapText");
 

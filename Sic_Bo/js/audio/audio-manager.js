@@ -15,7 +15,6 @@
     let noteIndex = 0;
     let bgmVolume = BASE_BGM_VOLUME;
     let sfxVolume = DEFAULT_SFX_VOLUME;
-    let mode = "menu";
     let started = false;
 
     function ensureContext() {
@@ -43,18 +42,9 @@
       return audioContext;
     }
 
-    function effectiveBGMVolume() {
-      if (mode !== "game") return bgmVolume;
-      const amplified = bgmVolume * 10;
-      if (amplified > 1) {
-        console.info("SicBo BGM gain clamped to 1.0 to avoid browser volume clipping.");
-      }
-      return Math.min(amplified, 1);
-    }
-
     function updateGains() {
       if (!bgmGain || !sfxGain) return;
-      bgmGain.gain.value = effectiveBGMVolume();
+      bgmGain.gain.value = bgmVolume;
       sfxGain.gain.value = sfxVolume;
     }
 
@@ -119,8 +109,7 @@
         bgmVolume = Math.max(0, Math.min(1, Number(value)));
         updateGains();
       },
-      setMode: function (nextMode) {
-        mode = nextMode === "game" ? "game" : "menu";
+      setMode: function () {
         updateGains();
         if (started) startBGM();
       },

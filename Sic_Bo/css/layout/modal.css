@@ -157,6 +157,18 @@
   gap: var(--space-3);
 }
 
+.menu-die-help {
+  background:
+    radial-gradient(circle at 12% 24%, color-mix(in srgb, var(--color-secondary) 22%, transparent), transparent 34%),
+    rgba(0, 0, 0, 0.24);
+  border-color: color-mix(in srgb, var(--color-secondary) 58%, rgba(255, 255, 255, 0.14) 42%);
+  box-shadow: inset 0 0 22px rgba(0, 0, 0, 0.18);
+}
+
+.menu-die-help h3 {
+  color: var(--color-secondary);
+}
+
 .bet-map {
   background: color-mix(in srgb, var(--color-bg-table) 72%, #091d15 28%);
   border: 3px solid var(--color-secondary);

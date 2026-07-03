@@ -32,8 +32,14 @@
 
   <div class="app-shell" id="app">
     <section class="screen screen-active main-menu" id="menuScreen" aria-labelledby="menuTitle">
-      <div class="ambient ambient-a"></div>
-      <div class="ambient ambient-b"></div>
+      <div class="ambient ambient-a" aria-hidden="true"><span class="ambient-chip" data-chip="10"></span></div>
+      <div class="ambient ambient-b" aria-hidden="true"><span class="ambient-chip" data-chip="50"></span></div>
+      <div class="ambient ambient-c" aria-hidden="true"><span class="ambient-chip" data-chip="100"></span></div>
+      <div class="ambient ambient-d" aria-hidden="true"><span class="ambient-chip" data-chip="500"></span></div>
+      <div class="ambient ambient-e" aria-hidden="true"><span class="ambient-chip" data-chip="1K"></span></div>
+      <div class="ambient ambient-f" aria-hidden="true"><span class="ambient-chip" data-chip="10"></span></div>
+      <div class="ambient ambient-g" aria-hidden="true"><span class="ambient-chip" data-chip="50"></span></div>
+      <div class="ambient ambient-h" aria-hidden="true"><span class="ambient-chip" data-chip="100"></span></div>
 
       <div class="language-corner" role="group" data-i18n-aria="common.language">
         <button class="icon-text-button language-option is-active" type="button" data-language="zh-TW">ZH</button>
@@ -42,7 +48,43 @@
       </div>
 
       <div class="menu-stack">
-        <div class="logo-mark" aria-hidden="true">🎲</div>
+        <button class="logo-mark" id="menuDieButton" type="button" data-i18n-aria="menu.logoAria">
+          <span class="menu-die-cube" aria-hidden="true">
+            <span class="menu-die-face menu-die-face-front">
+              <span class="menu-die-pip menu-die-pip-5 menu-die-pip-red"></span>
+            </span>
+            <span class="menu-die-face menu-die-face-right">
+              <span class="menu-die-pip menu-die-pip-1"></span>
+              <span class="menu-die-pip menu-die-pip-9"></span>
+            </span>
+            <span class="menu-die-face menu-die-face-top">
+              <span class="menu-die-pip menu-die-pip-1"></span>
+              <span class="menu-die-pip menu-die-pip-5"></span>
+              <span class="menu-die-pip menu-die-pip-9"></span>
+            </span>
+            <span class="menu-die-face menu-die-face-bottom">
+              <span class="menu-die-pip menu-die-pip-1 menu-die-pip-red"></span>
+              <span class="menu-die-pip menu-die-pip-3 menu-die-pip-red"></span>
+              <span class="menu-die-pip menu-die-pip-7 menu-die-pip-red"></span>
+              <span class="menu-die-pip menu-die-pip-9 menu-die-pip-red"></span>
+            </span>
+            <span class="menu-die-face menu-die-face-left">
+              <span class="menu-die-pip menu-die-pip-1"></span>
+              <span class="menu-die-pip menu-die-pip-3"></span>
+              <span class="menu-die-pip menu-die-pip-5"></span>
+              <span class="menu-die-pip menu-die-pip-7"></span>
+              <span class="menu-die-pip menu-die-pip-9"></span>
+            </span>
+            <span class="menu-die-face menu-die-face-back">
+              <span class="menu-die-pip menu-die-pip-1"></span>
+              <span class="menu-die-pip menu-die-pip-3"></span>
+              <span class="menu-die-pip menu-die-pip-4"></span>
+              <span class="menu-die-pip menu-die-pip-6"></span>
+              <span class="menu-die-pip menu-die-pip-7"></span>
+              <span class="menu-die-pip menu-die-pip-9"></span>
+            </span>
+          </span>
+        </button>
         <h1 id="menuTitle" class="game-title" data-i18n="app.title"></h1>
         <p class="game-subtitle" data-i18n="app.subtitle"></p>
 
