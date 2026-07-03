@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="zh-Hant" data-theme="classic-red">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="dark light">
+  <title>Sic Bo</title>
+  <link rel="stylesheet" href="css/base/reset.css">
+  <link rel="stylesheet" href="css/base/variables.css">
+  <link rel="stylesheet" href="css/base/typography.css">
+  <link rel="stylesheet" href="css/layout/main-menu.css">
+  <link rel="stylesheet" href="css/layout/game-board.css">
+  <link rel="stylesheet" href="css/layout/header-footer.css">
+  <link rel="stylesheet" href="css/layout/modal.css">
+  <link rel="stylesheet" href="css/components/buttons.css">
+  <link rel="stylesheet" href="css/components/dice.css">
+  <link rel="stylesheet" href="css/components/betting-table.css">
+  <link rel="stylesheet" href="css/components/chips.css">
+  <link rel="stylesheet" href="css/components/toast-notification.css">
+  <link rel="stylesheet" href="css/components/switch-slider.css">
+  <link rel="stylesheet" href="css/themes/theme-classic-red.css">
+  <link rel="stylesheet" href="css/themes/theme-emerald.css">
+  <link rel="stylesheet" href="css/themes/theme-royal-blue.css">
+  <link rel="stylesheet" href="css/themes/theme-midnight.css">
+  <link rel="stylesheet" href="css/themes/theme-sakura.css">
+  <link rel="stylesheet" href="css/responsive/mobile.css">
+  <link rel="stylesheet" href="css/responsive/tablet.css">
+  <link rel="stylesheet" href="css/responsive/desktop.css">
+</head>
+<body>
+  <noscript>JavaScript is required to play this game.</noscript>
+
+  <div class="app-shell" id="app">
+    <section class="screen screen-active main-menu" id="menuScreen" aria-labelledby="menuTitle">
+      <div class="ambient ambient-a"></div>
+      <div class="ambient ambient-b"></div>
+
+      <div class="language-corner" role="group" data-i18n-aria="common.language">
+        <button class="icon-text-button language-option is-active" type="button" data-language="zh-TW">ZH</button>
+        <button class="icon-text-button language-option" type="button" data-language="en">EN</button>
+        <button class="icon-text-button language-option" type="button" data-language="ja">JA</button>
+      </div>
+
+      <div class="menu-stack">
+        <div class="logo-mark" aria-hidden="true">🎲</div>
+        <h1 id="menuTitle" class="game-title" data-i18n="app.title"></h1>
+        <p class="game-subtitle" data-i18n="app.subtitle"></p>
+
+        <nav class="menu-actions" data-i18n-aria="menu.navAria">
+          <button class="primary-button menu-button" id="startGameButton" type="button" data-i18n="menu.start" data-i18n-aria="menu.startAria"></button>
+          <button class="secondary-button menu-button" id="continueGameButton" type="button" data-i18n="menu.continue" data-i18n-aria="menu.continueAria"></button>
+          <button class="secondary-button menu-button" id="helpButton" type="button" data-i18n="menu.howToPlay" data-i18n-aria="menu.howToPlayAria"></button>
+          <button class="secondary-button menu-button" id="settingsButton" type="button" data-i18n="menu.settings" data-i18n-aria="menu.settingsAria"></button>
+        </nav>
+      </div>
+    </section>
+
+    <section class="screen game-screen" id="gameScreen" aria-labelledby="gameTitle" hidden>
+      <header class="top-bar">
+        <button class="icon-button" id="backToMenuButton" type="button" data-i18n-aria="game.backToMenu">
+          <span aria-hidden="true">←</span>
+        </button>
+        <h2 id="gameTitle" class="screen-title" data-i18n="game.title"></h2>
+        <div class="status-strip" aria-live="polite">
+          <span class="status-pill"><span data-i18n="game.balance"></span> <strong id="balanceValue">0</strong></span>
+          <span class="status-pill"><span data-i18n="game.betTotal"></span> <strong id="betTotalValue">0</strong></span>
+          <span class="status-pill"><span data-i18n="game.round"></span> <strong id="roundValue">1</strong></span>
+          <span class="status-pill"><span data-i18n="game.langTheme"></span> <strong id="langThemeValue">ZH / RED</strong></span>
+        </div>
+      </header>
+
+      <main class="game-layout">
+        <section class="dice-arena" id="diceArena" aria-labelledby="diceTitle">
+          <div class="dice-cup" id="diceCup" aria-hidden="true">
+            <div class="cup-lip"></div>
+            <div class="cup-body"></div>
+          </div>
+          <h3 id="diceTitle" data-i18n="game.diceArea"></h3>
+          <div class="dice-row" id="diceRow" aria-live="polite"></div>
+          <div class="round-result" id="roundResult" data-i18n="game.waitingResult"></div>
+        </section>
+
+        <section class="betting-area" aria-labelledby="bettingTitle">
+          <div class="section-heading">
+            <h3 id="bettingTitle" data-i18n="game.bettingTable"></h3>
+            <p data-i18n="game.bettingHint"></p>
+          </div>
+          <div class="bet-board" id="betBoard"></div>
+        </section>
+
+        <aside class="history-panel" aria-labelledby="historyTitle">
+          <div class="section-heading">
+            <h3 id="historyTitle" data-i18n="game.history"></h3>
+            <button class="ghost-button compact-button" id="toggleHistoryButton" type="button" data-i18n="game.toggleHistory"></button>
+          </div>
+          <ol class="history-list" id="historyList"></ol>
+        </aside>
+      </main>
+
+      <footer class="action-bar" id="actionBar">
+        <div class="chip-tray" id="chipTray" role="radiogroup" data-i18n-aria="game.chipValues"></div>
+        <div class="action-buttons">
+          <button class="secondary-button compact-button" id="repeatBetButton" type="button" data-i18n="game.repeatBet"></button>
+          <button class="secondary-button compact-button" id="undoBetButton" type="button" data-i18n="game.undoBet"></button>
+          <button class="secondary-button compact-button" id="clearBetButton" type="button" data-i18n="game.clearBet"></button>
+          <button class="primary-button compact-button" id="confirmBetButton" type="button" data-i18n="game.confirmBet"></button>
+          <button class="danger-button compact-button" id="rollButton" type="button" data-i18n="game.roll"></button>
+        </div>
+      </footer>
+    </section>
+  </div>
+
+  <dialog class="app-dialog wide-dialog" id="helpDialog" aria-labelledby="helpTitle">
+    <form method="dialog" class="dialog-frame">
+      <header class="dialog-header">
+        <h2 id="helpTitle" data-i18n="help.title"></h2>
+        <button class="icon-button" value="cancel" data-i18n-aria="common.close" type="submit"><span aria-hidden="true">×</span></button>
+      </header>
+      <div class="dialog-body help-body" id="helpBody"></div>
+    </form>
+  </dialog>
+
+  <dialog class="app-dialog" id="settingsDialog" aria-labelledby="settingsTitle">
+    <form method="dialog" class="dialog-frame">
+      <header class="dialog-header">
+        <h2 id="settingsTitle" data-i18n="settings.title"></h2>
+        <button class="icon-button" value="cancel" data-i18n-aria="common.close" type="submit"><span aria-hidden="true">×</span></button>
+      </header>
+      <div class="dialog-body settings-list">
+        <label class="setting-card">
+          <span class="setting-label"><span aria-hidden="true">♪</span><span data-i18n="settings.bgmVolume"></span></span>
+          <span class="range-row">
+            <input id="bgmVolumeInput" type="range" min="0" max="100" step="1">
+            <strong id="bgmVolumeValue">8%</strong>
+          </span>
+        </label>
+        <label class="setting-card">
+          <span class="setting-label"><span aria-hidden="true">✦</span><span data-i18n="settings.sfxVolume"></span></span>
+          <span class="range-row">
+            <input id="sfxVolumeInput" type="range" min="0" max="100" step="1">
+            <strong id="sfxVolumeValue">60%</strong>
+          </span>
+        </label>
+        <label class="setting-card">
+          <span class="setting-label"><span aria-hidden="true">🌐</span><span data-i18n="settings.language"></span></span>
+          <select id="languageSelect">
+            <option value="zh-TW" data-i18n="settings.langZh"></option>
+            <option value="en" data-i18n="settings.langEn"></option>
+            <option value="ja" data-i18n="settings.langJa"></option>
+          </select>
+        </label>
+        <div class="setting-card">
+          <span class="setting-label"><span aria-hidden="true">◆</span><span data-i18n="settings.theme"></span></span>
+          <div class="theme-swatches" id="themeSwatches"></div>
+        </div>
+        <label class="setting-card switch-card">
+          <span class="setting-label"><span aria-hidden="true">⌁</span><span data-i18n="settings.vibration"></span></span>
+          <span class="switch">
+            <input id="vibrationInput" type="checkbox">
+            <span class="switch-track"></span>
+          </span>
+        </label>
+        <div class="setting-card destructive-card">
+          <span class="setting-label"><span aria-hidden="true">⌫</span><span data-i18n="settings.clearSave"></span></span>
+          <button class="danger-button compact-button" id="clearSaveButton" type="button" data-i18n="settings.clearSaveButton"></button>
+        </div>
+      </div>
+      <footer class="dialog-footer">
+        <button class="primary-button compact-button" value="cancel" type="submit" data-i18n="settings.back"></button>
+      </footer>
+    </form>
+  </dialog>
+
+  <dialog class="app-dialog" id="resultDialog" aria-labelledby="resultTitle">
+    <form method="dialog" class="dialog-frame">
+      <header class="dialog-header">
+        <h2 id="resultTitle" data-i18n="result.title"></h2>
+      </header>
+      <div class="dialog-body result-summary" id="resultSummary"></div>
+      <footer class="dialog-footer">
+        <button class="secondary-button compact-button" id="resultMenuButton" type="button" data-i18n="result.menu"></button>
+        <button class="primary-button compact-button" value="cancel" type="submit" data-i18n="result.next"></button>
+      </footer>
+    </form>
+  </dialog>
+
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="js/i18n/lang-zh-TW.js"></script>
+  <script src="js/i18n/lang-en.js"></script>
+  <script src="js/i18n/lang-ja.js"></script>
+  <script src="js/i18n/i18n-manager.js"></script>
+  <script src="js/audio/bgm-playlist.js"></script>
+  <script src="js/audio/sfx-map.js"></script>
+  <script src="js/audio/audio-manager.js"></script>
+  <script src="js/core/bet-types-data.js"></script>
+  <script src="js/core/payout-calculator.js"></script>
+  <script src="js/core/dice-roller.js"></script>
+  <script src="js/core/betting-logic.js"></script>
+  <script src="js/core/game-engine.js"></script>
+  <script src="js/ui/animation-controller.js"></script>
+  <script src="js/ui/board-renderer.js"></script>
+  <script src="js/ui/modal-controller.js"></script>
+  <script src="js/ui/menu-controller.js"></script>
+  <script src="js/settings/theme-manager.js"></script>
+  <script src="js/settings/settings-manager.js"></script>
+  <script src="js/storage/save-manager.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

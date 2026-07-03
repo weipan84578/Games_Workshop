@@ -1,0 +1,10 @@
+:root[data-theme="sakura"] {
+  --color-primary: #c75578;
+  --color-secondary: #265b80;
+  --color-accent: #8a7b2e;
+  --color-bg-table: #2e7665;
+  --color-bg-page: #30202a;
+  --color-bg-panel: rgba(76, 42, 56, 0.94);
+  --color-text-main: #fff8fb;
+  --color-text-secondary: #ffe1eb;
+}

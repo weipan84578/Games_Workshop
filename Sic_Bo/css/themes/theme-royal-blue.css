@@ -1,0 +1,10 @@
+:root[data-theme="royal-blue"] {
+  --color-primary: #315bb8;
+  --color-secondary: #f3c65e;
+  --color-accent: #c73f6f;
+  --color-bg-table: #24705f;
+  --color-bg-page: #131a32;
+  --color-bg-panel: rgba(22, 33, 66, 0.94);
+  --color-text-main: #f5f8ff;
+  --color-text-secondary: #d9d4ff;
+}

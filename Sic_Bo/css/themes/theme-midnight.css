@@ -1,0 +1,10 @@
+:root[data-theme="midnight"] {
+  --color-primary: #2f3440;
+  --color-secondary: #dfb85f;
+  --color-accent: #4ba589;
+  --color-bg-table: #1e5d49;
+  --color-bg-page: #101114;
+  --color-bg-panel: rgba(25, 27, 33, 0.96);
+  --color-text-main: #fff9e9;
+  --color-text-secondary: #d5c6a0;
+}

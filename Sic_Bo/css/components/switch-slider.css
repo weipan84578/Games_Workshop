@@ -1,0 +1,59 @@
+input[type="range"] {
+  accent-color: var(--color-secondary);
+  background: transparent;
+  min-height: var(--tap-size);
+  width: 100%;
+}
+
+select {
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-main);
+  min-height: var(--tap-size);
+  padding: 8px 12px;
+}
+
+.switch {
+  display: inline-flex;
+  justify-self: start;
+  position: relative;
+}
+
+.switch input {
+  height: 1px;
+  opacity: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.switch-track {
+  background: #5e5e5e;
+  border-radius: 999px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.38);
+  display: inline-block;
+  height: 34px;
+  position: relative;
+  width: 66px;
+}
+
+.switch-track::after {
+  background: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.32);
+  content: "";
+  height: 28px;
+  left: 3px;
+  position: absolute;
+  top: 3px;
+  transition: transform var(--transition-fast);
+  width: 28px;
+}
+
+.switch input:checked + .switch-track {
+  background: var(--color-success);
+}
+
+.switch input:checked + .switch-track::after {
+  transform: translateX(32px);
+}

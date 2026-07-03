@@ -1,0 +1,102 @@
+@media (max-width: 767px) {
+  :root {
+    --action-bar-height: 202px;
+  }
+
+  .main-menu {
+    padding: 84px 18px 28px;
+  }
+
+  .ambient {
+    height: 70px;
+    width: 70px;
+  }
+
+  .top-bar {
+    align-items: start;
+    grid-template-columns: auto 1fr;
+  }
+
+  .status-strip {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+
+  .status-pill {
+    flex: 1 1 140px;
+  }
+
+  .game-layout {
+    display: block;
+    padding: var(--space-3);
+  }
+
+  .dice-arena,
+  .betting-area,
+  .history-panel {
+    margin-bottom: var(--space-3);
+  }
+
+  .dice-arena {
+    min-height: 300px;
+  }
+
+  .bet-board {
+    display: grid;
+    grid-auto-columns: minmax(190px, 76vw);
+    grid-auto-flow: column;
+    grid-template-columns: none;
+    min-height: 176px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+
+  .bet-cell,
+  .bet-cell[data-size="wide"],
+  .bet-cell[data-size="full"] {
+    grid-column: auto;
+    min-height: 140px;
+    scroll-snap-align: start;
+  }
+
+  .history-panel:not(.is-open) .history-list {
+    display: none;
+  }
+
+  .section-heading {
+    display: grid;
+  }
+
+  .action-bar {
+    align-items: stretch;
+    grid-template-columns: 1fr;
+  }
+
+  .chip-tray {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 0 2px 4px;
+  }
+
+  .chip-button {
+    flex: 0 0 56px;
+  }
+
+  .action-buttons {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .action-buttons .danger-button {
+    grid-column: span 2;
+  }
+
+  .setting-card {
+    grid-template-columns: 1fr;
+  }
+
+  .dialog-header,
+  .dialog-footer,
+  .dialog-body {
+    padding: var(--space-3);
+  }
+}

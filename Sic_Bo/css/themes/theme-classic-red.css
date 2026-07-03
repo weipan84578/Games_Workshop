@@ -1,0 +1,10 @@
+:root[data-theme="classic-red"] {
+  --color-primary: #c0392b;
+  --color-secondary: #d4af37;
+  --color-accent: #1f8f70;
+  --color-bg-table: #1f774f;
+  --color-bg-page: #1a1513;
+  --color-bg-panel: rgba(43, 30, 26, 0.94);
+  --color-text-main: #fff8e7;
+  --color-text-secondary: #e8cf8e;
+}

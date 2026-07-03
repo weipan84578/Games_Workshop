@@ -1,0 +1,5 @@
+@media (min-width: 1025px) {
+  .history-panel {
+    min-width: 220px;
+  }
+}

@@ -1,0 +1,21 @@
+@media (min-width: 768px) and (max-width: 1024px) {
+  :root {
+    --action-bar-height: 150px;
+  }
+
+  .game-layout {
+    grid-template-columns: minmax(280px, 0.8fr) minmax(390px, 1.2fr);
+  }
+
+  .history-panel {
+    grid-column: 1 / -1;
+  }
+
+  .action-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .action-buttons {
+    grid-template-columns: repeat(5, minmax(108px, 1fr));
+  }
+}

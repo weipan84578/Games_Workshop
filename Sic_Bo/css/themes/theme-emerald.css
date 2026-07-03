@@ -1,0 +1,10 @@
+:root[data-theme="emerald"] {
+  --color-primary: #0f7b61;
+  --color-secondary: #f0c865;
+  --color-accent: #c9453a;
+  --color-bg-table: #166a4a;
+  --color-bg-page: #10251f;
+  --color-bg-panel: rgba(16, 49, 39, 0.94);
+  --color-text-main: #f7fff7;
+  --color-text-secondary: #d9edc2;
+}

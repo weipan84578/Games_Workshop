@@ -1,0 +1,120 @@
+.dice-cup {
+  height: 132px;
+  margin-top: var(--space-2);
+  position: relative;
+  transform-style: preserve-3d;
+  width: 132px;
+  will-change: transform;
+}
+
+.dice-cup.is-rolling {
+  animation: cup-shake 520ms ease-in-out infinite;
+}
+
+.cup-lip {
+  background: #2f1710;
+  border: 8px solid color-mix(in srgb, var(--color-secondary) 62%, #3a2318 38%);
+  border-radius: 50%;
+  height: 82px;
+  left: 10px;
+  position: absolute;
+  top: 0;
+  width: 112px;
+  z-index: 2;
+}
+
+.cup-body {
+  background: linear-gradient(90deg, #170c09, color-mix(in srgb, var(--color-primary) 70%, #1b0d0b 30%) 42%, #170c09);
+  border-radius: 16px 16px 50px 50px;
+  box-shadow: inset 0 0 22px rgba(255, 255, 255, 0.08), 0 18px 28px rgba(0, 0, 0, 0.44);
+  height: 102px;
+  left: 18px;
+  position: absolute;
+  top: 30px;
+  width: 96px;
+}
+
+.dice-row {
+  display: flex;
+  gap: var(--space-4);
+  justify-content: center;
+  min-height: 84px;
+  width: 100%;
+}
+
+.die {
+  background: #fff7ec;
+  border: 2px solid #e6d9c8;
+  border-radius: var(--radius-md);
+  box-shadow: inset -8px -8px 14px rgba(0, 0, 0, 0.14), inset 5px 5px 9px rgba(255, 255, 255, 0.92), 0 16px 22px rgba(0, 0, 0, 0.36);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  height: 72px;
+  padding: 9px;
+  transform: rotateX(12deg) rotateY(-10deg);
+  transform-style: preserve-3d;
+  width: 72px;
+  will-change: transform;
+}
+
+.die.is-rolling {
+  animation: die-roll 680ms linear infinite;
+}
+
+.pip {
+  align-self: center;
+  background: #16110f;
+  border-radius: 50%;
+  height: 12px;
+  justify-self: center;
+  width: 12px;
+}
+
+.pip-red {
+  background: #cf2525;
+}
+
+.pip-pos-1 { grid-area: 1 / 1; }
+.pip-pos-2 { grid-area: 1 / 2; }
+.pip-pos-3 { grid-area: 1 / 3; }
+.pip-pos-4 { grid-area: 2 / 1; }
+.pip-pos-5 { grid-area: 2 / 2; }
+.pip-pos-6 { grid-area: 2 / 3; }
+.pip-pos-7 { grid-area: 3 / 1; }
+.pip-pos-8 { grid-area: 3 / 2; }
+.pip-pos-9 { grid-area: 3 / 3; }
+
+@keyframes cup-shake {
+  0%, 100% { transform: rotateZ(0deg) translateX(0); }
+  25% { transform: rotateZ(-8deg) translateX(-8px); }
+  75% { transform: rotateZ(8deg) translateX(8px); }
+}
+
+@keyframes die-roll {
+  0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+  100% { transform: rotateX(360deg) rotateY(540deg) rotateZ(720deg); }
+}
+
+.win-particle {
+  animation: particle-burst 860ms ease-out forwards;
+  background: var(--color-secondary);
+  border-radius: 50%;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--color-secondary) 65%, transparent);
+  height: 10px;
+  pointer-events: none;
+  position: absolute;
+  width: 10px;
+  z-index: 4;
+}
+
+@keyframes particle-burst {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--x), var(--y), 0) scale(0.35);
+  }
+}

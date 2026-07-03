@@ -1,0 +1,100 @@
+.game-screen {
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 24px),
+    var(--color-bg-page);
+  padding-bottom: calc(var(--action-bar-height) + 28px);
+}
+
+.game-layout {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: minmax(280px, 0.78fr) minmax(430px, 1.34fr) minmax(220px, 0.52fr);
+  margin: 0 auto;
+  max-width: 1440px;
+  padding: var(--space-5);
+}
+
+.dice-arena,
+.betting-area,
+.history-panel {
+  background: var(--color-bg-panel);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-soft);
+}
+
+.dice-arena {
+  align-content: start;
+  display: grid;
+  gap: var(--space-4);
+  justify-items: center;
+  min-height: 360px;
+  padding: var(--space-5);
+  perspective: 900px;
+  position: relative;
+  text-align: center;
+}
+
+.round-result {
+  background: rgba(0, 0, 0, 0.24);
+  border-radius: var(--radius-sm);
+  min-height: 56px;
+  padding: var(--space-3);
+  width: 100%;
+}
+
+.betting-area {
+  overflow: hidden;
+  padding: var(--space-5);
+}
+
+.section-heading {
+  align-items: start;
+  display: flex;
+  gap: var(--space-3);
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.section-heading p {
+  max-width: 44rem;
+}
+
+.history-panel {
+  padding: var(--space-4);
+}
+
+.history-list {
+  display: grid;
+  gap: var(--space-2);
+  list-style: none;
+  max-height: 68dvh;
+  overflow: auto;
+}
+
+.history-item {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-sm);
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-2);
+}
+
+.history-dice {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.history-die {
+  align-items: center;
+  background: #fffaf0;
+  border-radius: var(--radius-xs);
+  color: #181111;
+  display: inline-flex;
+  font-size: 16px;
+  font-weight: 800;
+  height: 26px;
+  justify-content: center;
+  width: 26px;
+}
