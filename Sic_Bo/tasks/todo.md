@@ -100,3 +100,41 @@
   - deterministic payout checks for key Sic Bo rules.
   - `Temp` contains screenshots/images only.
   - no `README.md` outside `Temp`.
+
+---
+
+# 2026-07-03 sicbo_readme
+
+## Goal + Acceptance Criteria
+- Overwrite or create `README.md` for this project.
+- Include English, Japanese, and Chinese content.
+- Provide quick navigation to the desired language and topic.
+- Document game introduction, detailed gameplay, program introduction, and program/module classification.
+- Use icons and tables to keep the document scannable and organized.
+
+## Risk & Rollback
+- Risk level: low. Documentation-only change.
+- Affected components: `README.md`, task record only.
+- Rollback strategy: revert the README/documentation diff.
+
+## Dependencies & Environment
+- Source of truth: `SicBo_spec.md`, current `index.html`, and existing `css/` and `js/` module layout.
+- No screenshots or non-image artifacts should be written to `Temp/` for this task.
+
+## Checklist
+- [x] Restate goal + acceptance criteria
+- [x] Read spec and current implementation structure
+- [x] Write multilingual README
+- [x] Verify anchors/content and basic formatting
+- [x] Summarize changes + verification story
+
+## Working Notes
+- The current app is a pure static HTML/CSS/JavaScript game that runs from `index.html` without npm, build tools, server, CDN, ES modules, or local `fetch()`.
+- Runtime data is stored in browser LocalStorage under `sicbo.save.v1`.
+- JS modules are grouped under `core`, `ui`, `audio`, `i18n`, `settings`, and `storage`; CSS is grouped under `base`, `layout`, `components`, `themes`, and `responsive`.
+
+## Results
+- Added `README.md` with Chinese, English, and Japanese sections.
+- Included quick navigation links, game introduction, detailed gameplay, betting odds, program introduction, and module classification.
+- Used tables and icons for scannable organization.
+- Verification passed: required anchors exist and required multilingual topic names are present.
