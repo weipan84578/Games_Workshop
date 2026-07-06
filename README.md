@@ -88,3 +88,4 @@
 | `Virtual_Pet`  | 電子寵物 | Virtual Pet  | 電子ペット     |
 | `Roulette`     | 輪盤     | Roulette     | ルーレット     |
 | `Sic_Bo`       | 骰寶     | Sic Bo       | シックボー     |
+| `Darts`        | 飛鏢     | Darts        | ダーツ         |
