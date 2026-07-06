@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <title>Darts</title>
+  <link rel="stylesheet" href="css/base/reset.css">
+  <link rel="stylesheet" href="css/base/variables.css">
+  <link rel="stylesheet" href="css/base/typography.css">
+  <link rel="stylesheet" href="css/layout/grid.css">
+  <link rel="stylesheet" href="css/components/buttons.css">
+  <link rel="stylesheet" href="css/components/modal.css">
+  <link rel="stylesheet" href="css/components/panel.css">
+  <link rel="stylesheet" href="css/components/slider.css">
+  <link rel="stylesheet" href="css/components/toast.css">
+  <link rel="stylesheet" href="css/components/joystick-controls.css">
+  <link rel="stylesheet" href="css/pages/main-menu.css">
+  <link rel="stylesheet" href="css/pages/gameplay.css">
+  <link rel="stylesheet" href="css/pages/settings.css">
+  <link rel="stylesheet" href="css/pages/instructions.css">
+  <link rel="stylesheet" href="css/pages/result.css">
+  <link rel="stylesheet" href="css/themes/theme-classic.css">
+  <link rel="stylesheet" href="css/themes/theme-neon.css">
+  <link rel="stylesheet" href="css/themes/theme-sakura.css">
+  <link rel="stylesheet" href="css/themes/theme-dark.css">
+  <link rel="stylesheet" href="css/layout/responsive.css">
+</head>
+<body class="theme-classic">
+  <div id="app" class="app-shell" data-scene="menu">
+    <section id="menuScreen" class="screen screen-menu is-active" aria-labelledby="menuTitle">
+      <div class="menu-stage">
+        <header class="brand-block">
+          <div class="brand-mark" aria-hidden="true">
+            <span class="brand-ring"></span>
+            <span class="brand-dart"></span>
+          </div>
+          <div>
+            <p class="eyebrow" data-i18n="app.subtitle">Offline web game</p>
+            <h1 id="menuTitle">Darts</h1>
+          </div>
+        </header>
+
+        <div class="menu-layout">
+          <section class="panel menu-actions" aria-labelledby="quickStartTitle">
+            <h2 id="quickStartTitle" data-i18n="menu.quickStart">Quick start</h2>
+            <div class="segmented" role="radiogroup" aria-label="Game mode">
+              <button class="segmented-option is-active" type="button" data-mode-choice="501">501</button>
+              <button class="segmented-option" type="button" data-mode-choice="301">301</button>
+              <button class="segmented-option" type="button" data-mode-choice="cricket">Cricket</button>
+              <button class="segmented-option" type="button" data-mode-choice="around">Clock</button>
+            </div>
+            <div class="setup-grid">
+              <label class="field">
+                <span data-i18n="settings.players">Players</span>
+                <select id="menuPlayerCount">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                </select>
+              </label>
+              <label class="field">
+                <span data-i18n="settings.startScore">Start score</span>
+                <select id="menuStartScore">
+                  <option value="501">501</option>
+                  <option value="301">301</option>
+                </select>
+              </label>
+            </div>
+            <button id="startGameBtn" class="button button-primary button-large" type="button">
+              <span aria-hidden="true">▶</span>
+              <span data-i18n="menu.start">Start game</span>
+            </button>
+            <button id="continueGameBtn" class="button button-secondary button-large" type="button" disabled>
+              <span aria-hidden="true">↻</span>
+              <span data-i18n="menu.continue">Continue</span>
+            </button>
+            <p id="saveSummary" class="save-summary" data-i18n="menu.noSave">No saved game</p>
+          </section>
+
+          <nav class="panel menu-nav" aria-label="Primary">
+            <button class="button button-ghost" type="button" data-open-screen="instructions">
+              <span aria-hidden="true">?</span>
+              <span data-i18n="menu.instructions">Instructions</span>
+            </button>
+            <button class="button button-ghost" type="button" data-open-screen="settings">
+              <span aria-hidden="true">⚙</span>
+              <span data-i18n="menu.settings">Settings</span>
+            </button>
+            <button id="muteToggleBtn" class="button button-ghost" type="button">
+              <span aria-hidden="true">♪</span>
+              <span data-i18n="settings.audio">Audio</span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </section>
+
+    <section id="gameScreen" class="screen screen-game" aria-labelledby="gameTitle">
+      <header class="game-topbar">
+        <button class="icon-button" type="button" data-open-screen="menu" aria-label="Menu">‹</button>
+        <div>
+          <p id="gameModeLabel" class="eyebrow">501</p>
+          <h1 id="gameTitle" data-i18n="game.title">Match</h1>
+        </div>
+        <div class="game-topbar-actions">
+          <button id="undoBtn" class="icon-button" type="button" aria-label="Undo">↶</button>
+          <button class="icon-button" type="button" data-open-screen="settings" aria-label="Settings">⚙</button>
+        </div>
+      </header>
+
+      <main class="game-layout">
+        <section class="board-column" aria-label="Dartboard">
+          <div id="boardHost" class="dartboard-host" tabindex="0" role="application" aria-label="Dartboard"></div>
+          <div class="throw-meter" aria-hidden="true">
+            <span id="throwPowerBar"></span>
+          </div>
+          <div class="mobile-throw-controls" aria-label="Mobile throw controls">
+            <button class="icon-button" type="button" data-aim-step="up">↑</button>
+            <div>
+              <button class="icon-button" type="button" data-aim-step="left">←</button>
+              <button id="keyboardThrowBtn" class="button button-primary" type="button" data-i18n="game.throw">Throw</button>
+              <button class="icon-button" type="button" data-aim-step="right">→</button>
+            </div>
+            <button class="icon-button" type="button" data-aim-step="down">↓</button>
+          </div>
+        </section>
+
+        <aside class="game-sidebar">
+          <section class="panel turn-panel">
+            <p class="eyebrow" data-i18n="game.currentTurn">Current turn</p>
+            <h2 id="currentPlayerName">Player 1</h2>
+            <div class="turn-meta">
+              <span id="dartsRemaining">3</span>
+              <span data-i18n="game.dartsLeft">darts left</span>
+            </div>
+            <div id="turnThrows" class="throw-list" aria-live="polite"></div>
+            <button id="endTurnBtn" class="button button-secondary" type="button" data-i18n="game.endTurn">End turn</button>
+          </section>
+
+          <section class="panel score-panel">
+            <div class="panel-heading">
+              <h2 data-i18n="game.scoreboard">Scoreboard</h2>
+              <span id="saveStatePill" class="status-pill" data-i18n="game.saved">Saved</span>
+            </div>
+            <div id="scoreboard" class="scoreboard"></div>
+          </section>
+
+          <section class="panel log-panel">
+            <h2 data-i18n="game.log">Log</h2>
+            <ol id="gameLog" class="game-log" aria-live="polite"></ol>
+          </section>
+        </aside>
+      </main>
+    </section>
+
+    <section id="settingsScreen" class="screen screen-settings" aria-labelledby="settingsTitle">
+      <header class="subpage-header">
+        <button class="icon-button" type="button" data-open-screen="menu" aria-label="Back">‹</button>
+        <div>
+          <p class="eyebrow" data-i18n="settings.caption">Preferences</p>
+          <h1 id="settingsTitle" data-i18n="menu.settings">Settings</h1>
+        </div>
+      </header>
+      <main class="settings-grid">
+        <section class="panel settings-group">
+          <h2 data-i18n="settings.audio">Audio</h2>
+          <label class="switch-row">
+            <span data-i18n="settings.bgm">BGM</span>
+            <input id="bgmEnabled" type="checkbox">
+          </label>
+          <label class="range-field">
+            <span data-i18n="settings.bgmVolume">BGM volume</span>
+            <input id="bgmVolume" type="range" min="0" max="10" step="1">
+          </label>
+          <label class="switch-row">
+            <span data-i18n="settings.sfx">SFX</span>
+            <input id="sfxEnabled" type="checkbox">
+          </label>
+          <label class="range-field">
+            <span data-i18n="settings.sfxVolume">SFX volume</span>
+            <input id="sfxVolume" type="range" min="0" max="10" step="1">
+          </label>
+        </section>
+
+        <section class="panel settings-group">
+          <h2 data-i18n="settings.gameplay">Gameplay</h2>
+          <label class="field">
+            <span data-i18n="settings.mode">Mode</span>
+            <select id="settingsMode">
+              <option value="501">501</option>
+              <option value="301">301</option>
+              <option value="cricket">Cricket</option>
+              <option value="around">Around the Clock</option>
+            </select>
+          </label>
+          <label class="field">
+            <span data-i18n="settings.players">Players</span>
+            <select id="settingsPlayerCount">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </label>
+          <label class="field">
+            <span data-i18n="settings.startScore">Start score</span>
+            <select id="settingsStartScore">
+              <option value="501">501</option>
+              <option value="301">301</option>
+            </select>
+          </label>
+          <label class="switch-row">
+            <span data-i18n="settings.animation">Animation</span>
+            <input id="animationEnabled" type="checkbox">
+          </label>
+          <label class="switch-row">
+            <span data-i18n="settings.aimAssist">Aim assist</span>
+            <input id="aimAssist" type="checkbox">
+          </label>
+        </section>
+
+        <section class="panel settings-group">
+          <h2 data-i18n="settings.languageTheme">Language & theme</h2>
+          <label class="field">
+            <span data-i18n="settings.language">Language</span>
+            <select id="languageSelect">
+              <option value="zh-TW">繁體中文</option>
+              <option value="en-US">English</option>
+              <option value="ja-JP">日本語</option>
+            </select>
+          </label>
+          <label class="field">
+            <span data-i18n="settings.theme">Theme</span>
+            <select id="themeSelect">
+              <option value="classic" data-i18n="theme.classic">Classic board</option>
+              <option value="neon" data-i18n="theme.neon">Neon arcade</option>
+              <option value="sakura" data-i18n="theme.sakura">Sakura</option>
+              <option value="dark" data-i18n="theme.dark">Dark steel</option>
+            </select>
+          </label>
+          <button id="clearSaveBtn" class="button button-danger" type="button" data-i18n="settings.clearSave">Clear saved game</button>
+        </section>
+      </main>
+    </section>
+
+    <section id="instructionsScreen" class="screen screen-instructions" aria-labelledby="instructionsTitle">
+      <header class="subpage-header">
+        <button class="icon-button" type="button" data-open-screen="menu" aria-label="Back">‹</button>
+        <div>
+          <p class="eyebrow" data-i18n="instructions.caption">Reference</p>
+          <h1 id="instructionsTitle" data-i18n="menu.instructions">Instructions</h1>
+        </div>
+      </header>
+      <main class="instructions-layout">
+        <div class="tabs" role="tablist" aria-label="Instructions">
+          <button class="tab is-active" type="button" role="tab" data-tab="throw" data-i18n="instructions.throwTab">Throw</button>
+          <button class="tab" type="button" role="tab" data-tab="board" data-i18n="instructions.boardTab">Board</button>
+          <button class="tab" type="button" role="tab" data-tab="rules" data-i18n="instructions.rulesTab">Rules</button>
+          <button class="tab" type="button" role="tab" data-tab="modes" data-i18n="instructions.modesTab">Modes</button>
+          <button class="tab" type="button" role="tab" data-tab="access" data-i18n="instructions.accessTab">Access</button>
+        </div>
+        <section id="instructionsContent" class="panel instructions-content" aria-live="polite"></section>
+      </main>
+    </section>
+
+    <section id="resultScreen" class="screen screen-result" aria-labelledby="resultTitle">
+      <main class="result-layout">
+        <section class="panel result-panel">
+          <p class="eyebrow" data-i18n="result.caption">Match complete</p>
+          <h1 id="resultTitle" data-i18n="result.title">Winner</h1>
+          <p id="winnerText" class="winner-text"></p>
+          <div id="resultSummary" class="result-summary"></div>
+          <div class="result-actions">
+            <button id="resultNewGameBtn" class="button button-primary" type="button" data-i18n="menu.start">Start game</button>
+            <button class="button button-secondary" type="button" data-open-screen="menu" data-i18n="result.menu">Menu</button>
+          </div>
+        </section>
+      </main>
+    </section>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </div>
+
+  <script src="js/core/storageManager.js"></script>
+  <script src="js/i18n/translations.js"></script>
+  <script src="js/i18n/i18nApply.js"></script>
+  <script src="js/audio/audioManager.js"></script>
+  <script src="js/game/scoringEngine.js"></script>
+  <script src="js/game/dartboardRenderer.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

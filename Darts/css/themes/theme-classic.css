@@ -1,0 +1,22 @@
+.theme-classic {
+  --page-bg: #10221f;
+  --panel-bg: rgba(247, 239, 219, 0.92);
+  --panel-border: rgba(18, 35, 31, 0.22);
+  --text: #111f1c;
+  --text-muted: #58635d;
+  --hero-text: #f8efda;
+  --hero-muted: #b9c7bd;
+  --accent: #b5162b;
+  --accent-2: #1e7f54;
+  --on-accent: #fff8ea;
+  --control-bg: rgba(255, 255, 255, 0.68);
+  --control-strong: #e5d7bb;
+  --control-border: rgba(17, 31, 28, 0.22);
+  --brand-ring: #f3e7c7;
+  --focus: #f6c445;
+  --danger: #a0182d;
+  --danger-bg: #fee7ec;
+  --danger-text: #6b0e1d;
+  --glow-1: rgba(181, 22, 43, 0.24);
+  --glow-2: rgba(30, 127, 84, 0.22);
+}

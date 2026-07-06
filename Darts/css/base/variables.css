@@ -1,0 +1,26 @@
+:root {
+  --font-ui: "Segoe UI", "Noto Sans TC", "Noto Sans JP", system-ui, sans-serif;
+  --font-display: "Segoe UI", "Noto Sans TC", "Noto Sans JP", system-ui, sans-serif;
+  --font-size-hero: clamp(2.5rem, 2rem + 2vw, 4rem);
+  --font-size-h1: clamp(1.75rem, 1.5rem + 1vw, 2.5rem);
+  --font-size-h2: clamp(1.25rem, 1.1rem + 0.7vw, 1.875rem);
+  --font-size-button: 1.125rem;
+  --font-size-body: 1rem;
+  --font-size-score: clamp(2.25rem, 2rem + 1.5vw, 3.5rem);
+  --font-size-caption: 0.875rem;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --shadow-panel: 0 18px 60px rgba(0, 0, 0, 0.3);
+  --transition-fast: 140ms ease;
+  --transition-medium: 240ms ease;
+  --board-size: min(78vw, 74vh, 720px);
+  --tap-size: 48px;
+}

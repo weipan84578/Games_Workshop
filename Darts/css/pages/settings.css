@@ -1,0 +1,9 @@
+.screen-settings {
+  background: var(--page-bg);
+}
+
+.settings-group {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-5);
+}

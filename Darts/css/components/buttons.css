@@ -1,0 +1,95 @@
+.button,
+.icon-button,
+.segmented-option,
+.tab {
+  min-height: var(--tap-size);
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  background: var(--control-bg);
+  transition: transform var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: 0.8rem 1rem;
+  font-size: var(--font-size-button);
+  font-weight: 800;
+}
+
+.button:hover,
+.icon-button:hover,
+.segmented-option:hover,
+.tab:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+}
+
+.button:focus-visible,
+.icon-button:focus-visible,
+.segmented-option:focus-visible,
+.tab:focus-visible,
+select:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.button-primary {
+  color: var(--on-accent);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.button-secondary {
+  color: var(--text);
+  background: var(--control-strong);
+}
+
+.button-ghost {
+  justify-content: flex-start;
+  background: transparent;
+}
+
+.button-danger {
+  color: var(--danger-text);
+  border-color: var(--danger);
+  background: var(--danger-bg);
+}
+
+.button-large {
+  min-height: 60px;
+}
+
+.icon-button {
+  width: var(--tap-size);
+  height: var(--tap-size);
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
+.button:disabled,
+.icon-button:disabled {
+  opacity: 0.5;
+  transform: none;
+}
+
+.segmented {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.segmented-option.is-active,
+.tab.is-active {
+  color: var(--on-accent);
+  background: var(--accent);
+  border-color: var(--accent);
+}

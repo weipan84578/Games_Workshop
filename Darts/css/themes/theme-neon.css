@@ -1,0 +1,22 @@
+.theme-neon {
+  --page-bg: #090d16;
+  --panel-bg: rgba(14, 22, 36, 0.9);
+  --panel-border: rgba(96, 242, 255, 0.32);
+  --text: #f4fbff;
+  --text-muted: #a9b8c8;
+  --hero-text: #f4fbff;
+  --hero-muted: #a9dff0;
+  --accent: #19d8ff;
+  --accent-2: #ff477e;
+  --on-accent: #061018;
+  --control-bg: rgba(255, 255, 255, 0.08);
+  --control-strong: rgba(25, 216, 255, 0.16);
+  --control-border: rgba(244, 251, 255, 0.22);
+  --brand-ring: #111a2a;
+  --focus: #ffe45e;
+  --danger: #ff477e;
+  --danger-bg: rgba(255, 71, 126, 0.18);
+  --danger-text: #ffd9e4;
+  --glow-1: rgba(25, 216, 255, 0.28);
+  --glow-2: rgba(255, 71, 126, 0.24);
+}

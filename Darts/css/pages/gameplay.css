@@ -1,0 +1,141 @@
+.screen-game {
+  background:
+    radial-gradient(circle at 20% 12%, var(--glow-1), transparent 28rem),
+    radial-gradient(circle at 82% 18%, var(--glow-2), transparent 30rem),
+    var(--page-bg);
+}
+
+.game-topbar-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.board-column {
+  position: sticky;
+  top: var(--space-4);
+  display: grid;
+  justify-items: center;
+}
+
+.dartboard-host {
+  position: relative;
+  width: var(--board-size);
+  max-width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  touch-action: none;
+  filter: drop-shadow(0 24px 50px rgba(0, 0, 0, 0.38));
+}
+
+.dartboard-host svg {
+  width: 100%;
+  height: 100%;
+  user-select: none;
+}
+
+.dartboard-host .aim-reticle {
+  pointer-events: none;
+}
+
+.game-sidebar {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.turn-panel,
+.score-panel,
+.log-panel {
+  padding: var(--space-4);
+}
+
+.turn-panel {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.turn-meta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  color: var(--text-muted);
+  font-weight: 800;
+}
+
+#dartsRemaining {
+  color: var(--accent);
+  font-size: var(--font-size-score);
+  line-height: 1;
+}
+
+.throw-list {
+  display: grid;
+  gap: var(--space-2);
+  min-height: 88px;
+}
+
+.throw-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-height: 34px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-sm);
+  background: var(--control-bg);
+}
+
+.scoreboard {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+
+.player-score-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-3);
+  align-items: center;
+  padding: var(--space-3);
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-md);
+  background: var(--control-bg);
+}
+
+.player-score-row.is-current {
+  border-color: var(--accent);
+}
+
+.player-score {
+  font-size: var(--font-size-score);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.cricket-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+}
+
+.cricket-table th,
+.cricket-table td {
+  padding: 0.55rem;
+  border: 1px solid var(--control-border);
+  text-align: center;
+}
+
+.cricket-mark {
+  font-weight: 900;
+  color: var(--accent);
+}
+
+.game-log {
+  display: grid;
+  gap: var(--space-2);
+  max-height: 210px;
+  padding-left: 1.25rem;
+  overflow: auto;
+  color: var(--text-muted);
+}

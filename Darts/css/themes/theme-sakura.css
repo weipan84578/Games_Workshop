@@ -1,0 +1,22 @@
+.theme-sakura {
+  --page-bg: #f7eef3;
+  --panel-bg: rgba(255, 255, 255, 0.9);
+  --panel-border: rgba(123, 72, 92, 0.22);
+  --text: #2d2028;
+  --text-muted: #765c68;
+  --hero-text: #2d2028;
+  --hero-muted: #765c68;
+  --accent: #c43d6d;
+  --accent-2: #2d8c7f;
+  --on-accent: #fff7fb;
+  --control-bg: rgba(255, 255, 255, 0.78);
+  --control-strong: #f1d5df;
+  --control-border: rgba(45, 32, 40, 0.22);
+  --brand-ring: #f8d7e2;
+  --focus: #19766d;
+  --danger: #a01f43;
+  --danger-bg: #ffe7ef;
+  --danger-text: #6f1732;
+  --glow-1: rgba(196, 61, 109, 0.2);
+  --glow-2: rgba(45, 140, 127, 0.18);
+}

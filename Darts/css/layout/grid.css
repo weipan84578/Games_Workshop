@@ -1,0 +1,61 @@
+.app-shell {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.screen {
+  display: none;
+  min-height: 100vh;
+  padding: var(--space-6);
+}
+
+.screen.is-active {
+  display: block;
+}
+
+.subpage-header,
+.game-topbar {
+  width: min(1180px, 100%);
+  margin: 0 auto var(--space-6);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.subpage-header h1,
+.game-topbar h1 {
+  color: var(--hero-text);
+  text-shadow: 0 8px 28px rgba(0, 0, 0, 0.38);
+}
+
+.subpage-header .eyebrow,
+.game-topbar .eyebrow {
+  color: var(--hero-muted);
+}
+
+.game-layout,
+.settings-grid,
+.instructions-layout {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+.game-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 1fr) minmax(300px, 380px);
+  align-items: start;
+  gap: var(--space-6);
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-5);
+}
+
+.instructions-layout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: var(--space-5);
+}

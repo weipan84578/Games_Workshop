@@ -1,0 +1,91 @@
+.screen-menu {
+  position: relative;
+  display: none;
+  min-height: 100vh;
+  align-items: center;
+}
+
+.screen-menu.is-active {
+  display: flex;
+}
+
+.menu-stage {
+  width: min(1080px, 100%);
+  margin: 0 auto;
+}
+
+.brand-block {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  margin-bottom: var(--space-8);
+}
+
+.screen-menu .brand-block h1 {
+  color: var(--hero-text);
+  text-shadow: 0 8px 28px rgba(0, 0, 0, 0.42);
+}
+
+.screen-menu .brand-block .eyebrow {
+  color: var(--hero-muted);
+}
+
+.brand-mark {
+  position: relative;
+  width: clamp(72px, 12vw, 132px);
+  aspect-ratio: 1;
+  flex: 0 0 auto;
+}
+
+.brand-ring {
+  position: absolute;
+  inset: 0;
+  border: 10px solid var(--accent);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 16px var(--brand-ring), inset 0 0 0 30px var(--accent-2);
+}
+
+.brand-dart {
+  position: absolute;
+  left: 50%;
+  top: 8%;
+  width: 8px;
+  height: 72%;
+  background: var(--text);
+  border-radius: 999px;
+  transform: translateX(-50%) rotate(38deg);
+  transform-origin: 50% 78%;
+}
+
+.menu-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 520px) minmax(220px, 300px);
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.menu-actions,
+.menu-nav {
+  padding: var(--space-5);
+}
+
+.menu-actions {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.menu-nav {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.setup-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.save-summary {
+  color: var(--text-muted);
+  font-size: var(--font-size-caption);
+}

@@ -1,0 +1,22 @@
+.theme-dark {
+  --page-bg: #111316;
+  --panel-bg: rgba(29, 32, 36, 0.92);
+  --panel-border: rgba(229, 232, 235, 0.18);
+  --text: #f0f2f4;
+  --text-muted: #a6adb5;
+  --hero-text: #f0f2f4;
+  --hero-muted: #c3c9cf;
+  --accent: #e0b64b;
+  --accent-2: #5fbf9f;
+  --on-accent: #17130a;
+  --control-bg: rgba(255, 255, 255, 0.08);
+  --control-strong: rgba(224, 182, 75, 0.16);
+  --control-border: rgba(240, 242, 244, 0.2);
+  --brand-ring: #24282d;
+  --focus: #5fbf9f;
+  --danger: #f05a72;
+  --danger-bg: rgba(240, 90, 114, 0.16);
+  --danger-text: #ffd9df;
+  --glow-1: rgba(224, 182, 75, 0.2);
+  --glow-2: rgba(95, 191, 159, 0.18);
+}
