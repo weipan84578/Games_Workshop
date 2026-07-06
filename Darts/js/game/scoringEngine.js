@@ -12,7 +12,10 @@
   }
 
   function playerName(index) {
-    return window.Darts.I18n.t("player.name", { number: index + 1 });
+    if (index === 0) {
+      return window.Darts.I18n.t("player.human");
+    }
+    return window.Darts.I18n.t("ai.name", { number: index });
   }
 
   function modeStartScore(settings) {
@@ -34,6 +37,8 @@
     return {
       id: "p" + (index + 1),
       name: playerName(index),
+      isAi: index > 0,
+      difficulty: index > 0 ? settings.aiDifficulty : "human",
       color: ["#d54045", "#2f80ed", "#1e9c66", "#c77d1d"][index],
       score: settings.mode === "cricket" ? 0 : modeStartScore(settings),
       marks: createMarks(),
@@ -285,7 +290,8 @@
         settings.startScore = 301;
       }
       var players = [];
-      for (var index = 0; index < settings.playerCount; index += 1) {
+      var playerCount = Math.max(1, Math.min(4, Number(settings.playerCount) || ((Number(settings.aiCount) || 0) + 1)));
+      for (var index = 0; index < playerCount; index += 1) {
         players.push(createPlayer(index, settings));
       }
       return {
@@ -293,6 +299,8 @@
         id: "game-" + Date.now(),
         mode: mode,
         startScore: modeStartScore(settings),
+        aiCount: Math.max(0, playerCount - 1),
+        aiDifficulty: settings.aiDifficulty || "normal",
         players: players,
         currentPlayer: 0,
         dartsRemaining: 3,

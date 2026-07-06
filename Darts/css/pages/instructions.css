@@ -17,10 +17,42 @@
   margin-bottom: var(--space-3);
 }
 
+.instruction-detail {
+  display: grid;
+  grid-template-columns: minmax(180px, 280px) minmax(0, 1fr);
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.instruction-visual {
+  width: 100%;
+  min-height: 150px;
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-md);
+  background: var(--control-bg);
+}
+
+.instruction-visual text {
+  fill: var(--text);
+  font-weight: 900;
+}
+
+.instructions-content p {
+  margin-bottom: var(--space-4);
+  color: var(--text);
+  font-weight: 700;
+}
+
 .instructions-content ul {
   display: grid;
   gap: var(--space-2);
   margin: 0;
   padding-left: 1.2rem;
   color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+  .instruction-detail {
+    grid-template-columns: 1fr;
+  }
 }

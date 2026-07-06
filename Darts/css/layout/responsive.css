@@ -37,10 +37,6 @@
     display: grid;
     grid-template-columns: 1fr;
   }
-
-  .mobile-throw-controls {
-    display: grid;
-  }
 }
 
 @media (max-width: 480px) {

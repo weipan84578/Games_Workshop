@@ -37,6 +37,18 @@
   pointer-events: none;
 }
 
+.dartboard-host.is-ai-turn {
+  cursor: wait;
+}
+
+.dartboard-host.is-ai-turn .aim-reticle {
+  opacity: 0.45;
+}
+
+.board-flight {
+  pointer-events: none;
+}
+
 .game-sidebar {
   display: grid;
   gap: var(--space-4);
@@ -133,9 +145,37 @@
 
 .game-log {
   display: grid;
+  counter-reset: throw-log;
   gap: var(--space-2);
   max-height: 210px;
-  padding-left: 1.25rem;
+  padding-left: 0;
+  margin: var(--space-3) 0 0;
   overflow: auto;
   color: var(--text-muted);
+  list-style: none;
+}
+
+.game-log li {
+  counter-increment: throw-log;
+  display: grid;
+  grid-template-columns: 2.4rem minmax(0, 1fr);
+  gap: var(--space-2);
+  align-items: start;
+}
+
+.game-log li::before {
+  content: counter(throw-log);
+  display: inline-grid;
+  place-items: center;
+  min-width: 2rem;
+  height: 1.6rem;
+  border-radius: var(--radius-sm);
+  color: var(--on-accent);
+  background: var(--accent);
+  font-size: var(--font-size-caption);
+  font-weight: 900;
+}
+
+.game-log li span {
+  min-width: 0;
 }

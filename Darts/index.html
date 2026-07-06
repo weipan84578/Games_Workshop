@@ -14,7 +14,6 @@
   <link rel="stylesheet" href="css/components/panel.css">
   <link rel="stylesheet" href="css/components/slider.css">
   <link rel="stylesheet" href="css/components/toast.css">
-  <link rel="stylesheet" href="css/components/joystick-controls.css">
   <link rel="stylesheet" href="css/pages/main-menu.css">
   <link rel="stylesheet" href="css/pages/gameplay.css">
   <link rel="stylesheet" href="css/pages/settings.css">
@@ -42,32 +41,8 @@
         </header>
 
         <div class="menu-layout">
-          <section class="panel menu-actions" aria-labelledby="quickStartTitle">
-            <h2 id="quickStartTitle" data-i18n="menu.quickStart">Quick start</h2>
-            <div class="segmented" role="radiogroup" aria-label="Game mode">
-              <button class="segmented-option is-active" type="button" data-mode-choice="501">501</button>
-              <button class="segmented-option" type="button" data-mode-choice="301">301</button>
-              <button class="segmented-option" type="button" data-mode-choice="cricket">Cricket</button>
-              <button class="segmented-option" type="button" data-mode-choice="around">Clock</button>
-            </div>
-            <div class="setup-grid">
-              <label class="field">
-                <span data-i18n="settings.players">Players</span>
-                <select id="menuPlayerCount">
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                </select>
-              </label>
-              <label class="field">
-                <span data-i18n="settings.startScore">Start score</span>
-                <select id="menuStartScore">
-                  <option value="501">501</option>
-                  <option value="301">301</option>
-                </select>
-              </label>
-            </div>
+          <section class="panel menu-actions" aria-label="Start game">
+            <p class="menu-prompt" data-i18n="menu.startPrompt">Choose Start game to set up the match.</p>
             <button id="startGameBtn" class="button button-primary button-large" type="button">
               <span aria-hidden="true">▶</span>
               <span data-i18n="menu.start">Start game</span>
@@ -97,6 +72,51 @@
       </div>
     </section>
 
+    <section id="setupScreen" class="screen screen-setup" aria-labelledby="setupTitle">
+      <header class="subpage-header">
+        <button class="icon-button" type="button" data-open-screen="menu" aria-label="Back">‹</button>
+        <div>
+          <p class="eyebrow" data-i18n="setup.caption">Match setup</p>
+          <h1 id="setupTitle" data-i18n="setup.title">New match</h1>
+        </div>
+      </header>
+      <main class="setup-page">
+        <section class="panel setup-panel">
+          <h2 data-i18n="setup.mode">Game mode</h2>
+          <div class="segmented setup-mode-grid" role="radiogroup" aria-label="Game mode">
+            <button class="segmented-option is-active" type="button" data-mode-choice="501">501</button>
+            <button class="segmented-option" type="button" data-mode-choice="301">301</button>
+            <button class="segmented-option" type="button" data-mode-choice="cricket">Cricket</button>
+            <button class="segmented-option" type="button" data-mode-choice="around">Clock</button>
+          </div>
+          <div class="setup-grid">
+            <label class="field">
+              <span data-i18n="setup.aiCount">AI players</span>
+              <select id="setupAiCount">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+            </label>
+            <label class="field">
+              <span data-i18n="setup.aiDifficulty">AI difficulty</span>
+              <select id="setupAiDifficulty">
+                <option value="easy" data-i18n="difficulty.easy">Easy</option>
+                <option value="normal" data-i18n="difficulty.normal">Normal</option>
+                <option value="hard" data-i18n="difficulty.hard">Hard</option>
+              </select>
+            </label>
+          </div>
+          <p id="setupSummary" class="save-summary"></p>
+          <button id="confirmStartGameBtn" class="button button-primary button-large" type="button">
+            <span aria-hidden="true">▶</span>
+            <span data-i18n="setup.startMatch">Start match</span>
+          </button>
+        </section>
+      </main>
+    </section>
+
     <section id="gameScreen" class="screen screen-game" aria-labelledby="gameTitle">
       <header class="game-topbar">
         <button class="icon-button" type="button" data-open-screen="menu" aria-label="Menu">‹</button>
@@ -115,15 +135,6 @@
           <div id="boardHost" class="dartboard-host" tabindex="0" role="application" aria-label="Dartboard"></div>
           <div class="throw-meter" aria-hidden="true">
             <span id="throwPowerBar"></span>
-          </div>
-          <div class="mobile-throw-controls" aria-label="Mobile throw controls">
-            <button class="icon-button" type="button" data-aim-step="up">↑</button>
-            <div>
-              <button class="icon-button" type="button" data-aim-step="left">←</button>
-              <button id="keyboardThrowBtn" class="button button-primary" type="button" data-i18n="game.throw">Throw</button>
-              <button class="icon-button" type="button" data-aim-step="right">→</button>
-            </div>
-            <button class="icon-button" type="button" data-aim-step="down">↓</button>
           </div>
         </section>
 
@@ -181,43 +192,6 @@
           <label class="range-field">
             <span data-i18n="settings.sfxVolume">SFX volume</span>
             <input id="sfxVolume" type="range" min="0" max="10" step="1">
-          </label>
-        </section>
-
-        <section class="panel settings-group">
-          <h2 data-i18n="settings.gameplay">Gameplay</h2>
-          <label class="field">
-            <span data-i18n="settings.mode">Mode</span>
-            <select id="settingsMode">
-              <option value="501">501</option>
-              <option value="301">301</option>
-              <option value="cricket">Cricket</option>
-              <option value="around">Around the Clock</option>
-            </select>
-          </label>
-          <label class="field">
-            <span data-i18n="settings.players">Players</span>
-            <select id="settingsPlayerCount">
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-            </select>
-          </label>
-          <label class="field">
-            <span data-i18n="settings.startScore">Start score</span>
-            <select id="settingsStartScore">
-              <option value="501">501</option>
-              <option value="301">301</option>
-            </select>
-          </label>
-          <label class="switch-row">
-            <span data-i18n="settings.animation">Animation</span>
-            <input id="animationEnabled" type="checkbox">
-          </label>
-          <label class="switch-row">
-            <span data-i18n="settings.aimAssist">Aim assist</span>
-            <input id="aimAssist" type="checkbox">
           </label>
         </section>
 

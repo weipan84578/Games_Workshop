@@ -51,6 +51,7 @@
     });
     var boardGroup = svgEl("g", { class: "board-zones" });
     var markerGroup = svgEl("g", { class: "board-markers" });
+    var flightGroup = svgEl("g", { class: "board-flight" });
     var reticleGroup = svgEl("g", { class: "aim-reticle" });
 
     boardGroup.appendChild(svgEl("circle", { cx: 0, cy: 0, r: 0.99, fill: "#191919" }));
@@ -110,11 +111,13 @@
     reticleGroup.appendChild(svgEl("line", { x1: 0, y1: -0.075, x2: 0, y2: 0.075, stroke: "var(--focus)", "stroke-width": 0.008 }));
 
     svg.appendChild(boardGroup);
+    svg.appendChild(flightGroup);
     svg.appendChild(markerGroup);
     svg.appendChild(reticleGroup);
     host.appendChild(svg);
     host._dartsSvg = svg;
     host._markerGroup = markerGroup;
+    host._flightGroup = flightGroup;
     host._reticleGroup = reticleGroup;
     setReticle(host, { x: 0, y: 0 });
     return svg;
@@ -200,6 +203,77 @@
     });
   }
 
+  function quadraticPoint(from, control, to, progress) {
+    var inverse = 1 - progress;
+    return {
+      x: inverse * inverse * from.x + 2 * inverse * progress * control.x + progress * progress * to.x,
+      y: inverse * inverse * from.y + 2 * inverse * progress * control.y + progress * progress * to.y
+    };
+  }
+
+  function renderFlight(host, from, control, to, progress, color) {
+    if (!host || !host._flightGroup) {
+      return;
+    }
+    var tip = quadraticPoint(from, control, to, progress);
+    var tailProgress = Math.max(0, progress - 0.08);
+    var tail = quadraticPoint(from, control, to, tailProgress);
+    host._flightGroup.textContent = "";
+    var group = svgEl("g", { transform: "translate(" + tip.x + " " + tip.y + ")" });
+    var angle = Math.atan2(tip.y - tail.y, tip.x - tail.x) * 180 / Math.PI;
+    group.setAttribute("transform", "translate(" + tip.x + " " + tip.y + ") rotate(" + angle + ")");
+    group.appendChild(svgEl("line", {
+      x1: -0.11,
+      y1: 0,
+      x2: 0.02,
+      y2: 0,
+      stroke: color || "var(--focus)",
+      "stroke-width": 0.018,
+      "stroke-linecap": "round"
+    }));
+    group.appendChild(svgEl("path", {
+      d: "M -0.13 -0.035 L -0.2 0 L -0.13 0.035 Z",
+      fill: color || "var(--focus)",
+      stroke: "#111",
+      "stroke-width": 0.006
+    }));
+    group.appendChild(svgEl("circle", {
+      cx: 0.035,
+      cy: 0,
+      r: 0.018,
+      fill: "#f8f2da",
+      stroke: "#111",
+      "stroke-width": 0.006
+    }));
+    host._flightGroup.appendChild(group);
+  }
+
+  function clearFlight(host) {
+    if (host && host._flightGroup) {
+      host._flightGroup.textContent = "";
+    }
+  }
+
+  function pointForTarget(segment, value) {
+    if (segment === "bull") {
+      return { x: 0, y: 0 };
+    }
+    if (segment === "outerBull") {
+      return { x: 0, y: -0.075 };
+    }
+    var index = window.Darts.Scoring.BOARD_NUMBERS.indexOf(value);
+    var degrees = index === -1 ? 0 : index * 18;
+    var radius = 0.28;
+    if (segment === "double") {
+      radius = 0.87;
+    } else if (segment === "triple") {
+      radius = 0.495;
+    } else if (segment === "singleOuter") {
+      radius = 0.67;
+    }
+    return point(radius, degrees);
+  }
+
   window.Darts.Dartboard = {
     render: render,
     normalizedFromClient: normalizedFromClient,
@@ -209,6 +283,9 @@
     },
     setReticle: setReticle,
     renderMarkers: renderMarkers,
+    renderFlight: renderFlight,
+    clearFlight: clearFlight,
+    pointForTarget: pointForTarget,
     clampPoint: function (pointValue) {
       return {
         x: Math.max(-0.98, Math.min(0.98, pointValue.x)),

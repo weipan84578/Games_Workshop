@@ -14,8 +14,8 @@
     bgmVolume: 6,
     sfxVolume: 7,
     animation: true,
-    aimAssist: true,
-    playerCount: 2,
+    aiCount: 1,
+    aiDifficulty: "normal",
     mode: "501",
     startScore: 501
   };
@@ -60,7 +60,10 @@
 
   function normalizeSettings(input) {
     var settings = Object.assign({}, defaultSettings, input || {});
-    settings.playerCount = clampNumber(settings.playerCount, 1, 4, defaultSettings.playerCount);
+    if (typeof settings.aiCount === "undefined" && typeof settings.playerCount !== "undefined") {
+      settings.aiCount = clampNumber(Number(settings.playerCount) - 1, 0, 3, defaultSettings.aiCount);
+    }
+    settings.aiCount = clampNumber(settings.aiCount, 0, 3, defaultSettings.aiCount);
     settings.startScore = Number(settings.startScore) === 301 ? 301 : 501;
     settings.bgmVolume = clampNumber(settings.bgmVolume, 0, 10, defaultSettings.bgmVolume);
     settings.sfxVolume = clampNumber(settings.sfxVolume, 0, 10, defaultSettings.sfxVolume);
@@ -73,10 +76,13 @@
     if (["zh-TW", "en-US", "ja-JP"].indexOf(settings.language) === -1) {
       settings.language = defaultSettings.language;
     }
+    if (["easy", "normal", "hard"].indexOf(settings.aiDifficulty) === -1) {
+      settings.aiDifficulty = defaultSettings.aiDifficulty;
+    }
     settings.bgmEnabled = Boolean(settings.bgmEnabled);
     settings.sfxEnabled = Boolean(settings.sfxEnabled);
     settings.animation = Boolean(settings.animation);
-    settings.aimAssist = Boolean(settings.aimAssist);
+    settings.playerCount = settings.aiCount + 1;
     return settings;
   }
 

@@ -53,3 +53,61 @@ Build the web Darts game described in `darts-game-spec.md` as a static, offline-
   - Node scoring/hit-detection checks covered X01 bust restore, Double Out win, Cricket close/win, Around the Clock win, bull, double 20, and miss detection
   - Playwright headless opened `index.html` over `file://`, started a game, rendered the board, threw a dart, rendered a marker, and wrote a game log entry
   - Playwright screenshots checked desktop/mobile menu and desktop/mobile gameplay layouts
+
+# 2026-07-06_darts_revision_ai_setup
+
+## Goal
+Apply the requested UI and gameplay revisions: move match setup behind Start, replace player count with AI count/difficulty, remove gameplay settings, expand illustrated instructions, improve select/log contrast, make throws arc/scatter more realistic, and remove mobile directional throw controls.
+
+## Acceptance Criteria
+- [x] Main menu has no quick-start mode/start-score controls.
+- [x] Clicking Start opens a match setup screen where the player chooses mode, AI count up to 3, and AI difficulty.
+- [x] Settings no longer contains the Gameplay section.
+- [x] Instructions are expanded with detailed text and inline illustrations.
+- [x] Select controls stay visible on dark/black backgrounds.
+- [x] Dart throws animate along an arc and apply realistic scatter instead of landing exactly at the pressed point.
+- [x] Mobile/RWD no longer shows up/down/left/right throw controls; throw remains press-and-release on the board.
+- [x] Game log numbering remains readable at 10+ entries.
+- [x] Existing offline `index.html` launch, i18n, localStorage, and supported game modes still work.
+
+## Risk & Rollback
+- Risk level: medium, because this changes menu flow and turn flow.
+- Affected components: `index.html`, CSS pages/components/layout, `js/main.js`, storage, translations, scoring names, README/tasks.
+- Rollback strategy: revert this revision commit; no migrations beyond localStorage keys that have defaults.
+- Monitoring signals: browser console errors, setup-to-game flow, AI turn completion, mobile screenshots, log readability.
+
+## Dependencies & Environment
+- Runtime remains static browser only.
+- No new dependencies or external services.
+- Existing saved settings may lack AI fields; storage normalization must provide defaults.
+
+## Plan
+- [x] Restate goal + acceptance criteria
+- [x] Locate affected UI/logic references
+- [x] Implement setup flow and remove old settings controls
+- [x] Implement AI and realistic throw animation/scatter
+- [x] Expand instructions and CSS contrast/RWD fixes
+- [x] Run verification
+- [x] Summarize results
+
+## Working Notes
+- Keep classic scripts; no ES modules or fetch-based loading.
+- Treat Player 1 as the human and AI 1..3 as automated opponents.
+
+## Results
+- Main menu now only opens setup from Start; mode, AI count, and AI difficulty are chosen in the new setup screen.
+- Settings now only contains audio, language/theme, and save management.
+- Player 1 is human; AI 1..3 are automated and use difficulty-based aim/power/landing spread.
+- Throws now animate along an SVG arc and land with scatter before score resolution.
+- Mobile directional throw controls were removed; mobile uses board press/release.
+- Instructions now render detailed tab content with inline SVG illustrations.
+- Select controls use high-contrast surfaces; game log uses custom counters for readable 10+ numbering.
+- Verification passed:
+  - `node --check` for all files under `js/`
+  - static search for `type="module"`, external URLs, `cdn`, and `npm` returned no matches
+  - old ID/reference scan found no active references to removed menu/settings/mobile controls
+  - Node scoring/hit checks covered AI creation, X01 bust/Double Out, Cricket, Around the Clock, target points, bull, and miss detection
+  - Playwright desktop smoke test covered Start -> setup -> game, AI auto throw, menu -> settings, and removed gameplay settings
+  - Playwright mobile smoke test covered no directional controls and board press/release throw
+  - Playwright screenshots checked setup desktop, dark settings select contrast, mobile gameplay, and illustrated instructions
+  - Temporary Playwright screenshots matching `%TEMP%/darts-*.png` were deleted after inspection and rechecked clean

@@ -1,0 +1,3 @@
+# Keep this scratch directory in the repo while ignoring generated images.
+*
+!.gitignore
