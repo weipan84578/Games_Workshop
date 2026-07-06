@@ -6,6 +6,7 @@
   var BOARD_NUMBERS = [20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5];
   var CRICKET_TARGETS = [20, 19, 18, 17, 16, 15, 25];
   var AROUND_TARGETS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 25];
+  var PLAYER_COLORS = ["#d54045", "#2f80ed", "#7c3aed", "#c77d1d"];
 
   function clone(value) {
     return JSON.parse(JSON.stringify(value));
@@ -19,10 +20,13 @@
   }
 
   function modeStartScore(settings) {
+    if (settings.mode === "701") {
+      return 701;
+    }
     if (settings.mode === "301") {
       return 301;
     }
-    return Number(settings.startScore) === 301 ? 301 : 501;
+    return 501;
   }
 
   function createMarks() {
@@ -39,7 +43,7 @@
       name: playerName(index),
       isAi: index > 0,
       difficulty: index > 0 ? settings.aiDifficulty : "human",
-      color: ["#d54045", "#2f80ed", "#1e9c66", "#c77d1d"][index],
+      color: PLAYER_COLORS[index],
       score: settings.mode === "cricket" ? 0 : modeStartScore(settings),
       marks: createMarks(),
       aroundIndex: 0
@@ -156,9 +160,10 @@
     var score = hitScore(hit);
     var nextScore = before - score;
     var throwLabel = describeHit(hit);
+    var requiresDoubleOut = state.mode !== "701";
     state.turnThrows.push({ label: throwLabel, score: score });
 
-    if (nextScore < 0 || nextScore === 1 || (nextScore === 0 && !isDoubleOut(hit))) {
+    if (nextScore < 0 || (requiresDoubleOut && (nextScore === 1 || (nextScore === 0 && !isDoubleOut(hit))))) {
       player.score = state.turnStartScore;
       state.dartsRemaining = 0;
       state.log.unshift(window.Darts.I18n.t("game.bust") + ": " + player.name + " (" + throwLabel + ")");
@@ -284,9 +289,12 @@
     BOARD_NUMBERS: BOARD_NUMBERS,
     CRICKET_TARGETS: CRICKET_TARGETS,
     AROUND_TARGETS: AROUND_TARGETS,
+    PLAYER_COLORS: PLAYER_COLORS,
     newGame: function (settings) {
       var mode = settings.mode || "501";
-      if (mode === "301") {
+      if (mode === "701") {
+        settings.startScore = 701;
+      } else if (mode === "301") {
         settings.startScore = 301;
       }
       var players = [];

@@ -61,14 +61,20 @@
   function normalizeSettings(input) {
     var settings = Object.assign({}, defaultSettings, input || {});
     if (typeof settings.aiCount === "undefined" && typeof settings.playerCount !== "undefined") {
-      settings.aiCount = clampNumber(Number(settings.playerCount) - 1, 0, 3, defaultSettings.aiCount);
+      settings.aiCount = clampNumber(Number(settings.playerCount) - 1, 1, 3, defaultSettings.aiCount);
     }
-    settings.aiCount = clampNumber(settings.aiCount, 0, 3, defaultSettings.aiCount);
-    settings.startScore = Number(settings.startScore) === 301 ? 301 : 501;
+    settings.aiCount = clampNumber(settings.aiCount, 1, 3, defaultSettings.aiCount);
     settings.bgmVolume = clampNumber(settings.bgmVolume, 0, 10, defaultSettings.bgmVolume);
     settings.sfxVolume = clampNumber(settings.sfxVolume, 0, 10, defaultSettings.sfxVolume);
-    if (["501", "301", "cricket", "around"].indexOf(settings.mode) === -1) {
+    if (["501", "301", "701", "cricket", "around"].indexOf(settings.mode) === -1) {
       settings.mode = defaultSettings.mode;
+    }
+    if (settings.mode === "701") {
+      settings.startScore = 701;
+    } else if (settings.mode === "301") {
+      settings.startScore = 301;
+    } else {
+      settings.startScore = 501;
     }
     if (["classic", "neon", "sakura", "dark"].indexOf(settings.theme) === -1) {
       settings.theme = defaultSettings.theme;

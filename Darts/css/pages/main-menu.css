@@ -111,5 +111,37 @@
 }
 
 .setup-mode-grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
+}
+
+.mode-choice {
+  position: relative;
+  min-width: 0;
+}
+
+.mode-choice .segmented-option {
+  width: 100%;
+  padding-right: 2.6rem;
+}
+
+.mode-info-button {
+  position: absolute;
+  top: 50%;
+  right: var(--space-2);
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--control-border);
+  border-radius: 50%;
+  color: var(--text);
+  background: var(--control-bg);
+  font-weight: 900;
+}
+
+.mode-info-button:hover,
+.mode-info-button:focus-visible {
+  border-color: var(--accent);
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
 }

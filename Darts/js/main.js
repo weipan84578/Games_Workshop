@@ -32,6 +32,13 @@
     hard: 0.018
   };
 
+  var THROW_STABILITY = {
+    human: 0.62,
+    easy: 0.42,
+    normal: 0.68,
+    hard: 0.87
+  };
+
   function qs(selector, root) {
     return (root || document).querySelector(selector);
   }
@@ -62,8 +69,22 @@
     return String(mode || "501");
   }
 
+  function startScoreForMode(mode) {
+    if (mode === "701") {
+      return 701;
+    }
+    if (mode === "301") {
+      return 301;
+    }
+    return 501;
+  }
+
   function difficultyLabel(value) {
     return t("difficulty." + (value || "normal"));
+  }
+
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
   }
 
   function currentScreen() {
@@ -165,9 +186,9 @@
   function startConfiguredGame() {
     var activeModeButton = qs(".setup-mode-grid .segmented-option.is-active");
     var mode = activeModeButton ? activeModeButton.getAttribute("data-mode-choice") : settings.mode;
-    var aiCount = Number(qs("#setupAiCount").value);
+    var aiCount = Math.max(1, Number(qs("#setupAiCount").value) || 1);
     var aiDifficulty = qs("#setupAiDifficulty").value;
-    var startScore = mode === "301" ? 301 : 501;
+    var startScore = startScoreForMode(mode);
     persistSettings({
       mode: mode,
       aiCount: aiCount,
@@ -195,6 +216,9 @@
       }
       if (!player.name) {
         player.name = index === 0 ? t("player.human") : t("ai.name", { number: index });
+      }
+      if (window.Darts.Scoring.PLAYER_COLORS[index]) {
+        player.color = window.Darts.Scoring.PLAYER_COLORS[index];
       }
     });
     return save;
@@ -233,7 +257,7 @@
     var aiCount = qs("#setupAiCount");
     var aiDifficulty = qs("#setupAiDifficulty");
     if (aiCount) {
-      aiCount.value = String(settings.aiCount);
+      aiCount.value = String(Math.max(1, settings.aiCount));
     }
     if (aiDifficulty) {
       aiDifficulty.value = settings.aiDifficulty;
@@ -275,13 +299,13 @@
         var mode = button.getAttribute("data-mode-choice");
         persistSettings({
           mode: mode,
-          startScore: mode === "301" ? 301 : 501
+          startScore: startScoreForMode(mode)
         }, true);
       });
     });
 
     qs("#setupAiCount").addEventListener("change", function (event) {
-      persistSettings({ aiCount: Number(event.target.value) }, true);
+      persistSettings({ aiCount: Math.max(1, Number(event.target.value) || 1) }, true);
     });
     qs("#setupAiDifficulty").addEventListener("change", function (event) {
       persistSettings({ aiDifficulty: event.target.value }, true);
@@ -298,6 +322,48 @@
       game = null;
       showScreen("setup");
     });
+    qsa("[data-mode-info]").forEach(function (button) {
+      button.addEventListener("click", function (event) {
+        event.stopPropagation();
+        showModeInfo(button.getAttribute("data-mode-info"));
+      });
+    });
+    qs("#modeInfoCloseBtn").addEventListener("click", closeModeInfo);
+    qs("#modeInfoModal").addEventListener("click", function (event) {
+      if (event.target === qs("#modeInfoModal")) {
+        closeModeInfo();
+      }
+    });
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && !qs("#modeInfoModal").hidden) {
+        closeModeInfo();
+      }
+    });
+  }
+
+  function modeInfoKeys(mode) {
+    return {
+      "501": ["modeInfo.501.title", "modeInfo.501.lead", "modeInfo.501.point1", "modeInfo.501.point2", "modeInfo.501.point3"],
+      "301": ["modeInfo.301.title", "modeInfo.301.lead", "modeInfo.301.point1", "modeInfo.301.point2", "modeInfo.301.point3"],
+      "701": ["modeInfo.701.title", "modeInfo.701.lead", "modeInfo.701.point1", "modeInfo.701.point2", "modeInfo.701.point3"],
+      cricket: ["modeInfo.cricket.title", "modeInfo.cricket.lead", "modeInfo.cricket.point1", "modeInfo.cricket.point2", "modeInfo.cricket.point3"],
+      around: ["modeInfo.around.title", "modeInfo.around.lead", "modeInfo.around.point1", "modeInfo.around.point2", "modeInfo.around.point3"]
+    }[mode] || ["modeInfo.501.title", "modeInfo.501.lead", "modeInfo.501.point1", "modeInfo.501.point2", "modeInfo.501.point3"];
+  }
+
+  function showModeInfo(mode) {
+    var keys = modeInfoKeys(mode);
+    qs("#modeInfoLabel").textContent = t("setup.mode");
+    qs("#modeInfoTitle").textContent = t(keys[0]);
+    qs("#modeInfoBody").innerHTML =
+      "<p>" + escapeHtml(t(keys[1])) + "</p>" +
+      "<ul><li>" + escapeHtml(t(keys[2])) + "</li><li>" + escapeHtml(t(keys[3])) + "</li><li>" + escapeHtml(t(keys[4])) + "</li></ul>";
+    qs("#modeInfoModal").hidden = false;
+    qs("#modeInfoCloseBtn").focus();
+  }
+
+  function closeModeInfo() {
+    qs("#modeInfoModal").hidden = true;
   }
 
   function bindSettings() {
@@ -346,7 +412,7 @@
       return "<svg class=\"instruction-visual\" " + common + "><rect x=\"28\" y=\"24\" width=\"164\" height=\"102\" rx=\"8\" fill=\"var(--control-bg)\" stroke=\"var(--control-border)\"/><text x=\"58\" y=\"62\">501</text><path d=\"M92 57 H162\" stroke=\"var(--accent)\" stroke-width=\"8\" stroke-linecap=\"round\"/><text x=\"58\" y=\"98\">Bust</text><path d=\"M102 93 H150\" stroke=\"var(--accent-2)\" stroke-width=\"8\" stroke-linecap=\"round\"/><path d=\"M151 84 l16 9 -16 9\" fill=\"none\" stroke=\"var(--accent-2)\" stroke-width=\"6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>";
     }
     if (tab === "modes") {
-      return "<svg class=\"instruction-visual\" " + common + "><rect x=\"28\" y=\"28\" width=\"72\" height=\"38\" rx=\"8\" fill=\"var(--accent)\"/><rect x=\"120\" y=\"28\" width=\"72\" height=\"38\" rx=\"8\" fill=\"var(--control-bg)\" stroke=\"var(--control-border)\"/><rect x=\"28\" y=\"86\" width=\"72\" height=\"38\" rx=\"8\" fill=\"var(--control-bg)\" stroke=\"var(--control-border)\"/><rect x=\"120\" y=\"86\" width=\"72\" height=\"38\" rx=\"8\" fill=\"var(--accent-2)\"/><text x=\"64\" y=\"53\" text-anchor=\"middle\" fill=\"var(--on-accent)\">501</text><text x=\"156\" y=\"53\" text-anchor=\"middle\">301</text><text x=\"64\" y=\"111\" text-anchor=\"middle\">CRI</text><text x=\"156\" y=\"111\" text-anchor=\"middle\" fill=\"var(--on-accent)\">CLK</text></svg>";
+      return "<svg class=\"instruction-visual\" " + common + "><rect x=\"18\" y=\"24\" width=\"54\" height=\"34\" rx=\"8\" fill=\"var(--accent)\"/><rect x=\"83\" y=\"24\" width=\"54\" height=\"34\" rx=\"8\" fill=\"var(--control-bg)\" stroke=\"var(--control-border)\"/><rect x=\"148\" y=\"24\" width=\"54\" height=\"34\" rx=\"8\" fill=\"var(--accent-2)\"/><rect x=\"48\" y=\"88\" width=\"54\" height=\"34\" rx=\"8\" fill=\"var(--control-bg)\" stroke=\"var(--control-border)\"/><rect x=\"118\" y=\"88\" width=\"54\" height=\"34\" rx=\"8\" fill=\"var(--control-bg)\" stroke=\"var(--control-border)\"/><text x=\"45\" y=\"46\" text-anchor=\"middle\" fill=\"var(--on-accent)\">501</text><text x=\"110\" y=\"46\" text-anchor=\"middle\">301</text><text x=\"175\" y=\"46\" text-anchor=\"middle\" fill=\"var(--on-accent)\">701</text><text x=\"75\" y=\"110\" text-anchor=\"middle\">CRI</text><text x=\"145\" y=\"110\" text-anchor=\"middle\">CLK</text></svg>";
     }
     if (tab === "access") {
       return "<svg class=\"instruction-visual\" " + common + "><rect x=\"38\" y=\"24\" width=\"62\" height=\"102\" rx=\"12\" fill=\"var(--control-bg)\" stroke=\"var(--control-border)\"/><circle cx=\"69\" cy=\"102\" r=\"7\" fill=\"var(--accent)\"/><path d=\"M128 36 h44 a8 8 0 0 1 8 8 v62 a8 8 0 0 1 -8 8 h-44 a8 8 0 0 1 -8 -8 V44 a8 8 0 0 1 8 -8 Z\" fill=\"var(--control-bg)\" stroke=\"var(--control-border)\"/><path d=\"M133 62 h34 M133 82 h44 M133 102 h24\" stroke=\"var(--accent)\" stroke-width=\"6\" stroke-linecap=\"round\"/></svg>";
@@ -469,9 +535,10 @@
     }
   }
 
-  function randomOffset(radius) {
+  function randomOffset(radius, minRatio) {
     var angle = Math.random() * Math.PI * 2;
-    var distance = radius * (0.35 + Math.random() * 0.65);
+    var floor = Number.isFinite(minRatio) ? minRatio : 0.35;
+    var distance = radius * (floor + Math.random() * (1 - floor));
     return {
       x: Math.cos(angle) * distance,
       y: Math.sin(angle) * distance
@@ -480,11 +547,21 @@
 
   function computeLandingPoint(targetPoint, power, actor) {
     var idealPower = 0.72;
-    var releaseError = Math.abs((Number(power) || idealPower) - idealPower);
-    var baseSpread = actor && actor.isAi ? AI_LANDING_SPREAD[actor.difficulty] || AI_LANDING_SPREAD.normal : 0.022;
-    var powerSpread = actor && actor.isAi ? releaseError * 0.08 : releaseError * 0.22;
-    var wobble = baseSpread + powerSpread + Math.random() * baseSpread;
-    var offset = randomOffset(wobble);
+    var actualPower = clamp(Number(power) || idealPower, 0, 1);
+    var releaseError = Math.abs(actualPower - idealPower);
+    var radialDistance = clamp(Math.sqrt(targetPoint.x * targetPoint.x + targetPoint.y * targetPoint.y), 0, 1);
+    var difficulty = actor && actor.isAi ? actor.difficulty : "human";
+    var stability = THROW_STABILITY[difficulty] || THROW_STABILITY.human;
+    var baseSpread = actor && actor.isAi ? AI_LANDING_SPREAD[actor.difficulty] || AI_LANDING_SPREAD.normal : 0.028;
+    var powerTerm = Math.pow(releaseError / idealPower, 1.45) * (0.34 + (1 - stability) * 0.18);
+    var distanceTerm = radialDistance * (0.025 + (1 - stability) * 0.035);
+    var handTerm = (1 - stability) * 0.07;
+    var focusChance = 0.12 + stability * 0.26;
+    var focusFactor = Math.random() < focusChance ? 0.18 + Math.random() * 0.18 : 0.76 + Math.random() * 0.56;
+    var slipChance = 0.025 + releaseError * 0.24 + (1 - stability) * 0.08;
+    var slipTerm = Math.random() < slipChance ? 0.13 + Math.random() * (0.18 + releaseError * 0.6) : 0;
+    var wobble = clamp((baseSpread + powerTerm + distanceTerm + handTerm) * focusFactor + slipTerm, 0.002, 0.48);
+    var offset = randomOffset(wobble, 0);
     return window.Darts.Dartboard.clampPoint({
       x: targetPoint.x + offset.x,
       y: targetPoint.y + offset.y
@@ -639,7 +716,7 @@
     }
     var basePoint = window.Darts.Dartboard.pointForTarget(target.segment, target.value);
     var spread = AI_AIM_SPREAD[player.difficulty] || AI_AIM_SPREAD.normal;
-    var offset = randomOffset(spread);
+    var offset = randomOffset(spread, 0.2);
     var aim = window.Darts.Dartboard.clampPoint({
       x: basePoint.x + offset.x,
       y: basePoint.y + offset.y
@@ -705,7 +782,7 @@
       if (game.mode === "around") {
         sub = t("game.nextTarget") + ": " + window.Darts.Scoring.nextAroundLabel(player);
       } else {
-        sub = player.score === 0 ? t("game.win", { player: player.name }) : t("game.needDouble");
+        sub = player.score === 0 ? t("game.win", { player: player.name }) : t(game.mode === "701" ? "game.exactZero" : "game.needDouble");
       }
       return "<div class=\"player-score-row " + (index === game.currentPlayer ? "is-current" : "") + "\">" +
         "<div><strong>" + escapeHtml(player.name) + "</strong><p class=\"eyebrow\">" + escapeHtml(sub) + "</p></div>" +

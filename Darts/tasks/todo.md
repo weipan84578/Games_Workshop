@@ -111,3 +111,92 @@ Apply the requested UI and gameplay revisions: move match setup behind Start, re
   - Playwright mobile smoke test covered no directional controls and board press/release throw
   - Playwright screenshots checked setup desktop, dark settings select contrast, mobile gameplay, and illustrated instructions
   - Temporary Playwright screenshots matching `%TEMP%/darts-*.png` were deleted after inspection and rechecked clean
+
+# 2026-07-06_darts_revision_ai_min_power_mode_help
+
+## Goal
+Apply the requested refinements: AI count must start at one, throw accuracy must be driven by a power formula with both large misses and precise throws possible, and each setup mode must have a clickable explanation modal before the match starts.
+
+## Acceptance Criteria
+- [x] Setup AI count minimum is 1 and maximum is 3.
+- [x] Storage normalization upgrades old `aiCount: 0` or missing values to at least 1.
+- [x] Throws use a deterministic formula shape that combines release power error, radial distance, player/AI stability, and random variance without showing formula text in the game UI.
+- [x] Setup mode choices include a clickable control that opens a mode explanation modal.
+- [x] Mode explanation modal supports 501, 301, Cricket, and Around the Clock with i18n text.
+- [x] Existing offline launch, setup flow, AI turns, and board press/release still work.
+
+## Risk & Rollback
+- Risk level: low to medium, because this is a focused setup and throw-behavior change.
+- Affected components: `index.html`, setup CSS, `js/main.js`, storage normalization, translations, README/tasks.
+- Rollback strategy: revert this revision; no schema migration needed because settings normalization supplies defaults.
+
+## Plan
+- [x] Restate goal + acceptance criteria
+- [x] Update AI count defaults/options
+- [x] Refine throw landing formula
+- [x] Add setup mode help modal
+- [x] Run verification
+- [x] Summarize results
+
+## Working Notes
+- Do not display the throw formula in the game UI.
+- Keep screenshots in `TEMP/` if visual verification is needed, and delete them after use.
+
+## Results
+- Setup AI count now offers 1, 2, or 3 only; storage normalization upgrades old zero/missing AI settings to one.
+- Throw landing now combines release power error, target radial distance, player/AI stability, focus/slip random variance, and difficulty spread. No formula text is shown in the UI.
+- Each setup mode now has a `?` control that opens a modal with mode-specific guidance in Traditional Chinese, English, and Japanese.
+- Verification passed:
+  - `node --check` for all files under `js/`
+  - static search for `type="module"`, external URLs, `cdn`, and `npm` returned no matches
+  - Node checks covered storage normalization from `aiCount: 0` to `1` and minimum-AI game creation
+  - Playwright desktop smoke test covered old `aiCount: 0` localStorage normalization, absence of `0` AI option, Cricket/301 mode info modals, starting a match, and AI auto throw
+  - Playwright mobile smoke test covered setup without `0` AI and board press/release throw
+  - UI/source scan confirmed no formula text or `option value="0"` in `index.html`, `js`, `css`, or `README.md`
+  - `TEMP/` contains only `.gitignore`; no verification screenshots were left behind
+
+# 2026-07-06_darts_revision_701_mode
+
+## Goal
+Add a 701 countdown mode, include it in setup/help/settings documentation, and change the third player's dart color from green to purple.
+
+## Acceptance Criteria
+- [x] Setup mode selection includes 701 with a clickable explanation modal.
+- [x] Storage normalization accepts mode `701` and preserves a 701 start score.
+- [x] 701 starts every player at 701, subtracts hits, wins immediately on exact zero, and busts only when the score goes below zero.
+- [x] 501/301 Double Out behavior remains unchanged.
+- [x] Instructions, mode help, and README document the 701 rules.
+- [x] Third player dart markers use purple instead of green.
+- [x] Verification covers syntax, storage, scoring, and setup UI behavior.
+
+## Risk & Rollback
+- Risk level: low to medium, because this extends existing X01 behavior with one mode-specific rule branch.
+- Affected components: setup HTML/CSS, storage normalization, scoring engine, main UI logic, translations, README.
+- Rollback strategy: revert this focused revision; no external state migration required because settings normalize invalid modes safely.
+
+## Plan
+- [x] Restate goal + acceptance criteria
+- [x] Add 701 setup/storage/UI plumbing
+- [x] Add 701 scoring rule and purple third-player color
+- [x] Update instructions, mode help, and README
+- [x] Run verification
+- [x] Summarize results
+
+## Working Notes
+- Treat 701 as an X01 countdown mode with no Double Out requirement.
+- For 701, remaining 1 is valid; only scoring below 0 should bust.
+- Normalize start score from mode instead of trusting stale `startScore`, so 501 cannot inherit a stray 701 value.
+
+## Results
+- Added 701 to setup mode selection and mode info keys.
+- Added storage/scoring support for 701 with exact-zero wins and below-zero busts only.
+- Kept 501/301 Double Out behavior unchanged.
+- Changed the third player color palette entry from green to purple and reapplied palette colors when hydrating old saves.
+- Updated instructions, mode help, README, and the instruction mode illustration for 701.
+- Verification passed:
+  - `node --check` for all files under `js/`
+  - Node storage/scoring checks for 701 normalization, 701 start scores, exact-zero single-hit win, below-zero bust, remaining-one allowance, 501 Double Out bust, and third-player purple color
+  - Source assertions for setup 701 controls, 701 modal translation keys in all three languages, 701 scoreboard hint, scoring branch, README docs, and purple color
+  - Static scans found no old `#1e9c66` third-player color or old `mode === "301" ? 301 : 501` start-score special case
+  - Browser automation was not run because `playwright` is not installed in this workspace
+  - `TEMP/` contains only `.gitignore`; no verification screenshots were left behind

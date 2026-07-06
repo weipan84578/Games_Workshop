@@ -84,16 +84,31 @@
         <section class="panel setup-panel">
           <h2 data-i18n="setup.mode">Game mode</h2>
           <div class="segmented setup-mode-grid" role="radiogroup" aria-label="Game mode">
-            <button class="segmented-option is-active" type="button" data-mode-choice="501">501</button>
-            <button class="segmented-option" type="button" data-mode-choice="301">301</button>
-            <button class="segmented-option" type="button" data-mode-choice="cricket">Cricket</button>
-            <button class="segmented-option" type="button" data-mode-choice="around">Clock</button>
+            <div class="mode-choice">
+              <button class="segmented-option is-active" type="button" data-mode-choice="501">501</button>
+              <button class="mode-info-button" type="button" data-mode-info="501" aria-label="501 mode details">?</button>
+            </div>
+            <div class="mode-choice">
+              <button class="segmented-option" type="button" data-mode-choice="301">301</button>
+              <button class="mode-info-button" type="button" data-mode-info="301" aria-label="301 mode details">?</button>
+            </div>
+            <div class="mode-choice">
+              <button class="segmented-option" type="button" data-mode-choice="701">701</button>
+              <button class="mode-info-button" type="button" data-mode-info="701" aria-label="701 mode details">?</button>
+            </div>
+            <div class="mode-choice">
+              <button class="segmented-option" type="button" data-mode-choice="cricket">Cricket</button>
+              <button class="mode-info-button" type="button" data-mode-info="cricket" aria-label="Cricket mode details">?</button>
+            </div>
+            <div class="mode-choice">
+              <button class="segmented-option" type="button" data-mode-choice="around">Clock</button>
+              <button class="mode-info-button" type="button" data-mode-info="around" aria-label="Around the Clock mode details">?</button>
+            </div>
           </div>
           <div class="setup-grid">
             <label class="field">
               <span data-i18n="setup.aiCount">AI players</span>
               <select id="setupAiCount">
-                <option value="0">0</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -255,6 +270,18 @@
     </section>
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <div id="modeInfoModal" class="modal-backdrop" hidden>
+      <section class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modeInfoTitle">
+        <header class="modal-header">
+          <div>
+            <p id="modeInfoLabel" class="eyebrow"></p>
+            <h2 id="modeInfoTitle"></h2>
+          </div>
+          <button id="modeInfoCloseBtn" class="icon-button" type="button" aria-label="Close">×</button>
+        </header>
+        <div id="modeInfoBody" class="modal-body"></div>
+      </section>
+    </div>
   </div>
 
   <script src="js/core/storageManager.js"></script>
