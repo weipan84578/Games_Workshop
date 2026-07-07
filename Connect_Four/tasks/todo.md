@@ -108,3 +108,27 @@ Remove the visible flicker when settings controls or game moves trigger same-scr
 - `index.html` local reference check passed: 43 local files found.
 - Core smoke test passed: horizontal win detection, Easy AI immediate block, and Minimax legal move.
 - Scanned for screenshot, Playwright, tmp, and temp files; none were present.
+
+## 2026-07-07 result_icon_refresh
+
+### Goal
+Replace the generic result badge with outcome-specific win, loss, and draw illustrations.
+
+### Acceptance Criteria
+- Win result shows a celebratory visual with confetti, ribbon, flowers, and a four-piece connect-four motif.
+- Loss result shows a clearly different but non-hostile losing visual.
+- Draw result keeps a neutral visual.
+- Result illustrations remain responsive and do not introduce image files or temporary artifacts.
+
+### Results
+- Replaced the generic result badge markup with outcome-specific result art.
+- Win now shows four connected chips with confetti, a ribbon, and flowers.
+- Loss now shows a cracked sad chip, raindrops, and a white flag.
+- Draw now shows two opposing chips with an equals-style separator.
+- All illustrations are HTML/CSS only; no new image assets or generated screenshots were created.
+
+### Verification
+- `Get-ChildItem -Path .\js -Recurse -Filter *.js | ForEach-Object { node --check $_.FullName }` passed.
+- `index.html` local reference check passed: 43 local files found.
+- Core smoke test passed: horizontal win detection, Easy AI immediate block, and Minimax legal move.
+- Scanned for screenshot, Playwright, tmp, and temp files; none were present.

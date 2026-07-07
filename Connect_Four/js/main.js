@@ -169,7 +169,7 @@ function maybeShowResult() {
     className: "result-modal",
     body: `
       <div class="result-outcome result-${resultKind}">
-        <div class="result-badge" aria-hidden="true"><span>4</span></div>
+        ${renderResultArt(resultKind)}
         <p class="result-message">${CF.helpers.escapeHtml(detail)}</p>
       </div>
     `,
@@ -178,6 +178,51 @@ function maybeShowResult() {
       { label: CF.i18n.t("game.home"), action: "menu", className: "secondary" }
     ]
   });
+}
+
+function renderResultArt(resultKind) {
+  if (resultKind === "win") {
+    return `
+      <div class="result-art result-art-win" aria-hidden="true">
+        <span class="confetti c1"></span>
+        <span class="confetti c2"></span>
+        <span class="confetti c3"></span>
+        <span class="confetti c4"></span>
+        <span class="ribbon"></span>
+        <span class="flower f1"><i></i></span>
+        <span class="flower f2"><i></i></span>
+        <span class="win-chip p1"></span>
+        <span class="win-chip p2"></span>
+        <span class="win-chip p3"></span>
+        <span class="win-chip p4"></span>
+      </div>
+    `;
+  }
+
+  if (resultKind === "lose") {
+    return `
+      <div class="result-art result-art-lose" aria-hidden="true">
+        <span class="rain r1"></span>
+        <span class="rain r2"></span>
+        <span class="rain r3"></span>
+        <span class="loss-chip">
+          <span class="sad-eye left"></span>
+          <span class="sad-eye right"></span>
+          <span class="sad-mouth"></span>
+          <span class="crack"></span>
+        </span>
+        <span class="white-flag"><i></i></span>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="result-art result-art-draw" aria-hidden="true">
+      <span class="draw-chip one"></span>
+      <span class="draw-chip two"></span>
+      <span class="draw-line"></span>
+    </div>
+  `;
 }
 
 function showPauseModal() {

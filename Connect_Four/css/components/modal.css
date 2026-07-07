@@ -141,6 +141,296 @@
   overflow-wrap: anywhere;
 }
 
+.result-art {
+  position: relative;
+  width: clamp(168px, 34vw, 250px);
+  height: clamp(138px, 28vw, 206px);
+  isolation: isolate;
+}
+
+.result-art-win .win-chip,
+.result-art-draw .draw-chip,
+.result-art-lose .loss-chip {
+  position: absolute;
+  border-radius: 50%;
+  box-shadow:
+    inset -9px -11px 16px rgba(0, 0, 0, 0.22),
+    inset 7px 9px 14px rgba(255, 255, 255, 0.35),
+    0 10px 18px rgba(0, 0, 0, 0.18);
+}
+
+.result-art-win .win-chip {
+  bottom: 26%;
+  width: clamp(38px, 7vw, 58px);
+  aspect-ratio: 1;
+  background:
+    radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.78), transparent 20%),
+    radial-gradient(circle at 50% 50%, var(--chip-two), var(--chip-two-dark));
+  animation: win-pulse 980ms ease-in-out infinite;
+}
+
+.result-art-win .p1 { left: 13%; }
+.result-art-win .p2 { left: 32%; animation-delay: 70ms; }
+.result-art-win .p3 { left: 51%; animation-delay: 140ms; }
+.result-art-win .p4 { left: 70%; animation-delay: 210ms; }
+
+.result-art-win .ribbon {
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: 10%;
+  height: clamp(18px, 4vw, 28px);
+  border-radius: 999px;
+  background: linear-gradient(90deg, #e94456, #ffcf5d, #e94456);
+  box-shadow: 0 8px 14px rgba(0, 0, 0, 0.16);
+  z-index: -1;
+}
+
+.result-art-win .ribbon::before,
+.result-art-win .ribbon::after {
+  content: "";
+  position: absolute;
+  top: 54%;
+  width: 28%;
+  height: 150%;
+  background: #c92f44;
+  clip-path: polygon(0 0, 100% 0, 78% 100%, 50% 70%, 22% 100%);
+}
+
+.result-art-win .ribbon::before {
+  left: 2%;
+  transform: rotate(15deg);
+}
+
+.result-art-win .ribbon::after {
+  right: 2%;
+  transform: rotate(-15deg);
+}
+
+.confetti {
+  position: absolute;
+  width: clamp(10px, 2vw, 16px);
+  height: clamp(18px, 3vw, 26px);
+  border-radius: 4px;
+  animation: confetti-float 1200ms ease-in-out infinite;
+}
+
+.confetti.c1 {
+  left: 7%;
+  top: 10%;
+  background: #e94456;
+  transform: rotate(-22deg);
+}
+
+.confetti.c2 {
+  left: 28%;
+  top: 0;
+  background: #45c2a4;
+  transform: rotate(18deg);
+  animation-delay: 120ms;
+}
+
+.confetti.c3 {
+  right: 22%;
+  top: 4%;
+  background: #ffcf5d;
+  transform: rotate(-12deg);
+  animation-delay: 220ms;
+}
+
+.confetti.c4 {
+  right: 7%;
+  top: 18%;
+  background: #55a7e6;
+  transform: rotate(26deg);
+  animation-delay: 320ms;
+}
+
+.flower {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: clamp(30px, 6vw, 44px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #fff0f6;
+}
+
+.flower::before,
+.flower::after,
+.flower i {
+  content: "";
+  position: absolute;
+  width: 46%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #ff7dab;
+  box-shadow:
+    0 -15px 0 #ff7dab,
+    0 15px 0 #ff7dab,
+    15px 0 0 #ff7dab,
+    -15px 0 0 #ff7dab;
+}
+
+.flower::after {
+  width: 28%;
+  background: #ffd65b;
+  box-shadow: none;
+}
+
+.flower.f1 {
+  left: 0;
+  bottom: 24%;
+}
+
+.flower.f2 {
+  right: 0;
+  bottom: 24%;
+  transform: scale(0.9) rotate(18deg);
+}
+
+.result-art-lose .loss-chip {
+  left: 50%;
+  top: 50%;
+  display: block;
+  width: clamp(96px, 20vw, 136px);
+  aspect-ratio: 1;
+  background:
+    radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.68), transparent 20%),
+    radial-gradient(circle at 50% 50%, var(--chip-one), var(--chip-one-dark));
+  transform: translate(-50%, -50%);
+}
+
+.sad-eye {
+  position: absolute;
+  top: 36%;
+  width: 15%;
+  height: 9%;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+}
+
+.sad-eye.left {
+  left: 28%;
+  transform: rotate(18deg);
+}
+
+.sad-eye.right {
+  right: 28%;
+  transform: rotate(-18deg);
+}
+
+.sad-mouth {
+  position: absolute;
+  left: 50%;
+  bottom: 28%;
+  width: 36%;
+  height: 22%;
+  border-top: 5px solid rgba(255, 255, 255, 0.92);
+  border-radius: 50%;
+  transform: translateX(-50%);
+}
+
+.crack {
+  position: absolute;
+  left: 49%;
+  top: 14%;
+  width: 9%;
+  height: 58%;
+  background: rgba(255, 255, 255, 0.82);
+  clip-path: polygon(40% 0, 95% 20%, 55% 35%, 100% 56%, 35% 74%, 70% 100%, 0 100%, 38% 76%, 0 57%, 43% 38%, 8% 22%);
+  transform: translateX(-50%);
+}
+
+.rain {
+  position: absolute;
+  width: clamp(10px, 2vw, 16px);
+  height: clamp(24px, 5vw, 36px);
+  border-radius: 999px 999px 999px 0;
+  background: #62b6ef;
+  opacity: 0.9;
+  transform: rotate(-24deg);
+  animation: rain-drop 900ms ease-in-out infinite;
+}
+
+.rain.r1 {
+  left: 14%;
+  top: 4%;
+}
+
+.rain.r2 {
+  left: 25%;
+  top: 20%;
+  animation-delay: 160ms;
+}
+
+.rain.r3 {
+  right: 15%;
+  top: 12%;
+  animation-delay: 260ms;
+}
+
+.white-flag {
+  position: absolute;
+  right: 8%;
+  bottom: 16%;
+  width: clamp(40px, 8vw, 58px);
+  height: clamp(62px, 12vw, 84px);
+}
+
+.white-flag::before {
+  content: "";
+  position: absolute;
+  left: 12%;
+  top: 6%;
+  width: 4px;
+  height: 86%;
+  border-radius: 999px;
+  background: var(--color-muted);
+}
+
+.white-flag i {
+  position: absolute;
+  left: 20%;
+  top: 8%;
+  width: 72%;
+  height: 36%;
+  border-radius: 8px 8px 8px 2px;
+  background: var(--color-surface-strong);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.14);
+}
+
+.result-art-draw .draw-chip {
+  top: 42%;
+  width: clamp(76px, 16vw, 112px);
+  aspect-ratio: 1;
+}
+
+.result-art-draw .draw-chip.one {
+  left: 13%;
+  background:
+    radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.7), transparent 20%),
+    radial-gradient(circle at 50% 50%, var(--chip-one), var(--chip-one-dark));
+}
+
+.result-art-draw .draw-chip.two {
+  right: 13%;
+  background:
+    radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.7), transparent 20%),
+    radial-gradient(circle at 50% 50%, var(--chip-two), var(--chip-two-dark));
+}
+
+.draw-line {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: clamp(26px, 5vw, 38px);
+  height: clamp(10px, 2vw, 16px);
+  border-top: 5px solid var(--color-muted);
+  border-bottom: 5px solid var(--color-muted);
+  transform: translate(-50%, -50%);
+}
+
 .result-sparkles {
   color: var(--color-accent);
   font-size: clamp(32px, 8vw, 64px);
@@ -211,5 +501,10 @@
 
   .result-message {
     max-width: 38ch;
+  }
+
+  .result-art {
+    width: clamp(150px, 38vh, 220px);
+    height: clamp(112px, 30vh, 170px);
   }
 }
