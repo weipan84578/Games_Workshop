@@ -1,0 +1,13 @@
+{
+  "language": "zh-TW",
+  "theme": "classic",
+  "bgmVolume": 0.75,
+  "sfxVolume": 0.8,
+  "bgmMuted": false,
+  "sfxMuted": false,
+  "bgmBoost": 1.4,
+  "randomBgm": false,
+  "aiDifficulty": "normal",
+  "vibration": true,
+  "animations": true
+}

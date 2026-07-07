@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <title>Connect Four</title>
+  <link rel="stylesheet" href="css/base/reset.css">
+  <link rel="stylesheet" href="css/base/variables.css">
+  <link rel="stylesheet" href="css/base/typography.css">
+  <link rel="stylesheet" href="css/themes/theme-classic.css">
+  <link rel="stylesheet" href="css/themes/theme-ocean.css">
+  <link rel="stylesheet" href="css/themes/theme-candy.css">
+  <link rel="stylesheet" href="css/themes/theme-night.css">
+  <link rel="stylesheet" href="css/themes/theme-forest.css">
+  <link rel="stylesheet" href="css/layout/responsive.css">
+  <link rel="stylesheet" href="css/layout/grid.css">
+  <link rel="stylesheet" href="css/components/button.css">
+  <link rel="stylesheet" href="css/components/modal.css">
+  <link rel="stylesheet" href="css/components/board.css">
+  <link rel="stylesheet" href="css/components/navbar.css">
+  <link rel="stylesheet" href="css/components/toast.css">
+  <link rel="stylesheet" href="css/components/icons.css">
+  <link rel="stylesheet" href="css/screens/main-menu.css">
+  <link rel="stylesheet" href="css/screens/game.css">
+  <link rel="stylesheet" href="css/screens/settings.css">
+  <link rel="stylesheet" href="css/screens/howtoplay.css">
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body data-theme="classic">
+  <div id="app" class="app-shell" aria-live="polite"></div>
+  <div id="toast-root" class="toast-root" aria-live="assertive" aria-atomic="true"></div>
+  <div id="modal-root" class="modal-root" aria-live="polite"></div>
+  <noscript>This game requires JavaScript.</noscript>
+
+  <script src="js/utils/constants.js"></script>
+  <script src="js/utils/storage.js"></script>
+  <script src="js/utils/helpers.js"></script>
+  <script src="js/settings/settingsManager.js"></script>
+  <script src="js/i18n/i18n.js"></script>
+  <script src="js/core/board.js"></script>
+  <script src="js/core/rules.js"></script>
+  <script src="js/core/history.js"></script>
+  <script src="js/core/gameState.js"></script>
+  <script src="js/ai/heuristic.js"></script>
+  <script src="js/ai/easyRandom.js"></script>
+  <script src="js/ai/minimax.js"></script>
+  <script src="js/ai/aiController.js"></script>
+  <script src="js/ui/toast.js"></script>
+  <script src="js/ui/modalController.js"></script>
+  <script src="js/ui/responsiveController.js"></script>
+  <script src="js/ui/renderBoard.js"></script>
+  <script src="js/ui/renderMenu.js"></script>
+  <script src="js/audio/bgmPlaylist.js"></script>
+  <script src="js/audio/sfxPlayer.js"></script>
+  <script src="js/audio/audioManager.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

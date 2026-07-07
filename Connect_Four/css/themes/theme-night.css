@@ -1,0 +1,20 @@
+body[data-theme="night"] {
+  --theme-backdrop: #111727;
+  --color-bg: #111727;
+  --color-surface: #1c2436;
+  --color-surface-strong: #263148;
+  --color-text: #f8fbff;
+  --color-muted: #b8c5d9;
+  --color-accent: #69d7ff;
+  --color-accent-strong: #39a7d1;
+  --color-accent-text: #08111f;
+  --board-face: #263b72;
+  --board-side: #17254b;
+  --board-shadow: #0b1328;
+  --slot-color: #0f1728;
+  --chip-one: #b477ff;
+  --chip-one-dark: #6e31b9;
+  --chip-two: #45e8e2;
+  --chip-two-dark: #13807d;
+  --chip-empty-shadow: rgba(0, 0, 0, 0.5);
+}

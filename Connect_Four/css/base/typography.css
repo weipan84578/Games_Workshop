@@ -1,0 +1,42 @@
+body {
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.64), rgba(255, 255, 255, 0.64)),
+    var(--theme-backdrop, #f7eddf);
+  color: var(--color-text);
+  font-family: var(--font-family-ui);
+  font-size: var(--font-size-body);
+  line-height: 1.55;
+  letter-spacing: 0;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: var(--font-size-title);
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: var(--font-size-subtitle);
+  line-height: 1.2;
+}
+
+h3 {
+  font-size: 1.08rem;
+}
+
+.eyebrow {
+  color: var(--color-muted);
+  font-size: 0.92rem;
+  font-weight: var(--font-weight-emphasis);
+  text-transform: uppercase;
+}
+
+.muted {
+  color: var(--color-muted);
+}

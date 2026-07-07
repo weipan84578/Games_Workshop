@@ -1,0 +1,11 @@
+{
+  "menu.start": "ゲーム開始",
+  "menu.continue": "続きから",
+  "menu.howto": "遊び方",
+  "menu.settings": "設定",
+  "game.yourTurn": "あなたの番です",
+  "game.aiTurn": "AI 思考中...",
+  "result.win": "勝利！",
+  "result.lose": "もう一度挑戦！",
+  "result.draw": "引き分け！"
+}

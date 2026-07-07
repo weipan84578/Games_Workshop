@@ -1,0 +1,18 @@
+body[data-theme="forest"] {
+  --theme-backdrop: #edf4e5;
+  --color-bg: #edf4e5;
+  --color-surface: #fffaf0;
+  --color-surface-strong: #ffffff;
+  --color-text: #193b2e;
+  --color-muted: #4c675e;
+  --color-accent: #2b7254;
+  --color-accent-strong: #174934;
+  --board-face: #477d57;
+  --board-side: #2f573b;
+  --board-shadow: #1e3d28;
+  --slot-color: #f8edd1;
+  --chip-one: #b84e35;
+  --chip-one-dark: #732716;
+  --chip-two: #f3d76b;
+  --chip-two-dark: #886c12;
+}

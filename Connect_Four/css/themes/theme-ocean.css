@@ -1,0 +1,18 @@
+body[data-theme="ocean"] {
+  --theme-backdrop: #e5f7fb;
+  --color-bg: #e5f7fb;
+  --color-surface: #ffffff;
+  --color-surface-strong: #f8fdff;
+  --color-text: #0f3445;
+  --color-muted: #486776;
+  --color-accent: #0077a3;
+  --color-accent-strong: #00506f;
+  --board-face: #1c93c4;
+  --board-side: #0a6188;
+  --board-shadow: #083f59;
+  --slot-color: #eafcff;
+  --chip-one: #f15f4d;
+  --chip-one-dark: #973022;
+  --chip-two: #54d7a3;
+  --chip-two-dark: #167452;
+}

@@ -1,0 +1,11 @@
+{
+  "menu.start": "開始遊戲",
+  "menu.continue": "繼續遊戲",
+  "menu.howto": "遊戲說明",
+  "menu.settings": "設定",
+  "game.yourTurn": "輪到你了",
+  "game.aiTurn": "AI 思考中...",
+  "result.win": "恭喜獲勝！",
+  "result.lose": "再接再厲！",
+  "result.draw": "平手！"
+}

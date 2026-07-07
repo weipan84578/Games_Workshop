@@ -1,0 +1,53 @@
+:root {
+  --font-family-ui: "Arial Rounded MT Bold", "Segoe UI", "Hiragino Maru Gothic ProN", "Yu Gothic UI", "Microsoft JhengHei", sans-serif;
+  --font-size-body: clamp(16px, 2vw, 20px);
+  --font-size-title: clamp(28px, 5vw, 44px);
+  --font-size-subtitle: clamp(20px, 3vw, 28px);
+  --font-size-button: clamp(18px, 2.4vw, 23px);
+  --font-weight-emphasis: 700;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --shadow-soft: 0 12px 30px rgba(21, 28, 42, 0.18);
+  --shadow-board: 0 16px 0 var(--board-shadow), 0 24px 35px rgba(10, 15, 25, 0.22);
+  --duration-fast: 160ms;
+  --duration-normal: 240ms;
+  --duration-drop: 520ms;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --board-size: clamp(300px, min(86vw, 72vh), 690px);
+  --cell-gap: clamp(5px, 1vw, 10px);
+  --focus-ring: #f9b233;
+}
+
+body {
+  --color-bg: #f7eddf;
+  --color-surface: #fffaf1;
+  --color-surface-strong: #ffffff;
+  --color-text: #18324a;
+  --color-muted: #526675;
+  --color-accent: #1f5d8b;
+  --color-accent-strong: #123e66;
+  --color-accent-text: #ffffff;
+  --color-danger: #b73935;
+  --color-success: #247a52;
+  --board-face: #c88747;
+  --board-side: #94582b;
+  --board-shadow: #6a3b1e;
+  --slot-color: #fff6e8;
+  --chip-one: #174f81;
+  --chip-one-dark: #0d2f50;
+  --chip-two: #ffd65b;
+  --chip-two-dark: #b68212;
+  --chip-empty-shadow: rgba(85, 56, 28, 0.24);
+}

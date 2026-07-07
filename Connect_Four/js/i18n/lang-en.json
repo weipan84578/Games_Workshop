@@ -1,0 +1,11 @@
+{
+  "menu.start": "Start Game",
+  "menu.continue": "Continue",
+  "menu.howto": "How to Play",
+  "menu.settings": "Settings",
+  "game.yourTurn": "Your turn",
+  "game.aiTurn": "AI thinking...",
+  "result.win": "You win!",
+  "result.lose": "Try again!",
+  "result.draw": "Draw!"
+}

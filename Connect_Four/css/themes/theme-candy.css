@@ -1,0 +1,18 @@
+body[data-theme="candy"] {
+  --theme-backdrop: #fff1fb;
+  --color-bg: #fff1fb;
+  --color-surface: #fffaf0;
+  --color-surface-strong: #ffffff;
+  --color-text: #3c2552;
+  --color-muted: #6f577d;
+  --color-accent: #8e3f8f;
+  --color-accent-strong: #622064;
+  --board-face: #b96fc4;
+  --board-side: #82428d;
+  --board-shadow: #5c2365;
+  --slot-color: #fff7d9;
+  --chip-one: #d93f64;
+  --chip-one-dark: #8b1834;
+  --chip-two: #41a6df;
+  --chip-two-dark: #17608e;
+}

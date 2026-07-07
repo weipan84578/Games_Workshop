@@ -1,0 +1,48 @@
+.menu-screen {
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-panel {
+  display: grid;
+  gap: var(--space-6);
+  width: min(520px, 100%);
+  padding: clamp(20px, 4vw, 34px);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 250, 241, 0.9);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(8px);
+}
+
+body[data-theme="night"] .menu-panel {
+  background: rgba(28, 36, 54, 0.92);
+}
+
+.menu-title {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: center;
+  text-align: center;
+}
+
+.menu-actions {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.setup-panel,
+.content-panel {
+  display: grid;
+  gap: var(--space-5);
+  width: min(900px, 100%);
+  margin: auto;
+  padding: clamp(18px, 4vw, 30px);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 250, 241, 0.92);
+  box-shadow: var(--shadow-soft);
+}
+
+body[data-theme="night"] .setup-panel,
+body[data-theme="night"] .content-panel {
+  background: rgba(28, 36, 54, 0.94);
+}

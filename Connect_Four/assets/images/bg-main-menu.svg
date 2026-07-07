@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 960" role="img" aria-label="Connect Four table background">
+  <rect width="1440" height="960" fill="#f5ddbd"/>
+  <path d="M0 610c190-90 375-115 560-72 168 39 329 37 480-5 170-48 303-31 400 49v378H0z" fill="#d8a566"/>
+  <ellipse cx="720" cy="695" rx="520" ry="145" fill="#b7793f" opacity=".35"/>
+  <g transform="translate(410 175)">
+    <rect x="0" y="96" width="620" height="470" rx="42" fill="#ba7335"/>
+    <rect x="32" y="124" width="556" height="398" rx="28" fill="#2b6f9f"/>
+    <g fill="#fff4d8">
+      <circle cx="90" cy="185" r="28"/><circle cx="165" cy="185" r="28"/><circle cx="240" cy="185" r="28"/><circle cx="315" cy="185" r="28"/><circle cx="390" cy="185" r="28"/><circle cx="465" cy="185" r="28"/><circle cx="540" cy="185" r="28"/>
+      <circle cx="90" cy="250" r="28"/><circle cx="165" cy="250" r="28"/><circle cx="240" cy="250" r="28"/><circle cx="315" cy="250" r="28"/><circle cx="390" cy="250" r="28"/><circle cx="465" cy="250" r="28"/><circle cx="540" cy="250" r="28"/>
+      <circle cx="90" cy="315" r="28"/><circle cx="165" cy="315" r="28"/><circle cx="240" cy="315" r="28"/><circle cx="315" cy="315" r="28"/><circle cx="390" cy="315" r="28"/><circle cx="465" cy="315" r="28"/><circle cx="540" cy="315" r="28"/>
+      <circle cx="90" cy="380" r="28"/><circle cx="165" cy="380" r="28"/><circle cx="240" cy="380" r="28"/><circle cx="315" cy="380" r="28"/><circle cx="390" cy="380" r="28"/><circle cx="465" cy="380" r="28"/><circle cx="540" cy="380" r="28"/>
+      <circle cx="90" cy="445" r="28"/><circle cx="165" cy="445" r="28"/><circle cx="240" cy="445" r="28"/><circle cx="315" cy="445" r="28"/><circle cx="390" cy="445" r="28"/><circle cx="465" cy="445" r="28"/><circle cx="540" cy="445" r="28"/>
+    </g>
+    <circle cx="165" cy="445" r="24" fill="#ffd65b"/><circle cx="240" cy="445" r="24" fill="#174f81"/><circle cx="315" cy="445" r="24" fill="#ffd65b"/><circle cx="390" cy="445" r="24" fill="#174f81"/>
+    <circle cx="240" cy="380" r="24" fill="#ffd65b"/><circle cx="315" cy="380" r="24" fill="#174f81"/><circle cx="390" cy="380" r="24" fill="#ffd65b"/>
+  </g>
+  <g opacity=".32" fill="#ffffff">
+    <circle cx="160" cy="180" r="42"/><circle cx="1220" cy="155" r="58"/><circle cx="1180" cy="790" r="28"/>
+  </g>
+</svg>

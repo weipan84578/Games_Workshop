@@ -1,0 +1,24 @@
+.board-wrap {
+  display: grid;
+  gap: var(--space-3);
+  justify-items: center;
+}
+
+.column-targets {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--cell-gap);
+  width: var(--board-size);
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: var(--cell-gap);
+  width: var(--board-size);
+  aspect-ratio: 7 / 6;
+  padding: clamp(10px, 2vw, 18px);
+  border: clamp(6px, 1.2vw, 12px) solid var(--board-side);
+  border-radius: var(--radius-lg);
+}

@@ -1,0 +1,25 @@
+.icon-img,
+.icon {
+  width: 1.35em;
+  height: 1.35em;
+  flex: 0 0 auto;
+}
+
+.button:not(.secondary):not(.ghost) .icon-img,
+.button.danger .icon-img {
+  filter: brightness(0) invert(1);
+}
+
+.logo-mark {
+  display: inline-grid;
+  grid-template-columns: repeat(2, 0.72em);
+  grid-template-rows: repeat(2, 0.72em);
+  gap: 0.12em;
+  color: var(--color-accent);
+}
+
+.logo-mark span {
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: inset -2px -3px 5px rgba(0, 0, 0, 0.22), inset 2px 2px 4px rgba(255, 255, 255, 0.4);
+}

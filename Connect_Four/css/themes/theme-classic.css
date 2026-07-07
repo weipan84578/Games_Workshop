@@ -1,0 +1,18 @@
+body[data-theme="classic"] {
+  --theme-backdrop: #f7eddf;
+  --color-bg: #f7eddf;
+  --color-surface: #fff8ec;
+  --color-surface-strong: #ffffff;
+  --color-text: #173047;
+  --color-muted: #526675;
+  --color-accent: #1f5d8b;
+  --color-accent-strong: #123e66;
+  --board-face: #bd7a3c;
+  --board-side: #905221;
+  --board-shadow: #623515;
+  --slot-color: #fff3df;
+  --chip-one: #194f7e;
+  --chip-one-dark: #0e2f4e;
+  --chip-two: #ffd65b;
+  --chip-two-dark: #9a6c00;
+}
