@@ -4,12 +4,13 @@
   function show(options) {
     const root = document.getElementById("modal-root");
     if (!root) return;
+    const extraClass = options.className ? ` ${String(options.className).replace(/[^a-z0-9_\- ]/gi, "")}` : "";
     const actions = (options.actions || []).map((action) => {
       return `<button class="button ${action.className || ""}" type="button" data-modal-action="${action.action}">${CF.helpers.escapeHtml(action.label)}</button>`;
     }).join("");
 
     root.innerHTML = `
-      <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <section class="modal${extraClass}" role="dialog" aria-modal="true" aria-labelledby="modal-title">
         <div class="top-bar">
           <h2 id="modal-title">${CF.helpers.escapeHtml(options.title)}</h2>
           <button class="icon-button" type="button" data-modal-action="close" aria-label="${CF.i18n.t("common.close")}">

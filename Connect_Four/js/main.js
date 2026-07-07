@@ -161,9 +161,16 @@ function maybeShowResult() {
       });
 
   CF.audioManager.playSfx(isDraw ? "draw" : didLose ? "lose" : "win");
+  const resultKind = isDraw ? "draw" : didLose ? "lose" : "win";
   CF.modalController.show({
     title,
-    body: `<p>${detail}</p><div class="result-sparkles" aria-hidden="true">✦ ✧ ✦</div>`,
+    className: "result-modal",
+    body: `
+      <div class="result-outcome result-${resultKind}">
+        <div class="result-badge" aria-hidden="true"><span>4</span></div>
+        <p class="result-message">${CF.helpers.escapeHtml(detail)}</p>
+      </div>
+    `,
     actions: [
       { label: CF.i18n.t("result.playAgain"), action: "replay" },
       { label: CF.i18n.t("game.home"), action: "menu", className: "secondary" }

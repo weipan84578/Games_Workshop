@@ -63,3 +63,25 @@ Build the Connect Four game described in `connect-four-spec.md` as a zero-build 
 ## Lessons
 - Mistake class: incorrect assumption about browser behavior. `type="module"` can fail under `file://` even when the JS itself is valid.
 - Prevention rule: for a strict double-click offline app, avoid ES module entry scripts unless the target browsers have been manually verified with `file://`; use classic scripts or provide a server-based launch path.
+
+## 2026-07-07 result_modal_rwd
+
+### Goal
+Fix win/loss/draw result modal RWD so the settlement UI remains readable and usable on mobile portrait, mobile landscape, and desktop.
+
+### Acceptance Criteria
+- Result modal gets a dedicated layout instead of inheriting the generic content modal behavior.
+- Action buttons do not overflow or crowd each other on narrow screens.
+- Result message and decorative mark fit without covering the board or toolbar.
+- Existing game logic and persistence behavior remain unchanged.
+
+### Results
+- Added a `result-modal` class hook to modal rendering.
+- Replaced the win/loss/draw body with a dedicated `result-outcome` layout and responsive badge/message markup.
+- Added desktop, mobile portrait, narrow-phone, and mobile-landscape CSS rules for result modal sizing and action buttons.
+- Kept a scroll fallback for very short screens.
+
+### Verification
+- `Get-ChildItem -Path .\js -Recurse -Filter *.js | ForEach-Object { node --check $_.FullName }` passed.
+- `index.html` local reference check passed: 43 local files found.
+- Playwright is not installed in this zero-build folder, so screenshot-level browser verification was not available from the current environment.
