@@ -26,6 +26,7 @@
 | `Ultimate_Tic_Tac_Toe` | 終極井字棋   | Ultimate Tic-Tac-Toe | 究極三目並べ             |
 | `The_Mill_Game`        | 九子棋       | Nine Men's Morris    | ナインメンズモリス       |
 | `Dots_And_Boxes`       | 點格棋       | Dots and Boxes       | ドット・アンド・ボックス |
+| `Connect_Four`         | 四連棋       | Connect Four         | コネクトフォー           |
 
 ### 撲克牌遊戲
 
