@@ -14,8 +14,10 @@ function refreshSettings() {
   CF.audioManager.applySettings(settings);
 }
 
-function render() {
+function render(options = {}) {
+  const animate = options.animate !== false;
   refreshSettings();
+  app.classList.toggle("no-screen-transition", !animate);
 
   if (screen === "menu") {
     CF.audioManager.setMode("menu");
@@ -38,7 +40,7 @@ function render() {
 
 function goTo(nextScreen) {
   screen = nextScreen;
-  render();
+  render({ animate: true });
 }
 
 function startGame() {
@@ -47,7 +49,7 @@ function startGame() {
   currentGame = CF.gameState.createGame({ mode: setup.mode, difficulty: setup.difficulty });
   screen = "game";
   CF.audioManager.playSfx("click");
-  render();
+  render({ animate: true });
 }
 
 function continueGame() {
@@ -59,7 +61,7 @@ function continueGame() {
   resultShownFor = null;
   currentGame = saved;
   screen = "game";
-  render();
+  render({ animate: true });
   maybeScheduleAi();
 }
 
@@ -76,7 +78,7 @@ function handleDrop(column) {
 
   CF.audioManager.playSfx("drop");
   if (settings.vibration && navigator.vibrate) navigator.vibrate(22);
-  render();
+  render({ animate: false });
 
   if (currentGame.status === "playing") {
     CF.toast.show(CF.i18n.t("toast.saved"));
@@ -90,7 +92,7 @@ function maybeScheduleAi() {
 
   aiThinking = true;
   const token = ++aiToken;
-  render();
+  render({ animate: false });
 
   CF.aiController.chooseMove(
     CF.board.cloneBoard(currentGame.board),
@@ -101,7 +103,7 @@ function maybeScheduleAi() {
     if (token !== aiToken || !currentGame || currentGame.status !== "playing") return;
     aiThinking = false;
     if (column === null || column === undefined) {
-      render();
+      render({ animate: false });
       return;
     }
     const result = CF.gameState.applyMove(currentGame, column);
@@ -109,10 +111,10 @@ function maybeScheduleAi() {
       CF.audioManager.playSfx("drop");
       if (settings.vibration && navigator.vibrate) navigator.vibrate(16);
     }
-    render();
+    render({ animate: false });
   }).catch(() => {
     aiThinking = false;
-    render();
+    render({ animate: false });
   });
 }
 
@@ -128,7 +130,7 @@ function undoMove() {
   resultShownFor = null;
   CF.gameState.persistGame(currentGame);
   CF.audioManager.playSfx("toggle");
-  render();
+  render({ animate: false });
 }
 
 function restartGame() {
@@ -140,7 +142,7 @@ function restartGame() {
   aiThinking = false;
   aiToken += 1;
   CF.audioManager.playSfx("toggle");
-  render();
+  render({ animate: false });
 }
 
 function maybeShowResult() {
@@ -195,7 +197,7 @@ function updateSetting(patch, rerender = true) {
   settings = CF.settingsManager.updateSettings(patch);
   CF.audioManager.applySettings(settings);
   CF.toast.show(CF.i18n.t("toast.settingsSaved"));
-  if (rerender) render();
+  if (rerender) render({ animate: false });
 }
 
 function handleAction(target) {
@@ -218,11 +220,11 @@ function handleAction(target) {
   }
   if (action === "select-mode") {
     setup = { ...setup, mode: target.dataset.mode };
-    render();
+    render({ animate: false });
   }
   if (action === "select-difficulty") {
     setup = { ...setup, difficulty: target.dataset.difficulty };
-    render();
+    render({ animate: false });
   }
   if (action === "start-game") startGame();
   if (action === "drop") handleDrop(Number(target.dataset.column));
@@ -234,7 +236,7 @@ function handleAction(target) {
   if (action === "set-language") {
     CF.i18n.setLanguage(target.dataset.language);
     settings = CF.settingsManager.getSettings();
-    render();
+    render({ animate: false });
   }
   if (action === "set-theme") updateSetting({ theme: target.dataset.theme });
   if (action === "set-default-difficulty") updateSetting({ aiDifficulty: target.dataset.difficulty });
@@ -246,7 +248,7 @@ function handleAction(target) {
     settings = CF.settingsManager.resetSettings();
     CF.i18n.setLanguage(settings.language);
     CF.audioManager.applySettings(settings);
-    render();
+    render({ animate: false });
   }
 }
 
@@ -285,7 +287,10 @@ app.addEventListener("input", (event) => {
   const value = Number(control.value);
   settings = CF.settingsManager.updateSettings({ [key]: value });
   CF.audioManager.applySettings(settings);
-  render();
+  const valueLabel = control.parentElement && control.parentElement.querySelector("strong");
+  if (valueLabel) {
+    valueLabel.textContent = key === "bgmBoost" ? `${value.toFixed(2)}x` : CF.helpers.formatPercent(value);
+  }
 });
 
 document.getElementById("modal-root").addEventListener("click", (event) => {
@@ -300,4 +305,4 @@ document.addEventListener("keydown", (event) => {
 });
 
 CF.responsiveController.init();
-render();
+render({ animate: true });

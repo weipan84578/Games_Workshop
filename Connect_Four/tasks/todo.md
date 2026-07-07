@@ -85,3 +85,26 @@ Fix win/loss/draw result modal RWD so the settlement UI remains readable and usa
 - `Get-ChildItem -Path .\js -Recurse -Filter *.js | ForEach-Object { node --check $_.FullName }` passed.
 - `index.html` local reference check passed: 43 local files found.
 - Playwright is not installed in this zero-build folder, so screenshot-level browser verification was not available from the current environment.
+
+## 2026-07-07 same_screen_flicker
+
+### Goal
+Remove the visible flicker when settings controls or game moves trigger same-screen UI updates.
+
+### Acceptance Criteria
+- Navigation between screens may keep the existing entry animation.
+- Same-screen updates must not replay the full `.screen` entry animation.
+- Settings controls, range inputs, drop moves, AI-thinking state changes, undo, restart, and audio toggles use the stable render path.
+- No temporary screenshots or verification artifacts are left behind.
+
+### Results
+- Added a `render({ animate: false })` path for same-screen updates.
+- Added `.app-shell.no-screen-transition .screen` to suppress only the full-screen entry animation while preserving chip/drop/result animations.
+- Routed settings changes, setup selections, game moves, AI-thinking refreshes, undo, restart, and reset through the stable render path.
+- Updated range controls so slider input only updates the setting and value label, avoiding full settings-page DOM replacement while dragging.
+
+### Verification
+- `Get-ChildItem -Path .\js -Recurse -Filter *.js | ForEach-Object { node --check $_.FullName }` passed.
+- `index.html` local reference check passed: 43 local files found.
+- Core smoke test passed: horizontal win detection, Easy AI immediate block, and Minimax legal move.
+- Scanned for screenshot, Playwright, tmp, and temp files; none were present.

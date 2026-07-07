@@ -15,3 +15,11 @@
 - Detection signal: user reported that victory/defeat RWD was not properly handled.
 - Prevention rule: result, confirmation, and settlement dialogs need content-specific responsive rules, not only shared modal defaults.
 - Tripwire: before finishing UI work, inspect modal variants at narrow phone width and short landscape height, and verify action buttons do not overflow or crowd the content.
+
+## 2026-07-07 same_screen_flicker
+
+- Mistake class: missing verification / UI responsiveness oversight.
+- Failure mode: same-screen updates reused the navigation render path, so settings changes and game moves replayed the full `.screen` entry animation and appeared to flash.
+- Detection signal: user reported visible flashing in settings and during moves.
+- Prevention rule: separate navigation transitions from state-refresh renders. Same-screen updates should not replay page-enter animations.
+- Tripwire: grep `render(` call sites and classify each one as navigation or same-screen refresh before finishing UI work.
