@@ -70,3 +70,57 @@ Build the web version of the Nim game according to `nim-game-specification.md`.
 
 ## Lessons
 - No user correction or postmortem occurred, so `tasks/lessons.md` was not created.
+
+---
+
+# 2026-07-08 nim-ui-audio-corrections
+
+## Goal
+Apply the requested UI and BGM behavior corrections after the initial Nim web game implementation.
+
+## Acceptance Criteria
+- [ ] Remove the top-right "pure frontend/offline playable" header status text.
+- [ ] Remove the language selector from Settings and keep only the top-right language selector.
+- [ ] Remove the Settings back button and keep "Save and Back".
+- [ ] Make the Settings title scroll as normal text, not a sticky/frozen header.
+- [ ] Prevent overlapping BGM when switching screens.
+- [ ] Prevent overlapping BGM when starting a new round.
+- [ ] Make menu BGM volume match game BGM volume, with game volume behavior as the single source of truth.
+
+## Risk & Rollback
+- Risk level: low. Changes are scoped to static UI and audio scheduling.
+- Affected components: `index.html`, `css/layout/grid.css`, `css/layout/rwd.css`, `js/audio/audio-manager.js`, `js/main.js`, `js/ui/settings-controller.js`, task notes, lessons.
+- Rollback strategy: revert this correction change set.
+
+## Plan
+- [x] Restate requested corrections and acceptance criteria.
+- [x] Inspect affected files.
+- [x] Update header/settings layout.
+- [x] Fix BGM scheduling and volume multiplier behavior.
+- [x] Run verification.
+- [x] Record results and lessons.
+
+## Results
+- Removed the header status text and the main menu version line that displayed "pure frontend/offline playable".
+- Removed the Settings language selector; language is now only controlled from the top-right selector.
+- Removed the Settings back button; Settings keeps only "Save and Back" as the return action.
+- Made the Settings title a normal non-sticky heading while leaving the instructions heading behavior unchanged.
+- Made BGM start/stop idempotent so switching screens or pressing New Round does not layer another BGM interval or scheduled oscillator group.
+- Changed BGM gain handling so menu and game screens both use the same `AudioConfig.inGameMultiplier` value, making game-volume behavior the source of truth.
+
+## Verification Performed
+- `foreach ($file in Get-ChildItem js -Recurse -Filter *.js) { node --check $file.FullName }` -> passed.
+- `rg "header-status|language-select|settings-back|menu-version"` -> no matches.
+- HTML reference check -> passed: 42 local references exist.
+- HTML module check -> passed: no `type="module"`.
+- Node VM core/audio checks -> passed:
+  - Normal rule: last taker wins.
+  - Misere rule: last taker loses.
+  - Normal nim-sum optimal move reaches zero nim-sum.
+  - Misere one-large-pile endgame leaves odd ones.
+  - Audio in-game multiplier is `10`.
+  - `zh-TW` locale resolves `menu.start`.
+  - New Round does not create another BGM timer.
+  - Screen switching keeps one BGM timer.
+  - Screen switching does not accumulate scheduled BGM sources.
+  - Menu and game use the same 10x BGM gain.

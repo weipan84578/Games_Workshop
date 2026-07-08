@@ -17,10 +17,6 @@
     customPilesHost = NimGame.dom.$('#custom-piles');
     pileCountInput = NimGame.dom.$('#pile-count');
 
-    NimGame.dom.on(NimGame.dom.$('#settings-back'), 'click', function () {
-      NimGame.AudioManager.playSfx('click');
-      appRef.showScreen('menu');
-    });
     NimGame.dom.on(NimGame.dom.$('#settings-save-back'), 'click', function () {
       NimGame.AudioManager.playSfx('click');
       appRef.showScreen('menu');
@@ -34,11 +30,6 @@
           NimGame.MenuController.refresh();
         }
       });
-    });
-
-    NimGame.dom.on(NimGame.dom.$('#language-select'), 'change', function (event) {
-      NimGame.i18n.setLanguage(event.target.value);
-      render();
     });
 
     wireRange('#bgm-volume', 'bgmVolume', '#bgm-volume-label');
@@ -181,7 +172,6 @@
       return;
     }
     var settings = NimGame.StateManager.getState().settings;
-    NimGame.dom.$('#language-select').value = settings.language;
     NimGame.dom.$('#bgm-volume').value = Math.round(settings.bgmVolume * 100);
     NimGame.dom.$('#sfx-volume').value = Math.round(settings.sfxVolume * 100);
     NimGame.dom.$('#bgm-volume-label').textContent = Math.round(settings.bgmVolume * 100) + '%';

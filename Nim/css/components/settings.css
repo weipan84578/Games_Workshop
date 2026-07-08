@@ -3,6 +3,11 @@
   margin: 0 auto;
 }
 
+.settings-heading {
+  position: static;
+  background: transparent;
+}
+
 .settings-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(260px, 1fr));

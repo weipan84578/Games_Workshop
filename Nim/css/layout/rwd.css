@@ -4,14 +4,6 @@
     --footer-height: 148px;
   }
 
-  .app-header {
-    grid-template-columns: minmax(0, 1fr) auto;
-  }
-
-  .header-status {
-    display: none;
-  }
-
   .app-main {
     padding: var(--space-3);
   }

@@ -58,12 +58,6 @@
   function updateHeader() {
     var state = NimGame.StateManager.getState();
     var settings = state.settings;
-    var game = state.game;
-    var status = NimGame.t('menu.version');
-    if (currentScreen === 'game' && game) {
-      status = game.currentTurn === 'player' ? NimGame.t('game.yourTurn') : NimGame.t('game.aiTurn');
-    }
-    NimGame.dom.$('#header-status').textContent = status;
     NimGame.dom.$('#quick-language').value = settings.language;
     NimGame.dom.$('#quick-mute').classList.toggle('is-muted', !settings.bgmEnabled);
   }

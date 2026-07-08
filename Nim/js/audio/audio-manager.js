@@ -7,6 +7,7 @@
   var compressor = null;
   var currentPattern = 'menu';
   var bgmTimer = null;
+  var activeBgmSources = [];
   var isGameScreen = false;
   var isUnlocked = false;
 
@@ -45,7 +46,7 @@
     if (!settings || !context || !bgmGain || !sfxGain) {
       return;
     }
-    var multiplier = isGameScreen ? NimGame.AudioConfig.inGameMultiplier : 1;
+    var multiplier = NimGame.AudioConfig.inGameMultiplier;
     var bgmValue = settings.bgmEnabled ? settings.bgmVolume * multiplier : 0;
     var sfxValue = settings.sfxEnabled ? settings.sfxVolume : 0;
     bgmGain.gain.setTargetAtTime(bgmValue, context.currentTime, 0.08);
@@ -65,6 +66,20 @@
     envelope.gain.exponentialRampToValueAtTime(0.0001, when + duration);
     oscillator.connect(envelope);
     envelope.connect(destination);
+    if (destination === bgmGain) {
+      var bgmSource = {
+        oscillator: oscillator,
+        envelope: envelope
+      };
+      activeBgmSources.push(bgmSource);
+      oscillator.onended = function () {
+        activeBgmSources = activeBgmSources.filter(function (sourceInfo) {
+          return sourceInfo !== bgmSource;
+        });
+        oscillator.disconnect();
+        envelope.disconnect();
+      };
+    }
     oscillator.start(when);
     oscillator.stop(when + duration + 0.02);
   }
@@ -82,8 +97,9 @@
   }
 
   function startBgm(patternName) {
-    currentPattern = patternName || currentPattern;
+    var nextPattern = patternName || currentPattern;
     if (!isUnlocked) {
+      currentPattern = nextPattern;
       return;
     }
     ensureContext();
@@ -93,9 +109,14 @@
     if (context.state === 'suspended') {
       context.resume();
     }
+    if (currentPattern === nextPattern && bgmTimer) {
+      syncVolumes();
+      return;
+    }
     stopBgm();
+    currentPattern = nextPattern;
     scheduleBgmTick();
-    bgmTimer = window.setInterval(scheduleBgmTick, 1680);
+    bgmTimer = window.setInterval(scheduleBgmTick, 2200);
   }
 
   function stopBgm() {
@@ -103,15 +124,41 @@
       window.clearInterval(bgmTimer);
       bgmTimer = null;
     }
+    cancelScheduledBgm();
+  }
+
+  function cancelScheduledBgm() {
+    activeBgmSources.forEach(function (sourceInfo) {
+      try {
+        sourceInfo.oscillator.onended = null;
+        sourceInfo.oscillator.stop(0);
+        sourceInfo.oscillator.disconnect();
+        sourceInfo.envelope.disconnect();
+      } catch (error) {
+        // A source may already have ended between the snapshot and cleanup.
+      }
+    });
+    activeBgmSources = [];
   }
 
   function enterGameScreen() {
+    var nextPattern = currentPattern === 'game' || currentPattern === 'gameAlt'
+      ? currentPattern
+      : (Math.random() < 0.5 ? 'game' : 'gameAlt');
+    if (isGameScreen && bgmTimer) {
+      syncVolumes();
+      return;
+    }
     isGameScreen = true;
-    startBgm(Math.random() < 0.5 ? 'game' : 'gameAlt');
+    startBgm(nextPattern);
     syncVolumes();
   }
 
   function leaveGameScreen() {
+    if (!isGameScreen && currentPattern === 'menu' && bgmTimer) {
+      syncVolumes();
+      return;
+    }
     isGameScreen = false;
     startBgm('menu');
     syncVolumes();
@@ -177,7 +224,11 @@
         hasBgmGain: Boolean(bgmGain),
         hasSfxGain: Boolean(sfxGain),
         hasCompressor: Boolean(compressor),
-        inGameMultiplier: NimGame.AudioConfig.inGameMultiplier
+        inGameMultiplier: NimGame.AudioConfig.inGameMultiplier,
+        currentPattern: currentPattern,
+        isGameScreen: isGameScreen,
+        hasBgmTimer: Boolean(bgmTimer),
+        activeBgmSourceCount: activeBgmSources.length
       };
     }
   };
