@@ -25,8 +25,8 @@
 - Mistake class: missing UX/RWD verification.
 - Failure mode: the game screen layout worked functionally but did not look polished enough across responsive widths.
 - Detection signal: user reported that in-game RWD was not good-looking.
-- Prevention rule: for game screens, verify desktop, tablet, phone portrait, mid-width, and short landscape layout behavior before declaring done.
-- Tripwire: inspect `css/layout/rwd.css`, `css/components/board.css`, and `css/components/hud.css` together whenever game controls or board layout changes.
+- Prevention rule: for game screens, verify desktop, tablet, phone portrait, mid-width, and short landscape layout behavior before declaring done, including CSS cascade order.
+- Tripwire: inspect `css/layout/rwd.css`, `css/components/board.css`, and `css/components/hud.css` together whenever game controls or board layout changes, and assert `rwd.css` loads after component CSS in `index.html`.
 
 - Mistake class: missing interaction feedback.
 - Failure mode: pressing New Round immediately reset the board without a clear confirmation, and repeated feedback patterns risked stacked messages.
@@ -39,3 +39,11 @@
 - Detection signal: user reported the main/game BGM felt too short and boring.
 - Prevention rule: generated BGM needs phrase lengths long enough to avoid obvious short-loop fatigue; prefer 20+ note phrases and loop intervals of at least several seconds.
 - Tripwire: test BGM phrase lengths and loop duration when changing `audio-config.js` or `audio-manager.js`.
+
+## 2026-07-08 RWD cascade regression
+
+- Mistake class: missing verification.
+- Failure mode: responsive rules existed, but `rwd.css` loaded before component styles. Later component selectors overrode the mobile media-query rules, leaving the phone layout in a desktop two-column state.
+- Detection signal: user provided a screenshot where the HUD consumed the left side and the board was squeezed into a thin right strip.
+- Prevention rule: responsive override files must load after the component CSS they override, or use a clearly stronger override layer.
+- Tripwire: run a CSS order check that confirms `css/layout/rwd.css` appears after `css/components/board.css`, `css/components/hud.css`, `css/components/buttons.css`, and `css/animations/animations.css` in `index.html`.

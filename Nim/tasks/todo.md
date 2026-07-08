@@ -179,3 +179,40 @@ Apply user-requested polish for the game screen RWD, New Round confirmation, and
   - Repeated game entry still keeps one BGM timer.
   - Menu/game BGM loops are at least nine seconds.
   - Menu and game still use the same 10x BGM gain.
+
+---
+
+# 2026-07-08 rwd-cascade-fix
+
+## Goal
+Fix the in-game mobile RWD bug shown in `螢幕擷取畫面 2026-07-08 101354.png`, where the HUD and board still rendered as a desktop-style two-column layout and squeezed the board into a thin right-side strip.
+
+## Acceptance Criteria
+- [ ] `rwd.css` loads after component CSS that defines `.game-layout`, `.hud-panel`, `.board`, and `.game-controls`.
+- [ ] Mobile rules override board/HUD desktop defaults.
+- [ ] Phone HUD is compact enough to leave practical space for the board.
+
+## Risk & Rollback
+- Risk level: low. This is a CSS cascade/order fix plus small mobile HUD tightening.
+- Affected components: `index.html`, `css/layout/rwd.css`, task notes, lessons.
+- Rollback strategy: revert this change set.
+
+## Plan
+- [x] Inspect screenshot evidence.
+- [x] Identify CSS cascade issue.
+- [x] Move `rwd.css` after component CSS.
+- [x] Tighten phone HUD rules.
+- [x] Run static verification.
+- [x] Record results and lessons.
+
+## Results
+- Root cause: `css/layout/rwd.css` was loaded before component files such as `board.css` and `hud.css`, so later desktop component rules with the same selector specificity overrode the mobile media-query rules.
+- Moved `rwd.css` to load after component and animation CSS in `index.html`.
+- Tightened mobile HUD styling so the turn row uses a compact horizontal layout and rule helper text is hidden on phone widths.
+
+## Verification Performed
+- CSS order check -> passed: `rwd.css` loads after component and animation CSS.
+- `foreach ($file in Get-ChildItem js -Recurse -Filter *.js) { node --check $file.FullName }` -> passed.
+- HTML reference check -> passed: 42 local references exist.
+- HTML module check -> passed: no `type="module"`.
+- `rg "font-size:\s*clamp|font-size:\s*.*vw" css` -> no matches.

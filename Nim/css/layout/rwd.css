@@ -139,6 +139,13 @@
     gap: var(--space-1);
   }
 
+  .hud-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 42px;
+  }
+
   .hud-mascot {
     display: none;
   }
@@ -154,9 +161,12 @@
     padding: 6px;
   }
 
-  .hud-label,
-  .hud-grid small {
+  .hud-label {
     font-size: 12px;
+  }
+
+  .hud-grid small {
+    display: none;
   }
 
   .hud-panel strong {
