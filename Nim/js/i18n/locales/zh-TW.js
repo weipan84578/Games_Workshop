@@ -25,6 +25,8 @@
     'game.invalidMove': '請至少拿 1 個，且不可超過該堆剩餘數量。',
     'game.confirmMove': '拿走',
     'game.newRound': '新局',
+    'game.newRoundConfirmTitle': '要開一個新局嗎？',
+    'game.newRoundConfirmBody': '目前盤面會重置，AI 會重新依設定決定先後手。',
     'game.menu': '主選單',
     'game.pileLabel': '第 {index} 堆',
     'game.remaining': '剩餘 {count}',

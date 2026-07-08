@@ -49,7 +49,7 @@
       setAmount(parseInt(event.target.value, 10) || 1);
     });
     NimGame.dom.on(NimGame.dom.$('#confirm-move'), 'click', confirmPlayerMove);
-    NimGame.dom.on(NimGame.dom.$('#new-round'), 'click', startNewGame);
+    NimGame.dom.on(NimGame.dom.$('#new-round'), 'click', confirmNewGame);
     NimGame.dom.on(NimGame.dom.$('#game-menu'), 'click', function () {
       showScreen('menu');
     });
@@ -96,6 +96,15 @@
     NimGame.StateManager.startNewGame();
     document.dispatchEvent(new CustomEvent('nim:save-change'));
     showScreen('game');
+  }
+
+  function confirmNewGame() {
+    NimGame.AudioManager.playSfx('click');
+    NimGame.ModalController.confirm({
+      title: NimGame.t('game.newRoundConfirmTitle'),
+      body: NimGame.t('game.newRoundConfirmBody'),
+      onConfirm: startNewGame
+    });
   }
 
   function continueGame() {

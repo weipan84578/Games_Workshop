@@ -122,5 +122,60 @@ Apply the requested UI and BGM behavior corrections after the initial Nim web ga
   - `zh-TW` locale resolves `menu.start`.
   - New Round does not create another BGM timer.
   - Screen switching keeps one BGM timer.
-  - Screen switching does not accumulate scheduled BGM sources.
-  - Menu and game use the same 10x BGM gain.
+- Screen switching does not accumulate scheduled BGM sources.
+- Menu and game use the same 10x BGM gain.
+
+---
+
+# 2026-07-08 nim-gameplay-polish
+
+## Goal
+Apply user-requested polish for the game screen RWD, New Round confirmation, and longer BGM phrases.
+
+## Acceptance Criteria
+- [ ] Game screen RWD is more polished across desktop, tablet, phone portrait, and short landscape layouts.
+- [ ] Pressing New Round shows a clear confirmation before replacing the current board.
+- [ ] Repeated New Round clicks do not stack duplicate prompt messages.
+- [ ] Main/game BGM phrases are substantially longer so the loop feels less repetitive.
+
+## Risk & Rollback
+- Risk level: low. Changes are scoped to layout CSS, modal-trigger flow, audio phrase data/scheduling, and i18n strings.
+- Affected components: `index.html`, `css/components/board.css`, `css/components/hud.css`, `css/layout/rwd.css`, `js/main.js`, `js/audio/audio-config.js`, `js/audio/audio-manager.js`, locale files, task notes, lessons.
+- Rollback strategy: revert this polish change set.
+
+## Plan
+- [x] Restate requested corrections and acceptance criteria.
+- [x] Review lessons and affected files.
+- [x] Improve game screen RWD.
+- [x] Add non-stacking New Round confirmation.
+- [x] Extend generated BGM phrases and scheduling interval.
+- [x] Run verification.
+- [x] Record results and lessons.
+
+## Results
+- Improved game screen RWD:
+  - Desktop keeps a stable HUD + board two-column layout.
+  - Tablet uses a compact horizontal HUD row above the board.
+  - Mid-width screens switch the footer controls into wrapped rows before buttons become cramped.
+  - Phone portrait uses a compact HUD and two-column board grid with smaller pile objects.
+  - Short landscape keeps controls in a right-side rail and tightens board/HUD spacing.
+- Added New Round confirmation through the existing modal controller, so repeated clicks reuse the same modal instead of stacking messages.
+- Added localized New Round confirmation copy in `zh-TW`, `en`, and `ja`.
+- Expanded generated BGM phrases from short six-note loops to 24-note menu/game phrases and extended loop scheduling to roughly nine seconds or longer.
+- Removed the remaining viewport-scaled `font-size` in `css/base/typography.css`.
+
+## Verification Performed
+- `foreach ($file in Get-ChildItem js -Recurse -Filter *.js) { node --check $file.FullName }` -> passed.
+- HTML reference check -> passed: 42 local references exist.
+- HTML module check -> passed: no `type="module"`.
+- `rg "font-size:\s*clamp|font-size:\s*.*vw" css` -> no matches.
+- Node VM core/audio checks -> passed:
+  - Normal rule: last taker wins.
+  - Misere rule: last taker loses.
+  - Normal nim-sum optimal move reaches zero nim-sum.
+  - `zh-TW` New Round confirmation title exists.
+  - Menu BGM phrase has at least 24 notes.
+  - Game BGM phrase has at least 24 notes.
+  - Repeated game entry still keeps one BGM timer.
+  - Menu/game BGM loops are at least nine seconds.
+  - Menu and game still use the same 10x BGM gain.

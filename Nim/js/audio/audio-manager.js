@@ -91,8 +91,10 @@
     var pattern = NimGame.AudioConfig.bgmPatterns[currentPattern] || NimGame.AudioConfig.bgmPatterns.menu;
     var now = context.currentTime;
     pattern.forEach(function (frequency, index) {
-      playTone(frequency, 0.42, now + index * 0.28, 0.025, bgmGain, 'triangle');
-      playTone(frequency / 2, 0.55, now + index * 0.28, 0.012, bgmGain, 'sine');
+      var noteTime = now + index * 0.36;
+      var phraseAccent = index % 6 === 0 ? 0.032 : 0.023;
+      playTone(frequency, 0.52, noteTime, phraseAccent, bgmGain, 'triangle');
+      playTone(frequency / 2, 0.72, noteTime, 0.01, bgmGain, 'sine');
     });
   }
 
@@ -116,7 +118,12 @@
     stopBgm();
     currentPattern = nextPattern;
     scheduleBgmTick();
-    bgmTimer = window.setInterval(scheduleBgmTick, 2200);
+    bgmTimer = window.setInterval(scheduleBgmTick, getBgmLoopMs(currentPattern));
+  }
+
+  function getBgmLoopMs(patternName) {
+    var pattern = NimGame.AudioConfig.bgmPatterns[patternName] || NimGame.AudioConfig.bgmPatterns.menu;
+    return Math.max(3200, Math.ceil(pattern.length * 360 + 900));
   }
 
   function stopBgm() {
@@ -228,7 +235,8 @@
         currentPattern: currentPattern,
         isGameScreen: isGameScreen,
         hasBgmTimer: Boolean(bgmTimer),
-        activeBgmSourceCount: activeBgmSources.length
+        activeBgmSourceCount: activeBgmSources.length,
+        loopMs: getBgmLoopMs(currentPattern)
       };
     }
   };

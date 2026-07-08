@@ -25,6 +25,8 @@
     'game.invalidMove': 'Take at least 1 and no more than the selected pile has.',
     'game.confirmMove': 'Take',
     'game.newRound': 'New Round',
+    'game.newRoundConfirmTitle': 'Start a new round?',
+    'game.newRoundConfirmBody': 'The current board will reset, and the first turn will be chosen from your settings.',
     'game.menu': 'Main Menu',
     'game.pileLabel': 'Pile {index}',
     'game.remaining': '{count} left',

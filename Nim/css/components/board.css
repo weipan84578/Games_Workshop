@@ -1,7 +1,8 @@
 .game-layout {
   display: grid;
-  grid-template-columns: minmax(230px, 320px) minmax(0, 1fr);
+  grid-template-columns: minmax(230px, 300px) minmax(0, 1fr);
   gap: var(--space-3);
+  align-items: stretch;
   min-height: 100%;
 }
 
@@ -9,7 +10,8 @@
   display: grid;
   min-width: 0;
   min-height: 0;
-  padding: var(--space-3);
+  overflow: hidden;
+  padding: clamp(10px, 2.2vh, 20px);
   border: 1px solid var(--color-outline);
   border-radius: var(--radius-sm);
   background:
@@ -20,10 +22,13 @@
 
 .board {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(154px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
   align-content: center;
   gap: var(--space-3);
   min-height: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .pile {
@@ -33,7 +38,7 @@
   align-items: end;
   justify-items: center;
   gap: var(--space-1);
-  min-height: 176px;
+  min-height: clamp(142px, 23vh, 210px);
   padding: var(--space-2);
   border: 2px solid var(--color-outline);
   border-radius: var(--radius-sm);
@@ -49,19 +54,19 @@
 
 .pile-stack {
   display: grid;
-  grid-template-columns: repeat(5, 24px);
-  grid-auto-rows: 22px;
+  grid-template-columns: repeat(5, minmax(18px, 24px));
+  grid-auto-rows: minmax(18px, 22px);
   place-content: end center;
   align-items: center;
   justify-items: center;
-  min-height: 92px;
+  min-height: clamp(72px, 13vh, 112px);
   transform: perspective(500px) rotateX(4deg);
 }
 
 .pile-object {
   display: inline-block;
-  width: 28px;
-  height: 24px;
+  width: clamp(21px, 3vw, 28px);
+  height: clamp(19px, 2.6vw, 24px);
   filter: drop-shadow(0 4px 4px rgba(0, 0, 0, .18));
   transform: translateY(calc((var(--item-index, 0) % 3) * -1px));
   will-change: transform, opacity;

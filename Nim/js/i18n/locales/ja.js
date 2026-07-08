@@ -25,6 +25,8 @@
     'game.invalidMove': '1個以上、選んだ山の残り以下で指定してください。',
     'game.confirmMove': '取る',
     'game.newRound': '新しい局',
+    'game.newRoundConfirmTitle': '新しい局を始めますか？',
+    'game.newRoundConfirmBody': '現在の盤面をリセットし、設定に従って先攻を決め直します。',
     'game.menu': 'メニュー',
     'game.pileLabel': '第 {index} 山',
     'game.remaining': '残り {count}',
