@@ -47,3 +47,11 @@
 - Detection signal: user provided a screenshot where the HUD consumed the left side and the board was squeezed into a thin right strip.
 - Prevention rule: responsive override files must load after the component CSS they override, or use a clearly stronger override layer.
 - Tripwire: run a CSS order check that confirms `css/layout/rwd.css` appears after `css/components/board.css`, `css/components/hud.css`, `css/components/buttons.css`, and `css/animations/animations.css` in `index.html`.
+
+## 2026-07-08 empty-directory cleanup mistake
+
+- Mistake class: unsafe change scope / missing verification.
+- Failure mode: the first empty-directory cleanup attempted to remove the protected `.agents` directory repeatedly, then timed out. The follow-up exclusion regex was malformed and produced parse errors.
+- Detection signal: PowerShell reported repeated access-denied errors for `.agents`, followed by regex parse errors.
+- Prevention rule: before deleting empty directories, enumerate candidates first, exclude dot/tool directories by path segments instead of fragile regex, and stop the cleanup loop when no directory is successfully removed.
+- Tripwire: use a read-only candidate list before `Remove-Item`, and explicitly exclude `.git`, `.agents`, and `.codex`.
