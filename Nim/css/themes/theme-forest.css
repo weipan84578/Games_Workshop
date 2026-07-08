@@ -1,0 +1,15 @@
+html[data-theme="forest"] {
+  --color-primary: #28734a;
+  --color-primary-strong: #165332;
+  --color-secondary: #8b4e75;
+  --color-accent: #bd8317;
+  --color-bg: #f4fbef;
+  --color-bg-secondary: #fffaf2;
+  --color-surface: rgba(255, 255, 255, 0.9);
+  --color-surface-solid: #ffffff;
+  --color-board: #e4f4d8;
+  --color-text: #253724;
+  --color-muted: #58654f;
+  --color-outline: rgba(42, 95, 51, 0.24);
+  --color-shadow: rgba(33, 77, 45, 0.15);
+}

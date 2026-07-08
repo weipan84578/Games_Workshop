@@ -1,0 +1,79 @@
+@keyframes screen-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes mascot-breathe {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.015);
+  }
+}
+
+@keyframes float-shape {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(12deg);
+  }
+  50% {
+    transform: translate3d(0, -18px, 0) rotate(-7deg);
+  }
+}
+
+@keyframes take-item {
+  to {
+    opacity: 0;
+    transform: translate3d(22px, -28px, 0) rotate(16deg) scale(.72);
+  }
+}
+
+@keyframes particle-pop {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(.8);
+  }
+  to {
+    opacity: 0;
+    transform: translate3d(var(--x), var(--y), 0) rotate(180deg) scale(1.4);
+  }
+}
+
+html[data-reduce-motion="true"] *,
+html[data-reduce-motion="true"] *::before,
+html[data-reduce-motion="true"] *::after {
+  scroll-behavior: auto !important;
+  animation-duration: .001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: .001ms !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}

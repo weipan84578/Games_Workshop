@@ -1,0 +1,22 @@
+html[data-theme="night"] {
+  --color-primary: #75d6ff;
+  --color-primary-strong: #aee8ff;
+  --color-secondary: #ff9fc7;
+  --color-accent: #ffd166;
+  --color-bg: #121726;
+  --color-bg-secondary: #1e2638;
+  --color-surface: rgba(29, 36, 54, 0.92);
+  --color-surface-solid: #1e2638;
+  --color-board: #242f46;
+  --color-text: #f5f7ff;
+  --color-muted: #c4ccda;
+  --color-outline: rgba(216, 230, 255, 0.25);
+  --color-shadow: rgba(0, 0, 0, 0.32);
+  --color-focus: #ffd166;
+}
+
+html[data-theme="night"] body {
+  background:
+    linear-gradient(135deg, #121726, #202946),
+    repeating-linear-gradient(45deg, transparent 0 18px, rgba(255, 255, 255, 0.06) 18px 20px);
+}

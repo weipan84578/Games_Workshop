@@ -1,0 +1,15 @@
+html[data-theme="cute"] {
+  --color-primary: #d9487f;
+  --color-primary-strong: #9f1d55;
+  --color-secondary: #248b89;
+  --color-accent: #d99a00;
+  --color-bg: #fff7fb;
+  --color-bg-secondary: #f4fbff;
+  --color-surface: rgba(255, 255, 255, 0.9);
+  --color-surface-solid: #ffffff;
+  --color-board: #ffe6ef;
+  --color-text: #342743;
+  --color-muted: #63546f;
+  --color-outline: rgba(95, 50, 91, 0.22);
+  --color-shadow: rgba(113, 50, 88, 0.16);
+}

@@ -1,0 +1,73 @@
+.menu-screen {
+  display: grid;
+  grid-template-columns: minmax(240px, .9fr) minmax(280px, 1fr);
+  grid-template-areas:
+    "art copy"
+    "art actions"
+    "art version";
+  align-items: center;
+  gap: var(--space-4);
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.menu-art {
+  grid-area: art;
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 420px;
+}
+
+.menu-mascot {
+  width: min(38vw, 360px);
+  filter: drop-shadow(0 18px 18px var(--color-shadow));
+  animation: mascot-breathe 3.4s ease-in-out infinite;
+}
+
+.object-preview {
+  position: absolute;
+  right: 8%;
+  bottom: 12%;
+  display: flex;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  border: 1px solid var(--color-outline);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  box-shadow: 0 10px 30px var(--color-shadow);
+}
+
+.menu-copy {
+  grid-area: copy;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.menu-copy h2 {
+  font-size: var(--font-size-title);
+}
+
+.menu-copy p {
+  max-width: 34rem;
+  color: var(--color-muted);
+  font-size: 22px;
+}
+
+.menu-actions {
+  grid-area: actions;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(180px, 1fr));
+  gap: var(--space-2);
+}
+
+.menu-btn {
+  justify-content: flex-start;
+  min-height: 72px;
+}
+
+.menu-version {
+  grid-area: version;
+  color: var(--color-muted);
+  font-size: var(--font-size-small);
+}

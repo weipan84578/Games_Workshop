@@ -1,0 +1,152 @@
+@media (max-width: 900px) {
+  :root {
+    --header-height: 76px;
+    --footer-height: 148px;
+  }
+
+  .app-header {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .header-status {
+    display: none;
+  }
+
+  .app-main {
+    padding: var(--space-3);
+  }
+
+  .game-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .hud-panel {
+    grid-template-columns: auto 1fr;
+  }
+
+  .game-controls {
+    grid-template-columns: 1fr auto auto;
+  }
+
+  .selection-info,
+  .amount-controls {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  :root {
+    --font-size-title: 34px;
+    --font-size-page-title: 28px;
+    --font-size-button: 20px;
+    --font-size-body: 17px;
+    --font-size-small: 16px;
+  }
+
+  .app-header {
+    gap: var(--space-1);
+    padding-inline: var(--space-2);
+  }
+
+  .brand-icon {
+    width: 44px;
+    height: 44px;
+    flex-basis: 44px;
+  }
+
+  .brand-lockup h1 {
+    max-width: 11ch;
+    font-size: 21px;
+  }
+
+  .eyebrow {
+    display: none;
+  }
+
+  .compact-select {
+    width: 90px;
+  }
+
+  .app-main {
+    padding: var(--space-2);
+  }
+
+  .menu-screen {
+    grid-template-columns: 1fr;
+    align-content: start;
+  }
+
+  .menu-art {
+    min-height: 174px;
+  }
+
+  .menu-mascot {
+    width: min(58vw, 210px);
+  }
+
+  .menu-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .hud-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .hud-mascot {
+    display: none;
+  }
+
+  .hud-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .board {
+    gap: var(--space-2);
+  }
+
+  .pile {
+    min-height: 134px;
+  }
+
+  .game-controls {
+    grid-template-columns: 1fr 1fr;
+    padding-inline: var(--space-2);
+  }
+
+  .selection-info,
+  .amount-controls,
+  #confirm-move {
+    grid-column: 1 / -1;
+  }
+
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 620px) {
+  .app-shell {
+    grid-template-columns: minmax(0, 1fr) minmax(106px, 16vw);
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .app-header {
+    grid-column: 1 / -1;
+  }
+
+  .game-controls {
+    grid-column: 2;
+    grid-row: 2;
+    grid-template-columns: 1fr;
+    align-content: start;
+    min-height: 0;
+    border-top: 0;
+    border-left: 1px solid var(--color-outline);
+    padding: var(--space-2);
+  }
+
+  .app-main {
+    grid-column: 1;
+    grid-row: 2;
+  }
+}

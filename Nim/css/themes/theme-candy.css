@@ -1,0 +1,15 @@
+html[data-theme="candy"] {
+  --color-primary: #b83280;
+  --color-primary-strong: #84215c;
+  --color-secondary: #087f8c;
+  --color-accent: #c77800;
+  --color-bg: #fff4e8;
+  --color-bg-secondary: #edf8ff;
+  --color-surface: rgba(255, 255, 255, 0.9);
+  --color-surface-solid: #ffffff;
+  --color-board: #ffe5d9;
+  --color-text: #2d2840;
+  --color-muted: #5d5570;
+  --color-outline: rgba(88, 61, 96, 0.24);
+  --color-shadow: rgba(110, 45, 75, 0.16);
+}

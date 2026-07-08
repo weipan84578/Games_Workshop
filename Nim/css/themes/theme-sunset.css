@@ -1,0 +1,15 @@
+html[data-theme="sunset"] {
+  --color-primary: #b9472f;
+  --color-primary-strong: #87301f;
+  --color-secondary: #315f9c;
+  --color-accent: #c78b00;
+  --color-bg: #fff5ec;
+  --color-bg-secondary: #f1f4ff;
+  --color-surface: rgba(255, 255, 255, 0.9);
+  --color-surface-solid: #ffffff;
+  --color-board: #ffe2d0;
+  --color-text: #3a2a33;
+  --color-muted: #6b5960;
+  --color-outline: rgba(122, 63, 54, 0.25);
+  --color-shadow: rgba(126, 51, 45, 0.16);
+}

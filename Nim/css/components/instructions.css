@@ -1,0 +1,121 @@
+.instructions-screen {
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+.tabs {
+  position: sticky;
+  top: 62px;
+  z-index: 4;
+  display: flex;
+  gap: var(--space-1);
+  overflow-x: auto;
+  padding: var(--space-1) 0 var(--space-2);
+  background: var(--color-bg);
+}
+
+.tab-btn {
+  flex: 0 0 auto;
+  padding: 0 var(--space-2);
+  border: 2px solid var(--color-outline);
+  background: var(--color-surface-solid);
+  color: var(--color-text);
+  font-weight: 900;
+}
+
+.tab-btn.is-active {
+  border-color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 12%, var(--color-surface-solid));
+}
+
+.instruction-content {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.instruction-panel {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-outline);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+}
+
+.lesson-visual {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 72px;
+}
+
+.rule-compare,
+.difficulty-grid,
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: var(--space-2);
+}
+
+.rule-compare > div,
+.difficulty-grid > div,
+.steps > li,
+.tip-box,
+.faq-list details {
+  padding: var(--space-3);
+  border: 1px solid var(--color-outline);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-solid);
+}
+
+.rule-compare span {
+  display: block;
+  color: var(--color-muted);
+}
+
+.tip-box {
+  border-color: color-mix(in srgb, var(--color-accent) 60%, var(--color-outline));
+  background: color-mix(in srgb, var(--color-accent) 20%, var(--color-surface-solid));
+}
+
+.steps {
+  padding: 0;
+  list-style: none;
+}
+
+.steps > li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.steps span {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  font-weight: 900;
+}
+
+.difficulty-grid span {
+  display: block;
+  font-size: 32px;
+}
+
+.faq-list {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.faq-list summary {
+  min-height: var(--touch-target);
+  cursor: pointer;
+  font-weight: 900;
+}
+
+.faq-list p {
+  color: var(--color-muted);
+}
