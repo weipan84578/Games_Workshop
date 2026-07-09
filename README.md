@@ -91,3 +91,5 @@
 | `Roulette`     | 輪盤     | Roulette     | ルーレット     |
 | `Sic_Bo`       | 骰寶     | Sic Bo       | シックボー     |
 | `Darts`        | 飛鏢     | Darts        | ダーツ         |
+| `Barbecue`     | 烤肉     | Barbecue     | バーベキュー   |
+| `Takoyaki`     | 章魚燒   | Takoyaki     | たこ焼き       |
