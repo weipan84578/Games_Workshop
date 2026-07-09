@@ -377,6 +377,18 @@ test("game RWD rules prevent mobile layout squeeze and control overlap", () => {
   assert.match(mobileCss, /@media \(max-width: 768px\) and \(max-height: 480px\) and \(orientation: landscape\)[\s\S]*?grid-template-columns:\s*repeat\(7,\s*minmax\(0,\s*1fr\)\)/);
 });
 
+test("takoyaki balls render clear octopus and sauce badges", () => {
+  const gameLoop = readText("js/game/game-loop.js");
+  const gameCss = readText("css/pages/game.css");
+
+  assert.match(gameLoop, /ingredient-badge-octopus/);
+  assert.match(gameLoop, /ingredient-badge-sauce/);
+  assert.match(gameLoop, /classList\.toggle\("has-octopus",\s*slot\.hasOctopus\)/);
+  assert.match(gameLoop, /classList\.toggle\("has-sauce",\s*slot\.sauced\)/);
+  assert.match(gameCss, /\.takoyaki-slot\.has-octopus \.ingredient-badge-octopus/);
+  assert.match(gameCss, /\.takoyaki-slot\.has-sauce \.ingredient-badge-sauce/);
+});
+
 test("i18n dictionaries have identical keys and cover configured UI keys", () => {
   const app = loadScripts([
     "js/core/config.js",

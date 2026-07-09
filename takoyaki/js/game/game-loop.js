@@ -135,6 +135,10 @@
       button.dataset.index = String(slot.id);
       button.innerHTML = `
         <span class="takoyaki-ball" aria-hidden="true">
+          <span class="ingredient-badges">
+            <span class="ingredient-badge ingredient-badge-octopus">🐙</span>
+            <span class="ingredient-badge ingredient-badge-sauce">🍯</span>
+          </span>
           <span class="steam"></span>
           <span class="bonito"><span></span><span></span><span></span></span>
         </span>
@@ -152,6 +156,7 @@
       element.dataset.state = slot.state;
       element.classList.toggle("has-octopus", slot.hasOctopus);
       element.classList.toggle("has-topping", slot.hasTopping);
+      element.classList.toggle("has-sauce", slot.sauced);
       element.classList.toggle("is-ready", slot.isReady());
       element.classList.toggle("is-warning", slot.isWarning(now));
       element.setAttribute("aria-label", `${t("app_title")} ${index + 1}: ${slot.state}`);
