@@ -1,0 +1,16 @@
+body.theme-cute-pink {
+  --color-bg: #ffd6e8;
+  --color-bg-2: #fff8fb;
+  --color-surface: #fff0f5;
+  --color-surface-strong: #ffffff;
+  --color-text: #342333;
+  --color-muted: #6f5364;
+  --color-primary: #ff6fa5;
+  --color-primary-dark: #c92d72;
+  --color-secondary: #8fe0ff;
+  --color-accent: #ffb300;
+  --color-success: #24965b;
+  --color-warning: #9a5b00;
+  --color-danger: #bd3131;
+  --color-shadow: rgba(140, 50, 91, 0.26);
+}

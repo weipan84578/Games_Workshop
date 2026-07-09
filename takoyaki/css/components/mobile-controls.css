@@ -1,0 +1,52 @@
+.mobile-controls {
+  position: fixed;
+  right: var(--space-3);
+  bottom: max(var(--space-3), env(safe-area-inset-bottom));
+  left: var(--space-3);
+  z-index: 20;
+  display: none;
+  padding: var(--space-2);
+  border: 2px solid rgba(255, 255, 255, 0.72);
+  border-radius: var(--radius-panel);
+  background: color-mix(in srgb, var(--color-surface), transparent 16%);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(10px);
+}
+
+.mobile-controls.is-visible {
+  display: block;
+}
+
+.mobile-controls.is-collapsed .mobile-tool-list {
+  display: none;
+}
+
+.mobile-controls-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.mobile-tool-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.mobile-tool-list .btn {
+  min-width: 0;
+  padding-inline: 0.4rem;
+  font-size: 0.98rem;
+}
+
+@media (max-width: 768px) {
+  body[data-screen="game"] .mobile-controls {
+    display: block;
+  }
+
+  body[data-screen="game"] #screen-game {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 132px);
+  }
+}

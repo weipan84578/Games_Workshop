@@ -1,0 +1,59 @@
+.main-menu-frame {
+  display: grid;
+  place-items: center;
+  min-height: calc(100svh - var(--space-10));
+  min-height: calc(100dvh - var(--space-10));
+}
+
+.main-menu-content {
+  position: relative;
+  width: min(100%, 560px);
+  text-align: center;
+}
+
+.game-logo {
+  margin-bottom: var(--space-6);
+}
+
+.game-logo h1 {
+  color: var(--color-primary-dark);
+  text-shadow:
+    0 2px 0 #ffffff,
+    0 5px 16px var(--color-shadow);
+}
+
+.game-logo p {
+  margin-top: var(--space-2);
+  color: var(--color-muted);
+  font-weight: 800;
+}
+
+.menu-actions {
+  display: grid;
+  gap: var(--space-4);
+  width: min(100%, 420px);
+  margin: 0 auto;
+}
+
+.menu-actions .btn {
+  justify-content: flex-start;
+  padding-inline: var(--space-5);
+}
+
+.menu-note {
+  min-height: 1.5em;
+  margin-top: var(--space-4);
+  color: var(--color-muted);
+  font-weight: 700;
+}
+
+.menu-sparkle-a {
+  top: 12%;
+  left: 8%;
+}
+
+.menu-sparkle-b {
+  right: 5%;
+  bottom: 32%;
+  animation-delay: 0.4s;
+}

@@ -1,0 +1,48 @@
+body {
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: 1.55;
+  letter-spacing: 0;
+  text-shadow: 0 1px 0 var(--color-outline);
+}
+
+body[data-lang="ja"] {
+  --font-body: var(--font-jp);
+  line-height: 1.68;
+}
+
+body[data-lang="en"] {
+  --font-body: var(--font-en);
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.12;
+  font-weight: 800;
+}
+
+h1 {
+  font-size: var(--text-logo);
+}
+
+h2 {
+  font-size: var(--text-title);
+}
+
+h3 {
+  font-size: clamp(1.25rem, 1.12rem + 0.45vw, 1.62rem);
+}
+
+.muted {
+  color: var(--color-muted);
+}

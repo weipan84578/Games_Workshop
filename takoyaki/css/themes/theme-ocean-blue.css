@@ -1,0 +1,16 @@
+body.theme-ocean-blue {
+  --color-bg: #cdefff;
+  --color-bg-2: #f0fbff;
+  --color-surface: #f0fbff;
+  --color-surface-strong: #ffffff;
+  --color-text: #163343;
+  --color-muted: #42677a;
+  --color-primary: #2196c9;
+  --color-primary-dark: #0f6f9b;
+  --color-secondary: #7ee3cf;
+  --color-accent: #ffb84d;
+  --color-success: #12805d;
+  --color-warning: #9a5b00;
+  --color-danger: #bd3131;
+  --color-shadow: rgba(26, 90, 118, 0.22);
+}

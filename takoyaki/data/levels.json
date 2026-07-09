@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "slots": 6,
+    "target": 6,
+    "seconds": 110,
+    "topping": "greenOnion",
+    "sauce": "classic"
+  },
+  {
+    "id": 2,
+    "slots": 8,
+    "target": 8,
+    "seconds": 120,
+    "topping": "beni",
+    "sauce": "mayo"
+  },
+  {
+    "id": 3,
+    "slots": 10,
+    "target": 10,
+    "seconds": 135,
+    "topping": "tenkasu",
+    "sauce": "classic"
+  },
+  {
+    "id": 4,
+    "slots": 12,
+    "target": 12,
+    "seconds": 150,
+    "topping": "mixed",
+    "sauce": "special"
+  }
+]

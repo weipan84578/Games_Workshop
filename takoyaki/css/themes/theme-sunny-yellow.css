@@ -1,0 +1,16 @@
+body.theme-sunny-yellow {
+  --color-bg: #fff3c4;
+  --color-bg-2: #fffdf0;
+  --color-surface: #fff8d7;
+  --color-surface-strong: #ffffff;
+  --color-text: #3a2a11;
+  --color-muted: #765f2b;
+  --color-primary: #ffb300;
+  --color-primary-dark: #a86600;
+  --color-secondary: #ff7fa4;
+  --color-accent: #28a4c8;
+  --color-success: #267e42;
+  --color-warning: #965700;
+  --color-danger: #ad2d2d;
+  --color-shadow: rgba(135, 93, 0, 0.2);
+}

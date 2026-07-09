@@ -1,0 +1,16 @@
+body.theme-matcha-green {
+  --color-bg: #dff3e3;
+  --color-bg-2: #f3fbf4;
+  --color-surface: #f3fbf4;
+  --color-surface-strong: #ffffff;
+  --color-text: #1e3a28;
+  --color-muted: #4e735b;
+  --color-primary: #4caf6d;
+  --color-primary-dark: #2c7e45;
+  --color-secondary: #ffd476;
+  --color-accent: #ef6f93;
+  --color-success: #1e8a50;
+  --color-warning: #986000;
+  --color-danger: #b73838;
+  --color-shadow: rgba(44, 113, 67, 0.22);
+}

@@ -1,0 +1,64 @@
+:root {
+  --font-zh: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", system-ui, sans-serif;
+  --font-jp: "Noto Sans JP", "Yu Gothic", "Hiragino Sans", system-ui, sans-serif;
+  --font-en: "Fredoka", "Baloo 2", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: var(--font-zh);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+
+  --radius-card: 8px;
+  --radius-panel: 8px;
+  --radius-pill: 999px;
+
+  --text-xs: clamp(0.9rem, 0.84rem + 0.18vw, 1rem);
+  --text-sm: clamp(1rem, 0.96rem + 0.22vw, 1.12rem);
+  --text-body: clamp(1.125rem, 1.04rem + 0.35vw, 1.28rem);
+  --text-button: clamp(1.2rem, 1.08rem + 0.32vw, 1.36rem);
+  --text-title: clamp(1.75rem, 1.42rem + 1.2vw, 2.5rem);
+  --text-logo: clamp(2.15rem, 1.72rem + 1.7vw, 3.55rem);
+
+  --touch-size: 44px;
+  --page-max: 1160px;
+  --game-max: 980px;
+  --panel-max: 760px;
+
+  --color-bg: #ffd6e8;
+  --color-bg-2: #fff8fb;
+  --color-surface: #fffafd;
+  --color-surface-strong: #ffffff;
+  --color-text: #342333;
+  --color-muted: #6f5364;
+  --color-primary: #ff6fa5;
+  --color-primary-dark: #d83779;
+  --color-secondary: #6ed4ff;
+  --color-accent: #ffb300;
+  --color-success: #24965b;
+  --color-warning: #b86700;
+  --color-danger: #bd3131;
+  --color-shadow: rgba(78, 28, 55, 0.22);
+  --color-outline: rgba(255, 255, 255, 0.78);
+  --color-pan: #2d3136;
+  --color-pan-edge: #4b4f58;
+  --color-hole: #14171b;
+  --color-batter: #f8d592;
+  --color-half: #eeb75f;
+  --color-cooked: #c9792b;
+  --color-burnt: #432417;
+
+  --shadow-soft: 0 14px 32px var(--color-shadow);
+  --shadow-button: 0 6px 0 rgba(0, 0, 0, 0.18), 0 14px 24px var(--color-shadow);
+  --focus-ring: 0 0 0 4px color-mix(in srgb, var(--color-primary), white 46%);
+
+  color-scheme: light;
+}
+
+body.theme-night-purple {
+  color-scheme: dark;
+}

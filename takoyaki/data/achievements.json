@@ -1,0 +1,17 @@
+[
+  {
+    "id": "first_plate",
+    "titleKey": "msg_sauce_done",
+    "condition": "complete_one_takoyaki"
+  },
+  {
+    "id": "three_star_level",
+    "titleKey": "game_stars",
+    "condition": "earn_three_stars"
+  },
+  {
+    "id": "no_burn",
+    "titleKey": "msg_flipped",
+    "condition": "finish_level_without_burnt_slots"
+  }
+]

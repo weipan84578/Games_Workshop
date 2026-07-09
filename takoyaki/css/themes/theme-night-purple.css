@@ -1,0 +1,17 @@
+body.theme-night-purple {
+  --color-bg: #2b2140;
+  --color-bg-2: #3a2e55;
+  --color-surface: #45345f;
+  --color-surface-strong: #51406a;
+  --color-text: #fff7ff;
+  --color-muted: #e2d4ff;
+  --color-primary: #b79cff;
+  --color-primary-dark: #f5e7ff;
+  --color-secondary: #55d6ff;
+  --color-accent: #ffd25e;
+  --color-success: #76e09e;
+  --color-warning: #ffd25e;
+  --color-danger: #ff8c9b;
+  --color-shadow: rgba(0, 0, 0, 0.34);
+  --color-outline: rgba(0, 0, 0, 0.45);
+}

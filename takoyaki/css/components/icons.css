@@ -1,0 +1,95 @@
+.icon {
+  display: inline-grid;
+  place-items: center;
+  width: 1.45em;
+  height: 1.45em;
+  flex: 0 0 auto;
+  font-size: 1.12em;
+  line-height: 1;
+  text-shadow: none;
+}
+
+.asset-icon {
+  width: 1.35em;
+  height: 1.35em;
+  object-fit: contain;
+}
+
+.logo-mascot {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(92px, 18vw, 152px);
+  aspect-ratio: 1;
+  margin: 0 auto var(--space-3);
+  border: 5px solid rgba(255, 255, 255, 0.85);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 48% 56%, #d57830 0 36%, transparent 37%),
+    radial-gradient(circle at 50% 70%, #a84f1f 0 44%, transparent 45%),
+    var(--color-surface);
+  box-shadow: var(--shadow-soft);
+  animation: mascotBob 2.4s ease-in-out infinite;
+}
+
+.logo-mascot::before,
+.logo-mascot::after {
+  position: absolute;
+  top: 38%;
+  width: 13%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #251c1a;
+  content: "";
+}
+
+.logo-mascot::before {
+  left: 36%;
+}
+
+.logo-mascot::after {
+  right: 36%;
+}
+
+.mascot-mouth {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  width: 22%;
+  height: 12%;
+  border-bottom: 4px solid #251c1a;
+  border-radius: 0 0 999px 999px;
+  transform: translateX(-50%);
+}
+
+.sparkle {
+  position: absolute;
+  width: 14px;
+  aspect-ratio: 1;
+  background: var(--color-accent);
+  clip-path: polygon(50% 0, 62% 36%, 100% 50%, 62% 64%, 50% 100%, 38% 64%, 0 50%, 38% 36%);
+  filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.14));
+  animation: twinkle 1.8s ease-in-out infinite;
+}
+
+@keyframes mascotBob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(1deg);
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.85) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.12) rotate(18deg);
+  }
+}
