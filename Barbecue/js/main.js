@@ -107,10 +107,25 @@
     mainMenu.bind();
     settingsPanel.apply(settings);
 
-    root.document.addEventListener("pointerdown", function unlockAudioOnce() {
-      audio.unlock();
-      audio.setScene(game.state === "playing" ? "game" : "menu");
-    }, { once: true });
+    function removeAudioUnlockListeners() {
+      root.document.removeEventListener("pointerdown", requestAudioUnlock, true);
+      root.document.removeEventListener("click", requestAudioUnlock, true);
+      root.document.removeEventListener("touchend", requestAudioUnlock, true);
+      root.document.removeEventListener("keydown", requestAudioUnlock, true);
+    }
+
+    function requestAudioUnlock() {
+      audio.requestStart(game.state === "playing" ? "game" : "menu").then(function stopRetrying(success) {
+        if (success) {
+          removeAudioUnlockListeners();
+        }
+      });
+    }
+
+    root.document.addEventListener("pointerdown", requestAudioUnlock, true);
+    root.document.addEventListener("click", requestAudioUnlock, true);
+    root.document.addEventListener("touchend", requestAudioUnlock, true);
+    root.document.addEventListener("keydown", requestAudioUnlock, true);
 
     root.document.addEventListener("keydown", function closeModal(event) {
       if (event.key === "Escape" && !modalLayer.hidden) {

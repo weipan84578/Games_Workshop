@@ -15,7 +15,7 @@
   var DEFAULT_SETTINGS = Object.freeze({
     language: "zh-Hant",
     theme: "classic",
-    bgmVolume: 0.08,
+    bgmVolume: 0.24,
     sfxVolume: 0.72,
     largeText: false,
     highContrast: false
