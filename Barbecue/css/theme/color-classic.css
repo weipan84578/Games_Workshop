@@ -1,0 +1,13 @@
+body[data-theme="classic"] {
+  --primary: #ff7a45;
+  --primary-strong: #e85d2c;
+  --secondary: #7fc8a9;
+  --accent: #f6c445;
+  --surface: #fffaf2;
+  --surface-2: #fff0dc;
+  --surface-3: #ffffff;
+  --text: #30241f;
+  --text-muted: #6e5a52;
+  --grill: #3a2c2a;
+  --coal: #6f2a1d;
+}

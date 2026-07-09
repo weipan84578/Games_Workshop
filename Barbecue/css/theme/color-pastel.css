@@ -1,0 +1,13 @@
+body[data-theme="pastel"] {
+  --primary: #ff8fb1;
+  --primary-strong: #d95d88;
+  --secondary: #7fc8a9;
+  --accent: #ffd166;
+  --surface: #fff8fb;
+  --surface-2: #f2fff9;
+  --surface-3: #ffffff;
+  --text: #3f2b34;
+  --text-muted: #755c68;
+  --grill: #463844;
+  --coal: #7a3252;
+}

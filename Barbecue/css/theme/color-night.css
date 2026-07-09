@@ -1,0 +1,15 @@
+body[data-theme="night"] {
+  --primary: #f1c40f;
+  --primary-strong: #e67e22;
+  --secondary: #7bdff2;
+  --accent: #ff9f1c;
+  --surface: #1f2933;
+  --surface-2: #2c3e50;
+  --surface-3: #33495f;
+  --text: #fff7dc;
+  --text-muted: #d9cfae;
+  --line: rgba(255, 247, 220, 0.22);
+  --grill: #151b20;
+  --coal: #b94824;
+  --shadow-soft: 0 20px 48px rgba(0, 0, 0, 0.28);
+}

@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ff7a45">
+  <title>Barbecue Party</title>
+  <link rel="stylesheet" href="./css/base/reset.css">
+  <link rel="stylesheet" href="./css/base/variables.css">
+  <link rel="stylesheet" href="./css/base/typography.css">
+  <link rel="stylesheet" href="./css/layout/safe-area.css">
+  <link rel="stylesheet" href="./css/layout/rwd.css">
+  <link rel="stylesheet" href="./css/theme/color-classic.css">
+  <link rel="stylesheet" href="./css/theme/color-pastel.css">
+  <link rel="stylesheet" href="./css/theme/color-night.css">
+  <link rel="stylesheet" href="./css/theme/color-ocean.css">
+  <link rel="stylesheet" href="./css/theme/cute-theme.css">
+  <link rel="stylesheet" href="./css/components/buttons.css">
+  <link rel="stylesheet" href="./css/components/modal.css">
+  <link rel="stylesheet" href="./css/components/slider.css">
+  <link rel="stylesheet" href="./css/components/toggle.css">
+  <link rel="stylesheet" href="./css/components/icons.css">
+  <link rel="stylesheet" href="./css/pages/main-menu.css">
+  <link rel="stylesheet" href="./css/pages/game.css">
+  <link rel="stylesheet" href="./css/pages/settings.css">
+  <link rel="stylesheet" href="./css/pages/instructions.css">
+  <link rel="stylesheet" href="./css/animations/keyframes.css">
+</head>
+<body data-theme="classic" data-large-text="false" data-high-contrast="false">
+  <div id="app" class="app-shell">
+    <section id="mainMenu" class="screen main-menu active" aria-labelledby="gameTitle">
+      <div class="menu-visual" aria-hidden="true">
+        <div class="stand-roof"></div>
+        <div class="stand-body">
+          <span class="smoke smoke-a"></span>
+          <span class="smoke smoke-b"></span>
+          <span class="grill-line"></span>
+          <span class="food-dot dot-a"></span>
+          <span class="food-dot dot-b"></span>
+          <span class="food-dot dot-c"></span>
+        </div>
+      </div>
+
+      <div class="brand-lockup">
+        <p class="eyebrow" data-i18n="menu_eyebrow">Kawaii Cooking Arcade</p>
+        <h1 id="gameTitle" data-i18n="game_title">Barbecue Party</h1>
+        <p class="subtitle" data-i18n="menu_tagline">烤出剛剛好的香氣，完成今天的可愛訂單。</p>
+      </div>
+
+      <nav class="menu-actions" aria-label="Main menu">
+        <button id="startButton" class="primary-button menu-button" type="button">
+          <span class="icon">▶</span>
+          <span data-i18n="menu_start">開始遊戲</span>
+        </button>
+        <button id="continueButton" class="secondary-button menu-button" type="button">
+          <span class="icon">↻</span>
+          <span data-i18n="menu_continue">繼續遊戲</span>
+        </button>
+        <button id="helpButton" class="secondary-button menu-button" type="button">
+          <span class="icon">?</span>
+          <span data-i18n="menu_help">教學</span>
+        </button>
+        <button id="settingsButton" class="secondary-button menu-button" type="button">
+          <span class="icon">⚙</span>
+          <span data-i18n="menu_settings">設定</span>
+        </button>
+      </nav>
+    </section>
+
+    <section id="gameScreen" class="screen game-screen" aria-label="Game screen">
+      <header class="game-hud">
+        <button id="menuButton" class="icon-button" type="button" data-i18n-title="button_menu" title="返回選單">⌂</button>
+        <div class="stat-strip" aria-live="polite">
+          <div class="stat-pill">
+            <span data-i18n="hud_score">分數</span>
+            <strong id="scoreValue">0</strong>
+          </div>
+          <div class="stat-pill">
+            <span data-i18n="hud_time">時間</span>
+            <strong id="timeValue">90</strong>
+          </div>
+          <div class="stat-pill">
+            <span data-i18n="hud_combo">連擊</span>
+            <strong id="comboValue">0</strong>
+          </div>
+        </div>
+        <div class="order-ticket">
+          <span class="order-label" data-i18n="hud_order">訂單</span>
+          <strong id="orderText">--</strong>
+          <progress id="orderProgress" value="1" max="1"></progress>
+        </div>
+      </header>
+
+      <div class="play-stage">
+        <canvas id="gameCanvas" width="1280" height="800" aria-label="Barbecue grill"></canvas>
+      </div>
+
+      <div class="game-controls">
+        <div id="foodTray" class="food-tray" aria-label="Food tray">
+          <button class="food-button active" type="button" data-food="pork">
+            <span class="food-icon pork"></span>
+            <span data-i18n="food_pork">五花肉</span>
+          </button>
+          <button class="food-button" type="button" data-food="corn">
+            <span class="food-icon corn"></span>
+            <span data-i18n="food_corn">玉米</span>
+          </button>
+          <button class="food-button" type="button" data-food="mushroom">
+            <span class="food-icon mushroom"></span>
+            <span data-i18n="food_mushroom">香菇</span>
+          </button>
+          <button class="food-button" type="button" data-food="shrimp">
+            <span class="food-icon shrimp"></span>
+            <span data-i18n="food_shrimp">蝦子</span>
+          </button>
+          <button class="food-button" type="button" data-food="sausage">
+            <span class="food-icon sausage"></span>
+            <span data-i18n="food_sausage">香腸</span>
+          </button>
+        </div>
+
+        <div class="action-tray">
+          <button id="flipButton" class="secondary-button action-button" type="button">
+            <span class="icon">↺</span>
+            <span data-i18n="action_flip">翻面</span>
+          </button>
+          <button id="serveButton" class="primary-button action-button" type="button">
+            <span class="icon">★</span>
+            <span data-i18n="action_serve">出餐</span>
+          </button>
+          <button id="discardButton" class="secondary-button action-button danger" type="button">
+            <span class="icon">×</span>
+            <span data-i18n="action_discard">丟棄</span>
+          </button>
+          <button id="pauseButton" class="secondary-button action-button" type="button">
+            <span class="icon">Ⅱ</span>
+            <span data-i18n="action_pause">暫停</span>
+          </button>
+        </div>
+      </div>
+
+      <footer class="status-bar" aria-live="polite">
+        <span id="selectedText" data-i18n="status_select_slot">選擇爐位或放上食材</span>
+        <strong id="messageText"></strong>
+      </footer>
+    </section>
+  </div>
+
+  <div id="modalLayer" class="modal-layer" hidden>
+    <section id="instructionsModal" class="modal-panel instructions-modal" role="dialog" aria-modal="true" aria-labelledby="instructionsTitle" hidden>
+      <header class="modal-header">
+        <h2 id="instructionsTitle" data-i18n="help_title">烤肉手冊</h2>
+        <button class="icon-button modal-close" type="button" data-close-modal="instructionsModal" data-i18n-title="button_close" title="關閉">×</button>
+      </header>
+      <div class="instruction-tabs" role="tablist">
+        <button class="tab-button active" type="button" data-tab="basics" data-i18n="help_tab_basics">流程</button>
+        <button class="tab-button" type="button" data-tab="doneness" data-i18n="help_tab_doneness">熟度</button>
+        <button class="tab-button" type="button" data-tab="orders" data-i18n="help_tab_orders">訂單</button>
+        <button class="tab-button" type="button" data-tab="score" data-i18n="help_tab_score">評分</button>
+      </div>
+      <div class="instruction-pages">
+        <article class="instruction-page active" data-page="basics">
+          <h3 data-i18n="help_basics_title">開店節奏</h3>
+          <p data-i18n="help_basics_body">點空爐位放食材，點已放上的食材選取，適時翻面並在熟度漂亮時出餐。</p>
+        </article>
+        <article class="instruction-page" data-page="doneness">
+          <h3 data-i18n="help_doneness_title">熟度提示</h3>
+          <p data-i18n="help_doneness_body">第一面進度條變綠後翻面，第二面也變綠就是完美；綠了還放太久會燒焦。</p>
+        </article>
+        <article class="instruction-page" data-page="orders">
+          <h3 data-i18n="help_orders_title">客人訂單</h3>
+          <p data-i18n="help_orders_body">訂單會要求指定食材數量。只出訂單需要的食材，完成越快獎勵越高。</p>
+        </article>
+        <article class="instruction-page" data-page="score">
+          <h3 data-i18n="help_score_title">得分</h3>
+          <p data-i18n="help_score_body">完美熟度、連續完成訂單、剩餘時間都會增加分數；太早出餐、錯餐或燒焦會扣分。</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="settingsModal" class="modal-panel settings-modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" hidden>
+      <header class="modal-header">
+        <h2 id="settingsTitle" data-i18n="settings_title">設定</h2>
+        <button class="icon-button modal-close" type="button" data-close-modal="settingsModal" data-i18n-title="button_close" title="關閉">×</button>
+      </header>
+      <div class="settings-list">
+        <label class="setting-row">
+          <span data-i18n="settings_bgm">BGM 音量</span>
+          <input id="bgmVolume" type="range" min="0" max="1" step="0.01">
+        </label>
+        <label class="setting-row">
+          <span data-i18n="settings_sfx">音效音量</span>
+          <input id="sfxVolume" type="range" min="0" max="1" step="0.01">
+        </label>
+        <div class="setting-row theme-row">
+          <span data-i18n="settings_theme">色彩主題</span>
+          <div class="segmented-control" role="group" aria-label="Theme">
+            <button type="button" data-theme-choice="classic" data-i18n="theme_classic">炭火</button>
+            <button type="button" data-theme-choice="pastel" data-i18n="theme_pastel">棉花糖</button>
+            <button type="button" data-theme-choice="night" data-i18n="theme_night">夜市</button>
+            <button type="button" data-theme-choice="ocean" data-i18n="theme_ocean">海風</button>
+          </div>
+        </div>
+        <label class="setting-row">
+          <span data-i18n="settings_language">語言</span>
+          <select id="languageSelect">
+            <option value="zh-Hant">繁體中文</option>
+            <option value="en">English</option>
+            <option value="ja">日本語</option>
+          </select>
+        </label>
+        <label class="setting-row toggle-row">
+          <span data-i18n="settings_large_text">大型文字</span>
+          <input id="largeTextToggle" type="checkbox">
+        </label>
+        <label class="setting-row toggle-row">
+          <span data-i18n="settings_contrast">高對比</span>
+          <input id="contrastToggle" type="checkbox">
+        </label>
+        <button id="resetDataButton" class="secondary-button danger reset-button" type="button">
+          <span class="icon">↯</span>
+          <span data-i18n="settings_reset">清除存檔</span>
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="./js/utils/storage.js" defer></script>
+  <script src="./js/utils/eventBus.js" defer></script>
+  <script src="./js/utils/helpers.js" defer></script>
+  <script src="./js/i18n/i18n.js" defer></script>
+  <script src="./js/i18n/lang-zh.js" defer></script>
+  <script src="./js/i18n/lang-en.js" defer></script>
+  <script src="./js/i18n/lang-ja.js" defer></script>
+  <script src="./js/audio/soundList.js" defer></script>
+  <script src="./js/audio/audioManager.js" defer></script>
+  <script src="./js/ui/mainMenu.js" defer></script>
+  <script src="./js/ui/settingsPanel.js" defer></script>
+  <script src="./js/ui/instructionsPanel.js" defer></script>
+  <script src="./js/game/grillLogic.js" defer></script>
+  <script src="./js/game/orderSystem.js" defer></script>
+  <script src="./js/game/renderer.js" defer></script>
+  <script src="./js/game/inputController.js" defer></script>
+  <script src="./js/game/gameCore.js" defer></script>
+  <script src="./js/main.js" defer></script>
+</body>
+</html>

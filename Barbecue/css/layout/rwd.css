@@ -1,0 +1,93 @@
+.screen {
+  width: min(100%, var(--app-max-width));
+  margin: 0 auto;
+}
+
+.game-screen {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  gap: var(--space-4);
+  min-height: calc(100vh - 36px);
+}
+
+.game-hud {
+  display: grid;
+  grid-template-columns: var(--control-min) minmax(0, 1fr) minmax(240px, 0.9fr);
+  align-items: stretch;
+  gap: var(--space-3);
+}
+
+.stat-strip,
+.game-controls,
+.food-tray,
+.action-tray {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.stat-strip {
+  min-width: 0;
+}
+
+.game-controls {
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+.food-tray {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.action-tray {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 900px) {
+  .app-shell {
+    padding: 12px;
+  }
+
+  .game-hud {
+    grid-template-columns: var(--control-min) 1fr;
+  }
+
+  .order-ticket {
+    grid-column: 1 / -1;
+  }
+
+  .game-controls {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .action-tray {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  h1 {
+    font-size: 2.3rem;
+  }
+
+  .main-menu {
+    min-height: calc(100vh - 24px);
+  }
+
+  .stat-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .game-hud {
+    gap: var(--space-2);
+  }
+
+  .action-tray {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

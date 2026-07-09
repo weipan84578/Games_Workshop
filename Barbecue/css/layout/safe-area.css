@@ -1,0 +1,8 @@
+.app-shell {
+  min-height: 100vh;
+  padding: max(18px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left));
+}
+
+.game-screen {
+  padding-bottom: max(var(--space-4), env(safe-area-inset-bottom));
+}

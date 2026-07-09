@@ -1,0 +1,58 @@
+body {
+  min-height: 100vh;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.62) 25%, transparent 25%) 0 0 / 34px 34px,
+    linear-gradient(315deg, rgba(255, 255, 255, 0.48) 25%, transparent 25%) 0 0 / 34px 34px,
+    linear-gradient(180deg, var(--surface-2), var(--surface));
+  overflow-x: hidden;
+}
+
+.app-shell {
+  display: grid;
+  align-items: center;
+}
+
+.screen {
+  display: none;
+}
+
+.screen.active {
+  display: grid;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.toast {
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 30;
+  max-width: min(320px, calc(100vw - 32px));
+  padding: 0.8rem 1rem;
+  border: 2px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-3);
+  box-shadow: var(--shadow-soft);
+  color: var(--text);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 180ms ease, transform 180ms ease;
+  pointer-events: none;
+}
+
+.toast.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+body[data-high-contrast="true"] .toast,
+body[data-high-contrast="true"] .modal-panel,
+body[data-high-contrast="true"] .stat-pill,
+body[data-high-contrast="true"] .order-ticket,
+body[data-high-contrast="true"] .play-stage,
+body[data-high-contrast="true"] .status-bar {
+  border-width: 3px;
+}

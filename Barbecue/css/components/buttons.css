@@ -1,0 +1,87 @@
+.primary-button,
+.secondary-button,
+.icon-button,
+.food-button,
+.tab-button,
+.segmented-control button {
+  min-height: var(--control-min);
+  border-radius: var(--radius-sm);
+  font-weight: 800;
+  transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease, opacity 140ms ease;
+  user-select: none;
+}
+
+.primary-button,
+.secondary-button,
+.food-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.48rem;
+  padding: 0.68rem 1rem;
+}
+
+.primary-button {
+  background: var(--primary);
+  box-shadow: var(--shadow-button);
+  color: #ffffff;
+}
+
+.secondary-button,
+.food-button,
+.tab-button,
+.segmented-control button {
+  border: 2px solid var(--line);
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+.primary-button:hover,
+.secondary-button:hover,
+.food-button:hover,
+.tab-button:hover,
+.segmented-control button:hover {
+  transform: translateY(-2px);
+}
+
+.primary-button:active,
+.secondary-button:active,
+.food-button:active,
+.tab-button:active,
+.segmented-control button:active {
+  transform: translateY(1px);
+}
+
+.primary-button:disabled,
+.secondary-button:disabled,
+.food-button:disabled {
+  opacity: 0.48;
+  transform: none;
+  box-shadow: none;
+}
+
+.icon-button {
+  display: grid;
+  place-items: center;
+  width: var(--control-min);
+  min-width: var(--control-min);
+  padding: 0;
+  border: 2px solid var(--line);
+  background: var(--surface-3);
+  color: var(--text);
+  font-size: 1.35rem;
+}
+
+.danger {
+  color: #ffffff;
+  background: var(--danger);
+  border-color: transparent;
+}
+
+.icon {
+  display: inline-grid;
+  place-items: center;
+  width: 1.35em;
+  min-width: 1.35em;
+  font-weight: 900;
+}

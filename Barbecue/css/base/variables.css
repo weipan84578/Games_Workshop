@@ -1,0 +1,52 @@
+:root {
+  --font-ui: "Nunito", "Baloo 2", "Comic Sans MS", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Segoe UI", "Noto Sans TC", system-ui, sans-serif;
+  --font-size-base: 18px;
+  --font-size-small: 0.86rem;
+  --font-size-h1: 3rem;
+  --font-size-h2: 1.85rem;
+  --font-size-h3: 1.35rem;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --shadow-soft: 0 18px 42px rgba(45, 35, 28, 0.16);
+  --shadow-button: 0 8px 0 rgba(83, 44, 24, 0.2);
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --control-min: 48px;
+  --app-max-width: 1160px;
+  --primary: #ff7a45;
+  --primary-strong: #e85d2c;
+  --secondary: #7fc8a9;
+  --accent: #f6c445;
+  --danger: #d94b4b;
+  --surface: #fffaf2;
+  --surface-2: #fff2dd;
+  --surface-3: #ffffff;
+  --text: #30241f;
+  --text-muted: #6e5a52;
+  --line: rgba(99, 70, 49, 0.18);
+  --grill: #3a2c2a;
+  --coal: #6f2a1d;
+  --focus: #1b75d0;
+}
+
+body[data-large-text="true"] {
+  --font-size-base: 20px;
+  --font-size-h1: 3.25rem;
+  --font-size-h2: 2rem;
+  --font-size-h3: 1.5rem;
+}
+
+body[data-high-contrast="true"] {
+  --surface: #ffffff;
+  --surface-2: #fff7d1;
+  --surface-3: #ffffff;
+  --text: #111111;
+  --text-muted: #333333;
+  --line: #111111;
+  --focus: #005fcc;
+}

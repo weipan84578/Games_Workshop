@@ -1,0 +1,14 @@
+input[type="range"] {
+  width: min(260px, 100%);
+  accent-color: var(--primary);
+}
+
+select {
+  min-height: var(--control-min);
+  padding: 0.4rem 0.75rem;
+  border: 2px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-3);
+  color: var(--text);
+  font-weight: 700;
+}

@@ -1,0 +1,13 @@
+body[data-theme="ocean"] {
+  --primary: #00b4d8;
+  --primary-strong: #0077b6;
+  --secondary: #ff9f1c;
+  --accent: #90be6d;
+  --surface: #f0fcff;
+  --surface-2: #caf0f8;
+  --surface-3: #ffffff;
+  --text: #12333f;
+  --text-muted: #426c79;
+  --grill: #26383f;
+  --coal: #d85b2f;
+}

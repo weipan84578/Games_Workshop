@@ -1,0 +1,51 @@
+body {
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+button,
+.stat-pill strong,
+.order-ticket strong {
+  font-family: var(--font-ui);
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  line-height: 1.05;
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  line-height: 1.15;
+}
+
+h3 {
+  font-size: var(--font-size-h3);
+  line-height: 1.2;
+}
+
+.eyebrow {
+  color: var(--primary-strong);
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  max-width: 32rem;
+}
