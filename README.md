@@ -12,8 +12,8 @@
 | ---------------------- | ------------ | -------------------- | ------------------------ |
 | `Checkers`             | 西洋跳棋     | Checkers             | チェッカー               |
 | `Chinese_Chess`        | 中國象棋     | Xiangqi              | シャンチー               |
-| `chinese_dark_chess`   | 中國暗棋     | Chinese Dark Chess   | 中国暗棋                 |
-| `chinese_checkers`     | 中國跳棋     | Chinese Checkers     | チャイニーズチェッカー   |
+| `Chinese_dark_chess`   | 中國暗棋     | Chinese Dark Chess   | 中国暗棋                 |
+| `Chinese_checkers`     | 中國跳棋     | Chinese Checkers     | チャイニーズチェッカー   |
 | `Jungle_Chess`         | 鬥獸棋       | Jungle Chess         | ジャングルチェス         |
 | `Gomoku`               | 五子棋       | Gomoku               | 五目並べ                 |
 | `Othello`              | 黑白棋       | Othello              | オセロ                   |
@@ -46,7 +46,7 @@
 | `Sudoku`            | 數獨     | Sudoku            | 数独                   |
 | `Puzzle_Game`       | 拼圖挑戰 | Puzzle Challenge  | パズルチャレンジ       |
 | `Crossword`         | 填字遊戲 | Crossword         | クロスワード           |
-| `sokoban_puzzle`    | 推箱子   | Sokoban           | 倉庫番                 |
+| `Sokoban_puzzle`    | 推箱子   | Sokoban           | 倉庫番                 |
 | `Water_Sort_Puzzle` | 倒水排序 | Water Sort Puzzle | ウォーターソートパズル |
 | `Yahtzee`           | 快艇骰子 | Yahtzee           | ヨットダイス           |
 
@@ -56,14 +56,13 @@
 | ---------------- | ---------- | ------------------ | -------------------- |
 | `Snake_Game`     | 貪食蛇     | Snake              | スネーク             |
 | `Tetris`         | 俄羅斯方塊 | Tetris             | テトリス             |
-| `frogger`        | 青蛙過河   | Frogger            | フロッガー           |
 | `Endless_Runner` | 無限跑酷   | Endless Runner     | エンドレスランナー   |
 | `Flappy_Bird`    | 飛揚的小鳥 | Flappy Bird        | フラッピーバード     |
 | `Pacman`         | 小精靈     | Pac-Man            | パックマン           |
 | `Bubble_Shooter` | 泡泡射手   | Bubble Shooter     | バブルシューター     |
-| `breakout_game`  | 打磚塊     | Breakout           | ブロックくずし       |
+| `Breakout_Game`  | 打磚塊     | Breakout           | ブロックくずし       |
 | `Space_Invaders` | 太空侵略者 | Space Invaders     | スペースインベーダー |
-| `shooting_game`  | 光槍特訓   | Light Gun Training | ライトガン特訓       |
+| `Shooting_Game`  | 光槍特訓   | Light Gun Training | ライトガン特訓       |
 | `Pinball`        | 霓虹彈珠台 | Neon Pinball       | ネオンピンボール     |
 | `Bomberman_Lite` | 炸彈超人   | Bomberman Lite     | ボンバーマン ライト  |
 | `Pong`           | 乒乓球     | Pong               | ポン                 |
@@ -84,7 +83,7 @@
 
 | 資料夾         | 遊戲名稱 | English Name | 日本語名       |
 | -------------- | -------- | ------------ | -------------- |
-| `horse_racing` | 賽馬王   | Horse Racing | 競馬王         |
+| `Horse_Racing` | 賽馬王   | Horse Racing | 競馬王         |
 | `Whack_A_Mole` | 打地鼠   | Whack-A-Mole | もぐら叩き     |
 | `Typing_Game`  | 打字練習 | Typing Game  | タイピング練習 |
 | `Virtual_Pet`  | 電子寵物 | Virtual Pet  | 電子ペット     |
