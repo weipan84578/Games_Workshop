@@ -44,3 +44,57 @@
   color: var(--color-accent);
   filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.16));
 }
+
+@media (max-width: 768px) {
+  .hud {
+    grid-template-columns: var(--touch-size) minmax(0, 1fr) var(--touch-size);
+    gap: var(--space-2);
+    margin-bottom: var(--space-2);
+  }
+
+  .hud-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .hud-chip {
+    min-height: 34px;
+    padding: 0.2rem 0.42rem;
+    overflow: hidden;
+    font-size: 0.88rem;
+    white-space: nowrap;
+  }
+
+  .hud-message {
+    margin-top: 4px;
+    font-size: 0.92rem;
+    line-height: 1.28;
+  }
+}
+
+@media (max-width: 360px) {
+  .hud {
+    gap: 6px;
+  }
+
+  .hud-metrics {
+    gap: 4px;
+  }
+
+  .hud-chip {
+    min-height: 32px;
+    padding-inline: 0.32rem;
+    font-size: 0.78rem;
+  }
+}
+
+@media (max-width: 768px) and (max-height: 480px) and (orientation: landscape) {
+  .hud-metrics {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .hud-message {
+    min-height: 1.25em;
+  }
+}

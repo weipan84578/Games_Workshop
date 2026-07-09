@@ -362,6 +362,21 @@ test("CSS imports all layers and exposes required theme classes", () => {
   assert.match(readText("css/components/mobile-controls.css"), /env\(safe-area-inset-bottom\)/);
 });
 
+test("game RWD rules prevent mobile layout squeeze and control overlap", () => {
+  const gameCss = readText("css/pages/game.css");
+  const hudCss = readText("css/components/hud.css");
+  const mobileCss = readText("css/components/mobile-controls.css");
+
+  assert.match(gameCss, /@media \(max-width: 768px\)[\s\S]*?\.game-viewport[\s\S]*?grid-template-columns:\s*1fr/);
+  assert.match(gameCss, /@media \(max-width: 768px\)[\s\S]*?\.tool-tray[\s\S]*?display:\s*none/);
+  assert.match(gameCss, /@media \(max-width: 768px\) and \(max-height: 480px\) and \(orientation: landscape\)/);
+  assert.match(hudCss, /@media \(max-width: 768px\)[\s\S]*?\.hud-metrics[\s\S]*?grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
+  assert.match(mobileCss, /padding-bottom:\s*calc\(env\(safe-area-inset-bottom\) \+ 176px\)/);
+  assert.match(mobileCss, /@media \(max-width: 480px\)[\s\S]*?grid-template-columns:\s*repeat\(4,\s*minmax\(0,\s*1fr\)\)/);
+  assert.match(mobileCss, /@media \(max-width: 360px\)[\s\S]*?grid-template-columns:\s*repeat\(3,\s*minmax\(0,\s*1fr\)\)/);
+  assert.match(mobileCss, /@media \(max-width: 768px\) and \(max-height: 480px\) and \(orientation: landscape\)[\s\S]*?grid-template-columns:\s*repeat\(7,\s*minmax\(0,\s*1fr\)\)/);
+});
+
 test("i18n dictionaries have identical keys and cover configured UI keys", () => {
   const app = loadScripts([
     "js/core/config.js",
@@ -429,6 +444,39 @@ test("takoyaki slot state machine follows the required cooking flow", () => {
   assert.equal(slot.state, "done");
   slot.update(44);
   assert.equal(slot.state, "empty");
+});
+
+test("default burn windows include the latest balance extension", () => {
+  const app = loadScripts(["js/core/config.js"]);
+  assert.equal(app.Config.slotTiming.halfToBurnt, 10032);
+  assert.equal(app.Config.slotTiming.cookedToBurnt, 8712);
+});
+
+test("warning state starts at 60 percent of the burn window", () => {
+  const app = loadScripts([
+    "js/core/config.js",
+    "js/core/event-bus.js",
+    "js/core/storage.js",
+    "js/core/state.js",
+    "js/game/scoring.js",
+    "js/game/takoyaki-slot.js"
+  ]);
+  const slot = new app.TakoyakiSlot(0, {
+    rawToHalf: 10,
+    halfToBurnt: 100,
+    flippedToCooked: 10,
+    cookedToBurnt: 100,
+    doneToClear: 10
+  });
+  slot.applyAction("batter", 0);
+  slot.update(10);
+  assert.equal(slot.isWarning(70), false);
+  assert.equal(slot.isWarning(71), true);
+  slot.applyAction("flip", 72);
+  slot.update(82);
+  assert.equal(slot.state, "cooked");
+  assert.equal(slot.isWarning(142), false);
+  assert.equal(slot.isWarning(143), true);
 });
 
 test("discard tool clears only burnt takoyaki", () => {

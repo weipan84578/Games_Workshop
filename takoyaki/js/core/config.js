@@ -37,9 +37,9 @@
     ],
     slotTiming: {
       rawToHalf: 2400,
-      halfToBurnt: 7600,
+      halfToBurnt: 10032,
       flippedToCooked: 2600,
-      cookedToBurnt: 6600,
+      cookedToBurnt: 8712,
       doneToClear: 1500
     },
     levels: [

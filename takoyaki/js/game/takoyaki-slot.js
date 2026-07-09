@@ -1,6 +1,8 @@
 (function registerTakoyakiSlot(app) {
   "use strict";
 
+  const WARNING_THRESHOLD = 0.6;
+
   class TakoyakiSlot {
     constructor(id, timing = app.Config.slotTiming) {
       this.id = id;
@@ -110,10 +112,10 @@
 
     isWarning(now) {
       if (this.state === "half") {
-        return now - this.halfAt > this.timing.halfToBurnt * 0.72;
+        return now - this.halfAt > this.timing.halfToBurnt * WARNING_THRESHOLD;
       }
       if (this.state === "cooked") {
-        return now - this.cookedAt > this.timing.cookedToBurnt * 0.72;
+        return now - this.cookedAt > this.timing.cookedToBurnt * WARNING_THRESHOLD;
       }
       return this.state === "burnt";
     }

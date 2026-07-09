@@ -36,9 +36,15 @@
 }
 
 .mobile-tool-list .btn {
+  flex-direction: column;
   min-width: 0;
-  padding-inline: 0.4rem;
-  font-size: 0.98rem;
+  min-height: 58px;
+  padding: 0.38rem 0.24rem;
+  gap: 2px;
+  overflow: hidden;
+  font-size: clamp(0.74rem, 2.4vw, 0.9rem);
+  line-height: 1.05;
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 768px) {
@@ -47,6 +53,52 @@
   }
 
   body[data-screen="game"] #screen-game {
-    padding-bottom: calc(env(safe-area-inset-bottom) + 132px);
+    padding-bottom: calc(env(safe-area-inset-bottom) + 176px);
+  }
+}
+
+@media (max-width: 480px) {
+  .mobile-controls {
+    right: var(--space-2);
+    left: var(--space-2);
+    padding: 7px;
+  }
+
+  .mobile-controls-head {
+    min-height: 32px;
+  }
+
+  .mobile-tool-list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .mobile-tool-list .btn {
+    min-height: 54px;
+  }
+}
+
+@media (max-width: 360px) {
+  body[data-screen="game"] #screen-game {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 242px);
+  }
+
+  .mobile-tool-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) and (max-height: 480px) and (orientation: landscape) {
+  body[data-screen="game"] #screen-game {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 116px);
+  }
+
+  .mobile-tool-list {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  .mobile-tool-list .btn {
+    min-height: 48px;
+    font-size: 0.72rem;
   }
 }
