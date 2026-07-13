@@ -1,0 +1,4 @@
+interface:
+  display_name: "Build Basketball Arcade"
+  short_description: "Build and validate a polished Canvas arcade game"
+  default_prompt: "Use $build-basketball-arcade to implement or refine this basketball arcade game from its specification."
