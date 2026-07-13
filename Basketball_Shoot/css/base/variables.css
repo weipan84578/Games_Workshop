@@ -1,0 +1,17 @@
+:root {
+  --bg: #fff5e9;
+  --bg-2: #ffdfc2;
+  --surface: #fffdf8;
+  --ink: #39251c;
+  --muted: #795d50;
+  --primary: #ff7a00;
+  --primary-2: #ffb02e;
+  --secondary: #7fd9c8;
+  --soft: #fff;
+  --border: #4a2e1d;
+  --danger: #d84545;
+  --shadow: 0 8px 0 rgba(74, 46, 29, 0.18), 0 18px 45px rgba(74, 46, 29, 0.15);
+  --radius: 24px;
+  --font:
+    ui-rounded, "Arial Rounded MT Bold", "Noto Sans TC", system-ui, sans-serif;
+}

@@ -1,0 +1,1 @@
+describe('Arcade Mode',function(){it('returns a new ball in under one third of a second',function(){assert(BB.Constants.RESPAWN_DELAY<=.33);});it('uses high-energy gravity',function(){assert(BB.Constants.GRAVITY>=1700);});it('provides at least four BGM arrangements',function(){assert(BB.SoundLibrary.tracks.length>=4);});});

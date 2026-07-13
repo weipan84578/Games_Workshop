@@ -1,0 +1,1 @@
+(function(BB){'use strict';BB.MathUtils={clamp:function(v,min,max){return Math.max(min,Math.min(max,v));},distance:function(a,b){return Math.hypot(a.x-b.x,a.y-b.y);},lerp:function(a,b,t){return a+(b-a)*t;}};})(window.BB=window.BB||{});

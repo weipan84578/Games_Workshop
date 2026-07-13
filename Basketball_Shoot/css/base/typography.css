@@ -1,0 +1,30 @@
+body {
+  font-family: var(--font);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.45;
+}
+h1,
+h2,
+h3,
+strong,
+b {
+  font-weight: 900;
+}
+h2 {
+  font-size: clamp(1.8rem, 5vw, 2.7rem);
+  line-height: 1.1;
+}
+.eyebrow {
+  margin-bottom: 0.35rem;
+  color: var(--primary);
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+}
+.hint,
+.microcopy {
+  color: var(--muted);
+  font-size: 0.78rem;
+}

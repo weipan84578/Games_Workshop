@@ -1,0 +1,211 @@
+#app {
+  width: 100%;
+  min-height: 100dvh;
+  position: relative;
+  z-index: 1;
+  overflow-x: hidden;
+}
+.screen {
+  display: none;
+  width: 100%;
+  min-height: 100dvh;
+}
+.screen.active {
+  display: flex;
+}
+.language-picker {
+  position: fixed;
+  z-index: 4;
+  display: block;
+  right: max(12px, env(safe-area-inset-right));
+  top: max(12px, env(safe-area-inset-top));
+}
+.language-picker select {
+  max-width: calc(100vw - 24px);
+  padding: 0.55rem 0.8rem;
+  border: 3px solid var(--border);
+  border-radius: 14px;
+  color: var(--ink);
+  background: var(--surface);
+  font-weight: 900;
+}
+.screen#menu-screen {
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 4rem 1rem 2rem;
+  text-align: center;
+}
+.hero-mark {
+  position: relative;
+  margin-bottom: 0.3rem;
+}
+.hero-ball {
+  width: clamp(74px, 15vw, 104px);
+  height: clamp(74px, 15vw, 104px);
+  display: grid;
+  place-items: center;
+  border: 5px solid var(--border);
+  border-radius: 50%;
+  color: var(--border);
+  font-size: 2rem;
+  background: var(--primary);
+  box-shadow:
+    inset 0 0 0 5px rgba(255, 255, 255, 0.18),
+    var(--shadow);
+  transform: rotate(-8deg);
+}
+.hero-ball:before,
+.hero-ball:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  border-top: 4px solid var(--border);
+}
+.hero-ball:after {
+  transform: rotate(90deg);
+}
+.mini-star,
+.mini-heart {
+  position: absolute;
+  font-size: 2rem;
+  color: var(--primary);
+  animation: float 3s ease-in-out infinite;
+}
+.mini-star {
+  left: -45px;
+  top: 4px;
+}
+.mini-heart {
+  right: -43px;
+  bottom: 2px;
+}
+.screen h1 {
+  margin: 0.15rem 0;
+  font-size: clamp(2.5rem, 9vw, 5.2rem);
+  line-height: 0.82;
+  letter-spacing: -0.055em;
+  text-shadow:
+    0 5px 0 var(--surface),
+    0 8px 0 var(--border);
+}
+.screen h1 span {
+  color: var(--primary);
+}
+.tagline {
+  margin: 1.1rem 0 1.3rem;
+  color: var(--muted);
+}
+.menu-actions {
+  width: min(410px, calc(100vw - 2rem));
+  display: grid;
+  gap: 0.78rem;
+}
+.hint {
+  margin: 1rem 0 0;
+}
+.game-screen.active {
+  flex-direction: column;
+  align-items: center;
+  background: #19142b;
+}
+.hud {
+  z-index: 3;
+  width: min(900px, 100%);
+  min-height: 78px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem clamp(0.5rem, 2vw, 1rem);
+  color: var(--ink);
+  background: var(--surface);
+  border-bottom: 4px solid var(--border);
+}
+.hud div {
+  text-align: center;
+}
+.hud small {
+  display: block;
+  font-size: 0.64rem;
+  color: var(--muted);
+}
+.hud strong {
+  font-family: ui-monospace, monospace;
+  font-size: clamp(1.35rem, 5vw, 2.2rem);
+  line-height: 1;
+}
+.hud-time strong {
+  color: var(--primary);
+}
+.court-shell {
+  position: relative;
+  width: min(900px, 100vw);
+  height: min(calc(100dvh - 152px), calc(1120 / 900 * 100vw));
+  aspect-ratio: 900/1120;
+  background: #151126;
+}
+.court-shell canvas {
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+.control-strip {
+  width: min(900px, 100%);
+  min-height: 74px;
+  padding: 0.55rem calc(1rem + env(safe-area-inset-right))
+    calc(0.55rem + env(safe-area-inset-bottom))
+    calc(1rem + env(safe-area-inset-left));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: #fff;
+  background: rgba(12, 9, 24, 0.88);
+  text-align: center;
+}
+.control-strip b {
+  font-size: 0.78rem;
+}
+.drag-arrow {
+  color: var(--primary-2);
+  font-size: 1.2rem;
+}
+.shot-toast {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  top: 35%;
+  transform: translate(-50%, -50%) scale(0);
+  padding: 0.55rem 1rem;
+  border: 4px solid var(--border);
+  border-radius: 16px;
+  color: var(--ink);
+  background: var(--surface);
+  font-weight: 900;
+  white-space: nowrap;
+}
+.shot-toast.show {
+  animation: toast 0.8s ease-out;
+}
+.settings-body h3 {
+  margin: 1.5rem 0 0.6rem;
+}
+.settings-body h3:first-child {
+  margin-top: 0.5rem;
+}
+@keyframes toast {
+  0% {
+    transform: translate(-50%, -50%) scale(0) rotate(-8deg);
+  }
+  30% {
+    transform: translate(-50%, -50%) scale(1.15) rotate(3deg);
+  }
+  80% {
+    transform: translate(-50%, -70%) scale(1);
+  }
+  100% {
+    transform: translate(-50%, -90%) scale(0.8);
+    opacity: 0;
+  }
+}

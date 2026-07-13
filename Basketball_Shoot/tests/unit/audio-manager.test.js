@@ -1,0 +1,1 @@
+describe('Audio Manager',function(){it('calculates uncapped ten-times gain',function(){assertEqual(BB.AudioMath.getRawGain(.2),2);});it('caps output at the safety ceiling',function(){assertEqual(BB.AudioMath.getFinalGain(.8),BB.AudioMath.GAIN_HARD_CAP);});it('keeps multiplier at specification value',function(){assertEqual(BB.AudioMath.BGM_VOLUME_MULTIPLIER,10);});});

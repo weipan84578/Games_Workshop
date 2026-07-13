@@ -1,0 +1,6 @@
+(function(BB){BB.Langs=BB.Langs||{};BB.Langs.zh={
+'menu.tagline':'快抓回球、連續出手，挑戰街機最高分！','menu.start':'開始遊戲','menu.continue':'繼續遊戲','menu.howtoplay':'說明','menu.settings':'設定','menu.noSave':'完成第一場後即可繼續挑戰','menu.soundStart':'點一下進入球場並開啟音樂',
+'game.score':'分數','game.time':'剩餘時間','game.combo':'連擊','game.drag':'抓住籃球，快速往籃框方向甩出去！',
+'how.eyebrow':'上場前熱身','how.title':'怎麼投出漂亮好球？','how.controls':'操作','how.scoring':'得分','how.aimTitle':'抓球、往上甩、立刻接下一顆！','how.aimText':'從回球架抓住籃球，快速往籃框方向甩出。出手後新球會立刻回到手上。','how.swish':'空心球','how.bank':'擦框進球','how.streak':'連續命中最高加倍','how.saveQ':'進度會自動儲存嗎？','how.saveA':'會！暫停或離開時都會保留目前進度。','how.langQ':'如何切換語言？','how.langA':'使用主畫面右上角，或到設定頁切換。',
+'settings.eyebrow':'打造你的球場','settings.title':'設定','settings.theme':'球場配色','settings.sound':'音效','settings.bgm':'BGM 音量','settings.sfx':'音效音量','settings.gainNote':'遊戲內 BGM 已依設計加成，此滑桿為額外微調。','settings.trajectory':'拋物線輔助','settings.cuteSkin':'可愛籃球表情','settings.language':'語言','settings.reset':'清除存檔與排行榜','theme.default':'經典','theme.cute':'可愛','theme.dark':'深色','theme.ocean':'海洋','theme.sunset':'夕陽',
+'pause.title':'休息一下','pause.resume':'繼續','pause.restart':'重新開始','pause.menu':'回主選單','result.over':'比賽結束','result.score':'本場得分','result.name':'暱稱','result.save':'登上排行榜','leaderboard.title':'排行榜','result.saved':'已記錄！'};})(window.BB=window.BB||{});
