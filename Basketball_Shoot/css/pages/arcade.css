@@ -266,6 +266,30 @@
   background: #51ff7d;
   box-shadow: 0 0 10px #51ff7d;
 }
+.leaderboard-entry {
+  position: fixed;
+  z-index: 5;
+  top: max(12px, env(safe-area-inset-top));
+  left: max(12px, env(safe-area-inset-left));
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.8rem;
+  border: 3px solid #ffe46a;
+  border-radius: 14px;
+  color: #fff;
+  background: linear-gradient(#3b2750, #170b25);
+  box-shadow:
+    0 4px 0 #08040d,
+    0 0 16px rgba(255, 224, 76, 0.28);
+}
+.leaderboard-entry span {
+  font-size: 1.35rem;
+}
+.leaderboard-entry b {
+  font-size: 0.86rem;
+}
 .game-screen.active {
   background: #070710;
 }
@@ -278,6 +302,7 @@
 }
 .hud {
   position: relative;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
   color: #ff3838;
   background: linear-gradient(#16151d, #050508);
   border: 5px solid #5d5c67 !important;
@@ -286,6 +311,27 @@
   box-shadow:
     inset 0 0 16px #000,
     0 7px 0 #303039;
+}
+.hud-stage {
+  position: relative;
+}
+.hud-stage em {
+  display: block;
+  color: #fff08a;
+  font: 900 0.56rem/1 ui-monospace, monospace;
+  font-style: normal;
+  white-space: nowrap;
+}
+.hud.double-time {
+  border-color: #ffce31 !important;
+  animation: doubleHud 0.45s steps(2) infinite;
+}
+@keyframes doubleHud {
+  50% {
+    box-shadow:
+      inset 0 0 24px rgba(255, 31, 31, 0.72),
+      0 0 24px rgba(255, 214, 43, 0.55);
+  }
 }
 .hud::before {
   content: "ARCADE PRO";
@@ -316,11 +362,11 @@
   box-shadow: 0 4px 0 #6c0b0b;
 }
 .court-shell {
-  border-inline: clamp(9px, 2.4vw, 24px) solid #272631;
-  border-bottom: 16px solid #191820;
+  border: 0;
   background: #06070a;
   box-shadow:
-    0 0 0 5px #5c5b65,
+    0 0 0 6px #5c5b65,
+    0 0 0 12px #272631,
     0 20px 55px #000 !important;
 }
 .court-shell::before,
@@ -340,6 +386,33 @@
 }
 .court-shell::after {
   right: 0;
+}
+.double-badge {
+  position: absolute;
+  z-index: 5;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  padding: 0.42rem 0.8rem;
+  border: 3px solid #fff16b;
+  border-radius: 12px;
+  color: #fff;
+  background: #e21f2f;
+  box-shadow: 0 0 22px #ff2d3e;
+  font: 900 clamp(0.8rem, 2.4vw, 1.2rem)/1 var(--font);
+  letter-spacing: 0.06em;
+  pointer-events: none;
+  opacity: 0;
+}
+.double-badge.active {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+  animation: doubleBadge 0.55s ease-in-out infinite alternate;
+}
+@keyframes doubleBadge {
+  to {
+    transform: translateX(-50%) scale(1.08) rotate(-2deg);
+  }
 }
 .control-strip {
   position: relative;
@@ -416,10 +489,35 @@
   .coin-lights {
     margin-top: 0.7rem;
   }
+  .leaderboard-entry {
+    min-height: 44px;
+    padding: 0.4rem 0.55rem;
+  }
+  .leaderboard-entry b {
+    display: none;
+  }
+  .hud {
+    min-height: 70px;
+    gap: 0.1rem;
+    padding-inline: 0.3rem;
+  }
+  .hud strong {
+    font-size: clamp(1.05rem, 5vw, 1.45rem);
+  }
+  .hud small {
+    font-size: 0.5rem;
+  }
+  .hud-stage em {
+    font-size: 0.43rem;
+  }
+  .hud .icon-btn {
+    width: 46px;
+    height: 46px;
+  }
 }
 @media (max-width: 600px) and (orientation: portrait) {
   .court-shell {
-    width: calc((100dvh - 152px) * 0.803571);
+    width: calc((100dvh - 150px) * 0.803571);
     max-width: none;
   }
   .hud,
@@ -431,5 +529,45 @@
   .menu-marquee,
   .coin-lights {
     display: none;
+  }
+  .game-screen.active {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(92px, 16vw, 120px);
+    grid-template-rows: 64px minmax(0, 1fr);
+    width: 100vw;
+    min-height: 100dvh;
+    overflow: hidden;
+  }
+  .hud {
+    grid-column: 1 / 3;
+    grid-row: 1;
+    width: 100%;
+    min-height: 64px;
+    height: 64px;
+    max-width: none;
+  }
+  .court-shell {
+    grid-column: 1;
+    grid-row: 2;
+    width: min(calc((100dvh - 64px) * 0.803571), calc(100vw - 120px));
+    height: auto !important;
+    max-height: calc(100dvh - 64px);
+    justify-self: center;
+  }
+  .control-strip {
+    grid-column: 2;
+    grid-row: 2;
+    width: 100%;
+    height: calc(100dvh - 64px);
+    min-height: 0;
+    flex-direction: column;
+    padding: 0.7rem;
+  }
+  .control-strip b {
+    font-size: 0.62rem;
+  }
+  .drag-arrow {
+    transform: none;
+    writing-mode: vertical-rl;
   }
 }

@@ -1,1 +1,26 @@
-(function(BB){'use strict';BB.Constants={WIDTH:900,HEIGHT:1120,GRAVITY:1800,AIR_DRAG:.035,GAME_TIME:45,BALL_RADIUS:46,HOOP_X:450,HOOP_Y:338,HOOP_WIDTH:172,FLOOR_Y:1035,BALL_START_X:450,BALL_START_Y:920,RESPAWN_DELAY:.28,SAVE_VERSION:2};})(window.BB=window.BB||{});
+(function(BB){
+  'use strict';
+  BB.Constants={
+    WIDTH:900,
+    HEIGHT:1120,
+    GRAVITY:1800,
+    AIR_DRAG:.035,
+    GAME_TIME:35,
+    DOUBLE_TIME:10,
+    BALL_RADIUS:42,
+    BALL_COUNT:5,
+    RETURN_DURATION:1.65,
+    HOOP_X:450,
+    HOOP_Y:338,
+    HOOP_WIDTH:172,
+    FLOOR_Y:1035,
+    BALL_START_X:450,
+    BALL_START_Y:920,
+    LEVELS:[
+      {target:12,hoopSpeed:0,hoopRange:0,time:35},
+      {target:30,hoopSpeed:.9,hoopRange:105,time:35},
+      {target:52,hoopSpeed:1.75,hoopRange:145,time:35}
+    ],
+    SAVE_VERSION:3
+  };
+})(window.BB=window.BB||{});

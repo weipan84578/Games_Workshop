@@ -284,6 +284,19 @@
   background: var(--bg-2);
   border-radius: 10px;
 }
+.leaderboard-full {
+  max-height: min(62vh, 520px);
+  margin-top: 1rem;
+  border: 3px solid var(--border);
+  border-radius: 16px;
+  background: var(--bg);
+}
+.leaderboard-empty {
+  margin: 0;
+  padding: 2rem 1rem;
+  color: var(--muted);
+  text-align: center;
+}
 @keyframes pop {
   from {
     opacity: 0;
