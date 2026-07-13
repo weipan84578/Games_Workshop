@@ -96,13 +96,13 @@
     if(ball.x-ball.radius<62&&ball.vx<0){ball.x=62+ball.radius;ball.vx=Math.abs(ball.vx)*.62;this.shake=.06;}
     if(ball.x+ball.radius>C.WIDTH-62&&ball.vx>0){ball.x=C.WIDTH-62-ball.radius;ball.vx=-Math.abs(ball.vx)*.62;this.shake=.06;}
     if(ball.y-ball.radius<42&&ball.vy<0){ball.y=42+ball.radius;ball.vy=Math.abs(ball.vy)*.58;}
-    if(ball.rimCooldown<=0&&(BB.Physics.circleCollision(ball,left,14,.76)||BB.Physics.circleCollision(ball,right,14,.76))){ball.touchedRim=true;ball.rimCooldown=.09;ball.vx+=this.hoopVelocity*.28;this.rimFlash=1;this.shake=.16;if(this.options.onSound)this.options.onSound('rim');}
+    if(ball.rimCooldown<=0&&(BB.Physics.circleCollision(ball,left,C.RIM_COLLISION_RADIUS,C.RIM_RESTITUTION)||BB.Physics.circleCollision(ball,right,C.RIM_COLLISION_RADIUS,C.RIM_RESTITUTION))){ball.touchedRim=true;ball.rimCooldown=.075;ball.vx+=this.hoopVelocity*.22;this.rimFlash=1;this.shake=.12;if(this.options.onSound)this.options.onSound('rim');}
     var boardLeft=hx-198,boardRight=hx+198,boardTop=hy-232,boardBottom=hy-55;
     if(ball.y>boardTop-ball.radius&&ball.y<boardBottom+ball.radius){
       if(ball.x+ball.radius>boardRight&&ball.previousY<hy&&ball.vx>0){ball.x=boardRight-ball.radius;ball.vx=-Math.abs(ball.vx)*.7;ball.touchedRim=true;}
       if(ball.x-ball.radius<boardLeft&&ball.previousY<hy&&ball.vx<0){ball.x=boardLeft+ball.radius;ball.vx=Math.abs(ball.vx)*.7;ball.touchedRim=true;}
     }
-    var crossed=ball.previousY<hy&&ball.y>=hy&&ball.vy>0&&ball.x>left.x+20&&ball.x<right.x-20;
+    var crossed=ball.previousY<hy&&ball.y>=hy&&ball.vy>0&&ball.x>left.x+10&&ball.x<right.x-10;
     if(crossed&&!ball.scored)this.scoreBall(ball);
     if(ball.scored&&ball.y>hy+195)this.beginReturn(ball);
     else if(ball.y+ball.radius>C.FLOOR_Y||ball.y>C.HEIGHT+80)this.beginReturn(ball,true);

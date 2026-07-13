@@ -1,9 +1,9 @@
 /* Run with PLAYWRIGHT_CORE pointing at a playwright-core installation. */
 'use strict';
-var fs=require('fs'),path=require('path'),url=require('url');
+var fs=require('fs'),path=require('path'),url=require('url'),os=require('os');
 var playwright=require(process.env.PLAYWRIGHT_CORE||'playwright-core');
 var root=path.resolve(__dirname,'..');
-var artifactDir=path.join(__dirname,'.playwright-artifacts');
+var artifactDir=path.join(os.tmpdir(),'basketball-shoot-playwright-'+process.pid);
 var chrome=process.env.CHROME_PATH||'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
 var captures=[];
 
@@ -37,7 +37,7 @@ async function flickRackBall(page){
     await page.evaluate(function(){BB.Leaderboard.clear();BB.Leaderboard.add({name:'ACE',score:88,combo:9,date:new Date().toISOString()});});await page.locator('#leaderboard-btn').click();check(await page.locator('#leaderboard-modal').isVisible(),'Leaderboard entry is not accessible');check((await page.locator('#leaderboard-view').textContent()).indexOf('ACE')>=0,'Leaderboard rows are not rendered');await page.waitForTimeout(250);await capture(page,'02-leaderboard.png',false);await page.locator('#leaderboard-modal .modal-close').click();
     await capture(page,'03-main-menu.png');
     await page.locator('#start-btn').click();await page.waitForTimeout(350);
-    check(await page.evaluate(function(){var e=BBApp.getEngine();return e.running&&BBApp.getAudio().mode==='game'&&e.balls.length===5&&e.balls.every(function(b){return b.state==='rack';});}),'Five-ball game did not initialize');
+    check(await page.evaluate(function(){var e=BBApp.getEngine(),opening=BB.Constants.HOOP_WIDTH-2*(BB.Constants.BALL_RADIUS+BB.Constants.RIM_COLLISION_RADIUS);return e.running&&BBApp.getAudio().mode==='game'&&e.balls.length===5&&e.balls.every(function(b){return b.state==='rack';})&&opening>=95;}),'Five-ball game or forgiving hoop opening did not initialize');
     await page.evaluate(function(){BBApp.getEngine().pause(true);});await capture(page,'04-five-ball-machine.png');await page.evaluate(function(){var e=BBApp.getEngine();e.stageFlash=0;e.pause(false);});
     await flickRackBall(page);await page.waitForTimeout(90);await flickRackBall(page);await page.waitForTimeout(120);
     check(await page.evaluate(function(){var e=BBApp.getEngine(),busy=e.balls.filter(function(b){return b.state==='flying'||b.state==='returning';}).length;return busy>=2&&e.balls.length===5;}),'Two balls could not fly independently');
@@ -57,7 +57,7 @@ async function flickRackBall(page){
     check(await page.evaluate(function(){return BBApp.getEngine().level===3&&BB.Constants.LEVELS[2].hoopSpeed>BB.Constants.LEVELS[1].hoopSpeed;}),'Stage three speed progression failed');
     await assertResponsive(page,'desktop');
     await page.goto(localUrl('tests/test-runner.html'));await page.waitForFunction(function(){return document.querySelector('#summary').textContent.indexOf('passed')>0;});
-    check((await page.locator('#summary').textContent()).trim()==='33/33 passed','Browser unit tests did not all pass');await capture(page,'06-unit-tests.png');await desktop.close();
+    check((await page.locator('#summary').textContent()).trim()==='34/34 passed','Browser unit tests did not all pass');await capture(page,'06-unit-tests.png');await desktop.close();
 
     var phoneContext=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:1,isMobile:true,hasTouch:true});
     var phone=await phoneContext.newPage();phone.on('pageerror',function(e){errors.push(e.message);});await phone.goto(localUrl('index.html'));await phone.locator('#enter-arcade-btn').tap({force:true});await phone.locator('#start-btn').tap({force:true});await phone.waitForTimeout(250);await assertResponsive(phone,'mobile portrait');await phone.evaluate(function(){BBApp.getEngine().pause(true);});await capture(phone,'07-mobile-portrait.png');await phoneContext.close();
@@ -69,7 +69,7 @@ async function flickRackBall(page){
     var tablet=await tabletContext.newPage();tablet.on('pageerror',function(e){errors.push(e.message);});await tablet.goto(localUrl('index.html'));await tablet.locator('#enter-arcade-btn').tap({force:true});await tablet.locator('#start-btn').tap({force:true});await tablet.waitForTimeout(250);await assertResponsive(tablet,'tablet portrait');await tablet.evaluate(function(){BBApp.getEngine().pause(true);});await capture(tablet,'09-tablet-portrait.png');await tabletContext.close();
 
     check(errors.length===0,'Browser errors: '+errors.join(' | '));
-    process.stdout.write('PLAYWRIGHT_OK: five balls, slow return, leaderboard, rim/wall physics, double time, 3 stages, desktop/mobile/tablet RWD, 33/33 tests\n');
+    process.stdout.write('PLAYWRIGHT_OK: forgiving hoop, five balls, slow return, leaderboard, rim/wall physics, double time, 3 stages, RWD, 34/34 tests\n');
     process.stdout.write('CAPTURES_VERIFIED: '+captures.length+'\n');
   }catch(error){process.stderr.write('PLAYWRIGHT_FAIL: '+error.stack+'\n');process.exitCode=1;}
   finally{
