@@ -204,6 +204,23 @@
     --card-width: clamp(4rem, 17vw, 5rem);
   }
 
+  .human-hand .card__corner {
+    gap: 0.14rem;
+    line-height: 1;
+  }
+
+  .human-hand .card__rank {
+    font-size: clamp(0.9rem, 4.5vw, 1.15rem);
+  }
+
+  .human-hand .card__suit {
+    font-size: clamp(1rem, 5vw, 1.3rem);
+  }
+
+  .human-hand .card__center-suit {
+    font-size: clamp(1.5rem, 8vw, 2.25rem);
+  }
+
   .human-zone .playing-cards > .card + .card,
   .human-hand > .card + .card,
   .hand-cards > .card + .card {

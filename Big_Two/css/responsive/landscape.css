@@ -102,6 +102,23 @@
     --card-width: clamp(3.3rem, 7vw, 4.1rem);
   }
 
+  .human-hand .card__corner {
+    gap: 0.12rem;
+    line-height: 1;
+  }
+
+  .human-hand .card__rank {
+    font-size: clamp(0.85rem, 2.2vw, 1.1rem);
+  }
+
+  .human-hand .card__suit {
+    font-size: clamp(1rem, 2.5vw, 1.22rem);
+  }
+
+  .human-hand .card__center-suit {
+    font-size: clamp(1.35rem, 3.7vw, 1.8rem);
+  }
+
   .selection-summary {
     display: block;
     min-height: 1.5rem;

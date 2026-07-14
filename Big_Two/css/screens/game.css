@@ -146,16 +146,51 @@
 }
 
 .table-center .table-cards {
+  display: flex;
   width: 100%;
   max-width: 100%;
   min-height: calc(var(--table-card-width) / 0.7 + 0.7rem);
-  justify-content: safe center;
-  padding: 0.35rem;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.25rem, 0.65vw, 0.55rem);
+  padding: 0.35rem clamp(0.5rem, 2vw, 1rem);
   overflow: visible;
 }
 
 .table-center .card {
   --card-width: var(--table-card-width);
+  flex: 0 0 var(--table-card-width);
+  grid-template-rows: auto minmax(0, 1fr);
+  padding: clamp(0.2rem, 0.45vw, 0.38rem);
+}
+
+.table-center .card__corner {
+  line-height: 1;
+}
+
+.table-center .card__corner .card__suit {
+  display: none;
+}
+
+.table-center .card__rank {
+  font-size: clamp(0.8rem, 1.45vw, 1.2rem);
+  line-height: 1;
+}
+
+.table-center .card__center-suit {
+  display: grid;
+  min-height: 0;
+  place-items: center;
+  align-self: stretch;
+  justify-self: stretch;
+  font-size: clamp(1.25rem, 2.75vw, 2.35rem);
+  line-height: 1;
+  overflow: visible;
+}
+
+.table-center .table-cards > .card + .card {
+  margin-left: 0;
 }
 
 .trick-meta,
@@ -189,6 +224,16 @@
 
 .human-hand {
   justify-content: safe center;
+}
+
+.human-hand .card__corner {
+  gap: 0.18rem;
+  line-height: 1;
+}
+
+.human-hand .card__rank,
+.human-hand .card__suit {
+  line-height: 1;
 }
 
 .selection-summary {

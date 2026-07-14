@@ -25,6 +25,23 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
+  .human-hand .card__corner {
+    gap: 0.14rem;
+    line-height: 1;
+  }
+
+  .human-hand .card__rank {
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+  }
+
+  .human-hand .card__suit {
+    font-size: clamp(1rem, 2.3vw, 1.25rem);
+  }
+
+  .human-hand .card__center-suit {
+    font-size: clamp(1.45rem, 3.6vw, 2rem);
+  }
+
   .action-bar {
     min-height: auto;
   }
