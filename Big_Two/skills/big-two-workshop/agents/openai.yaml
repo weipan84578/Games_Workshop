@@ -1,0 +1,4 @@
+interface:
+  display_name: "Big Two Workshop"
+  short_description: "Build and refine the offline Big Two game UI"
+  default_prompt: "Use $big-two-workshop to implement or refine this Big Two project from spec.md while preserving file:// support."
