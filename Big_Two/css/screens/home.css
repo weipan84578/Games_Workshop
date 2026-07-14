@@ -1,0 +1,99 @@
+.screen {
+  display: none;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: calc(var(--safe-top) + clamp(1rem, 3vw, 2rem)) calc(var(--safe-right) + clamp(1rem, 3vw, 2rem)) calc(var(--safe-bottom) + clamp(1rem, 3vw, 2rem)) calc(var(--safe-left) + clamp(1rem, 3vw, 2rem));
+}
+
+.screen.is-active,
+.screen[aria-hidden="false"] {
+  display: grid;
+}
+
+.home-screen,
+[data-screen="home"] {
+  position: relative;
+  place-items: center;
+  overflow: hidden;
+  color: var(--color-on-dark);
+  text-align: center;
+}
+
+.home-screen::before,
+[data-screen="home"]::before {
+  content: "";
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  opacity: var(--texture-opacity);
+  background:
+    radial-gradient(circle at 20% 25%, var(--color-primary) 0 0.35rem, transparent 0.42rem),
+    radial-gradient(circle at 80% 70%, var(--color-accent) 0 0.45rem, transparent 0.52rem),
+    linear-gradient(35deg, transparent 47%, var(--color-on-dark) 48% 52%, transparent 53%);
+  background-size: 4rem 4rem, 5rem 5rem, 7rem 7rem;
+}
+
+.home-panel,
+.home-content,
+.home-hero {
+  position: relative;
+  display: grid;
+  width: min(34rem, 100%);
+  gap: clamp(1rem, 3vh, 1.7rem);
+  justify-items: center;
+  padding: clamp(1.25rem, 4vw, 2.6rem);
+  border: 3px solid color-mix(in srgb, var(--color-primary) 68%, var(--color-on-dark));
+  border-radius: calc(var(--radius-lg) * 1.25);
+  color: var(--color-text);
+  background: color-mix(in srgb, var(--color-surface) 94%, transparent);
+  box-shadow: var(--shadow-strong);
+  backdrop-filter: blur(0.4rem);
+}
+
+.home-decoration {
+  max-width: 100%;
+  color: var(--color-accent);
+  font-size: clamp(1.5rem, 7vw, 3.25rem);
+  font-weight: 900;
+  letter-spacing: clamp(0.15rem, 2vw, 0.8rem);
+  line-height: 1;
+  text-shadow: 0 0.12rem 0 var(--color-surface), 0 0.28rem 0.6rem color-mix(in srgb, var(--color-accent) 28%, transparent);
+  white-space: nowrap;
+}
+
+.home-title,
+.game-logo {
+  color: var(--color-secondary);
+  text-shadow: 0 0.1rem 0 color-mix(in srgb, var(--color-surface) 60%, transparent);
+}
+
+.home-subtitle {
+  max-width: 28rem;
+  color: var(--color-text-muted);
+  font-weight: 650;
+}
+
+.home-menu {
+  display: grid;
+  width: min(25rem, 100%);
+  gap: max(0.65rem, 8px);
+}
+
+.home-menu .button,
+.home-menu button {
+  width: 100%;
+}
+
+.continue-status,
+.home-continue-meta {
+  margin-top: -0.4rem;
+  color: var(--color-text-muted);
+  font-size: max(0.9rem, 18px);
+}
+
+.app-version,
+.version-text,
+.home-version {
+  color: var(--color-text-muted);
+  font-size: max(0.82rem, 18px);
+}

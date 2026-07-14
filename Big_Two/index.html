@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#123f2d">
+  <title>大老二｜Big Two</title>
+
+  <link rel="stylesheet" href="css/base/reset.css">
+  <link rel="stylesheet" href="css/base/variables.css">
+  <link rel="stylesheet" href="css/base/typography.css">
+  <link rel="stylesheet" href="css/base/accessibility.css">
+  <link rel="stylesheet" href="css/base/animations.css">
+  <link rel="stylesheet" href="css/components/buttons.css">
+  <link rel="stylesheet" href="css/components/cards.css">
+  <link rel="stylesheet" href="css/components/controls.css">
+  <link rel="stylesheet" href="css/components/modal.css">
+  <link rel="stylesheet" href="css/components/slider.css">
+  <link rel="stylesheet" href="css/components/toast.css">
+  <link rel="stylesheet" href="css/components/player-seat.css">
+  <link rel="stylesheet" href="css/screens/home.css">
+  <link rel="stylesheet" href="css/screens/game.css">
+  <link rel="stylesheet" href="css/screens/help.css">
+  <link rel="stylesheet" href="css/screens/settings.css">
+  <link rel="stylesheet" href="css/screens/results.css">
+  <link rel="stylesheet" href="css/themes/realistic.css">
+  <link rel="stylesheet" href="css/themes/midnight.css">
+  <link rel="stylesheet" href="css/themes/sakura.css">
+  <link rel="stylesheet" href="css/themes/cute-party.css">
+  <link rel="stylesheet" href="css/responsive/desktop.css">
+  <link rel="stylesheet" href="css/responsive/tablet.css">
+  <link rel="stylesheet" href="css/responsive/mobile.css">
+  <link rel="stylesheet" href="css/responsive/landscape.css">
+
+  <script defer src="js/config/constants.js"></script>
+  <script defer src="js/config/themes.js"></script>
+  <script defer src="js/utils/helpers.js"></script>
+  <script defer src="js/utils/rng.js"></script>
+  <script defer src="js/utils/validation.js"></script>
+  <script defer src="js/i18n/i18n.js"></script>
+  <script defer src="js/i18n/zh-Hant.js"></script>
+  <script defer src="js/i18n/en.js"></script>
+  <script defer src="js/i18n/ja.js"></script>
+  <script defer src="js/storage/save-schema.js"></script>
+  <script defer src="js/storage/storage.js"></script>
+  <script defer src="js/audio/music-library.js"></script>
+  <script defer src="js/audio/sfx-library.js"></script>
+  <script defer src="js/audio/audio-manager.js"></script>
+  <script defer src="js/core/card.js"></script>
+  <script defer src="js/core/deck.js"></script>
+  <script defer src="js/core/hand-evaluator.js"></script>
+  <script defer src="js/core/hand-comparator.js"></script>
+  <script defer src="js/core/legal-moves.js"></script>
+  <script defer src="js/core/scoring.js"></script>
+  <script defer src="js/ai/ai-common.js"></script>
+  <script defer src="js/ai/ai-easy.js"></script>
+  <script defer src="js/ai/ai-normal.js"></script>
+  <script defer src="js/ai/ai-hard.js"></script>
+  <script defer src="js/game/game-state.js"></script>
+  <script defer src="js/game/game-controller.js"></script>
+  <script defer src="js/game/turn-controller.js"></script>
+  <script defer src="js/game/save-controller.js"></script>
+  <script defer src="js/ui/router.js"></script>
+  <script defer src="js/ui/card-renderer.js"></script>
+  <script defer src="js/ui/table-renderer.js"></script>
+  <script defer src="js/ui/animation-controller.js"></script>
+  <script defer src="js/ui/dialog-controller.js"></script>
+  <script defer src="js/ui/toast-controller.js"></script>
+  <script defer src="js/screens/home-screen.js"></script>
+  <script defer src="js/screens/game-screen.js"></script>
+  <script defer src="js/screens/help-screen.js"></script>
+  <script defer src="js/screens/settings-screen.js"></script>
+  <script defer src="js/screens/results-screen.js"></script>
+  <script defer src="js/app.js"></script>
+</head>
+<body data-theme="realistic">
+  <a class="skip-link" href="#screen-root" data-i18n="aria.skipToContent">跳到主要內容</a>
+  <div id="app" class="app-shell">
+    <main id="screen-root" class="screen-root" tabindex="-1"></main>
+  </div>
+  <div id="toast-root" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+  <div id="dialog-root"></div>
+  <p id="status-live" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
+  <p id="alert-live" class="sr-only" role="alert" aria-live="assertive" aria-atomic="true"></p>
+  <noscript>此遊戲需要 JavaScript 才能執行。This game requires JavaScript.</noscript>
+</body>
+</html>

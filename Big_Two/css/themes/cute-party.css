@@ -1,0 +1,109 @@
+body[data-theme="cuteParty"],
+body[data-theme="cute-party"],
+body.theme-cute-party {
+  color-scheme: light;
+  --color-bg: #8ed8ea;
+  --color-surface: #fff9e9;
+  --color-table: #51ad8b;
+  --color-table-edge: #9f6ec3;
+  --color-text: #302744;
+  --color-text-muted: #625676;
+  --color-primary: #ffd153;
+  --color-primary-text: #352600;
+  --color-secondary: #6d47a6;
+  --color-accent: #ef6f9e;
+  --color-danger: #b62c50;
+  --color-success: #24775a;
+  --color-focus: #422366;
+  --card-front: #fffef9;
+  --card-back: #ef79a8;
+  --shadow-soft: 0 0.35rem 0.9rem rgb(61 44 82 / 18%);
+  --shadow-strong: 0 0.85rem 2.3rem rgb(61 44 82 / 31%);
+  --texture-opacity: 0.16;
+  --color-on-table: #ffffff;
+  --color-on-dark: #302744;
+  --color-card-ink: #242238;
+  --color-card-red: #b6294d;
+  --radius-sm: 0.8rem;
+  --radius-md: 1.25rem;
+  --radius-lg: 1.8rem;
+}
+
+body[data-theme="cuteParty"],
+body[data-theme="cute-party"],
+body.theme-cute-party {
+  background:
+    radial-gradient(circle at 12% 18%, #fff9 0 0.7rem, transparent 0.74rem),
+    radial-gradient(circle at 78% 14%, #ffd153 0 0.48rem, transparent 0.52rem),
+    radial-gradient(circle at 88% 78%, #ef6f9e 0 0.42rem, transparent 0.46rem),
+    linear-gradient(145deg, #99e1ef, #c6e9c7);
+  background-size: 6rem 6rem, 7rem 7rem, 5rem 5rem, auto;
+}
+
+body[data-theme="cuteParty"] .game-table,
+body[data-theme="cute-party"] .game-table,
+body.theme-cute-party .game-table {
+  border-style: solid;
+  background:
+    radial-gradient(circle at 15% 25%, rgb(255 255 255 / 15%) 0 0.65rem, transparent 0.72rem),
+    radial-gradient(circle at 75% 72%, rgb(255 209 83 / 24%) 0 0.5rem, transparent 0.58rem),
+    linear-gradient(145deg, #63bd99, #409b7d);
+  background-size: 5rem 5rem, 6rem 6rem, auto;
+}
+
+body[data-theme="cuteParty"] .player-avatar,
+body[data-theme="cuteParty"] .avatar,
+body[data-theme="cute-party"] .player-avatar,
+body[data-theme="cute-party"] .avatar,
+body.theme-cute-party .player-avatar,
+body.theme-cute-party .avatar {
+  position: relative;
+  overflow: visible;
+  border-radius: 45% 45% 48% 48%;
+  background: var(--animal-color, var(--color-primary));
+}
+
+body[data-theme="cuteParty"] .player-avatar::before,
+body[data-theme="cuteParty"] .avatar::before,
+body[data-theme="cute-party"] .player-avatar::before,
+body[data-theme="cute-party"] .avatar::before,
+body.theme-cute-party .player-avatar::before,
+body.theme-cute-party .avatar::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -0.42rem;
+  right: 0.2rem;
+  left: 0.2rem;
+  height: 1.15rem;
+  background: var(--animal-color, var(--color-primary));
+  clip-path: polygon(0 100%, 8% 0, 35% 34%, 65% 34%, 92% 0, 100% 100%);
+}
+
+body[data-theme="cuteParty"] .avatar:has(svg)::before,
+body[data-theme="cute-party"] .avatar:has(svg)::before,
+body.theme-cute-party .avatar:has(svg)::before {
+  display: none;
+}
+
+body[data-theme="cuteParty"] .avatar svg,
+body[data-theme="cute-party"] .avatar svg,
+body.theme-cute-party .avatar svg {
+  color: var(--color-text);
+}
+
+body[data-theme="cuteParty"] .player-seat:nth-of-type(2),
+body[data-theme="cute-party"] .player-seat:nth-of-type(2),
+body.theme-cute-party .player-seat:nth-of-type(2) { --animal-color: #f6a3bb; }
+body[data-theme="cuteParty"] .player-seat:nth-of-type(3),
+body[data-theme="cute-party"] .player-seat:nth-of-type(3),
+body.theme-cute-party .player-seat:nth-of-type(3) { --animal-color: #c79a70; }
+body[data-theme="cuteParty"] .player-seat:nth-of-type(4),
+body[data-theme="cute-party"] .player-seat:nth-of-type(4),
+body.theme-cute-party .player-seat:nth-of-type(4) { --animal-color: #ffe066; }
+
+body[data-theme="cuteParty"] :where(.button, button:not(.card)),
+body[data-theme="cute-party"] :where(.button, button:not(.card)),
+body.theme-cute-party :where(.button, button:not(.card)) {
+  border-radius: 1.25rem;
+}

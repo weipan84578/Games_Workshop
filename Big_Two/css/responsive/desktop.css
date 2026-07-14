@@ -1,0 +1,42 @@
+@media (min-width: 1024px) {
+  .game-screen,
+  [data-screen="game"] {
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  .game-table {
+    margin-inline: clamp(0.75rem, 2vw, 2rem);
+  }
+
+  .human-zone,
+  .player-hand-area {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .action-bar {
+    align-self: stretch;
+    box-shadow: none;
+  }
+
+  .home-panel,
+  .results-panel {
+    max-height: calc(100dvh - 3rem);
+    overflow: auto;
+  }
+}
+
+@media (min-width: 1440px) {
+  .game-table {
+    grid-template-columns: minmax(11rem, 0.75fr) minmax(24rem, 3fr) minmax(11rem, 0.75fr);
+  }
+
+  .card,
+  .playing-card {
+    --card-width: 6.05rem;
+  }
+}

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Multilingual Commit"
+  short_description: "Detailed three-language commit messages"
+  default_prompt: "Use $multilingual-commit to write a detailed, energetic commit message in English, Japanese, then Chinese."
+
+policy:
+  allow_implicit_invocation: true

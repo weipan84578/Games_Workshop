@@ -1,0 +1,87 @@
+@keyframes screen-enter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pulse-turn {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.025); }
+}
+
+@keyframes pass-feedback {
+  0% { opacity: 0; transform: translateY(0.4rem) scale(0.9); }
+  22% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-0.5rem) scale(1.03); }
+}
+
+@keyframes deal-card {
+  from { opacity: 0; transform: translate3d(0, -45vh, 0) rotate(-8deg); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) rotate(0); }
+}
+
+@keyframes play-card {
+  from { opacity: 0.55; transform: translateY(2rem) scale(0.86); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translate(-50%, 0.75rem); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@keyframes confetti-fall {
+  from { opacity: 1; transform: translate3d(0, -12vh, 0) rotate(0deg); }
+  to { opacity: 0; transform: translate3d(var(--drift, 2rem), 105vh, 0) rotate(540deg); }
+}
+
+.screen.is-active {
+  animation: screen-enter var(--motion-normal) var(--ease-out);
+}
+
+.player-seat.is-current,
+.player-seat[aria-current="true"] {
+  animation: pulse-turn 1.5s ease-in-out infinite;
+}
+
+.pass-feedback.is-active {
+  animation: pass-feedback 600ms var(--ease-out) both;
+}
+
+.card.is-dealing {
+  animation: deal-card min(1.8s, calc(450ms + var(--deal-order, 0) * 22ms)) var(--ease-out) both;
+}
+
+.last-play .card,
+.played-cards .card {
+  animation: play-card var(--motion-normal) var(--ease-out) both;
+}
+
+.confetti-piece,
+.confetti > span {
+  animation: confetti-fall 2.8s linear both;
+}
+
+body.animations-disabled *,
+body[data-animations="off"] * {
+  animation-duration: 60ms !important;
+  animation-iteration-count: 1 !important;
+  scroll-behavior: auto !important;
+  transition-duration: 60ms !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 60ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 60ms !important;
+  }
+
+  .confetti,
+  .confetti-piece,
+  .decorative-motion {
+    display: none !important;
+  }
+}

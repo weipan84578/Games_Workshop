@@ -1,0 +1,50 @@
+body[data-theme="sakura"],
+body.theme-sakura {
+  color-scheme: light;
+  --color-bg: #f6cfd8;
+  --color-surface: #fffaf0;
+  --color-table: #4d8dac;
+  --color-table-edge: #764b69;
+  --color-text: #35223e;
+  --color-text-muted: #68556f;
+  --color-primary: #f095ae;
+  --color-primary-text: #37132b;
+  --color-secondary: #315e85;
+  --color-accent: #9a6cb1;
+  --color-danger: #a9284d;
+  --color-success: #28745d;
+  --color-focus: #5e3212;
+  --card-front: #fffdf8;
+  --card-back: #b8577e;
+  --shadow-soft: 0 0.35rem 1rem rgb(76 39 66 / 18%);
+  --shadow-strong: 0 0.85rem 2.4rem rgb(72 38 63 / 34%);
+  --texture-opacity: 0.12;
+  --color-on-table: #ffffff;
+  --color-on-dark: #35223e;
+  --color-card-ink: #24233b;
+  --color-card-red: #ae2851;
+}
+
+body[data-theme="sakura"],
+body.theme-sakura {
+  background:
+    radial-gradient(ellipse at 13% 10%, rgb(255 255 255 / 55%) 0 0.45rem, transparent 0.5rem),
+    radial-gradient(ellipse at 82% 26%, rgb(255 255 255 / 48%) 0 0.35rem, transparent 0.42rem),
+    linear-gradient(140deg, #f8d5de, #d8eafa);
+  background-size: 5rem 5rem, 6rem 6rem, auto;
+}
+
+body[data-theme="sakura"] .game-table,
+body.theme-sakura .game-table {
+  background:
+    radial-gradient(ellipse at center, rgb(105 171 196 / 80%), transparent 62%),
+    linear-gradient(145deg, #4f95b2, #3d7596);
+}
+
+body[data-theme="sakura"] .home-panel,
+body[data-theme="sakura"] .home-hero,
+body.theme-sakura .home-panel,
+body.theme-sakura .home-hero {
+  border-color: var(--color-accent);
+  background: rgb(255 250 240 / 94%);
+}

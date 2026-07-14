@@ -1,0 +1,37 @@
+@media (min-width: 768px) and (max-width: 1023px) {
+  :root {
+    --action-bar-height: 5.4rem;
+  }
+
+  .game-screen,
+  [data-screen="game"] {
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  .game-table {
+    grid-template-columns: minmax(7.5rem, 0.7fr) minmax(13rem, 2.6fr) minmax(7.5rem, 0.7fr);
+    grid-template-rows: auto minmax(8rem, 1fr) auto;
+  }
+
+  .player-seat {
+    min-width: 7.2rem;
+  }
+
+  .human-zone,
+  .player-hand-area {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .action-bar {
+    min-height: auto;
+  }
+
+  .action-bar > button,
+  .action-bar > .button {
+    flex-basis: 6.5rem;
+    padding-inline: 0.8rem;
+  }
+}

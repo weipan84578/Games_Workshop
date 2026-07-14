@@ -1,0 +1,94 @@
+.button,
+button:not(.card):not(.icon-button),
+[role="button"].button {
+  display: inline-flex;
+  min-width: var(--touch-target);
+  min-height: var(--touch-target);
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 0.72rem 1.2rem;
+  border: 2px solid color-mix(in srgb, var(--color-primary) 72%, var(--color-text));
+  border-radius: var(--radius-pill);
+  color: var(--color-primary-text);
+  background: var(--color-primary);
+  box-shadow: 0 0.25rem 0 color-mix(in srgb, var(--color-primary) 55%, var(--color-text));
+  text-align: center;
+  text-decoration: none;
+  white-space: normal;
+  transition: transform var(--motion-fast) var(--ease-out), box-shadow var(--motion-fast), filter var(--motion-fast);
+}
+
+.button:hover,
+button:not(.card):not(.icon-button):hover {
+  filter: brightness(1.07) saturate(1.05);
+  transform: translateY(-2px);
+}
+
+.button:active,
+button:not(.card):not(.icon-button):active,
+.button.is-active {
+  box-shadow: 0 0.08rem 0 color-mix(in srgb, var(--color-primary) 55%, var(--color-text));
+  transform: translateY(2px);
+}
+
+.button:disabled,
+button:not(.card):not(.icon-button):disabled,
+.button[aria-disabled="true"] {
+  opacity: 0.52;
+  filter: grayscale(0.45);
+  box-shadow: none;
+  transform: none;
+}
+
+.button--secondary,
+.btn-secondary,
+button.secondary {
+  border-color: color-mix(in srgb, var(--color-secondary) 72%, var(--color-text));
+  color: var(--color-on-dark);
+  background: var(--color-secondary);
+  box-shadow: 0 0.25rem 0 color-mix(in srgb, var(--color-secondary) 55%, var(--color-text));
+}
+
+.button--danger,
+.btn-danger,
+button.danger {
+  border-color: color-mix(in srgb, var(--color-danger) 76%, var(--color-text));
+  color: var(--color-on-dark);
+  background: var(--color-danger);
+  box-shadow: 0 0.25rem 0 color-mix(in srgb, var(--color-danger) 55%, var(--color-text));
+}
+
+.button--ghost,
+.btn-ghost,
+button.ghost {
+  border-color: var(--color-border);
+  color: var(--color-text);
+  background: var(--color-surface);
+  box-shadow: 0 0.18rem 0 var(--color-border);
+}
+
+.icon-button {
+  display: inline-grid;
+  width: var(--touch-target);
+  height: var(--touch-target);
+  place-items: center;
+  border: 2px solid var(--color-border);
+  border-radius: 50%;
+  color: var(--color-text);
+  background: var(--color-surface);
+}
+
+.button-row,
+.actions,
+.modal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: max(0.5rem, 8px);
+  align-items: stretch;
+}
+
+.button-row > *,
+.actions > * {
+  flex: 1 1 10rem;
+}

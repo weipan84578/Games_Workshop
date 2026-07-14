@@ -1,0 +1,79 @@
+html {
+  font-family: "Noto Sans TC", "Noto Sans JP", "Microsoft JhengHei", "Yu Gothic", "Segoe UI", Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1.55;
+}
+
+body {
+  font-size: 1rem;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+.display-title {
+  line-height: 1.16;
+  text-wrap: balance;
+}
+
+h1,
+.display-title {
+  font-size: clamp(2rem, 5vw + 1rem, 3.55rem);
+  font-weight: 900;
+  letter-spacing: 0.025em;
+}
+
+h2 {
+  font-size: clamp(1.6rem, 2.8vw, 2.45rem);
+  font-weight: 850;
+}
+
+h3 {
+  font-size: clamp(1.25rem, 2vw, 1.65rem);
+  font-weight: 800;
+}
+
+h4 {
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+p,
+li,
+td,
+th,
+label,
+legend,
+summary {
+  font-size: max(1rem, 18px);
+}
+
+button,
+.button,
+[role="button"] {
+  font-size: max(1.1rem, 20px);
+  font-weight: 800;
+}
+
+.important-status,
+.turn-status,
+.score-value {
+  font-size: max(1.35rem, 24px);
+  font-weight: 850;
+}
+
+.muted,
+.supporting-text,
+.helper-text {
+  color: var(--color-text-muted);
+}
+
+.numeric {
+  font-variant-numeric: tabular-nums;
+}
+
+:lang(en) {
+  overflow-wrap: anywhere;
+}

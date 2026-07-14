@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Big Two｜離線單元測試</title>
+  <link rel="stylesheet" href="css/test-runner.css">
+
+  <script defer src="framework/test-runner.js"></script>
+  <script defer src="../js/config/constants.js"></script>
+  <script defer src="../js/config/themes.js"></script>
+  <script defer src="../js/utils/helpers.js"></script>
+  <script defer src="../js/utils/rng.js"></script>
+  <script defer src="../js/utils/validation.js"></script>
+  <script defer src="../js/i18n/i18n.js"></script>
+  <script defer src="../js/i18n/zh-Hant.js"></script>
+  <script defer src="../js/i18n/en.js"></script>
+  <script defer src="../js/i18n/ja.js"></script>
+  <script defer src="../js/storage/save-schema.js"></script>
+  <script defer src="../js/storage/storage.js"></script>
+  <script defer src="../js/audio/music-library.js"></script>
+  <script defer src="../js/audio/sfx-library.js"></script>
+  <script defer src="../js/audio/audio-manager.js"></script>
+  <script defer src="../js/core/card.js"></script>
+  <script defer src="../js/core/deck.js"></script>
+  <script defer src="../js/core/hand-evaluator.js"></script>
+  <script defer src="../js/core/hand-comparator.js"></script>
+  <script defer src="../js/core/legal-moves.js"></script>
+  <script defer src="../js/core/scoring.js"></script>
+  <script defer src="../js/ai/ai-common.js"></script>
+  <script defer src="../js/ai/ai-easy.js"></script>
+  <script defer src="../js/ai/ai-normal.js"></script>
+  <script defer src="../js/ai/ai-hard.js"></script>
+  <script defer src="../js/game/game-state.js"></script>
+  <script defer src="../js/game/game-controller.js"></script>
+  <script defer src="../js/game/turn-controller.js"></script>
+  <script defer src="../js/game/save-controller.js"></script>
+
+  <script defer src="specs/deck.test.js"></script>
+  <script defer src="specs/rules.test.js"></script>
+  <script defer src="specs/comparator.test.js"></script>
+  <script defer src="specs/legal-moves.test.js"></script>
+  <script defer src="specs/scoring.test.js"></script>
+  <script defer src="specs/ai.test.js"></script>
+  <script defer src="specs/storage.test.js"></script>
+  <script defer src="specs/i18n.test.js"></script>
+  <script defer src="specs/audio.test.js"></script>
+</head>
+<body data-test-status="pending" data-total="0" data-passed="0" data-failed="0" data-skipped="0" data-duration="0">
+  <main class="test-shell">
+    <header class="test-header">
+      <div>
+        <h1>Big Two 單元測試</h1>
+        <p class="test-subtitle">純前端、離線、逐項隔離執行</p>
+      </div>
+      <button id="run-tests" type="button">執行全部測試</button>
+    </header>
+
+    <section class="test-summary" aria-label="測試摘要">
+      <div class="summary-card">
+        <span class="summary-label">總數</span>
+        <strong id="test-total" class="summary-value" data-count="0">0</strong>
+      </div>
+      <div class="summary-card summary-card--passed">
+        <span class="summary-label">通過</span>
+        <strong id="test-passed" class="summary-value" data-count="0">0</strong>
+      </div>
+      <div class="summary-card summary-card--failed">
+        <span class="summary-label">失敗</span>
+        <strong id="test-failed" class="summary-value" data-count="0">0</strong>
+      </div>
+      <div class="summary-card summary-card--skipped">
+        <span class="summary-label">略過</span>
+        <strong id="test-skipped" class="summary-value" data-count="0">0</strong>
+      </div>
+      <div class="summary-card">
+        <span class="summary-label">總耗時</span>
+        <strong id="test-duration" class="summary-value" data-milliseconds="0">0 ms</strong>
+      </div>
+    </section>
+
+    <p id="test-status" role="status" aria-live="polite">等待執行…</p>
+    <section id="test-results" class="test-results" aria-label="測試結果"></section>
+  </main>
+</body>
+</html>
