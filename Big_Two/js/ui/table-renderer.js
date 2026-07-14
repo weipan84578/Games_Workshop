@@ -85,7 +85,6 @@
     var details = global.document.createElement('div');
     var name = global.document.createElement('h2');
     var count = global.document.createElement('p');
-    var turn = global.document.createElement('span');
     var isCurrent = currentPlayer(state) === player;
     article.className = 'player-seat player-seat--' + placement + (isCurrent ? ' is-current' : '');
     article.dataset.seat = placement;
@@ -98,12 +97,8 @@
     name.textContent = playerName(player);
     count.className = 'player-seat__count';
     count.textContent = text('game.cardsRemaining', { count: cardCount(player) });
-    turn.className = 'player-seat__turn';
-    turn.setAttribute('aria-hidden', isCurrent ? 'false' : 'true');
-    turn.textContent = isCurrent ? '➜ ' + text('game.turn', { name: playerName(player) }) : '';
     details.appendChild(name);
     details.appendChild(count);
-    details.appendChild(turn);
     article.appendChild(avatar);
     article.appendChild(details);
     if (state && state.actionHistory && state.actionHistory.length) {

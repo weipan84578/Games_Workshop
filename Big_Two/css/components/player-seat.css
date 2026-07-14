@@ -21,18 +21,6 @@
   box-shadow: 0 0 0 0.22rem color-mix(in srgb, var(--color-focus) 38%, transparent), var(--shadow-strong);
 }
 
-.player-seat.is-current::after,
-.player-seat[aria-current="true"]::after {
-  content: "▼";
-  position: absolute;
-  top: -1.25rem;
-  left: 50%;
-  color: var(--color-focus);
-  font-size: 1.2rem;
-  line-height: 1;
-  transform: translateX(-50%);
-}
-
 .player-avatar,
 .avatar {
   display: grid;
@@ -68,17 +56,6 @@
 .player-seat__count {
   font-size: max(0.92rem, 18px);
   font-weight: 700;
-}
-
-.player-seat__turn {
-  display: block;
-  color: var(--color-focus);
-  font-size: max(0.78rem, 18px);
-  font-weight: 850;
-}
-
-.player-seat__turn[aria-hidden="true"] {
-  display: none;
 }
 
 .pass-feedback {

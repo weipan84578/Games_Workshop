@@ -73,17 +73,11 @@
   }
 
   .player-seat__name,
-  .player-seat__count,
-  .player-seat__turn {
+  .player-seat__count {
     font-size: 0.76rem;
     line-height: 1.05;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
-
-  .player-seat.is-current .player-seat__count,
-  .player-seat[aria-current="true"] .player-seat__count {
-    display: none;
   }
 
   .table-center,
