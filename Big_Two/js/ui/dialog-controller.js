@@ -48,7 +48,7 @@
     title = global.document.createElement('h2');
     title.id = 'active-dialog-title';
     title.textContent = opts.title || '';
-    close = makeButton((BigTwo.I18n && BigTwo.I18n.t('common.close')) || 'Close', 'modal__close button button--secondary');
+    close = makeButton('\u00d7', 'modal__close icon-button');
     close.setAttribute('aria-label', BigTwo.I18n ? BigTwo.I18n.t('aria.closeDialog') : 'Close');
     header.appendChild(title);
     header.appendChild(close);

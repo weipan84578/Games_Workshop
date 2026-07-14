@@ -139,7 +139,7 @@
     } else {
       label.textContent = text('game.leading');
     }
-    cards.className = 'table-cards playing-cards';
+    cards.className = 'table-cards';
     lastCards.forEach(function (card) {
       var node = BigTwo.UI.CardRenderer.render(card, { disabled: true, tabIndex: -1 });
       node.removeAttribute('aria-pressed');

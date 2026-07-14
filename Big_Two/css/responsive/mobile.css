@@ -14,7 +14,7 @@
     height: 100dvh;
     min-height: 100vh;
     min-height: 100dvh;
-    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    grid-template-rows: auto minmax(0, 1fr) auto;
     padding: var(--safe-top) var(--safe-right) calc(var(--action-bar-height) + var(--safe-bottom) + 0.75rem) var(--safe-left);
     overflow-y: auto;
     overscroll-behavior-y: contain;
@@ -28,15 +28,23 @@
 
   .game-status-bar,
   .status-bar {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
     min-height: 2.8rem;
-    flex-wrap: nowrap;
+    gap: 0.3rem 0.45rem;
     padding: 0.25rem 0.45rem;
-    overflow-x: auto;
+    overflow: visible;
   }
 
   .game-status-bar__details {
-    flex: 0 0 auto;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    min-width: 0;
     flex-wrap: nowrap;
+    gap: 0.3rem;
+    padding-bottom: 0.15rem;
+    overflow-x: auto;
+    scrollbar-width: thin;
   }
 
   .game-status-bar > h1,
@@ -46,13 +54,29 @@
     flex: 0 0 auto;
   }
 
+  .game-status-bar > h1 {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .game-status-bar > .audio-toggle {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .game-status-bar > .audio-toggle + .button {
+    grid-column: 4;
+    grid-row: 1;
+  }
+
   .game-status-bar > button,
   .game-status-bar > .button,
   .game-status-bar .button--compact {
     width: auto;
     min-height: var(--touch-target);
     height: auto;
-    padding: 0.4rem 0.7rem;
+    padding: 0.35rem 0.5rem;
+    font-size: 1rem;
     white-space: nowrap;
   }
 
@@ -73,13 +97,11 @@
   }
 
   .game-table {
-    grid-template-columns: minmax(6rem, 1fr) minmax(6rem, 1fr);
-    grid-template-rows: auto auto minmax(8rem, 1fr) auto;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: auto minmax(8rem, 1fr);
     grid-template-areas:
-      "top top"
-      "left right"
-      "center center"
-      "human human";
+      "left top right"
+      "center center center";
     align-content: stretch;
     gap: 0.35rem;
     padding: 0.5rem;
@@ -90,54 +112,71 @@
 
   .player-seat {
     min-width: 0;
-    min-height: 3.8rem;
-    grid-template-columns: auto minmax(0, 1fr);
-    padding: 0.35rem 0.45rem;
+    min-height: 3.35rem;
+    grid-template-columns: 1.85rem minmax(0, 1fr);
+    gap: 0.22rem;
+    padding: 0.25rem 0.3rem;
     border-width: 2px;
-    border-radius: var(--radius-md);
+    border-radius: 0.8rem;
   }
 
   .player-seat[data-seat="top"],
   .seat-top {
-    width: min(12rem, 60%);
+    width: auto;
+    align-self: stretch;
+    justify-self: stretch;
   }
 
   .player-seat[data-seat="left"],
   .seat-left {
+    align-self: stretch;
     justify-self: stretch;
   }
 
   .player-seat[data-seat="right"],
   .seat-right {
+    align-self: stretch;
     justify-self: stretch;
+  }
+
+  .player-seat[data-seat="human"],
+  .seat-human {
+    display: none;
   }
 
   .player-avatar,
   .avatar {
-    width: 2.65rem;
-    height: 2.65rem;
+    width: 1.85rem;
+    height: 1.85rem;
     border-width: 2px;
     font-size: 1rem;
   }
 
   .player-name,
   .card-count,
-  .player-score {
-    font-size: max(0.78rem, 18px);
+  .player-score,
+  .player-seat__name,
+  .player-seat__count,
+  .player-seat__turn {
+    font-size: 0.78rem;
     line-height: 1.05;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .player-seat.is-current .player-seat__count,
+  .player-seat[aria-current="true"] .player-seat__count {
+    display: none;
   }
 
   .table-center,
   .trick-area,
   .last-play-area {
+    --table-card-width: clamp(2.65rem, min(12vw, 8.5dvh), 3.7rem);
+    width: min(28rem, 100%);
+    height: 100%;
     min-height: 7.25rem;
     padding: 0.35rem;
-  }
-
-  .table-center .card,
-  .last-play .card,
-  .played-cards .card {
-    --card-width: clamp(2.8rem, 13vw, 4rem);
   }
 
   .human-zone,
@@ -145,6 +184,11 @@
     padding-inline: 0;
     background: transparent;
     box-shadow: none;
+  }
+
+  .human-hand-wrap {
+    border-radius: var(--radius-sm);
+    background: color-mix(in srgb, var(--color-surface) 94%, transparent);
   }
 
   .selection-summary {
@@ -238,11 +282,6 @@
     grid-template-rows: auto auto minmax(7rem, 1fr) auto;
   }
 
-  .player-seat[data-seat="human"],
-  .seat-human {
-    width: min(11rem, 70%);
-  }
-
   .button-row,
   .modal__actions,
   .dialog-actions {
@@ -276,7 +315,7 @@
 @media (max-width: 479px) and (max-height: 650px) {
   .game-screen,
   [data-screen="game"] {
-    grid-template-rows: auto minmax(0, 250px) auto auto;
+    grid-template-rows: auto minmax(0, 250px) auto;
     gap: 0.35rem;
   }
 
@@ -286,26 +325,27 @@
   }
 
   .game-table {
-    grid-template-rows: 2.65rem 2.65rem minmax(4.35rem, 1fr) 2.65rem;
+    grid-template-rows: 3.15rem minmax(5.5rem, 1fr);
     gap: 0.18rem 0.3rem;
     padding: 0.3rem;
   }
 
   .player-seat {
-    min-height: 2.55rem;
+    min-height: 3.05rem;
     padding: 0.15rem 0.3rem;
   }
 
   .player-avatar,
   .avatar {
-    width: 2.15rem;
-    height: 2.15rem;
+    width: 1.75rem;
+    height: 1.75rem;
   }
 
   .table-center,
   .trick-area,
   .last-play-area {
-    min-height: 4.35rem;
+    --table-card-width: 2.55rem;
+    min-height: 5.5rem;
     gap: 0.1rem;
     padding: 0.15rem;
   }
@@ -319,14 +359,8 @@
 
   .table-center .playing-cards,
   .table-center .table-cards {
-    min-height: 3.85rem;
+    min-height: calc(var(--table-card-width) / 0.7 + 0.45rem);
     padding: 0.1rem;
-  }
-
-  .table-center .card,
-  .last-play .card,
-  .played-cards .card {
-    --card-width: 2.55rem;
   }
 
   .selection-summary {
@@ -351,5 +385,15 @@
   .human-hand .card,
   .hand-cards .card {
     --card-width: 3.35rem;
+  }
+
+  .human-hand .card.is-selected,
+  .human-hand .card[aria-pressed="true"] {
+    transform: translateY(-0.5rem);
+  }
+
+  .human-hand .card.is-selected:hover,
+  .human-hand .card[aria-pressed="true"]:hover {
+    transform: translateY(-0.55rem);
   }
 }

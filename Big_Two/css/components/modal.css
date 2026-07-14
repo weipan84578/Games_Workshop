@@ -37,10 +37,33 @@ dialog[open] {
 
 .modal__header,
 .dialog-header {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--space-3);
+  gap: var(--space-5);
+}
+
+.modal__header > h2,
+.dialog-header > h2 {
+  min-width: 0;
+  padding-top: var(--space-1);
+}
+
+.modal__close,
+button.modal__close {
+  width: var(--touch-target);
+  min-width: var(--touch-target);
+  height: var(--touch-target);
+  min-height: var(--touch-target);
+  flex: 0 0 var(--touch-target);
+  padding: 0;
+  border-color: var(--color-border);
+  color: var(--color-text);
+  background: var(--color-surface-raised);
+  box-shadow: none;
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 1;
 }
 
 .modal__body,
@@ -63,15 +86,18 @@ dialog[open] {
 }
 
 dialog.modal {
-  inset: auto;
+  position: fixed;
+  inset: 50% auto auto 50%;
   width: min(42rem, calc(100% - var(--safe-left) - var(--safe-right) - 1rem));
   max-width: none;
   max-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 1rem);
+  margin: 0;
   padding: 0;
   overflow: visible;
   border: 0;
   background: transparent;
   box-shadow: none;
+  transform: translate(-50%, -50%);
 }
 
 dialog.modal:not([open]) {

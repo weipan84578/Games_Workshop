@@ -63,6 +63,13 @@
     var wrap = global.document.createElement('div');
     var input = global.document.createElement('input');
     var output = global.document.createElement('output');
+    function syncProgress() {
+      var min = Number(input.min) || 0;
+      var max = Number(input.max) || 100;
+      var current = Number(input.value);
+      var progress = max === min ? 0 : ((current - min) / (max - min)) * 100;
+      input.style.setProperty('--range-progress', Math.max(0, Math.min(100, progress)) + '%');
+    }
     wrap.className = 'range-control';
     input.type = 'range';
     input.id = id;
@@ -70,9 +77,11 @@
     input.max = '100';
     input.step = '5';
     input.value = String(value);
+    syncProgress();
     output.htmlFor = id;
     output.textContent = t('settings.volumeValue', { value: value });
     input.addEventListener('input', function () {
+      syncProgress();
       output.textContent = t('settings.volumeValue', { value: input.value });
       onChange(Number(input.value));
     });
@@ -195,7 +204,7 @@
             if (didReset) { status.textContent = t('settings.resetDone'); }
           });
         });
-        resetHint.className = 'setting-row__hint';
+        resetHint.className = 'setting-row__hint settings-reset-hint';
         resetHint.textContent = t('settings.resetHint');
         data.appendChild(reset);
         data.appendChild(resetHint);

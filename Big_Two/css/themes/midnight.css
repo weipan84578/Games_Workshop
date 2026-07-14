@@ -45,6 +45,26 @@ body.theme-midnight .player-seat.is-current {
   box-shadow: 0 0 0 0.22rem var(--color-focus), 0 0 1rem rgb(85 230 220 / 34%);
 }
 
+body[data-theme="midnight"] select,
+body.theme-midnight select {
+  color-scheme: dark;
+  border-color: #596585;
+  color: #f6f7ff !important;
+  background: #202643 !important;
+}
+
+body[data-theme="midnight"] select option,
+body.theme-midnight select option {
+  color: #f6f7ff !important;
+  background: #151a35 !important;
+}
+
+body[data-theme="midnight"] select option:checked,
+body.theme-midnight select option:checked {
+  color: #041b1c !important;
+  background: #55e6dc !important;
+}
+
 body[data-theme="midnight"] .home-screen::after,
 body.theme-midnight .home-screen::after {
   content: "";

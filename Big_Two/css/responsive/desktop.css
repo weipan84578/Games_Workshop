@@ -13,9 +13,15 @@
   .human-zone,
   .player-hand-area {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
     align-items: center;
-    gap: var(--space-4);
+    gap: 0;
+  }
+
+  .human-hand-wrap,
+  .human-hand {
+    width: 100%;
   }
 
   .action-bar {
@@ -32,11 +38,15 @@
 
 @media (min-width: 1440px) {
   .game-table {
-    grid-template-columns: minmax(11rem, 0.75fr) minmax(24rem, 3fr) minmax(11rem, 0.75fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .card,
   .playing-card {
     --card-width: 6.05rem;
+  }
+
+  .table-center {
+    --table-card-width: clamp(3.8rem, min(5.1vw, 9.5dvh), 5.15rem);
   }
 }

@@ -1,4 +1,4 @@
-@media (orientation: landscape) and (max-height: 600px) {
+@media (orientation: landscape) and (max-height: 700px) {
   :root {
     --action-bar-height: 4.1rem;
   }
@@ -8,7 +8,7 @@
     height: 100vh;
     height: 100dvh;
     min-height: 0;
-    grid-template-columns: minmax(0, 1.45fr) minmax(16rem, 0.75fr);
+    grid-template-columns: minmax(0, 1.1fr) minmax(17rem, 0.9fr);
     grid-template-rows: auto minmax(0, 1fr);
     padding-bottom: calc(var(--action-bar-height) + var(--safe-bottom) + 0.25rem);
     overflow: hidden;
@@ -41,32 +41,58 @@
 
   .game-table {
     min-height: 0;
-    grid-template-columns: minmax(6.2rem, 0.7fr) minmax(12rem, 2.8fr) minmax(6.2rem, 0.7fr);
-    grid-template-rows: auto minmax(5rem, 1fr) auto;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: 3.25rem minmax(5rem, 1fr);
     grid-template-areas:
-      ". top ."
-      "left center right"
-      ". human .";
+      "left top right"
+      "center center center";
     gap: 0.25rem 0.45rem;
     padding: 0.35rem;
     border-width: 0.35rem;
   }
 
   .player-seat {
-    min-height: 2.75rem;
-    padding-block: 0.15rem;
+    min-width: 0;
+    min-height: 3.1rem;
+    grid-template-columns: 1.8rem minmax(0, 1fr);
+    gap: 0.25rem;
+    align-self: stretch;
+    justify-self: stretch;
+    padding: 0.15rem 0.25rem;
+  }
+
+  .player-seat[data-seat="human"],
+  .seat-human {
+    display: none;
   }
 
   .player-avatar,
   .avatar {
-    width: 2.35rem;
-    height: 2.35rem;
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+
+  .player-seat__name,
+  .player-seat__count,
+  .player-seat__turn {
+    font-size: 0.76rem;
+    line-height: 1.05;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .player-seat.is-current .player-seat__count,
+  .player-seat[aria-current="true"] .player-seat__count {
+    display: none;
   }
 
   .table-center,
   .trick-area,
   .last-play-area {
-    min-height: 4.2rem;
+    --table-card-width: clamp(2.55rem, min(5vw, 9dvh), 3.25rem);
+    width: min(28rem, 100%);
+    min-height: 5rem;
+    padding: 0.2rem;
   }
 
   .playing-cards,
@@ -78,13 +104,52 @@
 
   .playing-cards .card,
   .human-hand .card,
-  .hand-cards .card,
-  .table-center .card {
+  .hand-cards .card {
     --card-width: clamp(3.3rem, 7vw, 4.1rem);
   }
 
   .selection-summary {
-    display: none;
+    display: block;
+    min-height: 1.5rem;
+    padding: 0.15rem 0.4rem;
+    overflow: hidden;
+    font-size: 0.82rem;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .human-zone,
+  .player-hand-area {
+    display: grid;
+    min-height: 0;
+    grid-template-rows: auto minmax(0, 1fr);
+    padding: 0.35rem;
+    overflow: hidden;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-md) 0 0 var(--radius-md);
+    background: var(--color-surface);
+  }
+
+  .human-hand-wrap,
+  .human-hand {
+    min-height: 0;
+    height: 100%;
+  }
+
+  .human-hand {
+    align-items: center;
+    padding-block: 0.35rem;
+  }
+
+  .human-hand .card.is-selected,
+  .human-hand .card[aria-pressed="true"] {
+    transform: translateY(-0.55rem);
+  }
+
+  .human-hand .card.is-selected:hover,
+  .human-hand .card[aria-pressed="true"]:hover {
+    transform: translateY(-0.6rem);
   }
 
   .action-bar {
