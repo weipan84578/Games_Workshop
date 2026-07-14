@@ -6,8 +6,18 @@
     overflow: hidden;
   }
 
-  .game-table {
-    margin-inline: clamp(0.75rem, 2vw, 2rem);
+  .game-table-wrap > .game-table {
+    width: calc(100% - clamp(1.5rem, 4vw, 4rem));
+    margin-inline: auto;
+    border-width: clamp(0.5rem, 0.7vw, 0.7rem);
+  }
+
+  .table-center,
+  .trick-area,
+  .last-play-area {
+    width: min(54rem, calc(100% - clamp(1.5rem, 5vw, 3.5rem)));
+    border-style: solid;
+    border-color: color-mix(in srgb, var(--color-on-table) 36%, transparent);
   }
 
   .human-zone,

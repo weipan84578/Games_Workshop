@@ -82,6 +82,12 @@ body.theme-midnight .table-center__status {
   box-shadow: 0 0 0.8rem rgb(85 230 220 / 16%);
 }
 
+body[data-theme="midnight"] .table-center,
+body.theme-midnight .table-center {
+  border-color: rgb(85 230 220 / 46%);
+  box-shadow: inset 0 0 1.5rem rgb(0 0 0 / 18%), 0 0 0.8rem rgb(85 230 220 / 10%);
+}
+
 body[data-theme="midnight"] .modal__close,
 body[data-theme="midnight"] button.modal__close,
 body.theme-midnight .modal__close,

@@ -4,7 +4,7 @@
   var BigTwo = global.BigTwo = global.BigTwo || {};
   var Config = BigTwo.Config = BigTwo.Config || {};
 
-  Config.APP_VERSION = '3.0.0';
+  Config.APP_VERSION = '4.0.0';
   Config.SCHEMA_VERSION = 1;
   Config.RANKS = ['3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A', '2'];
   Config.SUITS = ['clubs', 'diamonds', 'hearts', 'spades'];
