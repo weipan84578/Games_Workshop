@@ -33,6 +33,7 @@
 | 資料夾      | 遊戲名稱       | English Name | 日本語名           |
 | ----------- | -------------- | ------------ | ------------------ |
 | `Blackjack` | 二十一點       | Blackjack    | ブラックジャック   |
+| `Big_Two`   | 大老二         | Big Two      | 大富豪             |
 | `Slapjack`  | 心臟病紙牌遊戲 | Slapjack     | 心臓病カードゲーム |
 | `Solitaire` | 撲克牌接龍     | Solitaire    | ソリティア         |
 | `UNO`       | UNO 牌         | UNO          | ウノ               |
