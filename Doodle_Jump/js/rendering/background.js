@@ -79,7 +79,10 @@
     ctx.fill();
     ctx.restore();
   }
-  function draw(ctx, state) {
+  function draw(ctx, state, options) {
+    options = options || {};
+    var lowQuality = options.quality === "low";
+    var motionY = options.reducedMotion ? 0 : state.camera.y;
     var p = palettes[state.environment] || palettes.morning;
     var gradient = ctx.createLinearGradient(
       0,
@@ -103,7 +106,7 @@
     ctx.globalAlpha = state.environment === "night" ? 0.75 : 0.9;
     ctx.fillStyle = p.sun;
     ctx.shadowColor = p.sun;
-    ctx.shadowBlur = 30;
+    ctx.shadowBlur = lowQuality ? 0 : 30;
     ctx.beginPath();
     ctx.arc(
       sunX,
@@ -117,7 +120,7 @@
     if (state.environment === "night") {
       ctx.save();
       ctx.fillStyle = "#fff9c4";
-      for (var s = 0; s < 34; s += 1) {
+      for (var s = 0; s < (lowQuality ? 14 : 34); s += 1) {
         var sx = (s * 83 + 27) % 420;
         var sy = (s * 47 + 11) % 320;
         ctx.globalAlpha = 0.35 + ((s * 13) % 5) * 0.1;
@@ -125,12 +128,12 @@
       }
       ctx.restore();
     }
-    var drift = (state.camera.y * 0.06) % 520;
-    drawMountains(ctx, 400, p.far, (state.camera.y * 0.018) % 90, 100);
-    drawMountains(ctx, 505, p.near, -(state.camera.y * 0.035) % 90, 90);
+    var drift = (motionY * 0.06) % 520;
+    drawMountains(ctx, 400, p.far, (motionY * 0.018) % 90, 100);
+    drawMountains(ctx, 505, p.near, -(motionY * 0.035) % 90, 90);
     drawCloud(
       ctx,
-      70 - ((state.camera.y * 0.045) % 520),
+      70 - ((motionY * 0.045) % 520),
       130,
       1.25,
       0.26,
@@ -138,27 +141,29 @@
     );
     drawCloud(
       ctx,
-      310 + ((state.camera.y * 0.025) % 500),
+      310 + ((motionY * 0.025) % 500),
       255,
       0.85,
       0.28,
       p.cloud,
     );
-    drawCloud(
-      ctx,
-      120 - ((state.camera.y * 0.02) % 480),
-      455,
-      1.05,
-      0.2,
-      p.cloud,
-    );
-    drawCloud(ctx, 360 + drift, 590, 0.7, 0.23, p.cloud);
+    if (!lowQuality) {
+      drawCloud(
+        ctx,
+        120 - ((motionY * 0.02) % 480),
+        455,
+        1.05,
+        0.2,
+        p.cloud,
+      );
+      drawCloud(ctx, 360 + drift, 590, 0.7, 0.23, p.cloud);
+    }
     ctx.save();
     ctx.globalAlpha = state.environment === "night" ? 0.18 : 0.14;
     ctx.strokeStyle = "#fff";
     ctx.lineWidth = 1;
-    for (var line = 0; line < 9; line += 1) {
-      var lx = ((line * 62 + state.camera.y * 0.08) % 460) - 20;
+    for (var line = 0; line < (lowQuality ? 3 : 9); line += 1) {
+      var lx = ((line * 62 + motionY * 0.08) % 460) - 20;
       ctx.beginPath();
       ctx.moveTo(lx, 0);
       ctx.lineTo(lx - 35, 720);

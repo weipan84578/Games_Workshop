@@ -86,4 +86,31 @@
       }),
     );
   });
+
+  Test.test("高難度主路徑不會連續生成脆弱平台", "generator", function () {
+    for (var seed = 1; seed <= 100; seed += 1) {
+      var state = Game.GameState.create(seed);
+      state.score.maxHeight = 3000;
+      for (var round = 0; round < 20; round += 1) {
+        state.camera.y = state.platforms.reduce(function (highest, platform) {
+          return platform.type === "spike"
+            ? highest
+            : Math.min(highest, platform.y);
+        }, Infinity);
+        Game.WorldGenerator.ensure(state);
+      }
+      var mainPath = state.platforms.filter(function (platform) {
+        return platform.type !== "spike";
+      });
+      for (var index = 1; index < mainPath.length; index += 1) {
+        var previousFragile =
+          mainPath[index - 1].type === "brittle" ||
+          mainPath[index - 1].type === "cloud";
+        var currentFragile =
+          mainPath[index].type === "brittle" ||
+          mainPath[index].type === "cloud";
+        assert.equal(previousFragile && currentFragile, false);
+      }
+    }
+  });
 })(window.DJGame, window.DJTest);

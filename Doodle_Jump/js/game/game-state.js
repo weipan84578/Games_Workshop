@@ -42,10 +42,15 @@
   function fromSnapshot(data) {
     if (!Game.SaveStore.isValid(data)) return null;
     var state = Game.clone(data);
+    if (!Number.isFinite(state.score.comboPeakY)) state.score.comboPeakY = null;
+    state.lastSavedHeight = Number(state.lastSavedHeight) || 0;
+    state.lastSaveAt = Number(state.lastSaveAt) || 0;
+    state.trackIndex = Number(state.trackIndex) || 0;
     state.rng = new Game.PRNG(state.seed);
     state.rng.seed = data.rngState >>> 0 || state.seed;
     state.particles = [];
     state.over = false;
+    state.reason = "";
     return state;
   }
   Game.GameState = Object.freeze({

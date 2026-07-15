@@ -70,8 +70,15 @@
       });
     }
 
+    var runId = 0;
     function run() {
-      render(window.DJTest.run(filter.value));
+      var currentRun = (runId += 1);
+      runButton.disabled = true;
+      window.DJTest.run(filter.value).then(function (report) {
+        if (currentRun !== runId) return;
+        render(report);
+        runButton.disabled = false;
+      });
     }
 
     runButton.addEventListener("click", run);

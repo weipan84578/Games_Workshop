@@ -16,22 +16,40 @@
           })
         : tests.slice();
     var started = performance.now();
-    var results = selected.map(function (item) {
-      try {
-        item.callback();
-        return { name: item.name, module: item.module, passed: true };
-      } catch (error) {
+    return selected
+      .reduce(function (chain, item) {
+        return chain.then(function (results) {
+          return Promise.resolve()
+            .then(function () {
+              return item.callback();
+            })
+            .then(
+              function () {
+                results.push({
+                  name: item.name,
+                  module: item.module,
+                  passed: true,
+                });
+                return results;
+              },
+              function (error) {
+                results.push({
+                  name: item.name,
+                  module: item.module,
+                  passed: false,
+                  error:
+                    error && error.message ? error.message : String(error),
+                });
+                return results;
+              },
+            );
+        });
+      }, Promise.resolve([]))
+      .then(function (results) {
         return {
-          name: item.name,
-          module: item.module,
-          passed: false,
-          error: error && error.message ? error.message : String(error),
+          results: results,
+          duration: Math.round(performance.now() - started),
         };
-      }
-    });
-    return {
-      results: results,
-      duration: Math.round(performance.now() - started),
-    };
+      });
   };
 })(window);

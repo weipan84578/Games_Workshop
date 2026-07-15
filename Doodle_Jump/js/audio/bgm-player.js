@@ -14,8 +14,11 @@
     this.active = false;
   }
   BgmPlayer.prototype.setTrack = function (index) {
-    this.track = Math.max(0, Math.min(2, Number(index) || 0));
+    var next = Math.max(0, Math.min(2, Number(index) || 0));
+    if (next === this.track) return this.track;
+    this.track = next;
     this.note = 0;
+    return this.track;
   };
   BgmPlayer.prototype.playNote = function () {
     if (!this.context || !this.boostNode || !this.active) return;

@@ -14,15 +14,18 @@
   }
   function getRaw(key) {
     try {
-      return storageAvailable ? storage.getItem(key) : memory[key] || null;
+      if (Object.prototype.hasOwnProperty.call(memory, key)) return memory[key];
+      return storageAvailable ? storage.getItem(key) : null;
     } catch (error) {
       return memory[key] || null;
     }
   }
   function setRaw(key, value) {
     try {
-      if (storageAvailable) storage.setItem(key, value);
-      else memory[key] = value;
+      if (storageAvailable) {
+        storage.setItem(key, value);
+        delete memory[key];
+      } else memory[key] = value;
       return true;
     } catch (error) {
       memory[key] = value;

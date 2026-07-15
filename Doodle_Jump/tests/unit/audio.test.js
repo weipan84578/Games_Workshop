@@ -38,4 +38,21 @@
     assert.equal(starts, 1);
     assert.equal(manager.pendingBgm, false);
   });
+
+  Test.test("自動曲目會跟隨遊戲環境更新", "audio", function () {
+    var selected = null;
+    var manager = new Game.AudioManager(function () {
+      return {
+        audio: { master: 70, bgm: 55, sfx: 75, muted: false, track: "auto" },
+      };
+    });
+    manager.bgm = {
+      setTrack: function (track) {
+        selected = track;
+      },
+    };
+    manager.setAutoTrack(2);
+    assert.equal(manager.autoTrack, 2);
+    assert.equal(selected, 2);
+  });
 })(window.DJGame, window.DJTest);

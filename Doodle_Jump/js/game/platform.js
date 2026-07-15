@@ -47,9 +47,12 @@
       platform.breakTimer -= dt;
       if (platform.breakTimer <= 0) platform.active = false;
     }
-    if (platform.type === "vanishing" && platform.vanishTimer > 0) {
+    if (platform.type === "vanishing" && platform.touched) {
       platform.vanishTimer -= dt;
-      if (platform.vanishTimer <= -2) platform.vanishTimer = 2;
+      if (platform.vanishTimer <= -2) {
+        platform.vanishTimer = 0;
+        platform.touched = false;
+      }
     }
     if (platform.type === "cloud" && platform.touched) {
       platform.vanishTimer -= dt;
@@ -63,10 +66,15 @@
     if (platform.type === "vanishing") platform.vanishTimer = 2;
     if (platform.type === "cloud") platform.vanishTimer = 0.22;
   }
+  function opacity(platform) {
+    if (platform.type !== "vanishing" || !platform.touched) return 1;
+    return Game.Math.clamp(Math.abs(platform.vanishTimer) / 2, 0, 1);
+  }
   Game.Platform = Object.freeze({
     create: create,
     update: update,
     touch: touch,
+    opacity: opacity,
     colors: colors,
   });
 })(window.DJGame);

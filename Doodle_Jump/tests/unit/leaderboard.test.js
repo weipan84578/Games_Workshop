@@ -28,4 +28,10 @@
       entries.push(Game.TestData.validLeaderboardEntry("entry-" + i, i));
     assert.equal(Game.LeaderboardStore.sanitize(entries).length, 20);
   });
+
+  Test.test("上次使用的暱稱可以安全讀回", "leaderboard", function () {
+    Game.LeaderboardStore.savePlayerName("  Sky Hopper  ");
+    assert.equal(Game.LeaderboardStore.loadPlayerName(), "Sky Hopper");
+    Game.Storage.remove("djgame.player.v1");
+  });
 })(window.DJGame, window.DJTest);

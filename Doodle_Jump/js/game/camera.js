@@ -9,7 +9,7 @@
         target,
         Game.Math.clamp(dt * 8, 0, 1),
       );
-    if (camera.y > target) camera.y = target;
+    if (Math.abs(camera.y - target) < 0.001) camera.y = target;
   }
   Game.Camera = Object.freeze({ update: update });
 })(window.DJGame);

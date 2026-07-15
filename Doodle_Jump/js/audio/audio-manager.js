@@ -19,6 +19,7 @@
     this.backgrounded = false;
     this.pendingBgm = false;
     this.resumeAttempt = null;
+    this.autoTrack = 0;
   }
   AudioManager.prototype.createContext = function () {
     var Factory =
@@ -67,7 +68,7 @@
     )
       return false;
     var track = this.getSettings().audio.track;
-    this.bgm.start(track === "auto" ? undefined : track);
+    this.bgm.start(track === "auto" ? this.autoTrack : track);
     this.pendingBgm = false;
     return true;
   };
@@ -131,9 +132,25 @@
     this.bgmUserGain.gain.linearRampToValueAtTime(bgm, now + 0.05);
     this.sfxUserGain.gain.cancelScheduledValues(now);
     this.sfxUserGain.gain.linearRampToValueAtTime(sfx, now + 0.05);
+    if (this.bgm)
+      this.bgm.setTrack(settings.track === "auto" ? this.autoTrack : settings.track);
   };
   AudioManager.prototype.setSettings = function () {
     if (this.context) this.applySettings();
+  };
+  AudioManager.prototype.setAutoTrack = function (track) {
+    var next = Game.Math.clamp(Math.round(Number(track) || 0), 0, 2);
+    if (next === this.autoTrack) return this.autoTrack;
+    this.autoTrack = next;
+    var settings = this.getSettings();
+    if (
+      this.bgm &&
+      settings &&
+      settings.audio &&
+      settings.audio.track === "auto"
+    )
+      this.bgm.setTrack(this.autoTrack);
+    return this.autoTrack;
   };
   AudioManager.prototype.startBgm = function () {
     this.pendingBgm = true;

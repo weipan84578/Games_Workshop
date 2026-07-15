@@ -13,8 +13,13 @@
     if (roll < difficulty.movingChance) return "moving";
     return "normal";
   }
-  function chooseItemType(rng, difficulty) {
-    if (difficulty.stage === 0 || rng.next() >= difficulty.rareItemChance)
+  function chooseItemType(rng, difficulty, luckyActive) {
+    var rareChance = Game.Math.clamp(
+      difficulty.rareItemChance + (luckyActive ? 0.25 : 0),
+      0,
+      0.85,
+    );
+    if (difficulty.stage === 0 || rng.next() >= rareChance)
       return "star";
     var choices = ["spring", "shield", "magnet"];
     if (difficulty.stage >= 2) choices.push("rocket", "slow");
@@ -76,13 +81,16 @@
     if (!last) return;
     var difficulty = Game.Difficulty.get(state.score.maxHeight);
     var gap = state.rng.range(difficulty.gapMin, difficulty.gapMax);
-    var reach = 150 + difficulty.platformWidth * 0.28;
+    var reach = Math.min(120, 105 + difficulty.platformWidth * 0.12);
     var x = Game.Math.clamp(
       last.x + state.rng.range(-reach, reach),
       10,
       Game.Constants.LOGICAL_WIDTH - difficulty.platformWidth - 10,
     );
     var type = chooseType(state.rng, difficulty);
+    var lastIsFragile = last.type === "brittle" || last.type === "cloud";
+    var nextIsFragile = type === "brittle" || type === "cloud";
+    if (lastIsFragile && nextIsFragile) type = "normal";
     var platform = Game.Platform.create(
       "platform-" + state.nextId++,
       x,
@@ -115,7 +123,11 @@
     }
 
     if (state.rng.next() < difficulty.itemChance) {
-      var itemType = chooseItemType(state.rng, difficulty);
+      var itemType = chooseItemType(
+        state.rng,
+        difficulty,
+        Boolean(state.player.buffs.lucky > 0),
+      );
       state.items.push(
         Game.Item.create(
           "item-" + state.nextId++,
@@ -165,15 +177,18 @@
   }
   function ensure(state) {
     var targetY = state.camera.y - 360;
-    var highest = state.platforms.reduce(function (min, platform) {
-      return Math.min(min, platform.y);
-    }, Infinity);
+    function highestActive() {
+      return state.platforms.reduce(function (min, platform) {
+        return platform.active && platform.type !== "spike"
+          ? Math.min(min, platform.y)
+          : min;
+      }, Infinity);
+    }
+    var highest = highestActive();
     var guard = 0;
     while (highest > targetY && guard < 8) {
       appendNext(state);
-      highest = state.platforms.reduce(function (min, platform) {
-        return Math.min(min, platform.y);
-      }, Infinity);
+      highest = highestActive();
       guard += 1;
     }
   }
@@ -201,5 +216,6 @@
     populate: populate,
     ensure: ensure,
     cleanup: cleanup,
+    chooseItemType: chooseItemType,
   });
 })(window.DJGame);

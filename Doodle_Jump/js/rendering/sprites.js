@@ -60,10 +60,7 @@
   }
   function platform(ctx, platform, x, y, time) {
     if (!platform.active) return;
-    var alpha =
-      platform.type === "vanishing" && platform.vanishTimer > 0
-        ? Math.min(1, platform.vanishTimer / 2)
-        : 1;
+    var alpha = Game.Platform.opacity(platform);
     ctx.save();
     ctx.globalAlpha = alpha;
     ctx.fillStyle = platform.color;
@@ -129,13 +126,13 @@
     }
     ctx.restore();
   }
-  function item(ctx, item, x, y, time) {
+  function item(ctx, item, x, y, time, quality) {
     if (!item.active) return;
     var bob = Math.sin(time * 0.006 + item.phase) * 3;
     ctx.save();
     ctx.translate(x + item.width / 2, y + item.height / 2 + bob);
     ctx.shadowColor = item.type === "lucky" ? "#ffd45c" : "#fff";
-    ctx.shadowBlur = 12;
+    ctx.shadowBlur = quality === "low" ? 0 : 12;
     ctx.fillStyle =
       item.type === "star" || item.type === "lucky"
         ? "#ffd45c"

@@ -33,6 +33,15 @@
     "neon-night",
   ]);
   Game.Locales = Object.freeze(["zh-TW", "en-US", "ja-JP"]);
+  Game.AppTransitions = Object.freeze({
+    HOME: Object.freeze(["PLAYING", "HELP", "SETTINGS", "LEADERBOARD"]),
+    PLAYING: Object.freeze(["PAUSED", "GAME_OVER"]),
+    PAUSED: Object.freeze(["PLAYING", "SETTINGS", "HOME"]),
+    HELP: Object.freeze(["HOME"]),
+    SETTINGS: Object.freeze(["HOME", "PAUSED"]),
+    LEADERBOARD: Object.freeze(["HOME", "PLAYING"]),
+    GAME_OVER: Object.freeze(["HOME", "PLAYING", "LEADERBOARD"]),
+  });
   Game.Events = Object.freeze({
     READY: "app:ready",
     ROUTE: "route:changed",

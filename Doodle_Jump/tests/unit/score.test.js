@@ -21,6 +21,23 @@
     assert.equal(score.comboScore, 90);
   });
 
+  Test.test("向下掉落超過一個畫面會中斷連擊", "score", function () {
+    var score = Game.ScoreService.create(500);
+    Game.ScoreService.landed(score, "a", 400);
+    Game.ScoreService.landed(score, "b", 300);
+
+    assert.equal(
+      Game.ScoreService.updateComboDrop(
+        score,
+        300 + Game.Constants.LOGICAL_HEIGHT + 1,
+        Game.Constants.LOGICAL_HEIGHT,
+      ),
+      true,
+    );
+    assert.equal(score.currentCombo, 0);
+    assert.equal(score.lastPlatformId, null);
+  });
+
   Test.test("里程碑只獎勵一次", "score", function () {
     var score = Game.ScoreService.create(500);
     Game.ScoreService.updateHeight(score, -4500);

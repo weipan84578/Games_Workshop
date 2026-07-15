@@ -4,6 +4,7 @@
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.dpr = 1;
+    this.quality = "high";
     this.resizeTimer = 0;
     this.resize();
     this.onResize = this.resize.bind(this);
@@ -13,7 +14,8 @@
     });
   }
   CanvasView.prototype.resize = function () {
-    var ratio = Math.min(window.devicePixelRatio || 1, 2);
+    var ratio =
+      this.quality === "low" ? 1 : Math.min(window.devicePixelRatio || 1, 2);
     this.dpr = ratio;
     this.canvas.width = Game.Constants.LOGICAL_WIDTH * ratio;
     this.canvas.height = Game.Constants.LOGICAL_HEIGHT * ratio;
@@ -28,6 +30,12 @@
       Game.Constants.LOGICAL_WIDTH,
       Game.Constants.LOGICAL_HEIGHT,
     );
+  };
+  CanvasView.prototype.setQuality = function (quality) {
+    var next = quality === "low" ? "low" : "high";
+    if (next === this.quality) return;
+    this.quality = next;
+    this.resize();
   };
   CanvasView.prototype.destroy = function () {
     window.removeEventListener("resize", this.onResize);

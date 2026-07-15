@@ -13,6 +13,7 @@
       bestCombo: 0,
       collected: 0,
       lastPlatformId: null,
+      comboPeakY: null,
       reachedMilestones: [],
       startY: startY,
     };
@@ -26,8 +27,12 @@
     }
     return height;
   }
-  function landed(score, platformId) {
+  function landed(score, platformId, playerY) {
     if (score.lastPlatformId !== platformId) {
+      if (!score.currentCombo || !Number.isFinite(score.comboPeakY))
+        score.comboPeakY = Number.isFinite(playerY) ? playerY : score.startY;
+      else if (Number.isFinite(playerY))
+        score.comboPeakY = Math.min(score.comboPeakY, playerY);
       score.currentCombo += 1;
       score.bestCombo = Math.max(score.bestCombo, score.currentCombo);
       var points = Math.min(score.currentCombo, 3) * 10;
@@ -40,6 +45,15 @@
   function breakCombo(score) {
     score.currentCombo = 0;
     score.lastPlatformId = null;
+    score.comboPeakY = null;
+  }
+  function updateComboDrop(score, playerY, threshold) {
+    if (!score.currentCombo || !Number.isFinite(playerY)) return false;
+    if (!Number.isFinite(score.comboPeakY)) score.comboPeakY = playerY;
+    score.comboPeakY = Math.min(score.comboPeakY, playerY);
+    if (playerY - score.comboPeakY <= threshold) return false;
+    breakCombo(score);
+    return true;
   }
   function addItem(score, type) {
     var points = type === "lucky" ? 250 : type === "star" ? 50 : 25;
@@ -81,6 +95,7 @@
     updateHeight: updateHeight,
     landed: landed,
     breakCombo: breakCombo,
+    updateComboDrop: updateComboDrop,
     addItem: addItem,
     addEnemy: addEnemy,
     milestones: milestones,

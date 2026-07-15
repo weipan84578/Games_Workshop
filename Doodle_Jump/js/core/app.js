@@ -3,6 +3,11 @@
 
   function App() {
     this.bus = new Game.EventBus();
+    this.appState = new Game.StateMachine(
+      "HOME",
+      Game.AppTransitions,
+      this.bus,
+    );
     this.settings = this.loadInitialSettings();
     this.router = new Game.Router(
       document.getElementById("page-container"),
@@ -27,11 +32,14 @@
     this.returnToPause = false;
     this.pendingResult = null;
     this.runtimeFailed = false;
+    this.autoSaveRetryAt = 0;
+    this.reducedMotion = false;
     this.bindPages();
     this.bindNavigation();
     this.bindGameEvents();
     this.bindVisibility();
     this.bindAudioBootstrap();
+    this.restorePlayerName();
     this.applySettings();
     this.loop = this.createLoop();
     this.input = this.createInput();
@@ -152,7 +160,8 @@
       .querySelector(".brand-mark")
       .addEventListener("click", function (event) {
         event.preventDefault();
-        self.openPage("home");
+        if (self.session.isActive()) self.confirmReturnHome();
+        else self.openPage("home");
       });
 
     document
@@ -211,6 +220,9 @@
 
   App.prototype.bindGameEvents = function () {
     var self = this;
+    this.bus.on(Game.Events.STARTED, function () {
+      self.transitionTo("PLAYING");
+    });
     this.bus.on(Game.Events.LANDED, function (event) {
       if (self.session.state && self.shouldUseParticles()) {
         Game.Particles.add(
@@ -218,9 +230,10 @@
           event.platform.x + event.platform.width / 2,
           event.platform.y,
           event.platform.color,
-          7,
+          self.particleCount(7),
         );
       }
+      if (event.platform.type === "spring") self.shake(4, 120);
       self.audio.playSfx(event.platform.type === "spring" ? "spring" : "land");
     });
     this.bus.on(Game.Events.COLLECTED, function (item) {
@@ -230,7 +243,7 @@
           item.x,
           item.y,
           "#ffd45c",
-          12,
+          self.particleCount(12),
         );
       self.audio.playSfx(
         item.type === "star" || item.type === "lucky" ? "collect" : "power",
@@ -243,12 +256,14 @@
           enemy.x,
           enemy.y,
           "#ff9db8",
-          10,
+          self.particleCount(10),
         );
+      self.shake(5, 120);
       self.audio.playSfx("hit");
     });
     this.bus.on(Game.Events.DAMAGED, function () {
       self.audio.playSfx("shield");
+      self.shake(8, 180);
       self.announce(Game.I18n.t("game.damaged"));
     });
     this.bus.on(Game.Events.MILESTONE, function (height) {
@@ -258,17 +273,20 @@
       );
     });
     this.bus.on(Game.Events.PAUSED, function () {
+      self.transitionTo("PAUSED");
       self.audio.pauseBgm();
       self.gameScreen.showPause(true);
       self.saveProgress();
       self.announce(Game.I18n.t("pause.title"));
     });
     this.bus.on(Game.Events.RESUMED, function () {
+      self.transitionTo("PLAYING");
       self.gameScreen.showPause(false);
       self.audio.resumeBgm();
       self.announce(Game.I18n.t("pause.resume"));
     });
     this.bus.on(Game.Events.OVER, function (state) {
+      self.transitionTo("GAME_OVER");
       self.handleGameOver(state);
     });
   };
@@ -279,8 +297,8 @@
       var hidden = document.visibilityState === "hidden";
       self.audio.onVisibility(hidden);
       if (hidden && self.session.isActive() && self.router.current === "game") {
-        self.session.pause();
-        self.saveProgress();
+        if (self.session.paused) self.saveProgress();
+        else self.session.pause();
       }
     });
   };
@@ -329,6 +347,7 @@
       step: function (dt) {
         if (!self.session.isActive() || self.session.paused) return;
         self.session.update(self.input.getState(), dt);
+        self.syncAutoTrack();
         if (self.session.state)
           Game.Particles.update(self.session.state.particles, dt);
       },
@@ -340,6 +359,7 @@
       },
       onFrame: function (timestamp, frameMs) {
         self.performance.sample(frameMs, timestamp);
+        self.maybeAutoSave();
       },
     });
   };
@@ -364,6 +384,8 @@
     if (reduced) document.body.classList.add("reduced-motion");
     if (this.settings.accessibility.reducedMotion === "off")
       document.body.classList.add("motion-override-off");
+    this.reducedMotion = Boolean(reduced);
+    this.renderer.setReducedMotion(this.reducedMotion);
     Game.I18n.setLocale(this.settings.language);
     Game.I18n.apply(document);
     this.audio.setSettings();
@@ -407,11 +429,26 @@
   };
 
   App.prototype.shouldUseParticles = function () {
+    if (this.reducedMotion || this.performance.quality === "low") return false;
     if (this.settings.accessibility.particles === "low") return false;
-    return (
-      this.performance.quality !== "low" ||
-      this.settings.accessibility.particles === "high"
-    );
+    return true;
+  };
+
+  App.prototype.particleCount = function (count) {
+    if (!this.shouldUseParticles()) return 0;
+    return this.settings.accessibility.particles === "high"
+      ? Math.ceil(count * 1.5)
+      : count;
+  };
+
+  App.prototype.shake = function (strength, duration) {
+    if (
+      this.reducedMotion ||
+      !this.settings.accessibility.screenShake ||
+      this.performance.quality === "low"
+    )
+      return false;
+    return this.renderer.shake(strength, duration);
   };
 
   App.prototype.unlockAudio = function () {
@@ -419,27 +456,47 @@
     this.audio.startBgm();
   };
 
+  App.prototype.transitionTo = function (state, payload) {
+    return this.appState.transition(state, payload);
+  };
+
+  App.prototype.routeState = function (route) {
+    return {
+      home: "HOME",
+      help: "HELP",
+      settings: "SETTINGS",
+      leaderboard: "LEADERBOARD",
+    }[route];
+  };
+
   App.prototype.openPage = function (route) {
     this.returnToPause = false;
     if (route !== "game") {
       this.loop.stop();
     }
+    var routeState = this.routeState(route);
+    if (routeState && !this.transitionTo(routeState)) return false;
     this.router.go(route);
     if (route === "home") this.refreshHome();
     if (route === "leaderboard") this.renderLeaderboard();
     if (route === "settings") this.settingsScreen.render(this.settings);
     this.audio.startBgm();
+    return true;
   };
 
   App.prototype.openSettings = function (fromPause) {
     this.returnToPause = Boolean(fromPause);
+    if (!this.transitionTo("SETTINGS")) return false;
     this.router.go("settings");
     this.settingsScreen.render(this.settings);
+    return true;
   };
 
   App.prototype.openGamePause = function () {
+    if (!this.transitionTo("PAUSED")) return false;
     this.router.go("game", { noFocus: true });
     this.gameScreen.showPause(true);
+    return true;
   };
 
   App.prototype.openLeaderboard = function () {
@@ -473,6 +530,7 @@
     this.pendingResult = null;
     this.runtimeFailed = false;
     this.session.start();
+    this.syncAutoTrack();
     this.returnToPause = false;
     this.gameScreen.showPause(false);
     this.router.go("game", { noFocus: true });
@@ -496,6 +554,8 @@
     }
     this.runtimeFailed = false;
     this.pendingResult = null;
+    this.transitionTo("PLAYING");
+    this.syncAutoTrack();
     this.gameScreen.showPause(false);
     this.router.go("game", { noFocus: true });
     this.loop.start();
@@ -526,27 +586,52 @@
 
   App.prototype.confirmReturnHome = function () {
     var self = this;
-    this.modal
+    var wasPaused = this.session.paused;
+    if (this.session.isActive() && !wasPaused) this.session.pause();
+    return this.modal
       .confirm({ body: Game.I18n.t("modal.home") })
       .then(function (confirmed) {
         if (confirmed) {
           self.saveProgress();
           self.openPage("home");
-        }
+        } else if (!wasPaused && self.session.isActive()) self.resumeGame();
       });
   };
 
-  App.prototype.saveProgress = function () {
+  App.prototype.maybeAutoSave = function () {
+    var state = this.session.state;
+    var now = Game.now();
+    if (now < this.autoSaveRetryAt) return false;
+    if (!Game.SaveStore.shouldAutoSave(state, now)) return false;
+    var saved = this.saveProgress({ silent: true, now: now });
+    this.autoSaveRetryAt = saved ? 0 : now + Game.Constants.SAVE_INTERVAL_MS;
+    return saved;
+  };
+
+  App.prototype.saveProgress = function (options) {
+    options = options || {};
     if (!this.session.isActive()) return false;
+    var state = this.session.state;
+    var previousSavedHeight = state.lastSavedHeight;
+    var previousSaveAt = state.lastSaveAt;
+    Game.SaveStore.markSaved(state, options.now || Game.now());
     var snapshot = this.session.snapshot();
-    if (!snapshot) return false;
+    if (!snapshot) {
+      state.lastSavedHeight = previousSavedHeight;
+      state.lastSaveAt = previousSaveAt;
+      return false;
+    }
     snapshot.updatedAt = new Date().toISOString();
     var result = Game.SaveStore.save(snapshot);
     if (result.ok) {
-      this.toast.show(Game.I18n.t("toast.saved"), "success");
+      if (!options.silent)
+        this.toast.show(Game.I18n.t("toast.saved"), "success");
       this.bus.emit(Game.Events.SAVE, snapshot);
     } else {
-      this.toast.show(Game.I18n.t("toast.saveUnavailable"), "warning");
+      state.lastSavedHeight = previousSavedHeight;
+      state.lastSaveAt = previousSaveAt;
+      if (!options.silent)
+        this.toast.show(Game.I18n.t("toast.saveUnavailable"), "warning");
       this.bus.emit(Game.Events.SAVE_FAILED, result);
     }
     return result.ok;
@@ -569,6 +654,7 @@
       newRecord: isNewRecord,
       submitted: false,
     });
+    this.restorePlayerName();
     this.audio.stop();
     this.audio.playSfx(isNewRecord ? "record" : "over");
     this.announce(Game.I18n.t("over.title"));
@@ -600,7 +686,7 @@
       message.textContent = Game.I18n.t("toast.saveUnavailable");
       return;
     }
-    Game.Storage.write("djgame.player.v1", { name: name });
+    Game.LeaderboardStore.savePlayerName(name);
     this.pendingResult.submitted = true;
     document.getElementById("score-form").hidden = true;
     message.textContent = Game.I18n.t("over.submitted");
@@ -615,6 +701,25 @@
         ? this.pendingResult.submissionId
         : null,
     );
+  };
+
+  App.prototype.restorePlayerName = function () {
+    var input = document.getElementById("player-name");
+    if (input) input.value = Game.LeaderboardStore.loadPlayerName();
+  };
+
+  App.prototype.syncAutoTrack = function () {
+    var state = this.session.state;
+    if (!state) return 0;
+    var track =
+      state.environment === "night"
+        ? 2
+        : state.environment === "sunset"
+          ? 1
+          : 0;
+    if (state.trackIndex !== track) state.trackIndex = track;
+    this.audio.setAutoTrack(track);
+    return track;
   };
 
   App.prototype.clearLeaderboard = function () {
@@ -691,7 +796,9 @@
       Game.App.toast.show(Game.I18n.t("errors.generic"), "warning");
   });
 
+  Game.AppClass = App;
   document.addEventListener("DOMContentLoaded", function () {
+    if (!document.getElementById("app-shell")) return;
     try {
       new App();
     } catch (error) {

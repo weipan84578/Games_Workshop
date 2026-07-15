@@ -15,4 +15,11 @@
     var second = new Game.PRNG(88);
     assert.equal(first.next(), second.next());
   });
+
+  Test.test("較高傾斜靈敏度會產生較大的控制輸入", "input", function () {
+    var low = Game.TiltInput.scale(15, 1);
+    var high = Game.TiltInput.scale(15, 5);
+    assert.truthy(high > low);
+    assert.equal(Game.TiltInput.scale(1, 5), 0);
+  });
 })(window.DJGame, window.DJTest);

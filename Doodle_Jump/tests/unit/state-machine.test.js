@@ -24,4 +24,14 @@
     bus.emit("test");
     assert.equal(calls, 1);
   });
+
+  Test.test("正式應用狀態表涵蓋遊玩、暫停與設定往返", "state-machine", function () {
+    var machine = new Game.StateMachine("HOME", Game.AppTransitions);
+    assert.equal(machine.transition("PLAYING"), true);
+    assert.equal(machine.transition("HOME"), false);
+    assert.equal(machine.transition("PAUSED"), true);
+    assert.equal(machine.transition("SETTINGS"), true);
+    assert.equal(machine.transition("PAUSED"), true);
+    assert.equal(machine.transition("HOME"), true);
+  });
 })(window.DJGame, window.DJTest);

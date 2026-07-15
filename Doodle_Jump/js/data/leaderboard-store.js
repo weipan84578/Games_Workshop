@@ -1,11 +1,19 @@
 (function (Game) {
   "use strict";
   var KEY = "djgame.leaderboard.v1";
+  var PLAYER_KEY = "djgame.player.v1";
+  function isValidName(name) {
+    if (typeof name !== "string") return false;
+    var visible = Array.from(
+      name.trim().replace(/[\u0000-\u001f\u007f]/g, ""),
+    );
+    return visible.length >= 1 && visible.length <= 12;
+  }
   function validEntry(entry) {
     return (
       Game.Validation.isPlainObject(entry) &&
       Game.Validation.string(entry.id, 100) &&
-      Game.Validation.string(entry.name, 12) &&
+      isValidName(entry.name) &&
       Game.Validation.finite(entry.score, 0, 100000000) &&
       Game.Validation.finite(entry.height, 0, 100000000) &&
       Game.Validation.finite(entry.bestCombo, 0, 100000) &&
@@ -40,6 +48,26 @@
   function save(entries) {
     return Game.Storage.write(KEY, sanitize(entries));
   }
+  function loadPlayerName() {
+    var result = Game.Storage.read(
+      PLAYER_KEY,
+      function (value) {
+        return (
+          Game.Validation.isPlainObject(value) &&
+          typeof value.name === "string"
+        );
+      },
+      null,
+    ).value;
+    if (!result) return "";
+    var name = Game.Validation.cleanName(result.name, "");
+    return isValidName(name) ? name : "";
+  }
+  function savePlayerName(name) {
+    var clean = Game.Validation.cleanName(name, "");
+    if (!isValidName(clean)) return { ok: false, invalid: true };
+    return Game.Storage.write(PLAYER_KEY, { name: clean });
+  }
   Game.LeaderboardStore = Object.freeze({
     key: KEY,
     compare: compare,
@@ -71,12 +99,8 @@
     clear: function () {
       return Game.Storage.remove(KEY);
     },
-    isValidName: function (name) {
-      return (
-        typeof name === "string" &&
-        Array.from(name.trim().replace(/[\u0000-\u001f\u007f]/g, "")).length >=
-          1
-      );
-    },
+    isValidName: isValidName,
+    loadPlayerName: loadPlayerName,
+    savePlayerName: savePlayerName,
   });
 })(window.DJGame);

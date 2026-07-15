@@ -2,6 +2,11 @@
   "use strict";
   function TiltInput(callbacks) {
     this.callbacks = callbacks || {};
+    this.getSensitivity =
+      this.callbacks.getSensitivity ||
+      function () {
+        return 3;
+      };
     this.enabled = false;
     this.value = 0;
     this.filtered = 0;
@@ -33,10 +38,7 @@
   TiltInput.prototype.onOrientation = function (event) {
     var gamma = Number(event.gamma) || 0;
     this.filtered += (gamma - this.filtered) * 0.12;
-    this.value =
-      Math.abs(this.filtered) < 4
-        ? 0
-        : Game.Math.clamp(this.filtered / 25, -1, 1);
+    this.value = scale(this.filtered, this.getSensitivity());
   };
   TiltInput.prototype.disable = function () {
     this.enabled = false;
@@ -46,5 +48,14 @@
   TiltInput.prototype.destroy = function () {
     this.disable();
   };
+  function scale(value, sensitivity) {
+    var level = Game.Math.clamp(Math.round(Number(sensitivity) || 3), 1, 5);
+    var deadZone = 7 - level;
+    var divisor = 40 - level * 5;
+    return Math.abs(value) < deadZone
+      ? 0
+      : Game.Math.clamp(value / divisor, -1, 1);
+  }
+  TiltInput.scale = scale;
   Game.TiltInput = TiltInput;
 })(window.DJGame);

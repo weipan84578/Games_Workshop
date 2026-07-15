@@ -38,6 +38,10 @@
       },
     );
     this.tilt = new Game.TiltInput({
+      getSensitivity: function () {
+        var settings = self.getSettings() || {};
+        return (settings.controls || {}).tiltSensitivity || 3;
+      },
       mode: function (mode) {
         self.mode = mode;
         self.onMode(mode);

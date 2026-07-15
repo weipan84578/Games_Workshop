@@ -35,15 +35,26 @@
     });
     state.items.forEach(function (item) {
       Game.Item.update(item, dt, state.time);
+      if (state.player.buffs.magnet > 0)
+        Game.Item.attract(item, state.player, dt);
     });
     state.enemies.forEach(function (enemy) {
       Game.Enemy.update(enemy, dt * slowFactor, state.time);
     });
+    Game.ScoreService.updateComboDrop(
+      state.score,
+      state.player.y,
+      Game.Constants.LOGICAL_HEIGHT,
+    );
     var landing = Game.Collision.platformLanding(state.player, state.platforms);
     if (landing) {
       Game.Platform.touch(landing.platform);
       Game.Player.land(state.player, landing.multiplier);
-      var combo = Game.ScoreService.landed(state.score, landing.platform.id);
+      var combo = Game.ScoreService.landed(
+        state.score,
+        landing.platform.id,
+        state.player.y,
+      );
       if (this.bus)
         this.bus.emit(Game.Events.LANDED, {
           platform: landing.platform,
