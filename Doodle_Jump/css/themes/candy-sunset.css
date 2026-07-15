@@ -1,0 +1,12 @@
+body.theme-candy-sunset {
+  --bg-start: #ffb38a;
+  --bg-mid: #ffd6a6;
+  --bg-end: #fff2dc;
+  --surface-solid: #fff2dc;
+  --primary: #7c4dff;
+  --primary-deep: #5530ba;
+  --secondary: #eb6a74;
+  --ink: #392546;
+  --ink-soft: #6d5367;
+  --outline: #603951;
+}

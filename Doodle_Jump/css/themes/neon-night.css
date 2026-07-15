@@ -1,0 +1,32 @@
+body.theme-neon-night {
+  --bg-start: #171a3d;
+  --bg-mid: #252750;
+  --bg-end: #292d5c;
+  --surface: rgba(41, 45, 92, 0.88);
+  --surface-solid: #292d5c;
+  --surface-soft: rgba(49, 54, 111, 0.75);
+  --ink: #f2f7ff;
+  --ink-soft: #c0caed;
+  --ink-faint: #9ca7d4;
+  --primary: #65e6ff;
+  --primary-deep: #1ca8c6;
+  --secondary: #a18bff;
+  --accent: #ffdc70;
+  --success: #70e2b5;
+  --danger: #ff7a90;
+  --outline: #a9e9ff;
+  --outline-soft: rgba(169, 233, 255, 0.25);
+  --glass-border: rgba(169, 233, 255, 0.35);
+  --shadow: 0 20px 55px rgba(0, 0, 0, 0.35);
+  --shadow-small: 0 8px 22px rgba(0, 0, 0, 0.3);
+}
+body.theme-neon-night::before {
+  opacity: 0.2;
+}
+body.theme-neon-night::after {
+  opacity: 0.2;
+}
+body.theme-neon-night .brand-cloud span,
+body.theme-neon-night .logo-cloud {
+  background: #292d5c;
+}

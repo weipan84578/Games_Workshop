@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>cloudbound test runner</title>
+    <link rel="stylesheet" href="test-runner.css" />
+  </head>
+  <body>
+    <main class="runner-shell">
+      <header class="runner-header">
+        <div>
+          <p class="runner-kicker">cloudbound / quality deck</p>
+          <h1>瀏覽器單元測試</h1>
+          <p>不需要套件或 server。這個頁面使用與遊戲相同的離線模組。</p>
+        </div>
+        <div class="runner-actions">
+          <button
+            id="run-all"
+            class="runner-button runner-primary"
+            type="button"
+          >
+            全部執行
+          </button>
+          <select id="module-filter" aria-label="測試模組">
+            <option value="all">全部模組</option>
+          </select>
+        </div>
+      </header>
+      <section class="runner-summary" aria-live="polite">
+        <div><span>總數</span><strong id="total-count">0</strong></div>
+        <div class="summary-pass">
+          <span>通過</span><strong id="pass-count">0</strong>
+        </div>
+        <div class="summary-fail">
+          <span>失敗</span><strong id="fail-count">0</strong>
+        </div>
+        <div><span>耗時</span><strong id="duration">0 ms</strong></div>
+      </section>
+      <section
+        id="test-results"
+        class="test-results"
+        aria-live="polite"
+      ></section>
+    </main>
+
+    <script defer src="../js/core/namespace.js"></script>
+    <script defer src="../js/core/constants.js"></script>
+    <script defer src="../js/core/event-bus.js"></script>
+    <script defer src="../js/utils/math.js"></script>
+    <script defer src="../js/utils/prng.js"></script>
+    <script defer src="../js/utils/validation.js"></script>
+    <script defer src="../js/utils/performance-monitor.js"></script>
+    <script defer src="../js/data/storage.js"></script>
+    <script defer src="../js/data/settings-store.js"></script>
+    <script defer src="../js/data/save-store.js"></script>
+    <script defer src="../js/data/leaderboard-store.js"></script>
+    <script defer src="../js/i18n/i18n.js"></script>
+    <script defer src="../js/i18n/locales/zh-TW.js"></script>
+    <script defer src="../js/i18n/locales/en-US.js"></script>
+    <script defer src="../js/i18n/locales/ja-JP.js"></script>
+    <script defer src="../js/core/state-machine.js"></script>
+    <script defer src="../js/game/difficulty.js"></script>
+    <script defer src="../js/game/platform.js"></script>
+    <script defer src="../js/game/item.js"></script>
+    <script defer src="../js/game/enemy.js"></script>
+    <script defer src="../js/game/player.js"></script>
+    <script defer src="../js/game/physics.js"></script>
+    <script defer src="../js/game/collision.js"></script>
+    <script defer src="../js/game/world-generator.js"></script>
+    <script defer src="../js/game/camera.js"></script>
+    <script defer src="../js/game/score.js"></script>
+    <script defer src="../js/game/game-state.js"></script>
+    <script defer src="../js/game/session.js"></script>
+    <script defer src="../js/input/keyboard.js"></script>
+    <script defer src="../js/input/pointer.js"></script>
+    <script defer src="../js/input/tilt.js"></script>
+    <script defer src="../js/input/input-manager.js"></script>
+    <script defer src="../js/audio/bgm-player.js"></script>
+    <script defer src="../js/audio/sfx-player.js"></script>
+    <script defer src="../js/audio/audio-manager.js"></script>
+    <script defer src="../tests/framework/assertions.js"></script>
+    <script defer src="../tests/framework/test-harness.js"></script>
+    <script defer src="../tests/fixtures/test-data.js"></script>
+    <script defer src="../tests/unit/physics.test.js"></script>
+    <script defer src="../tests/unit/collision.test.js"></script>
+    <script defer src="../tests/unit/generator.test.js"></script>
+    <script defer src="../tests/unit/score.test.js"></script>
+    <script defer src="../tests/unit/state-machine.test.js"></script>
+    <script defer src="../tests/unit/input.test.js"></script>
+    <script defer src="../tests/unit/audio.test.js"></script>
+    <script defer src="../tests/unit/i18n.test.js"></script>
+    <script defer src="../tests/unit/storage.test.js"></script>
+    <script defer src="../tests/unit/save-store.test.js"></script>
+    <script defer src="../tests/unit/leaderboard.test.js"></script>
+    <script defer src="../tests/unit/settings.test.js"></script>
+    <script defer src="../tests/unit/responsive-logic.test.js"></script>
+    <script defer src="runner.js"></script>
+  </body>
+</html>

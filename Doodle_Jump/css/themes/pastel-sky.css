@@ -1,0 +1,12 @@
+body.theme-pastel-sky {
+  --bg-start: #bdebff;
+  --bg-mid: #e9f8ff;
+  --bg-end: #fff9f0;
+  --surface-solid: #fff9f0;
+  --primary: #ff5fa2;
+  --primary-deep: #c73772;
+  --secondary: #50a9e8;
+  --ink: #19324b;
+  --ink-soft: #526b7e;
+  --outline: #1d506b;
+}

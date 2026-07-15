@@ -1,0 +1,349 @@
+@media (max-width: 900px) {
+  .game-sidebar {
+    display: none;
+  }
+  .game-stage-row {
+    display: block;
+  }
+  .canvas-column {
+    width: min(100%, var(--game-width));
+    margin: 0 auto;
+  }
+  .touch-controls {
+    display: flex;
+  }
+  .game-bottom-note {
+    margin-bottom: 8px;
+  }
+  .catalog-grid,
+  .item-catalog {
+    grid-template-columns: repeat(3, 1fr);
+    row-gap: 24px;
+  }
+}
+@media (max-width: 720px) {
+  .home-content {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    width: min(100%, 470px);
+  }
+  .home-logo {
+    width: min(210px, 48vw);
+  }
+  .home-logo-wrap h1 {
+    font-size: clamp(3rem, 16vw, 4.3rem);
+  }
+  .home-panel {
+    padding: 20px;
+  }
+  .help-grid,
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+  .help-wide {
+    grid-column: auto;
+  }
+  .document-head {
+    grid-template-columns: 1fr;
+    gap: 13px;
+  }
+  .document-head .button-back {
+    order: 2;
+    justify-self: start;
+  }
+  .document-head > div {
+    order: 1;
+  }
+  .document-head h1 {
+    font-size: 2.4rem;
+  }
+  .game-hud {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .hud-powerups {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+    min-height: auto;
+    padding: 0;
+  }
+}
+@media (max-width: 480px) {
+  .site-header {
+    min-height: 60px;
+  }
+  .header-status {
+    font-size: 0.7rem;
+  }
+  .brand-copy small {
+    display: none;
+  }
+  .page {
+    width: min(calc(100% - 20px), var(--page-max));
+  }
+  .page-home {
+    width: 100%;
+    min-height: calc(100dvh - 60px);
+    padding-top: 12px;
+  }
+  .home-footer {
+    position: relative;
+    bottom: auto;
+    margin-top: 22px;
+  }
+  .home-content {
+    gap: 8px;
+    min-width: 0;
+    width: calc(100% - 20px);
+  }
+  .home-logo-wrap h1 {
+    width: 100%;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    font-size: clamp(2.1rem, 10vw, 2.45rem);
+    letter-spacing: -0.1em;
+  }
+  .home-tagline {
+    font-size: 0.92rem;
+  }
+  .home-panel {
+    padding: 16px;
+    min-width: 0;
+  }
+  .home-actions,
+  .home-action-grid {
+    min-width: 0;
+  }
+  .home-action-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .home-actions .button {
+    min-width: 0;
+  }
+  .button-large {
+    min-height: 54px;
+    font-size: 1rem;
+  }
+  .page-game {
+    width: min(calc(100% - 16px), 1120px);
+    padding-top: 3px;
+  }
+  .game-topbar {
+    margin-bottom: 7px;
+  }
+  .game-title-group h1 {
+    font-size: 1.15rem;
+  }
+  .input-mode-label {
+    display: none;
+  }
+  .button-pause {
+    min-width: 83px;
+    padding: 8px 10px;
+    font-size: 0.83rem;
+  }
+  .game-hud {
+    gap: 6px;
+    margin-bottom: 9px;
+  }
+  .hud-card {
+    min-height: 57px;
+    padding: 7px;
+    gap: 5px;
+  }
+  .hud-icon {
+    width: 25px;
+    height: 25px;
+    flex-basis: 25px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+  }
+  .hud-label {
+    font-size: 0.64rem;
+  }
+  .hud-card strong {
+    font-size: 1.1rem;
+  }
+  .hud-card strong small {
+    font-size: 0.62rem;
+  }
+  .canvas-frame {
+    border-width: 4px;
+    border-radius: 17px;
+  }
+  .touch-controls {
+    gap: 10px;
+    padding-top: 11px;
+  }
+  .touch-button {
+    min-width: 0;
+    width: 42%;
+    min-height: 64px;
+    padding: 8px 10px;
+    font-size: 0.95rem;
+  }
+  .touch-arrow {
+    font-size: 1.55rem;
+  }
+  .touch-center-mark {
+    width: 15px;
+    height: 15px;
+  }
+  .touch-center-mark span {
+    width: 3px;
+    height: 3px;
+  }
+  .game-bottom-note {
+    font-size: 0.68rem;
+  }
+  .game-note-icon {
+    width: 17px;
+    height: 17px;
+  }
+  .page-document {
+    padding-top: 14px;
+  }
+  .document-head h1 {
+    font-size: 2.1rem;
+  }
+  .doc-toc {
+    gap: 4px;
+  }
+  .doc-toc a {
+    padding: 7px 9px;
+    font-size: 0.76rem;
+  }
+  .help-card,
+  .settings-card {
+    padding: 17px;
+  }
+  .step-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .step-item {
+    min-height: 0;
+    padding: 12px;
+  }
+  .step-icon {
+    display: inline-block;
+    margin: 0 7px 0 0;
+  }
+  .step-item h3 {
+    display: inline-block;
+  }
+  .step-item p {
+    margin-left: 34px;
+  }
+  .catalog-grid,
+  .item-catalog {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .leaderboard-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .result-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .overlay-panel {
+    padding: 22px 16px;
+  }
+  .overlay-actions-inline {
+    grid-template-columns: 1fr;
+  }
+  .score-form-row {
+    grid-template-columns: 1fr;
+  }
+  .modal-card {
+    padding: 22px 17px;
+  }
+  .modal-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .modal-actions .button {
+    width: 100%;
+  }
+}
+@media (orientation: landscape) and (max-height: 520px) {
+  .site-header {
+    min-height: 44px;
+    padding: 5px 0;
+  }
+  .page-game {
+    width: min(calc(100% - 18px), 1120px);
+    padding: 2px 0 8px;
+  }
+  .game-topbar {
+    margin-bottom: 4px;
+  }
+  .game-title-group h1 {
+    font-size: 1rem;
+  }
+  .game-hud {
+    grid-template-columns: repeat(4, 1fr);
+    margin-bottom: 5px;
+  }
+  .hud-card {
+    min-height: 45px;
+    padding: 4px 7px;
+  }
+  .hud-icon {
+    display: none;
+  }
+  .hud-label {
+    font-size: 0.58rem;
+  }
+  .hud-card strong {
+    font-size: 0.95rem;
+  }
+  .hud-powerups {
+    min-height: 45px;
+    padding: 0;
+  }
+  .game-stage-row {
+    display: grid;
+    grid-template-columns: minmax(56px, 1fr) minmax(200px, 420px) minmax(
+        56px,
+        1fr
+      );
+    gap: 8px;
+    align-items: center;
+  }
+  .canvas-column {
+    width: auto;
+  }
+  .canvas-frame {
+    width: min(calc(100dvh - 112px), 300px);
+  }
+  .touch-controls {
+    display: contents;
+  }
+  .touch-button {
+    position: absolute;
+    top: 50%;
+    width: 70px;
+    min-width: 56px;
+    min-height: 64px;
+    padding: 5px;
+    transform: translateY(-50%);
+  }
+  .touch-button.touch-left {
+    left: 0;
+  }
+  .touch-button.touch-right {
+    right: 0;
+  }
+  .touch-center-mark {
+    display: none;
+  }
+  .game-bottom-note {
+    display: none;
+  }
+}
+@media (min-width: 901px) {
+  .page-game {
+    width: min(calc(100% - 32px), 1120px);
+  }
+}

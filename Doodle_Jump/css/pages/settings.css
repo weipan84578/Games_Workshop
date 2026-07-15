@@ -1,0 +1,39 @@
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+.settings-card {
+  padding: 24px;
+}
+.settings-card legend {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 20px;
+  font-size: 1.3rem;
+  font-weight: 900;
+}
+.settings-card legend .card-icon {
+  width: 40px;
+  height: 40px;
+  flex-basis: 40px;
+  font-size: 1.15rem;
+}
+.setting-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 5px;
+}
+.settings-card .button-secondary {
+  color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 8%, white);
+  border-color: color-mix(in srgb, var(--danger) 40%, white);
+  box-shadow: none;
+}
+.settings-card .button-secondary:hover {
+  color: #fff;
+  background: var(--danger);
+}

@@ -1,0 +1,12 @@
+body.theme-mint-forest {
+  --bg-start: #bdefd4;
+  --bg-mid: #dcf7dc;
+  --bg-end: #f5fff9;
+  --surface-solid: #f5fff9;
+  --primary: #007d74;
+  --primary-deep: #005d58;
+  --secondary: #469e78;
+  --ink: #163c3b;
+  --ink-soft: #4c716c;
+  --outline: #205c56;
+}

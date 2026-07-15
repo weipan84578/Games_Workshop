@@ -1,0 +1,1244 @@
+﻿<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#bdebff" />
+    <title>Cloudbound — Doodle Jump</title>
+    <link rel="stylesheet" href="css/00-tokens.css" />
+    <link rel="stylesheet" href="css/01-reset.css" />
+    <link rel="stylesheet" href="css/02-base.css" />
+    <link rel="stylesheet" href="css/03-layout.css" />
+    <link rel="stylesheet" href="css/components/buttons.css" />
+    <link rel="stylesheet" href="css/components/cards.css" />
+    <link rel="stylesheet" href="css/components/dialogs.css" />
+    <link rel="stylesheet" href="css/components/forms.css" />
+    <link rel="stylesheet" href="css/components/hud.css" />
+    <link rel="stylesheet" href="css/components/leaderboard.css" />
+    <link rel="stylesheet" href="css/components/touch-controls.css" />
+    <link rel="stylesheet" href="css/pages/home.css" />
+    <link rel="stylesheet" href="css/pages/game.css" />
+    <link rel="stylesheet" href="css/pages/help.css" />
+    <link rel="stylesheet" href="css/pages/settings.css" />
+    <link rel="stylesheet" href="css/themes/pastel-sky.css" />
+    <link rel="stylesheet" href="css/themes/candy-sunset.css" />
+    <link rel="stylesheet" href="css/themes/mint-forest.css" />
+    <link rel="stylesheet" href="css/themes/neon-night.css" />
+    <link rel="stylesheet" href="css/themes/high-contrast.css" />
+    <link rel="stylesheet" href="css/utilities/accessibility.css" />
+    <link rel="stylesheet" href="css/utilities/responsive.css" />
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+  <body class="theme-pastel-sky">
+    <div id="app-shell" class="app-shell">
+      <header class="site-header">
+        <a class="brand-mark" href="#home" aria-label="Cloudbound home">
+          <span class="brand-cloud" aria-hidden="true">
+            <span> </span>
+            <span> </span>
+            <span> </span>
+          </span>
+          <span class="brand-copy">
+            <strong>cloudbound</strong>
+            <small>sky hop studio</small>
+          </span>
+        </a>
+        <div class="header-status">
+          <span class="status-dot" aria-hidden="true"> </span>
+          <span data-i18n="app.offline">離線遊玩</span>
+        </div>
+      </header>
+      <main id="page-container" class="page-container">
+        <section
+          id="home-page"
+          class="page page-home is-active"
+          data-route="home"
+          aria-labelledby="home-title"
+        >
+          <div class="home-sky-decor" aria-hidden="true">
+            <span class="decor-cloud decor-cloud-a"> </span>
+            <span class="decor-cloud decor-cloud-b"> </span>
+            <span class="decor-balloon"> </span>
+            <span class="decor-star decor-star-a">✦</span>
+            <span class="decor-star decor-star-b">✦</span>
+            <span class="decor-paper-plane">➤</span>
+          </div>
+          <div class="home-content">
+            <div class="home-logo-wrap">
+              <div class="home-logo" aria-hidden="true">
+                <div class="logo-sun"></div>
+                <div class="logo-cloud logo-cloud-left"></div>
+                <div class="logo-cloud logo-cloud-right"></div>
+                <div class="logo-mascot">
+                  <span class="mascot-eye mascot-eye-left"> </span>
+                  <span class="mascot-eye mascot-eye-right"> </span>
+                  <span class="mascot-mouth"> </span>
+                </div>
+                <span class="logo-spark spark-one">✦</span>
+                <span class="logo-spark spark-two">✦</span>
+              </div>
+              <p class="eyebrow" data-i18n="app.kicker">一場輕盈的天空冒險</p>
+              <h1 id="home-title">cloudbound</h1>
+              <p class="home-tagline" data-i18n="home.tagline">
+                踩上雲朵，向著今天最高的地方跳！
+              </p>
+            </div>
+            <div class="home-panel panel-glass">
+              <div class="home-version">
+                <span data-i18n="app.versionLabel">版本</span>
+                <span>1.0.0</span>
+              </div>
+              <div id="save-summary" class="save-summary" hidden></div>
+              <div class="home-actions" aria-label="Navigation">
+                <button
+                  id="start-game-button"
+                  class="button button-primary button-large button-icon-left"
+                  type="button"
+                >
+                  <span class="button-icon icon-play" aria-hidden="true">
+                  </span>
+                  <span data-i18n="home.start">開始遊戲</span>
+                </button>
+                <button
+                  id="continue-game-button"
+                  class="button button-secondary button-large button-icon-left"
+                  type="button"
+                  disabled
+                >
+                  <span class="button-icon icon-continue" aria-hidden="true">
+                  </span>
+                  <span data-i18n="home.continue">繼續遊戲</span>
+                </button>
+                <div class="home-action-grid">
+                  <button
+                    id="open-help-button"
+                    class="button button-quiet button-large button-icon-left"
+                    type="button"
+                  >
+                    <span class="button-icon icon-help" aria-hidden="true"
+                      >?</span
+                    >
+                    <span data-i18n="home.help">說明</span>
+                  </button>
+                  <button
+                    id="open-settings-button"
+                    class="button button-quiet button-large button-icon-left"
+                    type="button"
+                  >
+                    <span class="button-icon icon-settings" aria-hidden="true"
+                      >⚙</span
+                    >
+                    <span data-i18n="home.settings">設定</span>
+                  </button>
+                </div>
+                <button
+                  id="open-leaderboard-button"
+                  class="button button-quiet button-large button-icon-left"
+                  type="button"
+                >
+                  <span class="button-icon icon-trophy" aria-hidden="true"
+                    >♛</span
+                  >
+                  <span data-i18n="home.leaderboard">排行榜</span>
+                </button>
+              </div>
+              <p class="home-hint">
+                <span class="hint-dot" aria-hidden="true"> </span>
+                <span data-i18n="home.hint">支援鍵盤、觸控與離線遊玩</span>
+              </p>
+            </div>
+          </div>
+          <footer class="home-footer">
+            <span data-i18n="app.footer"
+              >原創離線小遊戲・所有資料只留在你的瀏覽器</span
+            >
+          </footer>
+        </section>
+        <section
+          id="game-page"
+          class="page page-game"
+          data-route="game"
+          aria-labelledby="game-title"
+          hidden
+        >
+          <div class="game-shell">
+            <div class="game-topbar">
+              <div class="game-title-group">
+                <span class="mini-sun" aria-hidden="true"> </span>
+                <h1 id="game-title" data-i18n="game.title">天空跳躍</h1>
+                <span
+                  id="input-mode-label"
+                  class="input-mode-label"
+                  data-i18n="game.keyboard"
+                  >鍵盤操作</span
+                >
+              </div>
+              <button
+                id="pause-button"
+                class="button button-pause"
+                type="button"
+                aria-label="暫停"
+                data-i18n-aria-label="game.pause"
+              >
+                <span class="pause-bars" aria-hidden="true"> </span>
+                <span data-i18n="game.pause">暫停</span>
+              </button>
+            </div>
+            <div class="game-hud" aria-label="Game status">
+              <div class="hud-card">
+                <span class="hud-icon hud-score-icon" aria-hidden="true"
+                  >✦</span
+                >
+                <div>
+                  <span class="hud-label" data-i18n="game.score">分數</span>
+                  <strong id="hud-score">0</strong>
+                </div>
+              </div>
+              <div class="hud-card">
+                <span class="hud-icon hud-height-icon" aria-hidden="true"
+                  >↟</span
+                >
+                <div>
+                  <span class="hud-label" data-i18n="game.height">高度</span>
+                  <strong>
+                    <span id="hud-height">0</span>
+                    <small> m</small>
+                  </strong>
+                </div>
+              </div>
+              <div class="hud-card">
+                <span class="hud-icon hud-combo-icon" aria-hidden="true"
+                  >↗</span
+                >
+                <div>
+                  <span class="hud-label" data-i18n="game.combo">連擊</span>
+                  <strong id="hud-combo">x1</strong>
+                </div>
+              </div>
+              <div
+                id="hud-powerups"
+                class="hud-powerups"
+                aria-live="polite"
+              ></div>
+            </div>
+            <div class="game-stage-row">
+              <aside
+                class="game-sidebar game-sidebar-left panel-glass"
+                aria-label="Game tips"
+              >
+                <div class="sidebar-orb orb-pink" aria-hidden="true">←</div>
+                <h2 data-i18n="game.sidebarMoveTitle">輕輕修正方向</h2>
+                <p data-i18n="game.sidebarMoveBody">
+                  角色會自動跳躍。左右移動，讓腳底落在平台中央。
+                </p>
+                <div class="sidebar-key">
+                  <kbd>←</kbd>
+                  <kbd>→</kbd>
+                  <span data-i18n="game.sidebarMoveKey">或 A / D</span>
+                </div>
+                <div class="sidebar-meter">
+                  <span> </span>
+                  <span> </span>
+                  <span> </span>
+                  <span> </span>
+                  <span> </span>
+                </div>
+              </aside>
+              <div class="canvas-column">
+                <div class="canvas-frame">
+                  <canvas
+                    id="game-canvas"
+                    width="420"
+                    height="720"
+                    tabindex="0"
+                    aria-label="天空跳躍遊戲畫布"
+                    data-i18n-aria-label="game.title"
+                  >
+                  </canvas>
+                  <div
+                    id="canvas-status"
+                    class="canvas-status"
+                    aria-live="polite"
+                  ></div>
+                </div>
+                <div
+                  id="touch-controls"
+                  class="touch-controls"
+                  aria-label="Touch controls"
+                >
+                  <button
+                    id="touch-left"
+                    class="touch-button touch-left"
+                    type="button"
+                    aria-label="左移"
+                    data-i18n-aria-label="game.left"
+                  >
+                    <span class="touch-arrow" aria-hidden="true">←</span>
+                    <span data-i18n="game.left">左移</span>
+                  </button>
+                  <div class="touch-center-mark" aria-hidden="true">
+                    <span> </span>
+                  </div>
+                  <button
+                    id="touch-right"
+                    class="touch-button touch-right"
+                    type="button"
+                    aria-label="右移"
+                    data-i18n-aria-label="game.right"
+                  >
+                    <span data-i18n="game.right">右移</span>
+                    <span class="touch-arrow" aria-hidden="true">→</span>
+                  </button>
+                </div>
+              </div>
+              <aside
+                class="game-sidebar game-sidebar-right panel-glass"
+                aria-label="Current run"
+              >
+                <div class="sidebar-orb orb-blue" aria-hidden="true">✦</div>
+                <h2 data-i18n="game.sidebarRunTitle">本次旅程</h2>
+                <div class="run-stat">
+                  <span data-i18n="game.bestCombo">最佳連擊</span>
+                  <strong id="side-best-combo">0</strong>
+                </div>
+                <div class="run-stat">
+                  <span data-i18n="game.collected">收集星星</span>
+                  <strong id="side-collected">0</strong>
+                </div>
+                <div id="side-milestone" class="milestone-note">
+                  <span aria-hidden="true">☼</span>
+                  <span data-i18n="game.milestoneHint"
+                    >下一個里程碑在 500 m</span
+                  >
+                </div>
+              </aside>
+            </div>
+            <div class="game-bottom-note">
+              <span class="game-note-icon" aria-hidden="true">i</span>
+              <span data-i18n="game.bottomHint"
+                >踩平台會自動再跳；注意不同顏色的道具與危險！</span
+              >
+            </div>
+          </div>
+          <div id="game-overlay" class="game-overlay" hidden>
+            <div id="pause-panel" class="overlay-panel panel-glass" hidden>
+              <span class="overlay-badge" aria-hidden="true">☁</span>
+              <p class="eyebrow" data-i18n="pause.kicker">先喘口氣</p>
+              <h2 data-i18n="pause.title">遊戲暫停</h2>
+              <p data-i18n="pause.body">雲朵正在等你回來。</p>
+              <div class="overlay-actions">
+                <button
+                  id="resume-button"
+                  class="button button-primary button-large"
+                  type="button"
+                  data-i18n="pause.resume"
+                >
+                  繼續遊戲
+                </button>
+                <button
+                  id="restart-pause-button"
+                  class="button button-secondary button-large"
+                  type="button"
+                  data-i18n="pause.restart"
+                >
+                  重新開始
+                </button>
+                <button
+                  id="pause-settings-button"
+                  class="button button-quiet button-large"
+                  type="button"
+                  data-i18n="pause.settings"
+                >
+                  設定
+                </button>
+                <button
+                  id="home-pause-button"
+                  class="button button-quiet button-large"
+                  type="button"
+                  data-i18n="pause.home"
+                >
+                  返回主畫面
+                </button>
+              </div>
+            </div>
+            <div id="game-over-panel" class="overlay-panel panel-glass" hidden>
+              <span
+                class="overlay-badge overlay-badge-trophy"
+                aria-hidden="true"
+                >♛</span
+              >
+              <p class="eyebrow" data-i18n="over.kicker">旅程完成</p>
+              <h2 data-i18n="over.title">雲端新紀錄</h2>
+              <p
+                id="game-over-subtitle"
+                class="overlay-subtitle"
+                data-i18n="over.body"
+              >
+                你跳得比昨天更高！
+              </p>
+              <div class="result-grid">
+                <div>
+                  <span data-i18n="game.score">分數</span>
+                  <strong id="result-score">0</strong>
+                </div>
+                <div>
+                  <span data-i18n="game.height">最高高度</span>
+                  <strong id="result-height">0 m</strong>
+                </div>
+                <div>
+                  <span data-i18n="game.bestCombo">最佳連擊</span>
+                  <strong id="result-combo">0</strong>
+                </div>
+                <div>
+                  <span data-i18n="game.collected">收集星星</span>
+                  <strong id="result-collected">0</strong>
+                </div>
+              </div>
+              <div id="new-record-badge" class="new-record-badge" hidden>
+                <span aria-hidden="true">✦</span>
+                <span data-i18n="over.newRecord">刷新紀錄！</span>
+              </div>
+              <form id="score-form" class="score-form">
+                <label for="player-name" data-i18n="over.nameLabel"
+                  >留下你的暱稱（1～12 字）</label
+                >
+                <div class="score-form-row">
+                  <input
+                    id="player-name"
+                    name="playerName"
+                    maxlength="12"
+                    autocomplete="nickname"
+                    data-i18n-placeholder="over.namePlaceholder"
+                    placeholder="玩家"
+                    required
+                  />
+                  <button
+                    class="button button-primary"
+                    type="submit"
+                    data-i18n="over.submit"
+                  >
+                    送出成績
+                  </button>
+                </div>
+                <p
+                  id="score-form-message"
+                  class="form-message"
+                  role="status"
+                ></p>
+              </form>
+              <div class="overlay-actions overlay-actions-inline">
+                <button
+                  id="play-again-button"
+                  class="button button-secondary button-large"
+                  type="button"
+                  data-i18n="over.playAgain"
+                >
+                  再玩一次
+                </button>
+                <button
+                  id="result-leaderboard-button"
+                  class="button button-quiet button-large"
+                  type="button"
+                  data-i18n="home.leaderboard"
+                >
+                  排行榜
+                </button>
+                <button
+                  id="result-home-button"
+                  class="button button-quiet button-large"
+                  type="button"
+                  data-i18n="pause.home"
+                >
+                  返回主畫面
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section
+          id="help-page"
+          class="page page-document"
+          data-route="help"
+          aria-labelledby="help-title"
+          hidden
+        >
+          <div class="document-head">
+            <button class="button button-back" type="button" data-back-button>
+              <span aria-hidden="true">←</span>
+              <span data-i18n="common.back">返回</span>
+            </button>
+            <div>
+              <p class="eyebrow" data-i18n="help.kicker">認識你的天空夥伴</p>
+              <h1 id="help-title" data-i18n="help.title">遊玩說明</h1>
+              <p data-i18n="help.intro">
+                三分鐘讀懂規則，然後把最高分留在雲端。
+              </p>
+            </div>
+          </div>
+          <nav class="doc-toc panel-glass" aria-label="Help contents">
+            <a href="#quick-start" data-i18n="help.toc.quick">快速開始</a>
+            <a href="#controls" data-i18n="help.toc.controls">控制方式</a>
+            <a href="#platforms" data-i18n="help.toc.platforms">平台圖鑑</a>
+            <a href="#items" data-i18n="help.toc.items">道具圖鑑</a>
+            <a href="#hazards" data-i18n="help.toc.hazards">危險圖鑑</a>
+            <a href="#accessibility" data-i18n="help.toc.accessibility"
+              >友善設定</a
+            >
+          </nav>
+          <div class="help-grid">
+            <article id="quick-start" class="info-card help-card help-wide">
+              <div class="card-heading">
+                <span class="card-icon icon-sunrise" aria-hidden="true">☼</span>
+                <div>
+                  <p class="eyebrow" data-i18n="help.stepLabel">三步驟</p>
+                  <h2 data-i18n="help.quickTitle">快速開始</h2>
+                </div>
+              </div>
+              <div class="step-grid">
+                <div class="step-item">
+                  <span class="step-number">01</span>
+                  <span class="step-icon" aria-hidden="true">↔</span>
+                  <h3 data-i18n="help.step1Title">移動</h3>
+                  <p data-i18n="help.step1Body">
+                    左右修正角色，讓他靠近下一個平台。
+                  </p>
+                </div>
+                <div class="step-item">
+                  <span class="step-number">02</span>
+                  <span class="step-icon" aria-hidden="true">⌁</span>
+                  <h3 data-i18n="help.step2Title">踩穩</h3>
+                  <p data-i18n="help.step2Body">
+                    只要從上方落下，平台就會讓你再次起跳。
+                  </p>
+                </div>
+                <div class="step-item">
+                  <span class="step-number">03</span>
+                  <span class="step-icon" aria-hidden="true">↟</span>
+                  <h3 data-i18n="help.step3Title">向上</h3>
+                  <p data-i18n="help.step3Body">
+                    越高分數越多，每 500 m 有里程碑獎勵。
+                  </p>
+                </div>
+              </div>
+            </article>
+            <article id="controls" class="info-card help-card">
+              <div class="card-heading">
+                <span class="card-icon icon-controls" aria-hidden="true"
+                  >⌨</span
+                >
+                <h2 data-i18n="help.controlsTitle">控制方式</h2>
+              </div>
+              <div class="legend-list">
+                <div class="legend-row">
+                  <span class="legend-visual keys-visual" aria-hidden="true">
+                    <kbd>A</kbd>
+                    <kbd>D</kbd>
+                  </span>
+                  <div>
+                    <strong data-i18n="help.keyboardTitle">鍵盤</strong>
+                    <p data-i18n="help.keyboardBody">
+                      使用 ← → 或 A / D，按住可連續移動。
+                    </p>
+                  </div>
+                </div>
+                <div class="legend-row">
+                  <span class="legend-visual touch-visual" aria-hidden="true">
+                    <i>←</i>
+                    <i>→</i>
+                  </span>
+                  <div>
+                    <strong data-i18n="help.touchTitle">觸控</strong>
+                    <p data-i18n="help.touchBody">
+                      按住畫面外的大按鈕，手指離開就會停止。
+                    </p>
+                  </div>
+                </div>
+                <div class="legend-row">
+                  <span class="legend-visual tilt-visual" aria-hidden="true"
+                    >⌁</span
+                  >
+                  <div>
+                    <strong data-i18n="help.tiltTitle">傾斜（選用）</strong>
+                    <p data-i18n="help.tiltBody">
+                      可在設定開啟，拒絕權限時會回到觸控。
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </article>
+            <article class="info-card help-card score-card">
+              <div class="card-heading">
+                <span class="card-icon icon-score" aria-hidden="true">✦</span>
+                <h2 data-i18n="help.scoreTitle">怎麼得分？</h2>
+              </div>
+              <ul class="clean-list">
+                <li>
+                  <span>+1</span>
+                  <p data-i18n="help.scoreHeight">
+                    每個新的高度公尺都會累積高度分。
+                  </p>
+                </li>
+                <li>
+                  <span>+50</span>
+                  <p data-i18n="help.scoreStar">
+                    一般星星 50 分，幸運星 250 分。
+                  </p>
+                </li>
+                <li>
+                  <span>×3</span>
+                  <p data-i18n="help.scoreCombo">
+                    連續踩不同平台，連擊倍率最高 ×3。
+                  </p>
+                </li>
+                <li>
+                  <span>+500</span>
+                  <p data-i18n="help.scoreMilestone">
+                    每 500 m 里程碑會送出 500 分。
+                  </p>
+                </li>
+              </ul>
+            </article>
+            <article id="platforms" class="info-card help-card help-wide">
+              <div class="card-heading">
+                <span class="card-icon icon-platform" aria-hidden="true"
+                  >▰</span
+                >
+                <div>
+                  <p class="eyebrow" data-i18n="help.catalogLabel">圖鑑</p>
+                  <h2 data-i18n="help.platformsTitle">平台圖鑑</h2>
+                </div>
+              </div>
+              <div class="catalog-grid">
+                <div class="catalog-item">
+                  <span
+                    class="catalog-art platform-art normal"
+                    aria-hidden="true"
+                  >
+                  </span>
+                  <h3 data-i18n="catalog.normal">一般平台</h3>
+                  <p data-i18n="catalog.normalBody">
+                    穩穩落地，最可靠的綠色軟墊。
+                  </p>
+                </div>
+                <div class="catalog-item">
+                  <span
+                    class="catalog-art platform-art moving"
+                    aria-hidden="true"
+                  >
+                  </span>
+                  <h3 data-i18n="catalog.moving">移動平台</h3>
+                  <p data-i18n="catalog.movingBody">藍色雙箭頭，會左右巡航。</p>
+                </div>
+                <div class="catalog-item">
+                  <span
+                    class="catalog-art platform-art brittle"
+                    aria-hidden="true"
+                  >
+                  </span>
+                  <h3 data-i18n="catalog.brittle">破裂平台</h3>
+                  <p data-i18n="catalog.brittleBody">
+                    踩過後短暫停留，接著碎裂。
+                  </p>
+                </div>
+                <div class="catalog-item">
+                  <span
+                    class="catalog-art platform-art spring"
+                    aria-hidden="true"
+                  >
+                  </span>
+                  <h3 data-i18n="catalog.spring">彈簧平台</h3>
+                  <p data-i18n="catalog.springBody">
+                    黃色線圈，給你更高的起跳。
+                  </p>
+                </div>
+                <div class="catalog-item">
+                  <span
+                    class="catalog-art platform-art vanishing"
+                    aria-hidden="true"
+                  >
+                  </span>
+                  <h3 data-i18n="catalog.vanishing">消失平台</h3>
+                  <p data-i18n="catalog.vanishingBody">
+                    紫色閃爍，踩後會暫時淡出。
+                  </p>
+                </div>
+                <div class="catalog-item">
+                  <span
+                    class="catalog-art platform-art cloud"
+                    aria-hidden="true"
+                  >
+                  </span>
+                  <h3 data-i18n="catalog.cloud">雲朵平台</h3>
+                  <p data-i18n="catalog.cloudBody">白色雲朵，只能承接一次。</p>
+                </div>
+              </div>
+            </article>
+            <article id="items" class="info-card help-card help-wide">
+              <div class="card-heading">
+                <span class="card-icon icon-items" aria-hidden="true">✧</span>
+                <h2 data-i18n="help.itemsTitle">道具圖鑑</h2>
+              </div>
+              <div class="catalog-grid item-catalog">
+                <div class="catalog-item">
+                  <span
+                    class="catalog-art item-art spring-shoes"
+                    aria-hidden="true"
+                    >↟</span
+                  >
+                  <h3 data-i18n="catalog.springShoes">彈簧鞋</h3>
+                  <p data-i18n="catalog.springShoesBody">3 次起跳提高 25%。</p>
+                </div>
+                <div class="catalog-item">
+                  <span class="catalog-art item-art rocket" aria-hidden="true"
+                    >♢</span
+                  >
+                  <h3 data-i18n="catalog.rocket">火箭背包</h3>
+                  <p data-i18n="catalog.rocketBody">
+                    2.8 秒向上飛行並短暫無敵。
+                  </p>
+                </div>
+                <div class="catalog-item">
+                  <span class="catalog-art item-art shield" aria-hidden="true"
+                    >◇</span
+                  >
+                  <h3 data-i18n="catalog.shield">護盾</h3>
+                  <p data-i18n="catalog.shieldBody">
+                    抵擋一次危險碰撞，最多維持 8 秒。
+                  </p>
+                </div>
+                <div class="catalog-item">
+                  <span class="catalog-art item-art magnet" aria-hidden="true"
+                    >⌒</span
+                  >
+                  <h3 data-i18n="catalog.magnet">磁鐵</h3>
+                  <p data-i18n="catalog.magnetBody">6 秒內吸引範圍內的星星。</p>
+                </div>
+                <div class="catalog-item">
+                  <span class="catalog-art item-art slow" aria-hidden="true"
+                    >◌</span
+                  >
+                  <h3 data-i18n="catalog.slow">慢動作</h3>
+                  <p data-i18n="catalog.slowBody">4 秒讓危險與平台放慢。</p>
+                </div>
+                <div class="catalog-item">
+                  <span class="catalog-art item-art lucky" aria-hidden="true"
+                    >✦</span
+                  >
+                  <h3 data-i18n="catalog.lucky">幸運星</h3>
+                  <p data-i18n="catalog.luckyBody">
+                    立即得到 250 分並提升稀有道具率。
+                  </p>
+                </div>
+              </div>
+            </article>
+            <article id="hazards" class="info-card help-card">
+              <div class="card-heading">
+                <span class="card-icon icon-warning" aria-hidden="true">!</span>
+                <h2 data-i18n="help.hazardsTitle">危險圖鑑</h2>
+              </div>
+              <div class="hazard-list">
+                <div>
+                  <span class="hazard-art monster" aria-hidden="true">•ᴗ•</span>
+                  <strong data-i18n="catalog.monster">彈跳怪物</strong>
+                  <small data-i18n="catalog.monsterBody"
+                    >從上方踩掉它；側面會受傷。</small
+                  >
+                </div>
+                <div>
+                  <span class="hazard-art spike" aria-hidden="true">▲</span>
+                  <strong data-i18n="catalog.spike">尖刺平台</strong>
+                  <small data-i18n="catalog.spikeBody"
+                    >不要踩，看到紅色輪廓就繞開。</small
+                  >
+                </div>
+                <div>
+                  <span class="hazard-art hole" aria-hidden="true">◉</span>
+                  <strong data-i18n="catalog.hole">黑洞</strong>
+                  <small data-i18n="catalog.holeBody"
+                    >外圈是吸引範圍，中心不可接觸。</small
+                  >
+                </div>
+              </div>
+            </article>
+            <article id="accessibility" class="info-card help-card">
+              <div class="card-heading">
+                <span class="card-icon icon-heart" aria-hidden="true">♡</span>
+                <h2 data-i18n="help.accessTitle">讓天空更友善</h2>
+              </div>
+              <ul class="check-list">
+                <li data-i18n="help.access1">高對比模式會加強輪廓與焦點。</li>
+                <li data-i18n="help.access2">
+                  減少動態會停用粒子、震動與大幅視差。
+                </li>
+                <li data-i18n="help.access3">
+                  所有危險都有形狀與文字提示，不只靠顏色。
+                </li>
+                <li data-i18n="help.access4">存檔與排行榜只儲存在此瀏覽器。</li>
+              </ul>
+            </article>
+          </div>
+          <button
+            class="back-to-top button button-quiet"
+            type="button"
+            data-back-to-top
+          >
+            <span aria-hidden="true">↑</span>
+            <span data-i18n="help.backTop">回到頂端</span>
+          </button>
+        </section>
+        <section
+          id="settings-page"
+          class="page page-document page-settings"
+          data-route="settings"
+          aria-labelledby="settings-title"
+          hidden
+        >
+          <div class="document-head">
+            <button class="button button-back" type="button" data-back-button>
+              <span aria-hidden="true">←</span>
+              <span data-i18n="common.back">返回</span>
+            </button>
+            <div>
+              <p class="eyebrow" data-i18n="settings.kicker">調整你的飛行感</p>
+              <h1 id="settings-title" data-i18n="settings.title">設定</h1>
+              <p data-i18n="settings.intro">所有選擇都會自動保存在這台裝置。</p>
+            </div>
+          </div>
+          <form id="settings-form" class="settings-grid">
+            <fieldset class="settings-card info-card">
+              <legend>
+                <span class="card-icon" aria-hidden="true">♫</span>
+                <span data-i18n="settings.audioTitle">音訊</span>
+              </legend>
+              <div class="range-field">
+                <label for="master-volume" data-i18n="settings.master"
+                  >主音量</label
+                >
+                <div class="range-row">
+                  <input
+                    id="master-volume"
+                    type="range"
+                    min="0"
+                    max="100"
+                    step="1"
+                    data-setting="audio.master"
+                  />
+                  <output for="master-volume" data-output-for="audio.master"
+                    >70</output
+                  >
+                </div>
+              </div>
+              <div class="range-field">
+                <label for="bgm-volume" data-i18n="settings.bgm"
+                  >BGM 音量</label
+                >
+                <div class="range-row">
+                  <input
+                    id="bgm-volume"
+                    type="range"
+                    min="0"
+                    max="100"
+                    step="1"
+                    data-setting="audio.bgm"
+                  />
+                  <output for="bgm-volume" data-output-for="audio.bgm"
+                    >55</output
+                  >
+                </div>
+              </div>
+              <div class="range-field">
+                <label for="sfx-volume" data-i18n="settings.sfx"
+                  >音效音量</label
+                >
+                <div class="range-row">
+                  <input
+                    id="sfx-volume"
+                    type="range"
+                    min="0"
+                    max="100"
+                    step="1"
+                    data-setting="audio.sfx"
+                  />
+                  <output for="sfx-volume" data-output-for="audio.sfx"
+                    >75</output
+                  >
+                </div>
+              </div>
+              <label class="switch-row">
+                <span>
+                  <strong data-i18n="settings.mute">靜音</strong>
+                  <small data-i18n="settings.muteHint"
+                    >保留音量設定，只暫時靜音</small
+                  >
+                </span>
+                <input
+                  id="muted-toggle"
+                  type="checkbox"
+                  data-setting="audio.muted"
+                />
+                <span class="switch-ui" aria-hidden="true"> </span>
+              </label>
+              <label class="select-field">
+                <span data-i18n="settings.track">BGM 曲目</span>
+                <select id="track-select" data-setting="audio.track">
+                  <option value="auto" data-i18n="settings.trackAuto">
+                    自動輪播
+                  </option>
+                  <option value="0">Morning Cloud Steps</option>
+                  <option value="1">Candy Balloon Waltz</option>
+                  <option value="2">Starlight Piano Hop</option>
+                </select>
+              </label>
+              <div class="setting-actions">
+                <button
+                  id="preview-sfx"
+                  class="button button-quiet"
+                  type="button"
+                  data-i18n="settings.previewSfx"
+                >
+                  試聽音效
+                </button>
+                <button
+                  id="preview-bgm"
+                  class="button button-quiet"
+                  type="button"
+                  data-i18n="settings.previewBgm"
+                >
+                  試聽 BGM
+                </button>
+              </div>
+            </fieldset>
+            <fieldset class="settings-card info-card">
+              <legend>
+                <span class="card-icon" aria-hidden="true">⌨</span>
+                <span data-i18n="settings.controlsTitle">操作</span>
+              </legend>
+              <div class="key-row">
+                <label for="left-key" data-i18n="settings.leftKey"
+                  >左移鍵</label
+                >
+                <input
+                  id="left-key"
+                  type="text"
+                  value="ArrowLeft"
+                  maxlength="20"
+                  data-control="leftKey"
+                />
+                <kbd>A</kbd>
+              </div>
+              <div class="key-row">
+                <label for="right-key" data-i18n="settings.rightKey"
+                  >右移鍵</label
+                >
+                <input
+                  id="right-key"
+                  type="text"
+                  value="ArrowRight"
+                  maxlength="20"
+                  data-control="rightKey"
+                />
+                <kbd>D</kbd>
+              </div>
+              <div class="key-row">
+                <label for="pause-key" data-i18n="settings.pauseKey"
+                  >暫停鍵</label
+                >
+                <input
+                  id="pause-key"
+                  type="text"
+                  value="Escape"
+                  maxlength="20"
+                  data-control="pauseKey"
+                />
+                <kbd>P</kbd>
+              </div>
+              <p
+                id="key-conflict-message"
+                class="form-message"
+                role="alert"
+              ></p>
+              <label class="switch-row">
+                <span>
+                  <strong data-i18n="settings.swap">交換觸控按鈕</strong>
+                  <small data-i18n="settings.swapHint"
+                    >把左、右按鈕的位置互換</small
+                  >
+                </span>
+                <input
+                  id="swap-touch-toggle"
+                  type="checkbox"
+                  data-setting="controls.swapTouchButtons"
+                />
+                <span class="switch-ui" aria-hidden="true"> </span>
+              </label>
+              <label class="switch-row">
+                <span>
+                  <strong data-i18n="settings.tilt">裝置傾斜控制</strong>
+                  <small data-i18n="settings.tiltHint"
+                    >只在你主動開啟後請求權限</small
+                  >
+                </span>
+                <input
+                  id="tilt-toggle"
+                  type="checkbox"
+                  data-setting="controls.tiltEnabled"
+                />
+                <span class="switch-ui" aria-hidden="true"> </span>
+              </label>
+              <div class="range-field">
+                <label for="tilt-sensitivity" data-i18n="settings.sensitivity"
+                  >傾斜靈敏度</label
+                >
+                <div class="range-row">
+                  <input
+                    id="tilt-sensitivity"
+                    type="range"
+                    min="1"
+                    max="5"
+                    step="1"
+                    data-setting="controls.tiltSensitivity"
+                  />
+                  <output
+                    for="tilt-sensitivity"
+                    data-output-for="controls.tiltSensitivity"
+                    >3</output
+                  >
+                </div>
+              </div>
+            </fieldset>
+            <fieldset class="settings-card info-card">
+              <legend>
+                <span class="card-icon" aria-hidden="true">✦</span>
+                <span data-i18n="settings.displayTitle">顯示與輔助</span>
+              </legend>
+              <label class="select-field">
+                <span data-i18n="settings.language">語言</span>
+                <select id="language-select" data-setting="language">
+                  <option value="zh-TW">繁體中文</option>
+                  <option value="en-US">English</option>
+                  <option value="ja-JP">日本語</option>
+                </select>
+              </label>
+              <label class="select-field">
+                <span data-i18n="settings.theme">配色主題</span>
+                <select id="theme-select" data-setting="theme">
+                  <option value="pastel-sky" data-i18n="theme.pastel">
+                    粉彩晴空
+                  </option>
+                  <option value="candy-sunset" data-i18n="theme.candy">
+                    糖果夕陽
+                  </option>
+                  <option value="mint-forest" data-i18n="theme.mint">
+                    薄荷森林
+                  </option>
+                  <option value="neon-night" data-i18n="theme.neon">
+                    星夜霓虹
+                  </option>
+                </select>
+              </label>
+              <label class="switch-row">
+                <span>
+                  <strong data-i18n="settings.contrast">高對比模式</strong>
+                  <small data-i18n="settings.contrastHint"
+                    >強化輪廓與文字對比</small
+                  >
+                </span>
+                <input
+                  id="contrast-toggle"
+                  type="checkbox"
+                  data-setting="accessibility.highContrast"
+                />
+                <span class="switch-ui" aria-hidden="true"> </span>
+              </label>
+              <label class="select-field">
+                <span data-i18n="settings.motion">減少動態效果</span>
+                <select
+                  id="motion-select"
+                  data-setting="accessibility.reducedMotion"
+                >
+                  <option value="system" data-i18n="settings.motionSystem">
+                    跟隨作業系統
+                  </option>
+                  <option value="on" data-i18n="settings.motionOn">開啟</option>
+                  <option value="off" data-i18n="settings.motionOff">
+                    關閉
+                  </option>
+                </select>
+              </label>
+              <label class="select-field">
+                <span data-i18n="settings.particles">粒子量</span>
+                <select
+                  id="particles-select"
+                  data-setting="accessibility.particles"
+                >
+                  <option value="low" data-i18n="settings.low">低</option>
+                  <option value="medium" data-i18n="settings.medium">中</option>
+                  <option value="high" data-i18n="settings.high">高</option>
+                </select>
+              </label>
+              <label class="switch-row">
+                <span>
+                  <strong data-i18n="settings.shake">畫面震動</strong>
+                  <small data-i18n="settings.shakeHint"
+                    >減少動態時會自動關閉</small
+                  >
+                </span>
+                <input
+                  id="shake-toggle"
+                  type="checkbox"
+                  data-setting="accessibility.screenShake"
+                />
+                <span class="switch-ui" aria-hidden="true"> </span>
+              </label>
+            </fieldset>
+            <fieldset class="settings-card info-card">
+              <legend>
+                <span class="card-icon" aria-hidden="true">⌂</span>
+                <span data-i18n="settings.dataTitle">資料管理</span>
+              </legend>
+              <p class="settings-note" data-i18n="settings.dataIntro">
+                資料只保存在此瀏覽器，不會傳送到網路。
+              </p>
+              <button
+                id="clear-save-button"
+                class="button button-secondary button-full"
+                type="button"
+                data-i18n="settings.clearSave"
+              >
+                清除繼續遊戲存檔
+              </button>
+              <button
+                id="clear-board-button"
+                class="button button-secondary button-full"
+                type="button"
+                data-i18n="settings.clearBoard"
+              >
+                清除本機排行榜
+              </button>
+              <button
+                id="reset-settings-button"
+                class="button button-quiet button-full"
+                type="button"
+                data-i18n="settings.reset"
+              >
+                還原全部設定
+              </button>
+              <p
+                id="settings-save-status"
+                class="form-message"
+                role="status"
+              ></p>
+            </fieldset>
+          </form>
+        </section>
+        <section
+          id="leaderboard-page"
+          class="page page-document page-leaderboard"
+          data-route="leaderboard"
+          aria-labelledby="leaderboard-title"
+          hidden
+        >
+          <div class="document-head">
+            <button class="button button-back" type="button" data-back-button>
+              <span aria-hidden="true">←</span>
+              <span data-i18n="common.back">返回</span>
+            </button>
+            <div>
+              <p class="eyebrow" data-i18n="leaderboard.kicker">
+                每一次跳躍都值得被記住
+              </p>
+              <h1 id="leaderboard-title" data-i18n="leaderboard.title">
+                雲端排行榜
+              </h1>
+              <p data-i18n="leaderboard.intro">只儲存在此瀏覽器・前 20 名</p>
+            </div>
+          </div>
+          <div class="leaderboard-toolbar">
+            <div class="board-note">
+              <span class="note-icon" aria-hidden="true">⌂</span>
+              <span data-i18n="leaderboard.localOnly"
+                >這是本機排行榜，不會上傳或跨裝置同步。</span
+              >
+            </div>
+            <button
+              id="clear-leaderboard-button"
+              class="button button-secondary"
+              type="button"
+              data-i18n="leaderboard.clear"
+            >
+              清除排行榜
+            </button>
+          </div>
+          <div id="leaderboard-content" class="leaderboard-content"></div>
+        </section>
+        <div id="modal-root"></div>
+        <div
+          id="toast-root"
+          class="toast-root"
+          aria-live="polite"
+          aria-atomic="true"
+        ></div>
+        <div
+          id="live-region"
+          class="sr-only"
+          aria-live="polite"
+          aria-atomic="true"
+        ></div>
+      </main>
+    </div>
+    <script defer src="js/core/namespace.js"></script>
+    <script defer src="js/core/constants.js"></script>
+    <script defer src="js/core/event-bus.js"></script>
+    <script defer src="js/utils/math.js"></script>
+    <script defer src="js/utils/prng.js"></script>
+    <script defer src="js/utils/validation.js"></script>
+    <script defer src="js/utils/performance-monitor.js"></script>
+    <script defer src="js/data/storage.js"></script>
+    <script defer src="js/data/settings-store.js"></script>
+    <script defer src="js/data/save-store.js"></script>
+    <script defer src="js/data/leaderboard-store.js"></script>
+    <script defer src="js/i18n/i18n.js"></script>
+    <script defer src="js/i18n/locales/zh-TW.js"></script>
+    <script defer src="js/i18n/locales/en-US.js"></script>
+    <script defer src="js/i18n/locales/ja-JP.js"></script>
+    <script defer src="js/core/state-machine.js"></script>
+    <script defer src="js/core/game-loop.js"></script>
+    <script defer src="js/game/difficulty.js"></script>
+    <script defer src="js/game/platform.js"></script>
+    <script defer src="js/game/item.js"></script>
+    <script defer src="js/game/enemy.js"></script>
+    <script defer src="js/game/player.js"></script>
+    <script defer src="js/game/physics.js"></script>
+    <script defer src="js/game/collision.js"></script>
+    <script defer src="js/game/world-generator.js"></script>
+    <script defer src="js/game/camera.js"></script>
+    <script defer src="js/game/score.js"></script>
+    <script defer src="js/game/game-state.js"></script>
+    <script defer src="js/game/session.js"></script>
+    <script defer src="js/rendering/canvas.js"></script>
+    <script defer src="js/rendering/background.js"></script>
+    <script defer src="js/rendering/particles.js"></script>
+    <script defer src="js/rendering/sprites.js"></script>
+    <script defer src="js/rendering/renderer.js"></script>
+    <script defer src="js/rendering/hud-renderer.js"></script>
+    <script defer src="js/input/keyboard.js"></script>
+    <script defer src="js/input/pointer.js"></script>
+    <script defer src="js/input/tilt.js"></script>
+    <script defer src="js/input/input-manager.js"></script>
+    <script defer src="js/audio/bgm-player.js"></script>
+    <script defer src="js/audio/sfx-player.js"></script>
+    <script defer src="js/audio/audio-manager.js"></script>
+    <script defer src="js/ui/modal.js"></script>
+    <script defer src="js/ui/toast.js"></script>
+    <script defer src="js/ui/router.js"></script>
+    <script defer src="js/ui/home-screen.js"></script>
+    <script defer src="js/ui/game-screen.js"></script>
+    <script defer src="js/ui/help-screen.js"></script>
+    <script defer src="js/ui/settings-screen.js"></script>
+    <script defer src="js/ui/leaderboard-screen.js"></script>
+    <script defer src="js/core/app.js"></script>
+  </body>
+</html>

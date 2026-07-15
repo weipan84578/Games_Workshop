@@ -1,0 +1,24 @@
+body.high-contrast {
+  --bg-start: #fff;
+  --bg-mid: #fff;
+  --bg-end: #f2f2f2;
+  --surface: #fff;
+  --surface-solid: #fff;
+  --ink: #111;
+  --ink-soft: #333;
+  --ink-faint: #444;
+  --primary: #a40055;
+  --primary-deep: #73003b;
+  --secondary: #005a9c;
+  --success: #006b52;
+  --danger: #9b0000;
+  --outline: #111;
+  --outline-soft: rgba(17, 17, 17, 0.4);
+  --glass-border: #111;
+  --shadow-small: 0 5px 0 rgba(17, 17, 17, 0.22);
+}
+body.high-contrast .panel-glass,
+body.high-contrast .info-card,
+body.high-contrast .hud-card {
+  backdrop-filter: none;
+}

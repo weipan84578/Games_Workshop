@@ -1,0 +1,77 @@
+.touch-controls {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 15px 0 calc(15px + env(safe-area-inset-bottom));
+}
+.touch-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 130px;
+  min-height: 72px;
+  padding: 10px 20px;
+  color: #fff;
+  background: linear-gradient(145deg, var(--primary), var(--primary-deep));
+  border: 3px solid rgba(255, 255, 255, 0.82);
+  border-radius: 22px;
+  box-shadow:
+    0 7px 0 rgba(100, 38, 77, 0.22),
+    0 12px 28px rgba(53, 107, 141, 0.2);
+  cursor: pointer;
+  font-size: 1.05rem;
+  font-weight: 900;
+  touch-action: none;
+  user-select: none;
+}
+.touch-button.touch-right {
+  background: linear-gradient(145deg, var(--secondary), #3677bf);
+}
+.touch-button:hover {
+  transform: translateY(-2px);
+}
+.touch-button.is-pressed,
+.touch-button:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 rgba(100, 38, 77, 0.22);
+}
+.touch-arrow {
+  font-size: 1.9rem;
+  line-height: 1;
+}
+.touch-center-mark {
+  display: grid;
+  width: 21px;
+  height: 21px;
+  place-items: center;
+  border: 3px solid var(--outline-soft);
+  border-radius: 50%;
+}
+.touch-center-mark span {
+  width: 5px;
+  height: 5px;
+  background: var(--outline-soft);
+  border-radius: 50%;
+}
+
+.touch-controls.is-swapped .touch-left {
+  order: 3;
+}
+
+.touch-controls.is-swapped .touch-right {
+  order: 1;
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+  .touch-controls.is-swapped .touch-button.touch-left {
+    right: 0;
+    left: auto;
+  }
+
+  .touch-controls.is-swapped .touch-button.touch-right {
+    right: auto;
+    left: 0;
+  }
+}

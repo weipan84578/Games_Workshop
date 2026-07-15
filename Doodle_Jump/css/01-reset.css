@@ -1,0 +1,52 @@
+html {
+  min-height: 100%;
+  scroll-behavior: smooth;
+}
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+figure,
+fieldset {
+  margin: 0;
+}
+button,
+input,
+select {
+  font: inherit;
+}
+button {
+  border: 0;
+}
+button,
+a,
+input,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+img,
+svg,
+canvas {
+  display: block;
+  max-width: 100%;
+}
+a {
+  color: inherit;
+}
+fieldset {
+  border: 0;
+  min-inline-size: 0;
+  padding: 0;
+}
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+[hidden] {
+  display: none !important;
+}

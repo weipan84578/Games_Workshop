@@ -1,0 +1,84 @@
+.game-hud {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(120px, 1fr)) minmax(170px, 1.5fr);
+  gap: 10px;
+  width: min(100%, 920px);
+  margin: 0 auto 14px;
+}
+.hud-card {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 70px;
+  padding: 10px 13px;
+  background: var(--surface);
+  border: 1px solid var(--glass-border);
+  border-radius: 15px;
+  box-shadow: var(--shadow-small);
+}
+.hud-icon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  place-items: center;
+  color: var(--primary-deep);
+  background: color-mix(in srgb, var(--primary) 13%, white);
+  border-radius: 11px;
+  font-size: 1.25rem;
+  font-weight: 900;
+}
+.hud-height-icon {
+  color: var(--success);
+  background: color-mix(in srgb, var(--success) 13%, white);
+}
+.hud-combo-icon {
+  color: var(--secondary);
+  background: color-mix(in srgb, var(--secondary) 13%, white);
+}
+.hud-card div {
+  min-width: 0;
+}
+.hud-label {
+  display: block;
+  color: var(--ink-soft);
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+.hud-card strong {
+  display: block;
+  margin-top: -1px;
+  font-size: 1.55rem;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.hud-card strong small {
+  color: var(--ink-soft);
+  font-size: 0.75rem;
+}
+.hud-powerups {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+  min-height: 70px;
+  padding: 8px;
+}
+.powerup-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 5px 9px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.76);
+  border: 2px solid var(--outline-soft);
+  border-radius: 12px;
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+.powerup-chip b {
+  color: var(--primary-deep);
+  font-variant-numeric: tabular-nums;
+}

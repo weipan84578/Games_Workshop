@@ -1,0 +1,50 @@
+:root {
+  --bg-start: #bdebff;
+  --bg-mid: #e9f8ff;
+  --bg-end: #fff9f0;
+  --surface: rgba(255, 255, 255, 0.86);
+  --surface-solid: #fff9f0;
+  --surface-soft: rgba(255, 255, 255, 0.56);
+  --ink: #19324b;
+  --ink-soft: #526b7e;
+  --ink-faint: #718698;
+  --primary: #ff5fa2;
+  --primary-deep: #c73772;
+  --secondary: #50a9e8;
+  --accent: #ffbf52;
+  --success: #2d927b;
+  --danger: #c43c4e;
+  --outline: #1d506b;
+  --outline-soft: rgba(29, 80, 107, 0.22);
+  --shadow: 0 20px 55px rgba(53, 107, 141, 0.18);
+  --shadow-small: 0 8px 22px rgba(53, 107, 141, 0.14);
+  --glass-border: rgba(255, 255, 255, 0.72);
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 28px;
+  --radius-pill: 999px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+  --space-9: 56px;
+  --page-max: 1240px;
+  --content-max: 1080px;
+  --game-width: 420px;
+  --game-height: 720px;
+  --focus: 0 0 0 4px rgba(255, 191, 82, 0.58), 0 0 0 7px var(--outline);
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --fast: 180ms;
+  --normal: 240ms;
+  --font:
+    "Trebuchet MS", "Noto Sans TC", "Noto Sans JP", system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}

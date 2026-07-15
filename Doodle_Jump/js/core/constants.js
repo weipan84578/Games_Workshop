@@ -1,0 +1,56 @@
+(function (Game) {
+  "use strict";
+  Game.Constants = Object.freeze({
+    LOGICAL_WIDTH: 420,
+    LOGICAL_HEIGHT: 720,
+    FIXED_STEP: 1 / 120,
+    MAX_ACCUMULATOR: 0.25,
+    MAX_STEPS_PER_FRAME: 8,
+    GRAVITY: 1850,
+    JUMP_VELOCITY: -780,
+    HORIZONTAL_ACCELERATION: 1800,
+    MAX_HORIZONTAL_SPEED: 270,
+    AIR_RESISTANCE: 0.86,
+    CAMERA_TRIGGER_Y: 274,
+    DEATH_LINE: 784,
+    PLAYER_WIDTH: 34,
+    PLAYER_HEIGHT: 42,
+    PLATFORM_HEIGHT: 16,
+    MAX_PLATFORMS: 40,
+    MAX_ENEMIES: 12,
+    MAX_ITEMS: 15,
+    MAX_PARTICLES: 200,
+    SAVE_VERSION: 1,
+    SETTINGS_VERSION: 1,
+    LEADERBOARD_VERSION: 1,
+    SAVE_INTERVAL_MS: 5000,
+    BGM_BOOST: 10.0,
+  });
+  Game.Themes = Object.freeze([
+    "pastel-sky",
+    "candy-sunset",
+    "mint-forest",
+    "neon-night",
+  ]);
+  Game.Locales = Object.freeze(["zh-TW", "en-US", "ja-JP"]);
+  Game.Events = Object.freeze({
+    READY: "app:ready",
+    ROUTE: "route:changed",
+    STARTED: "game:started",
+    PAUSED: "game:paused",
+    RESUMED: "game:resumed",
+    OVER: "game:over",
+    LANDED: "player:landed",
+    DAMAGED: "player:damaged",
+    DIED: "player:died",
+    COLLECTED: "item:collected",
+    DEFEATED: "enemy:defeated",
+    MILESTONE: "milestone:reached",
+    SCORE: "score:changed",
+    SAVE: "save:completed",
+    SAVE_FAILED: "save:failed",
+    SETTINGS: "settings:changed",
+    LOCALE: "locale:changed",
+    AUDIO: "audio:unlocked",
+  });
+})(window.DJGame);

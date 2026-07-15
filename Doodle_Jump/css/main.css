@@ -1,0 +1,4 @@
+/* The entry point intentionally stays small: index.html links each responsibility in order. */
+.is-active {
+  display: block;
+}
