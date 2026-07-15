@@ -1,0 +1,4 @@
+interface:
+  display_name: "Cloudbound Maintainer"
+  short_description: "Maintain and extend the Cloudbound game safely"
+  default_prompt: "Use $cloudbound-maintainer to implement and verify a safe change to this Cloudbound project."
