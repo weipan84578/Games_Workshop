@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project README Writer"
+  short_description: "Create detailed, navigable multilingual project READMEs"
+  default_prompt: "Use $readme-writer to inspect this project and create a detailed English, Japanese, then Traditional Chinese README.md."
