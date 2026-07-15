@@ -17,6 +17,8 @@
     );
     this.unlocked = false;
     this.backgrounded = false;
+    this.pendingBgm = false;
+    this.resumeAttempt = null;
   }
   AudioManager.prototype.createContext = function () {
     var Factory =
@@ -49,13 +51,68 @@
       return false;
     }
   };
+  AudioManager.prototype.markUnlocked = function () {
+    if (!this.context || this.context.state !== "running") return false;
+    if (!this.unlocked && this.bus) this.bus.emit(Game.Events.AUDIO);
+    this.unlocked = true;
+    return true;
+  };
+  AudioManager.prototype.startPendingBgm = function () {
+    if (
+      !this.pendingBgm ||
+      this.backgrounded ||
+      !this.context ||
+      this.context.state !== "running" ||
+      !this.bgm
+    )
+      return false;
+    var track = this.getSettings().audio.track;
+    this.bgm.start(track === "auto" ? undefined : track);
+    this.pendingBgm = false;
+    return true;
+  };
+  AudioManager.prototype.requestResume = function () {
+    var self = this;
+    if (!this.context) return false;
+    if (this.context.state === "running") {
+      this.markUnlocked();
+      this.startPendingBgm();
+      return true;
+    }
+    if (!this.context.resume) return false;
+    try {
+      var attempt = this.context.resume();
+      if (!attempt || typeof attempt.then !== "function") {
+        this.markUnlocked();
+        this.startPendingBgm();
+        return true;
+      }
+      this.resumeAttempt = attempt;
+      attempt.then(
+        function () {
+          if (self.resumeAttempt === attempt) self.resumeAttempt = null;
+          self.markUnlocked();
+          self.startPendingBgm();
+        },
+        function () {
+          if (self.resumeAttempt === attempt) self.resumeAttempt = null;
+        },
+      );
+      return true;
+    } catch (error) {
+      this.resumeAttempt = null;
+      return false;
+    }
+  };
   AudioManager.prototype.ensure = function () {
     if (!this.supported) return false;
     if (!this.context && !this.createContext()) return false;
-    if (this.context.state === "suspended" && this.context.resume)
-      this.context.resume();
-    if (!this.unlocked && this.bus) this.bus.emit(Game.Events.AUDIO);
-    this.unlocked = true;
+    if (this.context.state === "running") {
+      this.markUnlocked();
+      this.startPendingBgm();
+    } else {
+      this.requestResume();
+    }
     return true;
   };
   AudioManager.prototype.gainFor = function (value) {
@@ -79,12 +136,16 @@
     if (this.context) this.applySettings();
   };
   AudioManager.prototype.startBgm = function () {
-    if (!this.ensure()) return false;
-    var track = this.getSettings().audio.track;
-    this.bgm.start(track === "auto" ? undefined : track);
+    this.pendingBgm = true;
+    if (!this.ensure()) {
+      this.pendingBgm = false;
+      return false;
+    }
+    this.startPendingBgm();
     return true;
   };
   AudioManager.prototype.pauseBgm = function () {
+    this.pendingBgm = false;
     if (this.bgm) this.bgm.pause();
     if (this.context) {
       var now = this.context.currentTime;
@@ -101,11 +162,22 @@
     return true;
   };
   AudioManager.prototype.stop = function () {
+    this.pendingBgm = false;
     if (this.bgm) this.bgm.stop();
   };
   AudioManager.prototype.playSfx = function (name) {
     if (!this.ensure()) return false;
-    this.sfx.play(name);
+    if (this.context.state === "running") {
+      this.sfx.play(name);
+    } else if (this.resumeAttempt) {
+      var self = this;
+      this.resumeAttempt.then(
+        function () {
+          if (self.context.state === "running" && self.sfx) self.sfx.play(name);
+        },
+        function () {},
+      );
+    }
     return true;
   };
   AudioManager.prototype.previewBgm = function () {
@@ -123,7 +195,7 @@
   AudioManager.prototype.onVisibility = function (hidden) {
     this.backgrounded = hidden;
     if (hidden) this.pauseBgm();
-    else if (this.unlocked) this.stop();
+    else if (this.unlocked) this.startBgm();
   };
   Game.AudioManager = AudioManager;
 })(window.DJGame);

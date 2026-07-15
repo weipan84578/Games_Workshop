@@ -43,6 +43,7 @@
   grid-template-columns: minmax(150px, 1fr) auto minmax(150px, 1fr);
   align-items: center;
   gap: clamp(12px, 3vw, 30px);
+  min-width: 0;
 }
 .canvas-column {
   display: grid;
@@ -51,8 +52,8 @@
 }
 .canvas-frame {
   position: relative;
-  width: var(--game-width);
-  max-width: 100%;
+  width: min(100%, var(--game-width));
+  min-width: 0;
   aspect-ratio: 420 / 720;
   overflow: hidden;
   background: #bdebff;
@@ -66,6 +67,7 @@
 #game-canvas {
   width: 100%;
   height: 100%;
+  min-width: 0;
   image-rendering: auto;
   touch-action: none;
 }

@@ -118,6 +118,7 @@
         controls: "操作",
         platforms: "台",
         items: "アイテム",
+        hazards: "危険",
         accessibility: "アクセシビリティ",
       },
     },

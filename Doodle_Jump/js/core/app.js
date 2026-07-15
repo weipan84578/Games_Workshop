@@ -26,16 +26,21 @@
     );
     this.returnToPause = false;
     this.pendingResult = null;
+    this.runtimeFailed = false;
     this.bindPages();
     this.bindNavigation();
     this.bindGameEvents();
     this.bindVisibility();
+    this.bindAudioBootstrap();
     this.applySettings();
     this.loop = this.createLoop();
     this.input = this.createInput();
     this.router.go("home", { noFocus: true });
     this.refreshHome();
+    var version = document.getElementById("app-version");
+    if (version) version.textContent = Game.version;
     Game.App = this;
+    this.audio.startBgm();
     this.bus.emit(Game.Events.READY);
   }
 
@@ -150,7 +155,6 @@
         self.openPage("home");
       });
 
-    var gamePage = document.getElementById("game-page");
     document
       .getElementById("pause-button")
       .addEventListener("click", function () {
@@ -203,20 +207,6 @@
       .addEventListener("click", function () {
         self.clearLeaderboard();
       });
-    document.getElementById("game-canvas").addEventListener(
-      "pointerdown",
-      function () {
-        self.unlockAudio();
-      },
-      { passive: true },
-    );
-    gamePage.addEventListener(
-      "click",
-      function () {
-        if (self.router.current === "game") self.unlockAudio();
-      },
-      { passive: true },
-    );
   };
 
   App.prototype.bindGameEvents = function () {
@@ -293,6 +283,18 @@
         self.saveProgress();
       }
     });
+  };
+
+  App.prototype.bindAudioBootstrap = function () {
+    var self = this;
+    function unlockFromGesture() {
+      self.unlockAudio();
+    }
+    document.addEventListener("pointerdown", unlockFromGesture, {
+      capture: true,
+      passive: true,
+    });
+    document.addEventListener("keydown", unlockFromGesture, true);
   };
 
   App.prototype.createInput = function () {
@@ -414,19 +416,19 @@
 
   App.prototype.unlockAudio = function () {
     if (!this.audio.supported) return;
-    if (this.audio.startBgm()) this.audio.playSfx("confirm");
+    this.audio.startBgm();
   };
 
   App.prototype.openPage = function (route) {
     this.returnToPause = false;
     if (route !== "game") {
       this.loop.stop();
-      this.audio.stop();
     }
     this.router.go(route);
     if (route === "home") this.refreshHome();
     if (route === "leaderboard") this.renderLeaderboard();
     if (route === "settings") this.settingsScreen.render(this.settings);
+    this.audio.startBgm();
   };
 
   App.prototype.openSettings = function (fromPause) {
@@ -469,6 +471,7 @@
 
   App.prototype.startGame = function () {
     this.pendingResult = null;
+    this.runtimeFailed = false;
     this.session.start();
     this.returnToPause = false;
     this.gameScreen.showPause(false);
@@ -491,6 +494,7 @@
       this.refreshHome();
       return;
     }
+    this.runtimeFailed = false;
     this.pendingResult = null;
     this.gameScreen.showPause(false);
     this.router.go("game", { noFocus: true });
@@ -675,10 +679,16 @@
   };
 
   window.addEventListener("error", function () {
-    if (!Game.App) return;
-    var page = document.getElementById("home-page");
-    if (page && !page.classList.contains("is-active"))
-      Game.App.openPage("home");
+    if (!Game.App || Game.App.runtimeFailed) return;
+    Game.App.runtimeFailed = true;
+    if (Game.App.loop) Game.App.loop.stop();
+    if (Game.App.session && Game.App.session.isActive()) {
+      Game.App.session.paused = true;
+      Game.App.gameScreen.showPause(true);
+      Game.App.audio.pauseBgm();
+    }
+    if (Game.App.toast)
+      Game.App.toast.show(Game.I18n.t("errors.generic"), "warning");
   });
 
   document.addEventListener("DOMContentLoaded", function () {

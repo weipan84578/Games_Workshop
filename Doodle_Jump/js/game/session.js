@@ -73,7 +73,7 @@
       Game.Item.effect(state.player, item);
       Game.ScoreService.addItem(state.score, item.type);
       if (this.bus) this.bus.emit(Game.Events.COLLECTED, item);
-    });
+    }, this);
     var hits = Game.Collision.hitEnemies(state.player, state.enemies);
     hits.forEach(function (enemy) {
       if (!enemy.active) return;

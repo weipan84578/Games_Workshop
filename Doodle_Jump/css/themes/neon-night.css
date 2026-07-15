@@ -9,11 +9,11 @@ body.theme-neon-night {
   --ink-soft: #c0caed;
   --ink-faint: #9ca7d4;
   --primary: #65e6ff;
-  --primary-deep: #1ca8c6;
+  --primary-deep: #73e9ff;
   --secondary: #a18bff;
   --accent: #ffdc70;
-  --success: #70e2b5;
-  --danger: #ff7a90;
+  --success: #82efc4;
+  --danger: #ff9bad;
   --outline: #a9e9ff;
   --outline-soft: rgba(169, 233, 255, 0.25);
   --glass-border: rgba(169, 233, 255, 0.35);
@@ -29,4 +29,61 @@ body.theme-neon-night::after {
 body.theme-neon-night .brand-cloud span,
 body.theme-neon-night .logo-cloud {
   background: #292d5c;
+}
+
+body.theme-neon-night .button-primary,
+body.theme-neon-night .button-secondary,
+body.theme-neon-night .touch-button,
+body.theme-neon-night .touch-visual i,
+body.theme-neon-night .check-list li::before,
+body.theme-neon-night .game-note-icon {
+  color: #111735;
+}
+
+body.theme-neon-night .button-quiet,
+body.theme-neon-night .button-pause,
+body.theme-neon-night .input-mode-label,
+body.theme-neon-night .powerup-chip,
+body.theme-neon-night .step-item,
+body.theme-neon-night .legend-visual,
+body.theme-neon-night .range-row output,
+body.theme-neon-night .result-grid > div,
+body.theme-neon-night .overlay-badge,
+body.theme-neon-night input,
+body.theme-neon-night select,
+body.theme-neon-night kbd {
+  color: var(--ink);
+  background: rgba(22, 25, 64, 0.82);
+  border-color: var(--outline-soft);
+}
+
+body.theme-neon-night .card-icon,
+body.theme-neon-night .item-art {
+  color: var(--primary-deep);
+  background: rgba(22, 25, 64, 0.78);
+  border-color: var(--outline-soft);
+}
+
+body.theme-neon-night .milestone-note,
+body.theme-neon-night .save-summary {
+  color: var(--success);
+  background: rgba(17, 65, 61, 0.72);
+  border-color: rgba(130, 239, 196, 0.48);
+}
+
+body.theme-neon-night .settings-card .button-secondary {
+  color: #ffb6c3;
+  background: rgba(98, 33, 61, 0.72);
+  border-color: rgba(255, 155, 173, 0.62);
+}
+
+body.theme-neon-night .settings-card .button-secondary:hover {
+  color: #111735;
+  background: var(--danger);
+}
+
+body.theme-neon-night .button:disabled {
+  color: var(--ink-faint);
+  background: rgba(22, 25, 64, 0.58);
+  border-color: var(--outline-soft);
 }

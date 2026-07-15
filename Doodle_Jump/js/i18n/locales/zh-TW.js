@@ -116,6 +116,7 @@
         controls: "控制方式",
         platforms: "平台圖鑑",
         items: "道具圖鑑",
+        hazards: "危險圖鑑",
         accessibility: "友善設定",
       },
     },

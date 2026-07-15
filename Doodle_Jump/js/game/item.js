@@ -1,6 +1,14 @@
 (function (Game) {
   "use strict";
   var types = ["star", "spring", "rocket", "shield", "magnet", "slow", "lucky"];
+  function phaseFromId(id) {
+    var text = String(id);
+    var hash = 0;
+    for (var index = 0; index < text.length; index += 1) {
+      hash = (hash * 31 + text.charCodeAt(index)) >>> 0;
+    }
+    return (hash % 628) / 100;
+  }
   function create(id, x, y, type) {
     return {
       id: id,
@@ -10,7 +18,7 @@
       height: 24,
       type: type || "star",
       active: true,
-      phase: (id * 1.37) % 6.28,
+      phase: phaseFromId(id),
       baseY: y,
     };
   }

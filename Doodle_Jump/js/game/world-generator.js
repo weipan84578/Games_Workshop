@@ -13,41 +13,58 @@
     if (roll < difficulty.movingChance) return "moving";
     return "normal";
   }
+  function chooseItemType(rng, difficulty) {
+    if (difficulty.stage === 0 || rng.next() >= difficulty.rareItemChance)
+      return "star";
+    var choices = ["spring", "shield", "magnet"];
+    if (difficulty.stage >= 2) choices.push("rocket", "slow");
+    if (difficulty.stage >= 3) choices.push("lucky");
+    return rng.pick(choices);
+  }
+  function createOpeningPlatforms(state) {
+    var platforms = [];
+    var y = 660;
+    var width = state.rng.int(114, 132);
+    var x = Game.Math.clamp(
+      150 + state.rng.range(-20, 20),
+      12,
+      Game.Constants.LOGICAL_WIDTH - width - 12,
+    );
+    for (var index = 0; index < 6; index += 1) {
+      if (index > 0) {
+        y -= state.rng.range(104, 124);
+        width = state.rng.int(108, 132);
+        x = Game.Math.clamp(
+          x + state.rng.range(-132, 132),
+          12,
+          Game.Constants.LOGICAL_WIDTH - width - 12,
+        );
+      }
+      platforms.push(
+        Game.Platform.create(
+          "platform-" + index,
+          Math.round(x),
+          Math.round(y),
+          width,
+          "normal",
+        ),
+      );
+    }
+    return platforms;
+  }
   function populate(state) {
-    state.platforms = [];
-    state.platforms.push(
-      Game.Platform.create("platform-0", 150, 660, 120, "normal"),
-    );
-    state.platforms.push(
-      Game.Platform.create("platform-1", 90, 548, 128, "normal"),
-    );
-    state.platforms.push(
-      Game.Platform.create("platform-2", 240, 430, 116, "normal"),
-    );
-    state.platforms.push(
-      Game.Platform.create("platform-3", 120, 310, 125, "normal"),
-    );
-    state.platforms.push(
-      Game.Platform.create("platform-4", 272, 185, 115, "normal"),
-    );
-    state.platforms.push(
-      Game.Platform.create("platform-5", 164, 64, 120, "normal"),
-    );
-    state.items = [
-      {
-        id: "item-0",
-        x: 282,
-        y: 392,
-        width: 24,
-        height: 24,
-        type: "star",
-        active: true,
-        phase: 1,
-        baseY: 392,
-      },
-    ];
+    state.platforms = createOpeningPlatforms(state);
     state.enemies = [];
     state.nextId = 6;
+    var starPlatform = state.platforms[state.rng.int(2, 4)];
+    state.items = [
+      Game.Item.create(
+        "item-" + state.nextId++,
+        Math.round(starPlatform.x + starPlatform.width * 0.5 - 12),
+        starPlatform.y - 40,
+        "star",
+      ),
+    ];
   }
   function appendNext(state) {
     var platforms = state.platforms.filter(function (platform) {
@@ -98,10 +115,7 @@
     }
 
     if (state.rng.next() < difficulty.itemChance) {
-      var itemType =
-        state.rng.next() < 0.7
-          ? "star"
-          : Game.Item.types[state.rng.int(1, Game.Item.types.length - 1)];
+      var itemType = chooseItemType(state.rng, difficulty);
       state.items.push(
         Game.Item.create(
           "item-" + state.nextId++,

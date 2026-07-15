@@ -15,4 +15,27 @@
     assert.closeTo(manager.gainFor(50), 0.25, 0.0001);
     assert.equal(manager.gainFor(0), 0);
   });
+
+  Test.test("BGM 等待音訊解鎖後才開始排程", "audio", function () {
+    var starts = 0;
+    var manager = new Game.AudioManager(function () {
+      return {
+        audio: { master: 70, bgm: 55, sfx: 75, muted: false, track: "auto" },
+      };
+    });
+    manager.context = { state: "suspended" };
+    manager.bgm = {
+      start: function () {
+        starts += 1;
+      },
+    };
+    manager.supported = true;
+    manager.startBgm();
+    assert.equal(starts, 0);
+    assert.truthy(manager.pendingBgm);
+    manager.context.state = "running";
+    manager.startBgm();
+    assert.equal(starts, 1);
+    assert.equal(manager.pendingBgm, false);
+  });
 })(window.DJGame, window.DJTest);

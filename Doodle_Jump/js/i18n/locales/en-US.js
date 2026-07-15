@@ -122,6 +122,7 @@
         controls: "Controls",
         platforms: "Platforms",
         items: "Boosts",
+        hazards: "Hazards",
         accessibility: "Accessibility",
       },
     },

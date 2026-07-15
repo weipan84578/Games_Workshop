@@ -27,6 +27,11 @@
   gap: 9px;
   margin-top: 5px;
 }
+.data-management-actions {
+  display: grid;
+  gap: 14px;
+  margin-top: 20px;
+}
 .settings-card .button-secondary {
   color: var(--danger);
   background: color-mix(in srgb, var(--danger) 8%, white);

@@ -89,7 +89,7 @@
             <div class="home-panel panel-glass">
               <div class="home-version">
                 <span data-i18n="app.versionLabel">版本</span>
-                <span>1.0.0</span>
+                <span id="app-version">1.1.0</span>
               </div>
               <div id="save-summary" class="save-summary" hidden></div>
               <div class="home-actions" aria-label="Navigation">
@@ -1102,30 +1102,32 @@
               <p class="settings-note" data-i18n="settings.dataIntro">
                 資料只保存在此瀏覽器，不會傳送到網路。
               </p>
-              <button
-                id="clear-save-button"
-                class="button button-secondary button-full"
-                type="button"
-                data-i18n="settings.clearSave"
-              >
-                清除繼續遊戲存檔
-              </button>
-              <button
-                id="clear-board-button"
-                class="button button-secondary button-full"
-                type="button"
-                data-i18n="settings.clearBoard"
-              >
-                清除本機排行榜
-              </button>
-              <button
-                id="reset-settings-button"
-                class="button button-quiet button-full"
-                type="button"
-                data-i18n="settings.reset"
-              >
-                還原全部設定
-              </button>
+              <div class="data-management-actions">
+                <button
+                  id="clear-save-button"
+                  class="button button-secondary button-full"
+                  type="button"
+                  data-i18n="settings.clearSave"
+                >
+                  清除繼續遊戲存檔
+                </button>
+                <button
+                  id="clear-board-button"
+                  class="button button-secondary button-full"
+                  type="button"
+                  data-i18n="settings.clearBoard"
+                >
+                  清除本機排行榜
+                </button>
+                <button
+                  id="reset-settings-button"
+                  class="button button-quiet button-full"
+                  type="button"
+                  data-i18n="settings.reset"
+                >
+                  還原全部設定
+                </button>
+              </div>
               <p
                 id="settings-save-status"
                 class="form-message"
