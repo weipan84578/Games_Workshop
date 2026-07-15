@@ -1,7 +1,10 @@
 (function (Game) {
   "use strict";
-  function chooseType(rng, difficulty) {
+  function chooseType(rng, difficulty, forceSpecial) {
+    var total = difficulty.specialPlatformChance;
+    if (total <= 0) return "normal";
     var roll = rng.next();
+    if (forceSpecial) roll *= total;
     if (roll < difficulty.cloudChance) return "cloud";
     roll -= difficulty.cloudChance;
     if (roll < difficulty.vanishChance) return "vanishing";
@@ -62,6 +65,7 @@
     state.enemies = [];
     state.nextId = 6;
     var starPlatform = state.platforms[state.rng.int(2, 4)];
+    starPlatform.itemType = "star";
     state.items = [
       Game.Item.create(
         "item-" + state.nextId++,
@@ -73,7 +77,7 @@
   }
   function appendNext(state) {
     var platforms = state.platforms.filter(function (platform) {
-      return platform.active;
+      return platform.active && platform.type !== "spike";
     });
     var last = platforms.reduce(function (current, platform) {
       return !current || platform.y < current.y ? platform : current;
@@ -87,7 +91,13 @@
       10,
       Game.Constants.LOGICAL_WIDTH - difficulty.platformWidth - 10,
     );
-    var type = chooseType(state.rng, difficulty);
+    var recentPlatforms = platforms.slice(-4);
+    var forceSpecial =
+      recentPlatforms.length === 4 &&
+      recentPlatforms.every(function (platform) {
+        return platform.type === "normal";
+      });
+    var type = chooseType(state.rng, difficulty, forceSpecial);
     var lastIsFragile = last.type === "brittle" || last.type === "cloud";
     var nextIsFragile = type === "brittle" || type === "cloud";
     if (lastIsFragile && nextIsFragile) type = "normal";
@@ -101,10 +111,27 @@
     );
     state.platforms.push(platform);
 
-    if (
-      state.score.maxHeight > 1000 &&
-      state.rng.next() < difficulty.spikeChance
+    var fragile = type === "brittle" || type === "cloud";
+    var hazardAllowed = !last.hazardType && !fragile;
+    var hazardRoll = state.rng.next();
+    if (hazardAllowed && hazardRoll < difficulty.enemyChance) {
+      var enemyType =
+        state.rng.next() < difficulty.flyerChance ? "flyer" : "monster";
+      platform.hazardType = enemyType;
+      state.enemies.push(
+        Game.Enemy.create(
+          "enemy-" + state.nextId++,
+          Game.Math.clamp(x + state.rng.range(-40, platform.width), 15, 375),
+          platform.y - 34,
+          enemyType,
+          state.rng,
+        ),
+      );
+    } else if (
+      hazardAllowed &&
+      hazardRoll < difficulty.enemyChance + difficulty.spikeChance
     ) {
+      platform.hazardType = "spike";
       var spikeWidth = state.rng.int(42, 64);
       var spikeX = Game.Math.clamp(
         x + state.rng.range(-95, platform.width + 60),
@@ -120,46 +147,12 @@
           "spike",
         ),
       );
-    }
-
-    if (state.rng.next() < difficulty.itemChance) {
-      var itemType = chooseItemType(
-        state.rng,
-        difficulty,
-        Boolean(state.player.buffs.lucky > 0),
-      );
-      state.items.push(
-        Game.Item.create(
-          "item-" + state.nextId++,
-          x + platform.width * 0.5 - 12,
-          platform.y - 44,
-          itemType,
-        ),
-      );
-    }
-    if (
-      state.score.maxHeight > 300 &&
-      state.rng.next() < difficulty.enemyChance
+    } else if (
+      hazardAllowed &&
+      hazardRoll <
+        difficulty.enemyChance + difficulty.spikeChance + difficulty.holeChance
     ) {
-      var enemyType =
-        state.score.maxHeight > 1100 && state.rng.next() < 0.25
-          ? "flyer"
-          : "monster";
-      state.enemies.push(
-        Game.Enemy.create(
-          "enemy-" + state.nextId++,
-          Game.Math.clamp(x + state.rng.range(-40, platform.width), 15, 375),
-          platform.y - 34,
-          enemyType,
-          state.rng,
-        ),
-      );
-    }
-
-    if (
-      state.score.maxHeight > 1500 &&
-      state.rng.next() < difficulty.holeChance
-    ) {
+      platform.hazardType = "hole";
       state.enemies.push(
         Game.Enemy.create(
           "enemy-" + state.nextId++,
@@ -171,6 +164,30 @@
           platform.y - state.rng.range(80, 145),
           "hole",
           state.rng,
+        ),
+      );
+    }
+
+    var recentItemPlatforms = platforms.slice(-3);
+    var forceItem =
+      recentItemPlatforms.length === 3 &&
+      recentItemPlatforms.every(function (recentPlatform) {
+        return !recentPlatform.itemType;
+      });
+    var itemRoll = state.rng.next();
+    if (forceItem || itemRoll < difficulty.itemChance) {
+      var itemType = chooseItemType(
+        state.rng,
+        difficulty,
+        Boolean(state.player.buffs.lucky > 0),
+      );
+      platform.itemType = itemType;
+      state.items.push(
+        Game.Item.create(
+          "item-" + state.nextId++,
+          x + platform.width * 0.5 - 12,
+          platform.y - 44,
+          itemType,
         ),
       );
     }

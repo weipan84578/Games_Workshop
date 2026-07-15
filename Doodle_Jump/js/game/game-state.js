@@ -46,6 +46,10 @@
     state.lastSavedHeight = Number(state.lastSavedHeight) || 0;
     state.lastSaveAt = Number(state.lastSaveAt) || 0;
     state.trackIndex = Number(state.trackIndex) || 0;
+    state.platforms.forEach(function (platform) {
+      if (platform.itemType === undefined) platform.itemType = null;
+      if (platform.hazardType === undefined) platform.hazardType = null;
+    });
     state.rng = new Game.PRNG(state.seed);
     state.rng.seed = data.rngState >>> 0 || state.seed;
     state.particles = [];

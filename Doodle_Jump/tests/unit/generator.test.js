@@ -10,6 +10,47 @@
     });
   }
 
+  function sampleGeneration(height) {
+    var sample = {
+      total: 0,
+      special: 0,
+      items: 0,
+      hazards: 0,
+      itemTypes: {},
+      hazardTypes: {},
+    };
+    for (var seed = 1; seed <= 40; seed += 1) {
+      var state = Game.GameState.create(seed);
+      state.score.maxHeight = height;
+      for (var round = 0; round < 10; round += 1) {
+        state.camera.y = state.platforms.reduce(function (highest, platform) {
+          return platform.type === "spike"
+            ? highest
+            : Math.min(highest, platform.y);
+        }, Infinity);
+        Game.WorldGenerator.ensure(state);
+      }
+      state.platforms
+        .filter(function (platform) {
+          return platform.type !== "spike";
+        })
+        .slice(6)
+        .forEach(function (platform) {
+          sample.total += 1;
+          if (platform.type !== "normal") sample.special += 1;
+          if (platform.itemType) {
+            sample.items += 1;
+            sample.itemTypes[platform.itemType] = true;
+          }
+          if (platform.hazardType) {
+            sample.hazards += 1;
+            sample.hazardTypes[platform.hazardType] = true;
+          }
+        });
+    }
+    return sample;
+  }
+
   Test.test("同一 seed 產生完全相同的平台序列", "generator", function () {
     assert.deepEqual(signature(12345), signature(12345));
   });
@@ -76,6 +117,45 @@
     assert.truthy(late.platformWidth < opening.platformWidth);
   });
 
+  Test.test("平台、道具與危險機率會隨高度持續上升", "generator", function () {
+    var heights = [0, 100, 300, 700, 1500, 3000, 6000];
+    var chanceKeys = [
+      "specialPlatformChance",
+      "itemChance",
+      "rareItemChance",
+      "hazardChance",
+      "flyerChance",
+    ];
+    chanceKeys.forEach(function (key) {
+      for (var index = 1; index < heights.length; index += 1) {
+        assert.truthy(
+          Game.Difficulty.get(heights[index])[key] >=
+            Game.Difficulty.get(heights[index - 1])[key],
+        );
+      }
+      assert.truthy(
+        Game.Difficulty.get(heights[heights.length - 1])[key] >
+          Game.Difficulty.get(heights[0])[key],
+      );
+    });
+  });
+
+  Test.test("高空實際生成會明顯增加變化與危險種類", "generator", function () {
+    var low = sampleGeneration(100);
+    var high = sampleGeneration(3000);
+    assert.truthy(high.special / high.total > low.special / low.total + 0.25);
+    assert.truthy(high.items / high.total > low.items / low.total + 0.05);
+    assert.truthy(high.hazards / high.total > low.hazards / low.total + 0.2);
+    ["spring", "shield", "magnet", "rocket", "slow", "lucky"].forEach(
+      function (type) {
+        assert.truthy(high.itemTypes[type]);
+      },
+    );
+    ["monster", "flyer", "spike", "hole"].forEach(function (type) {
+      assert.truthy(high.hazardTypes[type]);
+    });
+  });
+
   Test.test("教學區不會生成危險平台或敵人", "generator", function () {
     var state = Game.GameState.create(42);
     Game.WorldGenerator.ensure(state);
@@ -87,7 +167,7 @@
     );
   });
 
-  Test.test("高難度主路徑不會連續生成脆弱平台", "generator", function () {
+  Test.test("高難度仍保留安全節奏與道具供應", "generator", function () {
     for (var seed = 1; seed <= 100; seed += 1) {
       var state = Game.GameState.create(seed);
       state.score.maxHeight = 3000;
@@ -110,7 +190,17 @@
           mainPath[index].type === "brittle" ||
           mainPath[index].type === "cloud";
         assert.equal(previousFragile && currentFragile, false);
+        assert.equal(
+          Boolean(mainPath[index - 1].hazardType) &&
+            Boolean(mainPath[index].hazardType),
+          false,
+        );
       }
+      var itemDrought = 0;
+      mainPath.slice(6).forEach(function (platform) {
+        itemDrought = platform.itemType ? 0 : itemDrought + 1;
+        assert.truthy(itemDrought <= 3);
+      });
     }
   });
 })(window.DJGame, window.DJTest);

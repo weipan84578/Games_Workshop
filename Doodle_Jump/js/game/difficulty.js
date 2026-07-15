@@ -1,50 +1,49 @@
 (function (Game) {
   "use strict";
+  function risingChance(height, unlockHeight, maximum, distance) {
+    if (height <= unlockHeight) return 0;
+    var climbed = height - unlockHeight;
+    return maximum * (climbed / (climbed + distance));
+  }
+  function risingFromBase(height, base, maximum, distance) {
+    var progress = height / (height + distance);
+    return base + (maximum - base) * progress;
+  }
   function get(height) {
-    var stage = height < 250 ? 0 : height < 900 ? 1 : height < 2200 ? 2 : 3;
+    height = Math.max(0, Number(height) || 0);
+    var stage = height < 60 ? 0 : height < 350 ? 1 : height < 900 ? 2 : 3;
     var progress = Game.Math.clamp(height / 3000, 0, 1);
+    var movingChance = risingChance(height, 30, 0.3, 180);
+    var springChance = risingChance(height, 50, 0.15, 350);
+    var brittleChance = risingChance(height, 90, 0.18, 600);
+    var vanishChance = risingChance(height, 140, 0.14, 750);
+    var cloudChance = risingChance(height, 230, 0.12, 900);
+    var enemyChance = risingChance(height, 50, 0.32, 800);
+    var spikeChance = risingChance(height, 130, 0.22, 950);
+    var holeChance = risingChance(height, 380, 0.14, 1200);
     return {
       stage: stage,
       platformWidth: Math.round(Game.Math.lerp(122, 76, progress)),
       gapMin: Math.round(Game.Math.lerp(88, 110, progress)),
       gapMax: Math.round(Game.Math.lerp(122, 150, progress)),
-      movingChance:
-        height < 250
-          ? 0
-          : Game.Math.clamp(0.08 + (height - 250) / 7500, 0.08, 0.32),
-      brittleChance:
-        height < 550
-          ? 0
-          : Game.Math.clamp(0.06 + (height - 550) / 12000, 0.06, 0.18),
-      springChance:
-        height < 350
-          ? 0
-          : Game.Math.clamp(0.06 + (height - 350) / 18000, 0.06, 0.13),
-      vanishChance:
-        height < 850
-          ? 0
-          : Game.Math.clamp(0.05 + (height - 850) / 18000, 0.05, 0.11),
-      cloudChance:
-        height < 1200
-          ? 0
-          : Game.Math.clamp(0.04 + (height - 1200) / 22000, 0.04, 0.09),
-      spikeChance:
-        height < 1100
-          ? 0
-          : Game.Math.clamp(0.05 + (height - 1100) / 15000, 0.05, 0.15),
-      holeChance:
-        height < 1700
-          ? 0
-          : Game.Math.clamp(0.03 + (height - 1700) / 22000, 0.03, 0.1),
-      enemyChance:
-        height < 450
-          ? 0
-          : Game.Math.clamp(0.06 + (height - 450) / 10000, 0.06, 0.17),
-      itemChance: Game.Math.clamp(0.16 + height / 18000, 0.16, 0.32),
-      rareItemChance:
-        height < 250
-          ? 0
-          : Game.Math.clamp(0.15 + (height - 250) / 9000, 0.15, 0.48),
+      movingChance: movingChance,
+      brittleChance: brittleChance,
+      springChance: springChance,
+      vanishChance: vanishChance,
+      cloudChance: cloudChance,
+      specialPlatformChance:
+        movingChance +
+        brittleChance +
+        springChance +
+        vanishChance +
+        cloudChance,
+      spikeChance: spikeChance,
+      holeChance: holeChance,
+      enemyChance: enemyChance,
+      hazardChance: enemyChance + spikeChance + holeChance,
+      flyerChance: risingChance(height, 350, 0.52, 1300),
+      itemChance: risingFromBase(height, 0.24, 0.56, 2600),
+      rareItemChance: risingChance(height, 20, 0.65, 420),
       wind: height < 650 ? 0 : Game.Math.clamp((height - 650) / 4500, 0, 0.8),
     };
   }

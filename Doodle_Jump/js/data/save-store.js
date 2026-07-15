@@ -94,6 +94,13 @@
       Game.Validation.oneOf(value.type, PLATFORM_TYPES) &&
       typeof value.active === "boolean" &&
       typeof value.touched === "boolean" &&
+      (value.itemType === undefined ||
+        value.itemType === null ||
+        Game.Validation.oneOf(value.itemType, ITEM_TYPES)) &&
+      (value.hazardType === undefined ||
+        value.hazardType === null ||
+        value.hazardType === "spike" ||
+        Game.Validation.oneOf(value.hazardType, ENEMY_TYPES)) &&
       Game.Validation.string(value.color, 40) &&
       value.color.length > 0
     );

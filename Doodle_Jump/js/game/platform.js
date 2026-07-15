@@ -25,6 +25,8 @@
       touched: false,
       breakTimer: 0,
       vanishTimer: 0,
+      itemType: null,
+      hazardType: null,
       color: colors[type || "normal"] || colors.normal,
     };
     if (platform.type === "cloud") platform.height = 20;

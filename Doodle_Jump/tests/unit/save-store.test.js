@@ -28,6 +28,14 @@
     state = Game.GameState.snapshot(Game.GameState.create(105));
     state.score.reachedMilestones = [500, "bad"];
     assert.equal(Game.SaveStore.isValid(state), false);
+
+    state = Game.GameState.snapshot(Game.GameState.create(108));
+    state.platforms[0].itemType = "unknown-item";
+    assert.equal(Game.SaveStore.isValid(state), false);
+
+    state = Game.GameState.snapshot(Game.GameState.create(109));
+    state.platforms[0].hazardType = "unknown-hazard";
+    assert.equal(Game.SaveStore.isValid(state), false);
   });
 
   Test.test("自動存檔需跨過百米且遵守五秒節流", "save-store", function () {
@@ -50,11 +58,20 @@
     delete snapshot.score.comboPeakY;
     delete snapshot.lastSavedHeight;
     delete snapshot.lastSaveAt;
+    snapshot.platforms.forEach(function (platform) {
+      delete platform.itemType;
+      delete platform.hazardType;
+    });
     var restored = Game.GameState.fromSnapshot(snapshot);
 
     assert.truthy(restored);
     assert.equal(restored.score.comboPeakY, null);
     assert.equal(restored.lastSavedHeight, 0);
     assert.equal(restored.lastSaveAt, 0);
+    assert.truthy(
+      restored.platforms.every(function (platform) {
+        return platform.itemType === null && platform.hazardType === null;
+      }),
+    );
   });
 })(window.DJGame, window.DJTest);
