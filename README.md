@@ -57,6 +57,7 @@
 | ---------------- | ---------- | ------------------ | -------------------- |
 | `Snake_Game`     | 貪食蛇     | Snake              | スネーク             |
 | `Tetris`         | 俄羅斯方塊 | Tetris             | テトリス             |
+| `Doodle_Jump`     | 塗鴉跳躍   | Doodle Jump        | ドゥードルジャンプ   |
 | `Endless_Runner` | 無限跑酷   | Endless Runner     | エンドレスランナー   |
 | `Flappy_Bird`    | 飛揚的小鳥 | Flappy Bird        | フラッピーバード     |
 | `Pacman`         | 小精靈     | Pac-Man            | パックマン           |
