@@ -1,6 +1,8 @@
 import { clamp, lerp } from "../utils/helpers.js";
 
 const SCENE_IMAGE_PATH = "assets/images/backgrounds/bowling-alley-realistic.png";
+const BALL_PATH_LATERAL_SCALE = 0.34;
+const BALL_PATH_END_Y = 0.12;
 
 const BALL_PALETTES = Object.freeze({
   cute: ["#ffbedb", "#ec4f91", "#8d2459"],
@@ -321,7 +323,7 @@ export function createCanvasRenderer(canvas) {
     const safeAngle = clamp(Number(aim.angle) || 0, -1, 1);
     const safePower = clamp(Number(aim.power) || 0, 0, 1);
     const start = toScreen({ x: 0.5, y: 0.9 });
-    const end = toScreen({ x: 0.5 + safeAngle * 0.7, y: 0.2 });
+    const end = toScreen({ x: 0.5 + safeAngle * BALL_PATH_LATERAL_SCALE, y: BALL_PATH_END_Y });
     target.save();
     target.strokeStyle = "rgba(255, 237, 170, 0.72)";
     target.lineWidth = Math.max(2, width * 0.0025);

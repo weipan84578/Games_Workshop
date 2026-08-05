@@ -1,0 +1,4 @@
+interface:
+  display_name: "Build Canvas Bowling"
+  short_description: "Build and debug deterministic responsive Canvas bowling games."
+  default_prompt: "Use $build-canvas-bowling to implement or refine a deterministic responsive bowling game in Vanilla JavaScript."

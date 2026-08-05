@@ -54,6 +54,11 @@
     var animationPausedFor = 0;
     var visualProgress = 0;
     var currentKnocked = 0;
+    var currentImpactOrder = [];
+    var impactPlayed = [];
+    var activeRollAngle = 0;
+    var activeRollPower = 0;
+    var activeRollDurationMs = 1180;
     var pressStartedAt = 0;
     var suppressClickUntil = 0;
 
@@ -319,21 +324,25 @@
     }
 
     function setAngle(nextAngle) {
+      if (rolling) return;
       angle = clamp(Number(nextAngle) || 0, -1, 1);
       var input = document.getElementById("fb-angle");
       var output = document.getElementById("fb-angle-value");
       if (input) input.value = String(Math.round(angle * 100));
       if (output) output.textContent = Math.round(angle * 30) + "°";
-      drawCanvas(visualProgress, currentKnocked);
+      visualProgress = 0;
+      drawCanvas(0);
     }
 
     function setPower(nextPower) {
+      if (rolling) return;
       power = clamp(Number(nextPower) || 0, 0, 1);
       var input = document.getElementById("fb-power");
       var output = document.getElementById("fb-power-value");
       if (input) input.value = String(Math.round(power * 100));
       if (output) output.textContent = Math.round(power * 100) + "%";
-      drawCanvas(visualProgress, currentKnocked);
+      visualProgress = 0;
+      drawCanvas(0);
     }
 
     /* -------------------------- Bowling scoring ------------------------ */
@@ -443,11 +452,65 @@
       return frameRecords(gameState.rolls)[9].complete;
     }
 
+    function syncFallbackControls() {
+      var disabled = rolling || currentIsComplete();
+      ["fb-angle", "fb-power", "fb-launch"].forEach(function (id) {
+        var control = document.getElementById(id);
+        if (control) control.disabled = disabled;
+      });
+    }
+
+    var pinDeckExitY = 0.12;
+    var pinCollisionWindow = 0.18;
+    var ballPathLateralScale = 0.34;
+
+    // Keep the direct-file renderer's collision timing in sync with the
+    // module physics: a pin can react only after the ball reaches its depth.
+    function pinImpactProgress(pin, sequence) {
+      var travel = clamp((0.9 - pin.y) / (0.9 - pinDeckExitY), 0, 1);
+      var progressAtDepth = 1 - Math.sqrt(1 - travel);
+      return clamp(progressAtDepth + sequence * 0.018, 0, 0.96);
+    }
+
+    function ballPathXAtPin(pinY) {
+      var travel = clamp((0.9 - pinY) / (0.9 - pinDeckExitY), 0, 1);
+      return 0.5 + clamp(angle, -1, 1) * ballPathLateralScale * travel;
+    }
+
+    // Direction chooses which pins the ball can reach; power controls both
+    // the available impact range and the number of pins in the chain reaction.
+    function calculateImpactOrder() {
+      var safeAngle = clamp(Number(angle) || 0, -1, 1);
+      var safePower = clamp(Number(power) || 0, 0, 1);
+      if (safePower <= 0) return [];
+
+      var alignment = 1 - Math.abs(safeAngle);
+      var pocketQuality = 1 - clamp(Math.abs(Math.abs(safeAngle) - 0.06) / 0.09, 0, 1);
+      var pocketBonus = safePower > 0.86 && pocketQuality > 0.55 ? 1 : 0;
+      var targetCount = clamp(Math.round(safePower * (2.4 + alignment * 6.6) + pocketBonus), 0, pinLayout.length);
+      var collisionReach = 0.04 + safePower * 0.125;
+
+      var candidates = pinLayout.map(function (pin, id) {
+        var gap = Math.abs(pin.x - ballPathXAtPin(pin.y));
+        return { id: id, gap: gap, proximity: clamp(1 - gap / collisionReach, 0, 1) };
+      }).filter(function (candidate) {
+        return candidate.proximity > 0.05;
+      }).sort(function (first, second) {
+        return second.proximity - first.proximity || first.id - second.id;
+      }).slice(0, targetCount);
+
+      return candidates.sort(function (first, second) {
+        var firstProgress = pinImpactProgress(pinLayout[first.id], 0);
+        var secondProgress = pinImpactProgress(pinLayout[second.id], 0);
+        return firstProgress - secondProgress || first.gap - second.gap;
+      }).map(function (candidate) {
+        return candidate.id;
+      });
+    }
+
     function calculateKnockedPins(context) {
-      var centreAccuracy = 1 - Math.abs(angle);
-      var impact = power * (0.34 + centreAccuracy * 0.66);
-      if (power >= 0.999 && Math.abs(angle) < 0.04) return context.pins;
-      return clamp(Math.round(impact * 10), 0, context.pins);
+      currentImpactOrder = calculateImpactOrder().slice(0, context.pins);
+      return currentImpactOrder.length;
     }
 
     /* ------------------------- Canvas presentation --------------------- */
@@ -456,7 +519,7 @@
     var sceneLoaded = false;
     sceneImage.onload = function () {
       sceneLoaded = true;
-      drawCanvas(visualProgress, currentKnocked);
+      drawCanvas(visualProgress);
     };
     sceneImage.src = "assets/images/backgrounds/bowling-alley-realistic.png";
 
@@ -684,7 +747,7 @@
 
     function drawAimGuide(context, width, height) {
       var start = canvasPosition({ x: 0.5, y: 0.9 }, width, height);
-      var end = canvasPosition({ x: 0.5 + angle * 0.7, y: 0.2 }, width, height);
+      var end = canvasPosition({ x: 0.5 + angle * ballPathLateralScale, y: pinDeckExitY }, width, height);
       context.save();
       context.strokeStyle = "rgba(255, 237, 170, 0.72)";
       context.lineWidth = Math.max(2, width * 0.0025);
@@ -701,7 +764,39 @@
       context.restore();
     }
 
-    function drawCanvas(progress, knocked) {
+    function drawImpactEffect(context, x, y, scale, localProgress) {
+      var fade = clamp(1 - localProgress / 0.42, 0, 1);
+      if (fade <= 0) return;
+      var radius = (10 + localProgress * 28) * scale;
+      context.save();
+      context.globalAlpha = fade;
+      context.strokeStyle = "#fff3b0";
+      context.lineWidth = Math.max(2, scale * 2);
+      context.beginPath();
+      context.arc(x, y, radius, 0, Math.PI * 2);
+      context.stroke();
+      context.strokeStyle = "#ffffff";
+      for (var ray = 0; ray < 8; ray += 1) {
+        var rayAngle = ray * Math.PI / 4;
+        context.beginPath();
+        context.moveTo(x + Math.cos(rayAngle) * radius * 1.15, y + Math.sin(rayAngle) * radius * 1.15);
+        context.lineTo(x + Math.cos(rayAngle) * radius * 1.65, y + Math.sin(rayAngle) * radius * 1.65);
+        context.stroke();
+      }
+      context.restore();
+    }
+
+    function triggerImpacts(progress) {
+      currentImpactOrder.forEach(function (pinId, sequence) {
+        var impactAt = pinImpactProgress(pinLayout[pinId], sequence);
+        if (progress >= impactAt && !impactPlayed[pinId]) {
+          impactPlayed[pinId] = true;
+          audio.playSfx("pin");
+        }
+      });
+    }
+
+    function drawCanvas(progress) {
       var canvas = document.getElementById("fb-canvas");
       if (!canvas) return;
       var size = resizeCanvas(canvas);
@@ -712,19 +807,25 @@
       else drawProceduralScene(context, size.width, size.height);
       drawLaneDetails(context, size.width, size.height);
 
+      if (rolling) triggerImpacts(progress);
       if (!rolling) drawAimGuide(context, size.width, size.height);
       pinLayout.forEach(function (pin, index) {
         var position = canvasPosition(pin, size.width, size.height);
-        var isFallen = index < knocked && progress > 0.52;
-        drawPin(context, position.x + (isFallen ? (index % 2 ? 1 : -1) * 22 * progress : 0), position.y, position.scale, isFallen ? (index % 2 ? 0.9 : -0.9) * progress : 0, isFallen ? progress : 0);
+        var sequence = currentImpactOrder.indexOf(index);
+        var impactAt = sequence >= 0 ? pinImpactProgress(pin, sequence) : 1.1;
+        var fallProgress = sequence >= 0 ? clamp((progress - impactAt) / pinCollisionWindow, 0, 1) : 0;
+        drawPin(context, position.x + (fallProgress ? (index % 2 ? 1 : -1) * 22 * fallProgress : 0), position.y, position.scale, fallProgress ? (index % 2 ? 0.9 : -0.9) * fallProgress : 0, fallProgress);
+        if (fallProgress > 0 && fallProgress < 0.42) drawImpactEffect(context, position.x, position.y, position.scale, fallProgress);
       });
-      var ballDepth = 0.9 - progress * 0.7;
-      var ballPosition = { x: 0.5 + angle * 0.34 * progress, y: ballDepth };
-      drawBall(context, ballPosition, angle * 18 * progress, [], size.width, size.height);
+      var ease = 1 - Math.pow(1 - progress, 2);
+      var ballDepth = 0.9 - ease * (0.9 - pinDeckExitY);
+      var renderAngle = rolling ? activeRollAngle : angle;
+      var ballPosition = { x: 0.5 + renderAngle * ballPathLateralScale * ease, y: ballDepth };
+      drawBall(context, ballPosition, renderAngle * 18 * progress, [], size.width, size.height);
     }
 
     window.addEventListener("resize", function () {
-      drawCanvas(visualProgress, currentKnocked);
+      drawCanvas(visualProgress);
     });
 
     /* --------------------------- Screen views -------------------------- */
@@ -806,6 +907,17 @@
     }
 
     function renderGame() {
+      // A new game view always starts with the ball at the approach. This is
+      // important when Continue reuses the same fallback page after a roll.
+      visualProgress = 0;
+      currentKnocked = 0;
+      currentImpactOrder = [];
+      impactPlayed = [];
+      activeRollAngle = angle;
+      activeRollPower = power;
+      activeRollDurationMs = 1180;
+      rolling = false;
+      paused = false;
       var context = nextContext();
       sections.game.innerHTML = `
         <h1 id="game-screen-title" class="game-screen-title">${t("game")}</h1>
@@ -854,7 +966,7 @@
         </div>`;
 
       renderScoreboard();
-      drawCanvas(visualProgress, currentKnocked);
+      drawCanvas(visualProgress);
       document.getElementById("fb-angle").addEventListener("input", function (event) { setAngle(Number(event.target.value) / 100); });
       document.getElementById("fb-power").addEventListener("input", function (event) { setPower(Number(event.target.value) / 100); });
       document.getElementById("fb-pause").addEventListener("click", openPause);
@@ -881,7 +993,7 @@
       });
       sections.game.addEventListener("keydown", onGameKeyDown);
       document.getElementById("fb-game-over").classList.toggle("is-visible", currentIsComplete());
-      document.getElementById("fb-launch").disabled = currentIsComplete();
+      syncFallbackControls();
     }
 
     /* -------------------------- Game interaction ----------------------- */
@@ -902,6 +1014,11 @@
     function launch() {
       if (rolling || currentIsComplete()) return;
       var context = nextContext();
+      // Snapshot the throw inputs. Changing a slider must affect the next
+      // throw, never the ball that is already travelling down the lane.
+      activeRollAngle = angle;
+      activeRollPower = power;
+      activeRollDurationMs = 1180 - activeRollPower * 420;
       currentKnocked = calculateKnockedPins(context);
       rolling = true;
       paused = false;
@@ -911,15 +1028,14 @@
       audio.unlock();
       audio.startBgm();
       audio.playSfx("roll");
-      document.getElementById("fb-launch").disabled = true;
+      syncFallbackControls();
       document.getElementById("fb-status").textContent = t("rolling");
 
       var animate = function (now) {
         if (paused) return;
-        var duration = power > 0.7 ? 760 : 1180;
-        var progress = Math.min(1, (now - animationStart - animationPausedFor) / duration);
+        var progress = Math.min(1, (now - animationStart - animationPausedFor) / activeRollDurationMs);
         visualProgress = progress;
-        drawCanvas(progress, currentKnocked);
+        drawCanvas(progress);
         if (progress < 1) animationId = requestAnimationFrame(animate);
         else finishRoll(currentKnocked);
       };
@@ -933,8 +1049,7 @@
       gameState.currentFrame = nextContext().frame;
       saveProgress();
       rolling = false;
-      visualProgress = 1;
-      audio.playSfx("pin");
+      visualProgress = 0;
       renderScoreboard();
 
       var records = frameRecords(gameState.rolls);
@@ -953,10 +1068,12 @@
       void celebration.offsetWidth;
       celebration.classList.add("is-visible");
       currentKnocked = 0;
+      currentImpactOrder = [];
+      impactPlayed = [];
       document.getElementById("fb-status").textContent = currentIsComplete() ? t("gameOver") : t("ready");
       document.getElementById("fb-game-over").classList.toggle("is-visible", currentIsComplete());
-      document.getElementById("fb-launch").disabled = currentIsComplete();
-      drawCanvas(0, 0);
+      syncFallbackControls();
+      drawCanvas(0);
     }
 
     function stopAnimation() {
@@ -964,7 +1081,11 @@
       animationId = 0;
       rolling = false;
       paused = false;
+      visualProgress = 0;
       currentKnocked = 0;
+      currentImpactOrder = [];
+      impactPlayed = [];
+      syncFallbackControls();
     }
 
     function openPause() {
@@ -982,10 +1103,9 @@
       paused = false;
       var resumeFrame = function (now) {
         if (paused) return;
-        var duration = power > 0.7 ? 760 : 1180;
-        var progress = Math.min(1, (now - animationStart - animationPausedFor) / duration);
+        var progress = Math.min(1, (now - animationStart - animationPausedFor) / activeRollDurationMs);
         visualProgress = progress;
-        drawCanvas(progress, currentKnocked);
+        drawCanvas(progress);
         if (progress < 1) animationId = requestAnimationFrame(resumeFrame);
         else finishRoll(currentKnocked);
       };

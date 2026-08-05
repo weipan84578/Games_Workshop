@@ -115,7 +115,23 @@ export function createGamePage({ section, i18n, storage, audio, getSettings, onN
     camera = createCameraController();
     engine = createGameEngine({
       onUpdate(nextPhysics, delta) {
+        // A pin becomes fallen only after the ball reaches its depth. Trigger
+        // the impact feedback at that transition instead of at roll settle.
+        const newlyHitCount = nextPhysics.pins.reduce(
+          (count, pin, index) => count + (pin.fallen && !physics.pins[index]?.fallen ? 1 : 0),
+          0,
+        );
         physics = nextPhysics;
+        if (newlyHitCount > 0) {
+          particles.emit({
+            x: nextPhysics.ball.x,
+            y: 0.2 + nextPhysics.ball.y * 0.72,
+            count: Math.min(30, 12 + newlyHitCount * 5),
+            kind: "spark",
+          });
+          camera.triggerShake(0.045 + newlyHitCount * 0.008);
+          audio?.playSfx("pin");
+        }
         particles.update(delta);
         camera.update(delta, nextPhysics.phase === PHYSICS_PHASES.SETTLED ? 0.03 : 0);
       },
@@ -168,6 +184,7 @@ export function createGamePage({ section, i18n, storage, audio, getSettings, onN
   }
 
   function setAngle(nextAngle) {
+    if (physics.phase === PHYSICS_PHASES.ROLLING) return;
     angle = clamp(Number(nextAngle) || 0, -1, 1);
     const input = section.querySelector("#angle-control");
     const output = section.querySelector("#angle-value");
@@ -177,6 +194,7 @@ export function createGamePage({ section, i18n, storage, audio, getSettings, onN
   }
 
   function setPower(nextPower) {
+    if (physics.phase === PHYSICS_PHASES.ROLLING) return;
     power = clamp(Number(nextPower) || 0, 0, 1);
     const input = section.querySelector("#power-control");
     const output = section.querySelector("#power-value");
@@ -257,7 +275,6 @@ export function createGamePage({ section, i18n, storage, audio, getSettings, onN
     };
     saveProgress(gameState, storage);
     particles.emit({ x: 0.5, y: 0.4, count: 24, kind: "spark" });
-    audio?.playSfx("pin");
     const frameRecord = getFrameRecords(nextRolls)[context.frame - 1];
     if (frameRecord?.type === "strike") {
       showCelebration("result_strike");

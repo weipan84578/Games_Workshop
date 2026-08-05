@@ -37,3 +37,38 @@ test("documents the direct-file fallback and keeps the UI code split into named 
   assert.match(fallback, /Screen views/);
   assert.doesNotMatch(fallback, /sections\.menu\.innerHTML = '.*fb-start/s);
 });
+
+test("plays impact feedback only when physics reports a newly hit pin", async () => {
+  const gamePage = await readFile(new URL("../js/ui/gamePage.js", import.meta.url), "utf8");
+  const fallback = await readFile(new URL("../js/file-fallback.js", import.meta.url), "utf8");
+  assert.match(gamePage, /newlyHitCount/);
+  assert.match(gamePage, /audio\?\.playSfx\("pin"\)/);
+  assert.match(fallback, /function triggerImpacts\(progress\)/);
+  assert.match(fallback, /pinCollisionWindow/);
+});
+
+test("locks throw inputs while the fallback ball is rolling", async () => {
+  const gamePage = await readFile(new URL("../js/ui/gamePage.js", import.meta.url), "utf8");
+  const fallback = await readFile(new URL("../js/file-fallback.js", import.meta.url), "utf8");
+  assert.match(gamePage, /if \(physics\.phase === PHYSICS_PHASES\.ROLLING\) return;/);
+  assert.match(fallback, /function syncFallbackControls\(\)/);
+  assert.match(fallback, /activeRollDurationMs/);
+  assert.match(fallback, /var renderAngle = rolling \? activeRollAngle : angle/);
+});
+
+test("keeps the ready ball at the approach and aligns the aim guide", async () => {
+  const renderer = await readFile(new URL("../js/render/canvasRenderer.js", import.meta.url), "utf8");
+  const fallback = await readFile(new URL("../js/file-fallback.js", import.meta.url), "utf8");
+  assert.doesNotMatch(fallback, /visualProgress = 1;/);
+  assert.match(fallback, /function setPower[\s\S]*?visualProgress = 0;[\s\S]*?drawCanvas\(0\);/);
+  assert.match(fallback, /ballPathLateralScale = 0\.34/);
+  assert.match(renderer, /BALL_PATH_LATERAL_SCALE = 0\.34/);
+});
+
+test("documents the prohibited browser automation and preserves agent skills", async () => {
+  const instructions = await readFile(new URL("../AGENTS.md", import.meta.url), "utf8");
+  assert.match(instructions, /--remote-debugging-port/);
+  assert.match(instructions, /ClientWebSocket/);
+  assert.match(instructions, /Games_Workshop\/\.agents/);
+  assert.match(instructions, /Do not delete, move, replace, or/);
+});
