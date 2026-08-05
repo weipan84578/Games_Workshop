@@ -33,8 +33,11 @@ Use this structure unless the user asks for another format:
 <type>(<scope>): 🚀 <short English summary> 🎮
 
 English: <detailed change, reason, impact, and validation> ✨
+
 日本語：<変更内容、理由、影響、確認内容> 🔥
+
 正體中文：<變更內容、原因、影響、驗證結果> 🎉
+
 ```
 
 Use clear labels so the three sections are easy to scan. Keep the English section first even when the request is made in Chinese or Japanese.
