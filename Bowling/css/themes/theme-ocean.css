@@ -1,0 +1,13 @@
+[data-theme="ocean"] {
+  --color-primary: #5dc1e8;
+  --color-primary-dark: #155f79;
+  --color-secondary: #dff6ff;
+  --color-accent: #ffd972;
+  --color-accent-dark: #765507;
+  --color-text: #173d4d;
+  --color-text-muted: #476674;
+  --color-bg: #effbff;
+  --color-surface: #ffffff;
+  --color-surface-soft: #e8f8fd;
+  --lane-wood: #d8b77b;
+}

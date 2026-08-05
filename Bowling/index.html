@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#fff9fb" />
+  <title>可愛保齡球 Cute Bowling</title>
+
+  <link rel="stylesheet" href="css/base/reset.css" />
+  <link rel="stylesheet" href="css/base/variables.css" />
+  <link rel="stylesheet" href="css/base/typography.css" />
+  <link rel="stylesheet" href="css/layout/grid.css" />
+  <link rel="stylesheet" href="css/layout/responsive.css" />
+  <link rel="stylesheet" href="css/components/buttons.css" />
+  <link rel="stylesheet" href="css/components/modal.css" />
+  <link rel="stylesheet" href="css/components/hud.css" />
+  <link rel="stylesheet" href="css/components/controls.css" />
+  <link rel="stylesheet" href="css/components/loading.css" />
+  <link rel="stylesheet" href="css/pages/main-menu.css" />
+  <link rel="stylesheet" href="css/pages/game.css" />
+  <link rel="stylesheet" href="css/pages/instructions.css" />
+  <link rel="stylesheet" href="css/pages/settings.css" />
+  <link rel="stylesheet" href="css/themes/theme-cute.css" id="theme-style" />
+</head>
+<body data-theme="cute">
+  <div id="app">
+    <section id="screen-main-menu" class="screen active" aria-labelledby="main-menu-title"></section>
+    <section id="screen-game" class="screen" aria-labelledby="game-screen-title"></section>
+    <section id="screen-instructions" class="screen" aria-labelledby="instructions-screen-title"></section>
+    <section id="screen-settings" class="screen" aria-labelledby="settings-screen-title"></section>
+    <p id="live-region" class="sr-only" role="status" aria-live="polite"></p>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+  <!-- file:// fallback: browsers that block ES Module imports can still launch the game directly. -->
+  <script src="js/file-fallback.js"></script>
+</body>
+</html>

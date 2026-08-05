@@ -1,0 +1,98 @@
+.instructions-content {
+  display: grid;
+  gap: var(--spacing-lg);
+}
+
+.instruction-card {
+  display: grid;
+  gap: var(--spacing-sm);
+  padding: clamp(18px, 3vw, 28px);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-round);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.instruction-card__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-primary-dark);
+}
+
+.instruction-card__title img {
+  width: 32px;
+  height: 32px;
+}
+
+.step-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--spacing-sm);
+}
+
+.step-card {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  padding: 14px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+}
+
+.step-card__number {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--color-secondary);
+  font-weight: 800;
+}
+
+.rule-list,
+.tip-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rule-list li,
+.tip-list li {
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+}
+
+.control-comparison {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-soft);
+}
+
+.control-comparison th,
+.control-comparison td {
+  padding: 10px;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.control-comparison th {
+  background: var(--color-secondary);
+}
+
+@media (max-width: 600px) {
+  .step-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .control-comparison {
+    display: block;
+    overflow-x: auto;
+  }
+}

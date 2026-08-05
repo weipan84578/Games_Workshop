@@ -1,0 +1,12 @@
+[data-theme="forest"] {
+  --color-primary: #7fc97f;
+  --color-primary-dark: #2d6a36;
+  --color-secondary: #eaf7e5;
+  --color-accent: #ffb84c;
+  --color-accent-dark: #704400;
+  --color-text: #25422b;
+  --color-text-muted: #55715a;
+  --color-bg: #f4fbf0;
+  --color-surface: #ffffff;
+  --color-surface-soft: #edf8e9;
+}

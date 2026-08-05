@@ -1,0 +1,10 @@
+{
+  "name": "cute-bowling",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A zero-build, offline-friendly cute bowling game.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test"
+  }
+}

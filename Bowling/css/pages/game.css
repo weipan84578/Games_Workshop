@@ -1,0 +1,216 @@
+#screen-game {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 100svh;
+  padding: max(10px, env(safe-area-inset-top)) 12px var(--safe-bottom);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--color-accent) 32%, var(--color-bg)), var(--color-bg));
+}
+
+#screen-game.active {
+  display: flex;
+}
+
+.game-screen-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.game-stage-wrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 1;
+  min-height: 0;
+  width: min(100%, 1100px);
+  margin: 0 auto;
+}
+
+.game-canvas {
+  display: block;
+  width: min(94vw, 1080px);
+  height: min(70svh, 720px);
+  min-height: 260px;
+  border: 4px solid var(--color-primary-dark);
+  border-radius: 28px;
+  background: #b8e8fc;
+  box-shadow: 0 12px 0 rgba(74, 59, 74, 0.14), 0 20px 40px rgba(74, 59, 74, 0.16);
+  touch-action: none;
+}
+
+.game-status {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  max-width: 80%;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: 800;
+  text-align: center;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.game-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: min(100%, 1060px);
+  margin: 0 auto;
+}
+
+.game-topbar .hud {
+  flex: 1;
+}
+
+.game-topbar__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.game-scoreboard-wrap {
+  width: min(100%, 1060px);
+  margin: 0 auto;
+}
+
+.celebration {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 4;
+  padding: 12px 22px;
+  border: 3px solid var(--color-primary-dark);
+  border-radius: 999px;
+  background: var(--color-secondary);
+  box-shadow: var(--shadow-cute);
+  color: var(--color-text);
+  font-size: clamp(24px, 5vw, 44px);
+  font-weight: 800;
+  transform: translate(-50%, -50%) scale(0.7);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.celebration.is-visible {
+  animation: celebration-pop 900ms ease forwards;
+}
+
+.game-over-panel {
+  display: none;
+  position: absolute;
+  right: 18px;
+  bottom: 18px;
+  left: 18px;
+  z-index: 5;
+  padding: 12px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.88);
+  text-align: center;
+}
+
+.game-over-panel.is-visible {
+  display: grid;
+  gap: 8px;
+}
+
+@keyframes celebration-pop {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.7) rotate(-8deg);
+  }
+
+  25% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.12) rotate(4deg);
+  }
+
+  75% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) rotate(-2deg);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.96) rotate(0);
+  }
+}
+
+@media (max-width: 480px) {
+  #screen-game {
+    overflow: hidden;
+  }
+
+  .game-canvas {
+    width: 96vw;
+    height: min(61svh, 560px);
+    min-height: 230px;
+  }
+
+  .game-stage-wrap {
+    margin-bottom: 104px;
+  }
+
+  .control-dock {
+    position: fixed;
+    right: 10px;
+    bottom: var(--safe-bottom);
+    left: 10px;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 9px;
+    border-radius: 18px;
+  }
+
+  .control-dock .control-group {
+    min-width: 0;
+  }
+
+  .control-dock .control-group:first-child {
+    grid-column: 1;
+  }
+
+  .control-dock .control-group:nth-child(2) {
+    grid-column: 2;
+  }
+
+  .control-dock .launch-button {
+    grid-column: 1 / -1;
+    min-height: 48px;
+  }
+
+  .touch-hint {
+    display: none;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) and (orientation: landscape) {
+  #screen-game {
+    overflow: hidden;
+  }
+
+  .game-canvas {
+    width: min(90vw, 900px);
+    height: 67svh;
+  }
+
+  .control-dock {
+    position: fixed;
+    right: 10px;
+    bottom: var(--safe-bottom);
+    left: 10px;
+    grid-template-columns: 1fr 1fr auto;
+    width: auto;
+    padding: 8px 12px;
+  }
+
+  .touch-hint {
+    display: none;
+  }
+}

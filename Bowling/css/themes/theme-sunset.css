@@ -1,0 +1,12 @@
+[data-theme="sunset"] {
+  --color-primary: #ff9e6d;
+  --color-primary-dark: #8c3d24;
+  --color-secondary: #ffe3c2;
+  --color-accent: #7c4dff;
+  --color-accent-dark: #3e207f;
+  --color-text: #4c2c2a;
+  --color-text-muted: #735654;
+  --color-bg: #fff5ed;
+  --color-surface: #ffffff;
+  --color-surface-soft: #fff0e5;
+}

@@ -1,0 +1,13 @@
+:root,
+[data-theme="cute"] {
+  --color-primary: #ffb6d9;
+  --color-primary-dark: #8f4168;
+  --color-secondary: #fff3b0;
+  --color-accent: #b8e8fc;
+  --color-accent-dark: #17637e;
+  --color-text: #4a3b4a;
+  --color-text-muted: #6f6070;
+  --color-bg: #fff9fb;
+  --color-surface: #ffffff;
+  --color-surface-soft: #fff1f7;
+}

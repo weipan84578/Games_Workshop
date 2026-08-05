@@ -1,0 +1,21 @@
+[data-theme="night"] {
+  color-scheme: dark;
+  --color-primary: #ffd76a;
+  --color-primary-dark: #7e6414;
+  --color-secondary: #4e4a75;
+  --color-accent: #ffd76a;
+  --color-accent-dark: #ffeaa4;
+  --color-text: #f8f5ff;
+  --color-text-muted: #d0cceb;
+  --color-text-inverse: #2e2a4a;
+  --color-bg: #2e2a4a;
+  --color-surface: #413b64;
+  --color-surface-soft: #4e4a75;
+  --color-border: rgba(255, 255, 255, 0.22);
+  --shadow-cute: 0 6px 0 rgba(0, 0, 0, 0.3);
+  --shadow-soft: 0 12px 32px rgba(0, 0, 0, 0.24);
+}
+
+[data-theme="night"] .game-canvas {
+  border-color: #ffd76a;
+}
