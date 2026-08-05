@@ -33,6 +33,16 @@ i18n.setLanguage(savedSettings.language);
 audio.setBgmVolume(savedSettings.bgmVolume);
 audio.setSfxVolume(savedSettings.sfxVolume);
 
+// Prime Web Audio from a real user gesture. This avoids autoplay blocking while
+// keeping the game silent until the player interacts with the page.
+function primeAudio() {
+  audio.unlock();
+  audio.playBgm();
+}
+
+document.addEventListener("pointerdown", primeAudio, { capture: true, passive: true });
+document.addEventListener("keydown", primeAudio, { capture: true });
+
 let settingsReturnTo = SCREENS.MENU;
 
 function navigate(screen, payload = {}) {

@@ -26,7 +26,8 @@ function createMelodyBuffer(context, trackIndex) {
     const noteTime = time % noteLength;
     const envelope = Math.min(1, noteTime * 30) * Math.min(1, (noteLength - noteTime) * 4);
     const frequency = notes[noteIndex];
-    channel[i] = (Math.sin(time * frequency * Math.PI * 2) * 0.08 + Math.sin(time * frequency * 2 * Math.PI * 2) * 0.025) * envelope;
+    // Keep the melody synthesized so the game remains completely offline.
+    channel[i] = (Math.sin(time * frequency * Math.PI * 2) * 0.13 + Math.sin(time * frequency * 2 * Math.PI * 2) * 0.04) * envelope;
   }
   return buffer;
 }
@@ -42,6 +43,8 @@ export function createAudioManager({ audioContextFactory } = {}) {
   let inGame = false;
   let trackIndex = 0;
   let currentScreen = null;
+  let bgmWanted = false;
+  let bgmStartPromise = null;
 
   function ensureContext() {
     if (context) return context;
@@ -66,12 +69,20 @@ export function createAudioManager({ audioContextFactory } = {}) {
 
   async function unlock() {
     const audioContext = ensureContext();
-    if (!audioContext) return false;
-    if (audioContext.state === "suspended") await audioContext.resume();
-    return true;
+    if (!audioContext) return null;
+    if (audioContext.state === "suspended") {
+      try {
+        await audioContext.resume();
+      } catch {
+        // Browsers can reject autoplay before the first user gesture.
+        return null;
+      }
+    }
+    return audioContext;
   }
 
   function stopBgm() {
+    bgmWanted = false;
     if (!source) return;
     try {
       source.stop();
@@ -83,19 +94,32 @@ export function createAudioManager({ audioContextFactory } = {}) {
   }
 
   async function playBgm() {
-    const audioContext = await unlock();
-    if (!audioContext || source) return Boolean(audioContext);
-    const bufferSource = audioContext.createBufferSource();
-    bufferSource.buffer = createMelodyBuffer(audioContext, trackIndex);
-    bufferSource.loop = true;
-    bufferSource.connect(bgmGain);
-    bufferSource.start();
-    bufferSource.onended = () => {
-      if (source === bufferSource) source = null;
-    };
-    source = bufferSource;
-    trackIndex = (trackIndex + 1) % SOUND_LIBRARY.bgm.length;
-    return true;
+    bgmWanted = true;
+    if (source) return true;
+    if (bgmStartPromise) return bgmStartPromise;
+
+    // Serialise starts so a menu transition cannot create two overlapping tracks.
+    bgmStartPromise = (async () => {
+      const audioContext = await unlock();
+      if (!audioContext || !bgmWanted || source) return false;
+      const bufferSource = audioContext.createBufferSource();
+      bufferSource.buffer = createMelodyBuffer(audioContext, trackIndex);
+      bufferSource.loop = true;
+      bufferSource.connect(bgmGain);
+      bufferSource.start();
+      bufferSource.onended = () => {
+        if (source === bufferSource) source = null;
+      };
+      source = bufferSource;
+      trackIndex = (trackIndex + 1) % SOUND_LIBRARY.bgm.length;
+      return true;
+    })()
+      .catch(() => false)
+      .finally(() => {
+        bgmStartPromise = null;
+      });
+
+    return bgmStartPromise;
   }
 
   function setScreen(screen) {
@@ -117,7 +141,13 @@ export function createAudioManager({ audioContextFactory } = {}) {
 
   async function playSfx(name) {
     const definition = SOUND_LIBRARY.sfx[name];
-    const audioContext = await unlock();
+    if (!definition) return false;
+    let audioContext;
+    try {
+      audioContext = await unlock();
+    } catch {
+      return false;
+    }
     if (!definition || !audioContext) return false;
     const oscillator = audioContext.createOscillator();
     const gain = audioContext.createGain();

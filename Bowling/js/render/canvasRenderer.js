@@ -1,5 +1,14 @@
-import { PIN_LAYOUT } from "../utils/constants.js";
 import { clamp, lerp } from "../utils/helpers.js";
+
+const SCENE_IMAGE_PATH = "assets/images/backgrounds/bowling-alley-realistic.png";
+
+const BALL_PALETTES = Object.freeze({
+  cute: ["#ffbedb", "#ec4f91", "#8d2459"],
+  ocean: ["#a8f2ff", "#168fa8", "#074b6b"],
+  sunset: ["#ffd0a8", "#ee674e", "#8e2e3a"],
+  forest: ["#d1f6bf", "#429b67", "#19513d"],
+  night: ["#d9d1ff", "#7867de", "#292257"],
+});
 
 function roundedRect(context, x, y, width, height, radius) {
   const r = Math.min(radius, width / 2, height / 2);
@@ -12,106 +21,178 @@ function roundedRect(context, x, y, width, height, radius) {
   context.closePath();
 }
 
+/**
+ * Draws the playable lane on a responsive canvas.
+ * Static scenery is cached once, while the ball, pins and aim guide are drawn
+ * every frame so the generated bowling-alley image never affects animation.
+ */
 export function createCanvasRenderer(canvas) {
   const context = canvas?.getContext?.("2d");
   const documentRef = canvas?.ownerDocument || (typeof document === "undefined" ? null : document);
   const cacheCanvas = documentRef?.createElement?.("canvas") || null;
   const cacheContext = cacheCanvas?.getContext?.("2d") || null;
+  const sceneImage = documentRef?.createElement?.("img") || null;
+
   let width = 900;
   let height = 560;
   let pixelRatio = 1;
+  let sceneLoaded = false;
 
-  function laneBounds(y) {
-    const top = { left: width * 0.38, right: width * 0.62 };
-    const bottom = { left: width * 0.13, right: width * 0.87 };
-    const amount = clamp(y, 0, 1);
-    return { left: lerp(top.left, bottom.left, amount), right: lerp(top.right, bottom.right, amount) };
+  if (sceneImage) {
+    sceneImage.alt = "";
+    sceneImage.decoding = "async";
+    sceneImage.addEventListener("load", () => {
+      sceneLoaded = true;
+      rebuildCache();
+    });
+    sceneImage.src = SCENE_IMAGE_PATH;
   }
 
-  function toScreen(position) {
-    const y = height * (0.18 + clamp(position.y, 0, 1) * 0.75);
-    const bounds = laneBounds(clamp(position.y, 0, 1));
-    return { x: lerp(bounds.left, bounds.right, clamp(position.x, 0, 1)), y, scale: lerp(0.46, 1.05, clamp(position.y, 0, 1)) };
+  // The centre of the generated image is the active lane. These normalized
+  // bounds keep the same perspective on desktop, tablet and mobile layouts.
+  function laneBounds(depth) {
+    const amount = clamp(depth, 0, 1);
+    return {
+      left: lerp(width * 0.405, width * 0.21, amount),
+      right: lerp(width * 0.595, width * 0.79, amount),
+    };
   }
 
-  function drawBackground(target) {
-    const sky = target.createLinearGradient(0, 0, 0, height);
-    sky.addColorStop(0, "#b8e8fc");
-    sky.addColorStop(0.48, "#e8f8ff");
-    sky.addColorStop(0.49, "#c69477");
-    sky.addColorStop(1, "#7b4e42");
-    target.fillStyle = sky;
-    target.fillRect(0, 0, width, height);
+  function toScreen(position = { x: 0.5, y: 0.9 }) {
+    const depth = clamp(position.y, 0, 1);
+    const y = height * (0.2 + depth * 0.72);
+    const bounds = laneBounds(depth);
+    return {
+      x: lerp(bounds.left, bounds.right, clamp(position.x, 0, 1)),
+      y,
+      scale: lerp(0.42, 1.08, depth),
+    };
+  }
 
-    target.fillStyle = "rgba(255,255,255,0.78)";
-    for (let index = 0; index < 6; index += 1) {
-      const x = width * (0.08 + index * 0.18);
-      const y = height * (0.11 + (index % 2) * 0.04);
-      target.beginPath();
-      target.arc(x, y, 22, 0, Math.PI * 2);
-      target.arc(x + 25, y + 4, 28, 0, Math.PI * 2);
-      target.arc(x + 53, y, 19, 0, Math.PI * 2);
-      target.fill();
+  function drawCoverImage(target, image) {
+    const imageRatio = image.naturalWidth / image.naturalHeight;
+    const canvasRatio = width / height;
+    let sourceX = 0;
+    let sourceY = 0;
+    let sourceWidth = image.naturalWidth;
+    let sourceHeight = image.naturalHeight;
+
+    if (imageRatio > canvasRatio) {
+      sourceWidth = image.naturalHeight * canvasRatio;
+      sourceX = (image.naturalWidth - sourceWidth) / 2;
+    } else if (imageRatio < canvasRatio) {
+      sourceHeight = image.naturalWidth / canvasRatio;
+      sourceY = (image.naturalHeight - sourceHeight) / 2;
     }
 
-    target.fillStyle = "rgba(74,59,74,0.36)";
-    for (let index = 0; index < 28; index += 1) {
-      const x = (index / 28) * width;
-      const y = height * (0.42 + (index % 3) * 0.015);
-      target.beginPath();
-      target.arc(x, y, 8 + (index % 4), Math.PI, 0);
-      target.fill();
+    target.drawImage(image, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, width, height);
+  }
+
+  function drawProceduralFallback(target) {
+    // This fallback keeps the game usable if the image is still loading or
+    // unavailable in an offline browser.
+    const backdrop = target.createLinearGradient(0, 0, 0, height);
+    backdrop.addColorStop(0, "#071321");
+    backdrop.addColorStop(0.48, "#153d52");
+    backdrop.addColorStop(0.49, "#5d3b2c");
+    backdrop.addColorStop(1, "#1b1118");
+    target.fillStyle = backdrop;
+    target.fillRect(0, 0, width, height);
+
+    target.fillStyle = "rgba(18, 104, 128, 0.35)";
+    for (let index = 0; index < 8; index += 1) {
+      target.fillRect(width * (0.04 + index * 0.13), height * 0.16, width * 0.045, height * 0.28);
     }
 
     const lane = laneBounds(0);
     const laneEnd = laneBounds(1);
-    const laneGradient = target.createLinearGradient(0, height * 0.18, 0, height * 0.96);
-    laneGradient.addColorStop(0, "#fff0c7");
-    laneGradient.addColorStop(0.45, "#eecb9e");
-    laneGradient.addColorStop(1, "#d79a68");
-    target.fillStyle = laneGradient;
+    const wood = target.createLinearGradient(0, height * 0.2, 0, height);
+    wood.addColorStop(0, "#d7a15e");
+    wood.addColorStop(0.45, "#e9bd78");
+    wood.addColorStop(1, "#8f5636");
+    target.fillStyle = wood;
     target.beginPath();
-    target.moveTo(lane.left, height * 0.18);
-    target.lineTo(lane.right, height * 0.18);
-    target.lineTo(laneEnd.right, height * 0.96);
-    target.lineTo(laneEnd.left, height * 0.96);
+    target.moveTo(lane.left, height * 0.2);
+    target.lineTo(lane.right, height * 0.2);
+    target.lineTo(laneEnd.right, height * 0.98);
+    target.lineTo(laneEnd.left, height * 0.98);
+    target.closePath();
+    target.fill();
+  }
+
+  function drawLaneDetails(target) {
+    const nearLane = laneBounds(1);
+    const farLane = laneBounds(0);
+
+    // A translucent glaze links the generated image to the live game objects.
+    target.fillStyle = "rgba(255, 191, 88, 0.08)";
+    target.beginPath();
+    target.moveTo(farLane.left, height * 0.2);
+    target.lineTo(farLane.right, height * 0.2);
+    target.lineTo(nearLane.right, height * 0.98);
+    target.lineTo(nearLane.left, height * 0.98);
     target.closePath();
     target.fill();
 
+    // Real lane boards and approach dots make the perspective readable.
     target.save();
-    target.globalAlpha = 0.18;
-    target.strokeStyle = "#8d4d38";
-    target.lineWidth = 2;
-    for (let index = 0; index < 11; index += 1) {
-      const amount = index / 10;
-      const topX = lerp(lane.left, lane.right, amount);
-      const bottomX = lerp(laneEnd.left, laneEnd.right, amount);
+    target.globalAlpha = 0.22;
+    target.strokeStyle = "#fff1c7";
+    target.lineWidth = Math.max(1, width * 0.0015);
+    for (let index = 1; index < 15; index += 1) {
+      const amount = index / 15;
       target.beginPath();
-      target.moveTo(topX, height * 0.18);
-      target.lineTo(bottomX, height * 0.96);
+      target.moveTo(lerp(farLane.left, farLane.right, amount), height * 0.2);
+      target.lineTo(lerp(nearLane.left, nearLane.right, amount), height * 0.98);
       target.stroke();
     }
     target.restore();
 
-    const foulY = height * 0.77;
-    target.strokeStyle = "#d53d59";
-    target.lineWidth = 5;
+    const foulDepth = 0.78;
+    const foulBounds = laneBounds(foulDepth);
+    target.strokeStyle = "#e85b63";
+    target.lineWidth = Math.max(2, width * 0.004);
     target.beginPath();
-    target.moveTo(laneBounds(0.79).left, foulY);
-    target.lineTo(laneBounds(0.79).right, foulY);
+    target.moveTo(foulBounds.left, height * (0.2 + foulDepth * 0.72));
+    target.lineTo(foulBounds.right, height * (0.2 + foulDepth * 0.72));
     target.stroke();
 
-    target.fillStyle = "rgba(255,255,255,0.32)";
-    for (let index = 0; index < 5; index += 1) {
-      const x = width * (0.42 + index * 0.04);
-      roundedRect(target, x, height * 0.43, 18, 5, 3);
+    // Lane targeting arrows: useful for play, subtle enough to preserve realism.
+    target.fillStyle = "rgba(255, 246, 211, 0.72)";
+    for (let index = -2; index <= 2; index += 1) {
+      const depth = 0.52;
+      const bounds = laneBounds(depth);
+      const x = width / 2 + index * width * 0.035;
+      const y = height * (0.2 + depth * 0.72);
+      target.beginPath();
+      target.moveTo(x, y + 10);
+      target.lineTo(x - 6, y - 5);
+      target.lineTo(x + 6, y - 5);
+      target.closePath();
       target.fill();
+      if (x < bounds.left || x > bounds.right) target.globalAlpha = 0.35;
     }
+    target.globalAlpha = 1;
 
-    target.fillStyle = "rgba(74,59,74,0.18)";
-    target.beginPath();
-    target.ellipse(width / 2, height * 0.97, width * 0.36, height * 0.025, 0, 0, Math.PI * 2);
-    target.fill();
+    // A soft vignette hides the image crop edges on narrow screens.
+    const vignette = target.createRadialGradient(width / 2, height * 0.56, height * 0.1, width / 2, height * 0.56, width * 0.76);
+    vignette.addColorStop(0, "rgba(0, 0, 0, 0)");
+    vignette.addColorStop(1, "rgba(3, 10, 20, 0.38)");
+    target.fillStyle = vignette;
+    target.fillRect(0, 0, width, height);
+  }
+
+  function drawBackground(target) {
+    if (sceneLoaded && sceneImage?.naturalWidth) drawCoverImage(target, sceneImage);
+    else drawProceduralFallback(target);
+    drawLaneDetails(target);
+  }
+
+  function rebuildCache() {
+    if (!cacheCanvas || !cacheContext) return;
+    cacheContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+    cacheContext.clearRect(0, 0, width, height);
+    drawBackground(cacheContext);
   }
 
   function resize() {
@@ -125,78 +206,140 @@ export function createCanvasRenderer(canvas) {
     if (cacheCanvas && cacheContext) {
       cacheCanvas.width = canvas.width;
       cacheCanvas.height = canvas.height;
-      cacheContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-      cacheContext.clearRect(0, 0, width, height);
-      drawBackground(cacheContext);
     }
+    rebuildCache();
     return { width, height, pixelRatio };
+  }
+
+  function drawPinShape(target, size) {
+    target.beginPath();
+    target.moveTo(0, -size * 0.82);
+    target.bezierCurveTo(size * 0.2, -size * 0.84, size * 0.24, -size * 0.59, size * 0.18, -size * 0.42);
+    target.bezierCurveTo(size * 0.15, -size * 0.29, size * 0.42, -size * 0.18, size * 0.47, size * 0.2);
+    target.bezierCurveTo(size * 0.52, size * 0.57, size * 0.3, size * 0.78, 0, size * 0.82);
+    target.bezierCurveTo(-size * 0.3, size * 0.78, -size * 0.52, size * 0.57, -size * 0.47, size * 0.2);
+    target.bezierCurveTo(-size * 0.42, -size * 0.18, -size * 0.15, -size * 0.29, -size * 0.18, -size * 0.42);
+    target.bezierCurveTo(-size * 0.24, -size * 0.59, -size * 0.2, -size * 0.84, 0, -size * 0.82);
+    target.closePath();
   }
 
   function drawPin(target, pin) {
     const screen = toScreen(pin);
-    const size = 32 * screen.scale;
+    const size = 28 * screen.scale;
+    const fall = pin.fallProgress || 0;
     target.save();
-    target.translate(screen.x + pin.drift * width, screen.y + pin.fallProgress * 18 * screen.scale);
+    target.translate(screen.x + (pin.drift || 0) * width, screen.y + fall * size * 0.9);
     target.rotate(pin.rotation || 0);
-    target.globalAlpha = 1 - pin.fallProgress * 0.08;
-    target.fillStyle = "rgba(74,59,74,0.2)";
+    target.globalAlpha = 1 - fall * 0.12;
+
+    target.fillStyle = "rgba(0, 0, 0, 0.38)";
     target.beginPath();
-    target.ellipse(0, size * 0.55, size * 0.55, size * 0.16, 0, 0, Math.PI * 2);
+    target.ellipse(0, size * 0.82, size * 0.55, size * 0.16, 0, 0, Math.PI * 2);
     target.fill();
-    target.fillStyle = "#fffaf4";
+
+    const body = target.createLinearGradient(-size, 0, size, 0);
+    body.addColorStop(0, "#b9c8cc");
+    body.addColorStop(0.22, "#ffffff");
+    body.addColorStop(0.64, "#fffdf8");
+    body.addColorStop(1, "#9eabb3");
+    drawPinShape(target, size);
+    target.fillStyle = body;
+    target.fill();
+
+    // Clip the red neck bands to the curved pin body.
+    target.save();
+    drawPinShape(target, size);
+    target.clip();
+    target.fillStyle = "#d93443";
+    target.fillRect(-size * 0.3, -size * 0.48, size * 0.6, size * 0.1);
+    target.fillRect(-size * 0.28, -size * 0.33, size * 0.56, size * 0.085);
+    target.restore();
+
+    target.fillStyle = "rgba(255, 255, 255, 0.8)";
     target.beginPath();
-    target.ellipse(0, 0, size * 0.42, size * 0.68, 0, 0, Math.PI * 2);
-    target.fill();
-    target.fillStyle = "#ee5e75";
-    roundedRect(target, -size * 0.28, -size * 0.2, size * 0.56, size * 0.16, size * 0.05);
-    target.fill();
-    target.fillStyle = "#30303d";
-    target.beginPath();
-    target.arc(-size * 0.13, -size * 0.38, size * 0.045, 0, Math.PI * 2);
-    target.arc(size * 0.13, -size * 0.38, size * 0.045, 0, Math.PI * 2);
+    target.ellipse(-size * 0.18, -size * 0.56, size * 0.08, size * 0.16, -0.4, 0, Math.PI * 2);
     target.fill();
     target.restore();
   }
 
+  function getBallPalette() {
+    const theme = documentRef?.body?.dataset?.theme || "cute";
+    return BALL_PALETTES[theme] || BALL_PALETTES.cute;
+  }
+
   function drawBall(target, ball) {
     const screen = toScreen(ball);
-    const radius = Math.max(10, width * 0.035 * screen.scale);
+    const radius = Math.max(10, width * 0.032 * screen.scale);
+    const palette = getBallPalette();
+
     if (ball.trail?.length > 1) {
       target.save();
       target.lineCap = "round";
       ball.trail.forEach((point, index) => {
         const trailPoint = toScreen(point);
         target.globalAlpha = (index / ball.trail.length) * 0.18;
-        target.fillStyle = "#ffffff";
+        target.fillStyle = palette[1];
         target.beginPath();
-        target.arc(trailPoint.x, trailPoint.y, radius * 0.5, 0, Math.PI * 2);
+        target.arc(trailPoint.x, trailPoint.y, radius * 0.45, 0, Math.PI * 2);
         target.fill();
       });
       target.restore();
     }
+
     target.save();
     target.translate(screen.x, screen.y);
     target.rotate(ball.rotation || 0);
-    target.fillStyle = "rgba(74,59,74,0.22)";
+    target.fillStyle = "rgba(0, 0, 0, 0.45)";
     target.beginPath();
-    target.ellipse(0, radius * 0.72, radius * 1.1, radius * 0.32, 0, 0, Math.PI * 2);
+    target.ellipse(0, radius * 0.84, radius * 1.16, radius * 0.3, 0, 0, Math.PI * 2);
     target.fill();
-    const gradient = target.createRadialGradient(-radius * 0.35, -radius * 0.4, radius * 0.1, 0, 0, radius);
-    gradient.addColorStop(0, "#ffecf7");
-    gradient.addColorStop(0.25, "#ff72ae");
-    gradient.addColorStop(1, "#c32d72");
-    target.fillStyle = gradient;
+
+    const ballGradient = target.createRadialGradient(-radius * 0.4, -radius * 0.5, radius * 0.08, 0, 0, radius * 1.05);
+    ballGradient.addColorStop(0, palette[0]);
+    ballGradient.addColorStop(0.28, palette[1]);
+    ballGradient.addColorStop(1, palette[2]);
+    target.fillStyle = ballGradient;
     target.beginPath();
     target.arc(0, 0, radius, 0, Math.PI * 2);
     target.fill();
-    target.fillStyle = "rgba(255,255,255,0.75)";
+
+    // Three small finger holes sell the ball as a real bowling ball.
+    target.fillStyle = "rgba(8, 11, 25, 0.48)";
+    [-0.22, 0, 0.22].forEach((offset, index) => {
+      target.beginPath();
+      target.arc(offset * radius * 2.1, -radius * (0.18 + (index === 1 ? 0.12 : 0)), radius * 0.1, 0, Math.PI * 2);
+      target.fill();
+    });
+    target.fillStyle = "rgba(255, 255, 255, 0.78)";
     target.beginPath();
-    target.arc(-radius * 0.35, -radius * 0.38, radius * 0.18, 0, Math.PI * 2);
+    target.ellipse(-radius * 0.4, -radius * 0.47, radius * 0.16, radius * 0.3, -0.4, 0, Math.PI * 2);
     target.fill();
     target.restore();
   }
 
-  function render(physicsState, { particles, camera } = {}) {
+  function drawAimGuide(target, aim = {}) {
+    const safeAngle = clamp(Number(aim.angle) || 0, -1, 1);
+    const safePower = clamp(Number(aim.power) || 0, 0, 1);
+    const start = toScreen({ x: 0.5, y: 0.9 });
+    const end = toScreen({ x: 0.5 + safeAngle * 0.7, y: 0.2 });
+    target.save();
+    target.strokeStyle = "rgba(255, 237, 170, 0.72)";
+    target.lineWidth = Math.max(2, width * 0.0025);
+    target.setLineDash([8, 10]);
+    target.beginPath();
+    target.moveTo(start.x, start.y - 6);
+    target.lineTo(end.x, end.y + 8);
+    target.stroke();
+    target.setLineDash([]);
+    target.strokeStyle = "rgba(255, 255, 255, 0.9)";
+    target.lineWidth = 3;
+    target.beginPath();
+    target.arc(start.x, start.y, 13 + safePower * 8, 0, Math.PI * 2);
+    target.stroke();
+    target.restore();
+  }
+
+  function render(physicsState, { particles, camera, aim } = {}) {
     if (!context || !canvas) return;
     context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
     context.clearRect(0, 0, width, height);
@@ -208,6 +351,7 @@ export function createCanvasRenderer(canvas) {
     context.translate(width * transform.offsetX, height * transform.offsetY);
     context.scale(transform.zoom, transform.zoom);
     context.translate(width * (1 - transform.zoom) / (2 * transform.zoom), height * (1 - transform.zoom) / (2 * transform.zoom));
+    if (physicsState.phase === "ready") drawAimGuide(context, aim);
     physicsState.pins?.forEach((pin) => drawPin(context, pin));
     drawBall(context, physicsState.ball || { x: 0.5, y: 0.9 });
     context.restore();

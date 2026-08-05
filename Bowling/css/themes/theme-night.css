@@ -19,3 +19,52 @@
 [data-theme="night"] .game-canvas {
   border-color: #ffd76a;
 }
+
+/* Night mode keeps every action readable against the deep purple background. */
+[data-theme="night"] .cute-button {
+  border-color: #ffe39a;
+  color: #251a35;
+}
+
+[data-theme="night"] .cute-button--secondary {
+  border-color: #ffe0ad;
+  background: #ffad62;
+  color: #26182e;
+}
+
+[data-theme="night"] .cute-button--soft,
+[data-theme="night"] .icon-button {
+  border-color: #aaa3e5;
+  background: #70689c;
+  box-shadow: 0 5px 0 rgba(9, 7, 22, 0.42);
+  color: #ffffff;
+}
+
+[data-theme="night"] .cute-button--soft:hover,
+[data-theme="night"] .icon-button:hover {
+  background: #827ab4;
+}
+
+[data-theme="night"] .cute-button:disabled {
+  border-color: #8d86b7;
+  background: #514a75;
+  color: #ded9f8;
+  opacity: 0.92;
+}
+
+[data-theme="night"] .game-logo__eyebrow,
+[data-theme="night"] .continue-hint {
+  color: #ffe28b;
+}
+
+[data-theme="night"] .game-status {
+  border: 1px solid rgba(255, 226, 139, 0.7);
+  background: rgba(18, 15, 35, 0.9);
+  color: #ffffff;
+}
+
+[data-theme="night"] .modal-card {
+  border-color: #ffe28b;
+  background: #373052;
+  color: #ffffff;
+}

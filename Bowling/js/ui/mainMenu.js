@@ -1,6 +1,5 @@
 import { createInitialGameState } from "../utils/constants.js";
-import { hasSavedProgress, loadProgress, loadSettings, saveSettings, SAVE_KEY } from "../utils/storage.js";
-import { announce } from "../utils/helpers.js";
+import { hasSavedProgress, loadProgress, loadSettings, SAVE_KEY } from "../utils/storage.js";
 
 export function createMainMenu({ section, i18n, storage, audio, onStart, onContinue, onNavigate } = {}) {
   let isMounted = false;
@@ -17,14 +16,6 @@ export function createMainMenu({ section, i18n, storage, audio, onStart, onConti
     }
     section.innerHTML = `
       <div class="main-menu-shell">
-        <div class="quick-language">
-          <img src="assets/images/icons/icon-language.svg" alt="" aria-hidden="true" />
-          <select id="quick-language" data-i18n-aria-label="quick_language">
-            <option value="zh" data-i18n="lang_zh"></option>
-            <option value="en" data-i18n="lang_en"></option>
-            <option value="ja" data-i18n="lang_ja"></option>
-          </select>
-        </div>
         <div class="mascot-stage" aria-hidden="true">
           <img class="mascot-bobo" src="assets/images/characters/mascot-bobo.svg" alt="" />
           <img class="mascot-pingping" src="assets/images/characters/mascot-pingping.svg" alt="" />
@@ -58,8 +49,6 @@ export function createMainMenu({ section, i18n, storage, audio, onStart, onConti
       </div>`;
 
     i18n.applyTranslations(section);
-    const languageSelect = section.querySelector("#quick-language");
-    languageSelect.value = i18n.getLanguage();
     section.querySelector("#continue-hint").textContent = hasProgress ? "" : t(hasInvalidProgress ? "save_invalid" : "no_progress");
 
     section.querySelector("#menu-start").addEventListener("click", () => {
@@ -80,11 +69,6 @@ export function createMainMenu({ section, i18n, storage, audio, onStart, onConti
     section.querySelector("#menu-settings").addEventListener("click", () => {
       audio?.playSfx("button");
       onNavigate?.("settings", { returnTo: "main-menu" });
-    });
-    languageSelect.addEventListener("change", (event) => {
-      i18n.setLanguage(event.target.value);
-      saveSettings({ ...loadSettings(storage), language: event.target.value }, storage);
-      announce(t("settings_saved"));
     });
     isMounted = true;
   }

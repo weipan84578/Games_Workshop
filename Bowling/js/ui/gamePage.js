@@ -120,7 +120,7 @@ export function createGamePage({ section, i18n, storage, audio, getSettings, onN
         camera.update(delta, nextPhysics.phase === PHYSICS_PHASES.SETTLED ? 0.03 : 0);
       },
       onRender(nextPhysics) {
-        renderer.render(nextPhysics, { particles, camera });
+        renderer.render(nextPhysics, { particles, camera, aim: { angle, power } });
       },
       onSettled: handleSettled,
     });
@@ -173,6 +173,7 @@ export function createGamePage({ section, i18n, storage, audio, getSettings, onN
     const output = section.querySelector("#angle-value");
     if (input) input.value = String(Math.round(angle * 100));
     if (output) output.textContent = `${Math.round(angle * 30)}°`;
+    engine?.renderNow();
   }
 
   function setPower(nextPower) {
@@ -181,6 +182,7 @@ export function createGamePage({ section, i18n, storage, audio, getSettings, onN
     const output = section.querySelector("#power-value");
     if (input) input.value = String(Math.round(power * 100));
     if (output) output.textContent = formatPercent(power);
+    engine?.renderNow();
   }
 
   function syncControls() {
