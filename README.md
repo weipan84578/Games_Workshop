@@ -89,6 +89,7 @@
 | `Basketball_Shoot` | 投籃機     | Basketball Shoot   | バスケットボールシュート |
 | `Darts`            | 飛鏢       | Darts              | ダーツ                   |
 | `Horse_Racing`     | 賽馬王     | Horse Racing       | 競馬王                   |
+| `Bowling`          | 保齡球     | Bowling            | ボウリング               |
 
 ### 博彩與機會遊戲
 
