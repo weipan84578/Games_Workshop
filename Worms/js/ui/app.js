@@ -46,6 +46,7 @@
     this.renderer = null;
     this.tutorial = null;
     this.lastBattleConfig = null;
+    this.attackFocus = null;
     this.hiddenPaused = false;
     this.touchHolds = new Set();
     this.confirmAction = null;
@@ -305,6 +306,7 @@
   App.prototype.startBattle = function (config) {
     this.stopBattle();
     document.getElementById("pause-screen").hidden = true;
+    this.attackFocus = null;
     this.lastBattleConfig = Object.assign({}, config);
     var self = this;
     var canvas = document.getElementById("game-canvas");
@@ -354,6 +356,7 @@
     this.renderer = null;
     this.camera = null;
     this.battle = null;
+    this.attackFocus = null;
     this.touchHolds.clear();
   };
 
@@ -367,11 +370,18 @@
     if (this.touchHolds.has("aimDown")) this.battle.adjustAim(-45 * dt);
     this.battle.update(dt);
     var snapshot = this.battle.snapshot();
-    var follow =
-      snapshot.projectiles.find(function (projectile) {
-        return projectile.delay <= 0;
-      }) || snapshot.current;
-    if (follow && !this.camera.manual) this.camera.target = follow;
+    var focus = WG.Camera.chooseBattleFocus(snapshot, this.attackFocus);
+    if (focus.target) {
+      if (
+        focus.locked &&
+        ["projectile", "placed", "effect"].indexOf(focus.mode) >= 0
+      ) {
+        this.attackFocus = { x: focus.target.x, y: focus.target.y };
+      }
+      if (focus.locked) this.camera.manual = false;
+      if (focus.locked || !this.camera.manual)
+        this.camera.target = focus.target;
+    }
     this.camera.update(dt, this.storage.data.settings.reducedMotion);
   };
 
@@ -418,10 +428,18 @@
     if (this.battle.selectWeapon(weaponId)) this.hud.toggleWeapons(false);
   };
 
+  App.prototype.setAttackFocus = function (point) {
+    if (!point || !Number.isFinite(point.x) || !Number.isFinite(point.y))
+      return;
+    this.attackFocus = { x: point.x, y: point.y };
+    if (this.camera) this.camera.focus(this.attackFocus, false);
+  };
+
   App.prototype.handleBattleEvent = function (type, detail) {
     if (!this.battle) return;
     if (type === "turnStart") {
       var actor = this.battle.currentCharacter();
+      this.attackFocus = null;
       this.camera && this.camera.focus(actor, false);
       this.hud.showTurnBanner(this.battle.turn.activeTeam, actor && actor.name);
       this.audio.sfx(detail.sudden ? "sudden" : "turn");
@@ -440,7 +458,9 @@
     if (type === "weaponLocked")
       this.hud.announce(this.i18n.t("battle.weaponLocked"));
     if (type === "secondShot") this.hud.announce(this.i18n.t("battle.shotTwo"));
-    if (type === "fired")
+    if (type === "fired") {
+      if (detail.focus) this.setAttackFocus(detail.focus);
+      else if (this.camera) this.camera.manual = false;
       this.audio.sfx(
         detail.weaponId === "shotgun"
           ? "shotgun"
@@ -452,13 +472,29 @@
                 ? "sheep"
                 : "rocket",
       );
+    }
+    if (type === "teleport") this.setAttackFocus(detail.point);
     if (type === "mineArmed" || type === "holyWarning") this.audio.sfx("fuse");
-    if (type === "explosion")
+    if (type === "explosion") {
+      this.setAttackFocus({ x: detail.x, y: detail.y });
       this.audio.sfx(detail.large ? "bigExplosion" : "explosion");
+    }
     if (type === "fallDamage") this.audio.sfx("hurt");
     if (type === "landed") this.audio.sfx("land");
     if (type === "drowned") this.audio.sfx("splash");
-    if (type === "damageSummary") this.hud.showDamage(detail.events || []);
+    if (type === "fallDamage" || type === "drowned" || type === "eliminated") {
+      var affected = this.battle.characters.find(function (character) {
+        return character.id === detail.characterId;
+      });
+      if (affected) this.setAttackFocus(affected);
+    }
+    if (type === "damageSummary") {
+      this.hud.showDamage(detail.events || []);
+      if (detail.events && detail.events.length) {
+        var latestDamage = detail.events[detail.events.length - 1];
+        this.setAttackFocus(latestDamage);
+      }
+    }
     if (type === "result") {
       var result = detail;
       setTimeout(

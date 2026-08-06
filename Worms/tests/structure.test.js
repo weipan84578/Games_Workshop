@@ -49,6 +49,24 @@ test("every local HTML script, stylesheet, and image path exists", () => {
   );
 });
 
+test("panel back buttons occupy their own heading column", () => {
+  const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
+  const screens = ["setup", "stats", "settings"];
+  screens.forEach((screen) => {
+    const start = html.indexOf(`id="${screen}-screen"`);
+    const end = html.indexOf("</section>", start);
+    const section = html.slice(start, end);
+    assert.match(section, /<header class="panel-heading">/);
+    assert.match(section, /class="icon-button back"/);
+    assert.ok(
+      section.indexOf("panel-heading") < section.indexOf("<h2"),
+      screen,
+    );
+  });
+  const css = fs.readFileSync(path.join(root, "css/screens.css"), "utf8");
+  assert.match(css, /\.panel-heading \.back\s*\{[^}]*position:\s*static/s);
+});
+
 test("browser entry has no CDN, fetch, module script, or absolute resource dependency", () => {
   const files = required.filter((file) => /\.(html|js|css)$/.test(file));
   const source = files

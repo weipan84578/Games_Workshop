@@ -266,6 +266,23 @@
 .panel.compact {
   width: min(92vw, 390px);
 }
+.panel-heading {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  align-items: start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.panel-heading .back {
+  position: static;
+  flex: 0 0 48px;
+}
+.panel-heading-copy {
+  min-width: 0;
+}
+.panel .panel-heading h2 {
+  margin: 0.25rem 0 0;
+}
 .panel h2 {
   margin: 0.25rem 0 1.5rem;
   font-size: clamp(1.8rem, 5vw, 3rem);

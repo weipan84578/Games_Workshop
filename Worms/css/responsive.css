@@ -19,9 +19,6 @@
   .panel {
     padding: 1.5rem;
   }
-  .panel h2 {
-    padding-left: 2.4rem;
-  }
   .career-stats {
     grid-template-columns: 1fr 1fr;
   }

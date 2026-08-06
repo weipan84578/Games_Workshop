@@ -1,12 +1,60 @@
 (function (root, factory) {
   var api = factory();
   root.WormsGame = root.WormsGame || {};
+  root.WormsGame.Camera = api;
   root.WormsGame.CameraController = api.CameraController;
   if (typeof module === "object" && module.exports) module.exports = api;
 })(typeof window !== "undefined" ? window : globalThis, function () {
   "use strict";
   function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
+  }
+
+  var ATTACK_STATES = Object.freeze([
+    "ACTION_ACTIVE",
+    "WORLD_SETTLING",
+    "DAMAGE_SUMMARY",
+  ]);
+
+  /**
+   * Choose the camera target for the current battle phase.
+   * Attack targets are locked until the turn has completely settled.
+   */
+  function chooseBattleFocus(snapshot, lastImpact) {
+    if (!snapshot) return { target: null, locked: false, mode: "none" };
+    var attackActive = ATTACK_STATES.indexOf(snapshot.turn.state) >= 0;
+    if (!attackActive) {
+      return {
+        target: snapshot.current || null,
+        locked: false,
+        mode: "character",
+      };
+    }
+
+    var projectile = snapshot.projectiles.find(function (candidate) {
+      return candidate.delay <= 0;
+    });
+    projectile = projectile || snapshot.projectiles[0];
+    if (projectile) {
+      return { target: projectile, locked: true, mode: "projectile" };
+    }
+
+    var movingWeapon = snapshot.placed.find(function (entity) {
+      return entity.type === "sheep" || entity.triggered;
+    });
+    if (movingWeapon) {
+      return { target: movingWeapon, locked: true, mode: "placed" };
+    }
+
+    var effect = snapshot.effects[snapshot.effects.length - 1];
+    if (effect) return { target: effect, locked: true, mode: "effect" };
+    if (lastImpact) return { target: lastImpact, locked: true, mode: "impact" };
+
+    return {
+      target: snapshot.current || null,
+      locked: true,
+      mode: "character",
+    };
   }
   /** Bounded world camera with coordinate conversion and optional smooth follow. */
   function CameraController(viewWidth, viewHeight) {
@@ -89,5 +137,9 @@
     context.scale(this.zoom, this.zoom);
     context.translate(-this.x, -this.y);
   };
-  return { CameraController: CameraController };
+  return {
+    ATTACK_STATES: ATTACK_STATES,
+    chooseBattleFocus: chooseBattleFocus,
+    CameraController: CameraController,
+  };
 });

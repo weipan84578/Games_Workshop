@@ -362,7 +362,7 @@
     this.projectiles.push.apply(this.projectiles, missiles);
     this.turn.markAction();
     this.actionElapsed = 0;
-    this.emit("fired", { weaponId: weaponId });
+    this.emit("fired", { weaponId: weaponId, focus: target });
     return true;
   };
 
@@ -414,7 +414,10 @@
     this.projectiles.push(projectile);
     this.turn.markAction();
     this.actionElapsed = 0;
-    this.emit("fired", { weaponId: weapon.id });
+    this.emit("fired", {
+      weaponId: weapon.id,
+      focus: { x: projectile.x, y: projectile.y },
+    });
   };
 
   GameState.prototype.applyDirectDamage = function (
@@ -446,6 +449,7 @@
   };
 
   GameState.prototype.fireShotgun = function (actor, weapon, attackId) {
+    var radians = (this.angle * Math.PI) / 180;
     var hit = WG.Weapons.raycastCharacter(
       actor,
       this.characters,
@@ -454,7 +458,6 @@
       this.terrain,
     );
     if (hit) {
-      var radians = (this.angle * Math.PI) / 180;
       this.applyDirectDamage(
         hit.target,
         weapon.maxDamage,
@@ -468,7 +471,16 @@
       this.carve(hit.target.x, hit.target.y, weapon.terrainRadius);
     }
     this.shotgunShots += 1;
-    this.emit("fired", { weaponId: weapon.id, hit: !!hit });
+    this.emit("fired", {
+      weaponId: weapon.id,
+      hit: !!hit,
+      focus: hit
+        ? { x: hit.target.x, y: hit.target.y }
+        : {
+            x: actor.x + Math.cos(radians) * actor.facing * weapon.range,
+            y: actor.y - Math.sin(radians) * weapon.range,
+          },
+    });
     if (this.shotgunShots < 2) {
       this.turn.state = actor.team === 0 ? "PLAYER_CONTROL" : "AI_THINKING";
       this.turn.timeLeft = Math.min(8, this.turn.timeLeft);
@@ -483,6 +495,7 @@
 
   GameState.prototype.swingBat = function (actor, weapon, attackId) {
     var hitAny = false;
+    var focus = { x: actor.x + actor.facing * weapon.range, y: actor.y };
     this.characters.forEach(function (target) {
       if (!target.alive || target.id === actor.id) return;
       var dx = target.x - actor.x;
@@ -492,6 +505,7 @@
       var angle = Math.abs((Math.atan2(-dy, Math.abs(dx)) * 180) / Math.PI);
       if (distance <= weapon.range && inFront && angle <= weapon.arc / 2) {
         hitAny = true;
+        focus = { x: target.x, y: target.y };
         this.applyDirectDamage(
           target,
           weapon.maxDamage,
@@ -503,7 +517,11 @@
     }, this);
     this.turn.markAction();
     this.enterSettling();
-    this.emit("fired", { weaponId: weapon.id, hit: hitAny });
+    this.emit("fired", {
+      weaponId: weapon.id,
+      hit: hitAny,
+      focus: focus,
+    });
   };
 
   GameState.prototype.placeWeapon = function (actor, weapon, attackId) {
@@ -528,7 +546,10 @@
     this.turn.markAction();
     this.actionElapsed = 0;
     if (weapon.id === "mine") this.enterSettling();
-    this.emit("fired", { weaponId: weapon.id });
+    this.emit("fired", {
+      weaponId: weapon.id,
+      focus: { x: entity.x, y: entity.y },
+    });
   };
 
   GameState.prototype.carve = function (x, y, radius) {
