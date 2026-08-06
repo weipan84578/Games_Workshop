@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain Worms Game"
+  short_description: "Safely evolve Wormy Boom Squad from spec to tests"
+  default_prompt: "Use $maintain-worms-game to implement and validate a focused change in Wormy Boom Squad."
