@@ -1,0 +1,301 @@
+.battle-shell {
+  overflow: hidden;
+  background: #8ed7ed;
+  touch-action: none;
+  user-select: none;
+}
+#game-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  outline: 0;
+}
+.battle-hud {
+  position: absolute;
+  z-index: 5;
+  top: max(0.65rem, env(safe-area-inset-top));
+  left: max(0.7rem, env(safe-area-inset-left));
+  right: max(0.7rem, env(safe-area-inset-right));
+  display: grid;
+  grid-template-columns: minmax(210px, 1fr) 190px minmax(210px, 1fr);
+  gap: 0.65rem;
+  pointer-events: none;
+}
+.team-card,
+.turn-card {
+  min-height: 70px;
+  padding: 0.55rem 0.7rem;
+  border: 3px solid var(--ink);
+  border-radius: 18px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 5px 0 rgba(52, 41, 79, 0.3);
+  backdrop-filter: blur(8px);
+}
+.team-title {
+  display: flex;
+  gap: 0.45rem;
+  align-items: center;
+}
+.team-title i {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--team-color, var(--pink));
+  border: 2px solid var(--ink);
+}
+.team-title strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.team-title .pattern {
+  margin-left: auto;
+  font-size: 0.6rem;
+}
+.enemy .team-title {
+  justify-content: flex-end;
+}
+.enemy .team-title .pattern {
+  margin-left: 0;
+  margin-right: auto;
+}
+.roster {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+}
+.enemy .roster {
+  justify-content: flex-end;
+}
+.worm-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+.worm-chip span {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--ink);
+  border-radius: 50% 50% 42%;
+  background: var(--worm-color);
+}
+.worm-chip b {
+  font-size: 0.65rem;
+}
+.worm-chip.dead {
+  opacity: 0.35;
+  filter: grayscale(1);
+}
+.turn-card {
+  text-align: center;
+}
+.turn-card > small {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.turn-card > b {
+  position: absolute;
+  left: 50%;
+  top: 24px;
+  translate: -50% 0;
+  font-size: 2rem;
+}
+.wind-meter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  margin-top: 0.3rem;
+  font-size: 0.7rem;
+}
+.wind-meter > div {
+  width: 75px;
+  height: 8px;
+  background: #ded5e7;
+  border-radius: 20px;
+  overflow: hidden;
+}
+.wind-meter i {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #67c8e7, #7053b4);
+  border-radius: inherit;
+}
+.turn-banner {
+  position: absolute;
+  z-index: 8;
+  left: 50%;
+  top: 23%;
+  translate: -50% 0;
+  min-width: 270px;
+  padding: 1rem 2rem;
+  text-align: center;
+  border: 4px solid var(--ink);
+  border-radius: 18px;
+  color: #fff;
+  background: linear-gradient(125deg, var(--pink), var(--grape));
+  box-shadow: 0 8px 0 var(--ink);
+  opacity: 0;
+  transform: scale(0.7) rotate(-3deg);
+  pointer-events: none;
+}
+.turn-banner.show {
+  animation: turn-banner 1.1s ease both;
+}
+.turn-banner strong {
+  display: block;
+  font-size: 1.5rem;
+}
+.turn-banner span {
+  font-size: 0.8rem;
+}
+@keyframes turn-banner {
+  20%,
+  75% {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+.weapon-bar {
+  position: absolute;
+  z-index: 7;
+  left: 50%;
+  bottom: max(0.8rem, env(safe-area-inset-bottom));
+  translate: -50% 0;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  max-width: calc(100% - 9rem);
+}
+.weapon-current {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 230px;
+  text-align: left;
+}
+.weapon-current .weapon-icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 38px;
+  place-items: center;
+}
+.weapon-current .weapon-icon img,
+.weapon-grid .weapon-art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.weapon-current small {
+  display: block;
+  color: var(--ink-soft);
+  font-size: 0.65rem;
+}
+.weapon-grid {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 0.8rem);
+  translate: -50% 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(110px, 1fr));
+  gap: 0.45rem;
+  width: min(90vw, 680px);
+  padding: 0.7rem;
+  border: 3px solid var(--ink);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 8px 0 var(--ink);
+}
+.weapon-grid button {
+  position: relative;
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  text-align: left;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem;
+  font-size: 0.68rem;
+}
+.weapon-grid button.selected {
+  background: #fff1ad;
+  border-color: var(--ink);
+}
+.weapon-grid .weapon-art {
+  width: 30px;
+  height: 30px;
+}
+.weapon-grid button small {
+  color: var(--ink-soft);
+}
+#control-hint {
+  padding: 0.55rem 0.7rem;
+  border: 2px solid rgba(52, 41, 79, 0.15);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.78);
+  font-size: 0.66rem;
+}
+.battle-tools {
+  position: absolute;
+  z-index: 7;
+  right: max(0.7rem, env(safe-area-inset-right));
+  bottom: max(0.8rem, env(safe-area-inset-bottom));
+  display: flex;
+  gap: 0.45rem;
+}
+.battle-tools button {
+  width: 48px;
+  padding: 0;
+  font-size: 1.2rem;
+}
+.damage-summary {
+  position: absolute;
+  z-index: 10;
+  left: 50%;
+  top: 32%;
+  translate: -50% 0;
+  pointer-events: none;
+}
+.damage-pop {
+  color: #fff;
+  font-size: 2rem;
+  -webkit-text-stroke: 5px var(--pink-dark);
+  paint-order: stroke fill;
+  animation: damage-pop 1.4s ease forwards;
+}
+@keyframes damage-pop {
+  to {
+    transform: translateY(-80px) scale(1.3);
+    opacity: 0;
+  }
+}
+.target-overlay {
+  position: absolute;
+  z-index: 6;
+  top: 95px;
+  left: 50%;
+  translate: -50% 0;
+  padding: 0.5rem 0.8rem;
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+  background: #fff8cd;
+  text-align: center;
+}
+.target-overlay p {
+  display: inline;
+  margin-right: 0.6rem;
+  font-size: 0.75rem;
+}
+.target-overlay button {
+  min-height: 36px;
+  padding: 0.25rem 0.6rem;
+}

@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#4f3b78" />
+    <meta name="description" content="蟲蟲轟轟隊：原創可愛風格回合制砲術遊戲" />
+    <title>蟲蟲轟轟隊 · Wormy Boom Squad</title>
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/screens.css" />
+    <link rel="stylesheet" href="css/hud.css" />
+    <link rel="stylesheet" href="css/controls.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#app">Skip to game</a>
+    <main id="app">
+      <section id="boot-screen" class="screen is-active" aria-label="Loading">
+        <div class="loader" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+        <p data-i18n="boot.loading">正在集合蟲蟲隊員…</p>
+      </section>
+
+      <section
+        id="menu-screen"
+        class="screen menu-screen"
+        aria-labelledby="game-title"
+        hidden
+      >
+        <div class="sky-decor" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="logo-lockup">
+          <div class="logo-burst" aria-hidden="true">✦</div>
+          <h1 id="game-title">
+            <span data-i18n="game.title">蟲蟲轟轟隊</span
+            ><small>Wormy Boom Squad</small>
+          </h1>
+          <p class="tagline" data-i18n="game.tagline">
+            瞄準、轟炸，笑著飛上天！
+          </p>
+        </div>
+        <div class="menu-mascots" aria-hidden="true">
+          <div class="mascot mascot-pink">
+            <span class="headband">● ● ●</span><i class="eye"></i
+            ><i class="eye"></i><b>◡</b>
+          </div>
+          <div class="mascot mascot-mint">
+            <span class="headband">▲ ▲ ▲</span><i class="eye"></i
+            ><i class="eye"></i><b>⌣</b>
+          </div>
+        </div>
+        <nav class="menu-buttons" aria-label="Main menu">
+          <button class="primary big" data-action="setup">
+            <span aria-hidden="true">💥</span
+            ><span data-i18n="menu.play">開始對戰</span>
+          </button>
+          <button class="big" data-action="tutorial">
+            <span aria-hidden="true">🎓</span
+            ><span data-i18n="menu.tutorial">新手教學</span
+            ><em id="tutorial-badge" data-i18n="menu.recommended">推薦</em>
+          </button>
+          <button class="big" data-action="stats">
+            <span aria-hidden="true">🏆</span
+            ><span data-i18n="menu.stats">生涯統計</span>
+          </button>
+          <button class="big" data-action="settings">
+            <span aria-hidden="true">⚙️</span
+            ><span data-i18n="menu.settings">設定</span>
+          </button>
+        </nav>
+        <p class="version">
+          v1.0 · <span data-i18n="menu.local">離線也能玩</span>
+        </p>
+      </section>
+
+      <section
+        id="setup-screen"
+        class="screen panel-screen"
+        aria-labelledby="setup-title"
+        hidden
+      >
+        <div class="panel wide">
+          <button
+            class="icon-button back"
+            data-action="menu"
+            data-i18n-aria="common.back"
+            aria-label="返回"
+          >
+            ←
+          </button>
+          <p class="eyebrow" data-i18n="setup.eyebrow">準備出發</p>
+          <h2 id="setup-title" data-i18n="setup.title">對戰設定</h2>
+          <form id="setup-form">
+            <div class="form-grid">
+              <label
+                ><span data-i18n="setup.difficulty">AI 難度</span
+                ><select name="aiDifficulty">
+                  <option value="easy" data-i18n="difficulty.easy">簡單</option>
+                  <option value="normal" data-i18n="difficulty.normal" selected>
+                    普通
+                  </option>
+                  <option value="hard" data-i18n="difficulty.hard">困難</option>
+                </select></label
+              >
+              <label
+                ><span data-i18n="setup.theme">地圖主題</span
+                ><select name="theme">
+                  <option value="random" data-i18n="theme.random">隨機</option>
+                  <option value="candy" data-i18n="theme.candy">糖果島</option>
+                  <option value="forest" data-i18n="theme.forest">
+                    森林野餐
+                  </option>
+                  <option value="icecream" data-i18n="theme.icecream">
+                    冰淇淋雪原
+                  </option>
+                </select></label
+              >
+              <label
+                ><span data-i18n="setup.timer">回合時間</span
+                ><select name="turnSeconds">
+                  <option value="20">20 s</option>
+                  <option value="30" selected>30 s</option>
+                  <option value="45">45 s</option>
+                </select></label
+              >
+              <label
+                ><span data-i18n="setup.teamName">玩家隊名</span
+                ><input
+                  name="playerTeamName"
+                  maxlength="12"
+                  value="蹦蹦隊"
+                  autocomplete="off"
+              /></label>
+            </div>
+            <fieldset class="color-picker">
+              <legend data-i18n="setup.color">隊伍顏色</legend>
+              <label
+                ><input
+                  type="radio"
+                  name="playerColor"
+                  value="pink"
+                  checked
+                /><span class="swatch pink"></span
+                ><b data-i18n="color.pink">粉紅</b></label
+              >
+              <label
+                ><input type="radio" name="playerColor" value="mint" /><span
+                  class="swatch mint"
+                ></span
+                ><b data-i18n="color.mint">薄荷綠</b></label
+              >
+              <label
+                ><input type="radio" name="playerColor" value="sky" /><span
+                  class="swatch sky"
+                ></span
+                ><b data-i18n="color.sky">天空藍</b></label
+              >
+              <label
+                ><input type="radio" name="playerColor" value="grape" /><span
+                  class="swatch grape"
+                ></span
+                ><b data-i18n="color.grape">葡萄紫</b></label
+              >
+            </fieldset>
+            <button class="primary launch" type="submit">
+              <span data-i18n="setup.launch">出發轟轟！</span
+              ><span aria-hidden="true">🚀</span>
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <section
+        id="tutorial-screen"
+        class="screen battle-shell"
+        aria-labelledby="tutorial-title"
+        hidden
+      >
+        <div class="tutorial-card">
+          <p id="tutorial-progress">1 / 4</p>
+          <h2 id="tutorial-title" data-i18n="tutorial.moveTitle">
+            動一動、跳一跳！
+          </h2>
+          <p id="tutorial-copy" data-i18n="tutorial.moveCopy">
+            使用 A / D 移動，W 跳躍，S 後空翻。
+          </p>
+          <div class="tutorial-keys" id="tutorial-keys" aria-hidden="true">
+            <kbd>A</kbd><kbd>W</kbd><kbd>D</kbd><kbd>S</kbd>
+          </div>
+          <div class="tutorial-actions">
+            <button data-action="tutorial-exit" data-i18n="common.exit">
+              退出</button
+            ><button data-action="tutorial-skip" data-i18n="tutorial.skip">
+              略過提示</button
+            ><button
+              class="primary"
+              data-action="tutorial-next"
+              data-i18n="common.next"
+            >
+              下一步
+            </button>
+          </div>
+        </div>
+        <canvas
+          id="tutorial-canvas"
+          width="960"
+          height="540"
+          aria-label="Tutorial practice field"
+        ></canvas>
+      </section>
+
+      <section
+        id="battle-screen"
+        class="screen battle-shell"
+        aria-labelledby="battle-heading"
+        hidden
+      >
+        <h2
+          id="battle-heading"
+          class="visually-hidden"
+          data-i18n="battle.title"
+        >
+          對戰
+        </h2>
+        <canvas
+          id="game-canvas"
+          width="1280"
+          height="720"
+          tabindex="0"
+          data-i18n-aria="battle.canvas"
+          aria-label="Battlefield"
+        ></canvas>
+        <div id="battle-hud" class="battle-hud">
+          <div class="team-card player">
+            <div class="team-title">
+              <i></i><strong id="player-team-name">蹦蹦隊</strong
+              ><span class="pattern">●●●</span>
+            </div>
+            <div id="player-roster" class="roster"></div>
+          </div>
+          <div class="turn-card">
+            <small id="turn-team">蹦蹦隊</small><b id="turn-timer">30</b>
+            <div id="wind-meter" class="wind-meter">
+              <span>◀</span>
+              <div><i></i></div>
+              <strong>0</strong><span>▶</span>
+            </div>
+          </div>
+          <div class="team-card enemy">
+            <div class="team-title">
+              <span class="pattern">▲▲▲</span
+              ><strong id="enemy-team-name" data-i18n="battle.enemy"
+                >搗蛋隊</strong
+              ><i></i>
+            </div>
+            <div id="enemy-roster" class="roster"></div>
+          </div>
+        </div>
+        <div id="turn-banner" class="turn-banner" aria-hidden="true">
+          <strong></strong><span></span>
+        </div>
+        <div id="weapon-bar" class="weapon-bar">
+          <button
+            id="weapon-current"
+            class="weapon-current"
+            aria-haspopup="true"
+          >
+            <span class="weapon-icon"
+              ><img src="assets/images/icons/bazooka.svg" alt="" /></span
+            ><span
+              ><b data-i18n="weapon.bazooka">火箭筒</b
+              ><small
+                >∞ · <span id="angle-value">45°</span> ·
+                <span id="power-value">10%</span></small
+              ></span
+            >
+          </button>
+          <div id="weapon-grid" class="weapon-grid" hidden></div>
+          <p id="control-hint" data-i18n="battle.hint">
+            A/D 移動 · ↑/↓ 瞄準 · 按住 Space 蓄力
+          </p>
+        </div>
+        <div class="battle-tools">
+          <button
+            data-command="focus"
+            data-i18n-aria="battle.focus"
+            aria-label="回到角色"
+          >
+            ◎</button
+          ><button
+            data-command="pause"
+            data-i18n-aria="battle.pause"
+            aria-label="暫停"
+          >
+            Ⅱ
+          </button>
+        </div>
+        <div
+          id="touch-controls"
+          class="touch-controls"
+          aria-label="Touch controls"
+        >
+          <div class="touch-left">
+            <button data-hold="moveLeft">◀</button
+            ><button data-command="jump">↟</button
+            ><button data-command="backflip">⤺</button
+            ><button data-hold="moveRight">▶</button>
+          </div>
+          <div class="touch-right">
+            <button data-hold="aimUp">↗</button
+            ><button class="fire" data-hold="charge">💥</button
+            ><button data-command="weapons">🎒</button
+            ><button data-hold="aimDown">↘</button>
+          </div>
+        </div>
+        <div id="target-overlay" class="target-overlay" hidden>
+          <p data-i18n="battle.pickTarget">選擇一個合法位置，再點一次確認</p>
+          <button data-command="cancelTarget" data-i18n="common.cancel">
+            取消
+          </button>
+        </div>
+        <div
+          id="damage-summary"
+          class="damage-summary"
+          aria-live="polite"
+        ></div>
+        <div class="rotate-prompt">
+          <span aria-hidden="true">↻</span
+          ><strong data-i18n="battle.rotate">請旋轉裝置</strong>
+          <p data-i18n="battle.rotateCopy">對戰需要橫向畫面</p>
+        </div>
+      </section>
+
+      <section
+        id="pause-screen"
+        class="modal-layer"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="pause-title"
+        hidden
+      >
+        <div class="panel compact">
+          <h2 id="pause-title" data-i18n="pause.title">暫停一下</h2>
+          <button class="primary" data-action="resume" data-i18n="pause.resume">
+            繼續對戰</button
+          ><button data-action="restart" data-i18n="pause.restart">
+            重新開始</button
+          ><button data-action="quit" data-i18n="pause.quit">退出對戰</button>
+        </div>
+      </section>
+
+      <section
+        id="result-screen"
+        class="screen result-screen"
+        aria-labelledby="result-title"
+        hidden
+      >
+        <div class="result-confetti" aria-hidden="true"></div>
+        <div class="panel wide result-panel">
+          <p id="result-kicker" class="eyebrow"></p>
+          <h2 id="result-title"></h2>
+          <div id="result-survivors" class="result-survivors"></div>
+          <dl id="result-stats" class="result-stats"></dl>
+          <div class="result-actions">
+            <button
+              class="primary"
+              data-action="rematch-same"
+              data-i18n="result.same"
+            >
+              同地圖重賽</button
+            ><button data-action="rematch-new" data-i18n="result.new">
+              新地圖重賽</button
+            ><button data-action="setup" data-i18n="result.setup">
+              對戰設定</button
+            ><button data-action="menu" data-i18n="common.menu">主選單</button>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="stats-screen"
+        class="screen panel-screen"
+        aria-labelledby="stats-title"
+        hidden
+      >
+        <div class="panel wide">
+          <button
+            class="icon-button back"
+            data-action="menu"
+            data-i18n-aria="common.back"
+            aria-label="返回"
+          >
+            ←
+          </button>
+          <p class="eyebrow" data-i18n="stats.eyebrow">戰績小本本</p>
+          <h2 id="stats-title" data-i18n="stats.title">生涯統計</h2>
+          <div id="career-stats" class="career-stats"></div>
+          <button class="primary" data-action="menu" data-i18n="common.done">
+            完成
+          </button>
+        </div>
+      </section>
+
+      <section
+        id="settings-screen"
+        class="screen panel-screen"
+        aria-labelledby="settings-title"
+        hidden
+      >
+        <div class="panel wide">
+          <button
+            class="icon-button back"
+            data-action="menu"
+            data-i18n-aria="common.back"
+            aria-label="返回"
+          >
+            ←
+          </button>
+          <p class="eyebrow" data-i18n="settings.eyebrow">調整舒適度</p>
+          <h2 id="settings-title" data-i18n="settings.title">設定</h2>
+          <form id="settings-form" class="settings-form">
+            <label
+              ><span data-i18n="settings.language">語言</span
+              ><select name="language">
+                <option value="zh-Hant">繁體中文</option>
+                <option value="en">English</option>
+                <option value="ja">日本語</option>
+              </select></label
+            >
+            <label
+              ><span
+                ><span data-i18n="settings.bgm">背景音樂</span
+                ><output name="bgmOutput">45%</output></span
+              ><input
+                type="range"
+                name="bgmVolume"
+                min="0"
+                max="100"
+                value="45"
+            /></label>
+            <label
+              ><span
+                ><span data-i18n="settings.sfx">音效</span
+                ><output name="sfxOutput">70%</output></span
+              ><input
+                type="range"
+                name="sfxVolume"
+                min="0"
+                max="100"
+                value="70"
+            /></label>
+            <label class="toggle"
+              ><input type="checkbox" name="muted" /><span></span
+              ><b data-i18n="settings.mute">全部靜音</b></label
+            >
+            <label class="toggle"
+              ><input type="checkbox" name="reducedMotion" /><span></span
+              ><b data-i18n="settings.motion">降低動態效果</b></label
+            >
+            <details>
+              <summary data-i18n="settings.keys">鍵盤操作說明</summary>
+              <p data-i18n="settings.keysCopy">
+                A/D 移動、W 跳躍、S 後空翻、方向鍵瞄準、Space 蓄力、Q/E
+                換武器、R 武器面板、F 回焦、Esc 暫停。
+              </p>
+            </details>
+            <button
+              type="button"
+              class="danger"
+              data-action="clear-stats"
+              data-i18n="settings.clear"
+            >
+              清除生涯統計</button
+            ><button
+              type="button"
+              class="primary"
+              data-action="menu"
+              data-i18n="common.done"
+            >
+              完成
+            </button>
+          </form>
+        </div>
+      </section>
+    </main>
+    <div
+      id="confirm-dialog"
+      class="modal-layer"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="confirm-title"
+      hidden
+    >
+      <div class="panel compact">
+        <h2 id="confirm-title" data-i18n="confirm.title">確定嗎？</h2>
+        <p id="confirm-copy"></p>
+        <div>
+          <button data-confirm="no" data-i18n="common.cancel">取消</button
+          ><button class="danger" data-confirm="yes" data-i18n="common.confirm">
+            確認
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      id="aria-live"
+      class="visually-hidden"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+
+    <script defer src="js/utils/random.js"></script>
+    <script defer src="js/data/i18n.js"></script>
+    <script defer src="js/storage/storage.js"></script>
+    <script defer src="js/physics/physics.js"></script>
+    <script defer src="js/terrain/terrain.js"></script>
+    <script defer src="js/weapons/weapons.js"></script>
+    <script defer src="js/core/game-loop.js"></script>
+    <script defer src="js/core/turn-manager.js"></script>
+    <script defer src="js/ai/ai.js"></script>
+    <script defer src="js/render/camera.js"></script>
+    <script defer src="js/render/renderer.js"></script>
+    <script defer src="js/input/input.js"></script>
+    <script defer src="js/audio/audio.js"></script>
+    <script defer src="js/core/game-state.js"></script>
+    <script defer src="js/ui/tutorial.js"></script>
+    <script defer src="js/ui/hud.js"></script>
+    <script defer src="js/ui/app.js"></script>
+    <script defer src="js/main.js"></script>
+  </body>
+</html>

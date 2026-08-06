@@ -1,0 +1,58 @@
+.touch-controls {
+  display: none;
+  position: absolute;
+  z-index: 6;
+  inset: auto max(0.7rem, env(safe-area-inset-right))
+    max(0.7rem, env(safe-area-inset-bottom))
+    max(0.7rem, env(safe-area-inset-left));
+  justify-content: space-between;
+  pointer-events: none;
+}
+.touch-left,
+.touch-right {
+  display: grid;
+  grid-template-columns: repeat(2, 52px);
+  gap: 0.4rem;
+  pointer-events: auto;
+}
+.touch-controls button {
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.82);
+  font-size: 1.25rem;
+}
+.touch-controls button.fire {
+  grid-row: span 2;
+  height: 108px;
+  border-radius: 22px;
+  background: #ff769f;
+}
+.rotate-prompt {
+  display: none;
+  position: absolute;
+  z-index: 50;
+  inset: 0;
+  place-content: center;
+  text-align: center;
+  color: #fff;
+  background: #4f3b78;
+  padding: 2rem;
+}
+.rotate-prompt span {
+  display: block;
+  font-size: 5rem;
+  animation: rotate-phone 1.6s ease-in-out infinite alternate;
+}
+.rotate-prompt strong {
+  font-size: 1.7rem;
+}
+.rotate-prompt p {
+  font-weight: 500;
+}
+@keyframes rotate-phone {
+  to {
+    transform: rotate(90deg);
+  }
+}
