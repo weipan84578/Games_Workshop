@@ -37,7 +37,7 @@
 | `Slapjack`  | 心臟病紙牌遊戲 | Slapjack     | 心臓病カードゲーム |
 | `Solitaire` | 撲克牌接龍     | Solitaire    | ソリティア         |
 | `UNO`       | UNO 牌         | UNO          | ウノ               |
-| `Yahtzee`    | 快艇骰子       | Yahtzee      | ヨットダイス       |
+| `Yahtzee`   | 快艇骰子       | Yahtzee      | ヨットダイス       |
 
 ### 益智與邏輯遊戲
 
@@ -57,7 +57,7 @@
 | ---------------- | ---------- | ------------------ | -------------------- |
 | `Snake_Game`     | 貪食蛇     | Snake              | スネーク             |
 | `Tetris`         | 俄羅斯方塊 | Tetris             | テトリス             |
-| `Doodle_Jump`     | 塗鴉跳躍   | Doodle Jump        | ドゥードルジャンプ   |
+| `Doodle_Jump`    | 塗鴉跳躍   | Doodle Jump        | ドゥードルジャンプ   |
 | `Endless_Runner` | 無限跑酷   | Endless Runner     | エンドレスランナー   |
 | `Flappy_Bird`    | 飛揚的小鳥 | Flappy Bird        | フラッピーバード     |
 | `Pacman`         | 小精靈     | Pac-Man            | パックマン           |
@@ -71,7 +71,7 @@
 | `Asteroids`      | 小行星     | Asteroids          | アステロイド         |
 | `Centipede`      | 蜈蚣射擊   | Centipede          | センチピード         |
 | `Stack_Tower`    | 堆疊高塔   | Stack Tower        | スタックタワー       |
-| `Whack_A_Mole`    | 打地鼠     | Whack-A-Mole       | もぐら叩き           |
+| `Whack_A_Mole`   | 打地鼠     | Whack-A-Mole       | もぐら叩き           |
 
 ### 策略與塔防遊戲
 
@@ -80,23 +80,24 @@
 | `Monkey_Tower_Defense` | 猴子塔防   | Monkey Tower Defense | モンキータワーディフェンス |
 | `PvZ_Frontend`         | 花園防衛者 | Garden Defenders     | ガーデンディフェンダーズ   |
 | `Nim`                  | 尼姆搶數字 | Nim                  | ニム                       |
+| `Worm`                 | 蟲蟲轟轟隊 | Wormy Boom Squad     | ワーム・ボム隊             |
 
 ### 運動與競技遊戲
 
-| 資料夾             | 遊戲名稱   | English Name       | 日本語名                 |
-| ------------------ | ---------- | ------------------ | ------------------------ |
-| `Air_Hockey`       | 空氣曲棍球 | Air Hockey         | エアホッケー             |
-| `Basketball_Shoot` | 投籃機     | Basketball Shoot   | バスケットボールシュート |
-| `Darts`            | 飛鏢       | Darts              | ダーツ                   |
-| `Horse_Racing`     | 賽馬王     | Horse Racing       | 競馬王                   |
-| `Bowling`          | 保齡球     | Bowling            | ボウリング               |
+| 資料夾             | 遊戲名稱   | English Name     | 日本語名                 |
+| ------------------ | ---------- | ---------------- | ------------------------ |
+| `Air_Hockey`       | 空氣曲棍球 | Air Hockey       | エアホッケー             |
+| `Basketball_Shoot` | 投籃機     | Basketball Shoot | バスケットボールシュート |
+| `Darts`            | 飛鏢       | Darts            | ダーツ                   |
+| `Horse_Racing`     | 賽馬王     | Horse Racing     | 競馬王                   |
+| `Bowling`          | 保齡球     | Bowling          | ボウリング               |
 
 ### 博彩與機會遊戲
 
-| 資料夾    | 遊戲名稱 | English Name | 日本語名     |
-| --------- | -------- | ------------ | ------------ |
-| `Roulette` | 輪盤     | Roulette     | ルーレット   |
-| `Sic_Bo`   | 骰寶     | Sic Bo       | シックボー   |
+| 資料夾     | 遊戲名稱 | English Name | 日本語名   |
+| ---------- | -------- | ------------ | ---------- |
+| `Roulette` | 輪盤     | Roulette     | ルーレット |
+| `Sic_Bo`   | 骰寶     | Sic Bo       | シックボー |
 
 ### 生活與休閒遊戲
 
