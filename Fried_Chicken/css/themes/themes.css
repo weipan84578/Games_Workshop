@@ -1,0 +1,12 @@
+html[data-theme="cream"] {
+  --bg: #fff7e0; --surface: #fff; --surface-soft: #fffaf1; --primary: #9a3412; --primary-strong: #7c2d12; --accent: #f59e0b; --text: #2b1b12; --muted: #6b4e3d; --line: #d8bfae;
+}
+html[data-theme="berry"] {
+  --bg: #fff1f5; --surface: #fff; --surface-soft: #fff7f9; --primary: #9d174d; --primary-strong: #831843; --accent: #f472b6; --text: #321523; --muted: #704052; --line: #ddb8c7;
+}
+html[data-theme="mint"] {
+  --bg: #ecfdf5; --surface: #fff; --surface-soft: #f3fff9; --primary: #047857; --primary-strong: #065f46; --accent: #34d399; --text: #12372c; --muted: #3d6b5d; --line: #a9d5c6;
+}
+html[data-theme="sky"] {
+  --bg: #eff6ff; --surface: #fff; --surface-soft: #f5faff; --primary: #1d4ed8; --primary-strong: #1e40af; --accent: #38bdf8; --text: #172554; --muted: #475a83; --line: #adc3e8;
+}

@@ -1,0 +1,146 @@
+.app-shell {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: calc(18px + var(--safe-top)) calc(18px + var(--safe-right)) calc(18px + var(--safe-bottom)) calc(18px + var(--safe-left));
+}
+
+.screen {
+  width: min(1160px, 100%);
+  min-height: calc(100vh - 36px - var(--safe-top) - var(--safe-bottom));
+  min-height: calc(100dvh - 36px - var(--safe-top) - var(--safe-bottom));
+  margin-inline: auto;
+  animation: screen-in .22s ease both;
+}
+
+.screen--center {
+  display: grid;
+  place-items: center;
+}
+
+.screen-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+.screen-header__title { margin: 0; color: var(--primary); }
+.screen-header__actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end; }
+
+.content-panel {
+  width: min(940px, 100%);
+  margin-inline: auto;
+  padding: clamp(20px, 4vw, 38px);
+  border: 2px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--surface) 96%, transparent);
+  box-shadow: var(--shadow);
+}
+
+.stack { display: grid; gap: 18px; }
+.cluster { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.two-column { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.three-column { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+
+.game-screen {
+  width: min(1480px, 100%);
+  height: calc(100vh - 36px - var(--safe-top) - var(--safe-bottom));
+  height: calc(100dvh - 36px - var(--safe-top) - var(--safe-bottom));
+  min-height: 590px;
+  display: grid;
+  grid-template-columns: minmax(240px, 290px) minmax(500px, 1fr) minmax(240px, 300px);
+  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-areas:
+    "hud hud hud"
+    "orders kitchen controls";
+  gap: 12px;
+  margin-inline: auto;
+  touch-action: manipulation;
+}
+
+.game-hud { grid-area: hud; }
+.order-rail { grid-area: orders; min-height: 0; display: grid; align-content: start; gap: 10px; overflow: auto; }
+.kitchen { grid-area: kitchen; min-width: 0; min-height: 0; overflow: auto; }
+.control-rail { grid-area: controls; min-height: 0; overflow: auto; }
+
+.game-hud {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(92px, 1fr)) auto;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.kitchen-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(140px, 1fr));
+  grid-template-areas:
+    "supply marinade coating"
+    "fryer fryer seasoning"
+    "bagging bagging waste";
+  gap: 10px;
+  min-height: 100%;
+}
+.station--supply { grid-area: supply; }
+.station--marinade { grid-area: marinade; }
+.station--coating { grid-area: coating; }
+.station--fryer { grid-area: fryer; }
+.station--seasoning { grid-area: seasoning; }
+.station--bagging { grid-area: bagging; }
+.station--waste { grid-area: waste; }
+
+@media (max-width: 1199px) {
+  .game-screen {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    grid-template-areas: "hud" "orders" "kitchen" "controls";
+  }
+  .order-rail { display: flex; gap: 10px; overflow-x: auto; overflow-y: hidden; padding-bottom: 6px; }
+  .order-rail .order-card { flex: 0 0 min(300px, 76vw); }
+  .control-rail { overflow: visible; }
+  .control-panel { display: grid; grid-template-columns: 1fr auto; align-items: center; }
+}
+
+@media (max-width: 767px) {
+  .app-shell { padding: calc(10px + var(--safe-top)) calc(10px + var(--safe-right)) calc(10px + var(--safe-bottom)) calc(10px + var(--safe-left)); }
+  .screen { min-height: calc(100dvh - 20px - var(--safe-top) - var(--safe-bottom)); }
+  .two-column, .three-column { grid-template-columns: 1fr; }
+  .screen-header { align-items: flex-start; }
+  .game-screen {
+    height: auto;
+    min-height: calc(100dvh - 20px - var(--safe-top) - var(--safe-bottom));
+  }
+  .game-hud { grid-template-columns: repeat(3, 1fr); }
+  .kitchen-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "supply marinade"
+      "coating coating"
+      "fryer fryer"
+      "seasoning bagging"
+      "waste waste";
+  }
+  .control-panel { grid-template-columns: 1fr; }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+  .app-shell { padding: calc(6px + var(--safe-top)) calc(8px + var(--safe-right)) calc(6px + var(--safe-bottom)) calc(8px + var(--safe-left)); }
+  .game-screen {
+    width: 100%;
+    height: calc(100dvh - 12px - var(--safe-top) - var(--safe-bottom));
+    min-height: 348px;
+    grid-template-columns: minmax(0, 1fr) 220px;
+    grid-template-rows: 58px 78px minmax(0, 1fr);
+    grid-template-areas: "hud hud" "orders orders" "kitchen controls";
+    gap: 6px;
+  }
+  .game-hud { grid-template-columns: repeat(7, minmax(68px, 1fr)); gap: 5px; }
+  .kitchen-grid { gap: 6px; }
+  .station { min-height: 94px; }
+  .order-rail .order-card { flex-basis: 250px; }
+  .control-rail { overflow: auto; }
+}
+
+@media (max-width: 520px) {
+  .screen-header { display: grid; }
+  .screen-header__actions { justify-content: flex-start; }
+}

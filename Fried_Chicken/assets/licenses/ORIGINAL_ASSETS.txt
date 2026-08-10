@@ -1,0 +1,6 @@
+CRISPY CUTLET CORNER — ORIGINAL ASSET NOTICE
+
+All SVG artwork, musical note data and synthesized sound definitions under the
+assets directory were created specifically for this project in 2026. They may
+be copied and redistributed as part of this project. No attribution to an
+external author is required and no third-party media is bundled.

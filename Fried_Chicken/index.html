@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-Hant" data-theme="cream">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5">
+  <meta name="theme-color" content="#fff7e0">
+  <meta name="description" content="雞排小舖 — 可離線遊玩的炸雞排攤位經營遊戲">
+  <title>雞排小舖｜Crispy Cutlet Corner</title>
+  <link rel="icon" href="assets/images/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/base/base.css">
+  <link rel="stylesheet" href="css/layout/layout.css">
+  <link rel="stylesheet" href="css/components/components.css">
+  <link rel="stylesheet" href="css/screens/screens.css">
+  <link rel="stylesheet" href="css/themes/themes.css">
+  <link rel="stylesheet" href="css/motion/motion.css">
+</head>
+<body>
+  <a class="skip-link" href="#app">跳至主要內容</a>
+
+  <div id="boot-screen" class="boot-screen" role="status" aria-live="polite">
+    <img src="assets/images/characters/chick-chef.svg" width="152" height="152" alt="">
+    <h1>雞排小舖</h1>
+    <p>正在升起油鍋溫度…</p>
+    <div class="boot-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+  </div>
+
+  <main id="app" class="app-shell" tabindex="-1" aria-live="polite"></main>
+  <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+  <div id="dialog-root"></div>
+
+  <aside id="core-error" class="core-error" hidden>
+    <h2>遊戲無法啟動 / Game could not start / ゲームを開始できません</h2>
+    <p>請重新整理頁面，並確認專案檔案完整。 / Reload the page and check the local files. / ページを再読み込みし、ファイルを確認してください。</p>
+  </aside>
+
+  <noscript>
+    <section class="core-error">
+      <h2>需要 JavaScript / JavaScript required / JavaScript が必要です</h2>
+      <p>請啟用 JavaScript 後重新開啟遊戲。</p>
+    </section>
+  </noscript>
+
+  <script defer src="js/core/namespace.js"></script>
+  <script defer src="js/i18n/dictionaries.js"></script>
+  <script defer src="js/i18n/i18n.js"></script>
+  <script defer src="js/data/game-data.js"></script>
+  <script defer src="assets/audio/bgm/tracks.js"></script>
+  <script defer src="assets/audio/sfx/sounds.js"></script>
+  <script defer src="js/services/storage.js"></script>
+  <script defer src="js/services/audio.js"></script>
+  <script defer src="js/services/fullscreen.js"></script>
+  <script defer src="js/services/lifecycle.js"></script>
+  <script defer src="js/game/rules.js"></script>
+  <script defer src="js/game/orders.js"></script>
+  <script defer src="js/game/cooking.js"></script>
+  <script defer src="js/game/upgrades.js"></script>
+  <script defer src="js/game/session.js"></script>
+  <script defer src="js/ui/components.js"></script>
+  <script defer src="js/ui/input.js"></script>
+  <script defer src="js/ui/screens.js"></script>
+  <script defer src="js/core/router.js"></script>
+  <script defer src="js/core/app.js"></script>
+</body>
+</html>

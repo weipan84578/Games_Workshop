@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" role="img" aria-labelledby="title desc">
+  <title id="title">小雞店長</title><desc id="desc">戴著廚師帽與橘色圍裙的圓潤黃色小雞</desc>
+  <defs><linearGradient id="body" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#ffe88a"/><stop offset="1" stop-color="#f7bd39"/></linearGradient></defs>
+  <ellipse cx="110" cy="193" rx="72" ry="12" fill="#532d1d" opacity=".14"/>
+  <path d="M70 55c-18-13-4-36 14-27 4-22 35-22 40 0 18-10 34 14 15 28z" fill="#fff" stroke="#6b3926" stroke-width="6" stroke-linejoin="round"/>
+  <circle cx="110" cy="116" r="69" fill="url(#body)" stroke="#6b3926" stroke-width="7"/>
+  <path d="M51 111c-27 3-28 29-8 38 9 4 19-3 25-16M169 111c27 3 28 29 8 38-9 4-19-3-25-16" fill="#ffd75c" stroke="#6b3926" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="83" cy="105" r="7" fill="#3b241c"/><circle cx="137" cy="105" r="7" fill="#3b241c"/>
+  <circle cx="78" cy="99" r="2.5" fill="#fff"/><circle cx="132" cy="99" r="2.5" fill="#fff"/>
+  <path d="M98 117l12-8 12 8-12 11z" fill="#ec7a2c" stroke="#6b3926" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M78 139c17 12 47 12 64 0l-5 48H83z" fill="#e56a2e" stroke="#6b3926" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M91 139v35M129 139v35" stroke="#fff2d4" stroke-width="5"/>
+  <path d="M93 187l-15 9M127 187l15 9" stroke="#d98021" stroke-width="7" stroke-linecap="round"/>
+</svg>
