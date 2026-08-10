@@ -101,9 +101,10 @@
 
 ### 生活與休閒遊戲
 
-| 資料夾        | 遊戲名稱 | English Name | 日本語名       |
-| ------------- | -------- | ------------ | -------------- |
-| `Typing_Game` | 打字練習 | Typing Game  | タイピング練習 |
-| `Virtual_Pet` | 電子寵物 | Virtual Pet  | 電子ペット     |
-| `Barbecue`    | 烤肉     | Barbecue     | バーベキュー   |
-| `Takoyaki`    | 章魚燒   | Takoyaki     | たこ焼き       |
+| 資料夾          | 遊戲名稱 | English Name         | 日本語名             |
+| --------------- | -------- | -------------------- | -------------------- |
+| `Typing_Game`   | 打字練習 | Typing Game          | タイピング練習       |
+| `Virtual_Pet`   | 電子寵物 | Virtual Pet          | 電子ペット           |
+| `Barbecue`      | 烤肉     | Barbecue             | バーベキュー         |
+| `Takoyaki`      | 章魚燒   | Takoyaki             | たこ焼き             |
+| `Fried_Chicken` | 炸雞排   | Fried Chicken Cutlet | フライドチキンカツ   |
