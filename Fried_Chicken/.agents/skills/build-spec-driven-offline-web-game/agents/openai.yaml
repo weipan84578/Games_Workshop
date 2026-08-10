@@ -1,0 +1,4 @@
+interface:
+  display_name: "Spec-Driven Offline Web Game"
+  short_description: "Build complete offline web games from product specs"
+  default_prompt: "Use $build-spec-driven-offline-web-game to turn this game specification into a tested, file://-ready web game."

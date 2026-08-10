@@ -67,14 +67,14 @@ test("every statically referenced translation key exists", () => {
   for (const key of referenced) assert.equal(keys.has(key), true, `missing translation: ${key}`);
 });
 
-test("project includes three local music definitions and licensing records", () => {
+test("project includes local music definitions, licensing records, and documentation", () => {
   require(path.join(root, "assets/audio/bgm/tracks.js"));
   require(path.join(root, "assets/audio/sfx/sounds.js"));
   assert.equal(Object.keys(globalThis.CCC.audioData.tracks).length, 3);
   assert.ok(Object.keys(globalThis.CCC.audioData.sfx).length >= 15);
   assert.equal(fs.existsSync(path.join(root, "LICENSES.md")), true);
   assert.equal(fs.existsSync(path.join(root, "assets/licenses/ORIGINAL_ASSETS.txt")), true);
-  assert.equal(fs.existsSync(path.join(root, "README.md")), false);
+  assert.equal(fs.existsSync(path.join(root, "README.md")), true);
 });
 
 test("data-driven recipes, tutorials, upgrades, and help sections are translated", () => {
