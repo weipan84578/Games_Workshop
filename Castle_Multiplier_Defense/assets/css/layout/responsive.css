@@ -1,14 +1,29 @@
 @media (max-width: 767px) {
-    :root { --font-size-body: 18px; }
-    .page-shell { padding-left: max(1rem, var(--safe-left)); padding-right: max(1rem, var(--safe-right)); }
-    .page-header { align-items: center; margin-bottom: 1.2rem; }
-    .page-header .button { min-width: 0; padding-inline: 0.85rem; }
+  :root {
+    --font-size-body: 18px;
+  }
+  .page-shell {
+    padding-left: max(1rem, var(--safe-left));
+    padding-right: max(1rem, var(--safe-right));
+  }
+  .page-header {
+    align-items: center;
+    margin-bottom: 1.2rem;
+  }
+  .page-header .button {
+    min-width: 0;
+    padding-inline: 0.85rem;
+  }
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
-    .page-shell { padding-inline: 2.5rem; }
+  .page-shell {
+    padding-inline: 2.5rem;
+  }
 }
 
 @media (min-width: 1440px) {
-    .page-shell { padding-top: calc(3.5rem + var(--safe-top)); }
+  .page-shell {
+    padding-top: calc(3.5rem + var(--safe-top));
+  }
 }

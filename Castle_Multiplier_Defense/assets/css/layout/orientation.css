@@ -1,8 +1,15 @@
 @media (orientation: portrait) and (max-width: 767px) {
-    .screen--game { min-height: 100dvh; }
+  .screen--game {
+    min-height: 100dvh;
+  }
 }
 
 @media (orientation: landscape) and (max-height: 560px) {
-    .page-shell { padding-bottom: 1rem; padding-top: calc(1rem + var(--safe-top)); }
-    .page-header { margin-bottom: 1rem; }
+  .page-shell {
+    padding-bottom: 1rem;
+    padding-top: calc(1rem + var(--safe-top));
+  }
+  .page-header {
+    margin-bottom: 1rem;
+  }
 }

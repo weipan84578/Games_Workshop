@@ -1,54 +1,95 @@
 (function (root) {
-    "use strict";
+  "use strict";
 
-    var cg = root.CastleGame = root.CastleGame || {};
-    cg.DEBUG = false;
-    cg.Constants = Object.freeze({
-        SAVE_KEY: "castleGame_save",
-        SETTINGS_KEY: "castleGame_settings",
-        SAVE_VERSION: 1,
-        MAX_DPR: 2,
-        TARGET_FPS: 60,
-        MAX_DELTA: 0.05,
-        MAX_RENDER_PROJECTILES_DESKTOP: 250,
-        MAX_RENDER_PROJECTILES_MOBILE: 120,
-        MAX_PARTICLES: 360,
-        MAX_SIMULTANEOUS_SFX: 16,
-        PLAYER_BASE_HP: 220,
-        PLAYER_BASE_DEFENSE: 3,
-        PLAYER_BASE_ATTACK: 8,
-        PLAYER_FIRE_RATE: 1.25,
-        PLAYER_PROJECTILE_SPEED: 0.74,
-        PLAYER_CRITICAL_RATE: 0.08,
-        ENEMY_BASE_HP: 280,
-        ENEMY_BASE_DEFENSE: 2,
-        ENEMY_BASE_ATTACK: 7,
-        ENEMY_FIRE_RATE: 2.8,
-        ENEMY_PROJECTILE_SPEED: 0.54,
-        SKILL_COOLDOWN: 12,
-        GATE_TYPES: Object.freeze({ MULTIPLY: "multiply", DIVIDE: "divide", ADD: "add", SPECIAL: "special" }),
-        DIFFICULTIES: Object.freeze({ EASY: "easy", NORMAL: "normal", HARD: "hard" }),
-        QUALITY: Object.freeze({ AUTO: "auto", LOW: "low", MEDIUM: "medium", HIGH: "high" }),
-        SCREENS: Object.freeze({ BOOT: "BOOT", MAIN_MENU: "MAIN_MENU", GAME: "GAME", PAUSE: "PAUSE", HELP: "HELP", SETTINGS: "SETTINGS", RESULT_WIN: "RESULT_WIN", RESULT_LOSE: "RESULT_LOSE" }),
-        DEFAULT_SETTINGS: Object.freeze({
-            locale: "zh-TW",
-            theme: "default",
-            masterVolume: 0.35,
-            bgmVolume: 0.25,
-            sfxVolume: 0.55,
-            mute: false,
-            bgmEnabled: true,
-            sfxEnabled: true,
-            graphicsQuality: "auto",
-            reducedMotion: false,
-            cameraShake: true,
-            highContrast: false,
-            difficulty: "normal"
-        }),
-        DIFFICULTY_MODIFIERS: Object.freeze({
-            easy: Object.freeze({ enemyHp: 0.82, enemyFireRate: 1.32, aiError: 0.15, gateBias: 0.2 }),
-            normal: Object.freeze({ enemyHp: 1, enemyFireRate: 1, aiError: 0.08, gateBias: 0 }),
-            hard: Object.freeze({ enemyHp: 1.18, enemyFireRate: 0.76, aiError: 0.035, gateBias: -0.14 })
-        })
-    });
-}(window));
+  var cg = (root.CastleGame = root.CastleGame || {});
+  cg.DEBUG = false;
+  cg.Constants = Object.freeze({
+    SAVE_KEY: "castleGame_save",
+    SETTINGS_KEY: "castleGame_settings",
+    SAVE_VERSION: 1,
+    MAX_DPR: 2,
+    TARGET_FPS: 60,
+    MAX_DELTA: 0.05,
+    MAX_RENDER_PROJECTILES_DESKTOP: 250,
+    MAX_RENDER_PROJECTILES_MOBILE: 120,
+    MAX_PARTICLES: 360,
+    MAX_SIMULTANEOUS_SFX: 16,
+    VOLLEY_SIZE: 5,
+    MAX_GATE_SPLIT: 20,
+    PROJECTILE_GRAVITY: 0.9,
+    PROJECTILE_FLIGHT_TIME: 1.55,
+    MULTIPLIER_VALUES: Object.freeze([5, 10, 15, 20]),
+    PLAYER_BASE_HP: 220,
+    PLAYER_BASE_DEFENSE: 3,
+    PLAYER_BASE_ATTACK: 8,
+    PLAYER_FIRE_RATE: 1.25,
+    PLAYER_CRITICAL_RATE: 0.08,
+    ENEMY_BASE_HP: 280,
+    ENEMY_BASE_DEFENSE: 2,
+    ENEMY_BASE_ATTACK: 7,
+    ENEMY_FIRE_RATE: 2.8,
+    SKILL_COOLDOWN: 12,
+    GATE_TYPES: Object.freeze({
+      MULTIPLY: "multiply",
+      DIVIDE: "divide",
+      ADD: "add",
+      SPECIAL: "special",
+    }),
+    DIFFICULTIES: Object.freeze({
+      EASY: "easy",
+      NORMAL: "normal",
+      HARD: "hard",
+    }),
+    QUALITY: Object.freeze({
+      AUTO: "auto",
+      LOW: "low",
+      MEDIUM: "medium",
+      HIGH: "high",
+    }),
+    SCREENS: Object.freeze({
+      BOOT: "BOOT",
+      MAIN_MENU: "MAIN_MENU",
+      GAME: "GAME",
+      PAUSE: "PAUSE",
+      HELP: "HELP",
+      SETTINGS: "SETTINGS",
+      RESULT_WIN: "RESULT_WIN",
+      RESULT_LOSE: "RESULT_LOSE",
+    }),
+    DEFAULT_SETTINGS: Object.freeze({
+      locale: "zh-TW",
+      theme: "default",
+      masterVolume: 0.35,
+      bgmVolume: 0.25,
+      sfxVolume: 0.55,
+      mute: false,
+      bgmEnabled: true,
+      sfxEnabled: true,
+      graphicsQuality: "auto",
+      reducedMotion: false,
+      cameraShake: true,
+      highContrast: false,
+      difficulty: "normal",
+    }),
+    DIFFICULTY_MODIFIERS: Object.freeze({
+      easy: Object.freeze({
+        enemyHp: 0.82,
+        enemyFireRate: 1.32,
+        aiError: 0.15,
+        gateBias: 0.2,
+      }),
+      normal: Object.freeze({
+        enemyHp: 1,
+        enemyFireRate: 1,
+        aiError: 0.08,
+        gateBias: 0,
+      }),
+      hard: Object.freeze({
+        enemyHp: 1.18,
+        enemyFireRate: 0.76,
+        aiError: 0.035,
+        gateBias: -0.14,
+      }),
+    }),
+  });
+})(window);

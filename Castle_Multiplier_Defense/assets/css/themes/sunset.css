@@ -1,15 +1,15 @@
 [data-theme="sunset"] {
-    --color-bg: #321c43;
-    --color-bg-deep: #1b1230;
-    --color-panel: rgba(69, 35, 65, .94);
-    --color-panel-solid: #4d294b;
-    --color-primary: #ffb476;
-    --color-primary-strong: #e86b75;
-    --color-secondary: #ffe18c;
-    --color-accent: #ff8bc1;
-    --scene-sky-top: #3d225e;
-    --scene-sky-bottom: #f28e82;
-    --scene-hill-back: #71466e;
-    --scene-hill-front: #6c4450;
-    --scene-ground: #403145;
+  --color-bg: #321c43;
+  --color-bg-deep: #1b1230;
+  --color-panel: rgba(69, 35, 65, 0.94);
+  --color-panel-solid: #4d294b;
+  --color-primary: #ffb476;
+  --color-primary-strong: #e86b75;
+  --color-secondary: #ffe18c;
+  --color-accent: #ff8bc1;
+  --scene-sky-top: #3d225e;
+  --scene-sky-bottom: #f28e82;
+  --scene-hill-back: #71466e;
+  --scene-hill-front: #6c4450;
+  --scene-ground: #403145;
 }

@@ -1,44 +1,48 @@
 :focus-visible {
-    outline: 3px solid var(--color-secondary);
-    outline-offset: 4px;
+  outline: 3px solid var(--color-secondary);
+  outline-offset: 4px;
 }
 
 .sr-only {
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
-    height: 1px;
-    overflow: hidden;
-    position: absolute;
-    white-space: nowrap;
-    width: 1px;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }
 
 [data-high-contrast="true"] {
-    --color-text-soft: #edf2ff;
-    --color-text-muted: #d7e1ff;
-    --color-border: rgba(255, 255, 255, 0.58);
-    --color-border-strong: rgba(255, 255, 255, 0.88);
+  --color-text-soft: #edf2ff;
+  --color-text-muted: #d7e1ff;
+  --color-border: rgba(255, 255, 255, 0.58);
+  --color-border-strong: rgba(255, 255, 255, 0.88);
 }
 
 [data-high-contrast="true"] .card,
 [data-high-contrast="true"] .hud-group,
 [data-high-contrast="true"] .hud-center,
-[data-high-contrast="true"] .stage-badge { border-width: 2px; }
+[data-high-contrast="true"] .stage-badge {
+  border-width: 2px;
+}
 
 [data-reduced-motion="true"] *,
 [data-reduced-motion="true"] *::before,
 [data-reduced-motion="true"] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  scroll-behavior: auto !important;
+  transition-duration: 0.001ms !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.001ms !important;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        animation-duration: 0.001ms !important;
-        animation-iteration-count: 1 !important;
-        scroll-behavior: auto !important;
-        transition-duration: 0.001ms !important;
-    }
+  }
 }

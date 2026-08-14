@@ -1,1 +1,4 @@
-.tabs { display: flex; gap: .5rem; }
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+}

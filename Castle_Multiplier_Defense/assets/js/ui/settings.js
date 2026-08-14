@@ -1,25 +1,158 @@
 (function (root) {
-    "use strict";
-    var cg = root.CastleGame = root.CastleGame || {};
-    var Settings = cg.Settings = {};
-    var ids = ["master-volume", "bgm-volume", "sfx-volume", "mute-toggle", "bgm-enabled-toggle", "sfx-enabled-toggle", "theme-select", "quality-select", "difficulty-select", "reduced-motion-toggle", "camera-shake-toggle", "high-contrast-toggle"];
-    Settings.returnScreen = cg.Constants.SCREENS.MAIN_MENU;
-    Settings.init = function () {
-        ids.forEach(function (id) { var element = document.getElementById(id); if (!element) return; var eventName = element.type === "range" ? "input" : "change"; element.addEventListener(eventName, function () { Settings.readControls(); }); if (element.type === "range") element.addEventListener("change", function () { cg.Audio.playSfx("click"); }); });
-        document.querySelectorAll("[data-locale]").forEach(function (button) { button.addEventListener("click", function () { Settings.set({ locale: button.getAttribute("data-locale") }); }); });
-        Settings.refresh();
+  "use strict";
+  var cg = (root.CastleGame = root.CastleGame || {});
+  var Settings = (cg.Settings = {});
+  var ids = [
+    "master-volume",
+    "bgm-volume",
+    "sfx-volume",
+    "mute-toggle",
+    "bgm-enabled-toggle",
+    "sfx-enabled-toggle",
+    "theme-select",
+    "quality-select",
+    "difficulty-select",
+    "reduced-motion-toggle",
+    "camera-shake-toggle",
+    "high-contrast-toggle",
+  ];
+  Settings.returnScreen = cg.Constants.SCREENS.MAIN_MENU;
+  Settings.init = function () {
+    ids.forEach(function (id) {
+      var element = document.getElementById(id);
+      if (!element) return;
+      var eventName = element.type === "range" ? "input" : "change";
+      element.addEventListener(eventName, function () {
+        Settings.readControls();
+      });
+      if (element.type === "range")
+        element.addEventListener("change", function () {
+          cg.Audio.playSfx("click");
+        });
+    });
+    document.querySelectorAll("[data-locale]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        Settings.set({ locale: button.getAttribute("data-locale") });
+      });
+    });
+    Settings.refresh();
+  };
+  Settings.open = function (returnScreen) {
+    Settings.returnScreen = returnScreen || cg.Constants.SCREENS.MAIN_MENU;
+    Settings.refresh();
+    cg.ScreenManager.show(cg.Constants.SCREENS.SETTINGS);
+  };
+  Settings.refresh = function () {
+    var settings = root.GameState.settings;
+    if (!settings) return;
+    var map = {
+      "master-volume": settings.masterVolume,
+      "bgm-volume": settings.bgmVolume,
+      "sfx-volume": settings.sfxVolume,
+      "mute-toggle": settings.mute,
+      "bgm-enabled-toggle": settings.bgmEnabled,
+      "sfx-enabled-toggle": settings.sfxEnabled,
+      "theme-select": settings.theme,
+      "quality-select": settings.graphicsQuality,
+      "difficulty-select": settings.difficulty,
+      "reduced-motion-toggle": settings.reducedMotion,
+      "camera-shake-toggle": settings.cameraShake,
+      "high-contrast-toggle": settings.highContrast,
     };
-    Settings.open = function (returnScreen) { Settings.returnScreen = returnScreen || cg.Constants.SCREENS.MAIN_MENU; Settings.refresh(); cg.ScreenManager.show(cg.Constants.SCREENS.SETTINGS); };
-    Settings.refresh = function () {
-        var settings = root.GameState.settings; if (!settings) return; var map = { "master-volume": settings.masterVolume, "bgm-volume": settings.bgmVolume, "sfx-volume": settings.sfxVolume, "mute-toggle": settings.mute, "bgm-enabled-toggle": settings.bgmEnabled, "sfx-enabled-toggle": settings.sfxEnabled, "theme-select": settings.theme, "quality-select": settings.graphicsQuality, "difficulty-select": settings.difficulty, "reduced-motion-toggle": settings.reducedMotion, "camera-shake-toggle": settings.cameraShake, "high-contrast-toggle": settings.highContrast };
-        Object.keys(map).forEach(function (id) { var element = document.getElementById(id); if (!element) return; if (element.type === "checkbox") element.checked = Boolean(map[id]); else element.value = map[id]; }); Settings.updateRangeOutputs(); document.body.dataset.theme = settings.theme; document.body.dataset.highContrast = String(settings.highContrast); document.body.dataset.reducedMotion = String(settings.reducedMotion || cg.Utils.prefersReducedMotion()); document.querySelectorAll("[data-locale]").forEach(function (button) { button.classList.toggle("is-selected", button.getAttribute("data-locale") === settings.locale); });
-    };
-    Settings.updateRangeOutputs = function () { ["master", "bgm", "sfx"].forEach(function (name) { var input = document.getElementById(name + "-volume"); var output = document.getElementById(name + "-volume-value"); if (!input || !output) return; var value = Number(input.value); output.textContent = cg.Utils.formatPercent(value); input.style.setProperty("--range-progress", cg.Utils.formatPercent(value)); }); };
-    Settings.readControls = function () {
-        var next = Object.assign({}, root.GameState.settings, { masterVolume: Number(document.getElementById("master-volume").value), bgmVolume: Number(document.getElementById("bgm-volume").value), sfxVolume: Number(document.getElementById("sfx-volume").value), mute: document.getElementById("mute-toggle").checked, bgmEnabled: document.getElementById("bgm-enabled-toggle").checked, sfxEnabled: document.getElementById("sfx-enabled-toggle").checked, theme: document.getElementById("theme-select").value, graphicsQuality: document.getElementById("quality-select").value, difficulty: document.getElementById("difficulty-select").value, reducedMotion: document.getElementById("reduced-motion-toggle").checked, cameraShake: document.getElementById("camera-shake-toggle").checked, highContrast: document.getElementById("high-contrast-toggle").checked }); Settings.apply(next); if (root.GameState.screen === cg.Constants.SCREENS.SETTINGS) Settings.updateRangeOutputs();
-    };
-    Settings.apply = function (settings, options) { var previous = root.GameState.settings; var clean = cg.SettingsStorage.save(settings); cg.State.setSettings(clean); Settings.refresh(); cg.I18n.apply(document); cg.Audio.applySettings(clean); if (cg.Battle) cg.Battle.refreshPalette(); if (!options || options.toast !== false) { if (previous.theme !== clean.theme && cg.Toast) cg.Toast.show(cg.I18n.t("toast.theme", { theme: cg.I18n.t("theme." + clean.theme) }), "success"); if (previous.locale !== clean.locale && cg.Toast) cg.Toast.show(cg.I18n.t("toast.language"), "success"); } };
-    Settings.set = function (patch) { Settings.apply(Object.assign({}, root.GameState.settings, patch)); };
-    Settings.restoreDefaults = function () { cg.ScreenManager.showConfirm("confirm.restoreTitle", "confirm.restoreCopy", function () { Settings.apply(cg.SettingsStorage.defaults()); if (cg.Toast) cg.Toast.show(cg.I18n.t("toast.saved"), "success"); }); };
-    Settings.resetProgress = function () { cg.ScreenManager.showConfirm("confirm.resetTitle", "confirm.resetCopy", function () { cg.SaveManager.reset(); cg.Menu.refreshContinue(); if (cg.Toast) cg.Toast.show(cg.I18n.t("toast.saved"), "success"); }, "confirm.resetYes"); };
-}(window));
+    Object.keys(map).forEach(function (id) {
+      var element = document.getElementById(id);
+      if (!element) return;
+      if (element.type === "checkbox") element.checked = Boolean(map[id]);
+      else element.value = map[id];
+    });
+    Settings.updateRangeOutputs();
+    document.body.dataset.theme = settings.theme;
+    document.body.dataset.highContrast = String(settings.highContrast);
+    document.body.dataset.reducedMotion = String(
+      settings.reducedMotion || cg.Utils.prefersReducedMotion(),
+    );
+    document.querySelectorAll("[data-locale]").forEach(function (button) {
+      button.classList.toggle(
+        "is-selected",
+        button.getAttribute("data-locale") === settings.locale,
+      );
+    });
+  };
+  Settings.updateRangeOutputs = function () {
+    ["master", "bgm", "sfx"].forEach(function (name) {
+      var input = document.getElementById(name + "-volume");
+      var output = document.getElementById(name + "-volume-value");
+      if (!input || !output) return;
+      var value = Number(input.value);
+      output.textContent = cg.Utils.formatPercent(value);
+      input.style.setProperty(
+        "--range-progress",
+        cg.Utils.formatPercent(value),
+      );
+    });
+  };
+  Settings.readControls = function () {
+    var next = Object.assign({}, root.GameState.settings, {
+      masterVolume: Number(document.getElementById("master-volume").value),
+      bgmVolume: Number(document.getElementById("bgm-volume").value),
+      sfxVolume: Number(document.getElementById("sfx-volume").value),
+      mute: document.getElementById("mute-toggle").checked,
+      bgmEnabled: document.getElementById("bgm-enabled-toggle").checked,
+      sfxEnabled: document.getElementById("sfx-enabled-toggle").checked,
+      theme: document.getElementById("theme-select").value,
+      graphicsQuality: document.getElementById("quality-select").value,
+      difficulty: document.getElementById("difficulty-select").value,
+      reducedMotion: document.getElementById("reduced-motion-toggle").checked,
+      cameraShake: document.getElementById("camera-shake-toggle").checked,
+      highContrast: document.getElementById("high-contrast-toggle").checked,
+    });
+    Settings.apply(next);
+    if (root.GameState.screen === cg.Constants.SCREENS.SETTINGS)
+      Settings.updateRangeOutputs();
+  };
+  Settings.apply = function (settings, options) {
+    var previous = root.GameState.settings;
+    var clean = cg.SettingsStorage.save(settings);
+    cg.State.setSettings(clean);
+    Settings.refresh();
+    cg.I18n.apply(document);
+    cg.Audio.applySettings(clean);
+    if (cg.Battle) cg.Battle.refreshPalette();
+    if (!options || options.toast !== false) {
+      if (previous.theme !== clean.theme && cg.Toast)
+        cg.Toast.show(
+          cg.I18n.t("toast.theme", {
+            theme: cg.I18n.t("theme." + clean.theme),
+          }),
+          "success",
+        );
+      if (previous.locale !== clean.locale && cg.Toast)
+        cg.Toast.show(cg.I18n.t("toast.language"), "success");
+    }
+  };
+  Settings.set = function (patch) {
+    Settings.apply(Object.assign({}, root.GameState.settings, patch));
+  };
+  Settings.restoreDefaults = function () {
+    cg.ScreenManager.showConfirm(
+      "confirm.restoreTitle",
+      "confirm.restoreCopy",
+      function () {
+        Settings.apply(cg.SettingsStorage.defaults());
+        if (cg.Toast) cg.Toast.show(cg.I18n.t("toast.saved"), "success");
+      },
+    );
+  };
+  Settings.resetProgress = function () {
+    cg.ScreenManager.showConfirm(
+      "confirm.resetTitle",
+      "confirm.resetCopy",
+      function () {
+        cg.SaveManager.reset();
+        cg.Menu.refreshContinue();
+        if (cg.Toast) cg.Toast.show(cg.I18n.t("toast.saved"), "success");
+      },
+      "confirm.resetYes",
+    );
+  };
+})(window);
