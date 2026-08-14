@@ -1,0 +1,4 @@
+interface:
+  display_name: "Castle Multiplier Defense"
+  short_description: "Maintain ballistic battles and moving gates"
+  default_prompt: "Use $castle-multiplier-defense to modify this game turn-based ballistic battle system safely."
