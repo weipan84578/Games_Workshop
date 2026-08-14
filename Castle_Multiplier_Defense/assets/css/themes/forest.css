@@ -1,0 +1,15 @@
+[data-theme="forest"] {
+    --color-bg: #122d2a;
+    --color-bg-deep: #091d1d;
+    --color-panel: rgba(24, 60, 53, .94);
+    --color-panel-solid: #1d4b40;
+    --color-primary: #9cda89;
+    --color-primary-strong: #4ba67d;
+    --color-secondary: #f5d77a;
+    --color-accent: #ef9a82;
+    --scene-sky-top: #214b52;
+    --scene-sky-bottom: #90c58d;
+    --scene-hill-back: #476f57;
+    --scene-hill-front: #286248;
+    --scene-ground: #1d503d;
+}

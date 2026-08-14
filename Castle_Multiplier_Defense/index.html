@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#101a38">
+    <meta name="description" content="Castle Multiplier Defense — 原創城堡倍率飛彈防衛遊戲">
+    <title>Castle Multiplier Defense</title>
+    <link rel="stylesheet" href="assets/css/base/reset.css">
+    <link rel="stylesheet" href="assets/css/base/variables.css">
+    <link rel="stylesheet" href="assets/css/base/typography.css">
+    <link rel="stylesheet" href="assets/css/base/accessibility.css">
+    <link rel="stylesheet" href="assets/css/layout/app.css">
+    <link rel="stylesheet" href="assets/css/layout/responsive.css">
+    <link rel="stylesheet" href="assets/css/layout/orientation.css">
+    <link rel="stylesheet" href="assets/css/components/buttons.css">
+    <link rel="stylesheet" href="assets/css/components/modal.css">
+    <link rel="stylesheet" href="assets/css/components/cards.css">
+    <link rel="stylesheet" href="assets/css/components/sliders.css">
+    <link rel="stylesheet" href="assets/css/components/tabs.css">
+    <link rel="stylesheet" href="assets/css/components/toast.css">
+    <link rel="stylesheet" href="assets/css/screens/menu.css">
+    <link rel="stylesheet" href="assets/css/screens/game.css">
+    <link rel="stylesheet" href="assets/css/screens/help.css">
+    <link rel="stylesheet" href="assets/css/screens/settings.css">
+    <link rel="stylesheet" href="assets/css/screens/pause.css">
+    <link rel="stylesheet" href="assets/css/screens/result.css">
+    <link rel="stylesheet" href="assets/css/themes/default.css">
+    <link rel="stylesheet" href="assets/css/themes/ocean.css">
+    <link rel="stylesheet" href="assets/css/themes/sunset.css">
+    <link rel="stylesheet" href="assets/css/themes/forest.css">
+    <link rel="stylesheet" href="assets/css/themes/night.css">
+    <link rel="stylesheet" href="assets/css/themes/kawaii.css">
+</head>
+<body data-theme="default" data-high-contrast="false" data-reduced-motion="false">
+<div id="app" class="app-shell">
+    <section id="boot-screen" class="screen screen--boot is-active" data-screen="BOOT" aria-live="polite">
+        <div class="boot-card">
+            <div class="loading-mascot" aria-hidden="true"><span>✦</span><i></i></div>
+            <p class="eyebrow" data-i18n="boot.eyebrow">準備戰場</p>
+            <p class="loading-label" data-i18n="boot.loading">正在載入原創戰場…</p>
+            <div class="loading-bar" aria-hidden="true"><span></span></div>
+        </div>
+    </section>
+
+    <main id="main-menu-screen" class="screen screen--menu" data-screen="MAIN_MENU" hidden>
+        <div class="menu-stars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="menu-layout">
+            <div class="menu-visual" aria-hidden="true">
+                <div class="moon-glow"></div>
+                <div class="menu-cloud menu-cloud--one"></div>
+                <div class="menu-cloud menu-cloud--two"></div>
+                <div class="menu-castle menu-castle--enemy"><span></span><b></b><i></i></div>
+                <div class="menu-bolt menu-bolt--one">✦</div>
+                <div class="menu-bolt menu-bolt--two">×5</div>
+                <div class="menu-castle menu-castle--player"><span></span><b></b><i></i></div>
+            </div>
+            <div class="menu-card">
+                <div class="brand-lockup">
+                    <div class="brand-emblem" aria-hidden="true"><span>♜</span><i>✦</i></div>
+                    <p class="eyebrow" data-i18n="menu.eyebrow">原創城堡倍率防衛</p>
+                    <h1>Castle <em>Multiplier</em><strong>Defense</strong></h1>
+                    <p class="menu-tagline" data-i18n="menu.tagline">瞄準、穿門、讓每一發都變成傳奇。</p>
+                </div>
+                <nav class="menu-actions" aria-label="Main menu" data-i18n-aria-label="common.mainMenu">
+                    <button class="button button--primary button--wide" type="button" data-action="start">
+                        <span class="button-icon" aria-hidden="true">⚔</span><span data-i18n="menu.start">開始遊戲</span>
+                    </button>
+                    <button id="continue-button" class="button button--secondary button--wide" type="button" data-action="continue" disabled>
+                        <span class="button-icon" aria-hidden="true">↻</span><span data-i18n="menu.continue">繼續遊戲</span>
+                    </button>
+                    <div class="menu-secondary-actions">
+                        <button class="button button--ghost" type="button" data-action="help">
+                            <span class="button-icon" aria-hidden="true">✧</span><span data-i18n="menu.help">說明</span>
+                        </button>
+                        <button class="button button--ghost" type="button" data-action="settings">
+                            <span class="button-icon" aria-hidden="true">⚙</span><span data-i18n="menu.settings">設定</span>
+                        </button>
+                    </div>
+                </nav>
+                <p class="menu-footnote"><span aria-hidden="true">⌁</span> <span data-i18n="menu.offline">離線可玩・原創素材・三語支援</span></p>
+            </div>
+        </div>
+    </main>
+
+    <section id="game-screen" class="screen screen--game" data-screen="GAME" hidden>
+        <div id="game-shell" class="game-shell">
+            <header class="game-hud" aria-label="Game HUD" data-i18n-aria-label="common.gameHud">
+                <div class="hud-group hud-group--enemy">
+                    <div class="hud-avatar hud-avatar--enemy" aria-hidden="true">♞</div>
+                    <div class="hud-stat-block">
+                        <div class="hud-label"><span data-i18n="hud.enemy">敵方城堡</span><span id="enemy-level-label" class="hud-badge">LV 1</span></div>
+                        <div class="hp-bar"><span id="enemy-hp-bar" class="hp-bar__fill hp-bar__fill--enemy"></span></div>
+                        <div class="hud-value"><span id="enemy-hp-value">280</span> / <span id="enemy-max-hp-value">280</span> HP</div>
+                    </div>
+                </div>
+                <div class="hud-center">
+                    <span class="hud-kicker" data-i18n="hud.stage">戰場</span>
+                    <strong id="hud-level">LEVEL 1</strong>
+                    <span id="hud-weather" class="hud-weather">☀ <span data-i18n="weather.clear">晴朗</span></span>
+                </div>
+                <div class="hud-group hud-group--player">
+                    <div class="hud-stat-block hud-stat-block--right">
+                        <div class="hud-label"><span data-i18n="hud.player">玩家城堡</span><span id="hud-combo" class="hud-badge hud-badge--combo">COMBO 0</span></div>
+                        <div class="hp-bar"><span id="player-hp-bar" class="hp-bar__fill hp-bar__fill--player"></span></div>
+                        <div class="hud-value"><span id="player-hp-value">220</span> / <span id="player-max-hp-value">220</span> HP</div>
+                    </div>
+                    <div class="hud-avatar hud-avatar--player" aria-hidden="true">♜</div>
+                    <button class="icon-button hud-pause-button" type="button" data-action="pause" aria-label="Pause" data-i18n-aria-label="common.pause"><span aria-hidden="true">Ⅱ</span></button>
+                </div>
+            </header>
+
+            <div id="battle-stage" class="battle-stage">
+                <canvas id="battle-canvas" tabindex="0" aria-label="Battle field" data-i18n-aria-label="common.battleField"></canvas>
+                <div class="stage-badge stage-badge--aim"><span aria-hidden="true">🎯</span><span id="aim-label" data-i18n="game.aim">拖曳瞄準</span></div>
+                <div id="combo-pop" class="combo-pop" aria-live="polite"></div>
+                <div id="debug-panel" class="debug-panel" hidden></div>
+            </div>
+
+            <div class="game-control-bar">
+                <div class="control-status">
+                    <div class="control-stat"><span class="control-stat__icon" aria-hidden="true">🚀</span><span><small data-i18n="game.shots">本局發射</small><strong id="shots-fired">0</strong></span></div>
+                    <div class="control-stat"><span class="control-stat__icon" aria-hidden="true">✦</span><span><small data-i18n="game.multiplier">最高倍率</small><strong id="max-multiplier">x1</strong></span></div>
+                    <div class="control-stat control-stat--skill"><span class="control-stat__icon" aria-hidden="true">◌</span><span><small data-i18n="game.skill">技能：緩速</small><strong id="skill-status" data-i18n="game.ready">READY</strong></span></div>
+                </div>
+                <div class="control-actions">
+                    <button id="skill-button" class="button button--skill" type="button" data-action="skill"><span class="button-icon" aria-hidden="true">◌</span><span data-i18n="game.slowTime">緩速時間</span></button>
+                    <button id="fire-button" class="button button--fire" type="button" data-action="fire"><span class="button-icon" aria-hidden="true">➤</span><span data-i18n="game.fire">發射</span></button>
+                </div>
+            </div>
+        </div>
+
+        <div id="pause-overlay" class="modal-overlay" hidden>
+            <div class="modal-panel pause-panel" role="dialog" aria-modal="true" aria-labelledby="pause-title">
+                <div class="modal-icon" aria-hidden="true">☁</div>
+                <p class="eyebrow" data-i18n="pause.eyebrow">戰場暫停</p>
+                <h2 id="pause-title" data-i18n="pause.title">整隊一下</h2>
+                <p class="modal-copy" data-i18n="pause.copy">你的城堡正在安全等待。</p>
+                <div class="modal-actions modal-actions--stack">
+                    <button class="button button--primary" type="button" data-action="resume"><span class="button-icon" aria-hidden="true">▶</span><span data-i18n="pause.resume">繼續戰鬥</span></button>
+                    <button class="button button--secondary" type="button" data-action="restart"><span class="button-icon" aria-hidden="true">↻</span><span data-i18n="pause.restart">重新開始</span></button>
+                    <button class="button button--ghost" type="button" data-action="pause-settings"><span class="button-icon" aria-hidden="true">⚙</span><span data-i18n="pause.settings">設定</span></button>
+                    <button class="button button--text-danger" type="button" data-action="menu-from-pause"><span class="button-icon" aria-hidden="true">←</span><span data-i18n="pause.menu">返回主選單</span></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="help-screen" class="screen screen--help" data-screen="HELP" hidden>
+        <div class="page-shell">
+            <header class="page-header">
+                <div><p class="eyebrow" data-i18n="help.eyebrow">航海圖與戰術筆記</p><h2 data-i18n="help.title">說明</h2></div>
+                <button class="button button--ghost" type="button" data-action="back-menu"><span class="button-icon" aria-hidden="true">←</span><span data-i18n="common.back">返回</span></button>
+            </header>
+            <div id="help-grid" class="help-grid"></div>
+        </div>
+    </section>
+
+    <section id="settings-screen" class="screen screen--settings" data-screen="SETTINGS" hidden>
+        <div class="page-shell page-shell--narrow">
+            <header class="page-header">
+                <div><p class="eyebrow" data-i18n="settings.eyebrow">調整你的戰場</p><h2 data-i18n="settings.title">設定</h2></div>
+                <button class="button button--ghost" type="button" data-action="settings-back"><span class="button-icon" aria-hidden="true">←</span><span data-i18n="common.back">返回</span></button>
+            </header>
+
+            <div class="settings-grid">
+                <section class="settings-card card" aria-labelledby="audio-settings-title">
+                    <div class="settings-card__heading"><span class="section-icon" aria-hidden="true">🎵</span><div><h3 id="audio-settings-title" data-i18n="settings.audio">音訊</h3><p data-i18n="settings.audioHint">清脆、輕快，音量可分開調整。</p></div></div>
+                    <div class="range-list">
+                        <label class="range-row" for="master-volume"><span><b data-i18n="settings.master">Master</b><small data-i18n="settings.masterHint">整體音量</small></span><input id="master-volume" type="range" min="0" max="1" step="0.01"><output id="master-volume-value">35%</output></label>
+                        <label class="range-row" for="bgm-volume"><span><b data-i18n="settings.bgm">BGM</b><small data-i18n="settings.bgmHint">鋼琴背景音樂</small></span><input id="bgm-volume" type="range" min="0" max="1" step="0.01"><output id="bgm-volume-value">25%</output></label>
+                        <label class="range-row" for="sfx-volume"><span><b data-i18n="settings.sfx">SFX</b><small data-i18n="settings.sfxHint">射擊與倍率音效</small></span><input id="sfx-volume" type="range" min="0" max="1" step="0.01"><output id="sfx-volume-value">55%</output></label>
+                    </div>
+                    <div class="switch-list">
+                        <label class="switch-row"><span><b data-i18n="settings.mute">靜音</b><small data-i18n="settings.muteHint">暫停所有聲音</small></span><input id="mute-toggle" type="checkbox"><span class="switch-control" aria-hidden="true"></span></label>
+                        <label class="switch-row"><span><b data-i18n="settings.bgmEnabled">背景音樂</b><small data-i18n="settings.bgmEnabledHint">保留鋼琴循環</small></span><input id="bgm-enabled-toggle" type="checkbox"><span class="switch-control" aria-hidden="true"></span></label>
+                        <label class="switch-row"><span><b data-i18n="settings.sfxEnabled">音效</b><small data-i18n="settings.sfxEnabledHint">保留操作回饋</small></span><input id="sfx-enabled-toggle" type="checkbox"><span class="switch-control" aria-hidden="true"></span></label>
+                    </div>
+                </section>
+
+                <section class="settings-card card" aria-labelledby="display-settings-title">
+                    <div class="settings-card__heading"><span class="section-icon" aria-hidden="true">🌈</span><div><h3 id="display-settings-title" data-i18n="settings.display">畫面</h3><p data-i18n="settings.displayHint">挑選氣氛並守住畫面清晰度。</p></div></div>
+                    <div class="field-list">
+                        <label class="select-row" for="theme-select"><span><b data-i18n="settings.theme">主題</b><small data-i18n="settings.themeHint">立即套用色彩與場景</small></span><select id="theme-select"><option value="default" data-i18n="theme.classic">Classic</option><option value="ocean" data-i18n="theme.ocean">Ocean</option><option value="sunset" data-i18n="theme.sunset">Sunset</option><option value="forest" data-i18n="theme.forest">Forest</option><option value="night" data-i18n="theme.night">Night</option><option value="kawaii" data-i18n="theme.kawaii">Kawaii</option></select></label>
+                        <label class="select-row" for="quality-select"><span><b data-i18n="settings.quality">畫質</b><small data-i18n="settings.qualityHint">依裝置調整特效數量</small></span><select id="quality-select"><option value="auto" data-i18n="quality.auto">Auto</option><option value="low" data-i18n="quality.low">Low</option><option value="medium" data-i18n="quality.medium">Medium</option><option value="high" data-i18n="quality.high">High</option></select></label>
+                    </div>
+                    <div class="switch-list">
+                        <label class="switch-row"><span><b data-i18n="settings.reducedMotion">減少動畫</b><small data-i18n="settings.reducedMotionHint">降低震動、粒子與縮放</small></span><input id="reduced-motion-toggle" type="checkbox"><span class="switch-control" aria-hidden="true"></span></label>
+                        <label class="switch-row"><span><b data-i18n="settings.cameraShake">鏡頭震動</b><small data-i18n="settings.cameraShakeHint">大倍率命中的衝擊感</small></span><input id="camera-shake-toggle" type="checkbox"><span class="switch-control" aria-hidden="true"></span></label>
+                        <label class="switch-row"><span><b data-i18n="settings.highContrast">高對比</b><small data-i18n="settings.highContrastHint">強化文字與標記辨識</small></span><input id="high-contrast-toggle" type="checkbox"><span class="switch-control" aria-hidden="true"></span></label>
+                    </div>
+                </section>
+
+                <section class="settings-card card" aria-labelledby="game-settings-title">
+                    <div class="settings-card__heading"><span class="section-icon" aria-hidden="true">🛡️</span><div><h3 id="game-settings-title" data-i18n="settings.game">遊戲</h3><p data-i18n="settings.gameHint">選擇適合你的節奏。</p></div></div>
+                    <label class="select-row" for="difficulty-select"><span><b data-i18n="settings.difficulty">難度</b><small data-i18n="settings.difficultyHint">不只增加血量，也會改變 AI</small></span><select id="difficulty-select"><option value="easy" data-i18n="difficulty.easy">Easy</option><option value="normal" data-i18n="difficulty.normal">Normal</option><option value="hard" data-i18n="difficulty.hard">Hard</option></select></label>
+                    <div class="language-block"><div class="language-heading"><span class="section-icon section-icon--small" aria-hidden="true">🌐</span><div><b data-i18n="settings.language">語言</b><small data-i18n="settings.languageHint">切換後立即更新介面</small></div></div><div class="language-options" role="group" aria-label="Language" data-i18n-aria-label="common.language"><button class="language-button" type="button" data-locale="zh-TW">中文</button><button class="language-button" type="button" data-locale="en-US">EN</button><button class="language-button" type="button" data-locale="ja-JP">日本語</button></div></div>
+                    <div class="settings-danger-zone"><button class="button button--small button--outline" type="button" data-action="reset-settings"><span aria-hidden="true">↺</span><span data-i18n="settings.restore">還原設定</span></button><button class="button button--small button--danger" type="button" data-action="reset-progress"><span aria-hidden="true">⌫</span><span data-i18n="settings.resetProgress">重置遊戲進度</span></button></div>
+                </section>
+            </div>
+        </div>
+    </section>
+
+    <section id="result-screen" class="screen screen--result" data-screen="RESULT_WIN" hidden>
+        <div class="result-confetti" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="result-card card">
+            <div id="result-icon" class="result-icon" aria-hidden="true">✦</div>
+            <p id="result-eyebrow" class="eyebrow" data-i18n="result.eyebrow">城堡日誌</p>
+            <h2 id="result-title" data-i18n="result.winTitle">勝利！</h2>
+            <p id="result-copy" class="result-copy" data-i18n="result.winCopy">倍率之光照亮了整座城。</p>
+            <div id="result-stats" class="result-stats"></div>
+            <div class="result-actions"><button id="result-primary-button" class="button button--primary" type="button" data-action="next-level"><span class="button-icon" aria-hidden="true">➜</span><span data-i18n="result.next">下一關</span></button><button class="button button--secondary" type="button" data-action="retry"><span class="button-icon" aria-hidden="true">↻</span><span data-i18n="result.retry">再來一次</span></button><button class="button button--ghost" type="button" data-action="result-menu"><span class="button-icon" aria-hidden="true">⌂</span><span data-i18n="result.menu">主選單</span></button></div>
+        </div>
+    </section>
+
+    <div id="confirm-modal" class="modal-overlay" hidden>
+        <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+            <div id="confirm-icon" class="modal-icon" aria-hidden="true">?</div>
+            <p class="eyebrow" data-i18n="common.confirmation">請確認</p>
+            <h2 id="confirm-title">確認操作</h2>
+            <p id="confirm-copy" class="modal-copy"></p>
+            <div class="modal-actions"><button id="confirm-cancel" class="button button--ghost" type="button"><span data-i18n="common.cancel">取消</span></button><button id="confirm-accept" class="button button--primary" type="button"><span data-i18n="common.confirm">確認</span></button></div>
+        </div>
+    </div>
+
+    <div id="error-modal" class="modal-overlay" hidden>
+        <div class="modal-panel" role="alertdialog" aria-modal="true" aria-labelledby="error-title">
+            <div class="modal-icon modal-icon--danger" aria-hidden="true">!</div>
+            <p class="eyebrow" data-i18n="error.eyebrow">需要整隊</p>
+            <h2 id="error-title" data-i18n="error.title">遊戲遇到了一點問題</h2>
+            <p class="modal-copy" data-i18n="error.copy">你可以返回主畫面重新開始。</p>
+            <div class="modal-actions"><button class="button button--primary" type="button" data-action="error-menu"><span data-i18n="error.back">返回主畫面</span></button></div>
+        </div>
+    </div>
+
+    <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+</div>
+
+<script src="assets/js/core/constants.js"></script>
+<script src="assets/js/core/state.js"></script>
+<script src="assets/js/core/utils.js"></script>
+<script src="assets/js/storage/settings-storage.js"></script>
+<script src="assets/js/storage/save-manager.js"></script>
+<script src="assets/js/i18n/zh-TW.js"></script>
+<script src="assets/js/i18n/en-US.js"></script>
+<script src="assets/js/i18n/ja-JP.js"></script>
+<script src="assets/js/i18n/i18n.js"></script>
+<script src="assets/js/audio/audio-manager.js"></script>
+<script src="assets/js/audio/bgm.js"></script>
+<script src="assets/js/audio/sfx.js"></script>
+<script src="assets/js/game/difficulty.js"></script>
+<script src="assets/js/game/level.js"></script>
+<script src="assets/js/game/castle.js"></script>
+<script src="assets/js/game/projectile.js"></script>
+<script src="assets/js/game/multiplier-gate.js"></script>
+<script src="assets/js/game/collision.js"></script>
+<script src="assets/js/game/particles.js"></script>
+<script src="assets/js/game/camera.js"></script>
+<script src="assets/js/game/enemy-ai.js"></script>
+<script src="assets/js/game/battle.js"></script>
+<script src="assets/js/input/keyboard.js"></script>
+<script src="assets/js/input/pointer.js"></script>
+<script src="assets/js/input/touch.js"></script>
+<script src="assets/js/ui/toast.js"></script>
+<script src="assets/js/ui/screen-manager.js"></script>
+<script src="assets/js/ui/hud.js"></script>
+<script src="assets/js/ui/menu.js"></script>
+<script src="assets/js/ui/settings.js"></script>
+<script src="assets/js/ui/help.js"></script>
+<script src="assets/js/ui/result.js"></script>
+<script src="assets/js/core/game-loop.js"></script>
+<script src="assets/js/core/app.js"></script>
+</body>
+</html>

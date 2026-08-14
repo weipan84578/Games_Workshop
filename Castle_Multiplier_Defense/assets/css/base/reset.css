@@ -1,0 +1,19 @@
+*, *::before, *::after { box-sizing: border-box; }
+
+html { min-width: 320px; min-height: 100%; background: #101a38; }
+
+body { margin: 0; min-width: 320px; min-height: 100%; }
+
+button, input, select { font: inherit; }
+
+button { border: 0; }
+
+button:disabled { cursor: not-allowed; }
+
+canvas { display: block; }
+
+img, svg { max-width: 100%; }
+
+h1, h2, h3, p { margin-top: 0; }
+
+[hidden] { display: none !important; }

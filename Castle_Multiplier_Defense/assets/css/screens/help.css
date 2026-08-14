@@ -1,0 +1,18 @@
+.screen--help { background: radial-gradient(circle at 8% 5%, rgba(98,213,255,.12), transparent 28%), var(--color-bg-deep); overflow-y: auto; }
+.help-grid { display: grid; gap: 1rem; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.help-card { background: linear-gradient(145deg, rgba(26, 47, 92, .88), rgba(11, 25, 56, .86)); border: 1px solid var(--color-border); border-radius: var(--radius-md); box-shadow: var(--shadow-card); min-height: 220px; padding: 1.25rem; }
+.help-card--wide { grid-column: span 2; }
+.help-card__icon { align-items: center; background: rgba(98,213,255,.12); border: 1px solid rgba(98,213,255,.3); border-radius: 14px; display: flex; font-size: 1.9rem; height: 54px; justify-content: center; margin-bottom: 1rem; width: 54px; }
+.help-card h3 { margin-bottom: .5rem; }
+.help-card p { font-size: .95rem; margin-bottom: .8rem; }
+.help-card ul { color: var(--color-text-soft); font-size: .9rem; margin: .5rem 0 0; padding-left: 1.2rem; }
+.help-card li + li { margin-top: .35rem; }
+.help-example { align-items: center; background: rgba(5, 13, 36, .62); border: 1px dashed rgba(255,255,255,.25); border-radius: 12px; display: flex; gap: .6rem; margin-top: .9rem; padding: .7rem; }
+.help-example strong { color: var(--color-secondary); font-family: var(--font-display); font-size: 1.35rem; }
+.help-example span { color: var(--color-text-muted); font-size: .82rem; }
+.help-route { align-items: center; display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .8rem; }
+.help-route b { background: rgba(98,213,255,.14); border: 1px solid rgba(98,213,255,.35); border-radius: 9px; color: var(--color-primary); padding: .3rem .5rem; }
+.help-route i { color: var(--color-secondary); font-style: normal; }
+
+@media (max-width: 900px) { .help-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .help-card--wide { grid-column: span 2; } }
+@media (max-width: 560px) { .help-grid { grid-template-columns: 1fr; } .help-card--wide { grid-column: auto; } .help-card { min-height: 0; } }

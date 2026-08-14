@@ -1,0 +1,6 @@
+.toast-region { bottom: calc(1rem + var(--safe-bottom)); display: grid; gap: .55rem; pointer-events: none; position: fixed; right: max(1rem, var(--safe-right)); z-index: 200; }
+.toast { align-items: center; animation: toast-in 220ms ease both; background: rgba(11, 24, 55, .94); border: 1px solid var(--color-border-strong); border-radius: 14px; box-shadow: var(--shadow-soft); color: var(--color-text); display: flex; gap: .65rem; max-width: min(380px, calc(100vw - 2rem)); padding: .75rem 1rem; }
+.toast__icon { color: var(--color-secondary); font-size: 1.2rem; }
+.toast--danger { border-color: rgba(255,113,134,.6); }
+.toast--success .toast__icon { color: var(--color-success); }
+@keyframes toast-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }

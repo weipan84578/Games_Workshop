@@ -1,0 +1,15 @@
+[data-theme="ocean"] {
+    --color-bg: #082d45;
+    --color-bg-deep: #041825;
+    --color-panel: rgba(8, 55, 79, .94);
+    --color-panel-solid: #0b3e59;
+    --color-primary: #6be5f5;
+    --color-primary-strong: #1caac3;
+    --color-secondary: #ffd987;
+    --color-accent: #77b7ff;
+    --scene-sky-top: #0a4168;
+    --scene-sky-bottom: #63d5d2;
+    --scene-hill-back: #29658a;
+    --scene-hill-front: #087568;
+    --scene-ground: #064f51;
+}

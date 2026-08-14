@@ -1,0 +1,15 @@
+[data-theme="night"] {
+    --color-bg: #080e25;
+    --color-bg-deep: #030716;
+    --color-panel: rgba(16, 24, 57, .96);
+    --color-panel-solid: #111a3b;
+    --color-primary: #91b8ff;
+    --color-primary-strong: #526ee6;
+    --color-secondary: #e8d58b;
+    --color-accent: #d08cff;
+    --scene-sky-top: #080d2b;
+    --scene-sky-bottom: #253d79;
+    --scene-hill-back: #1b2c58;
+    --scene-hill-front: #1b4860;
+    --scene-ground: #102e43;
+}
