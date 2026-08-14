@@ -77,6 +77,7 @@
 
 | 資料夾                 | 遊戲名稱   | English Name         | 日本語名                   |
 | ---------------------- | ---------- | -------------------- | -------------------------- |
+| `Castle_Multiplier_Defense` | 城堡倍率防衛 | Castle Multiplier Defense | 城塞マルチプライヤー・ディフェンス |
 | `Monkey_Tower_Defense` | 猴子塔防   | Monkey Tower Defense | モンキータワーディフェンス |
 | `PvZ_Frontend`         | 花園防衛者 | Garden Defenders     | ガーデンディフェンダーズ   |
 | `Nim`                  | 尼姆搶數字 | Nim                  | ニム                       |
