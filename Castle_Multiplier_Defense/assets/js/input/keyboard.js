@@ -25,6 +25,18 @@
     if (code === "Space") {
       event.preventDefault();
       Input.emit("FIRE");
+    } else if (code === "Equal" || code === "NumpadAdd") {
+      event.preventDefault();
+      Input.emit("CAMERA", "camera-zoom-in");
+    } else if (code === "Minus" || code === "NumpadSubtract") {
+      event.preventDefault();
+      Input.emit("CAMERA", "camera-zoom-out");
+    } else if (code === "KeyV") {
+      event.preventDefault();
+      Input.emit("CAMERA", "camera-overview");
+    } else if (code === "KeyC") {
+      event.preventDefault();
+      Input.emit("CAMERA", "camera-reset");
     } else if (code === "KeyA" || code === "ArrowLeft") {
       event.preventDefault();
       Input.emit("AIM", { x: -0.025, y: 0 });

@@ -14,6 +14,7 @@
       "player-max-hp-value",
       "hud-level",
       "hud-turn",
+      "hud-shield",
       "hud-weather",
       "hud-combo",
       "shots-fired",
@@ -21,6 +22,7 @@
       "skill-status",
       "skill-button",
       "fire-button",
+      "camera-zoom-value",
       "combo-pop",
     ].forEach(function (id) {
       nodes[id] = document.getElementById(id);
@@ -53,6 +55,9 @@
       battle.turn === "player" ? "game.playerTurn" : "game.enemyTurn",
       { turn: battle.turnNumber },
     );
+    var shieldActive = battle.isFirstTurnShieldActive();
+    nodes["hud-shield"].textContent = cg.I18n.t("game.shieldActive");
+    nodes["hud-shield"].classList.toggle("is-hidden", !shieldActive);
     nodes["enemy-level-label"].textContent = "LV " + battle.levelNumber;
     nodes["hud-combo"].textContent = cg.I18n.t("game.combo", {
       count: battle.stats.combo,
@@ -74,6 +79,10 @@
     nodes["skill-status"].textContent = skillReady
       ? cg.I18n.t("game.ready")
       : cg.I18n.t("game.cooling", { seconds: Math.ceil(battle.skillCooldown) });
+    if (nodes["camera-zoom-value"]) {
+      nodes["camera-zoom-value"].textContent =
+        Math.round(cg.Camera.state.targetZoom * 100) + "%";
+    }
   };
   Hud.refreshStatic = function () {
     if (!nodes["hud-level"]) Hud.init();

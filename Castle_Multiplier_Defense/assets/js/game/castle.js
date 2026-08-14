@@ -27,6 +27,7 @@
       radius: isPlayer ? 0.075 : 0.073,
       recoil: 0,
       hitFlash: 0,
+      shieldFlash: 0,
       takeDamage: function (amount) {
         var damage = Math.max(1, Math.round(amount));
         this.hp = Math.max(0, this.hp - damage);

@@ -37,14 +37,31 @@
       circle.radius + radius
     );
   };
+  Collision.segmentVsCircle = function (x1, y1, x2, y2, point, radius) {
+    var dx = x2 - x1;
+    var dy = y2 - y1;
+    var lengthSquared = dx * dx + dy * dy;
+    var ratio = lengthSquared
+      ? ((point.x - x1) * dx + (point.y - y1) * dy) / lengthSquared
+      : 0;
+    var clampedRatio = Math.max(0, Math.min(1, ratio));
+    var closestX = x1 + dx * clampedRatio;
+    var closestY = y1 + dy * clampedRatio;
+
+    return Math.hypot(closestX - point.x, closestY - point.y) <= radius;
+  };
   Collision.projectileHitsCastle = function (
     projectile,
     castlePoint,
     castleRadius,
   ) {
-    return (
-      Math.hypot(projectile.x - castlePoint.x, projectile.y - castlePoint.y) <=
-      castleRadius
+    return Collision.segmentVsCircle(
+      projectile.prevX,
+      projectile.prevY,
+      projectile.x,
+      projectile.y,
+      castlePoint,
+      castleRadius,
     );
   };
 })(window);

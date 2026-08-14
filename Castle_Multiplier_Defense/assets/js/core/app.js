@@ -96,6 +96,22 @@
         return cg.Battle.firePlayer();
       case "skill":
         return cg.Battle.useSkill();
+      case "camera-pan-up":
+        return cg.Camera.panBy(0, -0.08);
+      case "camera-pan-down":
+        return cg.Camera.panBy(0, 0.08);
+      case "camera-pan-left":
+        return cg.Camera.panBy(-0.08, 0);
+      case "camera-pan-right":
+        return cg.Camera.panBy(0.08, 0);
+      case "camera-zoom-in":
+        return cg.Camera.zoomBy(0.08);
+      case "camera-zoom-out":
+        return cg.Camera.zoomBy(-0.08);
+      case "camera-overview":
+        return cg.Camera.overview();
+      case "camera-reset":
+        return cg.Camera.resetView(cg.Battle.turn, cg.Battle.getOrientation());
       case "next-level":
         return cg.Result.next();
       case "retry":
@@ -132,6 +148,9 @@
     });
     cg.Input.on("SKILL", function () {
       App.handleAction("skill");
+    });
+    cg.Input.on("CAMERA", function (action) {
+      if (cg.Battle.active && !cg.Battle.paused) App.handleAction(action);
     });
     cg.Input.on("PAUSE", function () {
       if (

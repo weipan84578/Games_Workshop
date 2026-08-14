@@ -174,8 +174,8 @@
                   ></span>
                 </div>
                 <div class="hud-value">
-                  <span id="enemy-hp-value">280</span> /
-                  <span id="enemy-max-hp-value">280</span> HP
+                  <span id="enemy-hp-value">520</span> /
+                  <span id="enemy-max-hp-value">520</span> HP
                 </div>
               </div>
             </div>
@@ -183,6 +183,12 @@
               <span class="hud-kicker" data-i18n="hud.stage">戰場</span>
               <strong id="hud-level">LEVEL 1</strong>
               <span id="hud-turn" class="hud-turn">PLAYER TURN</span>
+              <span
+                id="hud-shield"
+                class="hud-shield"
+                data-i18n="game.shieldActive"
+                >護盾 75%</span
+              >
               <span id="hud-weather" class="hud-weather"
                 >☀ <span data-i18n="weather.clear">晴朗</span></span
               >
@@ -202,8 +208,8 @@
                   ></span>
                 </div>
                 <div class="hud-value">
-                  <span id="player-hp-value">220</span> /
-                  <span id="player-max-hp-value">220</span> HP
+                  <span id="player-hp-value">420</span> /
+                  <span id="player-max-hp-value">420</span> HP
                 </div>
               </div>
               <div class="hud-avatar hud-avatar--player" aria-hidden="true">
@@ -231,6 +237,102 @@
             <div class="stage-badge stage-badge--aim">
               <span aria-hidden="true">🎯</span
               ><span id="aim-label" data-i18n="game.aim">拖曳瞄準</span>
+            </div>
+            <div
+              class="camera-controls"
+              aria-label="Camera controls"
+              data-i18n-aria-label="game.camera"
+            >
+              <span class="camera-controls__label" data-i18n="game.camera"
+                >鏡頭</span
+              >
+              <button
+                class="camera-button"
+                type="button"
+                data-action="camera-pan-up"
+                aria-label="Pan camera up"
+                data-i18n-aria-label="game.cameraPanUp"
+                data-i18n-title="game.cameraPanUp"
+              >
+                ▲
+              </button>
+              <div class="camera-controls__row">
+                <button
+                  class="camera-button"
+                  type="button"
+                  data-action="camera-pan-left"
+                  aria-label="Pan camera left"
+                  data-i18n-aria-label="game.cameraPanLeft"
+                  data-i18n-title="game.cameraPanLeft"
+                >
+                  ◀
+                </button>
+                <button
+                  class="camera-button camera-button--home"
+                  type="button"
+                  data-action="camera-reset"
+                  aria-label="Reset camera view"
+                  data-i18n-aria-label="game.cameraReset"
+                  data-i18n-title="game.cameraReset"
+                >
+                  ⌂
+                </button>
+                <button
+                  class="camera-button"
+                  type="button"
+                  data-action="camera-pan-right"
+                  aria-label="Pan camera right"
+                  data-i18n-aria-label="game.cameraPanRight"
+                  data-i18n-title="game.cameraPanRight"
+                >
+                  ▶
+                </button>
+              </div>
+              <button
+                class="camera-button"
+                type="button"
+                data-action="camera-pan-down"
+                aria-label="Pan camera down"
+                data-i18n-aria-label="game.cameraPanDown"
+                data-i18n-title="game.cameraPanDown"
+              >
+                ▼
+              </button>
+              <div class="camera-controls__row">
+                <button
+                  class="camera-button"
+                  type="button"
+                  data-action="camera-zoom-out"
+                  aria-label="Zoom out"
+                  data-i18n-aria-label="game.cameraZoomOut"
+                  data-i18n-title="game.cameraZoomOut"
+                >
+                  −
+                </button>
+                <button
+                  class="camera-button camera-button--overview"
+                  type="button"
+                  data-action="camera-overview"
+                  aria-label="Show full battlefield"
+                  data-i18n-aria-label="game.cameraOverview"
+                  data-i18n-title="game.cameraOverview"
+                >
+                  ◎
+                </button>
+                <button
+                  class="camera-button"
+                  type="button"
+                  data-action="camera-zoom-in"
+                  aria-label="Zoom in"
+                  data-i18n-aria-label="game.cameraZoomIn"
+                  data-i18n-title="game.cameraZoomIn"
+                >
+                  ＋
+                </button>
+              </div>
+              <span id="camera-zoom-value" class="camera-controls__value"
+                >90%</span
+              >
             </div>
             <div id="combo-pop" class="combo-pop" aria-live="polite"></div>
             <div id="debug-panel" class="debug-panel" hidden></div>
@@ -789,6 +891,7 @@
     <script src="assets/js/game/projectile.js"></script>
     <script src="assets/js/game/multiplier-gate.js"></script>
     <script src="assets/js/game/collision.js"></script>
+    <script src="assets/js/game/terrain.js"></script>
     <script src="assets/js/game/particles.js"></script>
     <script src="assets/js/game/camera.js"></script>
     <script src="assets/js/game/enemy-ai.js"></script>

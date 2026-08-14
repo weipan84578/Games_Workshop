@@ -14,7 +14,7 @@
   }
 
   var levels = [
-    createLevel(1, "clear", 1, 1.08),
+    createLevel(1, "clear", 2, 1.08),
     createLevel(2, "cloud", 2, 1.05),
     createLevel(3, "clear", 2, 1),
     createLevel(4, "sunset", 2, 0.97),

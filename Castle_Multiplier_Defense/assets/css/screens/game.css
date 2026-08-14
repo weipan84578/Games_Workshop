@@ -150,6 +150,17 @@
   margin-top: 0.12rem;
   text-transform: uppercase;
 }
+.hud-shield {
+  color: var(--color-secondary);
+  display: block;
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  margin-top: 0.08rem;
+}
+.hud-shield.is-hidden {
+  display: none;
+}
 .hud-weather {
   color: var(--color-text-soft);
   display: block;
@@ -192,6 +203,68 @@
 .stage-badge--aim {
   bottom: 1rem;
   left: 1rem;
+}
+.camera-controls {
+  align-items: center;
+  backdrop-filter: blur(9px);
+  background: rgba(8, 19, 49, 0.66);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  display: grid;
+  gap: 0.28rem;
+  justify-items: center;
+  padding: 0.42rem;
+  pointer-events: auto;
+  position: absolute;
+  right: 0.8rem;
+  top: 0.8rem;
+  z-index: 4;
+}
+.camera-controls__label {
+  color: var(--color-text-soft);
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.camera-controls__row {
+  display: flex;
+  gap: 0.28rem;
+}
+.camera-button {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 0.78rem;
+  font-weight: 900;
+  height: 27px;
+  justify-content: center;
+  padding: 0;
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+  width: 29px;
+}
+.camera-button:hover,
+.camera-button:focus-visible {
+  background: var(--color-primary);
+  color: #061329;
+  outline: none;
+  transform: translateY(-1px);
+}
+.camera-button--home,
+.camera-button--overview {
+  color: var(--color-secondary);
+}
+.camera-controls__value {
+  color: var(--color-text-muted);
+  font-family: var(--font-display);
+  font-size: 0.58rem;
 }
 .combo-pop {
   color: var(--color-secondary);
@@ -317,6 +390,9 @@
   .hud-turn {
     font-size: 0.5rem;
   }
+  .hud-shield {
+    font-size: 0.46rem;
+  }
   .hud-weather {
     font-size: 0.58rem;
   }
@@ -354,6 +430,22 @@
     font-size: 0.68rem;
     left: 0.55rem;
     padding: 0.3rem 0.5rem;
+  }
+  .camera-controls {
+    border-radius: 11px;
+    gap: 0.2rem;
+    padding: 0.3rem;
+    right: 0.55rem;
+    top: 0.55rem;
+  }
+  .camera-controls__label {
+    font-size: 0.5rem;
+  }
+  .camera-button {
+    border-radius: 7px;
+    font-size: 0.68rem;
+    height: 24px;
+    width: 26px;
   }
 }
 

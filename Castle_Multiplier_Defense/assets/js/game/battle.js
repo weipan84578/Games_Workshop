@@ -40,9 +40,16 @@
   }
   function origin(side) {
     var portrait = Battle.orientation === "portrait";
+    var offset = portrait
+      ? cg.Constants.CASTLE_VERTICAL_OFFSET
+      : cg.Constants.CASTLE_WORLD_OFFSET;
     if (portrait)
-      return side === "player" ? { x: 0.5, y: 0.94 } : { x: 0.5, y: 0.06 };
-    return side === "player" ? { x: 0.06, y: 0.5 } : { x: 0.94, y: 0.5 };
+      return side === "player"
+        ? { x: 0.5, y: 0.5 + offset }
+        : { x: 0.5, y: 0.5 - offset };
+    return side === "player"
+      ? { x: 0.5 - offset, y: 0.5 }
+      : { x: 0.5 + offset, y: 0.5 };
   }
 
   function aimTarget(source, aim) {
@@ -54,9 +61,28 @@
     return target;
   }
 
+  function calculateGravity(start, target) {
+    var constants = cg.Constants;
+    var flightTime = constants.PROJECTILE_FLIGHT_TIME;
+    var gravity =
+      Battle.orientation === "portrait"
+        ? constants.PROJECTILE_GRAVITY
+        : constants.LANDSCAPE_PROJECTILE_GRAVITY;
+    var verticalDelta = target.y - start.y;
+
+    if (verticalDelta < 0) {
+      var apexOffset = constants.UPWARD_ARC_APEX_RATIO - 0.5;
+      var requiredGravity =
+        -verticalDelta / (flightTime * flightTime * apexOffset);
+      gravity = Math.max(gravity, requiredGravity);
+    }
+
+    return gravity;
+  }
+
   function calculateVelocity(start, target) {
     var flightTime = cg.Constants.PROJECTILE_FLIGHT_TIME;
-    var gravity = Battle.orientation === "portrait" ? 0.9 : 0.28;
+    var gravity = calculateGravity(start, target);
 
     return {
       x: (target.x - start.x) / flightTime,
@@ -93,6 +119,7 @@
   Battle.player = null;
   Battle.enemy = null;
   Battle.gates = [];
+  Battle.terrain = [];
   Battle.projectiles = [];
   Battle.projectilePool = new cg.Projectile.Pool();
   Battle.aim = { x: 0.5, y: 0.12 };
@@ -138,6 +165,8 @@
     canvas.height = Math.floor(height * Battle.dpr);
     if (changed && Battle.active && Battle.gates.length)
       cg.Gate.reflow(Battle.gates, Battle.orientation);
+    if (changed && Battle.active && Battle.terrain.length)
+      cg.Terrain.reflow(Battle.terrain, Battle.orientation);
     refreshPalette();
   };
   Battle.getPlayerOrigin = function () {
@@ -148,6 +177,9 @@
   };
   Battle.getOrientation = function () {
     return Battle.orientation;
+  };
+  Battle.isFirstTurnShieldActive = function () {
+    return Battle.turnNumber <= 1;
   };
   Battle.beginTurn = function (side) {
     Battle.turn = side === "enemy" ? "enemy" : "player";
@@ -216,6 +248,10 @@
       Battle.orientation,
       cg.Difficulty.get(root.GameState.settings.difficulty).gateBias,
     );
+    Battle.terrain = cg.Terrain.create(Battle.orientation, Battle.gates, [
+      Battle.getPlayerOrigin(),
+      Battle.getEnemyOrigin(),
+    ]);
     Battle.projectiles.length = 0;
     Battle.projectilePool.clear();
     cg.Particles.reset();
@@ -377,33 +413,40 @@
   Battle.processGate = function (projectile, gate) {
     var baseDamage = projectile.damageTotal;
     var result = cg.Gate.apply(gate, projectile);
-    var available = Math.max(
-      1,
-      maxVisual() - Battle.projectilePool.activeCount() + 1,
-    );
-    var splitCount = Math.min(
-      result.splitCount,
-      cg.Constants.MAX_GATE_SPLIT,
-      available,
-    );
+    var zeroed = result.factor === 0;
 
-    projectile.logicalCount = 1;
-    projectile.damageTotal = Math.max(1, baseDamage);
-    projectile.refreshVisualCount(maxVisual());
-
-    for (var index = 1; index < splitCount; index += 1) {
-      var clone = Battle.projectilePool.acquire();
-      var ratio = index / Math.max(1, splitCount - 1);
-      var angle = (ratio - 0.5) * 0.24;
-      var velocity = rotateVelocity(
-        { x: projectile.vx, y: projectile.vy },
-        angle,
+    if (zeroed) {
+      projectile.active = false;
+      projectile.visualCount = 0;
+    } else {
+      var available = Math.max(
+        1,
+        maxVisual() - Battle.projectilePool.activeCount() + 1,
       );
-      clone.copyFrom(projectile, velocity);
-      Battle.projectiles.push(clone);
-      if (projectile.source === "player") {
-        Battle.stats.shots += 1;
-        Battle.stats.playerMissilesSpawned += 1;
+      var splitCount = Math.min(
+        result.splitCount,
+        cg.Constants.MAX_GATE_SPLIT,
+        available,
+      );
+
+      projectile.logicalCount = 1;
+      projectile.damageTotal = Math.max(1, baseDamage);
+      projectile.refreshVisualCount(maxVisual());
+
+      for (var index = 1; index < splitCount; index += 1) {
+        var clone = Battle.projectilePool.acquire();
+        var ratio = index / Math.max(1, splitCount - 1);
+        var angle = (ratio - 0.5) * 0.24;
+        var velocity = rotateVelocity(
+          { x: projectile.vx, y: projectile.vy },
+          angle,
+        );
+        clone.copyFrom(projectile, velocity);
+        Battle.projectiles.push(clone);
+        if (projectile.source === "player") {
+          Battle.stats.shots += 1;
+          Battle.stats.playerMissilesSpawned += 1;
+        }
       }
     }
 
@@ -430,9 +473,9 @@
     cg.Particles.text(
       gate.x,
       gate.y - 0.035,
-      result.factor >= 1
-        ? "x" + cg.Utils.formatNumber(result.factor)
-        : "÷" + gate.value,
+      gate.type === "divide"
+        ? "÷" + gate.value
+        : "x" + cg.Utils.formatNumber(result.factor),
       color,
     );
     cg.Audio.playSfx(
@@ -441,7 +484,7 @@
         : result.factor >= 10
           ? "multiplier"
           : "gate",
-      Math.min(2, result.factor),
+      Math.max(0.7, Math.min(2, result.factor)),
     );
     if (result.factor >= 10) {
       cg.Particles.text(
@@ -461,6 +504,7 @@
         }),
         "success",
       );
+    return zeroed;
   };
   Battle.hitCastle = function (projectile, targetSide) {
     var target = targetSide === "enemy" ? Battle.enemy : Battle.player;
@@ -470,8 +514,18 @@
         : Battle.getPlayerOrigin();
     var defenseReduction =
       target.defense * Math.min(8, projectile.logicalCount);
-    var damage = Math.max(1, projectile.damageTotal - defenseReduction);
+    var rawDamage = Math.max(1, projectile.damageTotal - defenseReduction);
+    var shielded = Battle.isFirstTurnShieldActive();
+    var damage = shielded
+      ? Math.max(
+          1,
+          Math.round(
+            rawDamage * (1 - cg.Constants.FIRST_TURN_SHIELD_REDUCTION),
+          ),
+        )
+      : rawDamage;
     var dealt = target.takeDamage(damage);
+    target.shieldFlash = shielded ? 0.24 : 0;
     Battle.stats.damage += dealt;
     Battle.stats.hits += projectile.source === "player" ? 1 : 0;
     var color = targetSide === "enemy" ? palette.secondary : palette.danger;
@@ -489,10 +543,18 @@
       "-" + cg.Utils.formatNumber(dealt),
       color,
     );
+    if (shielded) {
+      cg.Particles.text(
+        point.x,
+        point.y - 0.115,
+        cg.I18n.t("game.shieldActive"),
+        palette.primary,
+      );
+    }
     cg.Camera.shake(projectile.logicalCount > 20 ? 0.055 : 0.022);
     cg.Audio.playSfx(
-      projectile.logicalCount > 20 ? "explosion" : "hit",
-      projectile.logicalCount > 20 ? 1.4 : 1,
+      shielded ? "shield" : projectile.logicalCount > 20 ? "explosion" : "hit",
+      shielded ? 0.9 : projectile.logicalCount > 20 ? 1.4 : 1,
     );
     if (projectile.logicalCount > 20) cg.Camera.impactZoom(1.03);
     if (target.hp <= 0) Battle.end(targetSide === "enemy" ? "win" : "lose");
@@ -508,9 +570,8 @@
     Battle.slowTimer = Math.max(0, Battle.slowTimer - dt);
     Battle.comboTimer -= dt;
     if (Battle.comboTimer <= 0) Battle.stats.combo = 0;
-    Battle.gates.forEach(function (gate) {
-      cg.Gate.update(gate, simDt, Battle.elapsed);
-    });
+    cg.Gate.updateAll(Battle.gates, simDt, Battle.elapsed, Battle.orientation);
+    cg.Terrain.update(Battle.terrain, simDt, Battle.elapsed);
 
     if (Battle.turn === "enemy" && !Battle.volleyActive && Battle.ai) {
       Battle.enemyFireTimer -= simDt;
@@ -556,11 +617,42 @@
         )
           continue;
         projectile.passedGates[gate.id] = true;
-        Battle.processGate(projectile, gate);
+        consumed = Battle.processGate(projectile, gate);
         break;
+      }
+      if (!consumed) {
+        var terrain = cg.Terrain.findHit(
+          Battle.terrain,
+          projectile.prevX,
+          projectile.prevY,
+          projectile.x,
+          projectile.y,
+        );
+        if (terrain) {
+          var destroyed = cg.Terrain.absorb(terrain);
+          cg.Particles.burst(
+            terrain.x + terrain.w / 2,
+            terrain.y + terrain.h / 2,
+            palette.secondary,
+            destroyed ? 18 : 9,
+            0.14,
+          );
+          cg.Particles.text(
+            terrain.x + terrain.w / 2,
+            terrain.y - 0.025,
+            cg.I18n.t("game.coverBlocked"),
+            palette.secondary,
+          );
+          cg.Audio.playSfx(
+            destroyed ? "explosion" : "hit",
+            destroyed ? 1.1 : 0.7,
+          );
+          consumed = true;
+        }
       }
       var targetSide = projectile.source === "player" ? "enemy" : "player";
       if (
+        !consumed &&
         cg.Collision.projectileHitsCastle(
           projectile,
           targetSide === "enemy"
@@ -575,10 +667,10 @@
       if (!Battle.active) break;
       if (
         projectile.life > 5 ||
-        projectile.x < -0.12 ||
-        projectile.x > 1.12 ||
-        projectile.y < -0.12 ||
-        projectile.y > 1.12
+        projectile.x < cg.Constants.WORLD_MIN - 0.08 ||
+        projectile.x > cg.Constants.WORLD_MAX + 0.08 ||
+        projectile.y < cg.Constants.WORLD_MIN - 0.08 ||
+        projectile.y > cg.Constants.WORLD_MAX + 0.08
       )
         consumed = true;
       if (consumed) {
@@ -600,6 +692,8 @@
       Battle.enemy.recoil = Math.max(0, Battle.enemy.recoil - dt);
       Battle.player.hitFlash = Math.max(0, Battle.player.hitFlash - dt);
       Battle.enemy.hitFlash = Math.max(0, Battle.enemy.hitFlash - dt);
+      Battle.player.shieldFlash = Math.max(0, Battle.player.shieldFlash - dt);
+      Battle.enemy.shieldFlash = Math.max(0, Battle.enemy.shieldFlash - dt);
     }
     cg.Particles.update(simDt);
 
@@ -676,6 +770,7 @@
     var offset = cg.Camera.offset(width, height);
     var zoom = cg.Camera.state.zoom;
     var pan = cg.Camera.state.pan;
+    drawBackground(width, height);
     ctx.save();
     ctx.translate(
       width / 2 + offset.x - pan.x * width,
@@ -683,7 +778,14 @@
     );
     ctx.scale(zoom, zoom);
     ctx.translate(-width / 2, -height / 2);
-    drawBackground(width, height);
+    cg.Terrain.drawAll(
+      Battle.terrain,
+      ctx,
+      width,
+      height,
+      palette,
+      cg.Utils.getQuality(),
+    );
     drawTrajectory(width, height);
     Battle.gates.forEach(function (gate) {
       drawGate(gate, width, height);
@@ -931,6 +1033,24 @@
     var roof = castle.side === "player" ? palette.success : palette.danger;
     ctx.save();
     ctx.translate(x, y + recoil);
+    if (Battle.isFirstTurnShieldActive()) {
+      var shieldColor =
+        castle.side === "player" ? palette.primary : palette.accent;
+      ctx.globalAlpha = 0.12;
+      ctx.fillStyle = shieldColor;
+      ctx.beginPath();
+      ctx.arc(0, 0, bodyW * 1.42, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 0.8;
+      ctx.strokeStyle = shieldColor;
+      ctx.lineWidth = 2.5;
+      ctx.setLineDash([5, 4]);
+      ctx.beginPath();
+      ctx.arc(0, 0, bodyW * 1.42, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    ctx.globalAlpha = 1;
     ctx.globalAlpha = 0.35;
     ctx.fillStyle = "#071329";
     ctx.beginPath();
@@ -992,6 +1112,13 @@
     ctx.lineTo(bodyW * 0.2, -bodyH * 0.76);
     ctx.closePath();
     ctx.fill();
+    if (castle.shieldFlash > 0) {
+      ctx.globalAlpha = (castle.shieldFlash / 0.24) * 0.45;
+      ctx.fillStyle = "#fff";
+      ctx.beginPath();
+      ctx.arc(0, 0, bodyW * 1.46, 0, Math.PI * 2);
+      ctx.fill();
+    }
     if (castle.hitFlash > 0) {
       ctx.globalAlpha = (castle.hitFlash / 0.24) * 0.45;
       ctx.fillStyle = "#fff";
