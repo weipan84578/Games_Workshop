@@ -22,6 +22,7 @@
       });
       var header = document.getElementById("global-header");
       if (header) header.classList.toggle("is-hidden", name !== "game");
+      document.body.classList.toggle("in-game", name === "game");
       if (name === "menu") app.AudioManager.startBgm("menu");
       if (name === "game" && app.GameState.get() && app.GameState.get().mode === "prepare") app.AudioManager.startBgm("prepare");
       if (name === "help" && app.HelpUI) app.HelpUI.render();

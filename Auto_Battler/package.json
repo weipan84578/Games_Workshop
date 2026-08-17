@@ -1,0 +1,7 @@
+{
+  "name": "starry-sprouts-auto-battler",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/core.test.js"
+  }
+}

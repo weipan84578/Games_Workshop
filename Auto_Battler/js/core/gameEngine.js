@@ -86,9 +86,19 @@
       if (!state) return null;
       configureState(state);
       battleBusy = false;
-      startPreparationClock();
+      if (!state.awaitingContinue) startPreparationClock();
       render();
       return state;
+    },
+    resumePreparation: function () {
+      var state = app.GameState.get();
+      if (!state || state.mode !== "prepare" || battleBusy) return false;
+      state.awaitingContinue = false;
+      if (state.phaseTime <= 0) state.phaseTime = 30;
+      app.GameState.save();
+      startPreparationClock();
+      render();
+      return true;
     },
     leaveToMenu: function () {
       stopPreparationClock();
@@ -167,12 +177,27 @@
         var removed = app.BoardSystem.returnToBench(state, slotIndex);
         if (removed.ok) {
           app.AudioManager.playSfx("place");
+          removed.merged = app.BoardSystem.autoMerge(state);
           app.GameState.save();
         }
         render();
         return removed;
       }
       return { ok: false, reason: "empty" };
+    },
+    returnUnit: function (instanceId) {
+      var state = app.GameState.get();
+      if (!state || state.mode !== "prepare") return { ok: false, reason: "busy" };
+      var location = app.BoardSystem.findLocation(state, instanceId);
+      if (!location || location.area !== "board") return { ok: false, reason: "not-on-board" };
+      var result = app.BoardSystem.returnToBench(state, location.index);
+      if (result.ok) {
+        result.merged = app.BoardSystem.autoMerge(state);
+        app.AudioManager.playSfx("place");
+        app.GameState.save();
+      }
+      render();
+      return result;
     },
     dropUnit: function (instanceId, slotIndex) {
       var state = app.GameState.get();
@@ -211,8 +236,8 @@
       state.lastResult = settled;
       state.mode = settled.gameOver ? "gameover" : "prepare";
       state.phaseTime = 30;
+      state.awaitingContinue = !settled.gameOver;
       if (!settled.gameOver && !state.shopLocked) app.ShopSystem.refresh(state, true);
-      if (!settled.gameOver) startPreparationClock();
       app.GameState.save();
       battleBusy = false;
       if (settled.winner === "player") app.AudioManager.playSfx("victory");

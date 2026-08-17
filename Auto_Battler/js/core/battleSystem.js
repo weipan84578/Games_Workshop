@@ -33,12 +33,13 @@
       abilityData: app.UnitData.get(instance.typeId).ability,
       actionTimer: 0.56 + index * 0.04,
       shield: 0,
-      alive: true
+      alive: true,
+      dead: false
     };
   }
 
   function alive(team) {
-    return team.filter(function (unit) { return unit.alive && unit.health > 0; });
+    return team.filter(function (unit) { return !unit.dead && unit.alive && unit.health > 0; });
   }
 
   function chooseTarget(actor, opponents, strategy) {
@@ -62,7 +63,10 @@
     target.shield -= absorbed;
     damage -= absorbed;
     target.health = Math.max(0, target.health - damage);
-    if (target.health <= 0) target.alive = false;
+    if (target.health <= 0) {
+      target.alive = false;
+      target.dead = true;
+    }
     return Math.max(1, damage);
   }
 

@@ -41,6 +41,16 @@
     font-size: 18px;
   }
 
+  .header-nav-button {
+    min-width: 44px;
+    padding: 6px;
+    font-size: 19px;
+  }
+
+  .header-nav-button span:last-child {
+    display: none;
+  }
+
   .level-chip {
     display: none;
   }
@@ -121,6 +131,12 @@
 
   .phase-timer {
     font-size: 20px;
+  }
+
+  .capacity-pill {
+    min-height: 27px;
+    padding: 2px 7px;
+    font-size: 13px;
   }
 
   .xp-strip {

@@ -59,8 +59,8 @@
           <div class="stat-chip level-chip"><span class="stat-icon">⭐</span><span data-i18n="game.level">等級</span><strong id="level-value">1</strong></div>
         </div>
         <div class="header-actions">
-          <button class="icon-button" type="button" data-action="open-settings" data-i18n-tooltip="common.settings" data-i18n-aria="common.settings" aria-label="Settings">⚙️</button>
-          <button class="icon-button" type="button" data-action="go-menu" data-i18n-tooltip="common.mainMenu" data-i18n-aria="common.mainMenu" aria-label="Main menu">🏠</button>
+          <button class="header-nav-button" type="button" data-action="open-settings" data-i18n-tooltip="common.settings" data-i18n-aria="common.settings" aria-label="Settings"><span>⚙️</span><span data-i18n="common.settings">設定</span></button>
+          <button class="header-nav-button" type="button" data-action="go-menu" data-i18n-tooltip="common.backHome" data-i18n-aria="common.backHome" aria-label="Back to main menu"><span>🏠</span><span data-i18n="common.backHome">回首頁</span></button>
         </div>
       </header>
 
@@ -121,6 +121,7 @@
                 <div class="phase-display">
                   <span id="phase-label" class="phase-pill">準備階段</span>
                   <span id="phase-timer" class="phase-timer">30s</span>
+                  <span id="board-capacity" class="capacity-pill">上場 1 / 3</span>
                 </div>
               </div>
               <div id="xp-progress" class="xp-strip">
@@ -167,6 +168,7 @@
             <button class="hud-button" type="button" data-action="refresh-shop"><span>🎲</span><span data-i18n="game.refresh">刷新</span></button>
             <button class="hud-button" type="button" data-action="toggle-lock"><span>🔒</span><span data-i18n="game.lock">鎖定</span></button>
           </div>
+          <div id="game-toast-root" class="toast-root game-toast-root" aria-live="polite"></div>
         </section>
 
         <section id="help-screen" class="screen screen-page" data-screen="help" hidden>

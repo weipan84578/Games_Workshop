@@ -12,6 +12,8 @@
 .phase-display {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 9px;
   padding-top: 4px;
 }
@@ -35,6 +37,20 @@
   font-size: 23px;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
+}
+
+.capacity-pill {
+  display: inline-flex;
+  min-height: 30px;
+  align-items: center;
+  padding: 3px 10px;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 30%, transparent);
+  border-radius: var(--radius-pill);
+  color: var(--color-text);
+  background: color-mix(in srgb, var(--color-accent) 18%, var(--color-surface));
+  font-size: 14px;
+  font-weight: 800;
+  white-space: nowrap;
 }
 
 .xp-strip {

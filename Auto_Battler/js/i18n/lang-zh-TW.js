@@ -49,6 +49,7 @@
       readyHint: "買下小夥伴，點擊棋子再點擊格子來布陣吧！",
       selectHint: "已選取 {name}，請選擇棋盤格",
       boardFull: "棋盤已達目前等級上限",
+      boardCapacity: "上場 {current} / {max}",
       placed: "{name} 已就位！",
       removed: "{name} 回到備戰區",
       shop: "星光商店",

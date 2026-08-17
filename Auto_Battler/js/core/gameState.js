@@ -27,6 +27,7 @@
       bestRound: 0,
       mode: "prepare",
       phaseTime: 30,
+      awaitingContinue: false,
       selectedId: null,
       lastResult: null,
       createdAt: Date.now(),
@@ -59,6 +60,7 @@
     state.xpToNext = Math.max(4, Math.floor(Number(state.xpToNext) || 4));
     state.mode = state.mode === "gameover" ? "gameover" : "prepare";
     state.phaseTime = app.Helpers.clamp(Math.floor(Number(raw.phaseTime) || 30), 0, 30);
+    state.awaitingContinue = state.mode === "prepare" && raw.awaitingContinue === true;
     state.selectedId = null;
     return state;
   }

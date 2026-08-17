@@ -85,6 +85,10 @@
     var phase = state.mode === "battle" ? "battle" : state.mode === "gameover" ? "settle" : "prepare";
     var label = document.getElementById("phase-label");
     var timer = document.getElementById("phase-timer");
+    var capacity = document.getElementById("board-capacity");
+    if (capacity && app.BoardSystem) {
+      capacity.textContent = replaceTokens(app.I18n.t("game.boardCapacity"), { current: app.BoardSystem.boardCount(state), max: app.BoardSystem.maxUnits(state) });
+    }
     if (label) label.textContent = app.I18n.t("game.phase." + phase);
     if (timer) timer.textContent = phase === "prepare" ? Math.max(0, Number(state.phaseTime) || 0) + "s" : phase === "battle" ? "✦" : "—";
     var startButtons = document.querySelectorAll('[data-action="start-battle"]');
@@ -136,7 +140,7 @@
       var effects = document.getElementById("battle-effects");
       var events = result.events.filter(function (event) { return event.type === "attack" || event.type === "skill" || event.type === "defeat"; }).slice(0, 34);
       var speed = (app.GameEngine.getSettings() || {}).battleSpeed || 1;
-      var delay = app.Device.prefersReducedMotion() ? 25 : Math.max(55, 145 / speed);
+      var delay = app.Device.prefersReducedMotion() ? 22 : Math.max(42, 105 / speed);
       if (battleTimer) window.clearTimeout(battleTimer);
       var index = 0;
       if (log) log.textContent = app.I18n.t("game.battleStarting");
@@ -162,9 +166,9 @@
             window.setTimeout(function () { spark.remove(); }, 730);
           }
           index += 1;
-          battleTimer = window.setTimeout(step, delay);
+          battleTimer = window.setTimeout(step, event.type === "defeat" ? Math.min(38, delay) : delay);
         } else {
-          battleTimer = window.setTimeout(function () { if (typeof done === "function") done(); }, app.Device.prefersReducedMotion() ? 250 : 650);
+          battleTimer = window.setTimeout(function () { if (typeof done === "function") done(); }, app.Device.prefersReducedMotion() ? 120 : 300);
         }
       }
       step();
@@ -184,5 +188,69 @@
       var rootElement = document.getElementById("modal-root");
       rootElement.innerHTML = '<div class="modal-backdrop"><div class="modal-card result-modal" role="dialog" aria-modal="true"><div class="modal-icon">' + (isGameOver ? "🌙" : won ? "🏆" : draw ? "🤝" : "🌱") + '</div><h2>' + title + '</h2><p class="modal-copy">' + copy + '</p><p class="result-score">' + replaceTokens(app.I18n.t("game.survivors"), { player: result.playerSurvivors, enemy: result.enemySurvivors }) + '</p><p class="modal-copy">' + damage + "<br>" + income + '</p><div class="battle-event-list">' + eventSummary + '</div><div class="modal-actions"><button class="primary-button" type="button" data-action="' + action + '">' + actionText + '</button></div></div></div>';
     }
+  };
+
+  var toastItems = [];
+  var nextToastId = 1;
+
+  function getToastRoot() {
+    var preferredId = document.body.classList.contains("in-game") ? "game-toast-root" : "toast-root";
+    return document.getElementById(preferredId) || document.getElementById("toast-root");
+  }
+
+  function renderToastTray() {
+    var rootElement = getToastRoot();
+    if (!rootElement) return;
+    var expanded = rootElement.classList.contains("is-expanded");
+    rootElement.innerHTML = "";
+    if (!toastItems.length) {
+      rootElement.classList.remove("has-items", "is-expanded");
+      return;
+    }
+    rootElement.classList.add("has-items");
+    if (expanded) rootElement.classList.add("is-expanded");
+
+    var summary = document.createElement("button");
+    summary.type = "button";
+    summary.className = "toast-summary";
+    summary.setAttribute("data-action", "toggle-toasts");
+    summary.setAttribute("aria-expanded", String(expanded));
+    summary.innerHTML = '<span class="toast-summary-icon" aria-hidden="true">✦</span><span class="toast-summary-text"></span><span class="toast-count"></span>';
+    summary.querySelector(".toast-summary-text").textContent = toastItems[0].message;
+    summary.querySelector(".toast-count").textContent = toastItems.length > 1 ? "+" + (toastItems.length - 1) : "";
+
+    var list = document.createElement("div");
+    list.className = "toast-list";
+    list.setAttribute("role", "status");
+    toastItems.forEach(function (item) {
+      var entry = document.createElement("div");
+      entry.className = "toast-item";
+      entry.setAttribute("data-kind", item.kind);
+      entry.textContent = item.message;
+      list.appendChild(entry);
+    });
+    rootElement.appendChild(summary);
+    rootElement.appendChild(list);
+  }
+
+  app.GameUI.showToast = function (message, kind) {
+    var rootElement = getToastRoot();
+    if (!rootElement || !message) return;
+    var item = { id: nextToastId++, message: String(message), kind: kind || "info" };
+    toastItems.unshift(item);
+    toastItems = toastItems.slice(0, 5);
+    renderToastTray();
+    window.setTimeout(function () {
+      toastItems = toastItems.filter(function (entry) { return entry.id !== item.id; });
+      renderToastTray();
+    }, 3200);
+  };
+
+  app.GameUI.toggleToasts = function () {
+    var rootElement = getToastRoot();
+    if (!rootElement || !toastItems.length) return;
+    var expanded = rootElement.classList.toggle("is-expanded");
+    var summary = rootElement.querySelector(".toast-summary");
+    if (summary) summary.setAttribute("aria-expanded", String(expanded));
   };
 }(window));

@@ -33,7 +33,7 @@
     if (!state) return;
     app.UIManager.show("game");
     app.GameUI.render();
-    if (state.mode === "gameover" && state.lastResult) app.GameUI.showResult(state.lastResult);
+    if ((state.mode === "gameover" || state.awaitingContinue) && state.lastResult) app.GameUI.showResult(state.lastResult);
   }
 
   function requestNewGame() {
@@ -92,8 +92,13 @@
     if (action === "confirm-modal") { app.UIManager.confirmModal(); return; }
     if (action === "continue-round") {
       app.UIManager.closeModal();
+      app.GameEngine.resumePreparation();
       app.AudioManager.startBgm("prepare");
       app.GameUI.render();
+      return;
+    }
+    if (action === "toggle-toasts") {
+      if (app.GameUI.toggleToasts) app.GameUI.toggleToasts();
       return;
     }
     if (action === "buy-unit") {
@@ -130,6 +135,19 @@
       return;
     }
     if (action === "select-unit") {
+      if (element.closest && element.closest(".board-cell")) {
+        var returned = app.GameEngine.returnUnit(element.getAttribute("data-unit-id"));
+        if (!returned.ok) showResultMessage(returned);
+        else {
+          var returnedDisplay = app.UnitData.getDisplay(returned.unit);
+          app.GameUI.showToast(app.I18n.t("game.removed").replace("{name}", returnedDisplay.name), "success");
+          if (returned.merged && returned.merged.length) {
+            app.AudioManager.playSfx("merge");
+            app.GameUI.showToast("⭐ " + returned.merged.map(function (unit) { return app.UnitData.getDisplay(unit).name; }).join(" / "), "success");
+          }
+        }
+        return;
+      }
       var selected = app.GameEngine.selectUnit(element.getAttribute("data-unit-id"));
       if (selected && app.GameState.get()) {
         var location = app.BoardSystem.findLocation(app.GameState.get(), selected);
