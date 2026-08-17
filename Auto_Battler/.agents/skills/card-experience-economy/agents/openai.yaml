@@ -1,0 +1,4 @@
+interface:
+  display_name: "Card EXP Economy"
+  short_description: "Balance five-star card EXP, feeding, and gold costs"
+  default_prompt: "Use $card-experience-economy to adjust this auto battler's star progression and card economy."
