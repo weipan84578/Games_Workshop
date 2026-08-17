@@ -10,7 +10,7 @@
 
   function blankState() {
     return {
-      version: 1,
+      version: 2,
       round: 1,
       gold: 8,
       health: 100,
@@ -37,7 +37,14 @@
 
   function normalizeUnit(value) {
     if (!value || !value.typeId || !app.UnitData.get(value.typeId)) return null;
-    return { instanceId: value.instanceId || app.Helpers.uid("unit"), typeId: value.typeId, star: app.Helpers.clamp(Number(value.star) || 1, 1, 3) };
+    var star = app.Helpers.clamp(Math.floor(Number(value.star) || 1), 1, app.UnitData.maxStar);
+    var experienceToNext = app.UnitData.experienceToNext(star);
+    return {
+      instanceId: value.instanceId || app.Helpers.uid("unit"),
+      typeId: value.typeId,
+      star: star,
+      experience: experienceToNext ? app.Helpers.clamp(Math.floor(Number(value.experience) || 0), 0, experienceToNext - 1) : 0
+    };
   }
 
   function normalizeState(raw) {
@@ -58,6 +65,7 @@
     state.level = app.Helpers.clamp(Math.floor(Number(state.level) || 1), 1, 8);
     state.xp = Math.max(0, Math.floor(Number(state.xp) || 0));
     state.xpToNext = Math.max(4, Math.floor(Number(state.xpToNext) || 4));
+    state.version = 2;
     state.mode = state.mode === "gameover" ? "gameover" : "prepare";
     state.phaseTime = app.Helpers.clamp(Math.floor(Number(raw.phaseTime) || 30), 0, 30);
     state.awaitingContinue = state.mode === "prepare" && raw.awaitingContinue === true;

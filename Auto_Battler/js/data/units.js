@@ -19,27 +19,53 @@
   var byId = {};
   units.forEach(function (unit) { byId[unit.id] = unit; });
 
+  var MAX_STAR = 5;
+  var EXPERIENCE_REQUIREMENTS = { 1: 2, 2: 3, 3: 4, 4: 5 };
+  var STAR_COEFFICIENTS = { 1: 1, 2: 1.8, 3: 3.2, 4: 4.8, 5: 6.8 };
+
+  function normalizeStar(star) {
+    return app.Helpers.clamp(Math.floor(Number(star) || 1), 1, MAX_STAR);
+  }
+
   app.UnitData = {
     all: units,
     byId: byId,
+    maxStar: MAX_STAR,
     get: function (id) { return byId[id]; },
-    create: function (typeId, star) {
+    experienceToNext: function (star) {
+      return EXPERIENCE_REQUIREMENTS[normalizeStar(star)] || 0;
+    },
+    create: function (typeId, star, experience) {
       var base = byId[typeId];
       if (!base) return null;
-      return { instanceId: app.Helpers.uid("unit"), typeId: typeId, star: star || 1 };
+      var normalizedStar = normalizeStar(star);
+      var experienceToNext = this.experienceToNext(normalizedStar);
+      return {
+        instanceId: app.Helpers.uid("unit"),
+        typeId: typeId,
+        star: normalizedStar,
+        experience: experienceToNext ? app.Helpers.clamp(Math.floor(Number(experience) || 0), 0, experienceToNext - 1) : 0
+      };
     },
     coefficient: function (star) {
-      return star === 3 ? 3.2 : star === 2 ? 1.8 : 1;
+      return STAR_COEFFICIENTS[normalizeStar(star)];
     },
     getDisplay: function (instance) {
       var base = byId[instance.typeId];
-      var coefficient = this.coefficient(instance.star || 1);
+      var star = normalizeStar(instance.star);
+      var experienceToNext = this.experienceToNext(star);
+      var experience = experienceToNext ? app.Helpers.clamp(Math.floor(Number(instance.experience) || 0), 0, experienceToNext - 1) : 0;
+      var coefficient = this.coefficient(star);
+      var abilityName = app.I18n ? app.I18n.t(base.abilityKey) : base.id;
       return {
         id: instance.instanceId,
         typeId: instance.typeId,
-        star: instance.star || 1,
+        star: star,
+        experience: experience,
+        experienceToNext: experienceToNext,
+        experienceRatio: experienceToNext ? experience / experienceToNext * 100 : 100,
         name: app.I18n ? app.I18n.t(base.nameKey) : base.id,
-        ability: app.I18n ? app.I18n.t(base.abilityKey) : base.id,
+        ability: abilityName,
         icon: base.icon,
         color: base.color,
         cost: base.cost,
@@ -50,7 +76,7 @@
         defense: Math.round(base.defense * (0.9 + coefficient * 0.1)),
         attackSpeed: base.attackSpeed,
         manaMax: base.manaMax,
-        ability: base.ability
+        abilityData: base.ability
       };
     }
   };

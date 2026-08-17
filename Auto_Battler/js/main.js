@@ -64,6 +64,35 @@
     if (message) app.GameUI.showToast(message, kind === "danger" ? "danger" : "info");
   }
 
+  function showStarUpEvents(events) {
+    (events || []).forEach(function (event) {
+      var display = event.unit ? app.UnitData.getDisplay(event.unit) : null;
+      if (!display) return;
+      (event.starUps || []).forEach(function (star) {
+        app.GameUI.showToast(app.I18n.t("game.starUp").replace("{name}", display.name).replace("{star}", star), "success");
+      });
+    });
+  }
+
+  function showMergeResults(merged) {
+    if (!merged || !merged.length) return;
+    var events = merged.events || [];
+    if (!events.length) {
+      app.GameUI.showToast("⭐ " + merged.map(function (unit) { return app.UnitData.getDisplay(unit).name; }).join(" / "), "success");
+      return;
+    }
+    events.forEach(function (event) {
+      var display = event.unit ? app.UnitData.getDisplay(event.unit) : null;
+      if (!display) return;
+      if (event.experience) {
+        app.GameUI.showToast(app.I18n.t("game.unitXp").replace("{name}", display.name).replace("{amount}", event.experience), "success");
+      }
+      (event.starUps || []).forEach(function (star) {
+        app.GameUI.showToast(app.I18n.t("game.starUp").replace("{name}", display.name).replace("{star}", star), "success");
+      });
+    });
+  }
+
   function handleAction(element, event) {
     var action = element.getAttribute("data-action");
     if (!action) return;
@@ -107,10 +136,8 @@
       else {
         var display = app.UnitData.getDisplay(purchase.unit);
         app.GameUI.showToast(app.I18n.t("game.bought").replace("{name}", display.name), "success");
-        if (purchase.merged && purchase.merged.length) {
-          app.AudioManager.playSfx("merge");
-          app.GameUI.showToast("⭐ " + purchase.merged.map(function (unit) { return app.UnitData.getDisplay(unit).name; }).join(" / "), "success");
-        }
+        if (purchase.merged && purchase.merged.length) app.AudioManager.playSfx("merge");
+        showMergeResults(purchase.merged);
       }
       return;
     }
@@ -130,7 +157,9 @@
       if (!xp.ok) showResultMessage(xp);
       else {
         app.GameUI.showToast(app.I18n.t("game.xpBought").replace("{amount}", xp.amount), "success");
-        (xp.levelUps || []).forEach(function (level) { app.GameUI.showToast(app.I18n.t("game.levelUp").replace("{level}", level), "success"); });
+        showStarUpEvents(xp.unitExperience);
+        if (xp.merged && xp.merged.length) app.AudioManager.playSfx("merge");
+        showMergeResults(xp.merged);
       }
       return;
     }
@@ -141,10 +170,8 @@
         else {
           var returnedDisplay = app.UnitData.getDisplay(returned.unit);
           app.GameUI.showToast(app.I18n.t("game.removed").replace("{name}", returnedDisplay.name), "success");
-          if (returned.merged && returned.merged.length) {
-            app.AudioManager.playSfx("merge");
-            app.GameUI.showToast("⭐ " + returned.merged.map(function (unit) { return app.UnitData.getDisplay(unit).name; }).join(" / "), "success");
-          }
+          if (returned.merged && returned.merged.length) app.AudioManager.playSfx("merge");
+          showMergeResults(returned.merged);
         }
         return;
       }
@@ -158,10 +185,8 @@
     if (action === "board-slot") {
       var boardResult = app.GameEngine.clickBoardSlot(Number(element.getAttribute("data-slot")));
       if (!boardResult.ok && boardResult.reason !== "empty") showResultMessage(boardResult);
-      if (boardResult.merged && boardResult.merged.length) {
-        app.AudioManager.playSfx("merge");
-        app.GameUI.showToast("⭐ " + boardResult.merged.map(function (unit) { return app.UnitData.getDisplay(unit).name; }).join(" / "), "success");
-      }
+      if (boardResult.merged && boardResult.merged.length) app.AudioManager.playSfx("merge");
+      showMergeResults(boardResult.merged);
       return;
     }
     if (action === "help-tab") { app.HelpUI.setChapter(element.getAttribute("data-chapter")); return; }

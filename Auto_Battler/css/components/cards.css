@@ -79,6 +79,38 @@
   line-height: 1;
 }
 
+.unit-xp-label {
+  position: absolute;
+  top: 3px;
+  right: 5px;
+  padding: 1px 3px;
+  border-radius: 4px;
+  color: var(--color-text-muted);
+  background: color-mix(in srgb, var(--color-surface) 76%, transparent);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.unit-xp-track {
+  position: absolute;
+  right: 5px;
+  bottom: 4px;
+  left: 5px;
+  height: 4px;
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-text-muted) 18%, transparent);
+}
+
+.unit-xp-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-accent);
+  transition: width var(--transition-normal);
+}
+
 .unit-cost {
   position: absolute;
   top: 4px;

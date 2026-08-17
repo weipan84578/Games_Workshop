@@ -85,6 +85,8 @@
       var state = app.GameState.load();
       if (!state) return null;
       configureState(state);
+      var migratedMerge = app.BoardSystem.autoMerge(state);
+      if (migratedMerge.length) app.GameState.save();
       battleBusy = false;
       if (!state.awaitingContinue) startPreparationClock();
       render();

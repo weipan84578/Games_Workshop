@@ -28,4 +28,30 @@
     toast: { saved: "進行状況を保存しました", cleared: "セーブを削除しました", audioReady: "オーディオを有効にしました" },
     errors: { generic: "少し問題が起きました。もう一度お試しください。" }
   };
+  root.AutoBattlerLang.ja.game.levelExp = "レベル経験値";
+  root.AutoBattlerLang.ja.game.buyXp = "カード経験値";
+  root.AutoBattlerLang.ja.game.xpBought = "所持する仲間全員に{amount}経験値";
+  root.AutoBattlerLang.ja.game.unitXp = "{name}が仲間を食べて経験値+{amount}";
+  root.AutoBattlerLang.ja.game.starUp = "{name}が{star}星にアップ！";
+  root.AutoBattlerLang.ja.game.tips[1] = "同じ仲間は星数に関係なく自動で経験値になり、最大5星まで成長します。";
+  root.AutoBattlerLang.ja.help.merge = {
+    title: "食べて経験値、最大5星",
+    intro: "同名の仲間は現在の星数に関係なく、お互いを食べて経験値にできます。",
+    steps: [
+      { title: "名前を合わせる", text: "ボードとベンチを合わせて数え、星数は一致しなくても大丈夫です。" },
+      { title: "経験値を満たす", text: "食べた仲間1体ごとにカード経験値を1獲得し、満タンで星が上がります。" },
+      { title: "5星を目指す", text: "1〜5星の能力係数は1.0、1.8、3.2、4.8、6.8です。" }
+    ],
+    callout: "カード経験値を買うと、所持している仲間全員の経験値が増えます。"
+  };
+  root.AutoBattlerLang.ja.help.economy = {
+    title: "ゴールドで夢を育てよう",
+    intro: "経済も戦いの一つ。利息を残しながら、所持する仲間を強化しましょう。",
+    steps: [
+      { title: "基本収入", text: "毎ラウンド5ゴールド。連勝ボーナスもあります。" },
+      { title: "利息", text: "所持10ゴールドごとに利息1、最大5ゴールドです。" },
+      { title: "カード経験値を買う", text: "4ゴールドで所持する仲間全員に4経験値。プレイヤーレベルはラウンド結果で上がります。" }
+    ],
+    callout: "更新前に、次の利息ラインを残せるか確認しましょう。"
+  };
 }(window));

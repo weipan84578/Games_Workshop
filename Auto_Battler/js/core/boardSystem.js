@@ -23,6 +23,44 @@
     return location.unit;
   }
 
+  function addExperience(unit, amount) {
+    var remaining = Math.max(0, Math.floor(Number(amount) || 0));
+    var gained = 0;
+    var starUps = [];
+    var maxStar = app.UnitData.maxStar;
+    var star = app.Helpers.clamp(Math.floor(Number(unit.star) || 1), 1, maxStar);
+    var experience = Math.max(0, Math.floor(Number(unit.experience) || 0));
+    while (remaining > 0 && star < maxStar) {
+      var required = app.UnitData.experienceToNext(star);
+      var available = Math.min(remaining, Math.max(1, required - experience));
+      experience += available;
+      remaining -= available;
+      gained += available;
+      if (experience >= required) {
+        experience = 0;
+        star += 1;
+        starUps.push(star);
+      }
+    }
+    unit.star = star;
+    unit.experience = star >= maxStar ? 0 : experience;
+    return { experience: gained, starUps: starUps };
+  }
+
+  function pickKeeper(state, group) {
+    return group.slice().sort(function (first, second) {
+      var starDifference = (second.star || 1) - (first.star || 1);
+      if (starDifference) return starDifference;
+      var experienceDifference = (second.experience || 0) - (first.experience || 0);
+      if (experienceDifference) return experienceDifference;
+      var firstLocation = findLocation(state, first.instanceId);
+      var secondLocation = findLocation(state, second.instanceId);
+      var firstPriority = firstLocation && firstLocation.area === "board" ? 0 : 1;
+      var secondPriority = secondLocation && secondLocation.area === "board" ? 0 : 1;
+      return firstPriority - secondPriority;
+    })[0];
+  }
+
   app.BoardSystem = {
     findLocation: findLocation,
     allInstances: allInstances,
@@ -59,30 +97,56 @@
     },
     autoMerge: function (state) {
       var merged = [];
+      merged.events = [];
+      merged.totalExperience = 0;
       var didMerge = true;
       while (didMerge) {
         didMerge = false;
-        var candidates = allInstances(state).filter(function (unit) { return unit.star < 3; });
+        var candidates = allInstances(state);
         var groups = {};
         candidates.forEach(function (unit) {
-          var key = unit.typeId + ":" + unit.star;
+          var key = unit.typeId;
           groups[key] = groups[key] || [];
           groups[key].push(unit);
         });
         var keys = Object.keys(groups);
         for (var index = 0; index < keys.length; index += 1) {
           var group = groups[keys[index]];
-          if (group.length < 3) continue;
-          var keep = group[0];
-          removeInstance(state, group[1].instanceId);
-          removeInstance(state, group[2].instanceId);
-          keep.star += 1;
+          if (group.length < 2) continue;
+          var keep = pickKeeper(state, group);
+          var consumed = [];
+          var experience = 0;
+          var starUps = [];
+          var others = group.filter(function (unit) { return unit.instanceId !== keep.instanceId; });
+          for (var otherIndex = 0; otherIndex < others.length; otherIndex += 1) {
+            if (keep.star >= app.UnitData.maxStar) break;
+            var eaten = removeInstance(state, others[otherIndex].instanceId);
+            if (!eaten) continue;
+            var progress = addExperience(keep, 1);
+            consumed.push(eaten);
+            experience += progress.experience;
+            starUps = starUps.concat(progress.starUps);
+          }
+          if (!consumed.length) continue;
           merged.push(keep);
+          merged.events.push({ unit: keep, consumed: consumed, experience: experience, starUps: starUps });
+          merged.totalExperience += experience;
           didMerge = true;
           break;
         }
       }
       return merged;
+    },
+    addExperience: addExperience,
+    addExperienceToAll: function (state, amount) {
+      var events = [];
+      allInstances(state).forEach(function (unit) {
+        var progress = addExperience(unit, amount);
+        if (progress.experience || progress.starUps.length) {
+          events.push({ unit: unit, experience: progress.experience, starUps: progress.starUps });
+        }
+      });
+      return events;
     },
     removeInstance: removeInstance
   };

@@ -8,7 +8,7 @@
     return count >= 5 ? 2 : count >= 3 ? 1 : 0;
   }
 
-  function addExperience(state, amount) {
+  function addPlayerExperience(state, amount) {
     var levels = [];
     state.xp += amount;
     while (state.level < 8 && state.xp >= state.xpToNext) {
@@ -42,7 +42,7 @@
       }
       var income = this.getIncome(state);
       state.gold += income.total;
-      var levelUps = addExperience(state, 2);
+      var levelUps = addPlayerExperience(state, 2);
       state.bestRound = Math.max(state.bestRound, state.round);
       battleResult.income = income;
       battleResult.levelUps = levelUps;
@@ -52,10 +52,12 @@
     },
     buyExperience: function (state) {
       var cost = 4;
-      if (state.gold < cost || state.level >= 8) return { ok: false, reason: state.level >= 8 ? "max-level" : "gold" };
+      if (state.gold < cost) return { ok: false, reason: "gold" };
       state.gold -= cost;
-      var levelUps = addExperience(state, 4);
-      return { ok: true, cost: cost, amount: 4, levelUps: levelUps };
+      var amount = 4;
+      var unitExperience = app.BoardSystem.addExperienceToAll(state, amount);
+      var merged = app.BoardSystem.autoMerge(state);
+      return { ok: true, cost: cost, amount: amount, unitExperience: unitExperience, merged: merged, levelUps: [] };
     },
     streakBonus: streakBonus
   };

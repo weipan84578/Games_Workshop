@@ -13,7 +13,9 @@
     var race = app.I18n.t("races." + display.race);
     var className = app.I18n.t("classes." + display.classId);
     var stars = "★".repeat(display.star);
-    return '<button type="button" draggable="true" class="' + (small ? "unit-card-mini" : "unit-card") + (selected ? " is-selected" : "") + '" style="--unit-color:' + display.color + '" data-action="select-unit" data-unit-id="' + instance.instanceId + '" title="' + display.ability + " ・ " + race + " / " + className + '"><span class="unit-portrait" aria-hidden="true">' + display.icon + '</span><span class="unit-name">' + display.name + '</span><span class="unit-stars">' + stars + '</span>' + (small ? "" : '<span class="unit-tags"><span class="tag">' + race + '</span><span class="tag">' + className + '</span></span>') + '</button>';
+    var experienceLabel = display.star >= app.UnitData.maxStar ? "MAX" : display.experience + "/" + display.experienceToNext;
+    var experienceWidth = display.star >= app.UnitData.maxStar ? 100 : display.experienceRatio;
+    return '<button type="button" draggable="true" class="' + (small ? "unit-card-mini" : "unit-card") + (selected ? " is-selected" : "") + '" style="--unit-color:' + display.color + '" data-action="select-unit" data-unit-id="' + instance.instanceId + '" title="' + display.ability + " ・ " + race + " / " + className + ' ・ EXP ' + experienceLabel + '"><span class="unit-portrait" aria-hidden="true">' + display.icon + '</span><span class="unit-name">' + display.name + '</span><span class="unit-stars">' + stars + '</span><span class="unit-xp-label">EXP ' + experienceLabel + '</span><span class="unit-xp-track" aria-hidden="true"><span class="unit-xp-fill" style="width:' + experienceWidth + '%"></span></span>' + (small ? "" : '<span class="unit-tags"><span class="tag">' + race + '</span><span class="tag">' + className + '</span></span>') + '</button>';
   }
 
   function eventText(event) {
@@ -94,7 +96,7 @@
     var startButtons = document.querySelectorAll('[data-action="start-battle"]');
     startButtons.forEach(function (button) { button.disabled = state.mode !== "prepare"; });
     document.querySelectorAll('[data-action="buy-xp"]').forEach(function (button) {
-      button.disabled = state.mode !== "prepare" || state.level >= 8 || state.gold < 4;
+      button.disabled = state.mode !== "prepare" || state.gold < 4;
     });
     document.querySelectorAll('[data-action="refresh-shop"], [data-action="toggle-lock"]').forEach(function (button) {
       button.disabled = state.mode !== "prepare";

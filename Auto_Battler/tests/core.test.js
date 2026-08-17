@@ -17,10 +17,10 @@ const coreFiles = [
   "js/data/stages.js",
   "js/data/items.js",
   "js/core/gameState.js",
-  "js/core/boardSystem.js",
-  "js/core/synergySystem.js",
-  "js/core/shopSystem.js",
   "js/core/economySystem.js",
+  "js/core/synergySystem.js",
+  "js/core/boardSystem.js",
+  "js/core/shopSystem.js",
   "js/core/battleSystem.js"
 ];
 
@@ -84,6 +84,11 @@ test("unit data, star scaling, and translated capacity text are available", () =
   assert.equal(app.UnitData.coefficient(1), 1);
   assert.equal(app.UnitData.coefficient(2), 1.8);
   assert.equal(app.UnitData.coefficient(3), 3.2);
+  assert.equal(app.UnitData.coefficient(4), 4.8);
+  assert.equal(app.UnitData.coefficient(5), 6.8);
+  assert.equal(app.UnitData.maxStar, 5);
+  assert.equal(app.UnitData.experienceToNext(1), 2);
+  assert.equal(app.UnitData.experienceToNext(4), 5);
 
   const zh = app.I18n.t("game.boardCapacity");
   app.I18n.setLanguage("en");
@@ -94,25 +99,38 @@ test("unit data, star scaling, and translated capacity text are available", () =
   assert.equal(zh, "上場 {current} / {max}");
 });
 
-test("board capacity, removal, and automatic three-of-a-kind merging work together", () => {
+test("board capacity, cross-area feeding, removal, and star-up work together", () => {
   const { app } = loadRuntime();
   const state = app.GameState.createNew();
   assert.equal(app.BoardSystem.maxUnits(state), 3);
   assert.equal(app.BoardSystem.boardCount(state), 1);
 
-  state.board[4] = app.UnitData.create("emberfox", 1);
-  state.bench.push(app.UnitData.create("emberfox", 1));
-  state.bench.push(app.UnitData.create("emberfox", 1));
-  const merged = app.BoardSystem.autoMerge(state);
-  assert.equal(merged.length, 1);
-  assert.equal(state.board[4].typeId, "emberfox");
-  assert.equal(state.board[4].star, 2);
-  assert.equal(state.bench.filter((unit) => unit.typeId === "emberfox").length, 0);
+  state.board[4] = app.UnitData.create("stoneback", 1);
+  state.bench.push(app.UnitData.create("stoneback", 1));
+  const fed = app.BoardSystem.autoMerge(state);
+  assert.equal(fed.length, 1);
+  assert.equal(fed.events[0].experience, 1);
+  assert.equal(state.board[4].typeId, "stoneback");
+  assert.equal(state.board[4].star, 1);
+  assert.equal(state.board[4].experience, 1);
+  assert.equal(state.bench.filter((unit) => unit.typeId === "stoneback").length, 0);
 
-  const removed = app.BoardSystem.returnToBench(state, 4);
+  state.bench.push(app.UnitData.create("stoneback", 2));
+  const mixedStarFeed = app.BoardSystem.autoMerge(state);
+  assert.equal(mixedStarFeed.length, 1);
+  assert.equal(mixedStarFeed[0].star, 2);
+  assert.equal(mixedStarFeed[0].experience, 1);
+
+  const fiveStar = app.UnitData.create("emberfox", 4, 4);
+  state.board[0] = fiveStar;
+  state.bench.push(app.UnitData.create("emberfox", 1));
+  app.BoardSystem.autoMerge(state);
+  assert.equal(fiveStar.star, 5);
+  assert.equal(fiveStar.experience, 0);
+
+  const removed = app.BoardSystem.returnToBench(state, 0);
   assert.equal(removed.ok, true);
-  assert.equal(state.board[4], null);
-  assert.equal(state.bench.length, 1);
+  assert.equal(state.board[0], null);
 });
 
 test("shop purchase and economy settlement update the intended state", () => {
@@ -132,6 +150,28 @@ test("shop purchase and economy settlement update the intended state", () => {
   assert.equal(result.gameOver, false);
   assert.equal(state.round, 2);
   assert.equal(state.xp, 2);
+});
+
+test("buying card experience improves every owned card", () => {
+  const { app } = loadRuntime();
+  const state = app.GameState.createNew();
+  state.board = [app.UnitData.create("emberfox", 1), null, null, null, null, null, null, null];
+  state.bench = [app.UnitData.create("tidepup", 1)];
+  state.gold = 10;
+  const result = app.EconomySystem.buyExperience(state);
+  assert.equal(result.ok, true);
+  assert.equal(result.amount, 4);
+  assert.equal(result.unitExperience.length, 2);
+  assert.equal(state.board[0].star, 2);
+  assert.equal(state.board[0].experience, 2);
+  assert.equal(state.bench[0].star, 2);
+  assert.equal(state.bench[0].experience, 2);
+  assert.equal(state.gold, 6);
+
+  state.level = 8;
+  state.gold = 4;
+  const maxLevelPurchase = app.EconomySystem.buyExperience(state);
+  assert.equal(maxLevelPurchase.ok, true);
 });
 
 test("forest synergy activates from deployed units only", () => {
@@ -182,12 +222,16 @@ test("deployed units can be returned through the game engine and save pause stat
   assert.equal(state.board[4], null);
   assert.equal(state.bench.length, 1);
 
+  state.board[0] = app.UnitData.create("stoneback", 1);
+  state.bench.push(app.UnitData.create("stoneback", 1));
   state.awaitingContinue = true;
   state.phaseTime = 30;
   app.GameState.save();
   app.GameEngine.continueGame();
   assert.equal(timerCalls, 0);
   assert.equal(app.GameState.get().awaitingContinue, true);
+  assert.equal(app.GameState.get().board[0].experience, 1);
+  assert.equal(app.GameState.get().bench.filter((unit) => unit.typeId === "stoneback").length, 0);
   app.GameEngine.resumePreparation();
   assert.equal(timerCalls, 1);
   assert.equal(app.GameState.get().awaitingContinue, false);

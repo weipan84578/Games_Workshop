@@ -32,4 +32,30 @@
     toast: { saved: "Progress saved", cleared: "Game save deleted", audioReady: "Audio enabled" },
     errors: { generic: "Something went a little wrong. Please try again." }
   };
+  root.AutoBattlerLang.en.game.levelExp = "Level EXP";
+  root.AutoBattlerLang.en.game.buyXp = "Buy card EXP";
+  root.AutoBattlerLang.en.game.xpBought = "All owned friends gained {amount} EXP";
+  root.AutoBattlerLang.en.game.unitXp = "{name} consumed a duplicate for +{amount} EXP";
+  root.AutoBattlerLang.en.game.starUp = "{name} reached {star} stars!";
+  root.AutoBattlerLang.en.game.tips[1] = "Matching friends feed each other for EXP regardless of star, up to 5 stars.";
+  root.AutoBattlerLang.en.help.merge = {
+    title: "Feed duplicates, reach five stars",
+    intro: "Friends with the same name can consume one another regardless of their current star.",
+    steps: [
+      { title: "Match the name", text: "The board and bench are counted together, and the stars do not need to match." },
+      { title: "Fill EXP", text: "Each consumed duplicate grants 1 card EXP. A full bar immediately raises the star." },
+      { title: "Reach five stars", text: "The power coefficients for 1–5 stars are 1.0, 1.8, 3.2, 4.8, and 6.8." }
+    ],
+    callout: "Buying card EXP raises the experience of every friend you own."
+  };
+  root.AutoBattlerLang.en.help.economy = {
+    title: "Let your gold grow the dream",
+    intro: "Economy is another battle. Keep enough gold for interest, then invest in the friends you own.",
+    steps: [
+      { title: "Base income", text: "Gain 5 gold each round, plus possible win-streak rewards." },
+      { title: "Interest", text: "Every 10 gold held grants 1 interest, up to 5 gold." },
+      { title: "Buy card EXP", text: "Spend 4 gold to grant 4 EXP to every owned friend; player level still grows from round results." }
+    ],
+    callout: "Check your next interest threshold before refreshing the shop."
+  };
 }(window));
