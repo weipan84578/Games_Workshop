@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 260" role="img" aria-label="Soft stars and clouds decoration">
+  <g opacity=".55">
+    <path d="M90 164c-28 0-43-35-19-54 9-7 20-9 30-7 6-35 55-40 68-6 31-11 57 24 39 50-8 11-21 17-35 17Z" fill="#fff" stroke="#82bfe9" stroke-width="6"/>
+    <path d="m320 43 10 22 24 3-18 17 5 24-21-12-21 12 5-24-18-17 24-3Z" fill="#ffd35d"/>
+    <path d="m515 116 8 17 19 3-14 13 3 19-16-9-17 9 3-19-14-13 19-3Z" fill="#ef6fa9"/>
+    <path d="M615 199c-22 0-34-28-15-43 7-6 16-7 24-6 5-28 44-32 54-5 25-9 46 19 31 40-6 9-16 14-28 14Z" fill="#fff" stroke="#9a80c9" stroke-width="6"/>
+    <circle cx="410" cy="183" r="7" fill="#ffd35d"/><circle cx="738" cy="60" r="6" fill="#ffd35d"/>
+  </g>
+</svg>

@@ -1,0 +1,29 @@
+.toast-root {
+  position: fixed;
+  z-index: 50;
+  right: 18px;
+  bottom: 22px;
+  display: grid;
+  gap: 10px;
+  width: min(370px, calc(100% - 36px));
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  padding: 12px 15px;
+  border: 1px solid var(--color-card-border);
+  border-left: 5px solid var(--toast-color, var(--color-primary));
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  font-size: 15px;
+  animation: slide-in 240ms ease both;
+}
+
+.toast.is-leaving {
+  animation: slide-out 180ms ease both;
+}

@@ -1,0 +1,298 @@
+@media (max-width: 767px) {
+  :root {
+    --header-height: 64px;
+  }
+
+  body {
+    font-size: 16px;
+  }
+
+  .global-header {
+    grid-template-columns: auto 1fr auto;
+    min-height: var(--header-height);
+    padding: 7px 10px;
+  }
+
+  .brand-mini {
+    min-height: 44px;
+    padding: 6px;
+    font-size: 0;
+  }
+
+  .brand-mini:first-letter {
+    font-size: 22px;
+  }
+
+  .header-stats {
+    gap: 4px;
+  }
+
+  .stat-chip {
+    min-height: 40px;
+    padding: 4px 7px;
+    font-size: 0;
+  }
+
+  .stat-chip strong {
+    font-size: 19px;
+  }
+
+  .stat-icon {
+    font-size: 18px;
+  }
+
+  .level-chip {
+    display: none;
+  }
+
+  .screen {
+    padding: 18px 12px calc(var(--hud-height) + 18px);
+  }
+
+  .screen-menu {
+    padding-top: 72px;
+    padding-bottom: 28px;
+  }
+
+  .game-logo {
+    font-size: clamp(39px, 13vw, 58px);
+  }
+
+  .mascot {
+    transform: scale(0.86);
+  }
+
+  .menu-button {
+    min-height: 54px;
+    font-size: 19px;
+  }
+
+  .screen-game {
+    min-height: calc(100dvh - var(--header-height));
+    padding: 10px 9px calc(var(--hud-height) + 14px);
+  }
+
+  .game-layout {
+    display: flex;
+    min-height: calc(100dvh - var(--header-height) - var(--hud-height));
+    flex-direction: column;
+    gap: 11px;
+  }
+
+  .board-panel {
+    order: 1;
+    min-height: 0;
+    padding: 13px;
+  }
+
+  .right-sidebar {
+    order: 2;
+  }
+
+  .left-sidebar {
+    order: 3;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .game-sidebar > .panel-card {
+    padding: 13px;
+  }
+
+  .board-panel-header h1 {
+    font-size: 24px;
+  }
+
+  .eyebrow {
+    font-size: 14px;
+  }
+
+  .phase-display {
+    display: grid;
+    justify-items: end;
+    gap: 2px;
+  }
+
+  .phase-pill {
+    min-height: 27px;
+    padding: 2px 7px;
+    font-size: 14px;
+  }
+
+  .phase-timer {
+    font-size: 20px;
+  }
+
+  .xp-strip {
+    gap: 8px;
+    margin: 12px 0;
+  }
+
+  .xp-label {
+    min-width: 102px;
+    font-size: 14px;
+  }
+
+  .xp-label strong {
+    font-size: 15px;
+  }
+
+  .board-stage {
+    min-height: min(61vw, 350px);
+    padding: 16px 9px;
+    border-width: 6px;
+  }
+
+  .board-grid {
+    gap: 7px;
+  }
+
+  .board-cell {
+    min-height: clamp(64px, 17vw, 104px);
+    border-radius: 12px;
+  }
+
+  .desktop-actions {
+    display: none;
+  }
+
+  .mobile-hud {
+    display: grid;
+  }
+
+  .shop-card {
+    min-height: auto;
+  }
+
+  .shop-list {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 2px 2px 7px;
+    scroll-snap-type: x proximity;
+  }
+
+  .shop-unit-card {
+    flex: 0 0 min(245px, 74vw);
+    scroll-snap-align: start;
+  }
+
+  .shop-actions {
+    margin-top: 8px;
+  }
+
+  .page-shell {
+    min-height: calc(100dvh - 36px);
+    padding: 18px 13px 24px;
+  }
+
+  .page-heading {
+    gap: 9px;
+    margin-bottom: 20px;
+  }
+
+  .page-heading h1 {
+    font-size: 29px;
+  }
+
+  .help-layout {
+    display: block;
+  }
+
+  .help-tabs {
+    position: static;
+    display: flex;
+    flex-direction: row;
+    gap: 7px;
+    margin: 0 -3px 14px;
+    overflow-x: auto;
+    padding: 3px;
+  }
+
+  .help-tab {
+    flex: 0 0 auto;
+    grid-template-columns: 27px auto;
+    min-height: 44px;
+    padding: 6px 8px;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+
+  .help-tab-icon {
+    width: 27px;
+    height: 27px;
+  }
+
+  .help-article {
+    min-height: 0;
+    padding: 15px;
+  }
+
+  .help-section-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-content {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-group-wide {
+    grid-column: auto;
+  }
+
+  .theme-grid,
+  .language-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .settings-row {
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+  }
+
+  .settings-row .range-control,
+  .settings-row .select-control {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .settings-row .settings-value {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .settings-row .toggle-wrap {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  .toast-root {
+    right: 12px;
+    bottom: calc(var(--hud-height) + 12px);
+    left: 12px;
+    width: auto;
+  }
+}
+
+@media (max-width: 360px) {
+  .header-stats .stat-chip:nth-child(2) {
+    display: none;
+  }
+
+  .board-cell {
+    min-height: 58px;
+  }
+
+  .board-stage {
+    min-height: 250px;
+  }
+
+  .mobile-hud {
+    gap: 4px;
+  }
+
+  .hud-button {
+    font-size: 14px;
+  }
+}

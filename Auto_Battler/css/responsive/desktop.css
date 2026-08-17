@@ -1,0 +1,9 @@
+@media (min-width: 1025px) {
+  .mobile-hud {
+    display: none;
+  }
+
+  .game-layout {
+    grid-template-columns: minmax(180px, 238px) minmax(500px, 1fr) minmax(250px, 315px);
+  }
+}

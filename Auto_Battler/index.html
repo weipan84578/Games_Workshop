@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="zh-Hant" data-theme="cute">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#ff8fbd">
+    <meta name="description" content="Starry Sprouts — a cozy offline auto battler">
+    <title>🎀 Starry Sprouts 自走棋</title>
+
+    <link rel="stylesheet" href="css/base/reset.css">
+    <link rel="stylesheet" href="css/base/variables.css">
+    <link rel="stylesheet" href="css/base/typography.css">
+    <link rel="stylesheet" href="css/themes/theme-cute.css" id="theme-style">
+    <link rel="stylesheet" href="css/themes/theme-ocean.css">
+    <link rel="stylesheet" href="css/themes/theme-sunset.css">
+    <link rel="stylesheet" href="css/themes/theme-forest.css">
+    <link rel="stylesheet" href="css/themes/theme-galaxy.css">
+    <link rel="stylesheet" href="css/themes/theme-dark.css">
+    <link rel="stylesheet" href="css/layout/grid.css">
+    <link rel="stylesheet" href="css/layout/header.css">
+    <link rel="stylesheet" href="css/layout/board.css">
+    <link rel="stylesheet" href="css/layout/shop.css">
+    <link rel="stylesheet" href="css/components/buttons.css">
+    <link rel="stylesheet" href="css/components/modal.css">
+    <link rel="stylesheet" href="css/components/cards.css">
+    <link rel="stylesheet" href="css/components/tooltip.css">
+    <link rel="stylesheet" href="css/components/hud.css">
+    <link rel="stylesheet" href="css/components/progressbar.css">
+    <link rel="stylesheet" href="css/components/toast.css">
+    <link rel="stylesheet" href="css/pages/main-menu.css">
+    <link rel="stylesheet" href="css/pages/help.css">
+    <link rel="stylesheet" href="css/pages/settings.css">
+    <link rel="stylesheet" href="css/pages/game.css">
+    <link rel="stylesheet" href="css/responsive/mobile.css">
+    <link rel="stylesheet" href="css/responsive/tablet.css">
+    <link rel="stylesheet" href="css/responsive/desktop.css">
+    <link rel="stylesheet" href="css/animations/transitions.css">
+    <link rel="stylesheet" href="css/animations/effects.css">
+  </head>
+  <body>
+    <div class="background-art" aria-hidden="true">
+      <span class="float-decoration decoration-cloud cloud-one">☁️</span>
+      <span class="float-decoration decoration-star star-one">✦</span>
+      <span class="float-decoration decoration-heart heart-one">♥</span>
+      <span class="float-decoration decoration-star star-two">✧</span>
+      <span class="float-decoration decoration-cloud cloud-two">☁️</span>
+      <span class="float-decoration decoration-flower flower-one">✿</span>
+    </div>
+
+    <div id="app" class="app-shell">
+      <header id="global-header" class="global-header is-hidden" data-i18n-aria="common.gameStatus" aria-label="Game status">
+        <div class="header-brand">
+          <button class="brand-mini" type="button" data-action="go-menu" data-i18n-aria="common.mainMenu" aria-label="Main menu">🎀 <span>Starry Sprouts</span></button>
+        </div>
+        <div class="header-stats" id="header-stats">
+          <div class="stat-chip stat-gold"><span class="stat-icon">💰</span><span data-i18n="game.gold">金幣</span><strong id="gold-value">0</strong></div>
+          <div class="stat-chip"><span class="stat-icon">❤️</span><span data-i18n="game.health">生命</span><strong id="health-value">0</strong></div>
+          <div class="stat-chip"><span class="stat-icon">⚔️</span><span data-i18n="game.round">回合</span><strong id="round-value">1</strong></div>
+          <div class="stat-chip level-chip"><span class="stat-icon">⭐</span><span data-i18n="game.level">等級</span><strong id="level-value">1</strong></div>
+        </div>
+        <div class="header-actions">
+          <button class="icon-button" type="button" data-action="open-settings" data-i18n-tooltip="common.settings" data-i18n-aria="common.settings" aria-label="Settings">⚙️</button>
+          <button class="icon-button" type="button" data-action="go-menu" data-i18n-tooltip="common.mainMenu" data-i18n-aria="common.mainMenu" aria-label="Main menu">🏠</button>
+        </div>
+      </header>
+
+      <main id="app-main" class="app-main">
+        <section id="menu-screen" class="screen screen-menu is-active" data-screen="menu">
+          <div class="menu-language-wrap">
+            <button id="menu-language-button" class="language-button" type="button" data-action="toggle-language" data-i18n-aria="common.language" aria-label="Language" aria-expanded="false">
+              🌐 <span id="current-language-label">繁中</span>
+            </button>
+            <div id="language-menu" class="language-menu" hidden></div>
+          </div>
+
+          <div class="menu-hero">
+            <div class="logo-badge" aria-hidden="true"><span>✦</span><span>🎀</span><span>✦</span></div>
+            <h1 class="game-logo" data-i18n="app.title">Starry Sprouts</h1>
+            <p class="game-tagline" data-i18n="app.tagline">種下夢想，讓小夥伴自動出擊！</p>
+            <div class="mascot" aria-label="A smiling starry sprout mascot">
+              <div class="mascot-sparkle">✦</div>
+              <div class="mascot-leaf leaf-left"></div>
+              <div class="mascot-leaf leaf-right"></div>
+              <div class="mascot-head"><span class="mascot-eye eye-left"></span><span class="mascot-eye eye-right"></span><span class="mascot-mouth">◡</span></div>
+              <div class="mascot-body"></div>
+              <div class="mascot-shadow"></div>
+            </div>
+          </div>
+
+          <div class="menu-actions" role="navigation" aria-label="Main menu">
+            <button class="primary-button menu-button" type="button" data-action="start-new"><span>▶</span><span data-i18n="menu.start">開始遊戲</span></button>
+            <button id="continue-button" class="secondary-button menu-button" type="button" data-action="continue" disabled title="尚無存檔紀錄"><span>⏯</span><span data-i18n="menu.continue">繼續遊戲</span></button>
+            <button class="secondary-button menu-button" type="button" data-action="open-help"><span>📖</span><span data-i18n="menu.help">遊戲說明</span></button>
+            <button class="secondary-button menu-button" type="button" data-action="open-settings"><span>⚙️</span><span data-i18n="menu.settings">設定</span></button>
+          </div>
+          <p class="offline-note"><span>✦</span> <span data-i18n="app.offline">離線可玩・進度保存在本機</span> <span>✦</span></p>
+        </section>
+
+        <section id="game-screen" class="screen screen-game" data-screen="game" hidden>
+          <div class="game-layout">
+            <aside class="game-sidebar left-sidebar">
+              <section class="panel-card synergy-card">
+                <div class="panel-heading compact-heading">
+                  <div><span class="heading-icon">🤝</span><h2 data-i18n="game.synergies">羈絆</h2></div>
+                  <span class="small-pill" id="synergy-count">0</span>
+                </div>
+                <div id="synergy-list" class="synergy-list"></div>
+              </section>
+              <section class="panel-card tips-card">
+                <div class="panel-heading compact-heading"><div><span class="heading-icon">💡</span><h2 data-i18n="game.tipTitle">小提示</h2></div></div>
+                <p id="game-tip" class="tip-copy"></p>
+              </section>
+            </aside>
+
+            <section class="board-panel panel-card">
+              <div class="board-panel-header">
+                <div>
+                  <span class="eyebrow" data-i18n="game.boardEyebrow">星光戰場</span>
+                  <h1 data-i18n="game.boardTitle">布陣棋盤</h1>
+                </div>
+                <div class="phase-display">
+                  <span id="phase-label" class="phase-pill">準備階段</span>
+                  <span id="phase-timer" class="phase-timer">30s</span>
+                </div>
+              </div>
+              <div id="xp-progress" class="xp-strip">
+                <div class="xp-label"><span>✨</span><span data-i18n="game.exp">經驗</span><strong id="xp-value">0 / 4</strong></div>
+                <div class="progress-track"><span id="xp-bar" class="progress-fill"></span></div>
+              </div>
+              <div class="board-stage">
+                <div class="board-wood-grain" aria-hidden="true"></div>
+                <div id="board" class="board-grid" data-i18n-aria="common.board" aria-label="Battle board"></div>
+                <div id="battle-effects" class="battle-effects" aria-hidden="true"></div>
+                <div id="board-selection-hint" class="selection-hint" hidden></div>
+              </div>
+              <div id="battle-log" class="battle-log" aria-live="polite">
+                <span class="log-dot"></span><span id="battle-log-text" data-i18n="game.readyHint">買下小夥伴，點擊棋子再點擊格子來布陣吧！</span>
+              </div>
+              <div class="board-actions desktop-actions">
+                <button class="primary-button" type="button" data-action="start-battle"><span>⚔️</span><span data-i18n="game.startBattle">開始戰鬥</span></button>
+                <button class="secondary-button" type="button" data-action="buy-xp"><span>✨</span><span data-i18n="game.buyXp">購買經驗</span><small>4💰</small></button>
+              </div>
+            </section>
+
+            <aside class="game-sidebar right-sidebar">
+              <section class="panel-card shop-card">
+                <div class="panel-heading shop-heading">
+                  <div><span class="heading-icon">🛒</span><h2 data-i18n="game.shop">星光商店</h2></div>
+                  <span class="small-pill" id="shop-refresh-cost">2💰</span>
+                </div>
+                <div id="shop-list" class="shop-list"></div>
+                <div class="shop-actions">
+                  <button class="secondary-button shop-action-button" type="button" data-action="refresh-shop"><span>🎲</span><span data-i18n="game.refresh">刷新</span><small>2💰</small></button>
+                  <button id="lock-shop-button" class="secondary-button shop-action-button" type="button" data-action="toggle-lock"><span>🔒</span><span data-i18n="game.lock">鎖定</span></button>
+                </div>
+              </section>
+              <section class="panel-card bench-card">
+                <div class="panel-heading compact-heading"><div><span class="heading-icon">🎒</span><h2 data-i18n="game.bench">備戰區</h2></div><span id="bench-count" class="small-pill">0/8</span></div>
+                <div id="bench-list" class="bench-list"></div>
+                <p class="bench-hint" data-i18n="game.benchHint">點擊備戰區棋子，再點擊棋盤格放置</p>
+              </section>
+            </aside>
+          </div>
+          <div class="mobile-hud" id="mobile-hud">
+            <button class="hud-button hud-battle" type="button" data-action="start-battle"><span>⚔️</span><span data-i18n="game.startBattle">開始戰鬥</span></button>
+            <button class="hud-button" type="button" data-action="buy-xp"><span>✨</span><span data-i18n="game.buyXp">經驗</span></button>
+            <button class="hud-button" type="button" data-action="refresh-shop"><span>🎲</span><span data-i18n="game.refresh">刷新</span></button>
+            <button class="hud-button" type="button" data-action="toggle-lock"><span>🔒</span><span data-i18n="game.lock">鎖定</span></button>
+          </div>
+        </section>
+
+        <section id="help-screen" class="screen screen-page" data-screen="help" hidden>
+          <div class="page-shell help-shell panel-card">
+            <div class="page-heading">
+              <button class="icon-button" type="button" data-action="go-menu" aria-label="Back">←</button>
+              <div><span class="eyebrow">📖 <span data-i18n="help.eyebrow">新手指南</span></span><h1 data-i18n="help.title">遊戲說明</h1></div>
+              <button class="secondary-button small-button" type="button" data-action="open-settings">⚙️</button>
+            </div>
+            <div id="help-layout" class="help-layout">
+              <nav id="help-tabs" class="help-tabs" data-i18n-aria="common.helpChapters" aria-label="Help chapters"></nav>
+              <article id="help-content" class="help-content"></article>
+            </div>
+            <div class="page-footer-actions">
+              <button class="secondary-button" type="button" data-action="go-menu"><span>🏠</span><span data-i18n="common.backHome">返回主畫面</span></button>
+              <button class="primary-button" type="button" data-action="start-new"><span>▶</span><span data-i18n="help.startNow">現在開始遊戲</span></button>
+            </div>
+          </div>
+        </section>
+
+        <section id="settings-screen" class="screen screen-page" data-screen="settings" hidden>
+          <div class="page-shell settings-shell panel-card">
+            <div class="page-heading">
+              <button class="icon-button" type="button" data-action="go-menu" aria-label="Back">←</button>
+              <div><span class="eyebrow">⚙️ <span data-i18n="settings.eyebrow">個人化體驗</span></span><h1 data-i18n="menu.settings">設定</h1></div>
+              <span class="save-badge">● <span data-i18n="settings.autoSave">自動儲存</span></span>
+            </div>
+            <div id="settings-content" class="settings-content"></div>
+            <div class="page-footer-actions">
+              <button class="secondary-button" type="button" data-action="go-menu"><span>🏠</span><span data-i18n="common.backHome">返回主畫面</span></button>
+              <button class="ghost-button" type="button" data-action="reset-settings"><span>↺</span><span data-i18n="settings.reset">恢復預設值</span></button>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <div id="modal-root" class="modal-root"></div>
+      <div id="toast-root" class="toast-root" aria-live="polite"></div>
+    </div>
+
+    <script src="js/utils/storage.js"></script>
+    <script src="js/utils/helpers.js"></script>
+    <script src="js/utils/deviceDetect.js"></script>
+    <script src="js/i18n/lang-zh-TW.js"></script>
+    <script src="js/i18n/lang-en.js"></script>
+    <script src="js/i18n/lang-ja.js"></script>
+    <script src="js/i18n/i18n.js"></script>
+    <script src="js/data/units.js"></script>
+    <script src="js/data/synergies.js"></script>
+    <script src="js/data/items.js"></script>
+    <script src="js/data/stages.js"></script>
+    <script src="js/core/gameState.js"></script>
+    <script src="js/core/economySystem.js"></script>
+    <script src="js/core/synergySystem.js"></script>
+    <script src="js/core/boardSystem.js"></script>
+    <script src="js/core/shopSystem.js"></script>
+    <script src="js/core/battleSystem.js"></script>
+    <script src="js/core/gameEngine.js"></script>
+    <script src="js/audio/audioManager.js"></script>
+    <script src="js/ui/uiManager.js"></script>
+    <script src="js/ui/mainMenuUI.js"></script>
+    <script src="js/ui/gameUI.js"></script>
+    <script src="js/ui/shopUI.js"></script>
+    <script src="js/ui/helpUI.js"></script>
+    <script src="js/ui/settingsUI.js"></script>
+    <script src="js/ui/dragDrop.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

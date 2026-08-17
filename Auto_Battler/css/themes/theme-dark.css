@@ -1,0 +1,27 @@
+html[data-theme="dark"] {
+  --color-primary: #8ee7c1;
+  --color-primary-strong: #57c79f;
+  --color-secondary: #8d99ae;
+  --color-accent: #ffe38a;
+  --color-bg: #1c2032;
+  --color-surface: #292d42;
+  --color-surface-soft: #333850;
+  --color-text: #f4f3f8;
+  --color-text-muted: #c4c5d0;
+  --color-text-inverse: #1c2032;
+  --color-success: #8ee7c1;
+  --color-danger: #ff8894;
+  --color-warning: #ffe38a;
+  --color-board: #53627d;
+  --color-board-dark: #303b54;
+  --color-card-border: rgba(255, 255, 255, 0.11);
+  --color-overlay: rgba(7, 9, 19, 0.76);
+  --gradient-page: linear-gradient(135deg, #1a1e2f, #2b3049 52%, #1d3640);
+  --gradient-primary: linear-gradient(135deg, #a0ffe0, #55c7a1);
+  --gradient-secondary: linear-gradient(135deg, #454d68, #343b55);
+  --gradient-board: linear-gradient(135deg, #697e9c, #3e4c69);
+  --shadow-soft: 0 12px 30px rgba(0, 0, 0, 0.24);
+  --shadow-card: 0 18px 44px rgba(0, 0, 0, 0.3);
+  --shadow-button: 0 7px 0 rgba(0, 0, 0, 0.24), 0 12px 22px rgba(0, 0, 0, 0.2);
+  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 -2px 0 rgba(0, 0, 0, 0.2);
+}

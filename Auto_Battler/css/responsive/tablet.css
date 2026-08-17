@@ -1,0 +1,34 @@
+@media (min-width: 768px) and (max-width: 1024px) {
+  .game-layout {
+    grid-template-columns: minmax(185px, 230px) minmax(0, 1fr);
+    grid-template-rows: 1fr auto;
+  }
+
+  .board-panel {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+
+  .left-sidebar {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .right-sidebar {
+    grid-column: 1;
+    grid-row: 2;
+    min-height: 0;
+  }
+
+  .right-sidebar .shop-card {
+    max-height: 330px;
+  }
+
+  .shop-list {
+    overflow-y: auto;
+  }
+
+  .page-shell {
+    padding: 28px;
+  }
+}

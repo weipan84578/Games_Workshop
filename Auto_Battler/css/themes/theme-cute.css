@@ -1,0 +1,20 @@
+html[data-theme="cute"] {
+  --color-primary: #ef6fa9;
+  --color-primary-strong: #c83f7b;
+  --color-secondary: #82bfe9;
+  --color-accent: #ffd35d;
+  --color-bg: #fff7fb;
+  --color-surface: #ffffff;
+  --color-surface-soft: #fff0f7;
+  --color-text: #34283a;
+  --color-text-muted: #6c5d72;
+  --color-text-inverse: #ffffff;
+  --color-success: #26956c;
+  --color-danger: #cf405c;
+  --color-warning: #bc7717;
+  --color-board: #d59a62;
+  --color-board-dark: #905435;
+  --gradient-page: linear-gradient(135deg, #fff9fc 0%, #ffeaf5 50%, #eaf7ff 100%);
+  --gradient-primary: linear-gradient(135deg, #ff9ac4, #e95f9e);
+  --gradient-secondary: linear-gradient(135deg, #e4f5ff, #acd6f5);
+}

@@ -1,0 +1,20 @@
+html[data-theme="forest"] {
+  --color-primary: #4b9a70;
+  --color-primary-strong: #2e6d4e;
+  --color-secondary: #b98d62;
+  --color-accent: #e9c75d;
+  --color-bg: #f6fbf5;
+  --color-surface: #ffffff;
+  --color-surface-soft: #eaf6e9;
+  --color-text: #263b31;
+  --color-text-muted: #5d7263;
+  --color-text-inverse: #ffffff;
+  --color-success: #268a5a;
+  --color-danger: #c84a54;
+  --color-warning: #987019;
+  --color-board: #a97b4d;
+  --color-board-dark: #68462e;
+  --gradient-page: linear-gradient(135deg, #fbfff7, #e6f5df 52%, #fff0bf);
+  --gradient-primary: linear-gradient(135deg, #8bc99c, #4a996d);
+  --gradient-secondary: linear-gradient(135deg, #f5eadb, #d9b78d);
+}

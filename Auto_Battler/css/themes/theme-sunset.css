@@ -1,0 +1,20 @@
+html[data-theme="sunset"] {
+  --color-primary: #e96f44;
+  --color-primary-strong: #ad4229;
+  --color-secondary: #bb7ad5;
+  --color-accent: #f8ca63;
+  --color-bg: #fff8f2;
+  --color-surface: #ffffff;
+  --color-surface-soft: #fff0e7;
+  --color-text: #402c35;
+  --color-text-muted: #755c61;
+  --color-text-inverse: #ffffff;
+  --color-success: #3b9364;
+  --color-danger: #cb4052;
+  --color-warning: #a96a15;
+  --color-board: #d8895b;
+  --color-board-dark: #914b3b;
+  --gradient-page: linear-gradient(135deg, #fffaf4, #ffe3cd 52%, #f3dff9);
+  --gradient-primary: linear-gradient(135deg, #ffb071, #e9694c);
+  --gradient-secondary: linear-gradient(135deg, #f4e1ff, #c88ddc);
+}

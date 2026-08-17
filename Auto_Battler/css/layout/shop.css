@@ -1,0 +1,84 @@
+.shop-card {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+}
+
+.panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.panel-heading > div {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-heading h2 {
+  font-size: 23px;
+}
+
+.compact-heading {
+  margin-bottom: 12px;
+}
+
+.heading-icon {
+  display: inline-grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 10px;
+  background: var(--color-surface-soft);
+  font-size: 19px;
+}
+
+.shop-list {
+  display: grid;
+  gap: 10px;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.shop-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 14px;
+}
+
+.shop-action-button {
+  min-height: 46px;
+  padding: 8px 7px;
+  font-size: 15px;
+}
+
+.bench-card {
+  min-height: 150px;
+}
+
+.bench-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 6px;
+  min-height: 46px;
+}
+
+.bench-hint,
+.tip-copy {
+  color: var(--color-text-muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.bench-hint {
+  margin-top: 9px;
+}

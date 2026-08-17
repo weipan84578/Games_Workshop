@@ -1,0 +1,69 @@
+/* The app remains fully usable offline: local system fallbacks are intentional. */
+:root {
+  --font-display: "Baloo 2", "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", sans-serif;
+  --font-body: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", "Yu Gothic", sans-serif;
+}
+
+body {
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.55;
+  letter-spacing: 0.01em;
+}
+
+h1,
+h2,
+h3,
+button,
+.game-logo,
+.brand-mini,
+.stat-chip strong,
+.phase-pill,
+.phase-timer,
+.unit-cost,
+.unit-stars,
+.number-value {
+  font-family: var(--font-display);
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.15;
+}
+
+h1 {
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 800;
+}
+
+h2 {
+  font-size: clamp(21px, 2vw, 28px);
+  font-weight: 800;
+}
+
+h3 {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+small,
+.small-copy,
+.eyebrow,
+.offline-note,
+.bench-hint {
+  font-size: 16px;
+}
+
+.eyebrow {
+  color: var(--color-primary-strong);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.muted {
+  color: var(--color-text-muted);
+}

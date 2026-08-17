@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 150" role="img" aria-labelledby="title desc">
+  <title id="title">Starry Sprouts</title>
+  <desc id="desc">A smiling sprout with a pink ribbon under a small star.</desc>
+  <defs>
+    <linearGradient id="ribbon" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#ff9ac4"/><stop offset="1" stop-color="#e95f9e"/></linearGradient>
+    <linearGradient id="leaf" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#a6e7b8"/><stop offset="1" stop-color="#4eaa77"/></linearGradient>
+  </defs>
+  <g stroke="#594054" stroke-linecap="round" stroke-linejoin="round" stroke-width="7">
+    <path fill="url(#leaf)" d="M68 56C35 20 9 34 22 75c24 3 41-5 46-19Z"/>
+    <path fill="url(#leaf)" d="M84 55c29-39 57-25 45 18-24 5-40-3-45-18Z"/>
+    <path fill="#ffe184" d="M48 66c0-20 17-35 39-35s39 15 39 35v35c0 22-17 35-39 35s-39-13-39-35Z"/>
+    <path fill="#8ed8a0" d="M61 121c9 13 20 18 26 18s17-5 26-18v16c-6 10-15 15-26 15s-20-5-26-15Z"/>
+    <circle fill="#594054" cx="75" cy="80" r="4" stroke="none"/>
+    <circle fill="#594054" cx="99" cy="80" r="4" stroke="none"/>
+    <path fill="none" d="M80 96c5 5 10 5 15 0"/>
+    <path fill="url(#ribbon)" d="M136 31c14-17 36-18 47-6-1 16-13 29-30 30l-7 24-15-7 10-18c-12-4-18-13-18-23Z"/>
+    <path fill="#fff4a9" stroke="none" d="m212 27 6 13 14 2-10 10 3 14-13-7-13 7 3-14-10-10 14-2Z"/>
+  </g>
+  <text x="250" y="95" fill="#c83f7b" font-family="Arial, sans-serif" font-size="39" font-weight="800">Starry Sprouts</text>
+</svg>

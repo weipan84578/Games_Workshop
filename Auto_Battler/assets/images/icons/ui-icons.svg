@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="coin" viewBox="0 0 48 48"><circle cx="24" cy="24" r="18" fill="#ffd35d" stroke="#825b0b" stroke-width="4"/><path d="M18 18c4-4 11-4 14 1M18 30c4 4 11 4 14-1" fill="none" stroke="#a76b16" stroke-linecap="round" stroke-width="3"/></symbol>
+  <symbol id="heart" viewBox="0 0 48 48"><path d="M24 39S7 29 7 17c0-8 11-12 17-4 6-8 17-4 17 4 0 12-17 22-17 22Z" fill="#ef6fa9" stroke="#9d416d" stroke-linejoin="round" stroke-width="4"/></symbol>
+  <symbol id="sword" viewBox="0 0 48 48"><path d="m11 37 25-25 5 5-25 25H11Z" fill="#dceaff" stroke="#4f5b76" stroke-linejoin="round" stroke-width="4"/><path d="m29 14 5 5M11 37l-4 4M17 31l-5-5" fill="none" stroke="#e9a235" stroke-linecap="round" stroke-width="4"/></symbol>
+  <symbol id="star" viewBox="0 0 48 48"><path d="m24 5 5.8 11.8L43 18.5l-9.5 9.2L35.7 41 24 34.8 12.3 41l2.2-13.3L5 18.5l13.2-1.7Z" fill="#ffd35d" stroke="#a76b16" stroke-linejoin="round" stroke-width="3"/></symbol>
+</svg>
