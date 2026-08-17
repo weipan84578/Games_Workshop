@@ -54,4 +54,7 @@
     ],
     callout: "更新前に、次の利息ラインを残せるか確認しましょう。"
   };
+  root.AutoBattlerLang.ja.game.buyXpOffer = "{cost}💰 ・ +{amount} EXP";
+  root.AutoBattlerLang.ja.game.xpBought = "{cost}ゴールドで全ユニットに{amount} EXPを付与";
+  root.AutoBattlerLang.ja.help.economy.steps[2].text = "所持ユニットの最高星で変化します。1星は4ゴールドで4 EXP、以降は6/3、8/2、10/1、5星は12/1です。";
 }(window));

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Safe Browser Validation"
+  short_description: "Safe checks without risky PowerShell/CDP browser automation."
+  default_prompt: "Use $safe-browser-validation to verify this project safely without remote-debugging PowerShell or CDP automation."

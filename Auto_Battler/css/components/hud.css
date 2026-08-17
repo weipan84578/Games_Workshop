@@ -18,12 +18,22 @@
 .hud-button {
   min-width: 0;
   padding: 8px 5px;
+  flex-wrap: wrap;
+  row-gap: 2px;
   border: 1px solid var(--color-card-border);
   color: var(--color-primary-strong);
   background: var(--color-surface-soft);
   font-size: 14px;
   line-height: 1.05;
   white-space: nowrap;
+}
+
+.hud-button small {
+  flex-basis: 100%;
+  overflow: hidden;
+  font-size: 10px;
+  line-height: 1;
+  text-overflow: ellipsis;
 }
 
 .hud-button span:last-child {

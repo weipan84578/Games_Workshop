@@ -22,6 +22,7 @@
   var MAX_STAR = 5;
   var EXPERIENCE_REQUIREMENTS = { 1: 2, 2: 3, 3: 4, 4: 5 };
   var STAR_COEFFICIENTS = { 1: 1, 2: 1.8, 3: 3.2, 4: 4.8, 5: 6.8 };
+  var STAR_PRICE_MULTIPLIERS = { 1: 1, 2: 2, 3: 4, 4: 7, 5: 11 };
 
   function normalizeStar(star) {
     return app.Helpers.clamp(Math.floor(Number(star) || 1), 1, MAX_STAR);
@@ -34,6 +35,11 @@
     get: function (id) { return byId[id]; },
     experienceToNext: function (star) {
       return EXPERIENCE_REQUIREMENTS[normalizeStar(star)] || 0;
+    },
+    price: function (typeId, star) {
+      var base = byId[typeId];
+      if (!base) return 0;
+      return Math.ceil(base.cost * STAR_PRICE_MULTIPLIERS[normalizeStar(star)]);
     },
     create: function (typeId, star, experience) {
       var base = byId[typeId];
@@ -69,6 +75,7 @@
         icon: base.icon,
         color: base.color,
         cost: base.cost,
+        price: this.price(instance.typeId, star),
         race: base.race,
         classId: base.classId,
         health: Math.round(base.health * coefficient),

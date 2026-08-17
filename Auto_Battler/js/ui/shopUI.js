@@ -7,10 +7,10 @@
     var base = app.UnitData.get(offer.typeId);
     if (!base) return "";
     var display = app.UnitData.getDisplay({ typeId: base.id, star: 1, instanceId: offer.offerId });
-    var canBuy = state.gold >= base.cost && state.bench.length < 8 && state.mode === "prepare";
+    var canBuy = state.gold >= display.price && state.bench.length < 8 && state.mode === "prepare";
     var race = app.I18n.t("races." + display.race);
     var className = app.I18n.t("classes." + display.classId);
-    return '<article class="shop-unit-card" style="--unit-color:' + display.color + '" title="' + display.ability + '"><div class="unit-portrait" aria-hidden="true">' + display.icon + '</div><div class="shop-unit-info"><div class="unit-name">' + display.name + '</div><div class="unit-stars">★</div><div class="unit-tags"><span class="tag">' + race + '</span><span class="tag">' + className + '</span></div></div><button class="shop-buy-button" type="button" data-action="buy-unit" data-offer-id="' + offer.offerId + '" ' + (canBuy ? "" : "disabled") + '>' + base.cost + '💰</button></article>';
+    return '<article class="shop-unit-card" style="--unit-color:' + display.color + '" title="' + display.ability + ' ・ 💰' + display.price + '"><div class="unit-portrait" aria-hidden="true">' + display.icon + '</div><div class="shop-unit-info"><div class="unit-name">' + display.name + '</div><div class="unit-stars">★</div><div class="unit-tags"><span class="tag">' + race + '</span><span class="tag">' + className + '</span></div></div><button class="shop-buy-button" type="button" data-action="buy-unit" data-offer-id="' + offer.offerId + '" ' + (canBuy ? "" : "disabled") + '>' + display.price + '💰</button></article>';
   }
 
   app.ShopUI = {

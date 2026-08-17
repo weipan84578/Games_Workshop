@@ -54,8 +54,10 @@
     steps: [
       { title: "Base income", text: "Gain 5 gold each round, plus possible win-streak rewards." },
       { title: "Interest", text: "Every 10 gold held grants 1 interest, up to 5 gold." },
-      { title: "Buy card EXP", text: "Spend 4 gold to grant 4 EXP to every owned friend; player level still grows from round results." }
+      { title: "Buy card EXP", text: "The highest owned star sets the offer: 1★ costs 4 gold for 4 EXP, then 6/3, 8/2, 10/1, and 12/1 through 5★." }
     ],
     callout: "Check your next interest threshold before refreshing the shop."
   };
+  root.AutoBattlerLang.en.game.buyXpOffer = "{cost}💰 ・ +{amount} EXP";
+  root.AutoBattlerLang.en.game.xpBought = "Spent {cost} gold: all owned friends gained {amount} EXP";
 }(window));

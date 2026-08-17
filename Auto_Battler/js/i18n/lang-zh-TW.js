@@ -288,4 +288,7 @@
     toast: { saved: "進度已保存", cleared: "遊戲存檔已清除", audioReady: "音效已啟用" },
     errors: { generic: "發生了一點小問題，請再試一次。" }
   };
+  root.AutoBattlerLang["zh-TW"].game.buyXpOffer = "{cost}💰 ・ +{amount} EXP";
+  root.AutoBattlerLang["zh-TW"].game.xpBought = "花費 {cost} 金幣，所有棋子獲得 {amount} 點經驗";
+  root.AutoBattlerLang["zh-TW"].help.economy.steps[2].text = "依目前最高星級調整：1 星花費 4 金幣得 4 經驗，之後依序為 6/3、8/2、10/1，最高五星為 12/1。";
 }(window));

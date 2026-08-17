@@ -20,6 +20,21 @@
     return levels;
   }
 
+  function highestOwnedStar(state) {
+    return app.BoardSystem.allInstances(state).reduce(function (highest, unit) {
+      return Math.max(highest, Math.min(app.UnitData.maxStar, Math.floor(Number(unit.star) || 1)));
+    }, 1);
+  }
+
+  function cardExperienceOffer(state) {
+    var highestStar = highestOwnedStar(state);
+    return {
+      highestStar: highestStar,
+      cost: 4 + (highestStar - 1) * 2,
+      amount: Math.max(1, 5 - highestStar)
+    };
+  }
+
   app.EconomySystem = {
     getIncome: function (state) {
       var base = 5;
@@ -50,14 +65,14 @@
       if (!battleResult.gameOver) state.round += 1;
       return battleResult;
     },
+    getCardExperienceOffer: cardExperienceOffer,
     buyExperience: function (state) {
-      var cost = 4;
-      if (state.gold < cost) return { ok: false, reason: "gold" };
-      state.gold -= cost;
-      var amount = 4;
-      var unitExperience = app.BoardSystem.addExperienceToAll(state, amount);
+      var offer = cardExperienceOffer(state);
+      if (state.gold < offer.cost) return { ok: false, reason: "gold", cost: offer.cost, amount: offer.amount };
+      state.gold -= offer.cost;
+      var unitExperience = app.BoardSystem.addExperienceToAll(state, offer.amount);
       var merged = app.BoardSystem.autoMerge(state);
-      return { ok: true, cost: cost, amount: amount, unitExperience: unitExperience, merged: merged, levelUps: [] };
+      return { ok: true, cost: offer.cost, amount: offer.amount, highestStar: offer.highestStar, unitExperience: unitExperience, merged: merged, levelUps: [] };
     },
     streakBonus: streakBonus
   };

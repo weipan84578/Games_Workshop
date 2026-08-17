@@ -50,14 +50,15 @@
       if (offerIndex < 0) return { ok: false, reason: "missing" };
       if (state.bench.length >= 8) return { ok: false, reason: "bench-full" };
       var base = app.UnitData.get(state.shop[offerIndex].typeId);
-      if (!base || state.gold < base.cost) return { ok: false, reason: "gold" };
-      state.gold -= base.cost;
+      var price = base ? app.UnitData.price(base.id, 1) : 0;
+      if (!base || state.gold < price) return { ok: false, reason: "gold", cost: price };
+      state.gold -= price;
       var unit = app.UnitData.create(base.id, 1);
       state.bench.push(unit);
       state.shop.splice(offerIndex, 1);
       state.shop.push(createOffer(app.Helpers.pick(app.UnitData.all).id));
       var merged = app.BoardSystem.autoMerge(state);
-      return { ok: true, unit: unit, base: base, merged: merged };
+      return { ok: true, unit: unit, base: base, cost: price, merged: merged };
     }
   };
 }(window));

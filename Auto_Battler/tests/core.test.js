@@ -89,6 +89,11 @@ test("unit data, star scaling, and translated capacity text are available", () =
   assert.equal(app.UnitData.maxStar, 5);
   assert.equal(app.UnitData.experienceToNext(1), 2);
   assert.equal(app.UnitData.experienceToNext(4), 5);
+  assert.equal(app.UnitData.price("stoneback", 1), 2);
+  assert.equal(app.UnitData.price("stoneback", 2), 4);
+  assert.equal(app.UnitData.price("stoneback", 3), 8);
+  assert.equal(app.UnitData.price("stoneback", 4), 14);
+  assert.equal(app.UnitData.price("stoneback", 5), 22);
 
   const zh = app.I18n.t("game.boardCapacity");
   app.I18n.setLanguage("en");
@@ -158,6 +163,10 @@ test("buying card experience improves every owned card", () => {
   state.board = [app.UnitData.create("emberfox", 1), null, null, null, null, null, null, null];
   state.bench = [app.UnitData.create("tidepup", 1)];
   state.gold = 10;
+  const firstOffer = app.EconomySystem.getCardExperienceOffer(state);
+  assert.equal(firstOffer.highestStar, 1);
+  assert.equal(firstOffer.cost, 4);
+  assert.equal(firstOffer.amount, 4);
   const result = app.EconomySystem.buyExperience(state);
   assert.equal(result.ok, true);
   assert.equal(result.amount, 4);
@@ -167,11 +176,25 @@ test("buying card experience improves every owned card", () => {
   assert.equal(state.bench[0].star, 2);
   assert.equal(state.bench[0].experience, 2);
   assert.equal(state.gold, 6);
+  const secondOffer = app.EconomySystem.getCardExperienceOffer(state);
+  assert.equal(secondOffer.highestStar, 2);
+  assert.equal(secondOffer.cost, 6);
+  assert.equal(secondOffer.amount, 3);
 
   state.level = 8;
-  state.gold = 4;
+  state.board[0].star = 5;
+  state.board[0].experience = 0;
+  state.bench[0].star = 5;
+  state.bench[0].experience = 0;
+  const finalOffer = app.EconomySystem.getCardExperienceOffer(state);
+  assert.equal(finalOffer.highestStar, 5);
+  assert.equal(finalOffer.cost, 12);
+  assert.equal(finalOffer.amount, 1);
+  state.gold = 12;
   const maxLevelPurchase = app.EconomySystem.buyExperience(state);
   assert.equal(maxLevelPurchase.ok, true);
+  assert.equal(maxLevelPurchase.cost, 12);
+  assert.equal(maxLevelPurchase.amount, 1);
 });
 
 test("forest synergy activates from deployed units only", () => {

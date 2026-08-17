@@ -15,7 +15,7 @@
     var stars = "★".repeat(display.star);
     var experienceLabel = display.star >= app.UnitData.maxStar ? "MAX" : display.experience + "/" + display.experienceToNext;
     var experienceWidth = display.star >= app.UnitData.maxStar ? 100 : display.experienceRatio;
-    return '<button type="button" draggable="true" class="' + (small ? "unit-card-mini" : "unit-card") + (selected ? " is-selected" : "") + '" style="--unit-color:' + display.color + '" data-action="select-unit" data-unit-id="' + instance.instanceId + '" title="' + display.ability + " ・ " + race + " / " + className + ' ・ EXP ' + experienceLabel + '"><span class="unit-portrait" aria-hidden="true">' + display.icon + '</span><span class="unit-name">' + display.name + '</span><span class="unit-stars">' + stars + '</span><span class="unit-xp-label">EXP ' + experienceLabel + '</span><span class="unit-xp-track" aria-hidden="true"><span class="unit-xp-fill" style="width:' + experienceWidth + '%"></span></span>' + (small ? "" : '<span class="unit-tags"><span class="tag">' + race + '</span><span class="tag">' + className + '</span></span>') + '</button>';
+    return '<button type="button" draggable="true" class="' + (small ? "unit-card-mini" : "unit-card") + (selected ? " is-selected" : "") + '" style="--unit-color:' + display.color + '" data-action="select-unit" data-unit-id="' + instance.instanceId + '" title="' + display.ability + " ・ " + race + " / " + className + ' ・ 💰' + display.price + ' ・ EXP ' + experienceLabel + '"><span class="unit-portrait" aria-hidden="true">' + display.icon + '</span><span class="unit-name">' + display.name + '</span><span class="unit-stars">' + stars + '</span><span class="unit-cost">💰' + display.price + '</span><span class="unit-xp-label">EXP ' + experienceLabel + '</span><span class="unit-xp-track" aria-hidden="true"><span class="unit-xp-fill" style="width:' + experienceWidth + '%"></span></span>' + (small ? "" : '<span class="unit-tags"><span class="tag">' + race + '</span><span class="tag">' + className + '</span></span>') + '</button>';
   }
 
   function eventText(event) {
@@ -95,8 +95,13 @@
     if (timer) timer.textContent = phase === "prepare" ? Math.max(0, Number(state.phaseTime) || 0) + "s" : phase === "battle" ? "✦" : "—";
     var startButtons = document.querySelectorAll('[data-action="start-battle"]');
     startButtons.forEach(function (button) { button.disabled = state.mode !== "prepare"; });
+    var experienceOffer = app.EconomySystem.getCardExperienceOffer(state);
+    var experienceOfferText = replaceTokens(app.I18n.t("game.buyXpOffer"), { cost: experienceOffer.cost, amount: experienceOffer.amount });
     document.querySelectorAll('[data-action="buy-xp"]').forEach(function (button) {
-      button.disabled = state.mode !== "prepare" || state.gold < 4;
+      button.disabled = state.mode !== "prepare" || state.gold < experienceOffer.cost;
+      var costLabel = button.querySelector("[data-buy-xp-cost]");
+      if (costLabel) costLabel.textContent = experienceOfferText;
+      button.title = experienceOfferText;
     });
     document.querySelectorAll('[data-action="refresh-shop"], [data-action="toggle-lock"]').forEach(function (button) {
       button.disabled = state.mode !== "prepare";

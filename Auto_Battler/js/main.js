@@ -156,7 +156,7 @@
       var xp = app.GameEngine.buyExperience();
       if (!xp.ok) showResultMessage(xp);
       else {
-        app.GameUI.showToast(app.I18n.t("game.xpBought").replace("{amount}", xp.amount), "success");
+        app.GameUI.showToast(app.I18n.t("game.xpBought").replace("{cost}", xp.cost).replace("{amount}", xp.amount), "success");
         showStarUpEvents(xp.unitExperience);
         if (xp.merged && xp.merged.length) app.AudioManager.playSfx("merge");
         showMergeResults(xp.merged);
