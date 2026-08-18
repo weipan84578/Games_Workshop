@@ -80,6 +80,7 @@
 | `Auto_Battler`         | 自走棋     | Auto Battler         | オートバトラー             |
 | `Castle_Multiplier_Defense` | 城堡倍率防衛 | Castle Multiplier Defense | 城塞マルチプライヤー・ディフェンス |
 | `Monkey_Tower_Defense` | 猴子塔防   | Monkey Tower Defense | モンキータワーディフェンス |
+| `Tug_of_War_TD`        | 塔防大戰爭 | Tug of War Tower Defense | 綱引きタワーディフェンス |
 | `PvZ_Frontend`         | 花園防衛者 | Garden Defenders     | ガーデンディフェンダーズ   |
 | `Nim`                  | 尼姆搶數字 | Nim                  | ニム                       |
 | `Worm`                 | 蟲蟲轟轟隊 | Wormy Boom Squad     | ワーム・ボム隊             |
