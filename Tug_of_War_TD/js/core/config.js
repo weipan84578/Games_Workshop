@@ -10,8 +10,11 @@
     defaultLanguage: "zh",
     maxDelta: 0.05,
     lowPerformanceUnitLimit: 36,
-    enemyRangedDamageMultiplier: .6,
-    playerEnergyRateMultiplier: 1.12
+    enemyRangedDamageMultiplier: .8,
+    playerEnergyRateMultiplier: 1.24,
+    unitCostMultiplier: .8,
+    playerDefensiveHpMultiplier: 1.2,
+    playerDefensiveDefenseBonus: .2
   });
 
   app.utils = {
@@ -34,14 +37,25 @@
     clone: function (value) {
       return JSON.parse(JSON.stringify(value));
     },
-    formatTime: function (seconds) {
-      var safe = Math.max(0, Math.ceil(seconds));
-      var minutes = Math.floor(safe / 60);
-      var remaining = safe % 60;
-      return String(minutes).padStart(2, "0") + ":" + String(remaining).padStart(2, "0");
-    },
     formatNumber: function (value) {
       return Math.round(value).toLocaleString();
+    },
+    getUnitCost: function (definition) {
+      if (!definition || definition.isBoss || !definition.cost) {
+        return definition ? definition.cost : 0;
+      }
+      return Math.max(1, Math.round(definition.cost * app.Config.unitCostMultiplier));
+    },
+    getUnitMaxHp: function (definition, side) {
+      var multiplier = side === "player" && definition && definition.defensive ? app.Config.playerDefensiveHpMultiplier : 1;
+      return Math.round((definition ? definition.hp : 0) * multiplier);
+    },
+    getUnitDefense: function (definition, side) {
+      var defense = Number(definition && definition.defense || 0);
+      if (side === "player" && definition && definition.defensive) {
+        defense += app.Config.playerDefensiveDefenseBonus;
+      }
+      return app.utils.clamp(defense, 0, .9);
     },
     percent: function (value, total) {
       return total > 0 ? app.utils.clamp((value / total) * 100, 0, 100) : 0;

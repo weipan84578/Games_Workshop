@@ -4,11 +4,21 @@ const path = require("node:path");
 const vm = require("node:vm");
 
 global.window = global;
+const storage = {};
+global.localStorage = {
+  getItem: function (key) {
+    return Object.prototype.hasOwnProperty.call(storage, key) ? storage[key] : null;
+  },
+  setItem: function (key, value) {
+    storage[key] = value;
+  }
+};
 
 const root = path.resolve(__dirname, "..");
 const scripts = [
   "js/core/config.js",
   "js/core/eventBus.js",
+  "js/core/saveManager.js",
   "data/unitsData.js",
   "data/levels.js",
   "js/entities/Unit.js",
@@ -72,6 +82,9 @@ test("unit catalog contains regular, special, and boss definitions", function ()
   assert.equal(boss.hp, global.UNITS_DATA.boss.hp - 60);
   assert.equal(global.LEVELS_DATA.length, 6);
   assert.equal(global.LEVELS_DATA[5].enhancedBoss, true);
+  assert.ok(global.LEVELS_DATA.every(function (level) {
+    return !("maxTime" in level);
+  }));
   assert.ok(global.LEVELS_DATA.every(function (level) {
     return app.LevelSystem.isUnlocked(level.id);
   }));
@@ -169,16 +182,41 @@ test("income upgrade increases production and stops at level five", function () 
   assert.equal(resource.upgradePlayer().reason, "max");
 });
 
+test("unit costs and defensive bonuses are applied consistently", function () {
+  assert.equal(app.Config.unitCostMultiplier, .8);
+  assert.equal(app.utils.getUnitCost(global.UNITS_DATA.ranger), 13);
+  assert.equal(app.utils.getUnitCost(global.UNITS_DATA.boss), 0);
+
+  const session = createSession(1);
+  const rangerCost = app.utils.getUnitCost(global.UNITS_DATA.ranger);
+  session.resource.player = rangerCost;
+  const spawnResult = session.spawnSystem.spawnPlayer(session, "ranger");
+  assert.equal(spawnResult.ok, true);
+  assert.equal(session.resource.player, 0);
+
+  ["basic", "tank", "guard", "guardian"].forEach(function (unitId) {
+    const definition = global.UNITS_DATA[unitId];
+    const player = new app.Unit(definition, "player", 300, 350);
+    const enemy = new app.Unit(definition, "enemy", 700, 350);
+    assert.equal(player.maxHp, Math.round(definition.hp * 1.2));
+    assert.equal(enemy.maxHp, definition.hp);
+    player.takeDamage(100);
+    enemy.takeDamage(100);
+    assert.equal(player.hp, player.maxHp - 80);
+    assert.equal(enemy.hp, enemy.maxHp - 100);
+  });
+});
+
 test("unit damage consumes barrier and preserves position and slow state", function () {
   const tank = new app.Unit(global.UNITS_DATA.tank, "player", 300, 350);
   const startingX = tank.x;
   tank.barrier = 40;
   tank.takeDamage(25);
   assert.equal(tank.hp, tank.maxHp);
-  assert.equal(tank.barrier, 15);
+  assert.equal(tank.barrier, 20);
 
   tank.takeDamage(30);
-  assert.equal(tank.hp, tank.maxHp - 15);
+  assert.equal(tank.hp, tank.maxHp - 4);
 
   tank.applySlow(2, .5);
   assert.equal(tank.slowTimer, 2);
@@ -209,6 +247,7 @@ test("attacks never push any character out of position", function () {
 
 test("enemy ranged damage is reduced without weakening player ranged units", function () {
   const session = createSession(1);
+  assert.equal(app.Config.enemyRangedDamageMultiplier, .8);
   const playerFrontline = new app.Unit(global.UNITS_DATA.basic, "player", 400, 350);
   const enemyRanger = new app.Unit(global.UNITS_DATA.ranger, "enemy", 520, 350);
   const secondEnemyRanger = new app.Unit(global.UNITS_DATA.ranger, "enemy", 540, 350);
@@ -217,7 +256,7 @@ test("enemy ranged damage is reduced without weakening player ranged units", fun
   session.enemyUnits.add(secondEnemyRanger);
 
   session.battleSystem.update(session, .05);
-  const softenedRangedDamage = global.UNITS_DATA.ranger.atk * app.Config.enemyRangedDamageMultiplier * 2;
+  const softenedRangedDamage = global.UNITS_DATA.ranger.atk * app.Config.enemyRangedDamageMultiplier * 2 * (1 - app.utils.getUnitDefense(global.UNITS_DATA.basic, "player"));
   assert.ok(Math.abs(playerFrontline.hp - (playerFrontline.maxHp - softenedRangedDamage)) < .0001);
 
   const enemyFrontline = new app.Unit(global.UNITS_DATA.basic, "enemy", 520, 350);
@@ -255,6 +294,22 @@ test("living opponents hold the lane until they are defeated", function () {
   player.attackCooldown = 0;
   session.battleSystem.update(session, .05);
   assert.ok(player.x > blockedX);
+});
+
+test("every deployable role stays in place during frontline contact", function () {
+  global.UNIT_ORDER.forEach(function (unitId) {
+    const session = createSession(1);
+    const player = new app.Unit(global.UNITS_DATA[unitId], "player", 400, 350);
+    const enemy = new app.Unit(global.UNITS_DATA.basic, "enemy", 405, 350);
+    const playerX = player.x;
+    const enemyX = enemy.x;
+    session.playerUnits.add(player);
+    session.enemyUnits.add(enemy);
+
+    session.battleSystem.update(session, .05);
+    assert.equal(player.x, playerX, unitId + " player moved");
+    assert.equal(enemy.x, enemyX, unitId + " enemy moved");
+  });
 });
 
 test("special abilities apply slow, chain damage, and ally barriers", function () {
@@ -329,15 +384,35 @@ test("Boss spawning takes priority over the regular unit performance cap", funct
   }), true);
 });
 
-test("living boss prevents a time-limit victory", function () {
+test("unlimited battles ignore elapsed time and finish only by castle rules", function () {
   const session = createSession(1);
-  session.enemyBase.hp = 290;
-  app.BossSystem.trigger(session);
-  session.timeRemaining = 0;
+  const snapshot = session.snapshot();
+  session.elapsed = 999999;
 
   session.battleSystem.update(session, 0);
+  assert.equal(session.result, null);
+  assert.equal("timeRemaining" in session, false);
+  assert.equal("timeRemaining" in snapshot, false);
+
+  session.playerBase.hp = 0;
+  session.battleSystem.update(session, 0);
   assert.equal(session.result.outcome, "defeat");
-  assert.equal(session.result.reason, "boss");
+  assert.equal(session.result.reason, "castle");
+});
+
+test("legacy best-time progress is removed during save migration", function () {
+  storage[app.Config.storageKey] = JSON.stringify({
+    progression: { unlockedLevel: 3, stars: { 1: 2 }, bestTimes: { 1: 99 } }
+  });
+
+  const migrated = app.SaveManager.loadGame();
+  assert.equal(migrated.progression.unlockedLevel, 3);
+  assert.equal(migrated.progression.stars[1], 2);
+  assert.equal("bestTimes" in migrated.progression, false);
+
+  const completed = app.SaveManager.completeLevel(1, 3, 999);
+  assert.equal(completed.progression.stars[1], 3);
+  assert.equal("bestTimes" in completed.progression, false);
 });
 
 test("enhanced level triggers a boss at every ten percent threshold", function () {

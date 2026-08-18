@@ -42,12 +42,14 @@
     container.innerHTML = "";
     global.UNIT_ORDER.forEach(function (id) {
       var unit = global.UNITS_DATA[id];
+      var cost = app.utils.getUnitCost(unit);
+      var hp = app.utils.getUnitMaxHp(unit, "player");
       var card = document.createElement("article");
       card.className = "unit-guide-card";
       card.style.setProperty("--unit-color", unit.color);
       card.innerHTML =
-        '<span class="unit-guide-icon">' + unit.icon + '</span><div><h3>' + app.t(unit.nameKey) + '</h3><span class="unit-guide-meta"><span class="unit-meta-pill">' + app.t(unit.roleKey) + '</span><span class="unit-meta-pill">⚡ ' + unit.cost + '</span></span></div>' +
-        '<p>' + app.t(unit.descriptionKey) + '</p><div class="unit-guide-meta"><span class="unit-meta-pill">❤️ ' + unit.hp + '</span><span class="unit-meta-pill">⚔️ ' + unit.atk + '</span><span class="unit-meta-pill">' + app.t(unit.attribute === "normal" ? "attribute_normal" : "attribute_" + unit.attribute) + '</span></div>';
+        '<span class="unit-guide-icon">' + unit.icon + '</span><div><h3>' + app.t(unit.nameKey) + '</h3><span class="unit-guide-meta"><span class="unit-meta-pill">' + app.t(unit.roleKey) + '</span><span class="unit-meta-pill">⚡ ' + cost + '</span></span></div>' +
+        '<p>' + app.t(unit.descriptionKey) + '</p><div class="unit-guide-meta"><span class="unit-meta-pill">❤️ ' + hp + '</span><span class="unit-meta-pill">⚔️ ' + unit.atk + '</span><span class="unit-meta-pill">' + app.t(unit.attribute === "normal" ? "attribute_normal" : "attribute_" + unit.attribute) + '</span></div>';
       container.appendChild(card);
     });
   }

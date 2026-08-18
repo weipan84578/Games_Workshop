@@ -12,7 +12,7 @@
       return;
     }
     var affordable = this.level.enemyPool.filter(function (unitId) {
-      return session.resource.canSpend("enemy", global.UNITS_DATA[unitId].cost);
+      return session.resource.canSpend("enemy", app.utils.getUnitCost(global.UNITS_DATA[unitId]));
     });
     if (!affordable.length) {
       this.timer = .55;

@@ -123,8 +123,8 @@
             <div class="how-hero-card victory-hero"><span class="how-hero-icon">🏆</span><div><h3 data-i18n="how_victory_heading">三種方式拿下勝利</h3><p data-i18n="how_victory_intro">聰明地推進戰線，星星會記住你的表現。</p></div></div>
             <div class="info-card-grid">
               <article class="info-card"><span class="info-icon">💥</span><h3 data-i18n="how_victory_1_title">摧毀城堡</h3><p data-i18n="how_victory_1_desc">敵方基地血量歸零立即勝利；自己的基地歸零則戰敗。</p></article>
-              <article class="info-card"><span class="info-icon">⏱️</span><h3 data-i18n="how_victory_2_title">時間結束</h3><p data-i18n="how_victory_2_desc">倒數結束時比較雙方基地百分比，血量較高的一方獲勝。</p></article>
-              <article class="info-card"><span class="info-icon">⭐</span><h3 data-i18n="how_victory_3_title">收集星級</h3><p data-i18n="how_victory_3_desc">剩餘時間與基地血量越高，結算星級越漂亮，最多三顆星。</p></article>
+              <article class="info-card"><span class="info-icon">👑</span><h3 data-i18n="how_victory_2_title">擊敗 Boss</h3><p data-i18n="how_victory_2_desc">敵方城堡前若有 Boss 存活，必須先擊敗它才能完成推城。</p></article>
+              <article class="info-card"><span class="info-icon">⭐</span><h3 data-i18n="how_victory_3_title">收集星級</h3><p data-i18n="how_victory_3_desc">勝利時依我方城堡剩餘血量評定星級：80% 三星、45% 兩星，其餘一星。</p></article>
               <article class="info-card"><span class="info-icon">💾</span><h3 data-i18n="how_victory_4_title">解鎖關卡</h3><p data-i18n="how_victory_4_desc">通關會自動保存並解鎖下一個節點，隨時可從繼續遊戲回來。</p></article>
             </div>
           </section>
@@ -173,7 +173,7 @@
       <div class="battle-shell">
         <header class="battle-hud">
           <div class="base-hud player-hud"><div class="base-avatar">🐱</div><div class="base-info"><div class="hud-label"><span data-i18n="battle_you">我方城堡</span><span id="player-hp-text">1000 / 1000</span></div><div class="health-track"><span id="player-hp-bar" class="health-fill player-fill"></span></div></div></div>
-          <div class="battle-center-hud"><span class="level-chip">🗺️ <span id="battle-level-name">—</span></span><div class="battle-timer"><span>⏱️</span><strong id="battle-time">02:00</strong></div></div>
+          <div class="battle-center-hud"><span class="level-chip">🗺️ <span id="battle-level-name">—</span></span><div class="battle-timer"><span>♾️</span><strong id="battle-time">∞</strong></div></div>
           <div class="base-hud enemy-hud"><div class="base-info"><div class="hud-label"><span data-i18n="battle_enemy">敵方城堡</span><span id="enemy-hp-text">1000 / 1000</span></div><div class="health-track"><span id="enemy-hp-bar" class="health-fill enemy-fill"></span></div></div><div class="base-avatar enemy-avatar">👹</div></div>
           <button id="battle-pause-button" class="pause-button" type="button" aria-label="Pause">Ⅱ</button>
         </header>
@@ -194,7 +194,7 @@
         <h2 id="result-title" data-i18n="result_victory">勝利！</h2>
         <p id="result-message" class="result-message" data-i18n="result_victory_message">你的貓咪小隊守住了榮耀！</p>
         <div class="result-stars" id="result-stars" aria-label="Stars">★★★</div>
-        <div class="result-stats"><div><span>⏱️</span><small data-i18n="result_time">剩餘時間</small><strong id="result-time">—</strong></div><div><span>🏰</span><small data-i18n="result_base_hp">我方城堡</small><strong id="result-base-hp">—</strong></div><div><span>💥</span><small data-i18n="result_defeated">擊破敵人</small><strong id="result-defeated">—</strong></div></div>
+        <div class="result-stats"><div><span>♾️</span><small data-i18n="result_unlimited">無限時間</small><strong id="result-time">∞</strong></div><div><span>🏰</span><small data-i18n="result_base_hp">我方城堡</small><strong id="result-base-hp">—</strong></div><div><span>💥</span><small data-i18n="result_defeated">擊破敵人</small><strong id="result-defeated">—</strong></div></div>
         <div class="result-actions"><button id="result-next" class="big-button button-primary" type="button"><span>➡️</span><span data-i18n="result_next">下一關</span></button><button id="result-levels" class="outline-button" type="button">🗺️ <span data-i18n="result_levels">返回選關</span></button><button id="result-menu" class="text-button" type="button" data-i18n="result_menu">返回主畫面</button></div>
       </div>
     </main>

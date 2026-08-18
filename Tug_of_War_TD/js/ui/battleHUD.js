@@ -44,13 +44,14 @@
     unitContainer.innerHTML = "";
     global.UNIT_ORDER.forEach(function (id) {
       var unit = global.UNITS_DATA[id];
+      var cost = app.utils.getUnitCost(unit);
       var ability = unit.abilityKey ? '<span class="unit-card-ability">✦ ' + app.t(unit.abilityKey) + '</span>' : "";
       var button = document.createElement("button");
       button.type = "button";
       button.className = "unit-card" + (unit.special ? " is-special" : "");
       button.setAttribute("data-unit-id", id);
       button.style.setProperty("--unit-color", unit.color);
-      button.innerHTML = '<span class="unit-card-icon">' + unit.icon + '</span><strong class="unit-card-name">' + app.t(unit.nameKey) + '</strong><span class="unit-card-meta"><span class="unit-card-cost">⚡ ' + unit.cost + '</span> · ' + app.t(unit.roleKey) + '</span>' + ability + '<span class="unit-card-cooldown"></span>';
+      button.innerHTML = '<span class="unit-card-icon">' + unit.icon + '</span><strong class="unit-card-name">' + app.t(unit.nameKey) + '</strong><span class="unit-card-meta"><span class="unit-card-cost">⚡ ' + cost + '</span> · ' + app.t(unit.roleKey) + '</span>' + ability + '<span class="unit-card-cooldown"></span>';
       button.title = unit.abilityKey ? app.t(unit.abilityKey) : app.t(unit.roleKey);
       button.addEventListener("click", function () {
         var result = api.summon(id);
@@ -75,15 +76,16 @@
     document.getElementById("player-energy").textContent = Math.floor(session.resource.player);
     document.getElementById("player-energy-max").textContent = session.resource.max;
     document.getElementById("player-energy-bar").style.height = app.utils.percent(session.resource.player, session.resource.max) + "%";
-    document.getElementById("battle-time").textContent = app.utils.formatTime(session.timeRemaining);
+    document.getElementById("battle-time").textContent = "∞";
     document.getElementById("battle-level-name").textContent = app.t(session.level.nameKey);
     updateIncome(session);
     updateBoss(session);
     unitContainer.querySelectorAll("[data-unit-id]").forEach(function (button) {
       var id = button.getAttribute("data-unit-id");
       var definition = global.UNITS_DATA[id];
+      var cost = app.utils.getUnitCost(definition);
       var cooldown = Number(session.cooldowns[id] || 0);
-      var affordable = session.resource.player >= definition.cost;
+      var affordable = session.resource.player >= cost;
       var ready = cooldown <= 0 && affordable && !session.result;
       button.disabled = !ready;
       button.classList.toggle("is-cooling", cooldown > 0);

@@ -121,17 +121,6 @@
     }
     if (session.playerBase.hp <= 0) {
       session.finish("defeat", "castle");
-      return;
-    }
-    if (session.timeRemaining <= 0) {
-      if (bossAlive) {
-        session.finish("defeat", "boss");
-        return;
-      }
-      var playerPercent = session.playerBase.getPercent();
-      var enemyPercent = session.enemyBase.getPercent();
-      var outcome = Math.abs(playerPercent - enemyPercent) < 1 ? "draw" : playerPercent > enemyPercent ? "victory" : "defeat";
-      session.finish(outcome, "time");
     }
   }
 
@@ -143,7 +132,6 @@
     var enemy = session.enemyUnits.getAlive();
     player.forEach(function (unit) { updateUnit(session, unit, player, enemy, session.enemyBase); });
     enemy.forEach(function (unit) { updateUnit(session, unit, enemy, player, session.playerBase); });
-    app.Collision.separate(player, enemy);
     var deadPlayer = session.playerUnits.removeDead();
     var deadEnemy = session.enemyUnits.removeDead();
     session.kills += deadEnemy.length;

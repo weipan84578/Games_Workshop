@@ -14,8 +14,7 @@
       },
       progression: {
         unlockedLevel: 1,
-        stars: {},
-        bestTimes: {}
+        stars: {}
       },
       activeBattle: null
     };
@@ -51,7 +50,7 @@
     base.settings = Object.assign(base.settings, source.settings || {});
     base.progression = Object.assign(base.progression, source.progression || {});
     base.progression.stars = Object.assign({}, source.progression && source.progression.stars || {});
-    base.progression.bestTimes = Object.assign({}, source.progression && source.progression.bestTimes || {});
+    delete base.progression.bestTimes;
     base.activeBattle = source.activeBattle || null;
     return base;
   }
@@ -90,14 +89,10 @@
     return data;
   }
 
-  function completeLevel(levelId, stars, remainingTime) {
+  function completeLevel(levelId, stars) {
     var data = loadGame();
     var currentStars = Number(data.progression.stars[levelId] || 0);
     data.progression.stars[levelId] = Math.max(currentStars, Number(stars || 0));
-    if (remainingTime !== undefined) {
-      var previousBest = Number(data.progression.bestTimes[levelId] || 0);
-      data.progression.bestTimes[levelId] = Math.max(previousBest, Math.round(remainingTime));
-    }
     data.progression.unlockedLevel = Math.max(data.progression.unlockedLevel, Number(levelId) + 1);
     data.activeBattle = null;
     saveGame(data);

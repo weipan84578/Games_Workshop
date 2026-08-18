@@ -3,7 +3,7 @@
     basic: {
       id: "basic", nameKey: "unit_basic_name", descriptionKey: "unit_basic_desc", roleKey: "unit_role_tank",
       icon: "🐱", color: "#e984a8", hp: 150, atk: 18, speed: 45, range: 34, cost: 8, cooldown: .75,
-      attribute: "normal", attackType: "melee", size: 22
+      attribute: "normal", attackType: "melee", size: 22, defensive: true
     },
     ranger: {
       id: "ranger", nameKey: "unit_ranger_name", descriptionKey: "unit_ranger_desc", roleKey: "unit_role_ranged",
@@ -13,7 +13,7 @@
     tank: {
       id: "tank", nameKey: "unit_tank_name", descriptionKey: "unit_tank_desc", roleKey: "unit_role_heavy",
       icon: "🛡️", color: "#bf8a56", hp: 420, atk: 12, speed: 18, range: 38, cost: 26, cooldown: 2.8,
-      attribute: "metal", attackType: "melee", size: 30
+      attribute: "metal", attackType: "melee", size: 30, defensive: true
     },
     striker: {
       id: "striker", nameKey: "unit_striker_name", descriptionKey: "unit_striker_desc", roleKey: "unit_role_burst",
@@ -33,7 +33,7 @@
     guard: {
       id: "guard", nameKey: "unit_guard_name", descriptionKey: "unit_guard_desc", roleKey: "unit_role_guard",
       icon: "🧱", color: "#71849b", hp: 250, atk: 26, speed: 32, range: 38, cost: 20, cooldown: 1.5,
-      attribute: "metal", attackType: "melee", size: 25
+      attribute: "metal", attackType: "melee", size: 25, defensive: true
     },
     catapult: {
       id: "catapult", nameKey: "unit_catapult_name", descriptionKey: "unit_catapult_desc", roleKey: "unit_role_siege",
@@ -58,7 +58,7 @@
     guardian: {
       id: "guardian", nameKey: "unit_guardian_name", descriptionKey: "unit_guardian_desc", roleKey: "unit_role_special",
       ability: "barrier", abilityKey: "unit_ability_barrier", icon: "🪽", color: "#83b4d8", hp: 280, atk: 20, speed: 24, range: 105, cost: 40, cooldown: 5.4,
-      attribute: "metal", attackType: "support", size: 27, barrier: 48, special: true
+      attribute: "metal", attackType: "support", size: 27, barrier: 48, special: true, defensive: true
     },
     summoner: {
       id: "summoner", nameKey: "unit_summoner_name", descriptionKey: "unit_summoner_desc", roleKey: "unit_role_special",

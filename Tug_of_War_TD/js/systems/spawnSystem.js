@@ -15,6 +15,10 @@
     return unit;
   }
 
+  function getCost(definition) {
+    return app.utils.getUnitCost(definition);
+  }
+
   SpawnSystem.prototype.update = function (session, delta) {
     Object.keys(session.cooldowns).forEach(function (unitId) {
       session.cooldowns[unitId] = Math.max(0, session.cooldowns[unitId] - delta);
@@ -25,14 +29,14 @@
     if (!definition) {
       return false;
     }
-    return session.resource.canSpend(side, definition.cost) && Number(session.cooldowns[unitId] || 0) <= 0;
+    return session.resource.canSpend(side, getCost(definition)) && Number(session.cooldowns[unitId] || 0) <= 0;
   };
   SpawnSystem.prototype.spawnPlayer = function (session, unitId) {
     var definition = global.UNITS_DATA[unitId];
     if (!definition || !this.canSpawn(session, unitId, "player")) {
       return { ok: false, reason: "not-ready" };
     }
-    session.resource.spend("player", definition.cost);
+    session.resource.spend("player", getCost(definition));
     session.cooldowns[unitId] = definition.cooldown;
     var unit = createUnit(session, unitId, "player");
     app.AudioManager.playSfx("summon");
@@ -41,10 +45,10 @@
   };
   SpawnSystem.prototype.spawnEnemy = function (session, unitId) {
     var definition = global.UNITS_DATA[unitId];
-    if (!definition || !session.resource.canSpend("enemy", definition.cost)) {
+    if (!definition || !session.resource.canSpend("enemy", getCost(definition))) {
       return { ok: false, reason: "not-ready" };
     }
-    session.resource.spend("enemy", definition.cost);
+    session.resource.spend("enemy", getCost(definition));
     var unit = createUnit(session, unitId, "enemy");
     app.events.emit("battle:summon", { side: "enemy", unit: unit });
     return { ok: true, unit: unit };

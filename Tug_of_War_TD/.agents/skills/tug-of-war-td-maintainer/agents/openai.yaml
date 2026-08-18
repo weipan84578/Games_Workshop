@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tug of War TD Maintainer"
+  short_description: "Maintain Tug of War TD balance and tests"
+  default_prompt: "Use $tug-of-war-td-maintainer to maintain Tug of War TD balance, documentation, and validation."

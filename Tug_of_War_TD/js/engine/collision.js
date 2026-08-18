@@ -17,19 +17,5 @@
     return { unit: best, distance: bestDistance };
   }
 
-  function separate(playerUnits, enemyUnits) {
-    playerUnits.forEach(function (player) {
-      enemyUnits.forEach(function (enemy) {
-        var minimum = (player.def.size + enemy.def.size) * .72;
-        var distance = enemy.x - player.x;
-        if (distance > 0 && distance < minimum) {
-          var correction = (minimum - distance) / 2;
-          player.x -= correction;
-          enemy.x += correction;
-        }
-      });
-    });
-  }
-
-  app.Collision = { nearest: nearest, separate: separate };
+  app.Collision = { nearest: nearest };
 })(window);

@@ -7,8 +7,8 @@
     this.side = side;
     this.x = x;
     this.y = y;
-    this.hp = definition.hp;
-    this.maxHp = definition.hp;
+    this.maxHp = app.utils.getUnitMaxHp(definition, side);
+    this.hp = this.maxHp;
     this.attackCooldown = 0;
     this.abilityCooldown = definition.abilityCooldown || 0;
     this.age = 0;
@@ -37,7 +37,7 @@
   };
 
   Unit.prototype.takeDamage = function (amount) {
-    var defense = app.utils.clamp(Number(this.def.defense || 0), 0, .9);
+    var defense = app.utils.getUnitDefense(this.def, this.side);
     var damage = Math.max(0, amount) * (1 - defense);
     if (this.barrier > 0) {
       var absorbed = Math.min(this.barrier, damage);
@@ -71,7 +71,7 @@
     var unit = new Unit(definition, snapshot.side, snapshot.x, snapshot.y);
     unit.uid = snapshot.uid || unit.uid;
     unit.hp = snapshot.hp;
-    unit.maxHp = snapshot.maxHp || definition.hp;
+    unit.maxHp = snapshot.maxHp || unit.maxHp;
     unit.attackCooldown = snapshot.attackCooldown || 0;
     unit.abilityCooldown = snapshot.abilityCooldown !== undefined ? snapshot.abilityCooldown : (definition.abilityCooldown || 0);
     unit.age = snapshot.age || 0;

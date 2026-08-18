@@ -29,10 +29,9 @@
       card.className = "level-card " + (unlocked ? "is-unlocked" : "is-locked");
       card.style.setProperty("--level-accent", level.accent);
       var starsValue = Number(progress.stars[level.id] || 0);
-      var bestTime = Number(progress.bestTimes[level.id] || 0);
       card.innerHTML =
         '<div class="level-visual"><span class="level-number">' + String(level.id).padStart(2, "0") + '</span><span class="level-scene-icon">' + ["🍓", "🌊", "🌲", "🌇", "🌙", "👑"][index] + '</span><span class="level-node">●</span></div>' +
-        '<div class="level-card-body"><div class="level-card-top"><span class="difficulty-pill">' + app.t(level.difficultyKey) + '</span><span class="level-stars">' + starMarkup(starsValue) + '</span></div><h3>' + app.t(level.nameKey) + '</h3><p>' + app.t(level.descriptionKey) + '</p><div class="level-meta"><span>⏱️ ' + app.utils.formatTime(level.maxTime) + '</span><span>⚡ ' + level.energyMax + '</span></div><button class="level-play-button ' + (unlocked ? "" : "is-disabled") + '" type="button" ' + (unlocked ? "" : "disabled") + '><span>' + (unlocked ? "🚩" : "🔒") + '</span><span>' + app.t(unlocked ? "level_play" : "level_locked") + '</span></button>' + (bestTime ? '<small class="level-best">🏅 ' + app.t("level_best") + ': ' + app.utils.formatTime(bestTime) + '</small>' : '') + '</div>';
+        '<div class="level-card-body"><div class="level-card-top"><span class="difficulty-pill">' + app.t(level.difficultyKey) + '</span><span class="level-stars">' + starMarkup(starsValue) + '</span></div><h3>' + app.t(level.nameKey) + '</h3><p>' + app.t(level.descriptionKey) + '</p><div class="level-meta"><span>♾️ ' + app.t("level_unlimited") + '</span><span>⚡ ' + level.energyMax + '</span></div><button class="level-play-button ' + (unlocked ? "" : "is-disabled") + '" type="button" ' + (unlocked ? "" : "disabled") + '><span>' + (unlocked ? "🚩" : "🔒") + '</span><span>' + app.t(unlocked ? "level_play" : "level_locked") + '</span></button></div>';
       card.querySelector("button").addEventListener("click", function () {
         if (unlocked && onSelect) {
           app.AudioManager.playSfx("click");

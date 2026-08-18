@@ -178,7 +178,7 @@
     currentSession = session;
     app.SaveManager.saveBattle(null);
     if (result.outcome === "victory") {
-      app.SaveManager.completeLevel(result.levelId, result.stars, result.timeRemaining);
+      app.SaveManager.completeLevel(result.levelId, result.stars);
       app.AudioManager.playSfx("victory");
       app.AudioManager.setScene("victory");
     } else if (result.outcome === "defeat") {
@@ -206,7 +206,7 @@
       stars += index <= result.stars ? "★" : '<span class="empty-star">☆</span>';
     }
     document.getElementById("result-stars").innerHTML = stars;
-    document.getElementById("result-time").textContent = app.utils.formatTime(result.timeRemaining);
+    document.getElementById("result-time").textContent = "∞";
     document.getElementById("result-base-hp").textContent = Math.round(result.playerPercent) + "%";
     document.getElementById("result-defeated").textContent = String(result.kills);
     var nextButton = document.getElementById("result-next");

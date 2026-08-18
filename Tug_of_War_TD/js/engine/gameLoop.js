@@ -4,7 +4,6 @@
   function BattleSession(level) {
     this.level = level;
     this.elapsed = 0;
-    this.timeRemaining = level.maxTime;
     this.playerUnits = new app.PlayerUnits();
     this.enemyUnits = new app.EnemyUnits();
     this.playerBase = new app.Base("player", 75, level.baseHp);
@@ -29,8 +28,6 @@
       return;
     }
     this.elapsed += delta;
-    var remaining = this.level.maxTime - this.elapsed;
-    this.timeRemaining = remaining > .001 ? remaining : 0;
     this.resource.update(delta);
     this.spawnSystem.update(this, delta);
     this.aiSystem.update(this, delta);
@@ -50,13 +47,12 @@
     var enemyPercent = this.enemyBase.getPercent();
     var stars = 0;
     if (outcome === "victory") {
-      stars = playerPercent >= 80 && this.timeRemaining >= this.level.maxTime * .35 ? 3 : playerPercent >= 45 && this.timeRemaining >= this.level.maxTime * .15 ? 2 : 1;
+      stars = playerPercent >= 80 ? 3 : playerPercent >= 45 ? 2 : 1;
     }
     this.result = {
       outcome: outcome,
-      reason: reason || "time",
+      reason: reason || "castle",
       stars: stars,
-      timeRemaining: this.timeRemaining,
       playerHp: this.playerBase.hp,
       enemyHp: this.enemyBase.hp,
       playerPercent: playerPercent,
@@ -70,7 +66,6 @@
     return {
       levelId: this.level.id,
       elapsed: this.elapsed,
-      timeRemaining: this.timeRemaining,
       playerUnits: this.playerUnits.snapshot(),
       enemyUnits: this.enemyUnits.snapshot(),
       playerBase: this.playerBase.snapshot(),
@@ -86,7 +81,6 @@
     var level = (global.LEVELS_DATA || []).find(function (item) { return item.id === Number(snapshot.levelId); }) || global.LEVELS_DATA[0];
     var session = new BattleSession(level);
     session.elapsed = Number(snapshot.elapsed || 0);
-    session.timeRemaining = Number(snapshot.timeRemaining !== undefined ? snapshot.timeRemaining : level.maxTime);
     session.playerUnits = app.PlayerUnits.fromSnapshot(snapshot.playerUnits);
     session.enemyUnits = app.EnemyUnits.fromSnapshot(snapshot.enemyUnits);
     session.playerBase = app.Base.fromSnapshot(snapshot.playerBase || session.playerBase.snapshot());
