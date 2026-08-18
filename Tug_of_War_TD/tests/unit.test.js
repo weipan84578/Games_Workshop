@@ -63,6 +63,13 @@ test("unit catalog contains regular, special, and boss definitions", function ()
     return global.UNITS_DATA[id].special;
   }).length, 5);
   assert.equal(global.UNITS_DATA.boss.isBoss, true);
+  const regularUnits = global.UNIT_ORDER.map(function (id) { return global.UNITS_DATA[id]; });
+  assert.ok(global.UNITS_DATA.boss.hp > Math.max.apply(Math, regularUnits.map(function (unit) { return unit.hp; })));
+  assert.ok(global.UNITS_DATA.boss.atk > Math.max.apply(Math, regularUnits.map(function (unit) { return unit.atk; })));
+  assert.ok(global.UNITS_DATA.boss.defense > 0);
+  const boss = new app.Unit(global.UNITS_DATA.boss, "enemy", 870, 350);
+  boss.takeDamage(100);
+  assert.equal(boss.hp, global.UNITS_DATA.boss.hp - 60);
   assert.equal(global.LEVELS_DATA.length, 6);
   assert.equal(global.LEVELS_DATA[5].enhancedBoss, true);
   assert.ok(global.LEVELS_DATA.every(function (level) {
@@ -148,18 +155,22 @@ test("income upgrade increases production and stops at level five", function () 
   assert.deepEqual(firstUpgrade.ok, true);
   assert.equal(resource.incomeLevel, 2);
   assert.equal(resource.playerRate, baseRate * 1.28);
+  assert.equal(resource.max, 118);
+  assert.equal(firstUpgrade.max, resource.max);
 
   for (let level = 2; level < 5; level += 1) {
     resource.player = resource.getUpgradeCost();
     assert.equal(resource.upgradePlayer().ok, true);
   }
   assert.equal(resource.incomeLevel, 5);
+  assert.equal(resource.max, 172);
   assert.equal(resource.getUpgradeCost(), 0);
   assert.equal(resource.upgradePlayer().reason, "max");
 });
 
-test("unit damage consumes barrier and preserves knockback and slow state", function () {
+test("unit damage consumes barrier and preserves position and slow state", function () {
   const tank = new app.Unit(global.UNITS_DATA.tank, "player", 300, 350);
+  const startingX = tank.x;
   tank.barrier = 40;
   tank.takeDamage(25);
   assert.equal(tank.hp, tank.maxHp);
@@ -168,33 +179,50 @@ test("unit damage consumes barrier and preserves knockback and slow state", func
   tank.takeDamage(30);
   assert.equal(tank.hp, tank.maxHp - 15);
 
-  tank.applyKnockback(-1, 120);
   tank.applySlow(2, .5);
-  assert.equal(tank.knockbackVelocity, -120);
   assert.equal(tank.slowTimer, 2);
   assert.equal(tank.slowFactor, .5);
   tank.updateTimers(.1);
-  assert.ok(tank.knockbackVelocity < 0 && tank.knockbackVelocity > -120);
+  assert.equal(tank.x, startingX);
+  assert.equal("knockbackVelocity" in tank, false);
 
   const restored = app.Unit.fromSnapshot(tank.snapshot());
-  assert.equal(restored.knockbackVelocity, tank.knockbackVelocity);
+  assert.equal(restored.x, tank.x);
   assert.equal(restored.slowFactor, tank.slowFactor);
   assert.equal(restored.barrier, tank.barrier);
 });
 
-test("enemy hit applies visible backward movement to a heavy unit", function () {
+test("attacks never push any character out of position", function () {
   const session = createSession(1);
-  const tank = new app.Unit(global.UNITS_DATA.tank, "player", 400, 350);
-  const striker = new app.Unit(global.UNITS_DATA.striker, "enemy", 430, 350);
-  session.playerUnits.add(tank);
-  session.enemyUnits.add(striker);
+  const attacker = new app.Unit(global.UNITS_DATA.striker, "enemy", 400, 350);
+  const target = new app.Unit(global.UNITS_DATA.tank, "player", 430, 350);
+  const nearby = new app.Unit(global.UNITS_DATA.basic, "player", 450, 350);
+  const targetX = target.x;
+  const nearbyX = nearby.x;
+
+  target.takeDamage(attacker.def.atk);
+  app.AbilitySystem.applyAttackEffects(session, attacker, target, [target, nearby], attacker.def.atk, function () {});
+  assert.equal(target.x, targetX);
+  assert.equal(nearby.x, nearbyX);
+});
+
+test("living opponents hold the lane until they are defeated", function () {
+  const session = createSession(1);
+  const player = new app.Unit(global.UNITS_DATA.basic, "player", 400, 350);
+  const enemy = new app.Unit(global.UNITS_DATA.basic, "enemy", 438, 350);
+  session.playerUnits.add(player);
+  session.enemyUnits.add(enemy);
 
   session.battleSystem.update(session, .05);
-  assert.ok(tank.knockbackVelocity < 0);
-
-  const xBefore = tank.x;
+  const blockedX = player.x;
   session.battleSystem.update(session, .05);
-  assert.ok(tank.x < xBefore, "the heavy unit should move toward its own castle after impact");
+  assert.equal(player.x, blockedX);
+
+  enemy.takeDamage(99999);
+  session.enemyUnits.removeDead();
+  player.attackCooldown = 0;
+  session.battleSystem.update(session, .05);
+  assert.ok(player.x > blockedX);
 });
 
 test("special abilities apply slow, chain damage, and ally barriers", function () {
@@ -207,6 +235,8 @@ test("special abilities apply slow, chain damage, and ally barriers", function (
   target.takeDamage(frost.def.atk);
   app.AbilitySystem.applyAttackEffects(session, frost, target, [target, nearby], frost.def.atk, function () {});
   assert.ok(target.slowTimer > 0);
+  assert.equal(target.x, 230);
+  assert.equal(nearby.x, 250);
 
   const thunder = new app.Unit(global.UNITS_DATA.thunderMage, "player", 200, 350);
   const chainTarget = new app.Unit(global.UNITS_DATA.basic, "enemy", 230, 350);
@@ -239,7 +269,7 @@ test("normal level triggers one boss below thirty percent and blocks base damage
 
 test("enemy base damage resumes only after the Boss is defeated", function () {
   const session = createSession(1);
-  const attacker = new app.Unit(global.UNITS_DATA.basic, "player", 915, 350);
+  const attacker = new app.Unit(global.UNITS_DATA.tank, "player", 915, 350);
   session.playerUnits.add(attacker);
   session.enemyBase.hp = 290;
   app.BossSystem.trigger(session);
@@ -302,6 +332,7 @@ test("battle snapshot restores resource upgrades and living bosses", function ()
   const restored = app.BattleSession.fromSnapshot(session.snapshot());
   assert.equal(restored.resource.incomeLevel, 2);
   assert.equal(restored.resource.playerRate, session.resource.playerRate);
+  assert.equal(restored.resource.max, session.resource.max);
   assert.equal(restored.bosses.length, 1);
   assert.equal(restored.bossTriggered[90], true);
 });

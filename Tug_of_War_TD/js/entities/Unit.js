@@ -14,7 +14,6 @@
     this.age = 0;
     this.hitFlash = 0;
     this.spawnPulse = 1;
-    this.knockbackVelocity = 0;
     this.slowTimer = 0;
     this.slowFactor = 1;
     this.barrier = 0;
@@ -30,7 +29,6 @@
     if (this.slowTimer <= 0) {
       this.slowFactor = 1;
     }
-    this.knockbackVelocity *= Math.pow(.035, delta);
     this.age += delta;
   };
 
@@ -39,7 +37,8 @@
   };
 
   Unit.prototype.takeDamage = function (amount) {
-    var damage = Math.max(0, amount);
+    var defense = app.utils.clamp(Number(this.def.defense || 0), 0, .9);
+    var damage = Math.max(0, amount) * (1 - defense);
     if (this.barrier > 0) {
       var absorbed = Math.min(this.barrier, damage);
       this.barrier -= absorbed;
@@ -48,10 +47,6 @@
     this.hp = Math.max(0, this.hp - damage);
     this.hitFlash = .16;
     return this.hp <= 0;
-  };
-
-  Unit.prototype.applyKnockback = function (direction, force) {
-    this.knockbackVelocity += direction * (force || this.def.knockbackForce || 8);
   };
 
   Unit.prototype.applySlow = function (duration, factor) {
@@ -67,8 +62,7 @@
     return {
       uid: this.uid, unitId: this.def.id, side: this.side, x: this.x, y: this.y,
       hp: this.hp, maxHp: this.maxHp, attackCooldown: this.attackCooldown, abilityCooldown: this.abilityCooldown,
-      age: this.age, knockbackVelocity: this.knockbackVelocity, slowTimer: this.slowTimer,
-      slowFactor: this.slowFactor, barrier: this.barrier
+      age: this.age, slowTimer: this.slowTimer, slowFactor: this.slowFactor, barrier: this.barrier
     };
   };
 
@@ -81,7 +75,6 @@
     unit.attackCooldown = snapshot.attackCooldown || 0;
     unit.abilityCooldown = snapshot.abilityCooldown !== undefined ? snapshot.abilityCooldown : (definition.abilityCooldown || 0);
     unit.age = snapshot.age || 0;
-    unit.knockbackVelocity = snapshot.knockbackVelocity || 0;
     unit.slowTimer = snapshot.slowTimer || 0;
     unit.slowFactor = snapshot.slowFactor || 1;
     unit.barrier = snapshot.barrier || 0;

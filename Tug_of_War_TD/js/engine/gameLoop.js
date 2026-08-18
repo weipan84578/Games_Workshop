@@ -29,7 +29,8 @@
       return;
     }
     this.elapsed += delta;
-    this.timeRemaining = Math.max(0, this.level.maxTime - this.elapsed);
+    var remaining = this.level.maxTime - this.elapsed;
+    this.timeRemaining = remaining > .001 ? remaining : 0;
     this.resource.update(delta);
     this.spawnSystem.update(this, delta);
     this.aiSystem.update(this, delta);

@@ -21,7 +21,7 @@
   function upgradeIncome() {
     var result = api.upgradeIncome();
     if (result && result.ok) {
-      announce("toast_income_upgraded", { level: result.level });
+      announce("toast_income_upgraded", { level: result.level, max: result.max });
     }
   }
 

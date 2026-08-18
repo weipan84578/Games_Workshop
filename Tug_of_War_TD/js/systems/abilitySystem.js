@@ -2,8 +2,6 @@
   var app = global.TugOfWar = global.TugOfWar || {};
 
   function applyAttackEffects(session, attacker, target, enemies, amount, emitHit) {
-    var direction = attacker.side === "player" ? 1 : -1;
-    target.applyKnockback(direction, target.def.knockbackForce);
     if (attacker.def.ability === "frost") {
       target.applySlow(2.6, .5);
     }
@@ -15,7 +13,6 @@
     }).slice(0, 2).forEach(function (other) {
       var chainDamage = amount * .36;
       other.takeDamage(chainDamage);
-      other.applyKnockback(direction, other.def.knockbackForce * .5);
       emitHit(session, attacker, other, chainDamage);
     });
   }

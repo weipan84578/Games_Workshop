@@ -64,9 +64,6 @@
 
   function updateUnit(session, unit, allies, enemies, enemyBase) {
     unit.updateTimers(session.delta);
-    if (unit.knockbackVelocity) {
-      unit.x = app.PathManager.clampX(unit.x + unit.knockbackVelocity * session.delta);
-    }
     unit.y = app.PathManager.getY(unit.x, session.elapsed);
     if (!unit.isAlive()) {
       return;
