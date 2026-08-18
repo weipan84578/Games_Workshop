@@ -1,0 +1,16 @@
+.theme-forest {
+  --color-primary: #3d8a5d;
+  --color-primary-dark: #26553b;
+  --color-secondary: #c78b48;
+  --color-accent: #f3c24e;
+  --color-background: #f2faef;
+  --color-surface: #fcfff9;
+  --color-surface-soft: #e6f4e0;
+  --color-text-main: #263d2c;
+  --color-text-sub: #58705b;
+  --color-danger: #c34b53;
+  --sky-top: #d6f0cf;
+  --sky-bottom: #fff8d7;
+  --ground: #9ecb79;
+  --ground-dark: #669f5a;
+}

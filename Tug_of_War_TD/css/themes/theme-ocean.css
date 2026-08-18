@@ -1,0 +1,16 @@
+.theme-ocean {
+  --color-primary: #167eb9;
+  --color-primary-dark: #0b4c78;
+  --color-secondary: #35b9ad;
+  --color-accent: #ffc857;
+  --color-background: #eaf8ff;
+  --color-surface: #fbffff;
+  --color-surface-soft: #e2f5fc;
+  --color-text-main: #17334a;
+  --color-text-sub: #426579;
+  --color-danger: #cf4d59;
+  --sky-top: #bdeaff;
+  --sky-bottom: #f8ffed;
+  --ground: #92d4c4;
+  --ground-dark: #4bb7ad;
+}

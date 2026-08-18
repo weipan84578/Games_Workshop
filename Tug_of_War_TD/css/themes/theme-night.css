@@ -1,0 +1,20 @@
+.theme-night {
+  --color-primary: #b178ee;
+  --color-primary-dark: #d6b7ff;
+  --color-secondary: #43cbb9;
+  --color-accent: #ffd36a;
+  --color-background: #15152b;
+  --color-surface: #252541;
+  --color-surface-soft: #20203a;
+  --color-text-main: #f8f2ff;
+  --color-text-sub: #c6beda;
+  --color-danger: #ff7180;
+  --color-focus: #77d8ff;
+  --sky-top: #252958;
+  --sky-bottom: #171731;
+  --ground: #466f68;
+  --ground-dark: #31534f;
+  --shadow-soft: 0 12px 28px rgba(0, 0, 0, .3);
+  --shadow-card: 0 10px 24px rgba(0, 0, 0, .35), 0 2px 4px rgba(0, 0, 0, .25);
+  --shadow-button: 0 8px 0 rgba(0, 0, 0, .28), 0 12px 22px rgba(0, 0, 0, .28);
+}

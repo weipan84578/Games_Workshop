@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ff6d9f">
+  <title>Tug of War TD</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="theme-cute-pink">
+  <div id="app" class="app-shell">
+    <div class="ambient-scene" aria-hidden="true">
+      <span class="cloud cloud-one"></span>
+      <span class="cloud cloud-two"></span>
+      <span class="cloud cloud-three"></span>
+      <span class="sparkle sparkle-one">✦</span>
+      <span class="sparkle sparkle-two">✦</span>
+      <span class="hill hill-back"></span>
+      <span class="hill hill-front"></span>
+    </div>
+
+    <main id="screen-menu" class="screen screen-menu is-active" data-screen="menu">
+      <div class="screen-inner menu-inner">
+        <div class="menu-topbar">
+          <div class="brand-chip"><span class="brand-chip-icon">🐾</span><span>TOW TD</span></div>
+          <div class="quick-language" aria-label="Language">
+            <button class="language-button is-active" type="button" data-language="zh" aria-label="中文">中</button>
+            <button class="language-button" type="button" data-language="en" aria-label="English">EN</button>
+            <button class="language-button" type="button" data-language="ja" aria-label="日本語">日</button>
+          </div>
+        </div>
+
+        <section class="hero-block" aria-labelledby="game-title">
+          <div class="hero-emblem">
+            <span class="emblem-cloud">☁</span>
+            <span class="emblem-cat">🐱</span>
+            <span class="emblem-helmet">🪖</span>
+            <span class="emblem-rope">〰</span>
+          </div>
+          <p class="eyebrow" data-i18n="game_eyebrow">可愛戰線作戰室</p>
+          <h1 id="game-title" data-i18n="game_title">Tug of War TD</h1>
+          <p class="hero-subtitle" data-i18n="game_subtitle">萌貓與魔物的戰線對決</p>
+          <div class="hero-ribbon"><span>★</span><span data-i18n="game_tagline">召喚、推線、守住城堡！</span><span>★</span></div>
+        </section>
+
+        <nav class="menu-actions" aria-label="Main menu">
+          <button id="menu-start" class="big-button button-primary" type="button">
+            <span class="button-icon">🎮</span><span data-i18n="menu_start">開始遊戲</span><span class="button-arrow">›</span>
+          </button>
+          <button id="menu-continue" class="big-button button-secondary" type="button">
+            <span class="button-icon">▶️</span><span data-i18n="menu_continue">繼續遊戲</span><span class="button-arrow">›</span>
+          </button>
+          <button id="menu-howto" class="big-button button-tertiary" type="button">
+            <span class="button-icon">📖</span><span data-i18n="menu_howto">遊戲說明</span><span class="button-arrow">›</span>
+          </button>
+          <button id="menu-settings" class="big-button button-quaternary" type="button">
+            <span class="button-icon">⚙️</span><span data-i18n="menu_settings">設定</span><span class="button-arrow">›</span>
+          </button>
+        </nav>
+        <p id="continue-hint" class="menu-hint" data-i18n="menu_no_save">尚無可繼續的戰局</p>
+        <div class="menu-stats">
+          <span>✨ <span data-i18n="menu_offline">離線即可遊玩</span></span>
+          <span>💾 <span data-i18n="menu_autosave">自動保存進度</span></span>
+        </div>
+      </div>
+      <footer class="screen-footer"><span>v1.0</span><span>•</span><span data-i18n="footer_local">純前端・雙擊即玩</span></footer>
+    </main>
+
+    <main id="screen-levels" class="screen screen-levels" data-screen="levels">
+      <div class="screen-inner page-inner">
+        <header class="page-heading">
+          <button class="icon-button" type="button" data-action="back-main" aria-label="Back">←</button>
+          <div><p class="eyebrow" data-i18n="level_eyebrow">戰線地圖</p><h2 data-i18n="level_select">選擇關卡</h2></div>
+          <span class="heading-badge">🗺️</span>
+        </header>
+        <p class="page-lead" data-i18n="level_lead">一步一步推進戰線，解鎖更多敵人與挑戰。</p>
+        <div id="level-grid" class="level-grid"></div>
+      </div>
+    </main>
+
+    <main id="screen-howto" class="screen screen-howto" data-screen="howto">
+      <div class="screen-inner page-inner">
+        <header class="page-heading">
+          <button class="icon-button" type="button" data-action="back-main" aria-label="Back">←</button>
+          <div><p class="eyebrow" data-i18n="how_eyebrow">新手指揮官手冊</p><h2 data-i18n="how_title">遊戲說明</h2></div>
+          <span class="heading-badge">📖</span>
+        </header>
+        <div class="how-tabs" role="tablist" aria-label="How to play">
+          <button class="how-tab is-active" type="button" role="tab" data-how-tab="basics" aria-selected="true"><span>🕹️</span><span data-i18n="how_tab_basic">基本操作</span></button>
+          <button class="how-tab" type="button" role="tab" data-how-tab="resources" aria-selected="false"><span>💰</span><span data-i18n="how_tab_resource">資源系統</span></button>
+          <button class="how-tab" type="button" role="tab" data-how-tab="units" aria-selected="false"><span>🐱</span><span data-i18n="how_tab_units">單位圖鑑</span></button>
+          <button class="how-tab" type="button" role="tab" data-how-tab="matchups" aria-selected="false"><span>⚔️</span><span data-i18n="how_tab_matchup">屬性剋制</span></button>
+          <button class="how-tab" type="button" role="tab" data-how-tab="victory" aria-selected="false"><span>🏆</span><span data-i18n="how_tab_victory">勝利條件</span></button>
+        </div>
+        <div class="how-panels">
+          <section class="how-panel is-active" data-how-panel="basics" role="tabpanel">
+            <div class="how-hero-card"><span class="how-hero-icon">🪢</span><div><h3 data-i18n="how_basics_heading">拉起你的勝利繩！</h3><p data-i18n="how_basics_intro">在同一條戰線上派出小隊，讓對手的城堡先倒下。</p></div></div>
+            <div class="info-card-grid">
+              <article class="info-card"><span class="info-icon">1️⃣</span><h3 data-i18n="how_basic_1_title">累積能量</h3><p data-i18n="how_basic_1_desc">能量會隨時間回復，觀察左側能量條再決定召喚節奏。</p></article>
+              <article class="info-card"><span class="info-icon">2️⃣</span><h3 data-i18n="how_basic_2_title">選擇單位</h3><p data-i18n="how_basic_2_desc">點擊底部卡片召喚單位。不同兵種各有成本、冷卻與定位。</p></article>
+              <article class="info-card"><span class="info-icon">3️⃣</span><h3 data-i18n="how_basic_3_title">推進戰線</h3><p data-i18n="how_basic_3_desc">單位會自動前進並戰鬥，你的任務是做出更好的派兵決策。</p></article>
+              <article class="info-card"><span class="info-icon">4️⃣</span><h3 data-i18n="how_basic_4_title">守護基地</h3><p data-i18n="how_basic_4_desc">敵人突破防線時會攻擊你的城堡，必要時留能量反守為攻。</p></article>
+            </div>
+          </section>
+          <section class="how-panel" data-how-panel="resources" role="tabpanel" hidden>
+            <div class="how-hero-card resource-hero"><span class="how-hero-icon">⚡</span><div><h3 data-i18n="how_resource_heading">能量就是節奏</h3><p data-i18n="how_resource_intro">不要一次花光，讓高低成本單位互相掩護，戰線才會穩。</p></div></div>
+            <div class="info-card-grid">
+              <article class="info-card"><span class="info-icon">🔋</span><h3 data-i18n="how_resource_1_title">上限 100+</h3><p data-i18n="how_resource_1_desc">每個關卡有不同能量上限與回復速度，難度越高節奏越快。</p></article>
+              <article class="info-card"><span class="info-icon">🪙</span><h3 data-i18n="how_resource_2_title">量力召喚</h3><p data-i18n="how_resource_2_desc">卡片上的數字是召喚成本，灰色卡片代表目前能量不足。</p></article>
+              <article class="info-card"><span class="info-icon">⏳</span><h3 data-i18n="how_resource_3_title">留意冷卻</h3><p data-i18n="how_resource_3_desc">強力單位不能連續召喚，搭配基礎兵填補空檔最有效率。</p></article>
+              <article class="info-card"><span class="info-icon">📈</span><h3 data-i18n="how_resource_4_title">推線回報</h3><p data-i18n="how_resource_4_desc">擊破敵人後把握空檔累積能量，準備下一波攻勢。</p></article>
+            </div>
+          </section>
+          <section class="how-panel" data-how-panel="units" role="tabpanel" hidden>
+            <div class="how-hero-card unit-hero"><span class="how-hero-icon">🐾</span><div><h3 data-i18n="how_units_heading">認識你的隊伍</h3><p data-i18n="how_units_intro">五種常駐單位各司其職，先用便宜兵種穩住戰線，再找機會爆發。</p></div></div>
+            <div id="how-unit-grid" class="unit-guide-grid"></div>
+          </section>
+          <section class="how-panel" data-how-panel="matchups" role="tabpanel" hidden>
+            <div class="how-hero-card matchup-hero"><span class="how-hero-icon">🧩</span><div><h3 data-i18n="how_matchup_heading">屬性相剋表</h3><p data-i18n="how_matchup_intro">看清敵人的色彩標記，剋制屬性可造成雙倍傷害。</p></div></div>
+            <div class="matchup-table-wrap"><table class="matchup-table"><thead><tr><th data-i18n="matchup_attacker">攻擊方</th><th data-i18n="matchup_effective">剋制</th><th data-i18n="matchup_note">效果</th></tr></thead><tbody><tr><td><span class="attribute-pill attr-red">🔴 <span data-i18n="attribute_red">紅色</span></span></td><td>👼 <span data-i18n="attribute_angel">天使</span></td><td class="advantage" data-i18n="matchup_double">傷害 ×2</td></tr><tr><td><span class="attribute-pill attr-angel">👼 <span data-i18n="attribute_angel">天使</span></span></td><td>😈 <span data-i18n="attribute_demon">惡魔</span></td><td class="advantage" data-i18n="matchup_double">傷害 ×2</td></tr><tr><td><span class="attribute-pill attr-demon">😈 <span data-i18n="attribute_demon">惡魔</span></span></td><td>🔩 <span data-i18n="attribute_metal">金屬</span></td><td class="advantage" data-i18n="matchup_double">傷害 ×2</td></tr><tr><td><span class="attribute-pill attr-metal">🔩 <span data-i18n="attribute_metal">金屬</span></span></td><td>🔴 <span data-i18n="attribute_red">紅色</span></td><td class="advantage" data-i18n="matchup_double">傷害 ×2</td></tr><tr><td><span class="attribute-pill attr-normal">✨ <span data-i18n="attribute_normal">一般</span></span></td><td>—</td><td data-i18n="matchup_neutral">穩定但沒有額外加成</td></tr></tbody></table></div>
+          </section>
+          <section class="how-panel" data-how-panel="victory" role="tabpanel" hidden>
+            <div class="how-hero-card victory-hero"><span class="how-hero-icon">🏆</span><div><h3 data-i18n="how_victory_heading">三種方式拿下勝利</h3><p data-i18n="how_victory_intro">聰明地推進戰線，星星會記住你的表現。</p></div></div>
+            <div class="info-card-grid">
+              <article class="info-card"><span class="info-icon">💥</span><h3 data-i18n="how_victory_1_title">摧毀城堡</h3><p data-i18n="how_victory_1_desc">敵方基地血量歸零立即勝利；自己的基地歸零則戰敗。</p></article>
+              <article class="info-card"><span class="info-icon">⏱️</span><h3 data-i18n="how_victory_2_title">時間結束</h3><p data-i18n="how_victory_2_desc">倒數結束時比較雙方基地百分比，血量較高的一方獲勝。</p></article>
+              <article class="info-card"><span class="info-icon">⭐</span><h3 data-i18n="how_victory_3_title">收集星級</h3><p data-i18n="how_victory_3_desc">剩餘時間與基地血量越高，結算星級越漂亮，最多三顆星。</p></article>
+              <article class="info-card"><span class="info-icon">💾</span><h3 data-i18n="how_victory_4_title">解鎖關卡</h3><p data-i18n="how_victory_4_desc">通關會自動保存並解鎖下一個節點，隨時可從繼續遊戲回來。</p></article>
+            </div>
+          </section>
+        </div>
+        <div class="how-navigation"><button id="how-prev" class="outline-button" type="button">← <span data-i18n="how_prev">上一頁</span></button><span id="how-page-indicator">1 / 5</span><button id="how-next" class="outline-button" type="button"><span data-i18n="how_next">下一頁</span> →</button></div>
+      </div>
+    </main>
+
+    <main id="screen-settings" class="screen screen-settings" data-screen="settings">
+      <div class="screen-inner page-inner narrow-inner">
+        <header class="page-heading">
+          <button class="icon-button" type="button" data-action="back-main" aria-label="Back">←</button>
+          <div><p class="eyebrow" data-i18n="settings_eyebrow">打造你的作戰室</p><h2 data-i18n="settings_title">設定</h2></div>
+          <span class="heading-badge">⚙️</span>
+        </header>
+        <div class="settings-stack">
+          <section class="settings-card">
+            <div class="section-title"><span class="section-icon">🔊</span><div><h3 data-i18n="settings_audio">音訊設定</h3><p data-i18n="settings_audio_hint">明亮飽滿的音色，並以限幅器保護耳朵。</p></div></div>
+            <label class="slider-row"><span class="slider-label"><span data-i18n="settings_bgm_volume">音樂音量</span><output id="bgm-value">90%</output></span><input id="bgm-volume" type="range" min="0" max="150" value="90" step="1"></label>
+            <label class="slider-row"><span class="slider-label"><span data-i18n="settings_sfx_volume">音效音量</span><output id="sfx-value">100%</output></span><input id="sfx-volume" type="range" min="0" max="150" value="100" step="1"></label>
+            <button id="mute-toggle" class="toggle-row" type="button" aria-pressed="false"><span class="toggle-icon">🔔</span><span><strong id="mute-label" data-i18n="settings_sound_on">音效開啟</strong><small data-i18n="settings_mute_hint">一鍵暫停所有聲音</small></span><span class="toggle-switch"><i></i></span></button>
+          </section>
+          <section class="settings-card">
+            <div class="section-title"><span class="section-icon">🎨</span><div><h3 data-i18n="settings_theme">主題配色</h3><p data-i18n="settings_theme_hint">選一個今天最想守護的天空。</p></div></div>
+            <div class="theme-picker">
+              <button class="theme-option theme-option-pink is-active" type="button" data-theme-choice="cute-pink"><span>🌸</span><strong data-i18n="theme_cute">可愛粉色</strong></button>
+              <button class="theme-option theme-option-ocean" type="button" data-theme-choice="ocean"><span>🌊</span><strong data-i18n="theme_ocean">海洋藍</strong></button>
+              <button class="theme-option theme-option-forest" type="button" data-theme-choice="forest"><span>🌲</span><strong data-i18n="theme_forest">森林綠</strong></button>
+              <button class="theme-option theme-option-sunset" type="button" data-theme-choice="sunset"><span>🌇</span><strong data-i18n="theme_sunset">夕陽橘</strong></button>
+              <button class="theme-option theme-option-night" type="button" data-theme-choice="night"><span>🌙</span><strong data-i18n="theme_night">夜間模式</strong></button>
+            </div>
+          </section>
+          <section class="settings-card">
+            <div class="section-title"><span class="section-icon">🌐</span><div><h3 data-i18n="settings_language">語言設定</h3><p data-i18n="settings_language_hint">即時切換，偏好會自動保存。</p></div></div>
+            <div class="language-picker"><button type="button" data-language="zh">🇹🇼 <span data-i18n="lang_zh">中文</span></button><button type="button" data-language="en">🇬🇧 <span data-i18n="lang_en">English</span></button><button type="button" data-language="ja">🇯🇵 <span data-i18n="lang_ja">日本語</span></button></div>
+          </section>
+          <section class="settings-card danger-card">
+            <div class="section-title"><span class="section-icon">🗑️</span><div><h3 data-i18n="settings_data">資料管理</h3><p data-i18n="settings_data_hint">清除已保存的關卡與進行中的戰局。</p></div></div>
+            <button id="clear-save" class="danger-button" type="button"><span>🗑️</span><span data-i18n="settings_clear_save">清除存檔</span></button>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <main id="screen-battle" class="screen screen-battle" data-screen="battle">
+      <div class="battle-shell">
+        <header class="battle-hud">
+          <div class="base-hud player-hud"><div class="base-avatar">🐱</div><div class="base-info"><div class="hud-label"><span data-i18n="battle_you">我方城堡</span><span id="player-hp-text">1000 / 1000</span></div><div class="health-track"><span id="player-hp-bar" class="health-fill player-fill"></span></div></div></div>
+          <div class="battle-center-hud"><span class="level-chip">🗺️ <span id="battle-level-name">—</span></span><div class="battle-timer"><span>⏱️</span><strong id="battle-time">02:00</strong></div></div>
+          <div class="base-hud enemy-hud"><div class="base-info"><div class="hud-label"><span data-i18n="battle_enemy">敵方城堡</span><span id="enemy-hp-text">1000 / 1000</span></div><div class="health-track"><span id="enemy-hp-bar" class="health-fill enemy-fill"></span></div></div><div class="base-avatar enemy-avatar">👹</div></div>
+          <button id="battle-pause-button" class="pause-button" type="button" aria-label="Pause">Ⅱ</button>
+        </header>
+        <div class="battle-main">
+          <aside class="resource-rail"><div class="resource-orb">⚡</div><div class="resource-label" data-i18n="battle_energy">能量</div><strong id="player-energy">100</strong><span>/ <span id="player-energy-max">100</span></span><div class="energy-track"><span id="player-energy-bar"></span></div><div class="resource-tip" data-i18n="battle_energy_tip">穩住節奏！</div></aside>
+          <div id="battle-stage" class="battle-stage"><canvas id="battle-canvas" aria-label="Battle field"></canvas><div id="battle-announcer" class="battle-announcer" aria-live="polite"></div><div class="battle-lane-label player-lane" data-i18n="battle_lane_you">貓咪防線</div><div class="battle-lane-label enemy-lane" data-i18n="battle_lane_enemy">魔物防線</div></div>
+          <aside id="summon-panel" class="summon-panel"><button id="summon-handle" class="summon-handle" type="button" aria-expanded="true"><span class="handle-grip"></span><span>🐾</span><strong data-i18n="battle_summon">召喚小隊</strong><span class="handle-chevron">⌄</span></button><div class="summon-caption" data-i18n="battle_summon_hint">點擊卡片，把夥伴送上戰線</div><div id="unit-cards" class="unit-cards"></div></aside>
+        </div>
+        <div class="mobile-quick-controls"><button id="mobile-pause" type="button" aria-label="Pause">Ⅱ</button><button id="mobile-summon-toggle" type="button" aria-label="Summon">🐾</button></div>
+      </div>
+    </main>
+
+    <main id="screen-result" class="screen screen-result" data-screen="result">
+      <div class="screen-inner result-inner">
+        <div id="result-confetti" class="result-confetti" aria-hidden="true">✦　★　✦　★　✦</div>
+        <div class="result-emblem" id="result-emblem">🏆</div>
+        <p class="eyebrow" id="result-kicker" data-i18n="result_kicker">戰線報告</p>
+        <h2 id="result-title" data-i18n="result_victory">勝利！</h2>
+        <p id="result-message" class="result-message" data-i18n="result_victory_message">你的貓咪小隊守住了榮耀！</p>
+        <div class="result-stars" id="result-stars" aria-label="Stars">★★★</div>
+        <div class="result-stats"><div><span>⏱️</span><small data-i18n="result_time">剩餘時間</small><strong id="result-time">—</strong></div><div><span>🏰</span><small data-i18n="result_base_hp">我方城堡</small><strong id="result-base-hp">—</strong></div><div><span>💥</span><small data-i18n="result_defeated">擊破敵人</small><strong id="result-defeated">—</strong></div></div>
+        <div class="result-actions"><button id="result-next" class="big-button button-primary" type="button"><span>➡️</span><span data-i18n="result_next">下一關</span></button><button id="result-levels" class="outline-button" type="button">🗺️ <span data-i18n="result_levels">返回選關</span></button><button id="result-menu" class="text-button" type="button" data-i18n="result_menu">返回主畫面</button></div>
+      </div>
+    </main>
+
+    <div id="pause-modal" class="modal-backdrop" hidden>
+      <section class="modal-card pause-card" role="dialog" aria-modal="true" aria-labelledby="pause-title">
+        <div class="modal-icon">⏸️</div><h2 id="pause-title" data-i18n="pause_title">暫停一下</h2><p data-i18n="pause_body">戰線暫時靜止，想好下一步再出發。</p>
+        <div class="modal-actions"><button id="pause-resume" class="big-button button-primary" type="button">▶️ <span data-i18n="pause_resume">繼續戰鬥</span></button><button id="pause-save-exit" class="outline-button" type="button">💾 <span data-i18n="pause_save_exit">保存並返回主畫面</span></button><button id="pause-restart" class="text-button danger-text" type="button" data-i18n="pause_restart">重新挑戰本關</button></div>
+      </section>
+    </div>
+
+    <div id="confirm-modal" class="modal-backdrop" hidden>
+      <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+        <div class="modal-icon" id="confirm-icon">💭</div><h2 id="confirm-title" data-i18n="confirm_title">確定嗎？</h2><p id="confirm-body" data-i18n="confirm_body">這個動作會覆蓋目前的進度。</p>
+        <div class="modal-actions modal-actions-inline"><button id="confirm-no" class="outline-button" type="button" data-i18n="confirm_no">先不要</button><button id="confirm-yes" class="big-button button-primary" type="button" data-i18n="confirm_yes">確定</button></div>
+      </section>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </div>
+
+  <script src="js/core/config.js"></script>
+  <script src="js/core/eventBus.js"></script>
+  <script src="js/core/gameState.js"></script>
+  <script src="js/core/saveManager.js"></script>
+  <script src="data/unitsData.js"></script>
+  <script src="data/levels.js"></script>
+  <script src="js/i18n/lang-zh.js"></script>
+  <script src="js/i18n/lang-en.js"></script>
+  <script src="js/i18n/lang-ja.js"></script>
+  <script src="js/i18n/i18nManager.js"></script>
+  <script src="js/audio/audioConfig.js"></script>
+  <script src="js/audio/audioManager.js"></script>
+  <script src="js/entities/Unit.js"></script>
+  <script src="js/entities/PlayerUnits.js"></script>
+  <script src="js/entities/EnemyUnits.js"></script>
+  <script src="js/entities/Base.js"></script>
+  <script src="js/engine/pathManager.js"></script>
+  <script src="js/engine/collision.js"></script>
+  <script src="js/engine/renderer.js"></script>
+  <script src="js/engine/gameLoop.js"></script>
+  <script src="js/systems/resourceSystem.js"></script>
+  <script src="js/systems/spawnSystem.js"></script>
+  <script src="js/systems/aiSystem.js"></script>
+  <script src="js/systems/battleSystem.js"></script>
+  <script src="js/systems/levelSystem.js"></script>
+  <script src="js/ui/themeSwitcher.js"></script>
+  <script src="js/ui/mainMenu.js"></script>
+  <script src="js/ui/settingsScreen.js"></script>
+  <script src="js/ui/howToPlayScreen.js"></script>
+  <script src="js/ui/battleHUD.js"></script>
+  <script src="js/ui/mobileControls.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

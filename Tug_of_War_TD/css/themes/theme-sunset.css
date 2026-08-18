@@ -1,0 +1,16 @@
+.theme-sunset {
+  --color-primary: #df6846;
+  --color-primary-dark: #833b35;
+  --color-secondary: #a44e99;
+  --color-accent: #ffd05b;
+  --color-background: #fff3ec;
+  --color-surface: #fffdf8;
+  --color-surface-soft: #ffe8dd;
+  --color-text-main: #49302e;
+  --color-text-sub: #795755;
+  --color-danger: #c64356;
+  --sky-top: #ffc8a8;
+  --sky-bottom: #fff0bb;
+  --ground: #a7c575;
+  --ground-dark: #6e9e60;
+}
