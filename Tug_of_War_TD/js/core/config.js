@@ -13,8 +13,12 @@
     enemyRangedDamageMultiplier: .8,
     playerEnergyRateMultiplier: 1.24,
     unitCostMultiplier: .8,
+    incomeUpgradeCostMultiplier: .7,
     playerDefensiveHpMultiplier: 1.2,
-    playerDefensiveDefenseBonus: .2
+    playerDefensiveDefenseBonus: .2,
+    enhancedBossHpPerTier: .18,
+    enhancedBossAttackPerTier: .12,
+    enhancedBossDefensePerTier: .04
   });
 
   app.utils = {
@@ -56,6 +60,16 @@
         defense += app.Config.playerDefensiveDefenseBonus;
       }
       return app.utils.clamp(defense, 0, .9);
+    },
+    getEnhancedBossDefinition: function (definition, tier) {
+      var safeTier = Math.max(1, Math.floor(Number(tier) || 1));
+      var steps = safeTier - 1;
+      var enhanced = Object.assign({}, definition);
+      enhanced.hp = Math.round(definition.hp * (1 + steps * app.Config.enhancedBossHpPerTier));
+      enhanced.atk = Math.round(definition.atk * (1 + steps * app.Config.enhancedBossAttackPerTier));
+      enhanced.defense = app.utils.clamp(Number(definition.defense || 0) + steps * app.Config.enhancedBossDefensePerTier, 0, .9);
+      enhanced.bossTier = safeTier;
+      return enhanced;
     },
     percent: function (value, total) {
       return total > 0 ? app.utils.clamp((value / total) * 100, 0, 100) : 0;

@@ -22,11 +22,12 @@ Use this skill to keep the one-lane battle rules readable, data-driven, and regr
 - Keep all six level IDs directly selectable. Progression may still store stars, but it must not lock a level.
 - Keep the one-lane frontline stationary while a living opponent is in attack range. Do not add knockback or collision separation that moves a character backward.
 - Use `BossSystem` as the single Boss gate: normal levels trigger at or below 30% enemy-castle HP; the enhanced level triggers at 90% through 10% in 10% steps; a living Boss blocks the enemy castle.
-- Keep the Boss at 2200 HP, 156 attack, and 40% defense unless the user explicitly requests a new Boss balance.
+- Keep normal Bosses and enhanced-level Tier 1 at 2200 HP, 156 attack, and 40% defense. For the explicitly requested Crown Endless Line ramp, Tier 1–Tier 9 add 18% base HP, 12% base attack, and 0.04 defense per tier step; preserve those stats in snapshots.
+- Keep the Crown Endless Line ramp data-driven: start wave acceleration after 8 seconds with a 0.35 interval floor, unlock higher-tier pools at 18/36/54 seconds, and keep AI selection/affordability separate from level tuning.
 - Apply enemy ranged damage through `Config.enemyRangedDamageMultiplier` to both unit and castle attacks. Do not weaken player ranged damage through that enemy-only coefficient.
 - Calculate deployable costs through `app.utils.getUnitCost(definition)` so the card label, affordability check, player spend, and AI spend stay identical. Preserve a zero cost for the enemy-only Boss.
 - Apply defensive stat bonuses only to player units marked `defensive: true`. The current defensive roster is `basic`, `tank`, `guard`, and `guardian`; each receives the configured HP multiplier and defense bonus.
-- Current balance targets are enemy ranged `0.8×`, player energy `1.24×` level rate, deployable cost `0.8×`, defensive HP `1.2×`, and defensive damage reduction `+0.2`; update the README and tests when these values change.
+- Current balance targets are enemy ranged `0.8×`, player energy `1.24×` level rate, deployable cost `0.8×`, income upgrade cost `0.7×`, defensive HP `1.2×`, and defensive damage reduction `+0.2`; update the README and tests when these values change.
 - Preserve energy upgrade levels LV1–LV5, snapshot fields, and legacy snapshot migration. A new energy-rate formula must be tested with both current and old snapshot shapes.
 
 ## Source map
@@ -50,6 +51,7 @@ When changing a number, record the old and new behavior in the development log a
 - Unit-versus-unit damage and castle damage → `battleSystem.js`.
 - Player-only defensive HP and damage reduction → `Unit.js` plus snapshot restore.
 - Energy HUD, upgrade feedback, and save migration → `resourceSystem.js`, `battleHUD.js`, `gameLoop.js`, and i18n dictionaries.
+- Enhanced Boss stats and final-level enemy ramp → `config.js`, `data/levels.js`, `bossSystem.js`, `aiSystem.js`, `Unit.js`, and snapshot tests.
 - Unlimited-time result flow → `gameLoop.js`, `battleSystem.js`, `main.js`, `levelSystem.js`, `data/levels.js`, and timer/result translations.
 
 ## Validation commands

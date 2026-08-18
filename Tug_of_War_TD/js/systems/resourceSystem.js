@@ -36,7 +36,8 @@
     return true;
   };
   ResourceSystem.prototype.getUpgradeCost = function () {
-    return this.incomeLevel >= 5 ? 0 : 30 + (this.incomeLevel - 1) * 25;
+    var baseCost = 30 + (this.incomeLevel - 1) * 25;
+    return this.incomeLevel >= 5 ? 0 : Math.round(baseCost * app.Config.incomeUpgradeCostMultiplier);
   };
   ResourceSystem.prototype.getMaxEnergy = function () {
     return Math.round(this.baseMax * (1 + (this.incomeLevel - 1) * .18));

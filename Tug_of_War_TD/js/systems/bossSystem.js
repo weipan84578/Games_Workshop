@@ -18,13 +18,22 @@
     });
   }
 
+  function getTier(level, threshold) {
+    if (!level.enhancedBoss) {
+      return 1;
+    }
+    return Math.max(1, Math.floor((90 - threshold) / (level.bossEveryPercent || 10)) + 1);
+  }
+
   function trigger(session) {
     var percent = session.enemyBase.getPercent();
     getThresholds(session.level).forEach(function (threshold) {
       if (session.bossTriggered[threshold] || percent > threshold) {
         return;
       }
-      var spawned = session.spawnSystem.spawnFree(session, "boss", "enemy", 870);
+      var tier = getTier(session.level, threshold);
+      var definition = app.utils.getEnhancedBossDefinition(global.UNITS_DATA.boss, tier);
+      var spawned = session.spawnSystem.spawnFree(session, "boss", "enemy", 870, definition);
       if (!spawned.ok) {
         return;
       }
@@ -36,6 +45,7 @@
       app.AudioManager.playSfx("boss");
       app.events.emit("battle:boss", {
         threshold: threshold,
+        tier: tier,
         enhanced: Boolean(session.level.enhancedBoss),
         count: getLiving(session).length
       });
@@ -45,6 +55,7 @@
 
   app.BossSystem = {
     getThresholds: getThresholds,
+    getTier: getTier,
     getLiving: getLiving,
     trigger: trigger,
     blocksEnemyBase: function (session) {

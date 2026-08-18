@@ -164,17 +164,24 @@ test("income upgrade increases production and stops at level five", function () 
   const baseRate = resource.basePlayerRate;
 
   assert.ok(Math.abs(baseRate - global.LEVELS_DATA[0].energyRate * app.Config.playerEnergyRateMultiplier) < .0001);
+  assert.equal(app.Config.incomeUpgradeCostMultiplier, .7);
+  assert.equal(resource.getUpgradeCost(), 21);
   resource.player = resource.getUpgradeCost();
   const firstUpgrade = resource.upgradePlayer();
   assert.deepEqual(firstUpgrade.ok, true);
+  assert.equal(firstUpgrade.cost, 21);
   assert.equal(resource.incomeLevel, 2);
   assert.equal(resource.playerRate, baseRate * 1.28);
   assert.equal(resource.max, 118);
   assert.equal(firstUpgrade.max, resource.max);
 
   for (let level = 2; level < 5; level += 1) {
-    resource.player = resource.getUpgradeCost();
-    assert.equal(resource.upgradePlayer().ok, true);
+    const cost = resource.getUpgradeCost();
+    assert.equal(cost, [39, 56, 74][level - 2]);
+    resource.player = cost;
+    const upgrade = resource.upgradePlayer();
+    assert.equal(upgrade.ok, true);
+    assert.equal(upgrade.cost, cost);
   }
   assert.equal(resource.incomeLevel, 5);
   assert.equal(resource.max, 172);
@@ -352,6 +359,63 @@ test("normal level triggers one boss below thirty percent and blocks base damage
   session.enemyUnits.units[0].takeDamage(99999);
   session.enemyUnits.removeDead();
   assert.equal(app.BossSystem.blocksEnemyBase(session), false);
+});
+
+test("enhanced level makes each later Boss tier stronger and restorable", function () {
+  const level = global.LEVELS_DATA[5];
+  const session = createSession(6);
+  assert.equal(app.BossSystem.getTier(level, 90), 1);
+  assert.equal(app.BossSystem.getTier(level, 50), 5);
+  assert.equal(app.BossSystem.getTier(level, 10), 9);
+
+  session.enemyBase.hp = 1980;
+  app.BossSystem.trigger(session);
+  const firstBoss = session.enemyUnits.units[0];
+  assert.equal(firstBoss.def.bossTier, 1);
+
+  session.enemyBase.hp = 1760;
+  app.BossSystem.trigger(session);
+  const secondBoss = session.enemyUnits.units[1];
+  assert.equal(secondBoss.def.bossTier, 2);
+  assert.ok(secondBoss.def.hp > firstBoss.def.hp);
+  assert.ok(secondBoss.def.atk > firstBoss.def.atk);
+  assert.ok(secondBoss.def.defense > firstBoss.def.defense);
+
+  const lateBoss = app.utils.getEnhancedBossDefinition(global.UNITS_DATA.boss, 9);
+  assert.equal(lateBoss.hp, 5368);
+  assert.equal(lateBoss.atk, 306);
+  assert.equal(lateBoss.defense, .72);
+
+  const restored = app.BattleSession.fromSnapshot(session.snapshot());
+  const restoredSecondBoss = restored.enemyUnits.units.find(function (unit) {
+    return unit.def.bossTier === 2;
+  });
+  assert.equal(restoredSecondBoss.def.hp, secondBoss.def.hp);
+  assert.equal(restoredSecondBoss.def.atk, secondBoss.def.atk);
+  assert.equal(restoredSecondBoss.def.defense, secondBoss.def.defense);
+});
+
+test("enhanced level accelerates waves and unlocks higher-tier enemies", function () {
+  const level = global.LEVELS_DATA[5];
+  const starterPool = level.enemyRamp.starterPool;
+  const firstTierPool = level.enemyRamp.tierPools[0];
+  const secondTierPool = level.enemyRamp.tierPools[1];
+  const finalTierPool = level.enemyRamp.tierPools[2];
+
+  assert.deepEqual(app.AISystem.getAvailablePool(level, 0), starterPool);
+  assert.equal(app.AISystem.getNewestTierIndex(level, 17), -1);
+  assert.ok(app.AISystem.getAvailablePool(level, 18).some(function (unitId) {
+    return firstTierPool.indexOf(unitId) >= 0;
+  }));
+  assert.ok(app.AISystem.getAvailablePool(level, 36).some(function (unitId) {
+    return secondTierPool.indexOf(unitId) >= 0;
+  }));
+  assert.ok(app.AISystem.getAvailablePool(level, 54).some(function (unitId) {
+    return finalTierPool.indexOf(unitId) >= 0;
+  }));
+  assert.equal(app.AISystem.getIntervalMultiplier(level, 0), 1);
+  assert.ok(app.AISystem.getIntervalMultiplier(level, 120) < 1);
+  assert.equal(app.AISystem.getIntervalMultiplier(level, 240), level.enemyRamp.intervalFloor);
 });
 
 test("enemy base damage resumes only after the Boss is defeated", function () {

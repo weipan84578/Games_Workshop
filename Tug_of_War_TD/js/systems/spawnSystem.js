@@ -3,8 +3,8 @@
 
   function SpawnSystem() {}
 
-  function createUnit(session, unitId, side, x) {
-    var definition = global.UNITS_DATA[unitId];
+  function createUnit(session, unitId, side, x, definitionOverride) {
+    var definition = definitionOverride || global.UNITS_DATA[unitId];
     var spawnX = x !== undefined ? x : app.PathManager.getSpawnX(side) + app.utils.randomInt(-8, 8);
     var unit = new app.Unit(definition, side, spawnX, app.PathManager.getY(spawnX, session.elapsed));
     if (side === "player") {
@@ -53,13 +53,13 @@
     app.events.emit("battle:summon", { side: "enemy", unit: unit });
     return { ok: true, unit: unit };
   };
-  SpawnSystem.prototype.spawnFree = function (session, unitId, side, x) {
-    var definition = global.UNITS_DATA[unitId];
+  SpawnSystem.prototype.spawnFree = function (session, unitId, side, x, definitionOverride) {
+    var definition = definitionOverride || global.UNITS_DATA[unitId];
     var count = session.playerUnits.units.length + session.enemyUnits.units.length;
     if (!definition || (count >= app.Config.lowPerformanceUnitLimit * 2 && !definition.isBoss)) {
       return { ok: false, reason: "unit-limit" };
     }
-    var unit = createUnit(session, unitId, side, x);
+    var unit = createUnit(session, unitId, side, x, definition);
     app.events.emit("battle:summon", { side: side, unit: unit, free: true });
     return { ok: true, unit: unit };
   };

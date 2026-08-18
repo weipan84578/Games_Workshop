@@ -93,7 +93,8 @@ Tug of War TD is an automatic one-lane battle. Both castles sit at opposite ends
 | --- | --- |
 | 🧵 One shared lane | Player and enemy units meet on one animated path; living opponents hold position until defeated, with no backward collision shove. |
 | 🐱 Unit roster | 13 regular/special deployable definitions, including 5 special-ability units, plus an enemy-only Boss definition. |
-| 👑 Boss gates | Normal stages spawn a Boss at or below 30% enemy-castle HP; Stage 6 spawns one at every 10% threshold from 90% to 10%. |
+| 👑 Boss gates | Normal stages spawn a Boss at or below 30% enemy-castle HP; Stage 6 spawns one at every 10% threshold from 90% to 10%, with later Boss tiers growing stronger. |
+| 🔥 Endless pressure | Stage 6 accelerates enemy wave intervals after 8 seconds and unlocks higher-tier enemy pools every 18 seconds, making the Crown Endless Line increasingly difficult. |
 | 🛡️ Frontline rules | Units do not receive knockback. A living opponent holds the line until defeated, and living Bosses block castle victory. |
 | 🔋 Energy economy | Energy regenerates faster for the player (`1.24×` level rate); LV1–LV5 upgrades increase both the cap and production rate, while deployable costs use a rounded `0.8×` discount. |
 | 🌐 Presentation | Chinese, English, and Japanese localization; cute-pink, ocean, forest, sunset, and night themes; responsive desktop/mobile layouts. |
@@ -111,6 +112,7 @@ Tug of War TD is an automatic one-lane battle. Both castles sit at opposite ends
 4. Upgrade energy production when the cost is available; the upgrade button shows the current level and cost.
 5. Defeat living opponents before your units can move farther down the lane.
 6. Defeat every living Boss before the enemy castle can be finished.
+7. In Stage 6, survive the accelerating enemy waves and stronger late Boss tiers.
 
 #### Controls and interactions
 
@@ -121,7 +123,7 @@ Tug of War TD is an automatic one-lane battle. Both castles sit at opposite ends
 | Main menu | How to Play | Opens five tabs: basics, resources, units, matchups, and victory rules. |
 | Main menu | Settings | Opens audio, theme, language, and save-management controls. |
 | Battle | Unit card | Spends the listed energy cost and deploys the unit if its cooldown is ready. |
-| Battle | Energy upgrade | Buys the next player energy level, up to LV5. Costs are 30, 55, 80, and 105 energy. |
+| Battle | Energy upgrade | Buys the next player energy level, up to LV5. Costs are 21, 39, 56, and 74 energy after a rounded 30% reduction. |
 | Battle | Pause | Stops the game loop; Resume continues, while Save & main menu stores a snapshot and returns to the menu. |
 | Mobile battle | Summon handle / quick controls | Collapses or opens the summon panel and exposes pause, summon, and energy-upgrade actions without covering the canvas. |
 
@@ -138,7 +140,7 @@ The level data defines the raw cap and base rate. New player sessions apply the 
 | 5 | Unlimited | 1550 | 140 | 2.50/s | 3.100/s |
 | 6 | Unlimited | 2200 | 160 | 2.70/s | 3.348/s |
 
-Each player energy upgrade raises production by 28% relative to the base rate and raises the cap by 18% of the level’s base cap. The cap and rate are visible in the HUD and persisted in battle snapshots.
+Each player energy upgrade raises production by 28% relative to the base rate and raises the cap by 18% of the level’s base cap. Upgrade costs are multiplied by `0.7` and rounded to whole energy: `21`, `39`, `56`, `74`. The cap and rate are visible in the HUD and persisted in battle snapshots.
 
 #### Unit roster
 
@@ -158,7 +160,9 @@ Each player energy upgrade raises production by 28% relative to the base rate an
 | `guardian` | Special / barrier | 32 | Periodically gives nearby allies a damage-absorbing barrier. |
 | `summoner` | Special / summon | 40 | Periodically free-summons a Basic unit after warming up. |
 
-The listed costs are effective player/enemy deployment costs after the `0.8×` multiplier. The Boss is not in the player deploy list: it has `2200 HP`, `156 attack`, `40% defense`, 48 range, and a 2.3-second attack cooldown. Player defensive units (`basic`, `tank`, `guard`, and `guardian`) receive `+20%` max HP and `+20` percentage points of damage reduction; enemy copies keep their base stats. The five special units are `berserker`, `frostMage`, `thunderMage`, `guardian`, and `summoner`.
+The listed costs are effective player/enemy deployment costs after the `0.8×` multiplier. A normal Boss and the first Stage-6 Boss tier have `2200 HP`, `156 attack`, `40% defense`, 48 range, and a 2.3-second attack cooldown. In Stage 6, each tier step adds `18%` of base HP, `12%` of base attack, and `0.04` defense, reaching tier 9 at the 10% threshold. Player defensive units (`basic`, `tank`, `guard`, and `guardian`) receive `+20%` max HP and `+20` percentage points of damage reduction; enemy copies keep their base stats. The five special units are `berserker`, `frostMage`, `thunderMage`, `guardian`, and `summoner`.
+
+Stage 6 starts with the starter enemy pool. After 18 seconds, it unlocks `striker` / `healer` / `berserker`, after 36 seconds it adds `frostMage` / `thunderMage` / `guardian`, and after 54 seconds it adds `summoner`. The enemy spawn interval begins accelerating after 8 seconds and reaches a `0.35×` floor.
 
 #### Attributes and damage
 
@@ -255,7 +259,7 @@ The test runner is intentionally dependency-light and uses Node’s built-in `as
 node tests/unit.test.js
 ```
 
-The latest verified run reports **17 unit tests passed**, covering the roster, levels, Boss defenses and thresholds, music scene cleanup, resource upgrades, discounted costs, player defensive bonuses, legacy save migration, no-knockback combat for every deployable role, frontline locking, special abilities, castle blocking, and unlimited-time outcomes.
+The latest verified run reports **19 unit tests passed**, covering the roster, levels, Boss defenses and thresholds, escalating Stage-6 Boss stats and snapshot restoration, time-based enemy wave ramps and tier unlocks, music scene cleanup, resource upgrades and 30% cheaper upgrade costs, discounted unit costs, player defensive bonuses, legacy save migration, no-knockback combat for every deployable role, frontline locking, special abilities, castle blocking, and unlimited-time outcomes.
 
 For a syntax-only pass across JavaScript files:
 
@@ -300,7 +304,8 @@ Tug of War TD は自動進行する一車線バトルです。1000 × 560 のゲ
 | --- | --- |
 | 🧵 共有一車線 | プレイヤーと敵が1本の動く道で戦い、生存中の敵を倒すまで前線を止めます。後退させる衝突分離はありません。 |
 | 🐱 部隊名簿 | 13種類の通常・特殊ユニット、5種類の特殊能力ユニット、敵専用Bossを実装しています。 |
-| 👑 Bossゲート | 通常ステージは敵城HPが30%以下でBossを出し、Stage 6は90%から10%まで10%ごとにBossを出します。 |
+| 👑 Bossゲート | 通常ステージは敵城HPが30%以下でBossを出し、Stage 6は90%から10%まで10%ごとにBossを出します。後半のBossほど強くなります。 |
+| 🔥 無限の圧力 | Stage 6は8秒後から敵の出撃間隔が短くなり、18秒ごとに高位ユニットを解放するため、時間とともに難しくなります。 |
 | 🛡️ 前線ルール | ノックバックはなく、生存している敵を倒すまで前線は止まります。生存Bossがいる間は城を落とせません。 |
 | 🔋 エネルギー経済 | プレイヤーのエネルギーはレベル速度の `1.24倍` で回復し、LV1〜LV5の強化で上限と生産速度が上がります。出撃コストは丸めた `0.8倍` です。 |
 | 🌐 表示 | 中国語・英語・日本語、5テーマ、デスクトップとモバイルのレスポンシブ画面に対応します。 |
@@ -318,6 +323,7 @@ Tug of War TD は自動進行する一車線バトルです。1000 × 560 のゲ
 4. コストを払えるときにエネルギー生産を強化します。ボタンにはレベルとコストが表示されます。
 5. 生存している敵を倒すまで、味方ユニットは前線を越えて進みません。
 6. 敵城を落とすには、生存しているBossをすべて倒す必要があります。
+7. Stage 6では加速する敵の波と後半の強化Bossに耐えます。
 
 #### 操作とインタラクション
 
@@ -328,7 +334,7 @@ Tug of War TD は自動進行する一車線バトルです。1000 × 560 のゲ
 | メインメニュー | How to Play | 基本、資源、ユニット、相性、勝利条件の5タブを開きます。 |
 | メインメニュー | Settings | 音声、テーマ、言語、セーブ管理を開きます。 |
 | バトル | ユニットカード | コストを払い、クールダウンが終わっていれば出撃します。 |
-| バトル | エネルギー強化 | LV5までプレイヤーのエネルギーを強化します。コストは30、55、80、105です。 |
+| バトル | エネルギー強化 | LV5までプレイヤーのエネルギーを強化します。30%減額後のコストは21、39、56、74です。 |
 | バトル | Pause | ループを停止します。Resumeで再開し、Save & main menuで保存して戻ります。 |
 | モバイル | サモンバー / クイック操作 | キャンバスを隠さず、出撃パネル、停止、召喚、強化を操作できます。 |
 
@@ -345,7 +351,7 @@ Tug of War TD は自動進行する一車線バトルです。1000 × 560 のゲ
 | 5 | 無制限 | 1550 | 140 | 2.50/秒 | 3.100/秒 |
 | 6 | 無制限 | 2200 | 160 | 2.70/秒 | 3.348/秒 |
 
-各強化は基本速度を28%ずつ増やし、基本上限の18%を上限へ加えます。上限と速度はHUDに表示され、戦闘スナップショットに保存されます。
+各強化は基本速度を28%ずつ増やし、基本上限の18%を上限へ加えます。強化コストには `0.7` 倍を適用し、整数の `21`、`39`、`56`、`74` に丸めます。上限と速度はHUDに表示され、戦闘スナップショットに保存されます。
 
 #### ユニット名簿
 
@@ -365,7 +371,9 @@ Tug of War TD は自動進行する一車線バトルです。1000 × 560 のゲ
 | `guardian` | 特殊 / barrier | 32 | 近くの味方にダメージ吸収バリア。 |
 | `summoner` | 特殊 / summon | 40 | 準備後、基本兵を無料召喚。 |
 
-表のコストは `0.8倍` 適用後の実際の出撃コストです。Bossはプレイヤーの出撃欄にはありません。`2200 HP`、`156攻撃`、`40%防御`、射程48、攻撃クールダウン2.3秒を持ちます。プレイヤーの防御型ユニット（`basic`、`tank`、`guard`、`guardian`）には最大HP `+20%` とダメージ軽減 `+20` ポイントを適用し、敵側は基本値のままです。5種類の特殊ユニットは `berserker`、`frostMage`、`thunderMage`、`guardian`、`summoner` です。
+表のコストは `0.8倍` 適用後の実際の出撃コストです。通常BossとStage 6の第1階層Bossは `2200 HP`、`156攻撃`、`40%防御`、射程48、攻撃クールダウン2.3秒を持ちます。Stage 6では後続階層ごとに基準値へHP `+18%`、攻撃 `+12%`、防御 `+0.04` を加え、10%門檻で第9階層に達します。プレイヤーの防御型ユニット（`basic`、`tank`、`guard`、`guardian`）には最大HP `+20%` とダメージ軽減 `+20` ポイントを適用し、敵側は基本値のままです。5種類の特殊ユニットは `berserker`、`frostMage`、`thunderMage`、`guardian`、`summoner` です。
+
+Stage 6は初期ユニットプールから始まり、18秒後に `striker` / `healer` / `berserker`、36秒後に `frostMage` / `thunderMage` / `guardian`、54秒後に `summoner` を解放します。敵の出撃間隔は8秒後から加速し、最終的に `0.35倍` まで短縮されます。
 
 #### 属性とダメージ
 
@@ -460,7 +468,7 @@ node tests/unit.test.js
 node tests/unit.test.js
 ```
 
-最新の検証結果は **17 unit tests passed** です。名簿、レベル、Bossの防御と門檻、音楽シーン整理、資源強化、コスト割引、プレイヤー防御型ユニット強化、旧セーブ移行、全出撃役割のノックバックなし、前線停止、特殊能力、城の封鎖、無制限時間を確認しています。
+最新の検証結果は **19 unit tests passed** です。名簿、レベル、Bossの防御と門檻、Stage 6のBoss階層強化とスナップショット復元、時間経過による敵波と高位ユニット解放、音楽シーン整理、資源強化と30%安い強化コスト、コスト割引、プレイヤー防御型ユニット強化、旧セーブ移行、全出撃役割のノックバックなし、前線停止、特殊能力、城の封鎖、無制限時間を確認しています。
 
 JavaScriptの構文チェックには `node --check` を全ファイルへ実行し、変更差分には `git diff --check` を使います。ブラウザ自動化ランナーは含まれていないため、起動、言語・テーマ、音声シーン、Pause、保存と再開、モバイルパネル、Bossゲートはブラウザで手動確認してください。
 
@@ -493,7 +501,8 @@ Tug of War TD 是自動推進的單線戰鬥遊戲。1000 × 560 的遊戲世界
 | --- | --- |
 | 🧵 單線戰場 | 玩家與敵人共用一條會動的路徑；存活對手未被擊敗前會卡住戰線，不會因碰撞把角色往後推。 |
 | 🐱 兵種名冊 | 13 種常駐/特殊可出擊角色、5 種特殊能力兵種，以及敵方專用 Boss。 |
-| 👑 Boss 門檻 | 一般關卡在敵方城堡 30% 以下時出 Boss；第 6 關從 90% 到 10% 每少 10% 出一隻。 |
+| 👑 Boss 門檻 | 一般關卡在敵方城堡 30% 以下時出 Boss；第 6 關從 90% 到 10% 每少 10% 出一隻，且後期 Boss 會越來越強。 |
+| 🔥 無限壓力 | 第 6 關在 8 秒後會加快敵方出兵間隔，並每 18 秒解鎖更高階兵種，讓王冠無限防線越打越難。 |
 | 🛡️ 前線規則 | 所有角色都不能擊退；存活敵人未被擊敗前會卡住戰線，存活 Boss 也會阻擋攻城勝利。 |
 | 🔋 能量經濟 | 玩家能量以關卡速度的 `1.24 倍` 回復；LV1～LV5 升級會同時提高上限與生產速度，出兵費用套用四捨五入後的 `0.8 倍`。 |
 | 🌐 顯示 | 支援中文、英文、日文、五種主題，以及桌機/手機 RWD 版面。 |
@@ -511,6 +520,7 @@ Tug of War TD 是自動推進的單線戰鬥遊戲。1000 × 560 的遊戲世界
 4. 能量足夠時購買生產升級；按鈕會顯示目前等級與費用。
 5. 必須擊敗存活敵人，自己的角色才能繼續向前推進。
 6. 必須擊敗所有存活 Boss，才能真正摧毀敵方城堡。
+7. 第 6 關要撐過逐漸加速的敵軍波次與後期強化 Boss。
 
 #### 操作與互動
 
@@ -521,7 +531,7 @@ Tug of War TD 是自動推進的單線戰鬥遊戲。1000 × 560 的遊戲世界
 | 主選單 | 遊戲說明 | 開啟基本操作、資源、單位、相剋、勝利條件五個頁籤。 |
 | 主選單 | 設定 | 開啟音訊、主題、語言與存檔管理。 |
 | 戰鬥 | 兵種卡片 | 消耗卡片費用，且冷卻完成後出兵。 |
-| 戰鬥 | 能量升級 | 購買玩家下一級能量，最高 LV5；費用依序為 30、55、80、105。 |
+| 戰鬥 | 能量升級 | 購買玩家下一級能量，最高 LV5；降低 30% 後費用依序為 21、39、56、74。 |
 | 戰鬥 | 暫停 | 停止遊戲迴圈；繼續戰鬥會恢復，保存並返回主畫面會保存快照後離開。 |
 | 手機戰鬥 | 召喚面板/快速按鈕 | 收合或展開出兵面板，並提供暫停、召喚、能量升級，不遮住 Canvas。 |
 
@@ -538,7 +548,7 @@ Tug of War TD 是自動推進的單線戰鬥遊戲。1000 × 560 的遊戲世界
 | 5 | 無限 | 1550 | 140 | 2.50/秒 | 3.100/秒 |
 | 6 | 無限 | 2200 | 160 | 2.70/秒 | 3.348/秒 |
 
-每次玩家能量升級會以基礎速度的 28% 增加產能，並把關卡基礎上限的 18% 加到上限；上限與速度會顯示在 HUD，並保存到戰鬥快照。
+每次玩家能量升級會以基礎速度的 28% 增加產能，並把關卡基礎上限的 18% 加到上限。升級費用套用 `0.7` 倍並四捨五入為 `21`、`39`、`56`、`74`；上限與速度會顯示在 HUD，並保存到戰鬥快照。
 
 #### 兵種名冊
 
@@ -558,7 +568,9 @@ Tug of War TD 是自動推進的單線戰鬥遊戲。1000 × 560 的遊戲世界
 | `guardian` | 特殊 / 護盾 | 32 | 週期性給附近盟友吸收傷害的護盾。 |
 | `summoner` | 特殊 / 召喚 | 40 | 暖機後免費召喚一名基礎兵。 |
 
-表格費用是套用 `0.8 倍` 後的實際出兵費用。Boss 不會出現在玩家出兵欄，擁有 `2200 HP`、`156 攻擊`、`40% 防禦`、48 射程與 2.3 秒攻擊冷卻。我方防守型兵種（`basic`、`tank`、`guard`、`guardian`）會獲得最大 HP `+20%` 與減傷 `+20` 個百分點；敵方同名角色維持基礎數值。5 種特殊兵種是 `berserker`、`frostMage`、`thunderMage`、`guardian`、`summoner`。
+表格費用是套用 `0.8 倍` 後的實際出兵費用。一般 Boss 與第 6 關第 1 階 Boss 擁有 `2200 HP`、`156 攻擊`、`40% 防禦`、48 射程與 2.3 秒攻擊冷卻。第 6 關後續階級會依基準值逐階增加 HP `+18%`、攻擊 `+12%`、防禦 `+0.04`，在敵方血量 10% 門檻達到第 9 階。我方防守型兵種（`basic`、`tank`、`guard`、`guardian`）會獲得最大 HP `+20%` 與減傷 `+20` 個百分點；敵方同名角色維持基礎數值。5 種特殊兵種是 `berserker`、`frostMage`、`thunderMage`、`guardian`、`summoner`。
+
+第 6 關一開始只會從初始兵池出兵；18 秒後解鎖 `striker`／`healer`／`berserker`，36 秒後加入 `frostMage`／`thunderMage`／`guardian`，54 秒後加入 `summoner`。敵方出兵間隔在 8 秒後開始加速，最短縮至 `0.35 倍`。
 
 #### 屬性與傷害
 
@@ -653,7 +665,7 @@ node tests/unit.test.js
 node tests/unit.test.js
 ```
 
-最近一次驗證結果為 **17 unit tests passed**，涵蓋兵種、關卡、Boss 防禦與門檻、音樂切頁清理、能量升級、費用折扣、我方防守型兵種加成、舊存檔移轉、所有出擊角色不後退、前線鎖定、特殊能力、城堡封鎖與無限時間規則。
+最近一次驗證結果為 **19 unit tests passed**，涵蓋兵種、關卡、Boss 防禦與門檻、第 6 關 Boss 階級強化與快照還原、隨時間加速的敵軍波次與高階兵種解鎖、音樂切頁清理、能量升級與費用降低 30%、費用折扣、我方防守型兵種加成、舊存檔移轉、所有出擊角色不後退、前線鎖定、特殊能力、城堡封鎖與無限時間規則。
 
 JavaScript 語法檢查會對所有檔案執行 `node --check`，修改差異會用 `git diff --check` 檢查。專案沒有瀏覽器自動化 runner，因此仍應在瀏覽器手動確認開戰、語言/主題、音樂切換、暫停、保存/繼續、手機面板與 Boss 門檻。
 

@@ -62,12 +62,16 @@
     return {
       uid: this.uid, unitId: this.def.id, side: this.side, x: this.x, y: this.y,
       hp: this.hp, maxHp: this.maxHp, attackCooldown: this.attackCooldown, abilityCooldown: this.abilityCooldown,
-      age: this.age, slowTimer: this.slowTimer, slowFactor: this.slowFactor, barrier: this.barrier
+      age: this.age, slowTimer: this.slowTimer, slowFactor: this.slowFactor, barrier: this.barrier,
+      bossTier: this.def.isBoss ? Number(this.def.bossTier || 1) : 0
     };
   };
 
   Unit.fromSnapshot = function (snapshot) {
     var definition = global.UNITS_DATA[snapshot.unitId] || global.UNITS_DATA.basic;
+    if (definition.isBoss && Number(snapshot.bossTier || 1) > 1) {
+      definition = app.utils.getEnhancedBossDefinition(definition, snapshot.bossTier);
+    }
     var unit = new Unit(definition, snapshot.side, snapshot.x, snapshot.y);
     unit.uid = snapshot.uid || unit.uid;
     unit.hp = snapshot.hp;
