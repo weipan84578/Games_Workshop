@@ -10,16 +10,27 @@
     this.hp = definition.hp;
     this.maxHp = definition.hp;
     this.attackCooldown = 0;
+    this.abilityCooldown = definition.abilityCooldown || 0;
     this.age = 0;
     this.hitFlash = 0;
     this.spawnPulse = 1;
+    this.knockbackVelocity = 0;
+    this.slowTimer = 0;
+    this.slowFactor = 1;
+    this.barrier = 0;
     this.facing = side === "player" ? 1 : -1;
   }
 
   Unit.prototype.updateTimers = function (delta) {
     this.attackCooldown = Math.max(0, this.attackCooldown - delta);
+    this.abilityCooldown = Math.max(0, this.abilityCooldown - delta);
     this.hitFlash = Math.max(0, this.hitFlash - delta);
     this.spawnPulse = Math.max(0, this.spawnPulse - delta * 2.5);
+    this.slowTimer = Math.max(0, this.slowTimer - delta);
+    if (this.slowTimer <= 0) {
+      this.slowFactor = 1;
+    }
+    this.knockbackVelocity *= Math.pow(.035, delta);
     this.age += delta;
   };
 
@@ -28,9 +39,24 @@
   };
 
   Unit.prototype.takeDamage = function (amount) {
-    this.hp = Math.max(0, this.hp - Math.max(0, amount));
+    var damage = Math.max(0, amount);
+    if (this.barrier > 0) {
+      var absorbed = Math.min(this.barrier, damage);
+      this.barrier -= absorbed;
+      damage -= absorbed;
+    }
+    this.hp = Math.max(0, this.hp - damage);
     this.hitFlash = .16;
     return this.hp <= 0;
+  };
+
+  Unit.prototype.applyKnockback = function (direction, force) {
+    this.knockbackVelocity += direction * (force || this.def.knockbackForce || 8);
+  };
+
+  Unit.prototype.applySlow = function (duration, factor) {
+    this.slowTimer = Math.max(this.slowTimer, duration || 1.5);
+    this.slowFactor = Math.min(this.slowFactor, factor || .55);
   };
 
   Unit.prototype.heal = function (amount) {
@@ -40,7 +66,9 @@
   Unit.prototype.snapshot = function () {
     return {
       uid: this.uid, unitId: this.def.id, side: this.side, x: this.x, y: this.y,
-      hp: this.hp, maxHp: this.maxHp, attackCooldown: this.attackCooldown, age: this.age
+      hp: this.hp, maxHp: this.maxHp, attackCooldown: this.attackCooldown, abilityCooldown: this.abilityCooldown,
+      age: this.age, knockbackVelocity: this.knockbackVelocity, slowTimer: this.slowTimer,
+      slowFactor: this.slowFactor, barrier: this.barrier
     };
   };
 
@@ -51,7 +79,12 @@
     unit.hp = snapshot.hp;
     unit.maxHp = snapshot.maxHp || definition.hp;
     unit.attackCooldown = snapshot.attackCooldown || 0;
+    unit.abilityCooldown = snapshot.abilityCooldown !== undefined ? snapshot.abilityCooldown : (definition.abilityCooldown || 0);
     unit.age = snapshot.age || 0;
+    unit.knockbackVelocity = snapshot.knockbackVelocity || 0;
+    unit.slowTimer = snapshot.slowTimer || 0;
+    unit.slowFactor = snapshot.slowFactor || 1;
+    unit.barrier = snapshot.barrier || 0;
     return unit;
   };
 

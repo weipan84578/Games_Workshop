@@ -194,8 +194,8 @@
     if (unit.spawnPulse > 0) {
       ctx.scale(1 + unit.spawnPulse * .3, 1 + unit.spawnPulse * .3);
     }
-    ctx.shadowColor = "rgba(40, 30, 48, .22)";
-    ctx.shadowBlur = 9;
+    ctx.shadowColor = unit.def.isBoss ? "rgba(120, 38, 126, .65)" : "rgba(40, 30, 48, .22)";
+    ctx.shadowBlur = unit.def.isBoss ? 20 : 9;
     ctx.shadowOffsetY = 5;
     ctx.fillStyle = unit.hitFlash > 0 ? "#fff" : unit.def.color;
     ctx.beginPath();
@@ -203,12 +203,19 @@
     ctx.fill();
     ctx.shadowColor = "transparent";
     ctx.strokeStyle = unit.side === "player" ? "#fff" : "#5f315d";
-    ctx.lineWidth = 3;
+    ctx.lineWidth = unit.def.isBoss ? 5 : 3;
     ctx.stroke();
     ctx.font = Math.max(18, size * 1.26) + "px Arial";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(unit.def.icon, 0, 1);
+    if (unit.def.isBoss) {
+      ctx.strokeStyle = "rgba(255, 220, 111, .88)";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(0, 0, size + 8 + Math.sin(this.time * 4) * 2, 0, Math.PI * 2);
+      ctx.stroke();
+    }
     ctx.restore();
     ctx.fillStyle = "rgba(47, 28, 45, .22)";
     roundedRect(ctx, unit.x - size, y - size - 12, size * 2, 6, 3);
@@ -216,6 +223,13 @@
     ctx.fillStyle = unit.side === "player" ? "#35af87" : "#e65366";
     roundedRect(ctx, unit.x - size, y - size - 12, size * 2 * app.utils.percent(unit.hp, unit.maxHp) / 100, 6, 3);
     ctx.fill();
+    if (unit.barrier > 0) {
+      ctx.strokeStyle = "#a7efff";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(unit.x, y, size + 5, 0, Math.PI * 2);
+      ctx.stroke();
+    }
     if (unit.def.attackType === "ranged") {
       ctx.fillStyle = "rgba(255,255,255,.85)";
       ctx.beginPath();
@@ -239,6 +253,15 @@
         ctx.font = "18px Arial";
         ctx.textAlign = "center";
         ctx.fillText("+", effect.x, effect.y - 25);
+      } else if (effect.type === "shield") {
+        ctx.strokeStyle = "#a7efff";
+        ctx.beginPath();
+        ctx.arc(effect.x, effect.y - 28, 16 + (1 - alpha) * 7, 0, Math.PI * 2);
+        ctx.stroke();
+      } else if (effect.type === "summon") {
+        ctx.font = "20px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("✦", effect.x, effect.y - 32 - (1 - alpha) * 18);
       } else {
         ctx.beginPath();
         ctx.moveTo(effect.x1, effect.y1 - 28);

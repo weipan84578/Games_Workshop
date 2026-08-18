@@ -7,6 +7,9 @@
       app.BattleHUD.togglePanel();
       app.AudioManager.playSfx("click");
     });
+    document.getElementById("mobile-income-upgrade").addEventListener("click", function () {
+      api.upgradeIncome();
+    });
   }
 
   app.MobileControls = { init: init };

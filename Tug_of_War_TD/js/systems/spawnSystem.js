@@ -3,6 +3,18 @@
 
   function SpawnSystem() {}
 
+  function createUnit(session, unitId, side, x) {
+    var definition = global.UNITS_DATA[unitId];
+    var spawnX = x !== undefined ? x : app.PathManager.getSpawnX(side) + app.utils.randomInt(-8, 8);
+    var unit = new app.Unit(definition, side, spawnX, app.PathManager.getY(spawnX, session.elapsed));
+    if (side === "player") {
+      session.playerUnits.add(unit);
+    } else {
+      session.enemyUnits.add(unit);
+    }
+    return unit;
+  }
+
   SpawnSystem.prototype.update = function (session, delta) {
     Object.keys(session.cooldowns).forEach(function (unitId) {
       session.cooldowns[unitId] = Math.max(0, session.cooldowns[unitId] - delta);
@@ -22,9 +34,7 @@
     }
     session.resource.spend("player", definition.cost);
     session.cooldowns[unitId] = definition.cooldown;
-    var x = app.PathManager.getSpawnX("player") + app.utils.randomInt(-8, 8);
-    var unit = new app.Unit(definition, "player", x, app.PathManager.getY(x, session.elapsed));
-    session.playerUnits.add(unit);
+    var unit = createUnit(session, unitId, "player");
     app.AudioManager.playSfx("summon");
     app.events.emit("battle:summon", { side: "player", unit: unit });
     return { ok: true, unit: unit };
@@ -35,10 +45,18 @@
       return { ok: false, reason: "not-ready" };
     }
     session.resource.spend("enemy", definition.cost);
-    var x = app.PathManager.getSpawnX("enemy") + app.utils.randomInt(-8, 8);
-    var unit = new app.Unit(definition, "enemy", x, app.PathManager.getY(x, session.elapsed));
-    session.enemyUnits.add(unit);
+    var unit = createUnit(session, unitId, "enemy");
     app.events.emit("battle:summon", { side: "enemy", unit: unit });
+    return { ok: true, unit: unit };
+  };
+  SpawnSystem.prototype.spawnFree = function (session, unitId, side, x) {
+    var definition = global.UNITS_DATA[unitId];
+    var count = session.playerUnits.units.length + session.enemyUnits.units.length;
+    if (!definition || (count >= app.Config.lowPerformanceUnitLimit * 2 && !definition.isBoss)) {
+      return { ok: false, reason: "unit-limit" };
+    }
+    var unit = createUnit(session, unitId, side, x);
+    app.events.emit("battle:summon", { side: side, unit: unit, free: true });
     return { ok: true, unit: unit };
   };
   app.SpawnSystem = SpawnSystem;

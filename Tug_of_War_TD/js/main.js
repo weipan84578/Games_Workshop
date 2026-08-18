@@ -15,6 +15,7 @@
     startBattle: startBattle,
     pauseBattle: pauseBattle,
     summon: summon,
+    upgradeIncome: upgradeIncome,
     getSession: function () { return currentSession; },
     confirm: openConfirm,
     toast: toast
@@ -32,6 +33,9 @@
     bindGlobalActions();
     app.events.on("battle:announce", function (payload) {
       app.BattleHUD.announce(payload.key);
+    });
+    app.events.on("battle:boss", function (payload) {
+      app.BattleHUD.announce("battle_boss_warning", { count: payload.count });
     });
     app.events.on("i18n:change", function () {
       if (currentScreen === "levels") {
@@ -191,7 +195,7 @@
     var isVictory = result.outcome === "victory";
     var isDraw = result.outcome === "draw";
     var titleKey = isVictory ? "result_victory" : isDraw ? "result_draw" : "result_defeat";
-    var messageKey = isVictory ? "result_victory_message" : isDraw ? "result_draw_message" : "result_defeat_message";
+    var messageKey = isVictory ? "result_victory_message" : isDraw ? "result_draw_message" : result.reason === "boss" ? "result_boss_message" : "result_defeat_message";
     var title = document.getElementById("result-title");
     var message = document.getElementById("result-message");
     title.setAttribute("data-i18n", titleKey);
@@ -244,6 +248,22 @@
     }
     var result = currentSession.spawnSystem.spawnPlayer(currentSession, unitId);
     if (!result.ok) {
+      app.AudioManager.playSfx("click");
+    }
+    return result;
+  }
+
+  function upgradeIncome() {
+    if (!currentSession || !loop || !loop.running) {
+      return { ok: false, reason: "not-in-battle" };
+    }
+    var result = currentSession.resource.upgradePlayer();
+    if (result.ok) {
+      app.AudioManager.playSfx("upgrade");
+      app.BattleHUD.update(currentSession);
+      return result;
+    }
+    if (result.reason === "insufficient") {
       app.AudioManager.playSfx("click");
     }
     return result;

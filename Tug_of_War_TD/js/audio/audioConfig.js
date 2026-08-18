@@ -6,6 +6,6 @@
       victory: { tracks: ["victory_piano"], tempo: 150 },
       defeat: { tracks: ["defeat_piano"], tempo: 82 }
     },
-    sfx: { click: true, summon: true, hit: true, victory: true, defeat: true, star: true }
+    sfx: { click: true, summon: true, hit: true, victory: true, defeat: true, star: true, upgrade: true, boss: true }
   };
 })(window);

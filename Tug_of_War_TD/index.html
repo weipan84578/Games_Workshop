@@ -178,11 +178,11 @@
           <button id="battle-pause-button" class="pause-button" type="button" aria-label="Pause">Ⅱ</button>
         </header>
         <div class="battle-main">
-          <aside class="resource-rail"><div class="resource-orb">⚡</div><div class="resource-label" data-i18n="battle_energy">能量</div><strong id="player-energy">100</strong><span>/ <span id="player-energy-max">100</span></span><div class="energy-track"><span id="player-energy-bar"></span></div><div class="resource-tip" data-i18n="battle_energy_tip">穩住節奏！</div></aside>
-          <div id="battle-stage" class="battle-stage"><canvas id="battle-canvas" aria-label="Battle field"></canvas><div id="battle-announcer" class="battle-announcer" aria-live="polite"></div><div class="battle-lane-label player-lane" data-i18n="battle_lane_you">貓咪防線</div><div class="battle-lane-label enemy-lane" data-i18n="battle_lane_enemy">魔物防線</div></div>
+          <aside class="resource-rail"><div class="resource-orb">⚡</div><div class="resource-label" data-i18n="battle_energy">能量</div><strong id="player-energy">100</strong><span>/ <span id="player-energy-max">100</span></span><div class="energy-track"><span id="player-energy-bar"></span></div><button id="income-upgrade" class="income-upgrade" type="button"><span class="income-upgrade-icon">⬆️</span><strong data-i18n="battle_income_upgrade">產速升級</strong><span id="income-level">LV1</span><small><span data-i18n="battle_upgrade_cost">費用</span> <span id="income-upgrade-cost">30</span></small></button><div class="resource-tip" data-i18n="battle_energy_tip">穩住節奏！</div></aside>
+          <div id="battle-stage" class="battle-stage"><canvas id="battle-canvas" aria-label="Battle field"></canvas><div id="battle-announcer" class="battle-announcer" aria-live="polite"></div><div id="boss-status" class="boss-status" hidden><div class="boss-status-heading"><span class="boss-status-icon">👑</span><strong data-i18n="battle_boss">大 Boss</strong><span id="boss-count"></span></div><div class="health-track"><span id="boss-hp-bar" class="health-fill boss-fill"></span></div></div><div class="battle-lane-label player-lane" data-i18n="battle_lane_you">貓咪防線</div><div class="battle-lane-label enemy-lane" data-i18n="battle_lane_enemy">魔物防線</div></div>
           <aside id="summon-panel" class="summon-panel"><button id="summon-handle" class="summon-handle" type="button" aria-expanded="true"><span class="handle-grip"></span><span>🐾</span><strong data-i18n="battle_summon">召喚小隊</strong><span class="handle-chevron">⌄</span></button><div class="summon-caption" data-i18n="battle_summon_hint">點擊卡片，把夥伴送上戰線</div><div id="unit-cards" class="unit-cards"></div></aside>
         </div>
-        <div class="mobile-quick-controls"><button id="mobile-pause" type="button" aria-label="Pause">Ⅱ</button><button id="mobile-summon-toggle" type="button" aria-label="Summon">🐾</button></div>
+        <div class="mobile-quick-controls"><button id="mobile-pause" type="button" aria-label="Pause">Ⅱ</button><button id="mobile-summon-toggle" type="button" aria-label="Summon">🐾</button><button id="mobile-income-upgrade" type="button" aria-label="Upgrade income">⬆️<small id="mobile-income-level">1</small></button></div>
       </div>
     </main>
 
@@ -239,6 +239,8 @@
   <script src="js/systems/resourceSystem.js"></script>
   <script src="js/systems/spawnSystem.js"></script>
   <script src="js/systems/aiSystem.js"></script>
+  <script src="js/systems/abilitySystem.js"></script>
+  <script src="js/systems/bossSystem.js"></script>
   <script src="js/systems/battleSystem.js"></script>
   <script src="js/systems/levelSystem.js"></script>
   <script src="js/ui/themeSwitcher.js"></script>

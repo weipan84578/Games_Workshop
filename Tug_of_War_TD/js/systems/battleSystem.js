@@ -18,13 +18,17 @@
     });
   }
 
-  function pushHealEffect(session, unit) {
-    session.effects.push({ type: "heal", x: unit.x, y: unit.y, color: "#9cf5a6", life: .25 });
+  function pushHealEffect(session, unit, type) {
+    session.effects.push({ type: type || "heal", x: unit.x, y: unit.y, color: "#9cf5a6", life: .25 });
   }
 
-  function attackUnit(session, attacker, target) {
+  function attackUnit(session, attacker, target, enemies) {
     var amount = attacker.def.atk * multiplier(attacker.def.attribute, target.def.attribute);
+    if (attacker.def.ability === "rage" && attacker.hp / attacker.maxHp < .5) {
+      amount *= 1.8;
+    }
     target.takeDamage(amount);
+    app.AbilitySystem.applyAttackEffects(session, attacker, target, enemies, amount, pushHitEffect);
     attacker.attackCooldown = attacker.def.cooldown;
     pushHitEffect(session, attacker, target, amount);
     if (session.hitSoundTimer <= 0) {
@@ -34,6 +38,9 @@
   }
 
   function attackBase(session, attacker, base) {
+    if (base.side === "enemy" && app.BossSystem.blocksEnemyBase(session)) {
+      return;
+    }
     var amount = attacker.def.atk;
     base.takeDamage(amount);
     attacker.attackCooldown = attacker.def.cooldown;
@@ -51,23 +58,29 @@
   }
 
   function moveTowardBase(unit, delta) {
-    unit.x = app.PathManager.clampX(unit.x + app.PathManager.getDirection(unit.side) * unit.def.speed * delta);
+    var speed = unit.def.speed * (unit.slowTimer > 0 ? unit.slowFactor : 1);
+    unit.x = app.PathManager.clampX(unit.x + app.PathManager.getDirection(unit.side) * speed * delta);
   }
 
   function updateUnit(session, unit, allies, enemies, enemyBase) {
     unit.updateTimers(session.delta);
+    if (unit.knockbackVelocity) {
+      unit.x = app.PathManager.clampX(unit.x + unit.knockbackVelocity * session.delta);
+    }
     unit.y = app.PathManager.getY(unit.x, session.elapsed);
     if (!unit.isAlive()) {
       return;
     }
 
+    if (app.AbilitySystem.tryCastBarrier(session, unit, allies, pushHealEffect)) {
+      return;
+    }
+    if (app.AbilitySystem.trySummon(session, unit, pushHealEffect)) {
+      return;
+    }
     if (unit.def.attackType === "support") {
-      var hurtAlly = allies.filter(function (ally) {
-        return ally !== unit && ally.isAlive() && ally.hp / ally.maxHp < .82 && Math.abs(ally.x - unit.x) <= unit.def.range;
-      }).sort(function (a, b) {
-        return (a.hp / a.maxHp) - (b.hp / b.maxHp);
-      })[0];
-      if (hurtAlly) {
+      var hurtAlly = app.AbilitySystem.findHurtAlly(unit, allies);
+      if (hurtAlly && unit.def.heal) {
         if (unit.attackCooldown <= 0) {
           healAlly(session, unit, hurtAlly);
         }
@@ -78,7 +91,7 @@
     var nearest = app.Collision.nearest(unit, enemies);
     if (nearest.unit && nearest.distance <= unit.def.range) {
       if (unit.attackCooldown <= 0) {
-        attackUnit(session, unit, nearest.unit);
+        attackUnit(session, unit, nearest.unit, enemies);
       }
       return;
     }
@@ -94,7 +107,9 @@
   }
 
   function checkOutcome(session) {
-    if (session.enemyBase.hp <= 0) {
+    app.BossSystem.trigger(session);
+    var bossAlive = app.BossSystem.blocksEnemyBase(session);
+    if (session.enemyBase.hp <= 0 && !bossAlive) {
       session.finish("victory", "castle");
       return;
     }
@@ -103,6 +118,10 @@
       return;
     }
     if (session.timeRemaining <= 0) {
+      if (bossAlive) {
+        session.finish("defeat", "boss");
+        return;
+      }
       var playerPercent = session.playerBase.getPercent();
       var enemyPercent = session.enemyBase.getPercent();
       var outcome = Math.abs(playerPercent - enemyPercent) < 1 ? "draw" : playerPercent > enemyPercent ? "victory" : "defeat";
@@ -113,6 +132,7 @@
   function BattleSystem() {}
   BattleSystem.prototype.update = function (session, delta) {
     session.delta = delta;
+    app.BossSystem.trigger(session);
     var player = session.playerUnits.getAlive();
     var enemy = session.enemyUnits.getAlive();
     player.forEach(function (unit) { updateUnit(session, unit, player, enemy, session.enemyBase); });
@@ -121,6 +141,7 @@
     var deadPlayer = session.playerUnits.removeDead();
     var deadEnemy = session.enemyUnits.removeDead();
     session.kills += deadEnemy.length;
+    session.bosses = app.BossSystem.getLiving(session);
     if (deadPlayer.length || deadEnemy.length) {
       app.events.emit("battle:units-removed", { player: deadPlayer.length, enemy: deadEnemy.length });
     }

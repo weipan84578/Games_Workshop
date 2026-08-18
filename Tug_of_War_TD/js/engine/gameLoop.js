@@ -17,6 +17,8 @@
     this.effects = [];
     this.kills = 0;
     this.hitSoundTimer = 0;
+    this.bosses = [];
+    this.bossTriggered = {};
     this.result = null;
     this.paused = false;
     this.lastAnnounce = 0;
@@ -74,7 +76,8 @@
       enemyBase: this.enemyBase.snapshot(),
       resource: this.resource.snapshot(),
       cooldowns: Object.assign({}, this.cooldowns),
-      kills: this.kills
+      kills: this.kills,
+      bossTriggered: Object.assign({}, this.bossTriggered)
     };
   };
 
@@ -90,6 +93,8 @@
     session.resource.restore(snapshot.resource);
     session.cooldowns = Object.assign({}, snapshot.cooldowns || {});
     session.kills = Number(snapshot.kills || 0);
+    session.bossTriggered = Object.assign({}, snapshot.bossTriggered || {});
+    session.bosses = session.enemyUnits.units.filter(function (unit) { return unit.def.isBoss && unit.isAlive(); });
     return session;
   };
 

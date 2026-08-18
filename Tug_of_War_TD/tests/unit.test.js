@@ -1,0 +1,309 @@
+const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
+const vm = require("node:vm");
+
+global.window = global;
+
+const root = path.resolve(__dirname, "..");
+const scripts = [
+  "js/core/config.js",
+  "js/core/eventBus.js",
+  "data/unitsData.js",
+  "data/levels.js",
+  "js/entities/Unit.js",
+  "js/entities/PlayerUnits.js",
+  "js/entities/EnemyUnits.js",
+  "js/entities/Base.js",
+  "js/engine/pathManager.js",
+  "js/engine/collision.js",
+  "js/engine/gameLoop.js",
+  "js/systems/resourceSystem.js",
+  "js/systems/spawnSystem.js",
+  "js/systems/aiSystem.js",
+  "js/systems/abilitySystem.js",
+  "js/systems/bossSystem.js",
+  "js/systems/battleSystem.js",
+  "js/systems/levelSystem.js"
+];
+
+function loadScript(relativePath) {
+  const filename = path.join(root, relativePath);
+  vm.runInThisContext(fs.readFileSync(filename, "utf8"), { filename });
+}
+
+scripts.forEach(loadScript);
+
+const app = global.TugOfWar;
+const silentAudio = { playSfx: function () {} };
+app.AudioManager = silentAudio;
+
+let passed = 0;
+
+function test(name, callback) {
+  try {
+    callback();
+    passed += 1;
+    console.log("PASS - " + name);
+  } catch (error) {
+    console.error("FAIL - " + name);
+    throw error;
+  }
+}
+
+function createSession(levelId) {
+  return new app.BattleSession(global.LEVELS_DATA.find(function (level) {
+    return level.id === levelId;
+  }));
+}
+
+test("unit catalog contains regular, special, and boss definitions", function () {
+  assert.equal(global.UNIT_ORDER.length, 13);
+  assert.equal(global.UNIT_ORDER.filter(function (id) {
+    return global.UNITS_DATA[id].special;
+  }).length, 5);
+  assert.equal(global.UNITS_DATA.boss.isBoss, true);
+  assert.equal(global.LEVELS_DATA.length, 6);
+  assert.equal(global.LEVELS_DATA[5].enhancedBoss, true);
+  assert.ok(global.LEVELS_DATA.every(function (level) {
+    return app.LevelSystem.isUnlocked(level.id);
+  }));
+});
+
+test("music scene changes stop the previous scheduled track", function () {
+  const originalAudioContext = global.AudioContext;
+  const originalSetTimeout = global.setTimeout;
+  const originalClearTimeout = global.clearTimeout;
+  const scheduled = [];
+  const oscillators = [];
+
+  function parameter() {
+    return {
+      value: 0,
+      setValueAtTime: function () {},
+      exponentialRampToValueAtTime: function () {},
+      cancelScheduledValues: function () {},
+      setTargetAtTime: function () {}
+    };
+  }
+  function gainNode() {
+    return { gain: parameter(), connect: function () {} };
+  }
+  function limiterNode() {
+    return { threshold: parameter(), knee: parameter(), ratio: parameter(), attack: parameter(), release: parameter(), connect: function () {} };
+  }
+  function oscillatorNode() {
+    const oscillator = {
+      type: "triangle",
+      frequency: parameter(),
+      stopCalls: 0,
+      connect: function () {},
+      start: function () {},
+      stop: function () { this.stopCalls += 1; },
+      onended: null
+    };
+    oscillators.push(oscillator);
+    return oscillator;
+  }
+  function FakeAudioContext() {
+    this.currentTime = 0;
+    this.state = "running";
+    this.destination = {};
+  }
+  FakeAudioContext.prototype.createGain = gainNode;
+  FakeAudioContext.prototype.createDynamicsCompressor = limiterNode;
+  FakeAudioContext.prototype.createOscillator = oscillatorNode;
+
+  global.AudioContext = FakeAudioContext;
+  global.setTimeout = function (callback) {
+    scheduled.push(callback);
+    return scheduled.length;
+  };
+  global.clearTimeout = function () {};
+  loadScript("js/audio/audioConfig.js");
+  loadScript("js/audio/audioManager.js");
+
+  try {
+    app.AudioManager.unlock();
+    const firstTrackCount = oscillators.length;
+    app.AudioManager.setScene("battle");
+    assert.ok(firstTrackCount > 0);
+    assert.ok(oscillators.slice(0, firstTrackCount).every(function (oscillator) {
+      return oscillator.stopCalls > 0;
+    }));
+    assert.ok(scheduled.length >= 2);
+  } finally {
+    global.AudioContext = originalAudioContext;
+    global.setTimeout = originalSetTimeout;
+    global.clearTimeout = originalClearTimeout;
+  }
+});
+
+test("income upgrade increases production and stops at level five", function () {
+  const resource = new app.ResourceSystem(global.LEVELS_DATA[0]);
+  const baseRate = resource.basePlayerRate;
+
+  resource.player = resource.getUpgradeCost();
+  const firstUpgrade = resource.upgradePlayer();
+  assert.deepEqual(firstUpgrade.ok, true);
+  assert.equal(resource.incomeLevel, 2);
+  assert.equal(resource.playerRate, baseRate * 1.28);
+
+  for (let level = 2; level < 5; level += 1) {
+    resource.player = resource.getUpgradeCost();
+    assert.equal(resource.upgradePlayer().ok, true);
+  }
+  assert.equal(resource.incomeLevel, 5);
+  assert.equal(resource.getUpgradeCost(), 0);
+  assert.equal(resource.upgradePlayer().reason, "max");
+});
+
+test("unit damage consumes barrier and preserves knockback and slow state", function () {
+  const tank = new app.Unit(global.UNITS_DATA.tank, "player", 300, 350);
+  tank.barrier = 40;
+  tank.takeDamage(25);
+  assert.equal(tank.hp, tank.maxHp);
+  assert.equal(tank.barrier, 15);
+
+  tank.takeDamage(30);
+  assert.equal(tank.hp, tank.maxHp - 15);
+
+  tank.applyKnockback(-1, 120);
+  tank.applySlow(2, .5);
+  assert.equal(tank.knockbackVelocity, -120);
+  assert.equal(tank.slowTimer, 2);
+  assert.equal(tank.slowFactor, .5);
+  tank.updateTimers(.1);
+  assert.ok(tank.knockbackVelocity < 0 && tank.knockbackVelocity > -120);
+
+  const restored = app.Unit.fromSnapshot(tank.snapshot());
+  assert.equal(restored.knockbackVelocity, tank.knockbackVelocity);
+  assert.equal(restored.slowFactor, tank.slowFactor);
+  assert.equal(restored.barrier, tank.barrier);
+});
+
+test("enemy hit applies visible backward movement to a heavy unit", function () {
+  const session = createSession(1);
+  const tank = new app.Unit(global.UNITS_DATA.tank, "player", 400, 350);
+  const striker = new app.Unit(global.UNITS_DATA.striker, "enemy", 430, 350);
+  session.playerUnits.add(tank);
+  session.enemyUnits.add(striker);
+
+  session.battleSystem.update(session, .05);
+  assert.ok(tank.knockbackVelocity < 0);
+
+  const xBefore = tank.x;
+  session.battleSystem.update(session, .05);
+  assert.ok(tank.x < xBefore, "the heavy unit should move toward its own castle after impact");
+});
+
+test("special abilities apply slow, chain damage, and ally barriers", function () {
+  const session = createSession(1);
+  const frost = new app.Unit(global.UNITS_DATA.frostMage, "player", 200, 350);
+  const target = new app.Unit(global.UNITS_DATA.basic, "enemy", 230, 350);
+  const nearby = new app.Unit(global.UNITS_DATA.basic, "enemy", 250, 350);
+  session.enemyUnits.add(target);
+  session.enemyUnits.add(nearby);
+  target.takeDamage(frost.def.atk);
+  app.AbilitySystem.applyAttackEffects(session, frost, target, [target, nearby], frost.def.atk, function () {});
+  assert.ok(target.slowTimer > 0);
+
+  const thunder = new app.Unit(global.UNITS_DATA.thunderMage, "player", 200, 350);
+  const chainTarget = new app.Unit(global.UNITS_DATA.basic, "enemy", 230, 350);
+  const chainNearby = new app.Unit(global.UNITS_DATA.basic, "enemy", 250, 350);
+  const chainBefore = chainNearby.hp;
+  chainTarget.takeDamage(thunder.def.atk);
+  app.AbilitySystem.applyAttackEffects(session, thunder, chainTarget, [chainTarget, chainNearby], thunder.def.atk, function () {});
+  assert.ok(chainNearby.hp < chainBefore);
+
+  const guardian = new app.Unit(global.UNITS_DATA.guardian, "player", 400, 350);
+  const ally = new app.Unit(global.UNITS_DATA.basic, "player", 430, 350);
+  assert.equal(app.AbilitySystem.tryCastBarrier(session, guardian, [guardian, ally], function () {}), true);
+  assert.equal(ally.barrier, global.UNITS_DATA.guardian.barrier);
+});
+
+test("normal level triggers one boss below thirty percent and blocks base damage", function () {
+  const session = createSession(1);
+  session.enemyBase.hp = 290;
+  app.BossSystem.trigger(session);
+
+  assert.equal(session.enemyUnits.units.length, 1);
+  assert.equal(session.enemyUnits.units[0].def.isBoss, true);
+  assert.equal(app.BossSystem.blocksEnemyBase(session), true);
+  assert.ok(session.enemyBase.hp > 0);
+
+  session.enemyUnits.units[0].takeDamage(99999);
+  session.enemyUnits.removeDead();
+  assert.equal(app.BossSystem.blocksEnemyBase(session), false);
+});
+
+test("enemy base damage resumes only after the Boss is defeated", function () {
+  const session = createSession(1);
+  const attacker = new app.Unit(global.UNITS_DATA.basic, "player", 915, 350);
+  session.playerUnits.add(attacker);
+  session.enemyBase.hp = 290;
+  app.BossSystem.trigger(session);
+
+  session.battleSystem.update(session, .05);
+  assert.equal(session.enemyBase.hp, 290);
+
+  session.enemyUnits.units[0].takeDamage(99999);
+  session.enemyUnits.removeDead();
+  attacker.attackCooldown = 0;
+  session.battleSystem.update(session, .05);
+  assert.ok(session.enemyBase.hp < 290);
+});
+
+test("Boss spawning takes priority over the regular unit performance cap", function () {
+  const session = createSession(1);
+  for (let index = 0; index < app.Config.lowPerformanceUnitLimit * 2; index += 1) {
+    session.playerUnits.add(new app.Unit(global.UNITS_DATA.basic, "player", 130, 350));
+  }
+  session.enemyBase.hp = 290;
+
+  app.BossSystem.trigger(session);
+  assert.equal(session.enemyUnits.units.some(function (unit) {
+    return unit.def.isBoss;
+  }), true);
+});
+
+test("living boss prevents a time-limit victory", function () {
+  const session = createSession(1);
+  session.enemyBase.hp = 290;
+  app.BossSystem.trigger(session);
+  session.timeRemaining = 0;
+
+  session.battleSystem.update(session, 0);
+  assert.equal(session.result.outcome, "defeat");
+  assert.equal(session.result.reason, "boss");
+});
+
+test("enhanced level triggers a boss at every ten percent threshold", function () {
+  const session = createSession(6);
+  session.enemyBase.hp = 1980;
+  app.BossSystem.trigger(session);
+  assert.equal(session.enemyUnits.units.length, 1);
+  assert.equal(session.bossTriggered[90], true);
+
+  session.enemyBase.hp = 1760;
+  app.BossSystem.trigger(session);
+  assert.equal(session.enemyUnits.units.length, 2);
+  assert.equal(session.bossTriggered[80], true);
+  assert.deepEqual(app.BossSystem.getThresholds(session.level), [90, 80, 70, 60, 50, 40, 30, 20, 10]);
+});
+
+test("battle snapshot restores resource upgrades and living bosses", function () {
+  const session = createSession(6);
+  session.resource.player = session.resource.getUpgradeCost();
+  session.resource.upgradePlayer();
+  session.enemyBase.hp = 1980;
+  app.BossSystem.trigger(session);
+
+  const restored = app.BattleSession.fromSnapshot(session.snapshot());
+  assert.equal(restored.resource.incomeLevel, 2);
+  assert.equal(restored.resource.playerRate, session.resource.playerRate);
+  assert.equal(restored.bosses.length, 1);
+  assert.equal(restored.bossTriggered[90], true);
+});
+
+console.log("\n" + passed + " unit tests passed.");

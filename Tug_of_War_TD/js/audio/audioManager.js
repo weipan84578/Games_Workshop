@@ -8,6 +8,8 @@
   var sfxLimiter = null;
   var scene = "menu";
   var sceneTimer = null;
+  var trackToken = 0;
+  var musicSources = [];
   var muted = false;
   var bgmVolume = 0.9;
   var sfxVolume = 1;
@@ -62,7 +64,11 @@
     sfxGain.gain.setTargetAtTime(muted ? 0 : sfxVolume, now, 0.02);
   }
 
-  function playTone(frequency, duration, destination, start, type, volume) {
+  function removeMusicSource(source) {
+    musicSources = musicSources.filter(function (item) { return item !== source; });
+  }
+
+  function playTone(frequency, duration, destination, start, type, volume, isMusic) {
     if (!context || muted) {
       return;
     }
@@ -75,6 +81,13 @@
     envelope.gain.exponentialRampToValueAtTime(.0001, start + duration);
     oscillator.connect(envelope);
     envelope.connect(destination);
+    if (isMusic) {
+      var source = { oscillator: oscillator, envelope: envelope };
+      musicSources.push(source);
+      oscillator.onended = function () {
+        removeMusicSource(source);
+      };
+    }
     oscillator.start(start);
     oscillator.stop(start + duration + .03);
   }
@@ -90,19 +103,38 @@
     var start = context.currentTime + .06;
     notes.forEach(function (frequency, index) {
       var noteStart = start + index * beat;
-      playTone(frequency, beat * .82, musicGain, noteStart, "triangle", .065);
+      playTone(frequency, beat * .82, musicGain, noteStart, "triangle", .065, true);
       if (index % 2 === 0) {
-        playTone(frequency / 2, beat * .7, musicGain, noteStart, "sine", .018);
+        playTone(frequency / 2, beat * .7, musicGain, noteStart, "sine", .018, true);
       }
     });
     var duration = notes.length * beat;
-    sceneTimer = global.setTimeout(scheduleTrack, Math.max(500, (duration - .06) * 1000));
+    var token = trackToken;
+    sceneTimer = global.setTimeout(function () {
+      if (token === trackToken) {
+        scheduleTrack();
+      }
+    }, Math.max(500, (duration - .06) * 1000));
   }
 
   function stopTrack() {
+    trackToken += 1;
     if (sceneTimer) {
       global.clearTimeout(sceneTimer);
       sceneTimer = null;
+    }
+    if (context) {
+      var now = context.currentTime;
+      musicSources.slice().forEach(function (source) {
+        try {
+          source.envelope.gain.cancelScheduledValues(now);
+          source.envelope.gain.setTargetAtTime(.0001, now, .025);
+          source.oscillator.stop(now + .1);
+        } catch (error) {
+          /* A note may already have completed naturally. */
+        }
+      });
+      musicSources = [];
     }
   }
 
@@ -157,7 +189,9 @@
       hit: [[180, .055, "square", .035], [420, .045, "triangle", .025]],
       victory: [[523.25, .13, "triangle", .08], [659.25, .13, "triangle", .08], [783.99, .25, "sine", .075]],
       defeat: [[392, .15, "sine", .055], [293.66, .28, "triangle", .05]],
-      star: [[880, .08, "sine", .06], [1174.66, .18, "sine", .06]]
+      star: [[880, .08, "sine", .06], [1174.66, .18, "sine", .06]],
+      upgrade: [[523.25, .08, "triangle", .06], [783.99, .16, "sine", .06]],
+      boss: [[146.83, .16, "sawtooth", .065], [220, .2, "triangle", .07], [293.66, .24, "sine", .06]]
     };
     (recipes[name] || recipes.click).forEach(function (recipe, index) {
       playTone(recipe[0], recipe[1], sfxGain, now + index * .08, recipe[2], recipe[3]);
