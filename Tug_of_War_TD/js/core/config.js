@@ -9,7 +9,9 @@
     defaultTheme: "cute-pink",
     defaultLanguage: "zh",
     maxDelta: 0.05,
-    lowPerformanceUnitLimit: 36
+    lowPerformanceUnitLimit: 36,
+    enemyRangedDamageMultiplier: .6,
+    playerEnergyRateMultiplier: 1.12
   });
 
   app.utils = {

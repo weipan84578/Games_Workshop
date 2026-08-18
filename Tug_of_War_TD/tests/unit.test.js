@@ -150,6 +150,7 @@ test("income upgrade increases production and stops at level five", function () 
   const resource = new app.ResourceSystem(global.LEVELS_DATA[0]);
   const baseRate = resource.basePlayerRate;
 
+  assert.ok(Math.abs(baseRate - global.LEVELS_DATA[0].energyRate * app.Config.playerEnergyRateMultiplier) < .0001);
   resource.player = resource.getUpgradeCost();
   const firstUpgrade = resource.upgradePlayer();
   assert.deepEqual(firstUpgrade.ok, true);
@@ -204,6 +205,37 @@ test("attacks never push any character out of position", function () {
   app.AbilitySystem.applyAttackEffects(session, attacker, target, [target, nearby], attacker.def.atk, function () {});
   assert.equal(target.x, targetX);
   assert.equal(nearby.x, nearbyX);
+});
+
+test("enemy ranged damage is reduced without weakening player ranged units", function () {
+  const session = createSession(1);
+  const playerFrontline = new app.Unit(global.UNITS_DATA.basic, "player", 400, 350);
+  const enemyRanger = new app.Unit(global.UNITS_DATA.ranger, "enemy", 520, 350);
+  const secondEnemyRanger = new app.Unit(global.UNITS_DATA.ranger, "enemy", 540, 350);
+  session.playerUnits.add(playerFrontline);
+  session.enemyUnits.add(enemyRanger);
+  session.enemyUnits.add(secondEnemyRanger);
+
+  session.battleSystem.update(session, .05);
+  const softenedRangedDamage = global.UNITS_DATA.ranger.atk * app.Config.enemyRangedDamageMultiplier * 2;
+  assert.ok(Math.abs(playerFrontline.hp - (playerFrontline.maxHp - softenedRangedDamage)) < .0001);
+
+  const enemyFrontline = new app.Unit(global.UNITS_DATA.basic, "enemy", 520, 350);
+  const playerRanger = new app.Unit(global.UNITS_DATA.ranger, "player", 400, 350);
+  const enemyHp = enemyFrontline.hp;
+  const playerSession = createSession(1);
+  playerSession.playerUnits.add(playerRanger);
+  playerSession.enemyUnits.add(enemyFrontline);
+
+  playerSession.battleSystem.update(playerSession, .05);
+  assert.equal(enemyFrontline.hp, enemyHp - global.UNITS_DATA.ranger.atk);
+
+  const baseSession = createSession(1);
+  const baseRanger = new app.Unit(global.UNITS_DATA.ranger, "enemy", 220, 350);
+  baseSession.enemyUnits.add(baseRanger);
+  baseSession.battleSystem.update(baseSession, .05);
+  const softenedBaseDamage = global.UNITS_DATA.ranger.atk * app.Config.enemyRangedDamageMultiplier;
+  assert.ok(Math.abs(baseSession.playerBase.hp - (baseSession.playerBase.maxHp - softenedBaseDamage)) < .0001);
 });
 
 test("living opponents hold the lane until they are defeated", function () {
@@ -335,6 +367,14 @@ test("battle snapshot restores resource upgrades and living bosses", function ()
   assert.equal(restored.resource.max, session.resource.max);
   assert.equal(restored.bosses.length, 1);
   assert.equal(restored.bossTriggered[90], true);
+
+  const legacySnapshot = session.snapshot();
+  delete legacySnapshot.resource.playerRateMultiplier;
+  legacySnapshot.resource.basePlayerRate = global.LEVELS_DATA[5].energyRate;
+  legacySnapshot.resource.playerRate = legacySnapshot.resource.basePlayerRate * 1.28;
+  const migrated = app.BattleSession.fromSnapshot(legacySnapshot);
+  assert.equal(migrated.resource.basePlayerRate, global.LEVELS_DATA[5].energyRate * app.Config.playerEnergyRateMultiplier);
+  assert.equal(migrated.resource.playerRate, migrated.resource.basePlayerRate * 1.28);
 });
 
 console.log("\n" + passed + " unit tests passed.");

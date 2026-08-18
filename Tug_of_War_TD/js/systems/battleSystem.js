@@ -11,6 +11,13 @@
     return 1;
   }
 
+  function rangedDamageMultiplier(attacker) {
+    if (attacker.side === "enemy" && attacker.def.attackType === "ranged") {
+      return app.Config.enemyRangedDamageMultiplier;
+    }
+    return 1;
+  }
+
   function pushHitEffect(session, attacker, target, damage) {
     session.effects.push({
       type: "hit", x1: attacker.x, y1: attacker.y, x2: target.x, y2: target.y,
@@ -24,6 +31,7 @@
 
   function attackUnit(session, attacker, target, enemies) {
     var amount = attacker.def.atk * multiplier(attacker.def.attribute, target.def.attribute);
+    amount *= rangedDamageMultiplier(attacker);
     if (attacker.def.ability === "rage" && attacker.hp / attacker.maxHp < .5) {
       amount *= 1.8;
     }
@@ -42,6 +50,7 @@
       return;
     }
     var amount = attacker.def.atk;
+    amount *= rangedDamageMultiplier(attacker);
     base.takeDamage(amount);
     attacker.attackCooldown = attacker.def.cooldown;
     session.effects.push({ type: "hit", x1: attacker.x, y1: attacker.y, x2: base.x, y2: base.y, color: "#ffe48b", life: .25, damage: amount });

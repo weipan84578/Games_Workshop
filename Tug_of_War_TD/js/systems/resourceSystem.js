@@ -1,13 +1,18 @@
 (function (global) {
   var app = global.TugOfWar = global.TugOfWar || {};
 
+  function incomeRateMultiplier(level) {
+    return 1 + (level - 1) * .28;
+  }
+
   function ResourceSystem(level) {
     this.baseMax = level.energyMax;
     this.max = this.baseMax;
     this.enemyMax = this.baseMax;
     this.player = Math.round(this.max * .82);
     this.enemy = Math.round(this.enemyMax * .58);
-    this.basePlayerRate = level.energyRate;
+    this.playerRateMultiplier = app.Config.playerEnergyRateMultiplier;
+    this.basePlayerRate = level.energyRate * this.playerRateMultiplier;
     this.playerRate = this.basePlayerRate;
     this.enemyRate = level.energyRate * .9;
     this.incomeLevel = 1;
@@ -50,7 +55,7 @@
     }
     this.incomeLevel += 1;
     this.max = this.getMaxEnergy();
-    this.playerRate = this.basePlayerRate * (1 + (this.incomeLevel - 1) * .28);
+    this.playerRate = this.basePlayerRate * incomeRateMultiplier(this.incomeLevel);
     return { ok: true, level: this.incomeLevel, cost: cost, rate: this.playerRate, max: this.max };
   };
   ResourceSystem.prototype.snapshot = function () {
@@ -61,6 +66,7 @@
       player: this.player,
       enemy: this.enemy,
       basePlayerRate: this.basePlayerRate,
+      playerRateMultiplier: this.playerRateMultiplier,
       playerRate: this.playerRate,
       enemyRate: this.enemyRate,
       incomeLevel: this.incomeLevel
@@ -71,14 +77,23 @@
       return;
     }
     this.baseMax = Number(snapshot.baseMax || this.baseMax);
-    this.basePlayerRate = Number(snapshot.basePlayerRate || this.basePlayerRate);
+    var hasSavedRateMultiplier = snapshot.playerRateMultiplier !== undefined;
+    this.playerRateMultiplier = hasSavedRateMultiplier
+      ? Number(snapshot.playerRateMultiplier)
+      : app.Config.playerEnergyRateMultiplier;
+    this.basePlayerRate = hasSavedRateMultiplier
+      ? Number(snapshot.basePlayerRate || this.basePlayerRate)
+      : this.basePlayerRate;
     this.enemyRate = Number(snapshot.enemyRate || this.enemyRate);
     this.incomeLevel = app.utils.clamp(Number(snapshot.incomeLevel || 1), 1, 5);
     this.enemyMax = Number(snapshot.enemyMax || snapshot.max || this.baseMax);
     this.max = snapshot.baseMax !== undefined ? Number(snapshot.max || this.getMaxEnergy()) : this.getMaxEnergy();
     this.player = app.utils.clamp(Number(snapshot.player), 0, this.max);
     this.enemy = app.utils.clamp(Number(snapshot.enemy), 0, this.enemyMax);
-    this.playerRate = Number(snapshot.playerRate || this.basePlayerRate * (1 + (this.incomeLevel - 1) * .28));
+    var defaultPlayerRate = this.basePlayerRate * incomeRateMultiplier(this.incomeLevel);
+    this.playerRate = hasSavedRateMultiplier
+      ? Number(snapshot.playerRate || defaultPlayerRate)
+      : defaultPlayerRate;
   };
   app.ResourceSystem = ResourceSystem;
 })(window);
