@@ -46,14 +46,17 @@
   }
   function itemName(item) {
     if (!item) return t('common.none');
+    if (item.category === 'candy') return t('candy.' + item.stat);
     if (item.templateKey) return t('stage.' + item.stageKey) + ' · ' + t('equipment.' + item.templateKey);
     return t('stage.' + PSG.data.equipmentStages[item.stage - 1].key) + ' · ' + t('consumable.' + item.type);
   }
   function itemEffect(item) {
+    if (item.category === 'candy') return t('item.effect.candy', { stat: t('stat.' + item.stat), value: item.gain });
     if (item.templateKey) return PSG.economy.equipment.describe(item);
     return t('item.effect.' + item.type, { value: item.value });
   }
   function itemIcon(item) {
+    if (!item.image) return '<span class="item-icon item-icon--glyph" aria-hidden="true" style="--item-accent:' + item.accent + '">' + item.icon + '</span>';
     return '<img class="item-icon" src="' + item.image + '" alt="" width="58" height="58">';
   }
 

@@ -11,7 +11,7 @@
       { id:'training', icon:'🎯', body:t('training.strengthHelp'), points:[t('training.strength'),t('training.endurance'),t('training.agility'),t('training.gold')+' ≥85 · '+t('training.silver')+' ≥60 · '+t('training.bronze')+' <60'] },
       { id:'battle', icon:'⚔', body:t('help.battle.body'), points:[t('help.point.damage'),t('help.point.crit'),t('help.point.rounds')] },
       { id:'ranking', icon:'🏆', body:t('help.ranking.body'), points:[t('help.point.ranking'),t('help.point.candidates'),t('help.point.swap')] },
-      { id:'shop', icon:'🛡', body:t('shop.title'), points:[t('help.point.slots'),t('help.point.gear'),t('help.point.items')] },
+      { id:'shop', icon:'🛡', body:t('shop.title'), points:[t('help.point.slots'),t('help.point.gear'),t('help.point.items'),t('help.point.candy')] },
       { id:'save', icon:'💾', body:t('help.save.body'), points:[t('help.point.autoSave'),t('help.point.offline'),t('help.point.settings')] },
       { id:'faq', icon:'?', body:t('help.save.body'), points:[t('help.point.noDeath'),t('help.point.noRankLoss'),t('help.point.max')] }
     ];

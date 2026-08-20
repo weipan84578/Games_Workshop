@@ -13,6 +13,10 @@
     save.pet.energy = PSG.utils.math.clamp(Math.round(Number(save.pet.energy) || 0), 0, 100);
     save.pet.mood = PSG.utils.math.clamp(Math.round(Number(save.pet.mood) || 0), 0, 100);
     save.pet.affection = PSG.utils.math.clamp(Math.round(Number(save.pet.affection) || 0), 0, 100);
+    save.pet.candyBoosts = save.pet.candyBoosts || {};
+    PSG.constants.STAT_KEYS.forEach(function (key) {
+      save.pet.candyBoosts[key] = PSG.utils.math.clamp(Math.floor(Number(save.pet.candyBoosts[key]) || 0), 0, 10000);
+    });
     save.day.actionPoints = PSG.utils.math.clamp(Math.round(Number(save.day.actionPoints) || 0), 0, 5);
     save.day.recentPlayIds = Array.isArray(save.day.recentPlayIds) ? save.day.recentPlayIds.slice(-2) : [];
     save.day.recentEventIds = Array.isArray(save.day.recentEventIds) ? save.day.recentEventIds.slice(-2) : [];

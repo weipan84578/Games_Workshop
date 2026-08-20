@@ -11,7 +11,7 @@
     var save = {
       schemaVersion: 1, createdAt: now, updatedAt: now, completedAt: null,
       player: { name: playerName, bestRank: 1000, coins: 0 },
-      pet: { name: petName, speciesId: speciesId, level: 1, xp: 0, energy: 80, mood: 80, affection: 0, currentHp: PSG.data.species[speciesId].base.hp, mastery: masteryDefaults() },
+      pet: { name: petName, speciesId: speciesId, level: 1, xp: 0, energy: 80, mood: 80, affection: 0, currentHp: PSG.data.species[speciesId].base.hp, mastery: masteryDefaults(), candyBoosts: {} },
       day: { number: 1, actionPoints: 5, recentPlayIds: [], recentEventIds: [], rngCounter: 0 },
       progression: { tutorialCompleted: false, viewedAffectionEvents: [], pendingAffectionEvents: [], defeatedRivals: [], championUnlocked: false, unlockedCosmetics: [] },
       economy: { ownedEquipment: [], consumables: {}, equipped: { armor: null, accessory: null, emblem: null } },

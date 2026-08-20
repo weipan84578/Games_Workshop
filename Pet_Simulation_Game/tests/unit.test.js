@@ -21,9 +21,9 @@ global.localStorage = {
 const root = path.resolve(__dirname, '..');
 const scripts = [
   'js/core/namespace.js','js/core/constants.js','js/utils/math.js','js/utils/rng.js','js/utils/validator.js','js/utils/formatter.js','js/core/eventBus.js',
-  'js/data/speciesData.js','js/data/equipmentData.js','js/data/consumableData.js','js/data/rivalData.js','js/data/eventData.js',
-  'js/i18n/lang-zh.js','js/i18n/lang-en.js','js/i18n/lang-ja.js','js/i18n/i18n.js',
-  'js/economy/equipmentManager.js','js/pet/statCalculator.js','js/pet/progression.js','js/pet/affection.js',
+  'js/data/speciesData.js','js/data/equipmentData.js','js/data/consumableData.js','js/data/abilityCandyData.js','js/data/rivalData.js','js/data/eventData.js',
+  'js/i18n/lang-zh.js','js/i18n/lang-en.js','js/i18n/lang-ja.js','js/i18n/featureLocales.js','js/i18n/i18n.js',
+  'js/economy/equipmentManager.js','js/pet/statCalculator.js','js/economy/abilityCandyManager.js','js/pet/progression.js','js/pet/affection.js',
   'js/ranking/rankingGenerator.js','js/ranking/matchmaking.js','js/ranking/rankingManager.js','js/core/gameState.js',
   'js/storage/migrationManager.js','js/storage/saveManager.js','js/economy/shopManager.js','js/economy/inventoryManager.js',
   'js/pet/dailyActions.js','js/pet/petModel.js','js/pet/playManager.js','js/pet/outingManager.js',
@@ -124,6 +124,9 @@ test('training grade boundaries and score helpers are exact', () => {
   assert.equal(PSG.training.manager.gradeFor(59).id, 'bronze');
   assert.equal(PSG.training.strength.scoreAt(.5), 100);
   assert.equal(PSG.training.endurance.scoreAt(.72), 100);
+  assert.equal(PSG.training.manager.feedbackFor(90).id, 'perfect');
+  assert.equal(PSG.training.manager.feedbackFor(60).id, 'great');
+  assert.equal(PSG.training.manager.feedbackFor(59).id, 'keep');
 });
 
 test('gold training settlement applies grade and mood multipliers', () => {
@@ -138,6 +141,7 @@ test('gold training settlement applies grade and mood multipliers', () => {
 test('equipment, consumable, and event catalog sizes match the specification', () => {
   assert.equal(PSG.data.equipment.length, 36);
   assert.equal(PSG.data.consumables.length, 18);
+  assert.equal(PSG.data.abilityCandies.length, 7);
   assert.equal(PSG.data.events.length, 24);
   PSG.data.equipment.concat(PSG.data.consumables).forEach(item => assert.ok(fs.existsSync(path.join(root, item.image)), `missing ${item.image}`));
 });
@@ -294,10 +298,57 @@ test('shop blocks locked items, charges coins, and prevents duplicates', () => {
   assert.equal(PSG.economy.shop.purchaseEquipment(save, 'eq_1_vital').reason, 'owned');
 });
 
+test('ability candy price scales with intrinsic stat, candy growth, and level', () => {
+  const save = fresh('eagle');
+  const attack = PSG.data.abilityCandyById.candy_attack;
+  const levelOnePrice = PSG.economy.candy.priceFor(save, attack);
+  assert.equal(levelOnePrice, 250);
+  save.pet.candyBoosts.attack = 1;
+  assert.ok(PSG.economy.candy.priceFor(save, attack) > levelOnePrice);
+  save.pet.level = 50;
+  assert.ok(PSG.economy.candy.priceFor(save, attack) > 1000);
+});
+
+test('ability candy purchases immediately grant permanent stats and raise the next price', () => {
+  const save = fresh('lion');
+  save.player.coins = 5000;
+  const beforeStat = PSG.pet.stats.effective(save).attack;
+  const beforePrice = PSG.economy.candy.priceFor(save, 'candy_attack');
+  const result = PSG.economy.shop.purchaseCandy(save, 'candy_attack');
+  assert.equal(result.ok, true);
+  assert.equal(result.price, beforePrice);
+  assert.equal(save.player.coins, 5000 - beforePrice);
+  assert.equal(save.pet.candyBoosts.attack, 1);
+  assert.equal(PSG.pet.stats.effective(save).attack, beforeStat + 1);
+  assert.ok(result.nextPrice > result.price);
+});
+
+test('HP candy grants three points and also extends current HP', () => {
+  const save = fresh('crocodile');
+  save.player.coins = 5000;
+  const beforeMax = PSG.pet.stats.effective(save).hp;
+  const beforeCurrent = save.pet.currentHp;
+  const result = PSG.economy.shop.purchaseCandy(save, 'candy_hp');
+  assert.equal(result.gain, 3);
+  assert.equal(PSG.pet.stats.effective(save).hp, beforeMax + 3);
+  assert.equal(save.pet.currentHp, beforeCurrent + 3);
+});
+
+test('ability candy rejects insufficient coins without changing stats', () => {
+  const save = fresh();
+  const before = PSG.pet.stats.effective(save).speed;
+  const result = PSG.economy.shop.purchaseCandy(save, 'candy_speed');
+  assert.equal(result.reason, 'coins');
+  assert.equal(PSG.pet.stats.effective(save).speed, before);
+  assert.equal(save.pet.candyBoosts.speed, undefined);
+});
+
 test('save repair clamps ranges and preserves a valid ranking', () => {
-  const save = fresh(); save.pet.energy = -20; save.pet.mood = 150; save.day.actionPoints = 99;
+  const save = fresh(); save.pet.energy = -20; save.pet.mood = 150; save.day.actionPoints = 99; save.pet.candyBoosts.attack = -4; save.pet.candyBoosts.hp = 3.9;
   const repaired = PSG.storage.save.repair(save);
   assert.equal(repaired.pet.energy, 0); assert.equal(repaired.pet.mood, 100); assert.equal(repaired.day.actionPoints, 5);
+  assert.equal(repaired.pet.candyBoosts.attack, 0); assert.equal(repaired.pet.candyBoosts.hp, 3);
+  PSG.constants.STAT_KEYS.forEach(key => assert.ok(Number.isInteger(repaired.pet.candyBoosts[key])));
 });
 
 test('validated saves round-trip through localStorage', () => {

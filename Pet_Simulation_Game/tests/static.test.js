@@ -69,6 +69,24 @@ check('all 54 item icons and three outing backdrops are local', () => {
   ['park','forest','river'].forEach(name => assert.ok(fs.statSync(path.join(root, `assets/images/backgrounds/${name}.svg`)).size > 400));
 });
 
+check('ability candy modules load in dependency-safe order', () => {
+  const scripts = [...index.matchAll(/<script[^>]+src="([^"]+)"/g)].map(match => match[1]);
+  assert.ok(scripts.indexOf('js/data/abilityCandyData.js') > scripts.indexOf('js/data/speciesData.js'));
+  assert.ok(scripts.indexOf('js/economy/abilityCandyManager.js') > scripts.indexOf('js/pet/statCalculator.js'));
+  assert.ok(scripts.indexOf('js/ui/shopUI.js') > scripts.indexOf('js/economy/abilityCandyManager.js'));
+});
+
+check('shop tiers and training effects include responsive and reduced-motion hooks', () => {
+  const shop = fs.readFileSync(path.join(root, 'css/components/shop.css'), 'utf8');
+  const training = fs.readFileSync(path.join(root, 'css/components/training-effects.css'), 'utf8');
+  assert.match(shop, /shop-stage-nav/);
+  assert.match(shop, /candy-card/);
+  assert.match(shop, /@media \(max-width: 760px\)/);
+  assert.match(training, /training-feedback/);
+  assert.match(training, /training-confetti/);
+  assert.match(training, /\[data-motion="reduced"\]/);
+});
+
 check('the project contains no forbidden README', () => {
   assert.equal(walk(root).some(file => /^readme\.md$/i.test(path.basename(file))), false);
 });
@@ -84,4 +102,4 @@ function walk(directory) {
   return fs.readdirSync(directory, { withFileTypes: true }).flatMap(entry => entry.isDirectory() ? walk(path.join(directory, entry.name)) : [path.join(directory, entry.name)]);
 }
 
-process.stdout.write(`\n${passed}/12 static checks passed.\n`);
+process.stdout.write(`\n${passed}/14 static checks passed.\n`);

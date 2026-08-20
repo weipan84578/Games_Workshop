@@ -20,6 +20,7 @@
       if (save.player.coins < item.price) return { ok: false, reason: 'coins' };
       save.player.coins -= item.price; save.economy.consumables[itemId] = count + 1; PSG.storage.save.write(save);
       return { ok: true };
-    }
+    },
+    purchaseCandy: function (save, itemId) { return PSG.economy.candy.purchase(save, itemId); }
   };
 })(window.PSG);

@@ -1,0 +1,463 @@
+.training-intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.training-intro__symbols {
+  display: flex;
+  gap: .5rem;
+  font-size: 1.55rem;
+}
+
+.training-intro__symbols span {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--primary) 12%, var(--surface));
+  animation: training-symbol-float 2.6s ease-in-out infinite;
+}
+
+.training-intro__symbols span:nth-child(2) { animation-delay: -.85s; }
+.training-intro__symbols span:nth-child(3) { animation-delay: -1.7s; }
+
+.training-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform var(--transition), border-color var(--transition);
+}
+
+.training-card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--training-accent) 65%, var(--border));
+}
+
+.training-card--strength { --training-accent: #ff6b62; }
+.training-card--endurance { --training-accent: #42a5f5; }
+.training-card--agility { --training-accent: #9b72e7; }
+
+.training-card__aura {
+  position: absolute;
+  z-index: 0;
+  inset: auto -25px -38px auto;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--training-accent) 24%, transparent), transparent 70%);
+}
+
+.training-card > :not(.training-card__aura) {
+  position: relative;
+  z-index: 1;
+}
+
+.training-card__aura span {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--training-accent);
+  animation: training-orbit 4s linear infinite;
+}
+
+.training-card__aura span:nth-child(2) { animation-delay: -1.3s; }
+.training-card__aura span:nth-child(3) { animation-delay: -2.6s; }
+
+.training-game {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  min-height: min(680px, calc(100vh - 130px));
+  align-content: start;
+  background: radial-gradient(circle at 50% 25%, color-mix(in srgb, var(--training-accent) 22%, transparent), transparent 42%), linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--training-accent) 8%, var(--background-art)));
+}
+
+.training-game--strength { --training-accent: #ff6b62; }
+.training-game--endurance { --training-accent: #42a5f5; }
+.training-game--agility { --training-accent: #9b72e7; }
+
+.training-game__header {
+  z-index: 2;
+  display: flex;
+  width: min(860px, 100%);
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  text-align: left;
+}
+
+.training-game__header p {
+  max-width: 62ch;
+}
+
+.training-game__emblem {
+  display: grid;
+  flex: 0 0 78px;
+  place-items: center;
+  width: 78px;
+  height: 78px;
+  border: 2px solid color-mix(in srgb, var(--training-accent) 65%, #fff);
+  border-radius: 26px;
+  background: color-mix(in srgb, var(--training-accent) 18%, var(--surface));
+  box-shadow: 0 0 32px color-mix(in srgb, var(--training-accent) 28%, transparent);
+  font-size: 2.2rem;
+  transform: rotate(5deg);
+}
+
+.training-game__hud {
+  z-index: 2;
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: .55rem;
+  flex-wrap: wrap;
+}
+
+.training-game__hud .number {
+  min-width: 108px;
+  color: var(--training-accent);
+  text-align: center;
+}
+
+.training-combo {
+  background: var(--training-accent);
+  color: #fff;
+}
+
+.training-combo.is-popping {
+  animation: training-combo-pop .35s ease-out;
+}
+
+.training-game__area {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  width: min(860px, 100%);
+  min-height: 390px;
+  place-items: center;
+  gap: 1.25rem;
+  padding: clamp(1rem, 4vw, 2rem);
+  border: 1px solid color-mix(in srgb, var(--training-accent) 28%, var(--border));
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  box-shadow: inset 0 0 60px color-mix(in srgb, var(--training-accent) 8%, transparent);
+}
+
+.training-game__area::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at center, color-mix(in srgb, var(--training-accent) 24%, transparent), transparent 48%);
+  content: '';
+  opacity: 0;
+  pointer-events: none;
+}
+
+.training-game__area.is-perfect::after { animation: training-hit-flash .48s ease-out; }
+.training-game__area.is-great::after { animation: training-hit-flash .48s ease-out; opacity: .55; }
+.training-game__area.is-keep { animation: training-soft-shake .32s ease-out; }
+.training-game__area.is-paused { filter: saturate(.45); }
+
+.training-ambient {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.training-ambient span {
+  position: absolute;
+  left: var(--particle-left);
+  bottom: -16px;
+  width: var(--particle-size);
+  height: var(--particle-size);
+  border-radius: 50%;
+  background: var(--training-accent);
+  box-shadow: 0 0 14px var(--training-accent);
+  opacity: .28;
+  animation: training-particle-rise var(--particle-duration) linear infinite;
+  animation-delay: var(--particle-delay);
+}
+
+.meter-wrap {
+  display: grid;
+  width: 100%;
+  justify-items: center;
+  gap: .45rem;
+}
+
+.game-meter--rhythm,
+.game-meter--charge {
+  box-shadow: inset 0 5px 14px rgba(0, 0, 0, .2), 0 10px 30px color-mix(in srgb, var(--training-accent) 15%, transparent);
+}
+
+.game-meter__center-glow {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 42%;
+  width: 16%;
+  border-inline: 2px solid rgba(255, 255, 255, .88);
+  background: rgba(255, 255, 255, .16);
+  box-shadow: 0 0 25px rgba(255, 255, 255, .65);
+  animation: training-zone-pulse 1.15s ease-in-out infinite;
+}
+
+.game-meter--charge .game-meter__center-glow {
+  left: 64%;
+  width: 16%;
+}
+
+.game-meter__marker {
+  z-index: 2;
+}
+
+.meter-caption {
+  display: flex;
+  width: min(620px, 100%);
+  justify-content: space-between;
+  color: var(--text-muted);
+  font-size: .78rem;
+}
+
+.meter-caption strong {
+  color: var(--success);
+}
+
+.training-action-button {
+  min-width: min(260px, 100%);
+  border-radius: 999px;
+  box-shadow: 0 10px 26px color-mix(in srgb, var(--training-accent) 23%, transparent);
+  font-size: 1.05rem;
+}
+
+.training-action-button span {
+  display: inline-block;
+  margin-right: .35rem;
+}
+
+.training-game__area.is-charging .training-action-button {
+  box-shadow: 0 0 38px color-mix(in srgb, var(--training-accent) 72%, transparent);
+  transform: scale(1.035);
+}
+
+.training-fx-layer {
+  position: absolute;
+  z-index: 8;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.training-feedback {
+  position: absolute;
+  top: 44%;
+  left: 50%;
+  color: var(--training-accent);
+  font-size: clamp(1.5rem, 5vw, 3.2rem);
+  letter-spacing: -.04em;
+  text-shadow: 0 3px 0 var(--surface), 0 0 24px var(--training-accent);
+  transform: translate(-50%, -50%);
+  animation: training-feedback-pop .82s ease-out forwards;
+}
+
+.training-feedback--perfect { color: #ffd24d; }
+.training-feedback--great { color: var(--success); }
+.training-feedback--keep { color: var(--warning); }
+
+.training-burst {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: var(--training-accent);
+  animation: training-burst .78s ease-out forwards;
+}
+
+.training-burst--perfect { background: #ffd24d; }
+.training-burst--great { background: var(--success); }
+.training-burst--keep { background: var(--warning); }
+
+.agility-field {
+  overflow: hidden;
+  border-style: solid;
+  border-color: color-mix(in srgb, var(--training-accent) 45%, var(--border));
+}
+
+.agility-field__grid {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(color-mix(in srgb, var(--training-accent) 9%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--training-accent) 9%, transparent) 1px, transparent 1px);
+  background-size: 42px 42px;
+  pointer-events: none;
+}
+
+.agility-target {
+  border: 3px solid rgba(255, 255, 255, .8);
+  box-shadow: 0 0 0 8px color-mix(in srgb, var(--training-accent) 18%, transparent), 0 0 28px var(--training-accent);
+}
+
+.agility-target span {
+  position: absolute;
+  inset: -12px;
+  border: 2px solid var(--training-accent);
+  border-radius: 50%;
+  animation: training-target-ring 1s ease-out infinite;
+}
+
+.agility-target.is-warping {
+  animation: training-target-warp .28s ease-out;
+}
+
+.training-celebration {
+  position: relative;
+  display: grid;
+  min-height: 190px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: radial-gradient(circle, color-mix(in srgb, var(--medal-color) 28%, var(--surface)), var(--background-art) 68%);
+}
+
+.training-celebration--gold { --medal-color: #f6bd36; }
+.training-celebration--silver { --medal-color: #aab7c6; }
+.training-celebration--bronze { --medal-color: #ba7649; }
+
+.training-celebration > strong {
+  z-index: 2;
+  font-size: 5.6rem;
+  filter: drop-shadow(0 10px 12px rgba(0, 0, 0, .2));
+  animation: training-medal-enter .75s cubic-bezier(.2, 1.5, .4, 1);
+}
+
+.training-celebration__rays {
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  background: repeating-conic-gradient(from 0deg, color-mix(in srgb, var(--medal-color) 38%, transparent) 0 10deg, transparent 10deg 22deg);
+  animation: training-rays-spin 12s linear infinite;
+}
+
+.training-confetti span {
+  position: absolute;
+  top: -15px;
+  left: var(--confetti-left);
+  width: 8px;
+  height: 14px;
+  border-radius: 2px;
+  background: var(--confetti-color);
+  animation: training-confetti-fall var(--confetti-duration) ease-in infinite;
+  animation-delay: var(--confetti-delay);
+}
+
+.training-result-copy {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+@keyframes training-symbol-float {
+  50% { transform: translateY(-7px) rotate(5deg); }
+}
+
+@keyframes training-orbit {
+  from { transform: rotate(0deg) translateX(43px) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(43px) rotate(-360deg); }
+}
+
+@keyframes training-particle-rise {
+  from { transform: translateY(0) scale(.65); }
+  to { transform: translateY(-720px) scale(1.25); opacity: 0; }
+}
+
+@keyframes training-zone-pulse {
+  50% { opacity: .45; }
+}
+
+@keyframes training-combo-pop {
+  50% { transform: scale(1.25) rotate(-3deg); }
+}
+
+@keyframes training-hit-flash {
+  0% { opacity: .95; transform: scale(.7); }
+  100% { opacity: 0; transform: scale(1.3); }
+}
+
+@keyframes training-soft-shake {
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+@keyframes training-feedback-pop {
+  0% { opacity: 0; transform: translate(-50%, -25%) scale(.5) rotate(-5deg); }
+  28% { opacity: 1; transform: translate(-50%, -50%) scale(1.12) rotate(2deg); }
+  100% { opacity: 0; transform: translate(-50%, -100%) scale(.92); }
+}
+
+@keyframes training-burst {
+  from { opacity: 1; transform: translate(-50%, -50%) rotate(var(--burst-angle)) translateX(0) scale(1); }
+  to { opacity: 0; transform: translate(-50%, -50%) rotate(var(--burst-angle)) translateX(var(--burst-distance)) scale(.3); }
+}
+
+@keyframes training-target-ring {
+  to { opacity: 0; transform: scale(1.55); }
+}
+
+@keyframes training-target-warp {
+  0% { opacity: .3; transform: scale(.45); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes training-medal-enter {
+  from { opacity: 0; transform: translateY(35px) scale(.35) rotate(-18deg); }
+  to { opacity: 1; transform: translateY(0) scale(1) rotate(0); }
+}
+
+@keyframes training-rays-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes training-confetti-fall {
+  to { top: 110%; transform: rotate(540deg); }
+}
+
+@media (max-width: 575px) {
+  .training-intro__symbols,
+  .training-game__emblem {
+    display: none;
+  }
+
+  .training-game {
+    min-height: calc(100vh - 100px);
+    padding: 1rem;
+  }
+
+  .training-game__area {
+    min-height: 350px;
+    padding: .85rem;
+  }
+}
+
+[data-motion="reduced"] .training-intro__symbols span,
+[data-motion="reduced"] .training-card__aura span,
+[data-motion="reduced"] .training-ambient span,
+[data-motion="reduced"] .game-meter__center-glow,
+[data-motion="reduced"] .agility-target span,
+[data-motion="reduced"] .training-celebration__rays,
+[data-motion="reduced"] .training-confetti span {
+  animation: none;
+}
+
+[data-motion="reduced"] .training-card {
+  transition: none;
+}

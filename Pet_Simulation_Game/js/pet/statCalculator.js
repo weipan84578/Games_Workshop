@@ -28,11 +28,14 @@
     var gear = PSG.economy.equipment.bonuses(equipped);
     var bond = 1 + affectionBonus(pet.affection || 0);
     var result = {};
+    var candyBoosts = pet.candyBoosts || {};
+    // Candy adds to the pet's permanent intrinsic stat before percentage-based growth.
     // Mastery and gear are additive percentages; bond is a separate multiplier.
     // Flooring only here prevents intermediate rounding from drifting at high levels.
     PSG.constants.STAT_KEYS.forEach(function (key) {
       var mastery = pet.mastery && pet.mastery[key] ? pet.mastery[key].level : 0;
-      result[key] = Math.floor(base[key] * (1 + mastery * 0.005 + (gear[key] || 0)) * bond);
+      var intrinsic = base[key] + Math.max(0, Math.floor(Number(candyBoosts[key]) || 0));
+      result[key] = Math.floor(intrinsic * (1 + mastery * 0.005 + (gear[key] || 0)) * bond);
     });
     return result;
   }

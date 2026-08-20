@@ -11,6 +11,11 @@
     if (score >= 60) return { id: 'silver', multiplier: 1 };
     return { id: 'bronze', multiplier: 0.75 };
   }
+  function feedbackFor(score) {
+    if (score >= 90) return { id: 'perfect', tone: 'perfect' };
+    if (score >= 60) return { id: 'great', tone: 'great' };
+    return { id: 'keep', tone: 'keep' };
+  }
   function settle(save, stat, score) {
     var check = PSG.pet.daily.can(save, 'training');
     if (!check.ok) return check;
@@ -26,5 +31,5 @@
     PSG.storage.save.write(save);
     return { ok: true, score: Math.round(score), grade: grade.id, xp: xpResult, mastery: masteryResult, bp: PSG.pet.stats.battlePower(save) };
   }
-  PSG.training.manager = { templateFor: templateFor, gradeFor: gradeFor, settle: settle };
+  PSG.training.manager = { templateFor: templateFor, gradeFor: gradeFor, feedbackFor: feedbackFor, settle: settle };
 })(window.PSG);
