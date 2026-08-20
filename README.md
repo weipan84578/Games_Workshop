@@ -108,7 +108,7 @@
 | --------------------- | ------------ | -------------------- | -------------------- |
 | `Typing_Game`         | 打字練習     | Typing Game          | タイピング練習       |
 | `Virtual_Pet`         | 電子寵物     | Virtual Pet          | 電子ペット           |
-| `Pet_Simulation_Game` | 動物養成遊戲 | Pet Simulation Game  | 動物育成ゲーム       |
+| `Pet_Simulation_Game` | 萌獸羈絆競技場 | Beast Bond Arena     | 萌獣の絆アリーナ     |
 | `Barbecue`            | 烤肉         | Barbecue             | バーベキュー         |
 | `Takoyaki`            | 章魚燒       | Takoyaki             | たこ焼き             |
 | `Fried_Chicken`       | 炸雞排       | Fried Chicken Cutlet | フライドチキンカツ   |
