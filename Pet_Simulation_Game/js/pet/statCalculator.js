@@ -1,6 +1,10 @@
 (function (PSG) {
   'use strict';
 
+  var MAX_MASTERY_LEVEL = 20;
+  var MASTERY_STAT_BONUS_PER_LEVEL = 0.005;
+  var MASTERY_GROWTH_BONUS_PER_LEVEL = 0.1;
+
   function natural(speciesId, level) {
     var species = PSG.data.species[speciesId];
     if (!species) throw new Error('Unknown species: ' + speciesId);
@@ -21,9 +25,21 @@
     return 0;
   }
 
+  function safeMasteryLevel(level) {
+    return PSG.utils.math.clamp(Math.round(Number(level) || 0), 0, MAX_MASTERY_LEVEL);
+  }
+
+  function masteryGrowthMultiplier(level) {
+    var safeLevel = safeMasteryLevel(level);
+    // Mastery changes the growth gained after level 1: LV 0 is 1x and LV 20 is 3x.
+    return 1 + safeLevel * 0.1;
+  }
+
   function effective(saveLike) {
     var pet = saveLike.pet;
     var base = natural(pet.speciesId, pet.level);
+    var species = PSG.data.species[pet.speciesId];
+    var safeLevel = PSG.utils.math.clamp(Math.round(Number(pet.level) || 1), 1, 100);
     var equipped = saveLike.economy && saveLike.economy.equipped || {};
     var gear = PSG.economy.equipment.bonuses(equipped);
     var bond = 1 + affectionBonus(pet.affection || 0);
@@ -33,9 +49,10 @@
     // Mastery and gear are additive percentages; bond is a separate multiplier.
     // Flooring only here prevents intermediate rounding from drifting at high levels.
     PSG.constants.STAT_KEYS.forEach(function (key) {
-      var mastery = pet.mastery && pet.mastery[key] ? pet.mastery[key].level : 0;
-      var intrinsic = base[key] + Math.max(0, Math.floor(Number(candyBoosts[key]) || 0));
-      result[key] = Math.floor(intrinsic * (1 + mastery * 0.005 + (gear[key] || 0)) * bond);
+      var mastery = safeMasteryLevel(pet.mastery && pet.mastery[key] ? pet.mastery[key].level : 0);
+      var extraGrowth = species.growth[key] * (safeLevel - 1) * (masteryGrowthMultiplier(mastery) - 1);
+      var intrinsic = Math.round(base[key] + extraGrowth) + Math.max(0, Math.floor(Number(candyBoosts[key]) || 0));
+      result[key] = Math.floor(intrinsic * (1 + mastery * MASTERY_STAT_BONUS_PER_LEVEL + (gear[key] || 0)) * bond);
     });
     return result;
   }
@@ -57,5 +74,5 @@
     return Math.round(statScore + 25 * Math.max(0, displayedCritPoints - 5) + (gear.passiveBp || 0));
   }
 
-  PSG.pet.stats = { natural: natural, effective: effective, affectionBonus: affectionBonus, critRate: critRate, battlePower: battlePower };
+  PSG.pet.stats = { natural: natural, effective: effective, affectionBonus: affectionBonus, masteryGrowthMultiplier: masteryGrowthMultiplier, critRate: critRate, battlePower: battlePower };
 })(window.PSG);

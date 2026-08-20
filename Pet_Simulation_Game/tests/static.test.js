@@ -87,6 +87,14 @@ check('shop tiers and training effects include responsive and reduced-motion hoo
   assert.match(training, /\[data-motion="reduced"\]/);
 });
 
+check('toast notifications overlap in one fixed bottom-right slot', () => {
+  const toast = fs.readFileSync(path.join(root, 'css/components/toasts.css'), 'utf8');
+  assert.match(toast, /position:\s*fixed/);
+  assert.match(toast, /grid-area:\s*1\s*\/\s*1/);
+  assert.match(toast, /\.toast \+ \.toast/);
+  assert.match(toast, /height:\s*4\.4rem/);
+});
+
 check('the project README is complete, trilingual, local, and internally linked', () => {
   const readmePath = path.join(root, 'README.md');
   assert.ok(fs.existsSync(readmePath));
@@ -117,4 +125,4 @@ function walk(directory) {
   return fs.readdirSync(directory, { withFileTypes: true }).flatMap(entry => entry.isDirectory() ? walk(path.join(directory, entry.name)) : [path.join(directory, entry.name)]);
 }
 
-process.stdout.write(`\n${passed}/14 static checks passed.\n`);
+process.stdout.write(`\n${passed}/15 static checks passed.\n`);

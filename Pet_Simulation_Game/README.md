@@ -115,7 +115,7 @@ There is no pet death or destructive game-over state. A defeat still grants redu
 | Mobility | Dodge chance, with a final cap of 40% |
 | Speed | Turn order; a seeded coin flip resolves exact ties |
 
-Natural stats follow `round(base + growth × (level - 1))`. Mastery and equipment percentages apply to the intrinsic stat, then affection applies as a separate multiplier. Level caps at 100; each stat has Mastery LV 0–20, worth +0.5% per level and +10% at maximum.
+Natural stats follow `round(base + growth × (level - 1))`. Mastery scales the growth gained after level 1 from 1× at LV 0 to 3× at LV 20; its separate intrinsic-stat bonus remains +0.5% per level (+10% at maximum), followed by affection and equipment rules. Level caps at 100.
 
 #### Follow the daily loop
 
@@ -180,9 +180,10 @@ Equipment occupies Armor, Accessory, or Emblem slots and remains owned permanent
 Candy prices are rounded upward to the next ten coins:
 
 ```text
-price = ceil10((120 + intrinsicStat × weight) × (1 + (LV - 1) × 0.025))
+price = ceil10((120 + intrinsicStat × weight) × (1 + (LV - 1) × 0.025) × 0.60)
 weight = 2 for HP; 8 for every other stat
 intrinsicStat = natural stat + previous candy bonuses
+0.60 = permanent 40% candy price reduction
 ```
 
 Temporary equipment, mastery, and affection do not affect candy pricing.
@@ -351,7 +352,7 @@ Browser interaction is intentionally left to a short manual pass when no approve
 | 機動 | 回避率を決定し、最終上限は40% |
 | 素早さ | 行動順を決定し、同値なら固定シードの抽選で解決 |
 
-自然能力は `round(base + growth × (level - 1))` で求めます。熟練と装備の割合を基礎能力へ加算した後、親密度を別の倍率として適用します。レベル上限は100、各能力の熟練はLV 0～20で、1レベルごとに+0.5%、最大+10%です。
+自然能力は `round(base + growth × (level - 1))` で求めます。熟練はレベル1以降の成長量をLV 0の1倍からLV 20の3倍まで高め、基礎能力には別途1レベルごとに+0.5%（最大+10%）を加算します。その後に装備と親密度を適用します。レベル上限は100です。
 
 #### 毎日のループ
 
@@ -416,9 +417,10 @@ flowchart LR
 キャンディ価格は10コイン単位で切り上げます。
 
 ```text
-price = ceil10((120 + intrinsicStat × weight) × (1 + (LV - 1) × 0.025))
+price = ceil10((120 + intrinsicStat × weight) × (1 + (LV - 1) × 0.025) × 0.60)
 weight = HPは2、その他の能力は8
 intrinsicStat = 自然能力 + 過去のキャンディ加算値
+0.60 = キャンディ価格を恒久的に40%割引する係数
 ```
 
 一時的な装備、熟練、親密度はキャンディ価格に影響しません。
@@ -587,7 +589,7 @@ git diff --check
 | 機動 | 決定迴避率，最終上限為40% |
 | 速度 | 決定行動順序；完全相同時以固定種子抽籤 |
 
-自然能力公式為 `round(base + growth × (level - 1))`。熟練與裝備百分比會先套用到先天能力，親密度再作為獨立倍率。等級上限是 100，每項能力的熟練為 LV 0～20，每級 +0.5%，滿級共 +10%。
+自然能力公式為 `round(base + growth × (level - 1))`。熟練會將 LV 1 之後的成長量由 LV 0 的 1 倍提高到 LV 20 的 3 倍；先天能力另套用每級 +0.5%（滿級共 +10%），再套用裝備與親密度。等級上限是 100。
 
 #### 進行每日循環
 
@@ -652,9 +654,10 @@ flowchart LR
 糖果價格會向上取整到十位數：
 
 ```text
-price = ceil10((120 + intrinsicStat × weight) × (1 + (LV - 1) × 0.025))
+price = ceil10((120 + intrinsicStat × weight) × (1 + (LV - 1) × 0.025) × 0.60)
 weight = HP為2，其餘能力為8
 intrinsicStat = 自然能力 + 過去糖果永久加值
+0.60 = 糖果價格永久降低40%的係數
 ```
 
 暫時性的裝備、熟練與親密度不會影響糖果價格。

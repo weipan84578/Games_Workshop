@@ -171,8 +171,7 @@
           d.one('[data-action="training-close"]', dialog).addEventListener('click', function () {
             PSG.ui.common.closeModal();
             if (save.day.actionPoints === 0) {
-              PSG.pet.daily.nextDay(save);
-              PSG.ui.common.toast(t('day.summary', { day: save.day.number }));
+              PSG.ui.common.completeDay(save);
             }
             PSG.core.scenes.go('home');
           });

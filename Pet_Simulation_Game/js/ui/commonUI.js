@@ -36,6 +36,11 @@
     document.getElementById('toast-region').appendChild(node);
     window.setTimeout(function () { node.remove(); }, 3800);
   }
+  function completeDay(save) {
+    var result = PSG.pet.daily.nextDay(save);
+    toast(t('day.summary', { day: result.day, coins: result.coins }));
+    return result;
+  }
   function actionReason(save, action) {
     var check = PSG.pet.daily.can(save, action);
     if (check.ok) return '';
@@ -77,5 +82,5 @@
   });
   document.getElementById('app-dialog').addEventListener('cancel', function (event) { if (this.dataset.required === 'true') event.preventDefault(); });
 
-  PSG.ui.common = { t: t, button: button, sceneHeader: sceneHeader, topbar: topbar, modal: showModal, closeModal: closeModal, toast: toast, actionReason: actionReason, itemName: itemName, itemEffect: itemEffect, itemIcon: itemIcon };
+  PSG.ui.common = { t: t, button: button, sceneHeader: sceneHeader, topbar: topbar, modal: showModal, closeModal: closeModal, toast: toast, completeDay: completeDay, actionReason: actionReason, itemName: itemName, itemEffect: itemEffect, itemIcon: itemIcon };
 })(window.PSG);

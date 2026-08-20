@@ -15,7 +15,7 @@
     if (result.reward.type === 'consumable') rewardText = t('outing.reward.consumable', { item: PSG.ui.common.itemName(PSG.data.consumableById[result.reward.itemId]) });
     root.innerHTML = '<section class="scene">' + PSG.ui.common.sceneHeader('🧭', t('location.' + event.location), null) + '<div class="event-scene"><div class="event-art event-art--' + event.location + '"><span>' + icons[event.location] + PSG.data.species[save.pet.speciesId].icon + '</span></div><article class="card card--raised" style="display:grid;align-content:center;gap:1rem"><span class="eyebrow">' + t('location.' + event.location) + '</span><h1>' + t('event.' + event.id) + '</h1><p>' + t('event.story') + '</p><div class="card card--soft"><strong>✦ ' + rewardText + '</strong><div class="muted">+' + result.xp.gained + ' XP</div></div><button class="button" type="button" data-action="outing-finish">' + t('common.confirm') + '</button></article></div></section>';
     PSG.audio.manager.sfx('bond');
-    d.one('[data-action="outing-finish"]', root).addEventListener('click', function () { if (save.day.actionPoints === 0) { PSG.pet.daily.nextDay(save); PSG.ui.common.toast(t('day.summary', { day: save.day.number })); } PSG.core.scenes.go('home'); });
+    d.one('[data-action="outing-finish"]', root).addEventListener('click', function () { if (save.day.actionPoints === 0) PSG.ui.common.completeDay(save); PSG.core.scenes.go('home'); });
   }
   PSG.ui.outing = { render: render };
 })(window.PSG);

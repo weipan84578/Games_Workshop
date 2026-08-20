@@ -62,6 +62,14 @@ test('mastery 20 provides exactly +10 percent before flooring', () => {
   assert.equal(PSG.pet.stats.effective(save).attack, Math.floor(16 * 1.10));
 });
 
+test('mastery scales level-up growth from 1x to 3x', () => {
+  assert.equal(PSG.pet.stats.masteryGrowthMultiplier(0), 1);
+  assert.equal(PSG.pet.stats.masteryGrowthMultiplier(20), 3);
+  const low = fresh('eagle'); low.pet.level = 20;
+  const high = fresh('eagle'); high.pet.level = 20; high.pet.mastery.attack.level = 20;
+  assert.ok(PSG.pet.stats.effective(high).attack > PSG.pet.stats.effective(low).attack);
+});
+
 test('affection thresholds provide 0/1/2/3/5 percent', () => {
   assert.deepEqual([0,20,40,60,80,100].map(PSG.pet.stats.affectionBonus), [0,.01,.02,.03,.03,.05]);
 });
@@ -197,6 +205,14 @@ test('AI names are unique and every 30-rank species window stays balanced', () =
   }
 });
 
+test('AI levels are deterministic and fixed to their original ranks', () => {
+  assert.equal(PSG.ranking.generator.levelForRank(999), 1);
+  assert.equal(PSG.ranking.generator.levelForRank(1), 100);
+  for (let rank = 2; rank <= 999; rank += 1) assert.ok(PSG.ranking.generator.levelForRank(rank) <= PSG.ranking.generator.levelForRank(rank - 1));
+  const ai = PSG.ranking.generator.getAI('ai_0421', 123, 'en');
+  assert.equal(ai.level, PSG.ranking.generator.levelForRank(421));
+});
+
 test('candidate matching returns five unique opponents at rank 1000 and rank 1', () => {
   const save = fresh();
   let rows = PSG.ranking.matchmaking.candidates(save);
@@ -212,6 +228,22 @@ test('mid-table candidate matching uses three higher and two lower ranks', () =>
   const rows = PSG.ranking.matchmaking.candidates(save);
   assert.equal(rows.filter(row => row.rank < 500).length, 3);
   assert.equal(rows.filter(row => row.rank > 500).length, 2);
+  assert.ok(rows.every(row => Math.abs(row.rank - 500) <= 12));
+});
+
+test('daily coin income follows rank stages and never falls below 30', () => {
+  const save = fresh();
+  assert.equal(PSG.pet.daily.dailyCoins(save), 30);
+  const bronzeId = save.ranking.rankOrder[749];
+  save.ranking.rankOrder[749] = 'player'; save.ranking.rankOrder[999] = bronzeId;
+  assert.equal(PSG.pet.daily.dailyCoins(save), 60);
+  const championId = save.ranking.rankOrder[0];
+  save.ranking.rankOrder[0] = 'player'; save.ranking.rankOrder[749] = championId;
+  assert.equal(PSG.pet.daily.dailyCoins(save), 180);
+  const before = save.player.coins;
+  const result = PSG.pet.daily.nextDay(save);
+  assert.equal(result.coins, 180);
+  assert.equal(save.player.coins, before + 180);
 });
 
 test('winning against a higher rank swaps positions; losing does not', () => {
@@ -302,11 +334,11 @@ test('ability candy price scales with intrinsic stat, candy growth, and level', 
   const save = fresh('eagle');
   const attack = PSG.data.abilityCandyById.candy_attack;
   const levelOnePrice = PSG.economy.candy.priceFor(save, attack);
-  assert.equal(levelOnePrice, 250);
+  assert.equal(levelOnePrice, 150);
   save.pet.candyBoosts.attack = 1;
   assert.ok(PSG.economy.candy.priceFor(save, attack) > levelOnePrice);
   save.pet.level = 50;
-  assert.ok(PSG.economy.candy.priceFor(save, attack) > 1000);
+  assert.equal(PSG.economy.candy.priceFor(save, attack), 850);
 });
 
 test('ability candy purchases immediately grant permanent stats and raise the next price', () => {

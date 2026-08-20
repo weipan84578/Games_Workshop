@@ -16,7 +16,10 @@
       applySettings(); PSG.storage.save.saveSettings(PSG.core.settings);
       var save = PSG.storage.save.read(); PSG.core.gameState.set(save);
       PSG.core.events.on('language:changed', function () { if (PSG.core.scenes.current()) PSG.core.scenes.rerender(); });
-      document.addEventListener('pointerdown', function unlockOnce() { PSG.audio.manager.unlock(); document.removeEventListener('pointerdown', unlockOnce); }, { once: true });
+      document.addEventListener('pointerdown', function () { PSG.audio.manager.unlock(); });
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' || event.key === ' ') PSG.audio.manager.unlock();
+      });
       document.addEventListener('click', function (event) { if (event.target.closest('button:not([disabled])')) PSG.audio.manager.sfx('click'); });
       PSG.core.scenes.go('menu');
       if (PSG.storage.save.lastError) window.setTimeout(function () { PSG.ui.common.modal({ title: PSG.i18n.t('error.title'), body: '<p>' + PSG.i18n.t('error.load') + '</p>' }); }, 120);

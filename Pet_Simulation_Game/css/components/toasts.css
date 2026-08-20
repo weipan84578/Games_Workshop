@@ -1,0 +1,55 @@
+/* Toasts share one bottom-right slot so a burst of messages never grows into the scene. */
+.toast-region {
+  position: fixed;
+  z-index: 50;
+  right: var(--safe-right);
+  bottom: var(--safe-bottom);
+  display: grid;
+  place-items: end;
+  width: min(420px, calc(100vw - 2rem));
+  height: 4.4rem;
+  max-width: none;
+  gap: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.toast {
+  grid-area: 1 / 1;
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding: .8rem 1rem;
+  border: 1px solid var(--border);
+  border-left: 6px solid var(--primary);
+  border-radius: var(--radius-sm);
+  background: var(--surface-strong);
+  box-shadow: var(--shadow);
+  animation: toast-in .22s both;
+  z-index: 1;
+}
+
+/* Older messages remain visible as a quiet rear layer; the newest stays readable. */
+.toast + .toast {
+  transform: translate(-.35rem, -.35rem) scale(.96);
+  transform-origin: bottom right;
+  opacity: .72;
+  z-index: 2;
+}
+
+.toast:nth-last-child(1) {
+  transform: none;
+  opacity: 1;
+  z-index: 5;
+}
+
+.toast:nth-last-child(n + 3) {
+  transform: translate(-.7rem, -.7rem) scale(.92);
+  opacity: .42;
+  z-index: 1;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: none; }
+}

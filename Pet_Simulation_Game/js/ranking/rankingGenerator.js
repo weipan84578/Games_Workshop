@@ -1,6 +1,8 @@
 (function (PSG) {
   'use strict';
 
+  var MAX_AI_RANK = 999;
+  var MAX_LEVEL = 100;
   var speciesOrder = ['eagle', 'lion', 'crocodile'];
   var cached = {};
   var nameParts = {
@@ -26,7 +28,17 @@
     return Number(String(id).split('_')[1]) || 999;
   }
   function stageForRank(rank) {
-    if (rank <= 25) return 6; if (rank <= 100) return 5; if (rank <= 250) return 4; if (rank <= 500) return 3; if (rank <= 750) return 2; return 1;
+    if (rank <= 25) return 6;
+    if (rank <= 100) return 5;
+    if (rank <= 250) return 4;
+    if (rank <= 500) return 3;
+    if (rank <= 750) return 2;
+    return 1;
+  }
+  function levelForRank(rank) {
+    var safeRank = PSG.utils.math.clamp(Math.round(Number(rank) || MAX_AI_RANK), 1, MAX_AI_RANK);
+    // A rank owns one deterministic level. A linear curve avoids large level jumps at tier edges.
+    return PSG.utils.math.clamp(1 + Math.floor((MAX_AI_RANK + 1 - safeRank) * (MAX_LEVEL - 1) / MAX_AI_RANK), 1, MAX_LEVEL);
   }
   function aiName(id, seed, language) {
     var rival = PSG.data.rivalById[id];
@@ -51,7 +63,7 @@
     var rival = PSG.data.rivalById[id];
     // Every identity/configuration decision derives from rankingSeed + stable ID for reload determinism.
     var progress = 1 - ((rank - 1) / 999);
-    var level = PSG.utils.math.clamp(Math.round(1 + 99 * Math.pow(progress, 0.75)), 1, 100);
+    var level = levelForRank(rank);
     var masteryTarget = Math.round(20 * Math.pow(progress, 1.10));
     // Cycling species keeps every 30-rank window balanced; the seed only rotates the starting species.
     var offset = PSG.utils.seedFrom(seed, 'species') % 3;
@@ -75,5 +87,5 @@
     return ai;
   }
 
-  PSG.ranking.generator = { createRankOrder: createRankOrder, getAI: getAI, originalRank: originalRank, stageForRank: stageForRank, rivalNames: rivalNames };
+  PSG.ranking.generator = { createRankOrder: createRankOrder, getAI: getAI, originalRank: originalRank, levelForRank: levelForRank, stageForRank: stageForRank, rivalNames: rivalNames };
 })(window.PSG);

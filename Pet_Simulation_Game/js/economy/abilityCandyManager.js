@@ -1,6 +1,8 @@
 (function (PSG) {
   'use strict';
 
+  var CANDY_PRICE_FACTOR = 0.60;
+
   function boostFor(save, stat) {
     return Math.max(0, Math.floor(Number(save.pet.candyBoosts && save.pet.candyBoosts[stat]) || 0));
   }
@@ -14,8 +16,8 @@
     if (!item) return 0;
     var statCost = intrinsicValue(save, item) * item.priceWeight;
     var levelMultiplier = 1 + (save.pet.level - 1) * 0.025;
-    // Round upward to a clean shop price. Both permanent growth and levels make future candy dearer.
-    return Math.ceil(((120 + statCost) * levelMultiplier) / 10) * 10;
+    // Apply the requested 40% price reduction, then round upward to a clean shop price.
+    return Math.ceil(((120 + statCost) * levelMultiplier * CANDY_PRICE_FACTOR) / 10) * 10;
   }
 
   function purchase(save, itemId) {
