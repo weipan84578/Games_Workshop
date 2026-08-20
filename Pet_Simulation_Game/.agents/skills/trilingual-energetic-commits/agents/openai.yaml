@@ -1,0 +1,4 @@
+interface:
+  display_name: "Trilingual Energetic Commits"
+  short_description: "English → 日本語 → 繁中 commit，活力滿點又詳細"
+  default_prompt: "Use $trilingual-energetic-commits to create an energetic, detailed commit message in English, Japanese, then Traditional Chinese, with plenty of fitting emojis."

@@ -1,0 +1,18 @@
+.event-art--park,
+.event-art--forest,
+.event-art--river {
+  background-position: center;
+  background-size: cover;
+}
+
+.event-art--park {
+  background-image: linear-gradient(rgba(255, 255, 255, .08), rgba(255, 255, 255, .2)), url("../../assets/images/backgrounds/park.svg");
+}
+
+.event-art--forest {
+  background-image: linear-gradient(rgba(255, 255, 255, .05), rgba(15, 48, 25, .12)), url("../../assets/images/backgrounds/forest.svg");
+}
+
+.event-art--river {
+  background-image: linear-gradient(rgba(255, 255, 255, .05), rgba(18, 83, 112, .1)), url("../../assets/images/backgrounds/river.svg");
+}
