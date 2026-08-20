@@ -87,8 +87,23 @@ check('shop tiers and training effects include responsive and reduced-motion hoo
   assert.match(training, /\[data-motion="reduced"\]/);
 });
 
-check('the project contains no forbidden README', () => {
-  assert.equal(walk(root).some(file => /^readme\.md$/i.test(path.basename(file))), false);
+check('the project README is complete, trilingual, local, and internally linked', () => {
+  const readmePath = path.join(root, 'README.md');
+  assert.ok(fs.existsSync(readmePath));
+  const readme = fs.readFileSync(readmePath, 'utf8');
+  const english = readme.indexOf('<a id="english"></a>');
+  const japanese = readme.indexOf('<a id="japanese"></a>');
+  const traditionalChinese = readme.indexOf('<a id="traditional-chinese"></a>');
+  assert.ok(english >= 0 && english < japanese && japanese < traditionalChinese);
+  ['en','ja','zh'].forEach(language => {
+    ['game-introduction','features','gameplay','quick-start','program-overview','code-organization','supporting-systems','testing','status'].forEach(section => {
+      assert.ok(readme.includes(`<a id="${language}-${section}"></a>`), `README missing ${language}-${section}`);
+    });
+  });
+  const ids = new Set([...readme.matchAll(/<a id="([^"]+)"><\/a>/g)].map(match => match[1]));
+  [...readme.matchAll(/\]\(#([^)]+)\)/g)].forEach(match => assert.ok(ids.has(match[1]), `README link missing #${match[1]}`));
+  [...readme.matchAll(/<img[^>]+src="([^"]+)"/g)].forEach(match => assert.ok(fs.existsSync(path.join(root, match[1])), `README image missing ${match[1]}`));
+  assert.equal(readme.trimEnd().split(/\r?\n/).at(-1), '[⬆️ Back to top](#top)');
 });
 
 check('source files contain no trailing whitespace', () => {

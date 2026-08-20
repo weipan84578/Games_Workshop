@@ -1,0 +1,4 @@
+interface:
+  display_name: "Pet Simulation Feature Workflow"
+  short_description: "Build save-safe offline pet game features"
+  default_prompt: "Use $pet-simulation-feature-workflow to implement a tested gameplay or UI feature in this project."
