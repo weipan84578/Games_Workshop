@@ -7,6 +7,30 @@ description: Implement or extend gameplay, progression, economy, persistence, tr
 
 Build features without breaking the project's direct-open, offline runtime or existing saves.
 
+## Project skill map
+
+Use the narrowest project skill that matches the requested work, and keep this workflow as the gameplay implementation source of truth:
+
+- Gameplay, progression, economy, persistence, training, battle, or UI changes: use this skill.
+- README creation or a full README rewrite: also load [readme-writer](../readme-writer/SKILL.md).
+- A requested Git commit: also load [trilingual-energetic-commits](../trilingual-energetic-commits/SKILL.md) and stage only the intended files.
+- Browser or manual visual validation: also load [safe-browser-validation](../safe-browser-validation/SKILL.md).
+- Skill creation or maintenance: load the system `skill-creator` skill before editing anything under `.agents/skills`.
+
+## Current gameplay contracts
+
+Treat these rules as regression contracts. Change them only when the user explicitly changes the design, and update the relevant domain tests and locale text together.
+
+- Persistence has three independent save slots. Legacy saves must be repaired into slot one, and new fields such as bank state, battle settings, Boss progress, and daily AP must have safe defaults.
+- Daily AP is level-scaled: levels 1–30 receive 7 AP, 31–50 receive 10, 51–75 receive 12, and 76–100 receive 15. Boss battles cost zero AP and may be attempted repeatedly, while their energy and mood requirements still apply.
+- The rank-one Boss gate has three species and seeded random arenas: grassland protects the Lion, swamp protects the Crocodile, and sky protects the Eagle. Non-native combatants take 3% damage each round; Boss battles last up to 80 rounds, grow endlessly stronger, and award large coin/experience rewards plus a 1% random-candy chance.
+- The economy includes deposit/withdraw banking, with one interest settlement after rest. Interest is `deposit * 1%` and is added to hand-held coins rather than the deposit balance. Daily coin income keeps the requested 300% boost.
+- Candy purchases and experience purchases support quantities up to 999. Candy Festival halves the current regular-candy price, discounts experience by 40%, and shows its localized notice inside the home `.pet-stage__bubble`; without the event, the original home message returns.
+- Toast messages remain in the fixed bottom-right notification slot, use 50% opacity, and format large numbers with thousands separators. Mood dialogue should choose from localized seeded variants instead of repeating one sentence.
+- The battle UI keeps persistent fast mode and auto battle. Auto battle performs normal attacks automatically and uses the special attack when its condition is met; timers and listeners must stop cleanly when the scene exits.
+- Seven local BGM tracks are mapped by context: `menu`, `home`, `training`, `outing`, `battle`, `champion`, and `bossbattle`. Boss victories switch to champion music, while the active Boss fight uses Boss battle music.
+- Main-menu help and settings controls must use visible icons (`❓` and `⚙`), not a literal `?` placeholder. Add a static regression assertion when changing icon markup.
+
 ## Preserve the runtime contract
 
 - Treat `index.html` as both the entry point and dependency manifest. The game uses classic scripts, shared `window.PSG` namespaces, relative assets, and no build step, package manager, server, `fetch`, or dynamic import.
@@ -32,6 +56,7 @@ Build features without breaking the project's direct-open, offline runtime or ex
 
 - Add every user-facing key to Traditional Chinese, English, and Japanese. Run the locale-parity test; never rely on fallback text as the finished translation.
 - Keep feature styling in focused CSS files and register them in `index.html`. Reuse theme tokens, support narrow screens, and retain at least 48px touch targets.
+- Keep JavaScript, HTML fragments, and CSS readable: split long concatenated markup at meaningful boundaries, keep one responsibility per handler, use named domain helpers for formulas, and avoid minified or densely packed source in committed files.
 - Keep contextual home notices inside the existing `.pet-stage__bubble` text box. The Candy Festival home message uses `shop.candyFestivalTitle` there, while the shop may keep its own price banner; do not add a separate top-of-scene alert for the home notice. Mood dialogue should use localized variants selected by the saved seed and day so rerenders stay stable.
 - For animated training or battle effects, provide a `[data-motion="reduced"]` path. Track and clean up `requestAnimationFrame`, intervals, timeouts, pointer listeners, and focus listeners when a scene exits.
 - Pause timed mini-games on window blur and resume after a countdown so backgrounding the tab cannot create unfair misses.
@@ -46,7 +71,9 @@ Run:
 ```powershell
 node tests/unit.test.js
 node tests/static.test.js
+node tests/audio.test.js
 $files = rg --files js tests tools -g '*.js'; foreach ($file in $files) { node --check $file; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE } }
+npx prettier --check index.html js css tests
 git diff --check
 ```
 
