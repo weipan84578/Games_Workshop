@@ -1,7 +1,7 @@
 (function (PSG) {
   'use strict';
 
-  var INTEREST_RATE = 0.03;
+  var INTEREST_RATE = 0.01;
 
   function accountFor(save) {
     save.economy = save.economy || {};
@@ -48,8 +48,9 @@
     var account = accountFor(save);
     var principal = balance(save);
     var interest = Math.floor(principal * INTEREST_RATE);
-    account.balance = principal + interest;
-    return { ok: true, principal: principal, interest: interest, balance: account.balance };
+    account.balance = principal;
+    save.player.coins = Math.max(0, Math.floor(Number(save.player.coins) || 0)) + interest;
+    return { ok: true, principal: principal, interest: interest, balance: account.balance, coins: save.player.coins };
   }
 
   PSG.economy.bank = {

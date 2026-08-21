@@ -142,7 +142,9 @@ check('savings account is loaded, repaired, and connected to rest settlement', (
   const home = fs.readFileSync(path.join(root, 'js/ui/homeUI.js'), 'utf8');
   const locales = fs.readFileSync(path.join(root, 'js/i18n/featureLocales.js'), 'utf8');
   assert.ok(scripts.indexOf('js/economy/bankManager.js') < scripts.indexOf('js/pet/dailyActions.js'));
-  assert.match(bank, /INTEREST_RATE\s*=\s*0\.03/);
+  assert.match(bank, /INTEREST_RATE\s*=\s*0\.01/);
+  assert.match(bank, /save\.player\.coins[\s\S]*\+ interest/);
+  assert.match(bank, /account\.balance = principal/);
   assert.match(bank, /function deposit\(save, value\)/);
   assert.match(bank, /function withdraw\(save, value\)/);
   assert.match(daily, /PSG\.economy\.bank\.settleInterest\(save\)/);
@@ -164,12 +166,16 @@ check('toast opacity and candy pricing presentation match the requested features
   assert.match(locales, /Candy Festival/);
 });
 
-check('Candy Festival alerts and daily coin boost are wired into the UI and economy', () => {
+check('Candy Festival messaging and daily coin boost are wired into the UI and economy', () => {
   const home = fs.readFileSync(path.join(root, 'js/ui/homeUI.js'), 'utf8');
   const shop = fs.readFileSync(path.join(root, 'js/ui/shopUI.js'), 'utf8');
+  const festivalCss = fs.readFileSync(path.join(root, 'css/components/candy-festival.css'), 'utf8');
   const daily = fs.readFileSync(path.join(root, 'js/pet/dailyActions.js'), 'utf8');
-  assert.match(home, /candy-festival-alert/);
-  assert.match(home, /candyFestival \? 'shop\.candyFestivalTitle' : 'home\.talk\.'/);
+  assert.doesNotMatch(home, /candy-festival-alert/);
+  assert.match(home, /pet-stage__bubble--festival/);
+  assert.match(home, /talkKey = candyFestival \? 'shop\.candyFestivalTitle' : PSG\.pet\.model\.talkKey\(save, state\)/);
+  assert.doesNotMatch(festivalCss, /candy-festival-alert/);
+  assert.match(festivalCss, /pet-stage__bubble--festival/);
   assert.match(shop, /candy-festival-shop-banner/);
   assert.match(daily, /DAILY_COIN_MULTIPLIER\s*=\s*4/);
 });

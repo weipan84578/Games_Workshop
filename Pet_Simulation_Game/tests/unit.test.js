@@ -340,6 +340,17 @@ test('daily coin income follows rank stages with the requested 300 percent incre
   assert.equal(save.player.coins, before + 720);
 });
 
+test('home mood dialogue uses seeded variants and preserves all mood states', () => {
+  const save = fresh();
+  const high = PSG.pet.model.talkKey(save, 'high');
+  assert.match(high, /^home\.talk\.high\.[1-4]$/);
+  assert.equal(PSG.pet.model.talkKey(save, 'high'), high);
+  save.pet.mood = 50;
+  assert.match(PSG.pet.model.talkKey(save), /^home\.talk\.mid\.[1-4]$/);
+  save.pet.mood = 10;
+  assert.match(PSG.pet.model.talkKey(save), /^home\.talk\.low\.[1-4]$/);
+});
+
 test('savings account deposits and withdrawals keep coins and balance in sync', () => {
   const save = fresh();
   save.player.coins = 1000;
@@ -354,13 +365,13 @@ test('savings account deposits and withdrawals keep coins and balance in sync', 
   assert.equal(PSG.economy.bank.deposit(save, 0).reason, 'amount');
 });
 
-test('rest settles savings interest once at the requested three percent rate', () => {
+test('rest pays one percent savings interest into hand-held coins', () => {
   const save = fresh();
   save.economy.savings.balance = 1000;
   const result = PSG.pet.daily.nextDay(save);
-  assert.equal(result.interest, 30);
-  assert.equal(PSG.economy.bank.balance(save), 1030);
-  assert.equal(save.player.coins, 120);
+  assert.equal(result.interest, 10);
+  assert.equal(PSG.economy.bank.balance(save), 1000);
+  assert.equal(save.player.coins, 130);
 });
 
 test('winning against a higher rank swaps positions; losing does not', () => {

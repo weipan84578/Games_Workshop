@@ -50,17 +50,6 @@
       '</span></button>'
     );
   }
-  function festivalBanner(t) {
-    return (
-      '<aside class="candy-festival-alert card" role="status" aria-live="polite"><div class="candy-festival-alert__icon" aria-hidden="true">🍬</div><div><span class="eyebrow">' +
-      t('shop.candyFestival') +
-      '</span><h2>' +
-      t('shop.candyFestivalTitle') +
-      '</h2><p>' +
-      t('shop.candyFestivalDesc') +
-      '</p></div><span class="candy-festival-alert__sparkle" aria-hidden="true">✦</span></aside>'
-    );
-  }
   function savingsPanel(save, t) {
     var balance = PSG.economy.bank.balance(save);
     return (
@@ -144,7 +133,8 @@
       stats = PSG.pet.stats.effective(save),
       bp = PSG.pet.stats.battlePower(save),
       rank = PSG.ranking.matchmaking.playerRank(save),
-      state = PSG.pet.model.statusLabel(save);
+      state = PSG.pet.model.statusLabel(save),
+      talkKey = candyFestival ? 'shop.candyFestivalTitle' : PSG.pet.model.talkKey(save, state);
     var xpMax = save.pet.level >= 100 ? 1 : PSG.pet.progression.xpToNext(save.pet.level),
       xpValue = save.pet.level >= 100 ? 1 : save.pet.xp;
     root.innerHTML =
@@ -178,8 +168,10 @@
       t(species.nameKey) +
       ' ' +
       d.escape(save.pet.name) +
-      '"><div class="pet-stage__bubble">' +
-      t(candyFestival ? 'shop.candyFestivalTitle' : 'home.talk.' + state) +
+      '"><div class="pet-stage__bubble' +
+      (candyFestival ? ' pet-stage__bubble--festival' : '') +
+      '" role="status" aria-live="polite">' +
+      t(talkKey) +
       '</div></div><aside class="card status-panel"><div class="panel-title"><div><span class="eyebrow">' +
       t('home.greeting', { playerName: d.escape(save.player.name), petName: d.escape(save.pet.name) }) +
       '</span><h3>' +
@@ -206,7 +198,6 @@
       '</button>' +
       actionButton(save, 'rest', '🌙', t('home.rest')) +
       '</div></section></div></section>';
-    if (candyFestival) d.one('.scene', root).insertAdjacentHTML('afterbegin', festivalBanner(t));
     d.all('[data-savings-action]', root).forEach(function (button) {
       button.addEventListener('click', function () {
         openSavingsModal(root, save, button.dataset.savingsAction);

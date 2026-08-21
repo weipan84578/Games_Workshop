@@ -32,6 +32,7 @@ Build features without breaking the project's direct-open, offline runtime or ex
 
 - Add every user-facing key to Traditional Chinese, English, and Japanese. Run the locale-parity test; never rely on fallback text as the finished translation.
 - Keep feature styling in focused CSS files and register them in `index.html`. Reuse theme tokens, support narrow screens, and retain at least 48px touch targets.
+- Keep contextual home notices inside the existing `.pet-stage__bubble` text box. The Candy Festival home message uses `shop.candyFestivalTitle` there, while the shop may keep its own price banner; do not add a separate top-of-scene alert for the home notice. Mood dialogue should use localized variants selected by the saved seed and day so rerenders stay stable.
 - For animated training or battle effects, provide a `[data-motion="reduced"]` path. Track and clean up `requestAnimationFrame`, intervals, timeouts, pointer listeners, and focus listeners when a scene exits.
 - Pause timed mini-games on window blur and resume after a countdown so backgrounding the tab cannot create unfair misses.
 - Use effects to clarify outcomes: immediate rating, score, combo, or state feedback should accompany animation rather than relying on decoration alone.

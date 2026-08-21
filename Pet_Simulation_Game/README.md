@@ -83,7 +83,8 @@ There is no pet death or destructive game-over state. A defeat still grants redu
 - 📊 **Seven battle stats:** HP, Attack, Defense, Mobility, Special Attack, Special Defense, and Speed.
 - ☀️ **A five-AP daily loop:** train, play, explore, duel, or rest to begin a new day.
 - 💰 **Boosted daily settlement:** the daily coin reward is four times the original amount, equivalent to a +300% increase.
-- 🏦 **Savings account:** deposit or withdraw coins from the home screen; each rest credits `floor(savedBalance × 0.03)` back into savings.
+- 🏦 **Savings account:** deposit or withdraw coins from the home screen; each rest pays `floor(savedBalance × 0.01)` directly into available coins while preserving the saved principal.
+- 💬 **Varied mood dialogue:** each mood state has four localized lines, with a seeded daily pick that stays stable while the home screen rerenders.
 - 🎯 **Three training mini-games:** rhythm timing, hold-and-release endurance, and moving-target agility with ratings, combos, particles, pause protection, and reduced-motion support.
 - 🌳 **Three outing locations and 24 weighted events:** park, forest, and river encounters provide XP, affection, coins, or battle items.
 - ⚔️ **Turn-based duels:** normal and special attacks, energy, dodge, critical hits, shields, initiative, species effects, and a 20-round tiebreak.
@@ -277,7 +278,7 @@ Key runtime characteristics:
 
 ### 🧪 Testing
 
-The current implementation was verified with **52/52 unit tests** and **19/19 static checks**, plus JavaScript syntax and whitespace validation.
+The current implementation was verified with **53/53 unit tests** and **19/19 static checks**, plus JavaScript syntax and whitespace validation.
 
 Run from the project root:
 
@@ -288,7 +289,7 @@ $files = rg --files js tests tools -g '*.js'; foreach ($file in $files) { node -
 git diff --check
 ```
 
-The unit suite covers stat formulas, progression overflow and caps, mood and affection thresholds, training grades, deterministic rankings, candidates, battle resolution, equipment, candy pricing and persistence, savings deposits and withdrawals, rest interest, save repair, localization parity, and local audio assets. Static checks cover direct-open script structure, relative asset existence, offline restrictions, responsive/theme requirements, touch targets, local art, README structure, reduced-motion hooks, savings wiring, and trailing whitespace.
+The unit suite covers stat formulas, progression overflow and caps, mood and affection thresholds, seeded mood dialogue variants, training grades, deterministic rankings, candidates, battle resolution, equipment, candy pricing and persistence, savings deposits and withdrawals, rest interest, save repair, localization parity, and local audio assets. Static checks cover direct-open script structure, relative asset existence, offline restrictions, responsive/theme requirements, touch targets, local art, README structure, reduced-motion hooks, savings wiring, home notice placement, and trailing whitespace.
 
 Browser interaction is intentionally left to a short manual pass when no approved integrated browser is available: open `index.html`, start or continue a save, try all three training templates, browse shop categories and tiers, buy a candy when affordable, switch language/theme/motion settings, and reload to confirm persistence.
 
@@ -325,7 +326,8 @@ Browser interaction is intentionally left to a short manual pass when no approve
 - 📊 **7つの戦闘能力：** HP、攻撃、防御、機動、特殊攻撃、特殊防御、素早さ。
 - ☀️ **毎日5 APの行動ループ：** 訓練、遊ぶ、おでかけ、決闘、または休息で次の日へ進みます。
 - 💰 **強化されたデイリー報酬：** デイリーコインは元の4倍、つまり+300%増加します。
-- 🏦 **貯金口座：** ホーム画面からコインを預け入れ・引き出しでき、休息ごとに `floor(預金残高 × 0.03)` が利息として貯金へ戻ります。
+- 🏦 **貯金口座：** ホーム画面からコインを預け入れ・引き出しでき、休息ごとに `floor(預金残高 × 0.01)` が利息として手持ちコインに加算され、預金元本は維持されます。
+- 💬 **気分に合わせた会話：** 各気分に4種類のローカライズ台詞があり、固定シードで選ばれたその日の台詞がホーム画面の再描画後も安定して表示されます。
 - 🎯 **3種類の訓練ミニゲーム：** リズム、ホールド＆リリース、移動ターゲットを使い、評価、コンボ、パーティクル、一時停止保護、動きを減らす設定に対応します。
 - 🌳 **3つのおでかけ先と24イベント：** 公園、森、河岸の重み付きイベントで経験値、親密度、コイン、バトルアイテムを獲得します。
 - ⚔️ **ターン制決闘：** 通常・特殊攻撃、エネルギー、回避、クリティカル、シールド、行動順、種族効果、20ラウンド判定を実装しています。
@@ -519,7 +521,7 @@ flowchart TD
 
 ### 🧪 テスト
 
-現在の実装は、**ユニットテスト52/52件**、**静的検証19/19件**、全JavaScript構文検査、空白検査を通過しています。
+現在の実装は、**ユニットテスト53/53件**、**静的検証19/19件**、全JavaScript構文検査、空白検査を通過しています。
 
 プロジェクトルートで実行します。
 
@@ -530,7 +532,7 @@ $files = rg --files js tests tools -g '*.js'; foreach ($file in $files) { node -
 git diff --check
 ```
 
-ユニットテストは能力計算、成長の繰り越しと上限、気分・親密度境界、訓練評価、決定的ランキング、候補選出、戦闘解決、装備、キャンディ価格と永続化、貯金の預け入れ・引き出し、休息時の利息、セーブ修復、多言語キー一致、ローカル音声を確認します。静的検証は直接起動のスクリプト構造、相対素材の存在、オフライン制約、レスポンシブ・テーマ要件、タッチ領域、ローカル画像、README構造、動きを減らす設定、貯金機能の接続、末尾空白を確認します。
+ユニットテストは能力計算、成長の繰り越しと上限、気分・親密度境界、固定種子の気分対話、訓練評価、決定的ランキング、候補選出、戦闘解決、装備、キャンディ価格と永続化、貯金の預け入れ・引き出し、休息時の利息、セーブ修復、多言語キー一致、ローカル音声を確認します。静的検証は直接起動のスクリプト構造、相対素材の存在、オフライン制約、レスポンシブ・テーマ要件、タッチ領域、ローカル画像、README構造、動きを減らす設定、貯金機能の接続、ホーム通知位置、末尾空白を確認します。
 
 承認済みの統合ブラウザがない場合、ブラウザ操作は短い手動確認を使います。`index.html` を開き、新規または継続セーブ、3種類の訓練、ショップ分類と段階、購入可能時のキャンディ、言語・テーマ・動き設定、再読み込み後の永続化を確認してください。
 
@@ -567,7 +569,8 @@ git diff --check
 - 📊 **七項戰鬥能力：** HP、攻擊、防禦、機動、特殊攻擊、特殊防禦與速度。
 - ☀️ **每日五點 AP 循環：** 可選擇訓練、玩耍、外出、決鬥，或休息並進入下一天。
 - 💰 **強化每日結算：** 每日獲得的金幣是原本的 4 倍，也就是增加 300%。
-- 🏦 **存款帳戶：** 可在主頁設定存入或領出的金額；每次休息會將 `floor(存款餘額 × 0.03)` 的利息加回存款。
+- 🏦 **存款帳戶：** 可在主頁設定存入或領出的金額；每次休息會將 `floor(存款餘額 × 0.01)` 的利息直接加入手上金幣，存款本金維持不變。
+- 💬 **多變的心情對話：** 每種心情都有四句三語系台詞，依固定種子每日抽選，重新繪製主頁時仍會維持一致。
 - 🎯 **三種訓練小遊戲：** 節奏判定、按住放開與移動目標，具備即時評價、連擊、粒子、暫停保護及降低動態效果。
 - 🌳 **三個外出地點與 24 種事件：** 公園、森林、河岸的加權事件會提供經驗、親密度、金幣或戰鬥道具。
 - ⚔️ **回合制決鬥：** 一般與特殊攻擊、能量、迴避、爆擊、護盾、先手、種族效果及 20 回合判定。
@@ -761,7 +764,7 @@ flowchart TD
 
 ### 🧪 測試
 
-目前實作已通過 **52/52 項單元測試**、**19/19 項靜態檢查**、全部 JavaScript 語法檢查及空白驗證。
+目前實作已通過 **53/53 項單元測試**、**19/19 項靜態檢查**、全部 JavaScript 語法檢查及空白驗證。
 
 請在專案根目錄執行：
 
@@ -772,7 +775,7 @@ $files = rg --files js tests tools -g '*.js'; foreach ($file in $files) { node -
 git diff --check
 ```
 
-單元測試涵蓋能力公式、成長溢位與上限、心情及親密度門檻、訓練評級、可重現排行榜、候選對手、戰鬥結算、裝備、糖果定價與持久化、存款存入與領出、休息利息、存檔修復、語系鍵值一致及本機音訊。靜態檢查涵蓋直接開啟的 script 結構、相對素材存在性、離線限制、響應式與主題要求、觸控尺寸、本機美術、README 結構、降低動態效果掛鉤、存款功能串接及尾端空白。
+單元測試涵蓋能力公式、成長溢位與上限、心情及親密度門檻、固定種子的心情對話、訓練評級、可重現排行榜、候選對手、戰鬥結算、裝備、糖果定價與持久化、存款存入與領出、休息利息、存檔修復、語系鍵值一致及本機音訊。靜態檢查涵蓋直接開啟的 script 結構、相對素材存在性、離線限制、響應式與主題要求、觸控尺寸、本機美術、README 結構、降低動態效果掛鉤、存款功能串接、主頁通知位置及尾端空白。
 
 若沒有經核准的整合式瀏覽器，可進行簡短人工驗證：開啟 `index.html`、開始或繼續存檔、遊玩三種訓練、瀏覽商店分類與階級、金幣足夠時購買糖果、切換語言／主題／動態設定，最後重新整理確認資料仍存在。
 
