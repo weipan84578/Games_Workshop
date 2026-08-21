@@ -1,1 +1,22 @@
-[data-theme="sunset"]{--background:#fff2e3;--background-art:#ffd6bd;--surface:#fffaf3;--surface-strong:#fff;--text:#42231e;--text-muted:#79564c;--border:#ebc6ad;--primary:#b4412f;--primary-contrast:#fff;--secondary:#6e347d;--secondary-contrast:#fff;--success:#277450;--warning:#895600;--danger:#ac2338;--focus:#175fc0;--shadow:0 20px 60px rgba(132,56,35,.18);--glow:rgba(255,114,64,.28);--energy:#257189;--mood:#965500;--bond:#963b68}
+[data-theme='sunset'] {
+  --background: #fff2e3;
+  --background-art: #ffd6bd;
+  --surface: #fffaf3;
+  --surface-strong: #fff;
+  --text: #42231e;
+  --text-muted: #79564c;
+  --border: #ebc6ad;
+  --primary: #b4412f;
+  --primary-contrast: #fff;
+  --secondary: #6e347d;
+  --secondary-contrast: #fff;
+  --success: #277450;
+  --warning: #895600;
+  --danger: #ac2338;
+  --focus: #175fc0;
+  --shadow: 0 20px 60px rgba(132, 56, 35, 0.18);
+  --glow: rgba(255, 114, 64, 0.28);
+  --energy: #257189;
+  --mood: #965500;
+  --bond: #963b68;
+}

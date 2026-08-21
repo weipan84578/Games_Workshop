@@ -2,15 +2,153 @@
   'use strict';
   var d = PSG.utils.dom;
   function render(root) {
-    var save = PSG.core.gameState.get(); if (!save) return PSG.core.scenes.go('menu');
-    var t = PSG.i18n.t, rank = PSG.ranking.matchmaking.playerRank(save), playerBp = PSG.pet.stats.battlePower(save), rows = PSG.ranking.matchmaking.candidates(save);
-    root.innerHTML = '<section class="scene">' + PSG.ui.common.sceneHeader('🏆', t('ranking.title'), 'home') + PSG.ui.common.topbar(save) + '<div class="ranking-summary card card--soft"><div><span class="eyebrow">' + t('ranking.player') + '</span><h2>' + t('common.bp', { bp: PSG.utils.formatter.number(playerBp) }) + '</h2><p class="muted">' + t('ranking.candidates') + '</p></div><div class="rank-badge"><span>RANK</span><strong>#' + rank + '</strong></div></div><div class="choice-grid">' + rows.map(function (row) { var ai = row.ai, species = PSG.data.species[ai.speciesId], delta = ((ai.bp - playerBp) / playerBp * 100), strongest = PSG.constants.STAT_KEYS.slice().sort(function (a,b) { return ai.stats[b] - ai.stats[a]; }).slice(0,3).map(function (key) { return t('stat.' + key); }).join(' · '); return '<article class="card candidate-card"><div class="candidate-card__header"><img class="candidate-card__avatar" src="' + species.image + '" alt="' + t(species.nameKey) + '"><div style="min-width:0"><span class="eyebrow">' + (row.rank < rank ? t('ranking.higher') : t('ranking.lower')) + '</span><h3>' + d.escape(ai.name) + '</h3></div></div><div class="candidate-card__meta"><strong>#' + row.rank + ' · LV ' + ai.level + '</strong><span>' + t('common.bp', { bp: ai.bp }) + '</span></div><span class="tag ' + (delta > 10 ? 'tag--danger' : delta < -10 ? 'tag--success' : 'tag--warning') + '">' + t('ranking.delta', { delta: (delta >= 0 ? '+' : '') + delta.toFixed(1) + '%' }) + '</span><p class="muted">' + t('ranking.topStats', { stats: strongest }) + '<br>' + t('ranking.stage', { stage: ai.equipmentStage }) + '</p><button type="button" class="button button--wide" data-opponent="' + row.id + '">' + t('ranking.challenge') + '</button></article>'; }).join('') + '</div></section>';
-    d.all('[data-opponent]', root).forEach(function (button) { button.addEventListener('click', function () { var row = rows.filter(function (item) { return item.id === button.dataset.opponent; })[0]; showOpponent(save, row); }); });
+    var save = PSG.core.gameState.get();
+    if (!save) return PSG.core.scenes.go('menu');
+    var t = PSG.i18n.t,
+      rank = PSG.ranking.matchmaking.playerRank(save),
+      playerBp = PSG.pet.stats.battlePower(save),
+      rows = PSG.ranking.matchmaking.candidates(save);
+    root.innerHTML =
+      '<section class="scene">' +
+      PSG.ui.common.sceneHeader('🏆', t('ranking.title'), 'home') +
+      PSG.ui.common.topbar(save) +
+      '<div class="ranking-summary card card--soft"><div><span class="eyebrow">' +
+      t('ranking.player') +
+      '</span><h2>' +
+      t('common.bp', { bp: PSG.utils.formatter.number(playerBp) }) +
+      '</h2><p class="muted">' +
+      t('ranking.candidates') +
+      '</p></div><div class="rank-badge"><span>RANK</span><strong>#' +
+      rank +
+      '</strong></div></div><div class="choice-grid">' +
+      rows
+        .map(function (row) {
+          var ai = row.ai,
+            species = PSG.data.species[ai.speciesId],
+            delta = ((ai.bp - playerBp) / playerBp) * 100,
+            strongest = PSG.constants.STAT_KEYS.slice()
+              .sort(function (a, b) {
+                return ai.stats[b] - ai.stats[a];
+              })
+              .slice(0, 3)
+              .map(function (key) {
+                return t('stat.' + key);
+              })
+              .join(' · ');
+          return (
+            '<article class="card candidate-card"><div class="candidate-card__header"><img class="candidate-card__avatar" src="' +
+            species.image +
+            '" alt="' +
+            t(species.nameKey) +
+            '"><div style="min-width:0"><span class="eyebrow">' +
+            (row.rank < rank ? t('ranking.higher') : t('ranking.lower')) +
+            '</span><h3>' +
+            d.escape(ai.name) +
+            '</h3></div></div><div class="candidate-card__meta"><strong>#' +
+            row.rank +
+            ' · LV ' +
+            ai.level +
+            '</strong><span>' +
+            t('common.bp', { bp: ai.bp }) +
+            '</span></div><span class="tag ' +
+            (delta > 10 ? 'tag--danger' : delta < -10 ? 'tag--success' : 'tag--warning') +
+            '">' +
+            t('ranking.delta', { delta: (delta >= 0 ? '+' : '') + delta.toFixed(1) + '%' }) +
+            '</span><p class="muted">' +
+            t('ranking.topStats', { stats: strongest }) +
+            '<br>' +
+            t('ranking.stage', { stage: ai.equipmentStage }) +
+            '</p><button type="button" class="button button--wide" data-opponent="' +
+            row.id +
+            '">' +
+            t('ranking.challenge') +
+            '</button></article>'
+          );
+        })
+        .join('') +
+      '</div></section>';
+    d.all('[data-opponent]', root).forEach(function (button) {
+      button.addEventListener('click', function () {
+        var row = rows.filter(function (item) {
+          return item.id === button.dataset.opponent;
+        })[0];
+        showOpponent(save, row);
+      });
+    });
   }
   function showOpponent(save, row) {
-    var t = PSG.i18n.t, ai = row.ai, species = PSG.data.species[ai.speciesId], canFight = PSG.pet.daily.can(save, 'battle'), owned = PSG.data.consumables.filter(function (item) { return (save.economy.consumables[item.id] || 0) > 0; });
-    var stats = PSG.constants.STAT_KEYS.map(function (key) { return '<span class="stat-chip"><span>' + t('stat.' + key) + '</span><strong>' + ai.stats[key] + '</strong></span>'; }).join('');
-    PSG.ui.common.modal({ title: d.escape(ai.name), eyebrow: '#' + row.rank + ' · ' + t(species.nameKey), body: '<div class="event-scene"><div class="event-art" style="padding:0;overflow:hidden;min-height:250px"><img src="' + species.image + '" alt="' + t(species.nameKey) + '" style="height:100%;width:100%;object-fit:cover"></div><div><h3>' + t('ranking.detail') + '</h3><p>' + t('common.level', { level: ai.level }) + ' · ' + t('common.bp', { bp: ai.bp }) + '</p><div class="stat-grid" style="margin-top:.75rem">' + stats + '</div></div></div>' + (ai.milestone ? '<blockquote class="card card--soft" style="margin:1rem 0">' + t('ranking.milestoneIntro') + '</blockquote>' : '') + '<hr style="border:0;border-top:1px solid var(--border);margin:1rem 0"><label for="prebattle-item"><strong>' + t('ranking.configure') + '</strong></label><select class="text-input" id="prebattle-item"><option value="">' + t('ranking.noConsumable') + '</option>' + owned.map(function (item) { return '<option value="' + item.id + '">' + PSG.ui.common.itemName(item) + ' ×' + save.economy.consumables[item.id] + ' — ' + PSG.ui.common.itemEffect(item) + '</option>'; }).join('') + '</select>' + (!canFight.ok ? '<p class="tag tag--danger" style="margin-top:.75rem">' + d.escape(PSG.ui.common.actionReason(save, 'battle')) + '</p>' : ''), actions: PSG.ui.common.button(t('common.cancel'), 'modal-close', 'ghost') + PSG.ui.common.button(t('ranking.fight'), 'fight-start', '', canFight.ok ? '' : 'disabled'), onOpen: function (dialog) { var fight = d.one('[data-action="fight-start"]', dialog); if (fight) fight.addEventListener('click', function () { var itemId = d.one('#prebattle-item', dialog).value || null; PSG.ui.common.closeModal(); var opponent = Object.assign({}, ai, { rank: row.rank }); PSG.core.scenes.go('battle', { opponent: opponent, consumableId: itemId }); }); } });
+    var t = PSG.i18n.t,
+      ai = row.ai,
+      species = PSG.data.species[ai.speciesId],
+      canFight = PSG.pet.daily.can(save, 'battle'),
+      owned = PSG.data.consumables.filter(function (item) {
+        return (save.economy.consumables[item.id] || 0) > 0;
+      });
+    var stats = PSG.constants.STAT_KEYS.map(function (key) {
+      return (
+        '<span class="stat-chip"><span>' + t('stat.' + key) + '</span><strong>' + ai.stats[key] + '</strong></span>'
+      );
+    }).join('');
+    PSG.ui.common.modal({
+      title: d.escape(ai.name),
+      eyebrow: '#' + row.rank + ' · ' + t(species.nameKey),
+      body:
+        '<div class="event-scene"><div class="event-art" style="padding:0;overflow:hidden;min-height:250px"><img src="' +
+        species.image +
+        '" alt="' +
+        t(species.nameKey) +
+        '" style="height:100%;width:100%;object-fit:cover"></div><div><h3>' +
+        t('ranking.detail') +
+        '</h3><p>' +
+        t('common.level', { level: ai.level }) +
+        ' · ' +
+        t('common.bp', { bp: ai.bp }) +
+        '</p><div class="stat-grid" style="margin-top:.75rem">' +
+        stats +
+        '</div></div></div>' +
+        (ai.milestone
+          ? '<blockquote class="card card--soft" style="margin:1rem 0">' + t('ranking.milestoneIntro') + '</blockquote>'
+          : '') +
+        '<hr style="border:0;border-top:1px solid var(--border);margin:1rem 0"><label for="prebattle-item"><strong>' +
+        t('ranking.configure') +
+        '</strong></label><select class="text-input" id="prebattle-item"><option value="">' +
+        t('ranking.noConsumable') +
+        '</option>' +
+        owned
+          .map(function (item) {
+            return (
+              '<option value="' +
+              item.id +
+              '">' +
+              PSG.ui.common.itemName(item) +
+              ' ×' +
+              save.economy.consumables[item.id] +
+              ' — ' +
+              PSG.ui.common.itemEffect(item) +
+              '</option>'
+            );
+          })
+          .join('') +
+        '</select>' +
+        (!canFight.ok
+          ? '<p class="tag tag--danger" style="margin-top:.75rem">' +
+            d.escape(PSG.ui.common.actionReason(save, 'battle')) +
+            '</p>'
+          : ''),
+      actions:
+        PSG.ui.common.button(t('common.cancel'), 'modal-close', 'ghost') +
+        PSG.ui.common.button(t('ranking.fight'), 'fight-start', '', canFight.ok ? '' : 'disabled'),
+      onOpen: function (dialog) {
+        var fight = d.one('[data-action="fight-start"]', dialog);
+        if (fight)
+          fight.addEventListener('click', function () {
+            var itemId = d.one('#prebattle-item', dialog).value || null;
+            PSG.ui.common.closeModal();
+            var opponent = Object.assign({}, ai, { rank: row.rank });
+            PSG.core.scenes.go('battle', { opponent: opponent, consumableId: itemId });
+          });
+      }
+    });
   }
   PSG.ui.ranking = { render: render };
 })(window.PSG);

@@ -1,7 +1,9 @@
 (function (PSG) {
   'use strict';
 
-  var CANDY_PRICE_FACTOR = 0.60;
+  var REGULAR_CANDY_PRICE_FACTOR = 0.6;
+  var FESTIVAL_PRICE_FACTOR = 0.5;
+  var FESTIVAL_INTERVAL_DAYS = 5;
 
   function boostFor(save, stat) {
     return Math.max(0, Math.floor(Number(save.pet.candyBoosts && save.pet.candyBoosts[stat]) || 0));
@@ -11,19 +13,33 @@
     return PSG.pet.stats.natural(save.pet.speciesId, save.pet.level)[item.stat] + boostFor(save, item.stat);
   }
 
-  function priceFor(save, itemOrId) {
-    var item = typeof itemOrId === 'string' ? PSG.data.abilityCandyById[itemOrId] : itemOrId;
-    if (!item) return 0;
-    var statCost = intrinsicValue(save, item) * item.priceWeight;
-    var levelMultiplier = 1 + (save.pet.level - 1) * 0.025;
-    // Apply the requested 40% price reduction, then round upward to a clean shop price.
-    return Math.ceil(((120 + statCost) * levelMultiplier * CANDY_PRICE_FACTOR) / 10) * 10;
+  function roundedPrice(value) {
+    return Math.ceil(value / 10) * 10;
   }
 
-  function purchase(save, itemId) {
+  function regularPriceFor(save, item) {
+    var statCost = intrinsicValue(save, item) * item.priceWeight;
+    var levelMultiplier = 1 + (save.pet.level - 1) * 0.025;
+    return roundedPrice((120 + statCost) * levelMultiplier * REGULAR_CANDY_PRICE_FACTOR);
+  }
+
+  function isCandyFestival(save) {
+    if (!save || !save.day || !save.ranking) return false;
+    var seed = PSG.utils.seedFrom(save.ranking.rankingSeed, save.day.number, 'candy-festival');
+    return new PSG.utils.RNG(seed).next() < 1 / FESTIVAL_INTERVAL_DAYS;
+  }
+
+  function priceFor(save, itemOrId, festival) {
+    var item = typeof itemOrId === 'string' ? PSG.data.abilityCandyById[itemOrId] : itemOrId;
+    if (!item) return 0;
+    var regularPrice = regularPriceFor(save, item);
+    return festival ? regularPrice * FESTIVAL_PRICE_FACTOR : regularPrice;
+  }
+
+  function purchase(save, itemId, festival) {
     var item = PSG.data.abilityCandyById[itemId];
     if (!item) return { ok: false, reason: 'missing' };
-    var price = priceFor(save, item);
+    var price = priceFor(save, item, festival);
     if (save.player.coins < price) return { ok: false, reason: 'coins', price: price };
 
     var oldMaxHp = PSG.pet.stats.effective(save).hp;
@@ -43,13 +59,14 @@
       price: price,
       before: before,
       after: intrinsicValue(save, item),
-      nextPrice: priceFor(save, item)
+      nextPrice: priceFor(save, item, festival)
     };
   }
 
   PSG.economy.candy = {
     boostFor: boostFor,
     intrinsicValue: intrinsicValue,
+    isCandyFestival: isCandyFestival,
     priceFor: priceFor,
     purchase: purchase
   };

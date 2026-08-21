@@ -1,1 +1,37 @@
-.app-dialog{width:min(720px,calc(100vw - 2rem));max-height:min(88vh,800px);border:0;border-radius:var(--radius-lg);background:var(--surface);color:var(--text);box-shadow:0 28px 100px rgba(0,0,0,.35)}.app-dialog::backdrop{background:rgba(20,15,25,.6);backdrop-filter:blur(6px)}.dialog__frame{display:grid;grid-template-rows:auto minmax(0,1fr) auto;max-height:min(88vh,800px)}.dialog__header,.dialog__actions{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:1rem 1.25rem;border-bottom:1px solid var(--border)}.dialog__body{padding:1.25rem;overflow:auto}.dialog__actions{justify-content:flex-end;border-bottom:0;border-top:1px solid var(--border);flex-wrap:wrap}
+.app-dialog {
+  width: min(720px, calc(100vw - 2rem));
+  max-height: min(88vh, 800px);
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 28px 100px rgba(0, 0, 0, 0.35);
+}
+.app-dialog::backdrop {
+  background: rgba(20, 15, 25, 0.6);
+  backdrop-filter: blur(6px);
+}
+.dialog__frame {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  max-height: min(88vh, 800px);
+}
+.dialog__header,
+.dialog__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+.dialog__body {
+  padding: 1.25rem;
+  overflow: auto;
+}
+.dialog__actions {
+  justify-content: flex-end;
+  border-bottom: 0;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}

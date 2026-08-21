@@ -9,7 +9,7 @@
 
 .training-intro__symbols {
   display: flex;
-  gap: .5rem;
+  gap: 0.5rem;
   font-size: 1.55rem;
 }
 
@@ -23,14 +23,20 @@
   animation: training-symbol-float 2.6s ease-in-out infinite;
 }
 
-.training-intro__symbols span:nth-child(2) { animation-delay: -.85s; }
-.training-intro__symbols span:nth-child(3) { animation-delay: -1.7s; }
+.training-intro__symbols span:nth-child(2) {
+  animation-delay: -0.85s;
+}
+.training-intro__symbols span:nth-child(3) {
+  animation-delay: -1.7s;
+}
 
 .training-card {
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  transition: transform var(--transition), border-color var(--transition);
+  transition:
+    transform var(--transition),
+    border-color var(--transition);
 }
 
 .training-card:hover {
@@ -38,9 +44,15 @@
   border-color: color-mix(in srgb, var(--training-accent) 65%, var(--border));
 }
 
-.training-card--strength { --training-accent: #ff6b62; }
-.training-card--endurance { --training-accent: #42a5f5; }
-.training-card--agility { --training-accent: #9b72e7; }
+.training-card--strength {
+  --training-accent: #ff6b62;
+}
+.training-card--endurance {
+  --training-accent: #42a5f5;
+}
+.training-card--agility {
+  --training-accent: #9b72e7;
+}
 
 .training-card__aura {
   position: absolute;
@@ -66,8 +78,12 @@
   animation: training-orbit 4s linear infinite;
 }
 
-.training-card__aura span:nth-child(2) { animation-delay: -1.3s; }
-.training-card__aura span:nth-child(3) { animation-delay: -2.6s; }
+.training-card__aura span:nth-child(2) {
+  animation-delay: -1.3s;
+}
+.training-card__aura span:nth-child(3) {
+  animation-delay: -2.6s;
+}
 
 .training-game {
   position: relative;
@@ -75,12 +91,20 @@
   isolation: isolate;
   min-height: min(680px, calc(100vh - 130px));
   align-content: start;
-  background: radial-gradient(circle at 50% 25%, color-mix(in srgb, var(--training-accent) 22%, transparent), transparent 42%), linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--training-accent) 8%, var(--background-art)));
+  background:
+    radial-gradient(circle at 50% 25%, color-mix(in srgb, var(--training-accent) 22%, transparent), transparent 42%),
+    linear-gradient(160deg, var(--surface), color-mix(in srgb, var(--training-accent) 8%, var(--background-art)));
 }
 
-.training-game--strength { --training-accent: #ff6b62; }
-.training-game--endurance { --training-accent: #42a5f5; }
-.training-game--agility { --training-accent: #9b72e7; }
+.training-game--strength {
+  --training-accent: #ff6b62;
+}
+.training-game--endurance {
+  --training-accent: #42a5f5;
+}
+.training-game--agility {
+  --training-accent: #9b72e7;
+}
 
 .training-game__header {
   z-index: 2;
@@ -116,7 +140,7 @@
   min-height: 42px;
   align-items: center;
   justify-content: center;
-  gap: .55rem;
+  gap: 0.55rem;
   flex-wrap: wrap;
 }
 
@@ -132,7 +156,7 @@
 }
 
 .training-combo.is-popping {
-  animation: training-combo-pop .35s ease-out;
+  animation: training-combo-pop 0.35s ease-out;
 }
 
 .training-game__area {
@@ -154,16 +178,29 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(circle at center, color-mix(in srgb, var(--training-accent) 24%, transparent), transparent 48%);
+  background: radial-gradient(
+    circle at center,
+    color-mix(in srgb, var(--training-accent) 24%, transparent),
+    transparent 48%
+  );
   content: '';
   opacity: 0;
   pointer-events: none;
 }
 
-.training-game__area.is-perfect::after { animation: training-hit-flash .48s ease-out; }
-.training-game__area.is-great::after { animation: training-hit-flash .48s ease-out; opacity: .55; }
-.training-game__area.is-keep { animation: training-soft-shake .32s ease-out; }
-.training-game__area.is-paused { filter: saturate(.45); }
+.training-game__area.is-perfect::after {
+  animation: training-hit-flash 0.48s ease-out;
+}
+.training-game__area.is-great::after {
+  animation: training-hit-flash 0.48s ease-out;
+  opacity: 0.55;
+}
+.training-game__area.is-keep {
+  animation: training-soft-shake 0.32s ease-out;
+}
+.training-game__area.is-paused {
+  filter: saturate(0.45);
+}
 
 .training-ambient {
   position: absolute;
@@ -182,7 +219,7 @@
   border-radius: 50%;
   background: var(--training-accent);
   box-shadow: 0 0 14px var(--training-accent);
-  opacity: .28;
+  opacity: 0.28;
   animation: training-particle-rise var(--particle-duration) linear infinite;
   animation-delay: var(--particle-delay);
 }
@@ -191,12 +228,14 @@
   display: grid;
   width: 100%;
   justify-items: center;
-  gap: .45rem;
+  gap: 0.45rem;
 }
 
 .game-meter--rhythm,
 .game-meter--charge {
-  box-shadow: inset 0 5px 14px rgba(0, 0, 0, .2), 0 10px 30px color-mix(in srgb, var(--training-accent) 15%, transparent);
+  box-shadow:
+    inset 0 5px 14px rgba(0, 0, 0, 0.2),
+    0 10px 30px color-mix(in srgb, var(--training-accent) 15%, transparent);
 }
 
 .game-meter__center-glow {
@@ -205,9 +244,9 @@
   bottom: 0;
   left: 42%;
   width: 16%;
-  border-inline: 2px solid rgba(255, 255, 255, .88);
-  background: rgba(255, 255, 255, .16);
-  box-shadow: 0 0 25px rgba(255, 255, 255, .65);
+  border-inline: 2px solid rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.65);
   animation: training-zone-pulse 1.15s ease-in-out infinite;
 }
 
@@ -225,7 +264,7 @@
   width: min(620px, 100%);
   justify-content: space-between;
   color: var(--text-muted);
-  font-size: .78rem;
+  font-size: 0.78rem;
 }
 
 .meter-caption strong {
@@ -241,7 +280,7 @@
 
 .training-action-button span {
   display: inline-block;
-  margin-right: .35rem;
+  margin-right: 0.35rem;
 }
 
 .training-game__area.is-charging .training-action-button {
@@ -264,15 +303,23 @@
   left: 50%;
   color: var(--training-accent);
   font-size: clamp(1.5rem, 5vw, 3.2rem);
-  letter-spacing: -.04em;
-  text-shadow: 0 3px 0 var(--surface), 0 0 24px var(--training-accent);
+  letter-spacing: -0.04em;
+  text-shadow:
+    0 3px 0 var(--surface),
+    0 0 24px var(--training-accent);
   transform: translate(-50%, -50%);
-  animation: training-feedback-pop .82s ease-out forwards;
+  animation: training-feedback-pop 0.82s ease-out forwards;
 }
 
-.training-feedback--perfect { color: #ffd24d; }
-.training-feedback--great { color: var(--success); }
-.training-feedback--keep { color: var(--warning); }
+.training-feedback--perfect {
+  color: #ffd24d;
+}
+.training-feedback--great {
+  color: var(--success);
+}
+.training-feedback--keep {
+  color: var(--warning);
+}
 
 .training-burst {
   position: absolute;
@@ -282,12 +329,18 @@
   height: 9px;
   border-radius: 2px;
   background: var(--training-accent);
-  animation: training-burst .78s ease-out forwards;
+  animation: training-burst 0.78s ease-out forwards;
 }
 
-.training-burst--perfect { background: #ffd24d; }
-.training-burst--great { background: var(--success); }
-.training-burst--keep { background: var(--warning); }
+.training-burst--perfect {
+  background: #ffd24d;
+}
+.training-burst--great {
+  background: var(--success);
+}
+.training-burst--keep {
+  background: var(--warning);
+}
 
 .agility-field {
   overflow: hidden;
@@ -298,14 +351,18 @@
 .agility-field__grid {
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(color-mix(in srgb, var(--training-accent) 9%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--training-accent) 9%, transparent) 1px, transparent 1px);
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--training-accent) 9%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--training-accent) 9%, transparent) 1px, transparent 1px);
   background-size: 42px 42px;
   pointer-events: none;
 }
 
 .agility-target {
-  border: 3px solid rgba(255, 255, 255, .8);
-  box-shadow: 0 0 0 8px color-mix(in srgb, var(--training-accent) 18%, transparent), 0 0 28px var(--training-accent);
+  border: 3px solid rgba(255, 255, 255, 0.8);
+  box-shadow:
+    0 0 0 8px color-mix(in srgb, var(--training-accent) 18%, transparent),
+    0 0 28px var(--training-accent);
 }
 
 .agility-target span {
@@ -317,7 +374,7 @@
 }
 
 .agility-target.is-warping {
-  animation: training-target-warp .28s ease-out;
+  animation: training-target-warp 0.28s ease-out;
 }
 
 .training-celebration {
@@ -327,25 +384,39 @@
   place-items: center;
   overflow: hidden;
   border-radius: var(--radius-lg);
-  background: radial-gradient(circle, color-mix(in srgb, var(--medal-color) 28%, var(--surface)), var(--background-art) 68%);
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--medal-color) 28%, var(--surface)),
+    var(--background-art) 68%
+  );
 }
 
-.training-celebration--gold { --medal-color: #f6bd36; }
-.training-celebration--silver { --medal-color: #aab7c6; }
-.training-celebration--bronze { --medal-color: #ba7649; }
+.training-celebration--gold {
+  --medal-color: #f6bd36;
+}
+.training-celebration--silver {
+  --medal-color: #aab7c6;
+}
+.training-celebration--bronze {
+  --medal-color: #ba7649;
+}
 
 .training-celebration > strong {
   z-index: 2;
   font-size: 5.6rem;
-  filter: drop-shadow(0 10px 12px rgba(0, 0, 0, .2));
-  animation: training-medal-enter .75s cubic-bezier(.2, 1.5, .4, 1);
+  filter: drop-shadow(0 10px 12px rgba(0, 0, 0, 0.2));
+  animation: training-medal-enter 0.75s cubic-bezier(0.2, 1.5, 0.4, 1);
 }
 
 .training-celebration__rays {
   position: absolute;
   width: 260px;
   height: 260px;
-  background: repeating-conic-gradient(from 0deg, color-mix(in srgb, var(--medal-color) 38%, transparent) 0 10deg, transparent 10deg 22deg);
+  background: repeating-conic-gradient(
+    from 0deg,
+    color-mix(in srgb, var(--medal-color) 38%, transparent) 0 10deg,
+    transparent 10deg 22deg
+  );
   animation: training-rays-spin 12s linear infinite;
 }
 
@@ -367,68 +438,128 @@
 }
 
 @keyframes training-symbol-float {
-  50% { transform: translateY(-7px) rotate(5deg); }
+  50% {
+    transform: translateY(-7px) rotate(5deg);
+  }
 }
 
 @keyframes training-orbit {
-  from { transform: rotate(0deg) translateX(43px) rotate(0deg); }
-  to { transform: rotate(360deg) translateX(43px) rotate(-360deg); }
+  from {
+    transform: rotate(0deg) translateX(43px) rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg) translateX(43px) rotate(-360deg);
+  }
 }
 
 @keyframes training-particle-rise {
-  from { transform: translateY(0) scale(.65); }
-  to { transform: translateY(-720px) scale(1.25); opacity: 0; }
+  from {
+    transform: translateY(0) scale(0.65);
+  }
+  to {
+    transform: translateY(-720px) scale(1.25);
+    opacity: 0;
+  }
 }
 
 @keyframes training-zone-pulse {
-  50% { opacity: .45; }
+  50% {
+    opacity: 0.45;
+  }
 }
 
 @keyframes training-combo-pop {
-  50% { transform: scale(1.25) rotate(-3deg); }
+  50% {
+    transform: scale(1.25) rotate(-3deg);
+  }
 }
 
 @keyframes training-hit-flash {
-  0% { opacity: .95; transform: scale(.7); }
-  100% { opacity: 0; transform: scale(1.3); }
+  0% {
+    opacity: 0.95;
+    transform: scale(0.7);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.3);
+  }
 }
 
 @keyframes training-soft-shake {
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
 }
 
 @keyframes training-feedback-pop {
-  0% { opacity: 0; transform: translate(-50%, -25%) scale(.5) rotate(-5deg); }
-  28% { opacity: 1; transform: translate(-50%, -50%) scale(1.12) rotate(2deg); }
-  100% { opacity: 0; transform: translate(-50%, -100%) scale(.92); }
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -25%) scale(0.5) rotate(-5deg);
+  }
+  28% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.12) rotate(2deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -100%) scale(0.92);
+  }
 }
 
 @keyframes training-burst {
-  from { opacity: 1; transform: translate(-50%, -50%) rotate(var(--burst-angle)) translateX(0) scale(1); }
-  to { opacity: 0; transform: translate(-50%, -50%) rotate(var(--burst-angle)) translateX(var(--burst-distance)) scale(.3); }
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(var(--burst-angle)) translateX(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(var(--burst-angle)) translateX(var(--burst-distance)) scale(0.3);
+  }
 }
 
 @keyframes training-target-ring {
-  to { opacity: 0; transform: scale(1.55); }
+  to {
+    opacity: 0;
+    transform: scale(1.55);
+  }
 }
 
 @keyframes training-target-warp {
-  0% { opacity: .3; transform: scale(.45); }
-  100% { opacity: 1; transform: scale(1); }
+  0% {
+    opacity: 0.3;
+    transform: scale(0.45);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @keyframes training-medal-enter {
-  from { opacity: 0; transform: translateY(35px) scale(.35) rotate(-18deg); }
-  to { opacity: 1; transform: translateY(0) scale(1) rotate(0); }
+  from {
+    opacity: 0;
+    transform: translateY(35px) scale(0.35) rotate(-18deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0);
+  }
 }
 
 @keyframes training-rays-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes training-confetti-fall {
-  to { top: 110%; transform: rotate(540deg); }
+  to {
+    top: 110%;
+    transform: rotate(540deg);
+  }
 }
 
 @media (max-width: 575px) {
@@ -444,20 +575,20 @@
 
   .training-game__area {
     min-height: 350px;
-    padding: .85rem;
+    padding: 0.85rem;
   }
 }
 
-[data-motion="reduced"] .training-intro__symbols span,
-[data-motion="reduced"] .training-card__aura span,
-[data-motion="reduced"] .training-ambient span,
-[data-motion="reduced"] .game-meter__center-glow,
-[data-motion="reduced"] .agility-target span,
-[data-motion="reduced"] .training-celebration__rays,
-[data-motion="reduced"] .training-confetti span {
+[data-motion='reduced'] .training-intro__symbols span,
+[data-motion='reduced'] .training-card__aura span,
+[data-motion='reduced'] .training-ambient span,
+[data-motion='reduced'] .game-meter__center-glow,
+[data-motion='reduced'] .agility-target span,
+[data-motion='reduced'] .training-celebration__rays,
+[data-motion='reduced'] .training-confetti span {
   animation: none;
 }
 
-[data-motion="reduced"] .training-card {
+[data-motion='reduced'] .training-card {
   transition: none;
 }

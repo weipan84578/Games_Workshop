@@ -1,0 +1,99 @@
+.candy-festival-alert,
+.candy-festival-shop-banner {
+  border: 2px solid var(--focus);
+  background: linear-gradient(
+    120deg,
+    color-mix(in srgb, var(--primary) 22%, var(--surface)),
+    color-mix(in srgb, var(--secondary) 20%, var(--surface))
+  );
+  box-shadow: 0 12px 30px color-mix(in srgb, var(--primary) 22%, transparent);
+}
+
+.candy-festival-alert {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem 1.25rem;
+  overflow: hidden;
+  animation: candy-festival-pulse 2.4s ease-in-out infinite;
+}
+
+.candy-festival-alert__icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 62px;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: var(--surface);
+  font-size: 2.2rem;
+}
+
+.candy-festival-alert h2 {
+  margin: 0.2rem 0;
+  color: var(--primary);
+}
+
+.candy-festival-alert p,
+.candy-festival-shop-banner span {
+  color: var(--text-muted);
+}
+
+.candy-festival-alert__sparkle {
+  margin-left: auto;
+  color: var(--secondary);
+  font-size: 2.5rem;
+  transform: rotate(15deg);
+}
+
+.candy-festival-shop-banner {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 0.85rem 1rem;
+}
+
+.candy-festival-shop-banner strong {
+  color: var(--primary);
+}
+
+@keyframes candy-festival-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.01);
+  }
+}
+
+[data-motion='reduced'] .candy-festival-alert {
+  animation: none;
+}
+
+@media (max-width: 575px) {
+  .candy-festival-alert {
+    align-items: flex-start;
+  }
+
+  .candy-festival-alert__icon {
+    flex-basis: 48px;
+    width: 48px;
+    height: 48px;
+    font-size: 1.7rem;
+  }
+
+  .candy-festival-alert__sparkle {
+    display: none;
+  }
+
+  .candy-festival-shop-banner {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}

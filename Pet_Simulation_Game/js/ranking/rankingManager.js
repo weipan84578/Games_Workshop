@@ -12,7 +12,8 @@
       }
       var after = PSG.ranking.matchmaking.playerRank(save);
       save.player.bestRank = Math.min(save.player.bestRank, after);
-      if (won && PSG.data.rivalById[opponentId] && save.progression.defeatedRivals.indexOf(opponentId) < 0) save.progression.defeatedRivals.push(opponentId);
+      if (won && PSG.data.rivalById[opponentId] && save.progression.defeatedRivals.indexOf(opponentId) < 0)
+        save.progression.defeatedRivals.push(opponentId);
       if (after === 1 && !save.progression.championUnlocked) {
         save.progression.championUnlocked = true;
         save.progression.unlockedCosmetics.push('champion_emblem');

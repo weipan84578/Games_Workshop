@@ -12,11 +12,18 @@
     Object.keys(values).forEach(function (type) {
       items.push({
         id: 'con_' + stage.id + '_' + type,
-        stage: stage.id, type: type, value: values[type][stage.id - 1], price: stage.consumablePrice,
-        image: 'assets/images/equipment/con_' + stage.id + '_' + type + '.svg', icon: icons[type]
+        stage: stage.id,
+        type: type,
+        value: values[type][stage.id - 1],
+        price: stage.consumablePrice,
+        image: 'assets/images/equipment/con_' + stage.id + '_' + type + '.svg',
+        icon: icons[type]
       });
     });
   });
   PSG.data.consumables = items;
-  PSG.data.consumableById = items.reduce(function (map, item) { map[item.id] = item; return map; }, {});
+  PSG.data.consumableById = items.reduce(function (map, item) {
+    map[item.id] = item;
+    return map;
+  }, {});
 })(window.PSG);

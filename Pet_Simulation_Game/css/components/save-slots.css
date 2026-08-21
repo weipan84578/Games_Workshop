@@ -1,0 +1,72 @@
+.save-slots {
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+}
+
+.save-slots__header {
+  padding: 0.25rem 0.25rem 0.4rem;
+}
+
+.save-slot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 118px;
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+}
+
+.save-slot--empty {
+  border-style: dashed;
+}
+
+.save-slot__copy {
+  min-width: 0;
+}
+
+.save-slot__copy strong,
+.save-slot__copy p {
+  display: block;
+  margin-top: 0.35rem;
+}
+
+.save-slot__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+@media (max-width: 575px) {
+  .save-slot {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .save-slot__actions {
+    justify-content: stretch;
+  }
+
+  .save-slot__actions .button {
+    flex: 1;
+  }
+
+  .topbar {
+    flex-wrap: wrap;
+  }
+
+  .topbar__actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

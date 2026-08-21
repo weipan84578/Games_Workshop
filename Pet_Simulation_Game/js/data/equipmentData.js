@@ -11,12 +11,48 @@
   ];
   var luck = [2, 4, 6, 9, 12, 15];
   var templates = [
-    { key: 'vital', slot: 'armor', bonuses: function (b) { return { hp: b / 100 }; } },
-    { key: 'guard', slot: 'armor', bonuses: function (b) { return { defense: b * 0.006, spDefense: b * 0.006 }; } },
-    { key: 'strike', slot: 'accessory', bonuses: function (b) { return { attack: b * 0.006, speed: b * 0.004 }; } },
-    { key: 'spirit', slot: 'accessory', bonuses: function (b) { return { spAttack: b * 0.006, speed: b * 0.004 }; } },
-    { key: 'gale', slot: 'emblem', bonuses: function (b) { return { mobility: b * 0.006, speed: b * 0.004 }; } },
-    { key: 'fortune', slot: 'emblem', bonuses: function (b, stage) { return { crit: luck[stage - 1] / 100 }; } }
+    {
+      key: 'vital',
+      slot: 'armor',
+      bonuses: function (b) {
+        return { hp: b / 100 };
+      }
+    },
+    {
+      key: 'guard',
+      slot: 'armor',
+      bonuses: function (b) {
+        return { defense: b * 0.006, spDefense: b * 0.006 };
+      }
+    },
+    {
+      key: 'strike',
+      slot: 'accessory',
+      bonuses: function (b) {
+        return { attack: b * 0.006, speed: b * 0.004 };
+      }
+    },
+    {
+      key: 'spirit',
+      slot: 'accessory',
+      bonuses: function (b) {
+        return { spAttack: b * 0.006, speed: b * 0.004 };
+      }
+    },
+    {
+      key: 'gale',
+      slot: 'emblem',
+      bonuses: function (b) {
+        return { mobility: b * 0.006, speed: b * 0.004 };
+      }
+    },
+    {
+      key: 'fortune',
+      slot: 'emblem',
+      bonuses: function (b, stage) {
+        return { crit: luck[stage - 1] / 100 };
+      }
+    }
   ];
   var items = [];
   stages.forEach(function (stage) {
@@ -36,5 +72,8 @@
   });
   PSG.data.equipmentStages = stages;
   PSG.data.equipment = items;
-  PSG.data.equipmentById = items.reduce(function (map, item) { map[item.id] = item; return map; }, {});
+  PSG.data.equipmentById = items.reduce(function (map, item) {
+    map[item.id] = item;
+    return map;
+  }, {});
 })(window.PSG);

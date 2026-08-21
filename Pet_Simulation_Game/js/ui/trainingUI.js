@@ -14,14 +14,21 @@
     var t = PSG.i18n.t;
     var unavailableReason = PSG.ui.common.actionReason(save, 'training');
 
-    root.innerHTML = '<section class="scene">' +
+    root.innerHTML =
+      '<section class="scene">' +
       PSG.ui.common.sceneHeader('🎯', t('training.title'), 'home') +
       PSG.ui.common.topbar(save) +
-      '<div class="training-intro card card--soft"><div><span class="eyebrow">✦ TRAINING LAB</span><h3>' + t('training.choose') + '</h3><p class="muted">' + t('training.ready') + '</p></div><div class="training-intro__symbols" aria-hidden="true"><span>⚔</span><span>🛡</span><span>➤</span></div></div>' +
-      '<div class="choice-grid training-choice-grid">' + PSG.constants.STAT_KEYS.map(function (key) {
+      '<div class="training-intro card card--soft"><div><span class="eyebrow">✦ TRAINING LAB</span><h3>' +
+      t('training.choose') +
+      '</h3><p class="muted">' +
+      t('training.ready') +
+      '</p></div><div class="training-intro__symbols" aria-hidden="true"><span>⚔</span><span>🛡</span><span>➤</span></div></div>' +
+      '<div class="choice-grid training-choice-grid">' +
+      PSG.constants.STAT_KEYS.map(function (key) {
         return trainingCard(save, key, unavailableReason);
-      }).join('') + '</div>' +
-    '</section>';
+      }).join('') +
+      '</div>' +
+      '</section>';
 
     d.all('[data-train]', root).forEach(function (button) {
       button.addEventListener('click', function () {
@@ -42,13 +49,33 @@
     var template = PSG.training.manager.templateFor(key);
     var max = mastery.level >= 20 ? 1 : PSG.pet.progression.masteryXpToNext(mastery.level);
     var xp = mastery.level >= 20 ? 1 : mastery.xp;
-    return '<article class="card training-card training-card--' + template + '">' +
+    return (
+      '<article class="card training-card training-card--' +
+      template +
+      '">' +
       '<div class="training-card__aura" aria-hidden="true"><span></span><span></span><span></span></div>' +
-      '<div class="card__header"><span class="training-card__stat">' + statIcon(key) + ' ' + t('stat.' + key) + '</span><span class="tag">' + t('stat.mastery') + ' ' + (mastery.level >= 20 ? t('common.max') : mastery.level) + '</span></div>' +
+      '<div class="card__header"><span class="training-card__stat">' +
+      statIcon(key) +
+      ' ' +
+      t('stat.' + key) +
+      '</span><span class="tag">' +
+      t('stat.mastery') +
+      ' ' +
+      (mastery.level >= 20 ? t('common.max') : mastery.level) +
+      '</span></div>' +
       d.bar(t('stat.mastery'), xp, max, '✦', 'primary') +
-      '<p class="muted">' + t('training.' + template) + '</p>' +
-      '<button class="button button--wide" type="button" data-train="' + key + '" ' + (unavailableReason ? 'disabled title="' + d.escape(unavailableReason) + '"' : '') + '>' + t('training.start') + '</button>' +
-    '</article>';
+      '<p class="muted">' +
+      t('training.' + template) +
+      '</p>' +
+      '<button class="button button--wide" type="button" data-train="' +
+      key +
+      '" ' +
+      (unavailableReason ? 'disabled title="' + d.escape(unavailableReason) + '"' : '') +
+      '>' +
+      t('training.start') +
+      '</button>' +
+      '</article>'
+    );
   }
 
   function statIcon(key) {
@@ -74,17 +101,41 @@
     var effectTimers = [];
     var resumeGame = function () {};
     var extraCleanup = function () {};
-    var rng = new PSG.utils.RNG(PSG.utils.seedFrom(save.ranking.rankingSeed, save.day.number, stat, save.stats.trainingGolds));
+    var rng = new PSG.utils.RNG(
+      PSG.utils.seedFrom(save.ranking.rankingSeed, save.day.number, stat, save.stats.trainingGolds)
+    );
 
-    root.innerHTML = '<section class="scene">' +
-      PSG.ui.common.sceneHeader('🎯', t('training.' + template), 'training') +
-      '<div class="minigame training-game training-game--' + template + '">' +
-        ambientHtml() +
-        '<header class="training-game__header"><div><span class="eyebrow">' + statIcon(stat) + ' ' + t('stat.' + stat) + '</span><h2>' + t('training.' + template) + '</h2><p class="muted">' + t('training.' + template + 'Help') + '</p></div><div class="training-game__emblem" aria-hidden="true">' + statIcon(stat) + '</div></header>' +
-        '<div class="training-game__hud"><div id="game-status" class="number">0 / ' + (template === 'agility' ? '15s' : template === 'strength' ? 5 : 4) + '</div><div id="score-preview" class="tag">' + t('training.score', { score: 0 }) + '</div><div id="combo-preview" class="tag training-combo" hidden></div></div>' +
-        '<div id="game-area" class="training-game__area"><div class="training-fx-layer" aria-hidden="true"></div></div>' +
+    root.innerHTML =
+      '<section class="scene">' +
+      PSG.ui.common.sceneHeader(
+        '🎯',
+        t('training.' + template),
+        'training',
+        PSG.ui.common.button(t('menu.saveAndMenu'), 'save-menu', 'ghost')
+      ) +
+      '<div class="minigame training-game training-game--' +
+      template +
+      '">' +
+      ambientHtml() +
+      '<header class="training-game__header"><div><span class="eyebrow">' +
+      statIcon(stat) +
+      ' ' +
+      t('stat.' + stat) +
+      '</span><h2>' +
+      t('training.' + template) +
+      '</h2><p class="muted">' +
+      t('training.' + template + 'Help') +
+      '</p></div><div class="training-game__emblem" aria-hidden="true">' +
+      statIcon(stat) +
+      '</div></header>' +
+      '<div class="training-game__hud"><div id="game-status" class="number">0 / ' +
+      (template === 'agility' ? '15s' : template === 'strength' ? 5 : 4) +
+      '</div><div id="score-preview" class="tag">' +
+      t('training.score', { score: 0 }) +
+      '</div><div id="combo-preview" class="tag training-combo" hidden></div></div>' +
+      '<div id="game-area" class="training-game__area"><div class="training-fx-layer" aria-hidden="true"></div></div>' +
       '</div>' +
-    '</section>';
+      '</section>';
 
     var area = d.one('#game-area', root);
     var status = d.one('#game-status', root);
@@ -92,7 +143,13 @@
     var combo = d.one('#combo-preview', root);
 
     function average() {
-      return scores.length ? Math.round(scores.reduce(function (sum, value) { return sum + value; }, 0) / scores.length) : 0;
+      return scores.length
+        ? Math.round(
+            scores.reduce(function (sum, value) {
+              return sum + value;
+            }, 0) / scores.length
+          )
+        : 0;
     }
 
     function updatePreview(scoreOverride) {
@@ -124,14 +181,25 @@
       for (var index = 0; index < 10; index += 1) {
         var spark = document.createElement('span');
         spark.className = 'training-burst training-burst--' + feedback.tone;
-        spark.style.setProperty('--burst-angle', (index * 36) + 'deg');
-        spark.style.setProperty('--burst-distance', (42 + index % 3 * 12) + 'px');
+        spark.style.setProperty('--burst-angle', index * 36 + 'deg');
+        spark.style.setProperty('--burst-distance', 42 + (index % 3) * 12 + 'px');
         layer.appendChild(spark);
-        rememberTimeout(function (node) { return function () { node.remove(); }; }(spark), 820);
+        rememberTimeout(
+          (function (node) {
+            return function () {
+              node.remove();
+            };
+          })(spark),
+          820
+        );
       }
       restartClass(area, 'is-' + feedback.tone);
-      rememberTimeout(function () { label.remove(); }, 850);
-      rememberTimeout(function () { area.classList.remove('is-' + feedback.tone); }, 500);
+      rememberTimeout(function () {
+        label.remove();
+      }, 850);
+      rememberTimeout(function () {
+        area.classList.remove('is-' + feedback.tone);
+      }, 500);
     }
 
     function rememberTimeout(callback, delay) {
@@ -141,7 +209,9 @@
     }
 
     function clearEffects() {
-      effectTimers.forEach(function (timer) { window.clearTimeout(timer); });
+      effectTimers.forEach(function (timer) {
+        window.clearTimeout(timer);
+      });
       effectTimers.length = 0;
     }
 
@@ -165,7 +235,13 @@
         required: true,
         eyebrow: t('training.score', { score: result.score }),
         title: t('training.' + result.grade),
-        body: celebrationHtml(result.grade) + '<div class="training-result-copy"><p>' + t('training.result', { xp: result.xp.gained, mastery: result.mastery.gained }) + '</p><p class="muted">' + t('common.bp', { bp: result.bp }) + '</p></div>',
+        body:
+          celebrationHtml(result.grade) +
+          '<div class="training-result-copy"><p>' +
+          t('training.result', { xp: result.xp.gained, mastery: result.mastery.gained }) +
+          '</p><p class="muted">' +
+          t('common.bp', { bp: result.bp }) +
+          '</p></div>',
         actions: PSG.ui.common.button(t('common.confirm'), 'training-close'),
         onOpen: function (dialog) {
           d.one('[data-action="training-close"]', dialog).addEventListener('click', function () {
@@ -214,7 +290,12 @@
     else setupAgility();
 
     function setupStrength() {
-      area.insertAdjacentHTML('afterbegin', '<div class="meter-wrap"><div class="game-meter game-meter--rhythm"><span class="game-meter__center-glow"></span><span class="game-meter__marker"></span></div><div class="meter-caption"><span>0</span><strong>100</strong><span>0</span></div></div><button class="button training-action-button" id="game-button" type="button"><span>✦</span>' + t('training.hit') + '</button>');
+      area.insertAdjacentHTML(
+        'afterbegin',
+        '<div class="meter-wrap"><div class="game-meter game-meter--rhythm"><span class="game-meter__center-glow"></span><span class="game-meter__marker"></span></div><div class="meter-caption"><span>0</span><strong>100</strong><span>0</span></div></div><button class="button training-action-button" id="game-button" type="button"><span>✦</span>' +
+          t('training.hit') +
+          '</button>'
+      );
       var marker = d.one('.game-meter__marker', area);
       var hit = d.one('#game-button', area);
       var lastPhase = 0;
@@ -223,10 +304,12 @@
         var cycle = PSG.core.settings.motion === 'reduced' ? 2000 : 1400;
         var elapsed = ((now || performance.now()) - started) / cycle;
         lastPhase = (Math.sin(elapsed * Math.PI * 2 - Math.PI / 2) + 1) / 2;
-        marker.style.left = 'calc(' + (lastPhase * 100) + '% - 7px)';
+        marker.style.left = 'calc(' + lastPhase * 100 + '% - 7px)';
         raf = requestAnimationFrame(strengthLoop);
       }
-      resumeGame = function () { strengthLoop(); };
+      resumeGame = function () {
+        strengthLoop();
+      };
       hit.addEventListener('click', function () {
         if (!running || pausedAt) return;
         recordScore(PSG.training.strength.scoreAt(lastPhase));
@@ -238,7 +321,12 @@
     }
 
     function setupEndurance() {
-      area.insertAdjacentHTML('afterbegin', '<div class="meter-wrap"><div class="game-meter game-meter--charge"><span class="game-meter__center-glow"></span><span class="game-meter__marker"></span></div><div class="meter-caption"><span>0</span><strong>72</strong><span>100</span></div></div><button class="button training-action-button" id="game-button" type="button"><span>⬆</span>' + t('training.hold') + '</button>');
+      area.insertAdjacentHTML(
+        'afterbegin',
+        '<div class="meter-wrap"><div class="game-meter game-meter--charge"><span class="game-meter__center-glow"></span><span class="game-meter__marker"></span></div><div class="meter-caption"><span>0</span><strong>72</strong><span>100</span></div></div><button class="button training-action-button" id="game-button" type="button"><span>⬆</span>' +
+          t('training.hold') +
+          '</button>'
+      );
       var chargeMarker = d.one('.game-meter__marker', area);
       var hold = d.one('#game-button', area);
       var holdStart = 0;
@@ -246,7 +334,7 @@
         if (!holdStart || !running || pausedAt) return;
         var duration = PSG.core.settings.motion === 'reduced' ? 2200 : 1600;
         var phase = Math.min(1, (performance.now() - holdStart) / duration);
-        chargeMarker.style.left = 'calc(' + (phase * 100) + '% - 7px)';
+        chargeMarker.style.left = 'calc(' + phase * 100 + '% - 7px)';
         raf = requestAnimationFrame(chargeLoop);
       }
       function beginHold(event) {
@@ -284,11 +372,18 @@
           chargeLoop();
         }
       };
-      extraCleanup = function () { window.removeEventListener('pointerup', endHold); };
+      extraCleanup = function () {
+        window.removeEventListener('pointerup', endHold);
+      };
     }
 
     function setupAgility() {
-      area.insertAdjacentHTML('afterbegin', '<div class="agility-field"><div class="agility-field__grid" aria-hidden="true"></div><button class="button agility-target" type="button"><span></span>' + t('training.target') + '</button></div>');
+      area.insertAdjacentHTML(
+        'afterbegin',
+        '<div class="agility-field"><div class="agility-field__grid" aria-hidden="true"></div><button class="button agility-target" type="button"><span></span>' +
+          t('training.target') +
+          '</button></div>'
+      );
       var field = d.one('.agility-field', area);
       var target = d.one('.agility-target', area);
       var hits = 0;
@@ -324,7 +419,9 @@
         if (remaining <= 0) finish(liveScore);
         else raf = requestAnimationFrame(agilityLoop);
       }
-      resumeGame = function () { agilityLoop(); };
+      resumeGame = function () {
+        agilityLoop();
+      };
       moveTarget();
       agilityLoop();
     }
@@ -349,7 +446,16 @@
   function ambientHtml() {
     var particles = '';
     for (var index = 0; index < 12; index += 1) {
-      particles += '<span style="--particle-left:' + ((index * 19 + 7) % 94) + '%;--particle-size:' + (5 + index * 0.35) + 'px;--particle-duration:' + (4 + index * 0.28) + 's;--particle-delay:' + (index * -0.47) + 's"></span>';
+      particles +=
+        '<span style="--particle-left:' +
+        ((index * 19 + 7) % 94) +
+        '%;--particle-size:' +
+        (5 + index * 0.35) +
+        'px;--particle-duration:' +
+        (4 + index * 0.28) +
+        's;--particle-delay:' +
+        index * -0.47 +
+        's"></span>';
     }
     return '<div class="training-ambient" aria-hidden="true">' + particles + '</div>';
   }
@@ -358,9 +464,26 @@
     var medal = grade === 'gold' ? '🥇' : grade === 'silver' ? '🥈' : '🥉';
     var confetti = '';
     for (var index = 0; index < 16; index += 1) {
-      confetti += '<span style="--confetti-left:' + (4 + index * 6) + '%;--confetti-color:hsl(' + (index * 43) + 'deg 78% 58%);--confetti-duration:' + (1.5 + index * 0.07) + 's;--confetti-delay:' + (index * -0.12) + 's"></span>';
+      confetti +=
+        '<span style="--confetti-left:' +
+        (4 + index * 6) +
+        '%;--confetti-color:hsl(' +
+        index * 43 +
+        'deg 78% 58%);--confetti-duration:' +
+        (1.5 + index * 0.07) +
+        's;--confetti-delay:' +
+        index * -0.12 +
+        's"></span>';
     }
-    return '<div class="training-celebration training-celebration--' + grade + '" aria-hidden="true"><div class="training-celebration__rays"></div><strong>' + medal + '</strong><div class="training-confetti">' + confetti + '</div></div>';
+    return (
+      '<div class="training-celebration training-celebration--' +
+      grade +
+      '" aria-hidden="true"><div class="training-celebration__rays"></div><strong>' +
+      medal +
+      '</strong><div class="training-confetti">' +
+      confetti +
+      '</div></div>'
+    );
   }
 
   PSG.ui.training = { render: render };

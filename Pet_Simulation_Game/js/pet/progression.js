@@ -1,8 +1,12 @@
 (function (PSG) {
   'use strict';
 
-  function xpToNext(level) { return 100 + 12 * (level - 1); }
-  function masteryXpToNext(level) { return 50 + 25 * level; }
+  function xpToNext(level) {
+    return 100 + 12 * (level - 1);
+  }
+  function masteryXpToNext(level) {
+    return 50 + 25 * level;
+  }
 
   function addXp(save, amount) {
     var pet = save.pet;
@@ -17,7 +21,14 @@
     if (pet.level >= PSG.constants.MAX_LEVEL) pet.xp = 0;
     var afterStats = PSG.pet.stats.effective(save);
     pet.currentHp = Math.min(afterStats.hp, pet.currentHp + Math.max(0, afterStats.hp - beforeStats.hp));
-    return { gained: Math.round(amount), levels: pet.level - beforeLevel, oldLevel: beforeLevel, newLevel: pet.level, oldStats: beforeStats, newStats: afterStats };
+    return {
+      gained: Math.round(amount),
+      levels: pet.level - beforeLevel,
+      oldLevel: beforeLevel,
+      newLevel: pet.level,
+      oldStats: beforeStats,
+      newStats: afterStats
+    };
   }
 
   function addMastery(save, stat, amount) {

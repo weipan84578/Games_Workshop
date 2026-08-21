@@ -3,6 +3,8 @@
 
   PSG.constants = Object.freeze({
     SAVE_KEY: 'psg.save.v1',
+    SAVE_SLOT_KEY_PREFIX: 'psg.save.v1.slot.',
+    SAVE_SLOT_COUNT: 3,
     SETTINGS_KEY: 'psg.settings.v1',
     BACKUP_KEY: 'psg.save.backup',
     SCHEMA_VERSION: 1,

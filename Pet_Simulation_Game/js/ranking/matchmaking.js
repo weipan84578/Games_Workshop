@@ -42,7 +42,13 @@
 
   function appendUnique(target, rows, limit) {
     rows.forEach(function (row) {
-      if (target.length >= limit || target.some(function (item) { return item.id === row.id; })) return;
+      if (
+        target.length >= limit ||
+        target.some(function (item) {
+          return item.id === row.id;
+        })
+      )
+        return;
       target.push(row);
     });
   }
@@ -66,15 +72,21 @@
 
     // The top and bottom ranks do not have five nearby opponents. Fill only those edge shortages.
     if (result.length < TOTAL_CANDIDATES) {
-      var fallback = collectRows(save, rank, playerBp, seed, language, function () { return true; });
-      fallback.sort(function (a, b) { return rankDistance(a, rank) - rankDistance(b, rank) || sorter(a, b); });
+      var fallback = collectRows(save, rank, playerBp, seed, language, function () {
+        return true;
+      });
+      fallback.sort(function (a, b) {
+        return rankDistance(a, rank) - rankDistance(b, rank) || sorter(a, b);
+      });
       appendUnique(result, fallback, TOTAL_CANDIDATES);
     }
     return result;
   }
 
   function refresh(save) {
-    save.ranking.candidateIds = candidates(save).map(function (row) { return row.id; });
+    save.ranking.candidateIds = candidates(save).map(function (row) {
+      return row.id;
+    });
     return save.ranking.candidateIds;
   }
 

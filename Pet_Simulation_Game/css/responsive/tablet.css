@@ -1,1 +1,30 @@
-@media(min-width:576px) and (max-width:1023px){.menu-scene{grid-template-columns:1fr 1fr}.home-layout{grid-template-columns:.8fr 1.2fr;grid-template-areas:"summary stage" "status stage" "actions actions"}.pet-summary{grid-area:summary}.pet-stage{grid-area:stage}.status-panel{grid-area:status}.action-panel{grid-area:actions}.action-grid{grid-template-columns:repeat(4,1fr)}.species-card{grid-template-rows:180px auto}.battle-arena{grid-template-columns:1fr 90px 1fr}}
+@media (min-width: 576px) and (max-width: 1023px) {
+  .menu-scene {
+    grid-template-columns: 1fr 1fr;
+  }
+  .home-layout {
+    grid-template-columns: 0.8fr 1.2fr;
+    grid-template-areas: 'summary stage' 'status stage' 'actions actions';
+  }
+  .pet-summary {
+    grid-area: summary;
+  }
+  .pet-stage {
+    grid-area: stage;
+  }
+  .status-panel {
+    grid-area: status;
+  }
+  .action-panel {
+    grid-area: actions;
+  }
+  .action-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .species-card {
+    grid-template-rows: 180px auto;
+  }
+  .battle-arena {
+    grid-template-columns: 1fr 90px 1fr;
+  }
+}

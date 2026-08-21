@@ -29,7 +29,14 @@
     if (grade.id === 'gold') save.stats.trainingGolds += 1;
     PSG.ranking.matchmaking.refresh(save);
     PSG.storage.save.write(save);
-    return { ok: true, score: Math.round(score), grade: grade.id, xp: xpResult, mastery: masteryResult, bp: PSG.pet.stats.battlePower(save) };
+    return {
+      ok: true,
+      score: Math.round(score),
+      grade: grade.id,
+      xp: xpResult,
+      mastery: masteryResult,
+      bp: PSG.pet.stats.battlePower(save)
+    };
   }
   PSG.training.manager = { templateFor: templateFor, gradeFor: gradeFor, feedbackFor: feedbackFor, settle: settle };
 })(window.PSG);

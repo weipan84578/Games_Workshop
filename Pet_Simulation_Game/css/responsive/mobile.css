@@ -1,1 +1,121 @@
-@media(max-width:575px){.app-shell{padding-inline:max(10px,env(safe-area-inset-left)) max(10px,env(safe-area-inset-right))}.menu-scene{grid-template-columns:1fr;align-content:start;padding-top:1rem}.brand-lockup{text-align:center;justify-items:center}.hero-trio{order:-1;height:210px}.hero-trio__frame{aspect-ratio:auto}.hero-trio__frame:nth-child(2){transform:none}.menu-actions{grid-template-columns:1fr}.scene-header{align-items:flex-start}.scene-header h2{font-size:1.65rem}.home-layout,.event-scene,.battle-bottom,.help-layout,.settings-grid{grid-template-columns:1fr}.home-layout{grid-template-areas:"stage" "summary" "status" "actions"}.pet-summary{grid-area:summary}.pet-stage{grid-area:stage;min-height:330px}.status-panel{grid-area:status}.action-panel{grid-area:actions}.species-grid{grid-template-columns:1fr}.species-card{grid-template-columns:120px 1fr;grid-template-rows:auto}.battle-layout{min-height:auto}.battle-arena{grid-template-columns:1fr 58px 1fr;gap:.35rem}.fighter__portrait{height:220px}.fighter h3{font-size:1rem}.battle-commands{grid-template-columns:1fr}.equipment-slots{grid-template-columns:1fr}.range-row{grid-template-columns:1fr 52px}.range-row label{grid-column:1/-1}.topbar{align-items:flex-start}.topbar__stats{gap:.35rem}.topbar__pill{font-size:.78rem}.ranking-summary{align-items:flex-start}.rank-badge{width:88px}.dialog__actions .button{flex:1}.help-nav{position:static;display:flex;overflow:auto;padding-bottom:.4rem}.help-nav .tab-button{white-space:nowrap}.event-art{min-height:220px}.action-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width: 575px) {
+  .app-shell {
+    padding-inline: max(10px, env(safe-area-inset-left)) max(10px, env(safe-area-inset-right));
+  }
+  .menu-scene {
+    grid-template-columns: 1fr;
+    align-content: start;
+    padding-top: 1rem;
+  }
+  .brand-lockup {
+    text-align: center;
+    justify-items: center;
+  }
+  .hero-trio {
+    order: -1;
+    height: 210px;
+  }
+  .hero-trio__frame {
+    aspect-ratio: auto;
+  }
+  .hero-trio__frame:nth-child(2) {
+    transform: none;
+  }
+  .menu-actions {
+    grid-template-columns: 1fr;
+  }
+  .scene-header {
+    align-items: flex-start;
+  }
+  .scene-header h2 {
+    font-size: 1.65rem;
+  }
+  .home-layout,
+  .event-scene,
+  .battle-bottom,
+  .help-layout,
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+  .home-layout {
+    grid-template-areas: 'stage' 'summary' 'status' 'actions';
+  }
+  .pet-summary {
+    grid-area: summary;
+  }
+  .pet-stage {
+    grid-area: stage;
+    min-height: 330px;
+  }
+  .status-panel {
+    grid-area: status;
+  }
+  .action-panel {
+    grid-area: actions;
+  }
+  .species-grid {
+    grid-template-columns: 1fr;
+  }
+  .species-card {
+    grid-template-columns: 120px 1fr;
+    grid-template-rows: auto;
+  }
+  .battle-layout {
+    min-height: auto;
+  }
+  .battle-arena {
+    grid-template-columns: 1fr 58px 1fr;
+    gap: 0.35rem;
+  }
+  .fighter__portrait {
+    height: 220px;
+  }
+  .fighter h3 {
+    font-size: 1rem;
+  }
+  .battle-commands {
+    grid-template-columns: 1fr;
+  }
+  .equipment-slots {
+    grid-template-columns: 1fr;
+  }
+  .range-row {
+    grid-template-columns: 1fr 52px;
+  }
+  .range-row label {
+    grid-column: 1/-1;
+  }
+  .topbar {
+    align-items: flex-start;
+  }
+  .topbar__stats {
+    gap: 0.35rem;
+  }
+  .topbar__pill {
+    font-size: 0.78rem;
+  }
+  .ranking-summary {
+    align-items: flex-start;
+  }
+  .rank-badge {
+    width: 88px;
+  }
+  .dialog__actions .button {
+    flex: 1;
+  }
+  .help-nav {
+    position: static;
+    display: flex;
+    overflow: auto;
+    padding-bottom: 0.4rem;
+  }
+  .help-nav .tab-button {
+    white-space: nowrap;
+  }
+  .event-art {
+    min-height: 220px;
+  }
+  .action-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

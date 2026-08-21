@@ -1,7 +1,9 @@
 (function (PSG) {
   'use strict';
   PSG.economy.inventory = {
-    count: function (save, itemId) { return save.economy.consumables[itemId] || 0; },
+    count: function (save, itemId) {
+      return save.economy.consumables[itemId] || 0;
+    },
     consume: function (save, itemId) {
       if (!itemId) return true;
       var count = save.economy.consumables[itemId] || 0;

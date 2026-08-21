@@ -35,7 +35,9 @@
       window.clearInterval(channel.fadeTimer);
       channel.fadeTimer = null;
     }
-    try { channel.audio.pause(); } catch (error) {}
+    try {
+      channel.audio.pause();
+    } catch (error) {}
   }
 
   function stopChannels() {
@@ -162,16 +164,21 @@
       return Promise.resolve(fallbackAfterUnlockFailure());
     }
 
-    unlockPromise = Promise.resolve(resumeResult).then(function () {
-      startPendingAudio();
-      return true;
-    }, fallbackAfterUnlockFailure).then(function (result) {
-      unlockPromise = null;
-      return result;
-    }, function () {
-      unlockPromise = null;
-      return false;
-    });
+    unlockPromise = Promise.resolve(resumeResult)
+      .then(function () {
+        startPendingAudio();
+        return true;
+      }, fallbackAfterUnlockFailure)
+      .then(
+        function (result) {
+          unlockPromise = null;
+          return result;
+        },
+        function () {
+          unlockPromise = null;
+          return false;
+        }
+      );
     return unlockPromise;
   }
 
@@ -181,7 +188,9 @@
     var muted = set.muted ? 0 : 1;
     if (directMode) {
       var directVolume = clampVolume(set.masterVolume, 0.5) * clampVolume(set.bgmVolume, 0.3) * muted;
-      channels.forEach(function (channel) { channel.audio.volume = directVolume; });
+      channels.forEach(function (channel) {
+        channel.audio.volume = directVolume;
+      });
       return;
     }
     master.gain.setTargetAtTime(clampVolume(set.masterVolume, 0.5) * muted, context.currentTime, 0.02);
@@ -219,7 +228,14 @@
     try {
       var result = audio.play();
       if (result && typeof result.then === 'function') {
-        result.then(function () { if (onSuccess) onSuccess(); }, function () { if (onFailure) onFailure(); });
+        result.then(
+          function () {
+            if (onSuccess) onSuccess();
+          },
+          function () {
+            if (onFailure) onFailure();
+          }
+        );
       } else if (onSuccess) {
         onSuccess();
       }
@@ -231,8 +247,12 @@
   }
 
   function clearMediaSource(audio) {
-    try { audio.removeAttribute('src'); } catch (error) {}
-    try { audio.load(); } catch (error) {}
+    try {
+      audio.removeAttribute('src');
+    } catch (error) {}
+    try {
+      audio.load();
+    } catch (error) {}
   }
 
   function isTrackActive(channel, track) {
@@ -257,16 +277,24 @@
     next.audio.src = PSG.audio.bgmTracks[track];
     next.audio.dataset.track = track;
     next.audio.volume = 0;
-    try { next.audio.load(); } catch (error) {}
-    try { next.audio.currentTime = 0; } catch (error) {}
+    try {
+      next.audio.load();
+    } catch (error) {}
+    try {
+      next.audio.currentTime = 0;
+    } catch (error) {}
     next.pending = true;
-    tryPlay(next.audio, function () {
-      next.pending = false;
-      pauseChannel(next);
-      clearMediaSource(next.audio);
-    }, function () {
-      next.pending = false;
-    });
+    tryPlay(
+      next.audio,
+      function () {
+        next.pending = false;
+        pauseChannel(next);
+        clearMediaSource(next.audio);
+      },
+      function () {
+        next.pending = false;
+      }
+    );
     fadeDirect(next, directBgmVolume());
 
     if (active) {
@@ -288,8 +316,12 @@
 
     next.audio.src = PSG.audio.bgmTracks[track];
     next.audio.dataset.track = track;
-    try { next.audio.load(); } catch (error) {}
-    try { next.audio.currentTime = 0; } catch (error) {}
+    try {
+      next.audio.load();
+    } catch (error) {}
+    try {
+      next.audio.currentTime = 0;
+    } catch (error) {}
 
     var now = context.currentTime;
     var fadeSeconds = BGM_FADE_MS / 1000;
@@ -306,12 +338,16 @@
     }
     activeIndex = nextIndex;
     next.pending = true;
-    tryPlay(next.audio, function () {
-      next.pending = false;
-      if (switchToDirect() && currentTrack) playDirect(currentTrack);
-    }, function () {
-      next.pending = false;
-    });
+    tryPlay(
+      next.audio,
+      function () {
+        next.pending = false;
+        if (switchToDirect() && currentTrack) playDirect(currentTrack);
+      },
+      function () {
+        next.pending = false;
+      }
+    );
   }
 
   function playDirectSfx(name) {
@@ -319,8 +355,16 @@
     audio.preload = 'auto';
     audio.src = PSG.audio.sfxTracks[name];
     audio.volume = directSfxVolume();
-    audio.addEventListener('ended', function () { clearMediaSource(audio); }, { once: true });
-    tryPlay(audio, function () { clearMediaSource(audio); });
+    audio.addEventListener(
+      'ended',
+      function () {
+        clearMediaSource(audio);
+      },
+      { once: true }
+    );
+    tryPlay(audio, function () {
+      clearMediaSource(audio);
+    });
   }
 
   function playWebSfx(name) {
@@ -333,7 +377,9 @@
     function release() {
       if (released) return;
       released = true;
-      try { source.disconnect(); } catch (error) {}
+      try {
+        source.disconnect();
+      } catch (error) {}
       clearMediaSource(audio);
     }
 
@@ -371,7 +417,9 @@
     if (!unlocked || !pendingSfx.length) return;
     var queued = pendingSfx.slice();
     pendingSfx.length = 0;
-    queued.forEach(function (name) { sfx(name); });
+    queued.forEach(function (name) {
+      sfx(name);
+    });
   }
 
   PSG.audio.manager = {
@@ -379,6 +427,8 @@
     play: play,
     sfx: sfx,
     apply: apply,
-    isUnlocked: function () { return unlocked; }
+    isUnlocked: function () {
+      return unlocked;
+    }
   };
 })(window.PSG);

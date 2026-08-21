@@ -40,7 +40,7 @@
     var base = natural(pet.speciesId, pet.level);
     var species = PSG.data.species[pet.speciesId];
     var safeLevel = PSG.utils.math.clamp(Math.round(Number(pet.level) || 1), 1, 100);
-    var equipped = saveLike.economy && saveLike.economy.equipped || {};
+    var equipped = (saveLike.economy && saveLike.economy.equipped) || {};
     var gear = PSG.economy.equipment.bonuses(equipped);
     var bond = 1 + affectionBonus(pet.affection || 0);
     var result = {};
@@ -58,21 +58,35 @@
   }
 
   function critRate(saveLike, consumableId, speciesSpecial) {
-    var gear = PSG.economy.equipment.bonuses(saveLike.economy && saveLike.economy.equipped || {});
+    var gear = PSG.economy.equipment.bonuses((saveLike.economy && saveLike.economy.equipped) || {});
     var item = PSG.data.consumableById[consumableId];
     var consumable = item && item.type === 'focus' ? item.value / 100 : 0;
-    var normal = Math.min(0.20, 0.05 + (gear.crit || 0) + consumable);
-    return speciesSpecial && saveLike.pet.speciesId === 'lion' ? Math.min(0.30, normal + 0.10) : normal;
+    var normal = Math.min(0.2, 0.05 + (gear.crit || 0) + consumable);
+    return speciesSpecial && saveLike.pet.speciesId === 'lion' ? Math.min(0.3, normal + 0.1) : normal;
   }
 
   function battlePower(saveLike) {
     var stats = effective(saveLike);
-    var gear = PSG.economy.equipment.bonuses(saveLike.economy && saveLike.economy.equipped || {});
+    var gear = PSG.economy.equipment.bonuses((saveLike.economy && saveLike.economy.equipped) || {});
     var displayedCritPoints = Math.round(critRate(saveLike) * 100);
     // Keep the public BP weights next to the implementation so previews and matchmaking share one source.
-    var statScore = stats.hp + 4 * stats.attack + 4.3 * stats.defense + 3.2 * stats.mobility + 4 * stats.spAttack + 4.3 * stats.spDefense + 2.8 * stats.speed;
+    var statScore =
+      stats.hp +
+      4 * stats.attack +
+      4.3 * stats.defense +
+      3.2 * stats.mobility +
+      4 * stats.spAttack +
+      4.3 * stats.spDefense +
+      2.8 * stats.speed;
     return Math.round(statScore + 25 * Math.max(0, displayedCritPoints - 5) + (gear.passiveBp || 0));
   }
 
-  PSG.pet.stats = { natural: natural, effective: effective, affectionBonus: affectionBonus, masteryGrowthMultiplier: masteryGrowthMultiplier, critRate: critRate, battlePower: battlePower };
+  PSG.pet.stats = {
+    natural: natural,
+    effective: effective,
+    affectionBonus: affectionBonus,
+    masteryGrowthMultiplier: masteryGrowthMultiplier,
+    critRate: critRate,
+    battlePower: battlePower
+  };
 })(window.PSG);

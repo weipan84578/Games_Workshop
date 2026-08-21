@@ -11,7 +11,10 @@
     definitions[location].forEach(function (key, index) {
       var rarity = index < 4 ? 'common' : index < 7 ? 'rare' : 'special';
       events.push({
-        id: location + '_' + key, location: location, key: key, rarity: rarity,
+        id: location + '_' + key,
+        location: location,
+        key: key,
+        rarity: rarity,
         weight: rarity === 'common' ? 15 : rarity === 'rare' ? 8 : 16,
         reward: index % 4 === 0 ? 'coins' : index % 4 === 1 ? 'affection' : index % 4 === 2 ? 'xp' : 'consumable'
       });

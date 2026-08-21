@@ -2,7 +2,9 @@
   'use strict';
 
   function interpolate(text, values) {
-    return String(text).replace(/\{([\w]+)\}/g, function (_, key) { return values && values[key] != null ? values[key] : '{' + key + '}'; });
+    return String(text).replace(/\{([\w]+)\}/g, function (_, key) {
+      return values && values[key] != null ? values[key] : '{' + key + '}';
+    });
   }
   PSG.i18n.current = 'zh-Hant';
   PSG.i18n.t = function (key, values) {

@@ -82,16 +82,18 @@ There is no pet death or destructive game-over state. A defeat still grants redu
 - 🦅 **Three distinct partners:** the mobile Giant Eagle, explosive Lion, and defensive Crocodile each have unique growth and special-attack behavior.
 - 📊 **Seven battle stats:** HP, Attack, Defense, Mobility, Special Attack, Special Defense, and Speed.
 - ☀️ **A five-AP daily loop:** train, play, explore, duel, or rest to begin a new day.
+- 💰 **Boosted daily settlement:** the daily coin reward is four times the original amount, equivalent to a +300% increase.
 - 🎯 **Three training mini-games:** rhythm timing, hold-and-release endurance, and moving-target agility with ratings, combos, particles, pause protection, and reduced-motion support.
 - 🌳 **Three outing locations and 24 weighted events:** park, forest, and river encounters provide XP, affection, coins, or battle items.
 - ⚔️ **Turn-based duels:** normal and special attacks, energy, dodge, critical hits, shields, initiative, species effects, and a 20-round tiebreak.
+- 🎛️ **Battle convenience controls:** accelerated battle playback stays enabled by default and persists; Auto Battle repeats normal attacks and releases specials at 100 energy.
 - 🏆 **A deterministic 1,000-entry ranking:** one player, 999 seeded AI opponents, 12 fixed milestone rivals, and five BP-near candidates per refresh.
 - 🛍️ **A three-part shop:** 36 permanent equipment pieces, 18 one-battle consumables, and seven permanent Ability Candies arranged through six arena tiers.
-- 🍬 **Scaling permanent growth:** HP Candy grants +3; the other six candies grant +1 and become more expensive as intrinsic stats and pet level rise.
+- 🍬 **Scaling permanent growth:** HP Candy grants +3; the other six candies grant +1 and become more expensive as intrinsic stats and pet level rise. A deterministic Candy Festival occasionally halves the current price.
 - 🌐 **Three complete locales:** Taiwan Traditional Chinese, English, and Japanese.
 - 🎨 **Five visual themes:** Candy Garden, Ocean Sky, Verdant Forest, Sunset Arena, and Moonlit Night.
 - 🎵 **Local audiovisual package:** three partner portraits, 54 item SVGs, three outing backdrops, six BGM loops, and 22 sound effects.
-- 💾 **Automatic local saves:** gameplay and preferences persist without a backend, account, build tool, or network connection.
+- 💾 **Three local save slots:** save and return to the main menu at any time, keep three partners independent, and resume gameplay with preferences preserved.
 
 <a id="en-gameplay"></a>
 
@@ -180,10 +182,12 @@ Equipment occupies Armor, Accessory, or Emblem slots and remains owned permanent
 Candy prices are rounded upward to the next ten coins:
 
 ```text
-price = ceil10((120 + intrinsicStat × weight) × (1 + (LV - 1) × 0.025) × 0.60)
+regularPrice = ceil10((120 + intrinsicStat × weight) × (1 + (LV - 1) × 0.025) × 0.60)
+festivalPrice = regularPrice × 0.50
 weight = 2 for HP; 8 for every other stat
 intrinsicStat = natural stat + previous candy bonuses
-0.60 = permanent 40% candy price reduction
+0.60 = permanent 40% regular candy discount
+0.50 = Candy Festival multiplier applied directly to the current price, active on about one day in five
 ```
 
 Temporary equipment, mastery, and affection do not affect candy pricing.
@@ -272,7 +276,7 @@ Key runtime characteristics:
 
 ### 🧪 Testing
 
-The current implementation was verified with **43/43 unit tests** and **14/14 static checks**, plus JavaScript syntax and whitespace validation.
+The current implementation was verified with **50/50 unit tests** and **18/18 static checks**, plus JavaScript syntax and whitespace validation.
 
 Run from the project root:
 
@@ -319,16 +323,18 @@ Browser interaction is intentionally left to a short manual pass when no approve
 - 🦅 **個性の異なる3体の相棒：** 機動型のオオワシ、爆発力のあるライオン、防御型のワニは、成長傾向と特殊攻撃の効果が異なります。
 - 📊 **7つの戦闘能力：** HP、攻撃、防御、機動、特殊攻撃、特殊防御、素早さ。
 - ☀️ **毎日5 APの行動ループ：** 訓練、遊ぶ、おでかけ、決闘、または休息で次の日へ進みます。
+- 💰 **強化されたデイリー報酬：** デイリーコインは元の4倍、つまり+300%増加します。
 - 🎯 **3種類の訓練ミニゲーム：** リズム、ホールド＆リリース、移動ターゲットを使い、評価、コンボ、パーティクル、一時停止保護、動きを減らす設定に対応します。
 - 🌳 **3つのおでかけ先と24イベント：** 公園、森、河岸の重み付きイベントで経験値、親密度、コイン、バトルアイテムを獲得します。
 - ⚔️ **ターン制決闘：** 通常・特殊攻撃、エネルギー、回避、クリティカル、シールド、行動順、種族効果、20ラウンド判定を実装しています。
+- 🎛️ **決闘の便利機能：** 高速再生は初期オンで設定を保存し、オートバトルは通常攻撃を繰り返してエネルギー100で特殊攻撃を使います。
 - 🏆 **固定シードの1,000人ランキング：** プレイヤー1人、AI 999人、固定位置の節目ライバル12人、BPが近い候補5人で構成されます。
 - 🛍️ **3分類ショップ：** 6つのアリーナ段階に、永久装備36個、1試合用消耗品18種、永久成長用の能力キャンディ7種があります。
-- 🍬 **価格が成長する永久強化：** HPキャンディは+3、ほか6種は+1。基礎能力とペットLVが高いほど次の価格が上がります。
+- 🍬 **価格が成長する永久強化：** HPキャンディは+3、ほか6種は+1。基礎能力とペットLVが高いほど次の価格が上がり、決定的なキャンディフェスティバルでは現在価格が半額になります。
 - 🌐 **3言語を完全収録：** 台湾繁體中文、English、日本語。
 - 🎨 **5つのテーマ：** キャンディガーデン、オーシャンスカイ、翠影の森、夕焼けアリーナ、星月夜。
 - 🎵 **ローカル素材一式：** 相棒画像3枚、アイテムSVG 54個、おでかけ背景3枚、BGM 6曲、効果音22種。
-- 💾 **ローカル自動保存：** バックエンド、アカウント、ビルドツール、ネット接続なしでゲームと設定を保存します。
+- 💾 **3つのローカルセーブ枠：** いつでも保存してメインメニューへ戻り、3体の相棒を独立して育成できます。ゲームと設定はローカルに保存されます。
 
 <a id="ja-gameplay"></a>
 
@@ -417,10 +423,12 @@ flowchart LR
 キャンディ価格は10コイン単位で切り上げます。
 
 ```text
-price = ceil10((120 + intrinsicStat × weight) × (1 + (LV - 1) × 0.025) × 0.60)
+regularPrice = ceil10((120 + intrinsicStat × weight) × (1 + (LV - 1) × 0.025) × 0.60)
+festivalPrice = regularPrice × 0.50
 weight = HPは2、その他の能力は8
 intrinsicStat = 自然能力 + 過去のキャンディ加算値
-0.60 = キャンディ価格を恒久的に40%割引する係数
+0.60 = 通常キャンディ価格の恒久的な40%割引係数
+0.50 = 現在価格に直接適用する、およそ5日に1度のキャンディフェスティバル係数
 ```
 
 一時的な装備、熟練、親密度はキャンディ価格に影響しません。
@@ -509,7 +517,7 @@ flowchart TD
 
 ### 🧪 テスト
 
-現在の実装は、**ユニットテスト43/43件**、**静的検証14/14件**、全JavaScript構文検査、空白検査を通過しています。
+現在の実装は、**ユニットテスト50/50件**、**静的検証18/18件**、全JavaScript構文検査、空白検査を通過しています。
 
 プロジェクトルートで実行します。
 
@@ -556,16 +564,18 @@ git diff --check
 - 🦅 **三種定位鮮明的夥伴：** 高機動巨鷹、爆發型獅子與防守型鱷魚，各自擁有不同成長與特殊攻擊效果。
 - 📊 **七項戰鬥能力：** HP、攻擊、防禦、機動、特殊攻擊、特殊防禦與速度。
 - ☀️ **每日五點 AP 循環：** 可選擇訓練、玩耍、外出、決鬥，或休息並進入下一天。
+- 💰 **強化每日結算：** 每日獲得的金幣是原本的 4 倍，也就是增加 300%。
 - 🎯 **三種訓練小遊戲：** 節奏判定、按住放開與移動目標，具備即時評價、連擊、粒子、暫停保護及降低動態效果。
 - 🌳 **三個外出地點與 24 種事件：** 公園、森林、河岸的加權事件會提供經驗、親密度、金幣或戰鬥道具。
 - ⚔️ **回合制決鬥：** 一般與特殊攻擊、能量、迴避、爆擊、護盾、先手、種族效果及 20 回合判定。
+- 🎛️ **決鬥便利功能：** 加速播放預設開啟且會持續保存；自動戰鬥會重複一般攻擊，能量達 100 時自動施放特殊攻擊。
 - 🏆 **可重現的千名排行榜：** 玩家 1 名、固定種子 AI 999 名、12 名固定里程碑強敵，每次提供 5 名 BP 接近候選。
 - 🛍️ **三分類商店：** 六個競技階級中共有 36 件永久裝備、18 種單場消耗品及 7 種永久能力糖果。
-- 🍬 **價格隨成長調整的永久強化：** HP 糖果 +3，其餘六種 +1；先天能力與寵物 LV 越高，下一顆越昂貴。
+- 🍬 **價格隨成長調整的永久強化：** HP 糖果 +3，其餘六種 +1；先天能力與寵物 LV 越高，下一顆越昂貴，偶爾遇到糖果節時當日目前價格再打五折。
 - 🌐 **三種完整語系：** 臺灣繁體中文、English、日本語。
 - 🎨 **五套視覺主題：** 糖果樂園、海洋晴空、翠影森林、夕陽競技與星夜月光。
 - 🎵 **完整本機影音：** 三張夥伴圖像、54 個道具 SVG、三張外出背景、六首 BGM 及 22 種音效。
-- 💾 **本機自動存檔：** 不需要後端、帳號、建置工具或網路連線，即可保存遊戲與偏好設定。
+- 💾 **三個本機存檔格：** 可隨時存檔並回到主畫面，獨立培養三位夥伴；遊戲與偏好設定都保存在本機。
 
 <a id="zh-gameplay"></a>
 
@@ -654,10 +664,12 @@ flowchart LR
 糖果價格會向上取整到十位數：
 
 ```text
-price = ceil10((120 + intrinsicStat × weight) × (1 + (LV - 1) × 0.025) × 0.60)
+regularPrice = ceil10((120 + intrinsicStat × weight) × (1 + (LV - 1) × 0.025) × 0.60)
+festivalPrice = regularPrice × 0.50
 weight = HP為2，其餘能力為8
 intrinsicStat = 自然能力 + 過去糖果永久加值
-0.60 = 糖果價格永久降低40%的係數
+0.60 = 平時糖果價格永久降低40%的係數
+0.50 = 直接套用目前價格、約每五天一次的糖果節價格係數
 ```
 
 暫時性的裝備、熟練與親密度不會影響糖果價格。
@@ -746,7 +758,7 @@ flowchart TD
 
 ### 🧪 測試
 
-目前實作已通過 **43/43 項單元測試**、**14/14 項靜態檢查**、全部 JavaScript 語法檢查及空白驗證。
+目前實作已通過 **50/50 項單元測試**、**18/18 項靜態檢查**、全部 JavaScript 語法檢查及空白驗證。
 
 請在專案根目錄執行：
 

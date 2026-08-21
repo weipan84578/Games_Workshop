@@ -6,19 +6,71 @@
   var speciesOrder = ['eagle', 'lion', 'crocodile'];
   var cached = {};
   var nameParts = {
-    'zh-Hant': { prefix: ['疾風','晨星','青葉','琥珀','霜羽','潮音','赤焰','銀月','晴空','岩心'], core: ['阿爾','米菈','諾亞','凜','索恩','露卡','凱伊','希亞','羅恩','亞瑟'], title: ['旅者','守望者','挑戰者','追光者','鍛鍊家','競技士'] },
-    en: { prefix: ['Swift','Dawn','Verdant','Amber','Frost','Tidal','Scarlet','Silver','Azure','Stone'], core: ['Arlo','Mira','Noah','Rin','Thorne','Luca','Kai','Thea','Rowan','Arthur'], title: ['Wayfarer','Warden','Challenger','Lightseeker','Trainer','Duelist'] },
-    ja: { prefix: ['疾風','暁星','青葉','琥珀','霜羽','潮音','紅蓮','銀月','蒼空','岩心'], core: ['アル','ミラ','ノア','リン','ソーン','ルカ','カイ','シア','ロアン','アーサー'], title: ['旅人','守り人','挑戦者','光追い','鍛錬士','闘士'] }
+    'zh-Hant': {
+      prefix: ['疾風', '晨星', '青葉', '琥珀', '霜羽', '潮音', '赤焰', '銀月', '晴空', '岩心'],
+      core: ['阿爾', '米菈', '諾亞', '凜', '索恩', '露卡', '凱伊', '希亞', '羅恩', '亞瑟'],
+      title: ['旅者', '守望者', '挑戰者', '追光者', '鍛鍊家', '競技士']
+    },
+    en: {
+      prefix: ['Swift', 'Dawn', 'Verdant', 'Amber', 'Frost', 'Tidal', 'Scarlet', 'Silver', 'Azure', 'Stone'],
+      core: ['Arlo', 'Mira', 'Noah', 'Rin', 'Thorne', 'Luca', 'Kai', 'Thea', 'Rowan', 'Arthur'],
+      title: ['Wayfarer', 'Warden', 'Challenger', 'Lightseeker', 'Trainer', 'Duelist']
+    },
+    ja: {
+      prefix: ['疾風', '暁星', '青葉', '琥珀', '霜羽', '潮音', '紅蓮', '銀月', '蒼空', '岩心'],
+      core: ['アル', 'ミラ', 'ノア', 'リン', 'ソーン', 'ルカ', 'カイ', 'シア', 'ロアン', 'アーサー'],
+      title: ['旅人', '守り人', '挑戦者', '光追い', '鍛錬士', '闘士']
+    }
   };
   var rivalNames = {
-    'zh-Hant': { rival_sora:'蒼空・索拉',rival_leon:'赤鬃・里昂',rival_goro:'岩甲・五郎',rival_aria:'天翔・艾莉亞',rival_nova:'烈星・諾瓦',rival_bruno:'深潭・布魯諾',rival_ren:'疾風・蓮',rival_regulus:'金獅・雷古勒斯',rival_titan:'古岩・泰坦',rival_marea:'潮汐・瑪蕾雅',rival_zenith:'天頂・澤尼斯',rival_crown:'冠冕・奧雷恩' },
-    en: { rival_sora:'Sora of the Azure Sky',rival_leon:'Leon Redmane',rival_goro:'Goro Stoneplate',rival_aria:'Aria Skyborne',rival_nova:'Nova Blazestar',rival_bruno:'Bruno of the Deep',rival_ren:'Ren Galefoot',rival_regulus:'Regulus Goldmane',rival_titan:'Titan Ancientrock',rival_marea:'Marea Tideshield',rival_zenith:'Zenith Highsky',rival_crown:'Aureon the Crown' },
-    ja: { rival_sora:'蒼空のソラ',rival_leon:'赤鬃のレオン',rival_goro:'岩甲のゴロウ',rival_aria:'天翔のアリア',rival_nova:'烈星のノヴァ',rival_bruno:'深潭のブルーノ',rival_ren:'疾風のレン',rival_regulus:'金獅子レグルス',rival_titan:'古岩のタイタン',rival_marea:'潮汐のマレア',rival_zenith:'天頂のゼニス',rival_crown:'冠王アウレオン' }
+    'zh-Hant': {
+      rival_sora: '蒼空・索拉',
+      rival_leon: '赤鬃・里昂',
+      rival_goro: '岩甲・五郎',
+      rival_aria: '天翔・艾莉亞',
+      rival_nova: '烈星・諾瓦',
+      rival_bruno: '深潭・布魯諾',
+      rival_ren: '疾風・蓮',
+      rival_regulus: '金獅・雷古勒斯',
+      rival_titan: '古岩・泰坦',
+      rival_marea: '潮汐・瑪蕾雅',
+      rival_zenith: '天頂・澤尼斯',
+      rival_crown: '冠冕・奧雷恩'
+    },
+    en: {
+      rival_sora: 'Sora of the Azure Sky',
+      rival_leon: 'Leon Redmane',
+      rival_goro: 'Goro Stoneplate',
+      rival_aria: 'Aria Skyborne',
+      rival_nova: 'Nova Blazestar',
+      rival_bruno: 'Bruno of the Deep',
+      rival_ren: 'Ren Galefoot',
+      rival_regulus: 'Regulus Goldmane',
+      rival_titan: 'Titan Ancientrock',
+      rival_marea: 'Marea Tideshield',
+      rival_zenith: 'Zenith Highsky',
+      rival_crown: 'Aureon the Crown'
+    },
+    ja: {
+      rival_sora: '蒼空のソラ',
+      rival_leon: '赤鬃のレオン',
+      rival_goro: '岩甲のゴロウ',
+      rival_aria: '天翔のアリア',
+      rival_nova: '烈星のノヴァ',
+      rival_bruno: '深潭のブルーノ',
+      rival_ren: '疾風のレン',
+      rival_regulus: '金獅子レグルス',
+      rival_titan: '古岩のタイタン',
+      rival_marea: '潮汐のマレア',
+      rival_zenith: '天頂のゼニス',
+      rival_crown: '冠王アウレオン'
+    }
   };
 
   function createRankOrder(seed) {
     var order = [];
-    for (var rank = 1; rank <= 999; rank += 1) order.push(PSG.data.rivalByRank[rank] ? PSG.data.rivalByRank[rank].id : 'ai_' + String(rank).padStart(4, '0'));
+    for (var rank = 1; rank <= 999; rank += 1)
+      order.push(PSG.data.rivalByRank[rank] ? PSG.data.rivalByRank[rank].id : 'ai_' + String(rank).padStart(4, '0'));
     order.push('player');
     return order;
   }
@@ -38,7 +90,11 @@
   function levelForRank(rank) {
     var safeRank = PSG.utils.math.clamp(Math.round(Number(rank) || MAX_AI_RANK), 1, MAX_AI_RANK);
     // A rank owns one deterministic level. A linear curve avoids large level jumps at tier edges.
-    return PSG.utils.math.clamp(1 + Math.floor((MAX_AI_RANK + 1 - safeRank) * (MAX_LEVEL - 1) / MAX_AI_RANK), 1, MAX_LEVEL);
+    return PSG.utils.math.clamp(
+      1 + Math.floor(((MAX_AI_RANK + 1 - safeRank) * (MAX_LEVEL - 1)) / MAX_AI_RANK),
+      1,
+      MAX_LEVEL
+    );
   }
   function aiName(id, seed, language) {
     var rival = PSG.data.rivalById[id];
@@ -47,14 +103,26 @@
     var dict = nameParts[language] || nameParts['zh-Hant'];
     var rng = new PSG.utils.RNG(PSG.utils.seedFrom(seed, id, 'name'));
     var separator = language === 'en' ? ' ' : '・';
-    return rng.pick(dict.prefix) + separator + rng.pick(dict.core) + separator + rng.pick(dict.title) + ' ' + String(rank).padStart(3, '0');
+    return (
+      rng.pick(dict.prefix) +
+      separator +
+      rng.pick(dict.core) +
+      separator +
+      rng.pick(dict.title) +
+      ' ' +
+      String(rank).padStart(3, '0')
+    );
   }
   function equipmentFor(stage, speciesId, rank) {
     var strength = PSG.data.species[speciesId].strengths;
     var armorKey = strength.indexOf('hp') >= 0 ? 'vital' : 'guard';
     var accessoryKey = strength.indexOf('spAttack') >= 0 ? 'spirit' : 'strike';
     var emblemKey = rank % 4 === 0 ? 'fortune' : 'gale';
-    return { armor: 'eq_' + stage + '_' + armorKey, accessory: 'eq_' + stage + '_' + accessoryKey, emblem: 'eq_' + stage + '_' + emblemKey };
+    return {
+      armor: 'eq_' + stage + '_' + armorKey,
+      accessory: 'eq_' + stage + '_' + accessoryKey,
+      emblem: 'eq_' + stage + '_' + emblemKey
+    };
   }
   function getAI(id, seed, language) {
     var cacheKey = [id, seed, language].join('|');
@@ -62,9 +130,9 @@
     var rank = originalRank(id);
     var rival = PSG.data.rivalById[id];
     // Every identity/configuration decision derives from rankingSeed + stable ID for reload determinism.
-    var progress = 1 - ((rank - 1) / 999);
+    var progress = 1 - (rank - 1) / 999;
     var level = levelForRank(rank);
-    var masteryTarget = Math.round(20 * Math.pow(progress, 1.10));
+    var masteryTarget = Math.round(20 * Math.pow(progress, 1.1));
     // Cycling species keeps every 30-rank window balanced; the seed only rotates the starting species.
     var offset = PSG.utils.seedFrom(seed, 'species') % 3;
     var speciesId = rival ? rival.speciesId : speciesOrder[(rank + offset) % 3];
@@ -75,10 +143,22 @@
     });
     var stage = stageForRank(rank);
     var ai = {
-      id: id, originalRank: rank, name: aiName(id, seed, language), speciesId: speciesId, level: level,
+      id: id,
+      originalRank: rank,
+      name: aiName(id, seed, language),
+      speciesId: speciesId,
+      level: level,
       tactic: rival ? rival.tactic : speciesId === 'crocodile' ? 'defense' : rank % 2 ? 'normal' : 'offense',
-      equipmentStage: stage, milestone: Boolean(rival),
-      pet: { name: aiName(id, seed, language), speciesId: speciesId, level: level, xp: 0, affection: Math.round(progress * 100), mastery: mastery },
+      equipmentStage: stage,
+      milestone: Boolean(rival),
+      pet: {
+        name: aiName(id, seed, language),
+        speciesId: speciesId,
+        level: level,
+        xp: 0,
+        affection: Math.round(progress * 100),
+        mastery: mastery
+      },
       economy: { equipped: equipmentFor(stage, speciesId, rank) }
     };
     ai.stats = PSG.pet.stats.effective(ai);
@@ -87,5 +167,12 @@
     return ai;
   }
 
-  PSG.ranking.generator = { createRankOrder: createRankOrder, getAI: getAI, originalRank: originalRank, levelForRank: levelForRank, stageForRank: stageForRank, rivalNames: rivalNames };
+  PSG.ranking.generator = {
+    createRankOrder: createRankOrder,
+    getAI: getAI,
+    originalRank: originalRank,
+    levelForRank: levelForRank,
+    stageForRank: stageForRank,
+    rivalNames: rivalNames
+  };
 })(window.PSG);

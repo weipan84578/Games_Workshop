@@ -1,73 +1,127 @@
 <!doctype html>
 <html lang="zh-Hant" data-theme="candy" data-motion="standard">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="color-scheme" content="light dark">
-  <meta name="description" content="萌獸羈絆競技場：離線單人寵物培養與回合制競技遊戲">
-  <title>萌獸羈絆競技場</title>
-  <link rel="icon" href="assets/images/ui/logo-mark.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="css/base/reset.css">
-  <link rel="stylesheet" href="css/base/variables.css">
-  <link rel="stylesheet" href="css/base/typography.css">
-  <link rel="stylesheet" href="css/base/accessibility.css">
-  <link rel="stylesheet" href="css/themes/theme-candy.css">
-  <link rel="stylesheet" href="css/themes/theme-ocean.css">
-  <link rel="stylesheet" href="css/themes/theme-forest.css">
-  <link rel="stylesheet" href="css/themes/theme-sunset.css">
-  <link rel="stylesheet" href="css/themes/theme-night.css">
-  <link rel="stylesheet" href="css/layout/app-shell.css">
-  <link rel="stylesheet" href="css/components/toasts.css">
-  <link rel="stylesheet" href="css/layout/scenes.css">
-  <link rel="stylesheet" href="css/components/buttons.css">
-  <link rel="stylesheet" href="css/components/cards.css">
-  <link rel="stylesheet" href="css/components/bars.css">
-  <link rel="stylesheet" href="css/components/modal.css">
-  <link rel="stylesheet" href="css/components/pet-stage.css">
-  <link rel="stylesheet" href="css/components/event-art.css">
-  <link rel="stylesheet" href="css/components/shop.css">
-  <link rel="stylesheet" href="css/components/training-effects.css">
-  <link rel="stylesheet" href="css/responsive/mobile.css">
-  <link rel="stylesheet" href="css/responsive/tablet.css">
-  <link rel="stylesheet" href="css/responsive/desktop.css">
-  <link rel="stylesheet" href="css/responsive/landscape.css">
-</head>
-<body>
-  <a class="skip-link" href="#scene-root">Skip to content</a>
-  <div id="app" class="app-shell">
-    <main id="scene-root" tabindex="-1" aria-live="polite">
-      <section class="boot-card" aria-busy="true">
-        <img src="assets/images/ui/logo-mark.svg" width="72" height="72" alt="">
-        <h1>萌獸羈絆競技場</h1>
-        <p>正在準備你的冒險……</p>
-      </section>
-    </main>
-    <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
-  </div>
-  <dialog id="app-dialog" class="app-dialog" aria-labelledby="dialog-title">
-    <div class="dialog__frame">
-      <header class="dialog__header"><div><span class="eyebrow" id="dialog-eyebrow"></span><h2 id="dialog-title"></h2></div><button class="icon-button" id="dialog-close" type="button" aria-label="Close">×</button></header>
-      <div id="dialog-body" class="dialog__body"></div>
-      <footer id="dialog-actions" class="dialog__actions"></footer>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="萌獸羈絆競技場：離線單人寵物培養與回合制競技遊戲" />
+    <title>萌獸羈絆競技場</title>
+    <link rel="icon" href="assets/images/ui/logo-mark.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="css/base/reset.css" />
+    <link rel="stylesheet" href="css/base/variables.css" />
+    <link rel="stylesheet" href="css/base/typography.css" />
+    <link rel="stylesheet" href="css/base/accessibility.css" />
+    <link rel="stylesheet" href="css/themes/theme-candy.css" />
+    <link rel="stylesheet" href="css/themes/theme-ocean.css" />
+    <link rel="stylesheet" href="css/themes/theme-forest.css" />
+    <link rel="stylesheet" href="css/themes/theme-sunset.css" />
+    <link rel="stylesheet" href="css/themes/theme-night.css" />
+    <link rel="stylesheet" href="css/layout/app-shell.css" />
+    <link rel="stylesheet" href="css/components/toasts.css" />
+    <link rel="stylesheet" href="css/layout/scenes.css" />
+    <link rel="stylesheet" href="css/components/buttons.css" />
+    <link rel="stylesheet" href="css/components/cards.css" />
+    <link rel="stylesheet" href="css/components/save-slots.css" />
+    <link rel="stylesheet" href="css/components/candy-festival.css" />
+    <link rel="stylesheet" href="css/components/bars.css" />
+    <link rel="stylesheet" href="css/components/modal.css" />
+    <link rel="stylesheet" href="css/components/pet-stage.css" />
+    <link rel="stylesheet" href="css/components/event-art.css" />
+    <link rel="stylesheet" href="css/components/shop.css" />
+    <link rel="stylesheet" href="css/components/training-effects.css" />
+    <link rel="stylesheet" href="css/responsive/mobile.css" />
+    <link rel="stylesheet" href="css/responsive/tablet.css" />
+    <link rel="stylesheet" href="css/responsive/desktop.css" />
+    <link rel="stylesheet" href="css/responsive/landscape.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#scene-root">Skip to content</a>
+    <div id="app" class="app-shell">
+      <main id="scene-root" tabindex="-1" aria-live="polite">
+        <section class="boot-card" aria-busy="true">
+          <img src="assets/images/ui/logo-mark.svg" width="72" height="72" alt="" />
+          <h1>萌獸羈絆競技場</h1>
+          <p>正在準備你的冒險……</p>
+        </section>
+      </main>
+      <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
     </div>
-  </dialog>
+    <dialog id="app-dialog" class="app-dialog" aria-labelledby="dialog-title">
+      <div class="dialog__frame">
+        <header class="dialog__header">
+          <div>
+            <span class="eyebrow" id="dialog-eyebrow"></span>
+            <h2 id="dialog-title"></h2>
+          </div>
+          <button class="icon-button" id="dialog-close" type="button" aria-label="Close">×</button>
+        </header>
+        <div id="dialog-body" class="dialog__body"></div>
+        <footer id="dialog-actions" class="dialog__actions"></footer>
+      </div>
+    </dialog>
 
-  <script src="js/core/namespace.js"></script>
-  <script>window.PSG.env = { development: false };</script>
-  <script src="js/core/constants.js"></script>
-  <script src="js/utils/math.js"></script><script src="js/utils/rng.js"></script><script src="js/utils/validator.js"></script><script src="js/utils/formatter.js"></script><script src="js/utils/dom.js"></script>
-  <script src="js/core/eventBus.js"></script>
-  <script src="js/data/speciesData.js"></script><script src="js/data/equipmentData.js"></script><script src="js/data/consumableData.js"></script><script src="js/data/abilityCandyData.js"></script><script src="js/data/rivalData.js"></script><script src="js/data/eventData.js"></script>
-  <script src="js/i18n/lang-zh.js"></script><script src="js/i18n/lang-en.js"></script><script src="js/i18n/lang-ja.js"></script><script src="js/i18n/featureLocales.js"></script><script src="js/i18n/i18n.js"></script>
-  <script src="js/audio/bgmPlaylist.js"></script><script src="js/audio/sfxLibrary.js"></script>
-  <script src="js/economy/equipmentManager.js"></script><script src="js/pet/statCalculator.js"></script><script src="js/economy/abilityCandyManager.js"></script><script src="js/pet/progression.js"></script><script src="js/pet/affection.js"></script>
-  <script src="js/ranking/rankingGenerator.js"></script><script src="js/ranking/matchmaking.js"></script><script src="js/ranking/rankingManager.js"></script>
-  <script src="js/core/gameState.js"></script><script src="js/storage/migrationManager.js"></script><script src="js/storage/saveManager.js"></script><script src="js/audio/audioManager.js"></script>
-  <script src="js/economy/shopManager.js"></script><script src="js/economy/inventoryManager.js"></script>
-  <script src="js/pet/dailyActions.js"></script><script src="js/pet/petModel.js"></script><script src="js/pet/playManager.js"></script><script src="js/pet/outingManager.js"></script>
-  <script src="js/training/trainingManager.js"></script><script src="js/training/strengthGame.js"></script><script src="js/training/enduranceGame.js"></script><script src="js/training/agilityGame.js"></script>
-  <script src="js/battle/damageCalculator.js"></script><script src="js/battle/effectManager.js"></script><script src="js/battle/battleAI.js"></script><script src="js/battle/battleEngine.js"></script>
-  <script src="js/ui/commonUI.js"></script><script src="js/ui/mainMenuUI.js"></script><script src="js/ui/onboardingUI.js"></script><script src="js/ui/homeUI.js"></script><script src="js/ui/trainingUI.js"></script><script src="js/ui/outingUI.js"></script><script src="js/ui/rankingUI.js"></script><script src="js/ui/battleUI.js"></script><script src="js/ui/shopUI.js"></script><script src="js/ui/instructionsUI.js"></script><script src="js/ui/settingsUI.js"></script>
-  <script src="js/core/sceneManager.js"></script><script src="js/core/app.js"></script>
-</body>
+    <script src="js/core/namespace.js"></script>
+    <script>
+      window.PSG.env = { development: false };
+    </script>
+    <script src="js/core/constants.js"></script>
+    <script src="js/utils/math.js"></script>
+    <script src="js/utils/rng.js"></script>
+    <script src="js/utils/validator.js"></script>
+    <script src="js/utils/formatter.js"></script>
+    <script src="js/utils/dom.js"></script>
+    <script src="js/core/eventBus.js"></script>
+    <script src="js/data/speciesData.js"></script>
+    <script src="js/data/equipmentData.js"></script>
+    <script src="js/data/consumableData.js"></script>
+    <script src="js/data/abilityCandyData.js"></script>
+    <script src="js/data/rivalData.js"></script>
+    <script src="js/data/eventData.js"></script>
+    <script src="js/i18n/lang-zh.js"></script>
+    <script src="js/i18n/lang-en.js"></script>
+    <script src="js/i18n/lang-ja.js"></script>
+    <script src="js/i18n/featureLocales.js"></script>
+    <script src="js/i18n/i18n.js"></script>
+    <script src="js/audio/bgmPlaylist.js"></script>
+    <script src="js/audio/sfxLibrary.js"></script>
+    <script src="js/economy/equipmentManager.js"></script>
+    <script src="js/pet/statCalculator.js"></script>
+    <script src="js/economy/abilityCandyManager.js"></script>
+    <script src="js/pet/progression.js"></script>
+    <script src="js/pet/affection.js"></script>
+    <script src="js/ranking/rankingGenerator.js"></script>
+    <script src="js/ranking/matchmaking.js"></script>
+    <script src="js/ranking/rankingManager.js"></script>
+    <script src="js/core/gameState.js"></script>
+    <script src="js/storage/migrationManager.js"></script>
+    <script src="js/storage/saveManager.js"></script>
+    <script src="js/audio/audioManager.js"></script>
+    <script src="js/economy/shopManager.js"></script>
+    <script src="js/economy/inventoryManager.js"></script>
+    <script src="js/pet/dailyActions.js"></script>
+    <script src="js/pet/petModel.js"></script>
+    <script src="js/pet/playManager.js"></script>
+    <script src="js/pet/outingManager.js"></script>
+    <script src="js/training/trainingManager.js"></script>
+    <script src="js/training/strengthGame.js"></script>
+    <script src="js/training/enduranceGame.js"></script>
+    <script src="js/training/agilityGame.js"></script>
+    <script src="js/battle/damageCalculator.js"></script>
+    <script src="js/battle/effectManager.js"></script>
+    <script src="js/battle/battleAI.js"></script>
+    <script src="js/battle/battleEngine.js"></script>
+    <script src="js/ui/commonUI.js"></script>
+    <script src="js/ui/mainMenuUI.js"></script>
+    <script src="js/ui/onboardingUI.js"></script>
+    <script src="js/ui/homeUI.js"></script>
+    <script src="js/ui/trainingUI.js"></script>
+    <script src="js/ui/outingUI.js"></script>
+    <script src="js/ui/rankingUI.js"></script>
+    <script src="js/ui/battleUI.js"></script>
+    <script src="js/ui/shopUI.js"></script>
+    <script src="js/ui/instructionsUI.js"></script>
+    <script src="js/ui/settingsUI.js"></script>
+    <script src="js/core/sceneManager.js"></script>
+    <script src="js/core/app.js"></script>
+  </body>
 </html>

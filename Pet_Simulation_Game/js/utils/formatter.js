@@ -14,6 +14,8 @@
         return String(value || '—');
       }
     },
-    percent: function (value, digits) { return (value * 100).toFixed(digits == null ? 1 : digits) + '%'; }
+    percent: function (value, digits) {
+      return (value * 100).toFixed(digits == null ? 1 : digits) + '%';
+    }
   };
 })(window.PSG);

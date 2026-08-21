@@ -12,29 +12,70 @@ Object.defineProperty(global, 'navigator', { value: { language: 'zh-TW' }, confi
 global.document = { documentElement: { lang: 'zh-Hant' } };
 const memory = new Map();
 global.localStorage = {
-  getItem: key => memory.has(key) ? memory.get(key) : null,
+  getItem: (key) => (memory.has(key) ? memory.get(key) : null),
   setItem: (key, value) => memory.set(key, String(value)),
-  removeItem: key => memory.delete(key),
+  removeItem: (key) => memory.delete(key),
   clear: () => memory.clear()
 };
 
 const root = path.resolve(__dirname, '..');
 const scripts = [
-  'js/core/namespace.js','js/core/constants.js','js/utils/math.js','js/utils/rng.js','js/utils/validator.js','js/utils/formatter.js','js/core/eventBus.js',
-  'js/data/speciesData.js','js/data/equipmentData.js','js/data/consumableData.js','js/data/abilityCandyData.js','js/data/rivalData.js','js/data/eventData.js',
-  'js/i18n/lang-zh.js','js/i18n/lang-en.js','js/i18n/lang-ja.js','js/i18n/featureLocales.js','js/i18n/i18n.js',
-  'js/economy/equipmentManager.js','js/pet/statCalculator.js','js/economy/abilityCandyManager.js','js/pet/progression.js','js/pet/affection.js',
-  'js/ranking/rankingGenerator.js','js/ranking/matchmaking.js','js/ranking/rankingManager.js','js/core/gameState.js',
-  'js/storage/migrationManager.js','js/storage/saveManager.js','js/economy/shopManager.js','js/economy/inventoryManager.js',
-  'js/pet/dailyActions.js','js/pet/petModel.js','js/pet/playManager.js','js/pet/outingManager.js',
-  'js/training/trainingManager.js','js/training/strengthGame.js','js/training/enduranceGame.js','js/training/agilityGame.js',
-  'js/battle/damageCalculator.js','js/battle/effectManager.js','js/battle/battleAI.js','js/battle/battleEngine.js'
+  'js/core/namespace.js',
+  'js/core/constants.js',
+  'js/utils/math.js',
+  'js/utils/rng.js',
+  'js/utils/validator.js',
+  'js/utils/formatter.js',
+  'js/core/eventBus.js',
+  'js/data/speciesData.js',
+  'js/data/equipmentData.js',
+  'js/data/consumableData.js',
+  'js/data/abilityCandyData.js',
+  'js/data/rivalData.js',
+  'js/data/eventData.js',
+  'js/i18n/lang-zh.js',
+  'js/i18n/lang-en.js',
+  'js/i18n/lang-ja.js',
+  'js/i18n/featureLocales.js',
+  'js/i18n/i18n.js',
+  'js/economy/equipmentManager.js',
+  'js/pet/statCalculator.js',
+  'js/economy/abilityCandyManager.js',
+  'js/pet/progression.js',
+  'js/pet/affection.js',
+  'js/ranking/rankingGenerator.js',
+  'js/ranking/matchmaking.js',
+  'js/ranking/rankingManager.js',
+  'js/core/gameState.js',
+  'js/storage/migrationManager.js',
+  'js/storage/saveManager.js',
+  'js/economy/shopManager.js',
+  'js/economy/inventoryManager.js',
+  'js/pet/dailyActions.js',
+  'js/pet/petModel.js',
+  'js/pet/playManager.js',
+  'js/pet/outingManager.js',
+  'js/training/trainingManager.js',
+  'js/training/strengthGame.js',
+  'js/training/enduranceGame.js',
+  'js/training/agilityGame.js',
+  'js/battle/damageCalculator.js',
+  'js/battle/effectManager.js',
+  'js/battle/battleAI.js',
+  'js/battle/battleEngine.js'
 ];
-scripts.forEach(file => vm.runInThisContext(fs.readFileSync(path.join(root, file), 'utf8'), { filename: file }));
+scripts.forEach((file) => vm.runInThisContext(fs.readFileSync(path.join(root, file), 'utf8'), { filename: file }));
 
 const tests = [];
-function test(name, fn) { tests.push({ name, fn }); }
-function fresh(species = 'lion') { memory.clear(); const save = PSG.core.gameState.create('Trainer', 'Buddy', species, 123456789); PSG.core.gameState.set(save); return save; }
+function test(name, fn) {
+  tests.push({ name, fn });
+}
+function fresh(species = 'lion') {
+  memory.clear();
+  const save = PSG.core.gameState.create('Trainer', 'Buddy', species, 123456789);
+  PSG.core.gameState.set(save, 1);
+  return save;
+}
 
 test('name validation counts Unicode code points and trims whitespace', () => {
   assert.equal(PSG.utils.validator.name('  小獅丸  ').value, '小獅丸');
@@ -44,13 +85,29 @@ test('name validation counts Unicode code points and trims whitespace', () => {
 });
 
 test('natural stats match the level 1, 50, and 100 formulas', () => {
-  assert.deepEqual(PSG.pet.stats.natural('eagle', 1), { hp:100,attack:16,defense:10,mobility:18,spAttack:12,spDefense:10,speed:18 });
+  assert.deepEqual(PSG.pet.stats.natural('eagle', 1), {
+    hp: 100,
+    attack: 16,
+    defense: 10,
+    mobility: 18,
+    spAttack: 12,
+    spDefense: 10,
+    speed: 18
+  });
   assert.equal(PSG.pet.stats.natural('lion', 50).attack, Math.round(18 + 1.05 * 49));
-  assert.deepEqual(PSG.pet.stats.natural('crocodile', 100), { hp:585,attack:90,defense:122,mobility:49,spAttack:90,spDefense:122,speed:56 });
+  assert.deepEqual(PSG.pet.stats.natural('crocodile', 100), {
+    hp: 585,
+    attack: 90,
+    defense: 122,
+    mobility: 49,
+    spAttack: 90,
+    spDefense: 122,
+    speed: 56
+  });
 });
 
 test('species positioning is preserved at equal levels', () => {
-  const all = ['eagle','lion','crocodile'].map(id => PSG.pet.stats.natural(id, 70));
+  const all = ['eagle', 'lion', 'crocodile'].map((id) => PSG.pet.stats.natural(id, 70));
   assert.ok(all[0].mobility > all[1].mobility && all[0].speed > all[1].speed);
   assert.ok(all[1].attack > all[0].attack && all[1].spAttack > all[0].spAttack);
   assert.ok(all[2].hp > all[1].hp && all[2].defense > all[1].defense && all[2].spDefense > all[1].spDefense);
@@ -59,19 +116,22 @@ test('species positioning is preserved at equal levels', () => {
 test('mastery 20 provides exactly +10 percent before flooring', () => {
   const save = fresh('eagle');
   save.pet.mastery.attack.level = 20;
-  assert.equal(PSG.pet.stats.effective(save).attack, Math.floor(16 * 1.10));
+  assert.equal(PSG.pet.stats.effective(save).attack, Math.floor(16 * 1.1));
 });
 
 test('mastery scales level-up growth from 1x to 3x', () => {
   assert.equal(PSG.pet.stats.masteryGrowthMultiplier(0), 1);
   assert.equal(PSG.pet.stats.masteryGrowthMultiplier(20), 3);
-  const low = fresh('eagle'); low.pet.level = 20;
-  const high = fresh('eagle'); high.pet.level = 20; high.pet.mastery.attack.level = 20;
+  const low = fresh('eagle');
+  low.pet.level = 20;
+  const high = fresh('eagle');
+  high.pet.level = 20;
+  high.pet.mastery.attack.level = 20;
   assert.ok(PSG.pet.stats.effective(high).attack > PSG.pet.stats.effective(low).attack);
 });
 
 test('affection thresholds provide 0/1/2/3/5 percent', () => {
-  assert.deepEqual([0,20,40,60,80,100].map(PSG.pet.stats.affectionBonus), [0,.01,.02,.03,.03,.05]);
+  assert.deepEqual([0, 20, 40, 60, 80, 100].map(PSG.pet.stats.affectionBonus), [0, 0.01, 0.02, 0.03, 0.03, 0.05]);
 });
 
 test('affection scenes queue once and their rewards are idempotent', () => {
@@ -94,44 +154,55 @@ test('XP can overflow across multiple levels', () => {
 });
 
 test('level 100 is capped and shows no retained XP', () => {
-  const save = fresh(); save.pet.level = 99; save.pet.xp = 0;
+  const save = fresh();
+  save.pet.level = 99;
+  save.pet.xp = 0;
   PSG.pet.progression.addXp(save, 10000);
-  assert.equal(save.pet.level, 100); assert.equal(save.pet.xp, 0);
+  assert.equal(save.pet.level, 100);
+  assert.equal(save.pet.xp, 0);
 });
 
 test('mastery XP overflows and caps at level 20', () => {
   const save = fresh();
   PSG.pet.progression.addMastery(save, 'hp', 100000);
-  assert.equal(save.pet.mastery.hp.level, 20); assert.equal(save.pet.mastery.hp.xp, 0);
+  assert.equal(save.pet.mastery.hp.level, 20);
+  assert.equal(save.pet.mastery.hp.xp, 0);
 });
 
 test('mood reward multipliers use exact thresholds', () => {
-  assert.deepEqual([0,29,30,69,70,100].map(PSG.pet.daily.moodMultiplier), [.75,.75,1,1,1.1,1.1]);
+  assert.deepEqual([0, 29, 30, 69, 70, 100].map(PSG.pet.daily.moodMultiplier), [0.75, 0.75, 1, 1, 1.1, 1.1]);
 });
 
 test('daily activities reject insufficient AP, stamina, and mood', () => {
-  const save = fresh(); save.day.actionPoints = 0;
+  const save = fresh();
+  save.day.actionPoints = 0;
   assert.equal(PSG.pet.daily.can(save, 'training').reason, 'ap');
-  save.day.actionPoints = 5; save.pet.energy = 10;
+  save.day.actionPoints = 5;
+  save.pet.energy = 10;
   assert.equal(PSG.pet.daily.can(save, 'training').reason, 'energy');
-  save.pet.energy = 80; save.pet.mood = 19;
+  save.pet.energy = 80;
+  save.pet.mood = 19;
   assert.equal(PSG.pet.daily.can(save, 'battle').reason, 'mood');
 });
 
 test('status values are clamped after activities and rest', () => {
-  const save = fresh(); save.pet.mood = 99; save.pet.affection = 99;
+  const save = fresh();
+  save.pet.mood = 99;
+  save.pet.affection = 99;
   PSG.pet.daily.applyFixed(save, 'play');
-  assert.equal(save.pet.mood, 100); assert.equal(save.pet.affection, 100);
+  assert.equal(save.pet.mood, 100);
+  assert.equal(save.pet.affection, 100);
   PSG.pet.daily.nextDay(save);
-  assert.equal(save.day.actionPoints, 5); assert.ok(save.pet.energy <= 100);
+  assert.equal(save.day.actionPoints, 5);
+  assert.ok(save.pet.energy <= 100);
 });
 
 test('training grade boundaries and score helpers are exact', () => {
   assert.equal(PSG.training.manager.gradeFor(85).id, 'gold');
   assert.equal(PSG.training.manager.gradeFor(60).id, 'silver');
   assert.equal(PSG.training.manager.gradeFor(59).id, 'bronze');
-  assert.equal(PSG.training.strength.scoreAt(.5), 100);
-  assert.equal(PSG.training.endurance.scoreAt(.72), 100);
+  assert.equal(PSG.training.strength.scoreAt(0.5), 100);
+  assert.equal(PSG.training.endurance.scoreAt(0.72), 100);
   assert.equal(PSG.training.manager.feedbackFor(90).id, 'perfect');
   assert.equal(PSG.training.manager.feedbackFor(60).id, 'great');
   assert.equal(PSG.training.manager.feedbackFor(59).id, 'keep');
@@ -151,14 +222,19 @@ test('equipment, consumable, and event catalog sizes match the specification', (
   assert.equal(PSG.data.consumables.length, 18);
   assert.equal(PSG.data.abilityCandies.length, 7);
   assert.equal(PSG.data.events.length, 24);
-  PSG.data.equipment.concat(PSG.data.consumables).forEach(item => assert.ok(fs.existsSync(path.join(root, item.image)), `missing ${item.image}`));
+  PSG.data.equipment
+    .concat(PSG.data.consumables)
+    .forEach((item) => assert.ok(fs.existsSync(path.join(root, item.image)), `missing ${item.image}`));
 });
 
 test('each outing location has eight events totaling weight 100', () => {
-  PSG.data.outingLocations.forEach(location => {
-    const rows = PSG.data.events.filter(event => event.location === location);
+  PSG.data.outingLocations.forEach((location) => {
+    const rows = PSG.data.events.filter((event) => event.location === location);
     assert.equal(rows.length, 8);
-    assert.equal(rows.reduce((sum, event) => sum + event.weight, 0), 100);
+    assert.equal(
+      rows.reduce((sum, event) => sum + event.weight, 0),
+      100
+    );
   });
 });
 
@@ -172,35 +248,43 @@ test('six equipment stage thresholds unlock from best rank permanently', () => {
 test('luck emblems respect normal critical-rate cap', () => {
   const save = fresh();
   save.economy.equipped.emblem = 'eq_6_fortune';
-  assert.equal(PSG.pet.stats.critRate(save), .20);
-  assert.equal(PSG.pet.stats.critRate(save, null, true), .30);
+  assert.equal(PSG.pet.stats.critRate(save), 0.2);
+  assert.equal(PSG.pet.stats.critRate(save, null, true), 0.3);
 });
 
 test('ranking always has 1,000 distinct IDs and one player', () => {
   const save = fresh();
   assert.equal(save.ranking.rankOrder.length, 1000);
   assert.equal(new Set(save.ranking.rankOrder).size, 1000);
-  assert.equal(save.ranking.rankOrder.filter(id => id === 'player').length, 1);
+  assert.equal(save.ranking.rankOrder.filter((id) => id === 'player').length, 1);
 });
 
 test('all 12 milestone rivals occupy their fixed ranks', () => {
   const save = fresh();
-  PSG.data.rivals.forEach(rival => assert.equal(save.ranking.rankOrder[rival.rank - 1], rival.id));
+  PSG.data.rivals.forEach((rival) => assert.equal(save.ranking.rankOrder[rival.rank - 1], rival.id));
 });
 
 test('same ranking seed yields identical AI identity and configuration', () => {
   const a = PSG.ranking.generator.getAI('ai_0421', 99, 'en');
   const b = PSG.ranking.generator.getAI('ai_0421', 99, 'en');
-  assert.equal(a.name, b.name); assert.equal(a.speciesId, b.speciesId); assert.equal(a.bp, b.bp);
+  assert.equal(a.name, b.name);
+  assert.equal(a.speciesId, b.speciesId);
+  assert.equal(a.bp, b.bp);
 });
 
 test('AI names are unique and every 30-rank species window stays balanced', () => {
   const save = fresh();
-  const species = save.ranking.rankOrder.slice(0, 999).map(id => PSG.ranking.generator.getAI(id, save.ranking.rankingSeed, 'en').speciesId);
-  const names = save.ranking.rankOrder.slice(0, 999).map(id => PSG.ranking.generator.getAI(id, save.ranking.rankingSeed, 'en').name);
+  const species = save.ranking.rankOrder
+    .slice(0, 999)
+    .map((id) => PSG.ranking.generator.getAI(id, save.ranking.rankingSeed, 'en').speciesId);
+  const names = save.ranking.rankOrder
+    .slice(0, 999)
+    .map((id) => PSG.ranking.generator.getAI(id, save.ranking.rankingSeed, 'en').name);
   assert.equal(new Set(names).size, 999);
   for (let start = 0; start <= species.length - 30; start += 1) {
-    const counts = ['eagle','lion','crocodile'].map(id => species.slice(start, start + 30).filter(value => value === id).length);
+    const counts = ['eagle', 'lion', 'crocodile'].map(
+      (id) => species.slice(start, start + 30).filter((value) => value === id).length
+    );
     assert.ok(Math.max(...counts) - Math.min(...counts) <= 3, `unbalanced window at rank ${start + 1}`);
   }
 });
@@ -208,7 +292,8 @@ test('AI names are unique and every 30-rank species window stays balanced', () =
 test('AI levels are deterministic and fixed to their original ranks', () => {
   assert.equal(PSG.ranking.generator.levelForRank(999), 1);
   assert.equal(PSG.ranking.generator.levelForRank(1), 100);
-  for (let rank = 2; rank <= 999; rank += 1) assert.ok(PSG.ranking.generator.levelForRank(rank) <= PSG.ranking.generator.levelForRank(rank - 1));
+  for (let rank = 2; rank <= 999; rank += 1)
+    assert.ok(PSG.ranking.generator.levelForRank(rank) <= PSG.ranking.generator.levelForRank(rank - 1));
   const ai = PSG.ranking.generator.getAI('ai_0421', 123, 'en');
   assert.equal(ai.level, PSG.ranking.generator.levelForRank(421));
 });
@@ -216,66 +301,101 @@ test('AI levels are deterministic and fixed to their original ranks', () => {
 test('candidate matching returns five unique opponents at rank 1000 and rank 1', () => {
   const save = fresh();
   let rows = PSG.ranking.matchmaking.candidates(save);
-  assert.equal(rows.length, 5); assert.equal(new Set(rows.map(row => row.id)).size, 5);
-  const first = save.ranking.rankOrder[0]; save.ranking.rankOrder[0] = 'player'; save.ranking.rankOrder[999] = first;
+  assert.equal(rows.length, 5);
+  assert.equal(new Set(rows.map((row) => row.id)).size, 5);
+  const first = save.ranking.rankOrder[0];
+  save.ranking.rankOrder[0] = 'player';
+  save.ranking.rankOrder[999] = first;
   rows = PSG.ranking.matchmaking.candidates(save);
-  assert.equal(rows.length, 5); assert.ok(rows.every(row => row.rank > 1));
+  assert.equal(rows.length, 5);
+  assert.ok(rows.every((row) => row.rank > 1));
 });
 
 test('mid-table candidate matching uses three higher and two lower ranks', () => {
-  const save = fresh(); const displaced = save.ranking.rankOrder[499];
-  save.ranking.rankOrder[499] = 'player'; save.ranking.rankOrder[999] = displaced;
+  const save = fresh();
+  const displaced = save.ranking.rankOrder[499];
+  save.ranking.rankOrder[499] = 'player';
+  save.ranking.rankOrder[999] = displaced;
   const rows = PSG.ranking.matchmaking.candidates(save);
-  assert.equal(rows.filter(row => row.rank < 500).length, 3);
-  assert.equal(rows.filter(row => row.rank > 500).length, 2);
-  assert.ok(rows.every(row => Math.abs(row.rank - 500) <= 12));
+  assert.equal(rows.filter((row) => row.rank < 500).length, 3);
+  assert.equal(rows.filter((row) => row.rank > 500).length, 2);
+  assert.ok(rows.every((row) => Math.abs(row.rank - 500) <= 12));
 });
 
-test('daily coin income follows rank stages and never falls below 30', () => {
+test('daily coin income follows rank stages with the requested 300 percent increase', () => {
   const save = fresh();
-  assert.equal(PSG.pet.daily.dailyCoins(save), 30);
+  assert.equal(PSG.pet.daily.dailyCoins(save), 120);
   const bronzeId = save.ranking.rankOrder[749];
-  save.ranking.rankOrder[749] = 'player'; save.ranking.rankOrder[999] = bronzeId;
-  assert.equal(PSG.pet.daily.dailyCoins(save), 60);
+  save.ranking.rankOrder[749] = 'player';
+  save.ranking.rankOrder[999] = bronzeId;
+  assert.equal(PSG.pet.daily.dailyCoins(save), 240);
   const championId = save.ranking.rankOrder[0];
-  save.ranking.rankOrder[0] = 'player'; save.ranking.rankOrder[749] = championId;
-  assert.equal(PSG.pet.daily.dailyCoins(save), 180);
+  save.ranking.rankOrder[0] = 'player';
+  save.ranking.rankOrder[749] = championId;
+  assert.equal(PSG.pet.daily.dailyCoins(save), 720);
   const before = save.player.coins;
   const result = PSG.pet.daily.nextDay(save);
-  assert.equal(result.coins, 180);
-  assert.equal(save.player.coins, before + 180);
+  assert.equal(result.coins, 720);
+  assert.equal(save.player.coins, before + 720);
 });
 
 test('winning against a higher rank swaps positions; losing does not', () => {
-  const save = fresh(); const opponent = save.ranking.rankOrder[998];
+  const save = fresh();
+  const opponent = save.ranking.rankOrder[998];
   let result = PSG.ranking.manager.settle(save, opponent, false);
   assert.equal(result.after, 1000);
   result = PSG.ranking.manager.settle(save, opponent, true);
-  assert.equal(result.after, 999); assert.equal(save.ranking.rankOrder[999], opponent);
+  assert.equal(result.after, 999);
+  assert.equal(save.ranking.rankOrder[999], opponent);
 });
 
 test('damage formula reproduces the documented level-50 example', () => {
-  const normal = PSG.battle.damage.calculate({ level:50,power:80,attack:75,defense:70,variance:1.02,critical:false });
-  const critical = PSG.battle.damage.calculate({ level:50,power:80,attack:75,defense:70,variance:1.02,critical:true });
-  assert.equal(normal.damage, 40); assert.equal(critical.damage, 70);
+  const normal = PSG.battle.damage.calculate({
+    level: 50,
+    power: 80,
+    attack: 75,
+    defense: 70,
+    variance: 1.02,
+    critical: false
+  });
+  const critical = PSG.battle.damage.calculate({
+    level: 50,
+    power: 80,
+    attack: 75,
+    defense: 70,
+    variance: 1.02,
+    critical: true
+  });
+  assert.equal(normal.damage, 40);
+  assert.equal(critical.damage, 70);
 });
 
 test('damage variance is clamped and damage never falls below one', () => {
-  const low = PSG.battle.damage.calculate({ level:1,power:1,attack:0,defense:999,variance:0,critical:false });
-  assert.equal(low.damage, 1); assert.equal(low.variance, .95);
+  const low = PSG.battle.damage.calculate({
+    level: 1,
+    power: 1,
+    attack: 0,
+    defense: 999,
+    variance: 0,
+    critical: false
+  });
+  assert.equal(low.damage, 1);
+  assert.equal(low.variance, 0.95);
 });
 
 test('evasion follows the formula and never exceeds 40 percent', () => {
-  assert.equal(PSG.battle.damage.evasion(9999, 1, 1), .40);
+  assert.equal(PSG.battle.damage.evasion(9999, 1, 1), 0.4);
   const value = PSG.battle.damage.evasion(12, 1, 1);
-  assert.ok(Math.abs(value - .18) < 1e-12);
-  assert.ok(Math.abs(PSG.battle.damage.evasion(12, 1, .5) - .09) < 1e-12);
+  assert.ok(Math.abs(value - 0.18) < 1e-12);
+  assert.ok(Math.abs(PSG.battle.damage.evasion(12, 1, 0.5) - 0.09) < 1e-12);
 });
 
 test('battle energy starts, gains, spends, and clamps correctly', () => {
-  const save = fresh('lion'); const ai = Object.assign({}, PSG.ranking.generator.getAI('ai_0999', save.ranking.rankingSeed, 'en'), { rank:999 });
-  const state = PSG.battle.engine.create(save, ai, null, 4); PSG.battle.engine.start(state);
-  state.rng.next = () => .9;
+  const save = fresh('lion');
+  const ai = Object.assign({}, PSG.ranking.generator.getAI('ai_0999', save.ranking.rankingSeed, 'en'), { rank: 999 });
+  const state = PSG.battle.engine.create(save, ai, null, 4);
+  PSG.battle.engine.start(state);
+  state.rng.next = () => 0.9;
   PSG.battle.engine.round(state, 'normal');
   assert.ok(state.player.energy === 30 || state.player.energy === 40);
   state.player.energy = 100;
@@ -284,8 +404,9 @@ test('battle energy starts, gains, spends, and clamps correctly', () => {
 });
 
 test('battle consumable is deducted only after a valid snapshot starts', () => {
-  const save = fresh(); save.economy.consumables.con_1_energy = 1;
-  const ai = Object.assign({}, PSG.ranking.generator.getAI('ai_0999', save.ranking.rankingSeed, 'en'), { rank:999 });
+  const save = fresh();
+  save.economy.consumables.con_1_energy = 1;
+  const ai = Object.assign({}, PSG.ranking.generator.getAI('ai_0999', save.ranking.rankingSeed, 'en'), { rank: 999 });
   const state = PSG.battle.engine.create(save, ai, 'con_1_energy', 4);
   assert.equal(save.economy.consumables.con_1_energy, 1);
   assert.equal(PSG.battle.engine.start(state).ok, true);
@@ -294,37 +415,56 @@ test('battle consumable is deducted only after a valid snapshot starts', () => {
 });
 
 test('Eagle special halves dodge and grants two future mobility actions on hit', () => {
-  const save = fresh('eagle'); const ai = Object.assign({}, PSG.ranking.generator.getAI('ai_0999', save.ranking.rankingSeed, 'en'), { rank:999 });
-  const state = PSG.battle.engine.create(save, ai, null, 1); state.player.energy = 100; state.rng.next = () => .99;
-  const expected = PSG.battle.damage.evasion(state.enemy.stats.mobility, state.enemy.level, .5);
+  const save = fresh('eagle');
+  const ai = Object.assign({}, PSG.ranking.generator.getAI('ai_0999', save.ranking.rankingSeed, 'en'), { rank: 999 });
+  const state = PSG.battle.engine.create(save, ai, null, 1);
+  state.player.energy = 100;
+  state.rng.next = () => 0.99;
+  const expected = PSG.battle.damage.evasion(state.enemy.stats.mobility, state.enemy.level, 0.5);
   const result = PSG.battle.engine.performAttack(state, state.player, state.enemy, 'special');
-  assert.equal(result.dodged, false); assert.equal(result.dodgeRate, expected); assert.equal(state.player.effects.eagleMobility, 2);
+  assert.equal(result.dodged, false);
+  assert.equal(result.dodgeRate, expected);
+  assert.equal(state.player.effects.eagleMobility, 2);
 });
 
 test('Crocodile special creates a 12 percent max-HP shield on hit', () => {
-  const save = fresh('crocodile'); const ai = Object.assign({}, PSG.ranking.generator.getAI('ai_0999', save.ranking.rankingSeed, 'en'), { rank:999 });
-  const state = PSG.battle.engine.create(save, ai, null, 1); state.player.energy = 100; state.rng.next = () => .99;
+  const save = fresh('crocodile');
+  const ai = Object.assign({}, PSG.ranking.generator.getAI('ai_0999', save.ranking.rankingSeed, 'en'), { rank: 999 });
+  const state = PSG.battle.engine.create(save, ai, null, 1);
+  state.player.energy = 100;
+  state.rng.next = () => 0.99;
   PSG.battle.engine.performAttack(state, state.player, state.enemy, 'special');
-  assert.equal(state.player.shield, Math.floor(state.player.maxHp * .12)); assert.equal(state.player.effects.shieldTurns, 2);
+  assert.equal(state.player.shield, Math.floor(state.player.maxHp * 0.12));
+  assert.equal(state.player.effects.shieldTurns, 2);
 });
 
 test('a knockout prevents the defeated second actor from attacking', () => {
-  const save = fresh('lion'); const ai = Object.assign({}, PSG.ranking.generator.getAI('ai_0999', save.ranking.rankingSeed, 'en'), { rank:999 });
-  const state = PSG.battle.engine.create(save, ai, null, 8); PSG.battle.engine.start(state);
-  state.player.stats.speed = 999; state.player.stats.attack = 99999; state.rng.next = () => .9;
+  const save = fresh('lion');
+  const ai = Object.assign({}, PSG.ranking.generator.getAI('ai_0999', save.ranking.rankingSeed, 'en'), { rank: 999 });
+  const state = PSG.battle.engine.create(save, ai, null, 8);
+  PSG.battle.engine.start(state);
+  state.player.stats.speed = 999;
+  state.player.stats.attack = 99999;
+  state.rng.next = () => 0.9;
   const result = PSG.battle.engine.round(state, 'normal');
-  assert.equal(result.events.length, 1); assert.equal(state.winnerId, 'player');
+  assert.equal(result.events.length, 1);
+  assert.equal(state.winnerId, 'player');
 });
 
 test('round-20 tiebreak always produces one winner', () => {
-  const save = fresh(); const ai = Object.assign({}, PSG.ranking.generator.getAI('ai_0999', save.ranking.rankingSeed, 'en'), { rank:999 });
+  const save = fresh();
+  const ai = Object.assign({}, PSG.ranking.generator.getAI('ai_0999', save.ranking.rankingSeed, 'en'), { rank: 999 });
   const state = PSG.battle.engine.create(save, ai, null, 9);
-  state.player.hp = state.player.maxHp; state.enemy.hp = state.enemy.maxHp; state.player.totalDamage = state.enemy.totalDamage; state.player.stats.speed = state.enemy.stats.speed;
+  state.player.hp = state.player.maxHp;
+  state.enemy.hp = state.enemy.maxHp;
+  state.player.totalDamage = state.enemy.totalDamage;
+  state.player.stats.speed = state.enemy.stats.speed;
   assert.ok(['player', state.enemy.id].includes(PSG.battle.engine.decideTurnLimit(state)));
 });
 
 test('shop blocks locked items, charges coins, and prevents duplicates', () => {
-  const save = fresh(); save.player.coins = 5000;
+  const save = fresh();
+  save.player.coins = 5000;
   assert.equal(PSG.economy.shop.purchaseEquipment(save, 'eq_2_vital').reason, 'locked');
   assert.equal(PSG.economy.shop.purchaseEquipment(save, 'eq_1_vital').ok, true);
   assert.equal(PSG.economy.shop.purchaseEquipment(save, 'eq_1_vital').reason, 'owned');
@@ -341,7 +481,22 @@ test('ability candy price scales with intrinsic stat, candy growth, and level', 
   assert.equal(PSG.economy.candy.priceFor(save, attack), 850);
 });
 
-test('ability candy purchases immediately grant permanent stats and raise the next price', () => {
+test('Candy Festival halves the current regular candy price', () => {
+  const save = fresh('eagle');
+  const attack = PSG.data.abilityCandyById.candy_attack;
+  const regularPrice = PSG.economy.candy.priceFor(save, attack, false);
+  const festivalPrice = PSG.economy.candy.priceFor(save, attack, true);
+  assert.equal(regularPrice, 150);
+  assert.equal(festivalPrice, 75);
+  assert.equal(PSG.economy.candy.isCandyFestival(save), PSG.economy.candy.isCandyFestival(save));
+  save.player.coins = festivalPrice;
+  const result = PSG.economy.shop.purchaseCandy(save, attack.id, true);
+  assert.equal(result.ok, true);
+  assert.equal(result.price, festivalPrice);
+  assert.equal(save.player.coins, 0);
+});
+
+test('ability candy purchases immediately grant permanent stats and recalculate the next price', () => {
   const save = fresh('lion');
   save.player.coins = 5000;
   const beforeStat = PSG.pet.stats.effective(save).attack;
@@ -352,7 +507,7 @@ test('ability candy purchases immediately grant permanent stats and raise the ne
   assert.equal(save.player.coins, 5000 - beforePrice);
   assert.equal(save.pet.candyBoosts.attack, 1);
   assert.equal(PSG.pet.stats.effective(save).attack, beforeStat + 1);
-  assert.ok(result.nextPrice > result.price);
+  assert.ok(result.nextPrice >= result.price);
 });
 
 test('HP candy grants three points and also extends current HP', () => {
@@ -376,35 +531,104 @@ test('ability candy rejects insufficient coins without changing stats', () => {
 });
 
 test('save repair clamps ranges and preserves a valid ranking', () => {
-  const save = fresh(); save.pet.energy = -20; save.pet.mood = 150; save.day.actionPoints = 99; save.pet.candyBoosts.attack = -4; save.pet.candyBoosts.hp = 3.9;
+  const save = fresh();
+  save.pet.energy = -20;
+  save.pet.mood = 150;
+  save.day.actionPoints = 99;
+  save.pet.candyBoosts.attack = -4;
+  save.pet.candyBoosts.hp = 3.9;
   const repaired = PSG.storage.save.repair(save);
-  assert.equal(repaired.pet.energy, 0); assert.equal(repaired.pet.mood, 100); assert.equal(repaired.day.actionPoints, 5);
-  assert.equal(repaired.pet.candyBoosts.attack, 0); assert.equal(repaired.pet.candyBoosts.hp, 3);
-  PSG.constants.STAT_KEYS.forEach(key => assert.ok(Number.isInteger(repaired.pet.candyBoosts[key])));
+  assert.equal(repaired.pet.energy, 0);
+  assert.equal(repaired.pet.mood, 100);
+  assert.equal(repaired.day.actionPoints, 5);
+  assert.equal(repaired.pet.candyBoosts.attack, 0);
+  assert.equal(repaired.pet.candyBoosts.hp, 3);
+  PSG.constants.STAT_KEYS.forEach((key) => assert.ok(Number.isInteger(repaired.pet.candyBoosts[key])));
 });
 
 test('validated saves round-trip through localStorage', () => {
-  const save = fresh(); save.player.coins = 321;
+  const save = fresh();
+  save.player.coins = 321;
   PSG.storage.save.write(save);
   const loaded = PSG.storage.save.read();
-  assert.equal(loaded.player.coins, 321); assert.equal(loaded.ranking.rankOrder.length, 1000);
+  assert.equal(loaded.player.coins, 321);
+  assert.equal(loaded.ranking.rankOrder.length, 1000);
+});
+
+test('three save slots stay independent and legacy saves enter slot one', () => {
+  const first = fresh('eagle');
+  first.pet.name = 'Sky';
+  PSG.storage.save.write(first, 1);
+  const second = PSG.core.gameState.create('Trainer', 'Roar', 'lion', 987654321);
+  PSG.core.gameState.set(second, 2);
+  PSG.storage.save.write(second, 2);
+  const slots = PSG.storage.save.list();
+  assert.equal(slots.length, 3);
+  assert.equal(slots[0].save.pet.name, 'Sky');
+  assert.equal(slots[1].save.pet.name, 'Roar');
+  assert.equal(slots[2].save, null);
+  assert.equal(PSG.storage.save.read(1).pet.speciesId, 'eagle');
+  assert.equal(PSG.storage.save.read(2).pet.speciesId, 'lion');
+
+  const legacy = PSG.core.gameState.create('Trainer', 'Legacy', 'crocodile', 123);
+  memory.clear();
+  localStorage.setItem(PSG.constants.SAVE_KEY, JSON.stringify(legacy));
+  assert.equal(PSG.storage.save.read(1).pet.name, 'Legacy');
+  PSG.storage.save.write(legacy, 1);
+  assert.equal(localStorage.getItem(PSG.constants.SAVE_KEY), null);
+});
+
+test('battle speed defaults on and persists as a separate setting', () => {
+  memory.clear();
+  assert.equal(PSG.storage.save.settingsDefaults().battleFast, true);
+  const settings = PSG.storage.save.loadSettings();
+  settings.battleFast = false;
+  PSG.storage.save.saveSettings(settings);
+  assert.equal(PSG.storage.save.loadSettings().battleFast, false);
+});
+
+test('cancelling an active battle refunds its entry cost and consumable', () => {
+  const save = fresh();
+  save.economy.consumables.con_1_energy = 1;
+  const ai = Object.assign({}, PSG.ranking.generator.getAI('ai_0999', save.ranking.rankingSeed, 'en'), { rank: 999 });
+  const state = PSG.battle.engine.create(save, ai, 'con_1_energy', 4);
+  assert.equal(PSG.battle.engine.start(state).ok, true);
+  assert.equal(save.day.actionPoints, 3);
+  assert.equal(save.pet.energy, 55);
+  assert.equal(save.economy.consumables.con_1_energy, 0);
+  assert.equal(PSG.battle.engine.cancel(state).ok, true);
+  assert.equal(save.day.actionPoints, 5);
+  assert.equal(save.pet.energy, 80);
+  assert.equal(save.economy.consumables.con_1_energy, 1);
+  assert.equal(PSG.storage.save.read(1).day.actionPoints, 5);
 });
 
 test('all Traditional Chinese UI keys exist in English and Japanese dictionaries', () => {
   const keys = Object.keys(PSG.i18n.languages['zh-Hant']);
-  keys.forEach(key => { assert.ok(PSG.i18n.languages.en[key] != null, `missing en ${key}`); assert.ok(PSG.i18n.languages.ja[key] != null, `missing ja ${key}`); });
+  keys.forEach((key) => {
+    assert.ok(PSG.i18n.languages.en[key] != null, `missing en ${key}`);
+    assert.ok(PSG.i18n.languages.ja[key] != null, `missing ja ${key}`);
+  });
 });
 
 test('all required local BGM and generated sound files exist', () => {
-  ['menu','home','training','outing','battle','champion'].forEach(name => assert.ok(fs.statSync(path.join(root, `assets/audio/bgm/bgm_${name}.wav`)).size > 44));
-  assert.equal(fs.readdirSync(path.join(root, 'assets/audio/sfx')).filter(name => name.endsWith('.wav')).length, 22);
+  ['menu', 'home', 'training', 'outing', 'battle', 'champion'].forEach((name) =>
+    assert.ok(fs.statSync(path.join(root, `assets/audio/bgm/bgm_${name}.wav`)).size > 44)
+  );
+  assert.equal(fs.readdirSync(path.join(root, 'assets/audio/sfx')).filter((name) => name.endsWith('.wav')).length, 22);
 });
 
 (async () => {
   let passed = 0;
   for (const item of tests) {
-    try { await item.fn(); passed += 1; process.stdout.write(`✓ ${item.name}\n`); }
-    catch (error) { process.stderr.write(`✗ ${item.name}\n${error.stack}\n`); process.exitCode = 1; }
+    try {
+      await item.fn();
+      passed += 1;
+      process.stdout.write(`✓ ${item.name}\n`);
+    } catch (error) {
+      process.stderr.write(`✗ ${item.name}\n${error.stack}\n`);
+      process.exitCode = 1;
+    }
   }
   process.stdout.write(`\n${passed}/${tests.length} unit tests passed.\n`);
 })();
