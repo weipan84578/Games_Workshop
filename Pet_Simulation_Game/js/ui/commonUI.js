@@ -126,9 +126,9 @@
     if (item.templateKey) return t('stage.' + item.stageKey) + ' · ' + t('equipment.' + item.templateKey);
     return t('stage.' + PSG.data.equipmentStages[item.stage - 1].key) + ' · ' + t('consumable.' + item.type);
   }
-  function itemEffect(item) {
+  function itemEffect(item, save) {
     if (item.category === 'candy') return t('item.effect.candy', { stat: t('stat.' + item.stat), value: item.gain });
-    if (item.templateKey) return PSG.economy.equipment.describe(item);
+    if (item.templateKey) return PSG.economy.equipment.describe(item, save);
     return t('item.effect.' + item.type, { value: item.value });
   }
   function itemIcon(item) {

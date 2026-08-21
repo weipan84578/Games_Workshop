@@ -279,6 +279,95 @@
         render(root, { tab: 'inventory' });
       });
     });
+    d.all('[data-upgrade-equipment]', root).forEach(function (button) {
+      button.addEventListener('click', function () {
+        openEquipmentUpgradeDialog(root, save, button.dataset.upgradeEquipment);
+      });
+    });
+  }
+
+  function openEquipmentUpgradeDialog(root, save, itemId) {
+    var item = PSG.data.equipmentById[itemId];
+    if (!item || !item.mythic) return;
+    var t = PSG.i18n.t;
+    var maxQuantity = PSG.economy.equipment.maxUpgradeQuantity;
+    var initialPlan = PSG.economy.equipment.upgradePreview(save, itemId, 1);
+    PSG.ui.common.modal({
+      title: t('shop.mythicUpgradeTitle'),
+      body:
+        '<p data-mythic-upgrade-confirmation></p>' +
+        '<div class="mythic-upgrade-quantity"><label for="mythic-upgrade-quantity"><strong>' +
+        t('shop.mythicUpgradeQuantity') +
+        '</strong></label><input class="text-input" id="mythic-upgrade-quantity" type="number" inputmode="numeric" min="1" max="' +
+        maxQuantity +
+        '" step="1" value="1"><p class="muted">' +
+        t('shop.mythicUpgradeHint', { max: maxQuantity }) +
+        '</p></div><div class="card card--soft purchase-preview" data-mythic-upgrade-preview></div>',
+      actions:
+        PSG.ui.common.button(t('common.cancel'), 'modal-close', 'ghost') +
+        PSG.ui.common.button(
+          t('common.confirm'),
+          'mythic-upgrade-confirm',
+          null,
+          initialPlan && initialPlan.affordable ? '' : 'disabled'
+        ),
+      onOpen: function (dialog) {
+        var quantityInput = d.one('#mythic-upgrade-quantity', dialog);
+        var confirmation = d.one('[data-mythic-upgrade-confirmation]', dialog);
+        var preview = d.one('[data-mythic-upgrade-preview]', dialog);
+        var confirmButton = d.one('[data-action="mythic-upgrade-confirm"]', dialog);
+
+        function refreshUpgradeDialog() {
+          var quantity = Math.min(maxQuantity, Math.max(1, Math.floor(Number(quantityInput.value) || 1)));
+          quantityInput.value = quantity;
+          var plan = PSG.economy.equipment.upgradePreview(save, itemId, quantity);
+          if (!plan.ok) {
+            confirmation.textContent = t('shop.mythicUpgradeUnavailable');
+            preview.textContent = '';
+            confirmButton.disabled = true;
+            return;
+          }
+          confirmation.textContent = t('shop.mythicUpgradeConfirm', {
+            price: PSG.utils.formatter.number(plan.price),
+            quantity: plan.quantity,
+            before: plan.beforeLevel,
+            after: plan.afterLevel
+          });
+          preview.textContent = t('shop.mythicUpgradeSummary', {
+            quantity: plan.quantity,
+            price: PSG.utils.formatter.number(plan.price),
+            nextPrice: PSG.utils.formatter.number(plan.nextPrice)
+          });
+          confirmButton.disabled = !plan.affordable;
+        }
+
+        quantityInput.addEventListener('input', refreshUpgradeDialog);
+        refreshUpgradeDialog();
+        confirmButton.addEventListener('click', function () {
+          var quantity = Math.min(maxQuantity, Math.max(1, Math.floor(Number(quantityInput.value) || 1)));
+          var result = PSG.economy.equipment.upgrade(save, itemId, quantity);
+          if (!result.ok) {
+            PSG.ui.common.toast(
+              result.reason === 'coins' ? t('shop.notEnough') : t('shop.mythicUpgradeUnavailable'),
+              'warning'
+            );
+            return;
+          }
+          PSG.audio.manager.sfx('coin');
+          PSG.audio.manager.sfx('equip');
+          PSG.ui.common.closeModal();
+          PSG.ui.common.toast(
+            t('shop.mythicUpgradeApplied', {
+              item: PSG.ui.common.itemName(item),
+              quantity: result.quantity,
+              level: result.afterLevel
+            }),
+            'success'
+          );
+          render(root, { tab: 'inventory' });
+        });
+      }
+    });
   }
 
   function shopHtml(save, candyFestival) {
@@ -624,7 +713,7 @@
           '</h3>' +
           (item
             ? '<p>' +
-              PSG.ui.common.itemEffect(item) +
+              PSG.ui.common.itemEffect(item, save) +
               '</p><button class="button button--ghost button--small" data-unequip="' +
               slot +
               '">' +
@@ -654,17 +743,40 @@
       save.economy.ownedEquipment
         .map(function (id) {
           var item = PSG.data.equipmentById[id];
+          if (!item) return null;
           var equipped = save.economy.equipped[item.slot] === id;
+          var mythic = item.mythic === true;
+          var level = mythic ? PSG.economy.equipment.upgradeLevel(save, id) : 0;
+          var nextPrice = mythic ? PSG.economy.equipment.upgradePrice(save, id) : 0;
+          var upgradePanel = mythic
+            ? '<div class="mythic-upgrade-panel"><div class="mythic-upgrade-panel__row"><span>' +
+              t('shop.mythicLevel', { level: level }) +
+              '</span><strong>🪙 ' +
+              t('shop.mythicNextPrice', { price: PSG.utils.formatter.number(nextPrice) }) +
+              '</strong></div><button class="button button--ghost button--small" data-upgrade-equipment="' +
+              id +
+              '" ' +
+              (save.player.coins < nextPrice ? 'disabled title="' + d.escape(t('shop.notEnough')) + '"' : '') +
+              '>' +
+              t('shop.mythicUpgrade') +
+              '</button></div>'
+            : '';
           return (
-            '<article class="card shop-card"><div class="card__header">' +
+            '<article class="card shop-card' +
+            (mythic ? ' mythic-equipment-card' : '') +
+            '"><div class="card__header">' +
             PSG.ui.common.itemIcon(item) +
             '<span class="tag">' +
             t('slot.' + item.slot) +
-            '</span></div><h3>' +
+            '</span>' +
+            (mythic ? '<span class="tag tag--mythic">' + t('equipment.mythicRarity') + '</span>' : '') +
+            '</div><h3>' +
             PSG.ui.common.itemName(item) +
             '</h3><p>' +
-            PSG.ui.common.itemEffect(item) +
-            '</p><button class="button button--wide" data-equip="' +
+            PSG.ui.common.itemEffect(item, save) +
+            '</p>' +
+            upgradePanel +
+            '<button class="button button--wide" data-equip="' +
             id +
             '" ' +
             (equipped ? 'disabled' : '') +
@@ -673,6 +785,7 @@
             '</button></article>'
           );
         })
+        .filter(Boolean)
         .join('') || '<div class="empty-state">' + t('shop.items') + ' → ' + t('shop.buy') + '</div>';
     var consumables = PSG.data.consumables
       .filter(function (item) {

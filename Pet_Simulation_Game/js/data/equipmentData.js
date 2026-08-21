@@ -54,6 +54,29 @@
       }
     }
   ];
+  var mythicTemplates = [
+    {
+      id: 'mythic_armor',
+      key: 'mythicArmor',
+      slot: 'armor',
+      bonuses: { hp: 0.18, defense: 0.09, spDefense: 0.09 },
+      icon: '🛡️'
+    },
+    {
+      id: 'mythic_accessory',
+      key: 'mythicAccessory',
+      slot: 'accessory',
+      bonuses: { attack: 0.09, spAttack: 0.09, accuracy: 0.06 },
+      icon: '🎯'
+    },
+    {
+      id: 'mythic_emblem',
+      key: 'mythicEmblem',
+      slot: 'emblem',
+      bonuses: { speed: 0.07, mobility: 0.075, crit: 0.2 },
+      icon: '👑'
+    }
+  ];
   var items = [];
   stages.forEach(function (stage) {
     templates.forEach(function (template) {
@@ -70,9 +93,27 @@
       });
     });
   });
+  var mythicItems = mythicTemplates.map(function (template) {
+    return {
+      id: template.id,
+      stage: 7,
+      stageKey: 'mythic',
+      templateKey: template.key,
+      slot: template.slot,
+      price: 0,
+      bonuses: Object.assign({}, template.bonuses),
+      mythic: true,
+      upgradeBasePrice: 10000,
+      upgradePriceRate: 0.1,
+      icon: template.icon,
+      accent: '#d9a441'
+    };
+  });
+  var allItems = items.concat(mythicItems);
   PSG.data.equipmentStages = stages;
   PSG.data.equipment = items;
-  PSG.data.equipmentById = items.reduce(function (map, item) {
+  PSG.data.mythicEquipment = mythicItems;
+  PSG.data.equipmentById = allItems.reduce(function (map, item) {
     map[item.id] = item;
     return map;
   }, {});

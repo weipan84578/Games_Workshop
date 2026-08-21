@@ -47,6 +47,7 @@
       },
       economy: {
         ownedEquipment: [],
+        equipmentUpgrades: {},
         consumables: {},
         equipped: { armor: null, accessory: null, emblem: null },
         savings: { balance: 0 }

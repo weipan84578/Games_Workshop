@@ -167,6 +167,55 @@
   align-content: start;
 }
 
+.mythic-equipment-card {
+  border: 2px solid color-mix(in srgb, #d9a441 62%, var(--border));
+  background:
+    radial-gradient(circle at 100% 0, color-mix(in srgb, #d9a441 18%, transparent), transparent 38%), var(--surface);
+}
+
+.mythic-equipment-card::before {
+  background: linear-gradient(90deg, #9b6b17, #f2d276, #9b6b17);
+}
+
+.tag--mythic {
+  border-color: color-mix(in srgb, #d9a441 62%, var(--border));
+  background: color-mix(in srgb, #d9a441 16%, var(--surface));
+  color: color-mix(in srgb, #8a5d0b 78%, var(--text));
+}
+
+.mythic-upgrade-panel {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0.15rem 0 0.7rem;
+  padding: 0.7rem;
+  border: 1px solid color-mix(in srgb, #d9a441 32%, var(--border));
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, #d9a441 10%, var(--background-art));
+}
+
+.mythic-upgrade-panel__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.mythic-upgrade-panel__row span {
+  color: var(--text-muted);
+  font-size: 0.86rem;
+}
+
+.mythic-upgrade-panel__row strong {
+  color: var(--warning);
+  white-space: nowrap;
+}
+
+.mythic-upgrade-quantity {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 0.8rem;
+}
+
 .shop-card::before {
   position: absolute;
   inset: 0 0 auto;

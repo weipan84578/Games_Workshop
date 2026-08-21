@@ -40,8 +40,9 @@
     var base = natural(pet.speciesId, pet.level);
     var species = PSG.data.species[pet.speciesId];
     var safeLevel = PSG.utils.math.clamp(Math.round(Number(pet.level) || 1), 1, 100);
-    var equipped = (saveLike.economy && saveLike.economy.equipped) || {};
-    var gear = PSG.economy.equipment.bonuses(equipped);
+    var economy = saveLike.economy || {};
+    var equipped = economy.equipped || {};
+    var gear = PSG.economy.equipment.bonuses(equipped, economy.equipmentUpgrades || {});
     var bond = 1 + affectionBonus(pet.affection || 0);
     var result = {};
     var candyBoosts = pet.candyBoosts || {};
@@ -58,7 +59,8 @@
   }
 
   function critRate(saveLike, consumableId, speciesSpecial) {
-    var gear = PSG.economy.equipment.bonuses((saveLike.economy && saveLike.economy.equipped) || {});
+    var economy = saveLike.economy || {};
+    var gear = PSG.economy.equipment.bonuses(economy.equipped || {}, economy.equipmentUpgrades || {});
     var item = PSG.data.consumableById[consumableId];
     var consumable = item && item.type === 'focus' ? item.value / 100 : 0;
     var normal = Math.min(0.2, 0.05 + (gear.crit || 0) + consumable);
@@ -67,7 +69,8 @@
 
   function battlePower(saveLike) {
     var stats = effective(saveLike);
-    var gear = PSG.economy.equipment.bonuses((saveLike.economy && saveLike.economy.equipped) || {});
+    var economy = saveLike.economy || {};
+    var gear = PSG.economy.equipment.bonuses(economy.equipped || {}, economy.equipmentUpgrades || {});
     var displayedCritPoints = Math.round(critRate(saveLike) * 100);
     // Keep the public BP weights next to the implementation so previews and matchmaking share one source.
     var statScore =

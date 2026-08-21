@@ -26,6 +26,8 @@ Treat these rules as regression contracts. Change them only when the user explic
 - The rank-one Boss gate has three species and seeded random arenas: grassland protects the Lion, swamp protects the Crocodile, and sky protects the Eagle. Non-native combatants take 3% damage each round; Boss battles last up to 80 rounds, grow endlessly stronger, and award large coin/experience rewards plus a 1% random-candy chance.
 - The economy includes deposit/withdraw banking, with one interest settlement after rest. Interest is `deposit * 1%` and is added to hand-held coins rather than the deposit balance. Daily coin income keeps the requested 300% boost.
 - Candy purchases and experience purchases support quantities up to 999. Candy Festival halves the current regular-candy price, discounts experience by 40%, and shows its localized notice inside the home `.pet-stage__bubble`; without the event, the original home message returns.
+- Reaching rank #1 automatically grants exactly three Mythic items—Armor (`HP +18%`, `Defense +9%`, `Special Defense +9%`), Accessory (`Attack +9%`, `Special Attack +9%`, `Accuracy +6%`), and Emblem (`Speed +7%`, `Mobility +7.5%`, `Attack CRIT +20%`)—to `economy.ownedEquipment`. The grant must be idempotent and must also repair already-rank-one legacy saves.
+- Only Mythic equipment can be upgraded from the inventory. Upgrade levels persist in `economy.equipmentUpgrades`, batches are capped at 999, the first level costs 10,000 coins, and each next level costs `ceil(10000 * (1 + currentLevel * 0.1))`; batch purchases sum each level's cost. Each level adds `0.001` (0.1 percentage point) to every non-CRIT bonus on that item, while Mythic Emblem Attack CRIT remains exactly `0.20`.
 - Toast messages remain in the fixed bottom-right notification slot, use 50% opacity, and format large numbers with thousands separators. Mood dialogue should choose from localized seeded variants instead of repeating one sentence.
 - The battle UI keeps persistent fast mode and auto battle. Auto battle performs normal attacks automatically and uses the special attack when its condition is met; timers and listeners must stop cleanly when the scene exits.
 - Seven local BGM tracks are mapped by context: `menu`, `home`, `training`, `outing`, `battle`, `champion`, and `bossbattle`. Boss victories switch to champion music, while the active Boss fight uses Boss battle music.
@@ -49,6 +51,7 @@ Treat these rules as regression contracts. Change them only when the user explic
 
 - Add defaults to new-game creation and conservative repair logic in `js/storage/saveManager.js`. Missing fields from older saves must become valid without requiring a reset.
 - Clamp and normalize persisted values before formulas consume them. Recompute dependent values such as maximum HP only after new fields have been repaired.
+- Normalize missing or malformed `equipmentUpgrades` to non-negative integer levels, and call the idempotent Mythic grant during repair when the saved player is already rank #1.
 - Preserve the validated-clone write path and the previous formal save on validation failure. Avoid schema changes when an optional repaired field is sufficient.
 - After a permanent stat or equipment change, refresh BP-based matchmaking and handle current HP intentionally rather than allowing accidental healing or damage.
 
@@ -56,6 +59,7 @@ Treat these rules as regression contracts. Change them only when the user explic
 
 - Add every user-facing key to Traditional Chinese, English, and Japanese. Run the locale-parity test; never rely on fallback text as the finished translation.
 - Keep feature styling in focused CSS files and register them in `index.html`. Reuse theme tokens, support narrow screens, and retain at least 48px touch targets.
+- Keep Mythic upgrade controls in the Inventory scene, show the current level and next cost with thousands separators, preview the same domain batch calculation used by the mutation, and display the rank-one reward in the battle settlement dialog.
 - Keep JavaScript, HTML fragments, and CSS readable: split long concatenated markup at meaningful boundaries, keep one responsibility per handler, use named domain helpers for formulas, and avoid minified or densely packed source in committed files.
 - Keep contextual home notices inside the existing `.pet-stage__bubble` text box. The Candy Festival home message uses `shop.candyFestivalTitle` there, while the shop may keep its own price banner; do not add a separate top-of-scene alert for the home notice. Mood dialogue should use localized variants selected by the saved seed and day so rerenders stay stable.
 - For animated training or battle effects, provide a `[data-motion="reduced"]` path. Track and clean up `requestAnimationFrame`, intervals, timeouts, pointer listeners, and focus listeners when a scene exits.

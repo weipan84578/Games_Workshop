@@ -101,15 +101,25 @@ check('ability candy modules load in dependency-safe order', () => {
   const scripts = [...index.matchAll(/<script[^>]+src="([^"]+)"/g)].map((match) => match[1]);
   const constants = fs.readFileSync(path.join(root, 'js/core/constants.js'), 'utf8');
   const species = fs.readFileSync(path.join(root, 'js/data/speciesData.js'), 'utf8');
+  const equipmentData = fs.readFileSync(path.join(root, 'js/data/equipmentData.js'), 'utf8');
+  const equipmentManager = fs.readFileSync(path.join(root, 'js/economy/equipmentManager.js'), 'utf8');
   const candyData = fs.readFileSync(path.join(root, 'js/data/abilityCandyData.js'), 'utf8');
   const candy = fs.readFileSync(path.join(root, 'js/economy/abilityCandyManager.js'), 'utf8');
   const damage = fs.readFileSync(path.join(root, 'js/battle/damageCalculator.js'), 'utf8');
   const battle = fs.readFileSync(path.join(root, 'js/battle/battleEngine.js'), 'utf8');
+  const rankingManager = fs.readFileSync(path.join(root, 'js/ranking/rankingManager.js'), 'utf8');
   const training = fs.readFileSync(path.join(root, 'js/training/trainingManager.js'), 'utf8');
   const shop = fs.readFileSync(path.join(root, 'js/ui/shopUI.js'), 'utf8');
   assert.match(constants, /STAT_KEYS:\s*\[[^\]]*'accuracy'/);
   assert.match(species, /accuracy:\s*16/);
   assert.match(candyData, /accuracy:/);
+  assert.match(equipmentData, /var mythicTemplates/);
+  assert.match(equipmentData, /PSG\.data\.mythicEquipment/);
+  assert.match(equipmentManager, /maxUpgradeQuantity/);
+  assert.match(equipmentManager, /function upgradePreview\(save, itemId, quantity\)/);
+  assert.match(equipmentManager, /function grantMythic\(save\)/);
+  assert.match(equipmentManager, /key === 'crit'/);
+  assert.match(rankingManager, /grantMythic\(save\)/);
   assert.match(damage, /function accuracyRatio\(accuracy, mobility\)/);
   assert.match(battle, /attacker\.stats\.accuracy/);
   assert.match(training, /stat === 'accuracy'.*return 'agility'/s);
@@ -123,6 +133,9 @@ check('ability candy modules load in dependency-safe order', () => {
   assert.match(shop, /id="candy-quantity"/);
   assert.match(shop, /shop\.confirmQuantity/);
   assert.match(shop, /data-buy-experience/);
+  assert.match(shop, /data-upgrade-equipment/);
+  assert.match(shop, /mythic-upgrade-quantity/);
+  assert.match(shop, /function openEquipmentUpgradeDialog\(root, save, itemId\)/);
   assert.match(shop, /shop\.experienceType/);
   assert.match(shop, /function experiencePreview\(plan\)/);
   assert.match(shop, /experiencePreview\(plan\)/);
@@ -191,6 +204,7 @@ check('rank-one Boss gate loads safely and uses the endless battle rules', () =>
   assert.match(playlist, /bossbattle:\s*'bgm\/bgm_bossbattle\.mp3'/);
   assert.match(scenes, /payload && payload\.bossChallenge \? 'bossbattle' : 'battle'/);
   assert.match(battleUi, /result\.boss && result\.won/);
+  assert.match(battleUi, /ranking\.mythicReward/);
 });
 
 check('level-scaled daily AP and AP-free Boss battles are wired', () => {

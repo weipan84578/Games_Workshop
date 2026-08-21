@@ -235,6 +235,10 @@ test('gold training settlement applies grade and mood multipliers', () => {
 
 test('equipment, consumable, and event catalog sizes match the specification', () => {
   assert.equal(PSG.data.equipment.length, 36);
+  assert.equal(PSG.data.mythicEquipment.length, 3);
+  assert.deepEqual(PSG.data.mythicEquipment[0].bonuses, { hp: 0.18, defense: 0.09, spDefense: 0.09 });
+  assert.deepEqual(PSG.data.mythicEquipment[1].bonuses, { attack: 0.09, spAttack: 0.09, accuracy: 0.06 });
+  assert.deepEqual(PSG.data.mythicEquipment[2].bonuses, { speed: 0.07, mobility: 0.075, crit: 0.2 });
   assert.equal(PSG.data.consumables.length, 18);
   assert.equal(PSG.data.abilityCandies.length, 8);
   assert.equal(PSG.data.events.length, 24);
@@ -266,6 +270,58 @@ test('luck emblems respect normal critical-rate cap', () => {
   save.economy.equipped.emblem = 'eq_6_fortune';
   assert.equal(PSG.pet.stats.critRate(save), 0.2);
   assert.equal(PSG.pet.stats.critRate(save, null, true), 0.3);
+});
+
+test('reaching rank one grants the three Mythic items exactly once', () => {
+  const save = fresh();
+  const playerIndex = save.ranking.rankOrder.indexOf('player');
+  const rankOneId = save.ranking.rankOrder[0];
+  save.ranking.rankOrder[playerIndex] = save.ranking.rankOrder[1];
+  save.ranking.rankOrder[1] = 'player';
+  PSG.ranking.matchmaking.refresh(save);
+  const result = PSG.ranking.manager.settle(save, rankOneId, true);
+  assert.equal(result.after, 1);
+  assert.deepEqual(result.mythicEquipment, ['mythic_armor', 'mythic_accessory', 'mythic_emblem']);
+  assert.deepEqual(save.economy.ownedEquipment, result.mythicEquipment);
+  assert.deepEqual(save.economy.equipmentUpgrades, {
+    mythic_armor: 0,
+    mythic_accessory: 0,
+    mythic_emblem: 0
+  });
+  assert.deepEqual(PSG.economy.equipment.grantMythic(save), []);
+});
+
+test('Mythic gear supports escalating batch upgrades while CRIT stays fixed', () => {
+  const save = fresh('eagle');
+  PSG.economy.equipment.grantMythic(save);
+  save.player.coins = 100000;
+  save.economy.equipped.accessory = 'mythic_accessory';
+  save.economy.equipped.emblem = 'mythic_emblem';
+  const preview = PSG.economy.equipment.upgradePreview(save, 'mythic_accessory', 3);
+  assert.equal(preview.price, 33000);
+  assert.equal(preview.afterLevel, 3);
+  assert.equal(preview.nextPrice, 13000);
+  assert.equal(PSG.economy.equipment.upgradePreview(save, 'mythic_accessory', 1000).quantity, 999);
+  const result = PSG.economy.equipment.upgrade(save, 'mythic_accessory', 3);
+  assert.equal(result.ok, true);
+  assert.equal(save.player.coins, 67000);
+  assert.equal(PSG.economy.equipment.upgradeLevel(save, 'mythic_accessory'), 3);
+
+  const emblemResult = PSG.economy.equipment.upgrade(save, 'mythic_emblem', 5);
+  assert.equal(emblemResult.ok, true);
+  const gear = PSG.economy.equipment.bonuses(save.economy.equipped, save.economy.equipmentUpgrades);
+  assert.equal(gear.attack, 0.093);
+  assert.equal(gear.spAttack, 0.093);
+  assert.equal(gear.accuracy, 0.063);
+  assert.ok(Math.abs(gear.speed - 0.075) < 1e-12);
+  assert.ok(Math.abs(gear.mobility - 0.08) < 1e-12);
+  assert.equal(gear.crit, 0.2);
+  assert.equal(PSG.economy.equipment.upgrade(save, 'eq_1_vital', 1).reason, 'notMythic');
+
+  const poor = fresh();
+  PSG.economy.equipment.grantMythic(poor);
+  assert.equal(PSG.economy.equipment.upgrade(poor, 'mythic_armor', 1).reason, 'coins');
+  assert.equal(PSG.economy.equipment.upgradeLevel(poor, 'mythic_armor'), 0);
 });
 
 test('ranking always has 1,000 distinct IDs and one player', () => {
@@ -801,6 +857,7 @@ test('save repair clamps ranges and preserves a valid ranking', () => {
   delete save.progression.bossAttempts;
   delete save.stats.bossChallenges;
   delete save.stats.bossWins;
+  delete save.economy.equipmentUpgrades;
   const repaired = PSG.storage.save.repair(save);
   assert.equal(repaired.pet.energy, 0);
   assert.equal(repaired.pet.mood, 100);
@@ -813,10 +870,22 @@ test('save repair clamps ranges and preserves a valid ranking', () => {
   assert.equal(repaired.progression.bossAttempts, 0);
   assert.equal(repaired.stats.bossChallenges, 0);
   assert.equal(repaired.stats.bossWins, 0);
+  assert.deepEqual(repaired.economy.equipmentUpgrades, {
+    mythic_armor: 0,
+    mythic_accessory: 0,
+    mythic_emblem: 0
+  });
   PSG.constants.STAT_KEYS.forEach((key) => assert.ok(Number.isInteger(repaired.pet.candyBoosts[key])));
 
   repaired.economy.savings.balance = -20.7;
   assert.equal(PSG.storage.save.repair(repaired).economy.savings.balance, 0);
+
+  const champion = movePlayerToRankOne(fresh());
+  champion.economy.ownedEquipment = [];
+  delete champion.economy.equipmentUpgrades;
+  const repairedChampion = PSG.storage.save.repair(champion);
+  assert.equal(repairedChampion.progression.championUnlocked, true);
+  assert.deepEqual(repairedChampion.economy.ownedEquipment, ['mythic_armor', 'mythic_accessory', 'mythic_emblem']);
 });
 
 test('validated saves round-trip through localStorage', () => {

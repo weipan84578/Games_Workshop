@@ -86,15 +86,25 @@
       save.progression.bossWins,
       Math.floor(Number(save.progression.bossAttempts) || 0)
     );
+    save.progression.unlockedCosmetics = Array.isArray(save.progression.unlockedCosmetics)
+      ? save.progression.unlockedCosmetics
+      : [];
     save.economy = Object.assign(
       {
         ownedEquipment: [],
+        equipmentUpgrades: {},
         consumables: {},
         equipped: { armor: null, accessory: null, emblem: null },
         savings: { balance: 0 }
       },
       save.economy || {}
     );
+    save.economy.ownedEquipment = Array.isArray(save.economy.ownedEquipment) ? save.economy.ownedEquipment : [];
+    save.economy.equipmentUpgrades = Object.assign({}, save.economy.equipmentUpgrades || {});
+    PSG.data.mythicEquipment.forEach(function (item) {
+      var level = Number(save.economy.equipmentUpgrades[item.id]);
+      save.economy.equipmentUpgrades[item.id] = Number.isFinite(level) ? Math.max(0, Math.floor(level)) : 0;
+    });
     save.economy.equipped = Object.assign({ armor: null, accessory: null, emblem: null }, save.economy.equipped || {});
     save.economy.savings = Object.assign({ balance: 0 }, save.economy.savings || {});
     save.economy.savings.balance = Math.max(0, Math.floor(Number(save.economy.savings.balance) || 0));
@@ -102,6 +112,12 @@
       var item = PSG.data.equipmentById[save.economy.equipped[slot]];
       if (!item || item.slot !== slot) save.economy.equipped[slot] = null;
     });
+    if (PSG.ranking.matchmaking.playerRank(save) === 1) {
+      save.progression.championUnlocked = true;
+      if (save.progression.unlockedCosmetics.indexOf('champion_emblem') < 0)
+        save.progression.unlockedCosmetics.push('champion_emblem');
+      PSG.economy.equipment.grantMythic(save);
+    }
     save.ranking.battleHistory = Array.isArray(save.ranking.battleHistory) ? save.ranking.battleHistory.slice(-50) : [];
     save.stats = Object.assign(
       {

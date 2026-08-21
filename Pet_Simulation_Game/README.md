@@ -92,6 +92,7 @@ There is no pet death or destructive game-over state. A defeat still grants redu
 - 🏆 **A deterministic 1,000-entry ranking:** one player, 999 seeded AI opponents, 12 fixed milestone rivals, and five BP-near candidates per refresh.
 - 🚪 **An endless Boss Gate at rank #1:** choose Lion, Crocodile, or Eagle bosses whose stats grow forever; each attempt costs only 5 Energy and 5 Mood, then reveals a random Grassland, Swamp, or Sky arena when the 80-round battle begins.
 - 🎁 **Endless Boss rewards:** victories pay large coin and XP rewards while XP is available, plus a deterministic 1% chance at a random Ability Candy.
+- 🏅 **Mythic champion gear:** reaching rank #1 grants Mythic Armor, Mythic Accessory, and Mythic Emblem automatically. Upgrade them only from the inventory, in batches up to 999; each level adds 0.1 percentage point to every listed non-CRIT ability while the Emblem's Attack CRIT stays at 20%.
 - 🛍️ **A four-category shop:** 36 permanent equipment pieces, 18 one-battle consumables, eight permanent Ability Candies, and XP supplies.
 - 🍬 **Scaling permanent growth:** HP Candy grants +3; the other seven candies grant +1 and become more expensive as intrinsic stats and pet level rise. Buy up to 999 candies at once, with batch totals following each candy’s escalating price. A deterministic Candy Festival occasionally halves the current price.
 - ✨ **XP supplies:** buy 100 XP packs in batches up to 999; the per-pack price rises with level but caps at 400 coins, and Candy Festival cuts it by 40%.
@@ -189,6 +190,25 @@ After reaching rank #1, open the Boss Gate from the ranking screen and choose a 
 
 Equipment occupies Armor, Accessory, or Emblem slots and remains owned permanently. Battle items stack up to 99 and are consumed only after a valid duel starts. Ability Candy is used immediately: HP gains +3 and Attack, Accuracy, Special Attack, Defense, Special Defense, Mobility, or Speed gains +1.
 
+#### Upgrade Mythic gear from the inventory
+
+Reaching rank #1 automatically grants these three Mythic items. They are not sold in the shop and are added idempotently, so repaired or revisited rank-one saves never duplicate them.
+
+| Slot      | Mythic base abilities                        |
+| --------- | -------------------------------------------- |
+| Armor     | HP +18%, Defense +9%, Special Defense +9%    |
+| Accessory | Attack +9%, Special Attack +9%, Accuracy +6% |
+| Emblem    | Speed +7%, Mobility +7.5%, Attack CRIT +20%  |
+
+Open the Inventory tab to upgrade a Mythic item. The upgrade level starts at LV 0, one action can cover up to 999 levels, and the batch price is the sum of each level's escalating cost:
+
+```text
+price(level) = ceil(10,000 × (1 + level × 0.10))
+batchPrice = sum(price(currentLevel + i), i = 0 ... quantity - 1)
+each level = +0.1 percentage point to every non-CRIT ability on that item
+Attack CRIT on the Mythic Emblem = 20% forever
+```
+
 Candy prices are rounded upward to the next ten coins:
 
 ```text
@@ -252,30 +272,30 @@ Key runtime characteristics:
 
 ### 📁 Code Organization
 
-| Path                                                | Responsibility                                                                           | Representative files                                                |
-| --------------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| `index.html`                                        | HTML shell, stylesheet registration, dependency-ordered classic scripts                  | `index.html`                                                        |
-| `css/base/`, `css/layout/`                          | Tokens, typography, accessibility foundations, app and scene layout                      | `variables.css`, `accessibility.css`, `scenes.css`                  |
-| `css/components/`, `css/responsive/`, `css/themes/` | Reusable controls, shop/training effects, breakpoints, five themes                       | `shop.css`, `training-effects.css`, `mobile.css`, `theme-night.css` |
-| `js/core/`                                          | Shared namespace, events, current state, scene lifecycle, startup                        | `namespace.js`, `gameState.js`, `sceneManager.js`, `app.js`         |
-| `js/data/`                                          | Declarative species, equipment, consumable, candy, rival, and event catalogs             | `speciesData.js`, `abilityCandyData.js`, `rivalData.js`             |
-| `js/pet/`                                           | Stats, XP, mastery, affection, daily costs, play, and outings                            | `statCalculator.js`, `progression.js`, `dailyActions.js`            |
-| `js/training/`                                      | Mini-game scoring and training settlement                                                | `trainingManager.js`, `strengthGame.js`, `agilityGame.js`           |
-| `js/battle/`                                        | Damage, AI choices, temporary effects, ranked and endless Boss round resolution, rewards | `damageCalculator.js`, `bossManager.js`, `battleEngine.js`          |
-| `js/ranking/`                                       | Seeded 1,000-entry ladder, BP-near matching, rank swaps                                  | `rankingGenerator.js`, `matchmaking.js`                             |
-| `js/economy/`                                       | Equipment, inventory, shop purchase rules, Ability Candy pricing                         | `equipmentManager.js`, `abilityCandyManager.js`                     |
-| `js/storage/`, `js/i18n/`, `js/audio/`              | Save repair, three-language dictionaries, local music and SFX                            | `saveManager.js`, `featureLocales.js`, `audioManager.js`            |
-| `js/ui/`                                            | Menu, onboarding, home, activity, battle, shop, help, and settings scenes                | `trainingUI.js`, `shopUI.js`, `settingsUI.js`                       |
-| `assets/` and `bgm/`                                | Local portraits, SVG art, seven BGM tracks, and SFX                                      | `images/pets/`, `images/equipment/`, `audio/`, `bgm/`               |
-| `tests/`, `tools/`                                  | Deterministic Node tests and asset-generation utilities                                  | `unit.test.js`, `static.test.js`, `generate-audio.js`               |
-| `.agents/skills/`                                   | Project-specific Codex workflows                                                         | `pet-simulation-feature-workflow/`, `safe-browser-validation/`      |
+| Path                                                | Responsibility                                                                             | Representative files                                                |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------- |
+| `index.html`                                        | HTML shell, stylesheet registration, dependency-ordered classic scripts                    | `index.html`                                                        |
+| `css/base/`, `css/layout/`                          | Tokens, typography, accessibility foundations, app and scene layout                        | `variables.css`, `accessibility.css`, `scenes.css`                  |
+| `css/components/`, `css/responsive/`, `css/themes/` | Reusable controls, shop/training effects, breakpoints, five themes                         | `shop.css`, `training-effects.css`, `mobile.css`, `theme-night.css` |
+| `js/core/`                                          | Shared namespace, events, current state, scene lifecycle, startup                          | `namespace.js`, `gameState.js`, `sceneManager.js`, `app.js`         |
+| `js/data/`                                          | Declarative species, normal/Mythic equipment, consumable, candy, rival, and event catalogs | `speciesData.js`, `equipmentData.js`, `abilityCandyData.js`         |
+| `js/pet/`                                           | Stats, XP, mastery, affection, daily costs, play, and outings                              | `statCalculator.js`, `progression.js`, `dailyActions.js`            |
+| `js/training/`                                      | Mini-game scoring and training settlement                                                  | `trainingManager.js`, `strengthGame.js`, `agilityGame.js`           |
+| `js/battle/`                                        | Damage, AI choices, temporary effects, ranked and endless Boss round resolution, rewards   | `damageCalculator.js`, `bossManager.js`, `battleEngine.js`          |
+| `js/ranking/`                                       | Seeded 1,000-entry ladder, BP-near matching, rank swaps                                    | `rankingGenerator.js`, `matchmaking.js`                             |
+| `js/economy/`                                       | Equipment ownership/upgrades, inventory, shop purchase rules, Ability Candy pricing        | `equipmentManager.js`, `abilityCandyManager.js`                     |
+| `js/storage/`, `js/i18n/`, `js/audio/`              | Save repair, three-language dictionaries, local music and SFX                              | `saveManager.js`, `featureLocales.js`, `audioManager.js`            |
+| `js/ui/`                                            | Menu, onboarding, home, activity, battle, shop, help, and settings scenes                  | `trainingUI.js`, `shopUI.js`, `settingsUI.js`                       |
+| `assets/` and `bgm/`                                | Local portraits, SVG art, seven BGM tracks, and SFX                                        | `images/pets/`, `images/equipment/`, `audio/`, `bgm/`               |
+| `tests/`, `tools/`                                  | Deterministic Node tests and asset-generation utilities                                    | `unit.test.js`, `static.test.js`, `generate-audio.js`               |
+| `.agents/skills/`                                   | Project-specific Codex workflows                                                           | `pet-simulation-feature-workflow/`, `safe-browser-validation/`      |
 
 <a id="en-supporting-systems"></a>
 
 ### 💾 Supporting Systems
 
 - 🌐 **Localization:** `zh-Hant`, `en`, and `ja` dictionaries cover scenes, events, equipment, candy, tutorials, and settings. Unit tests enforce key parity.
-- 💾 **Persistence:** every meaningful activity autosaves. Repair logic clamps invalid ranges, supplies optional fields for older saves, validates the 1,000-entry ranking, and preserves corrupted raw data under a timestamped backup key when possible.
+- 💾 **Persistence:** every meaningful activity autosaves. Repair logic clamps invalid ranges, supplies optional fields for older saves, restores Mythic upgrade levels, grants missing Mythic gear to already-ranked-first legacy saves, validates the 1,000-entry ranking, and preserves corrupted raw data under a timestamped backup key when possible.
 - 🎵 **Audio safety:** volume controls cover master, BGM, SFX, and mute. Browser gesture unlocking is respected, one-shot nodes disconnect after playback, and BGM pre-gain feeds a dynamics compressor. The playlist uses `bgm_menu.mp3` for menu/onboarding/instructions, `bgm_home.mp3` for home/ranking/shop/in-game settings, `bgm_training.mp3` for training, `bgm_outing.mp3` for outings, `bgm_battle.mp3` for ranked battles, `bgm_bossbattle.mp3` for Boss battles, and `bgm_champion.mp3` for the rank-1 ending or a Boss victory.
 - ♿ **Accessibility:** semantic buttons and dialog behavior, focus restoration, focus trapping, a skip link, keyboard-capable training controls, 48px minimum touch targets, text scaling at 100%/115%/130%, and standard/fast/reduced motion modes.
 - 📱 **Responsive layout:** dedicated mobile, tablet, desktop, and landscape styles use safe-area insets and adapt menus, battles, settings, shops, and training fields.
@@ -286,18 +306,20 @@ Key runtime characteristics:
 
 ### 🧪 Testing
 
-The current implementation was verified with **61/61 unit tests** and **22/22 static checks**, plus JavaScript syntax and whitespace validation.
+The current implementation was verified with **66/66 unit tests**, **22/22 static checks**, **3/3 audio checks**, JavaScript syntax validation, and whitespace validation.
 
 Run from the project root:
 
 ```powershell
 node tests/unit.test.js
 node tests/static.test.js
+node tests/audio.test.js
 $files = rg --files js tests tools -g '*.js'; foreach ($file in $files) { node --check $file; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE } }
+npx prettier --check index.html js css tests README.md
 git diff --check
 ```
 
-The unit suite covers stat formulas, progression overflow and caps, level-scaled AP boundaries, mood and affection thresholds, seeded mood dialogue variants, training grades, deterministic rankings, candidates, ranked and endless Boss battle resolution, AP-free Boss entry, arena immunity and damage, Boss growth and rewards, equipment, candy pricing, batch candy purchases, XP shop pricing and level-ups, savings deposits and withdrawals, rest interest, save repair, localization parity, and local audio assets. Static checks cover direct-open script structure, relative asset existence, offline restrictions, responsive/theme requirements, touch targets, local art, README structure, reduced-motion hooks, savings wiring, home notice placement, batch candy controls, XP shop wiring, rank-one Boss loading, Boss BGM routing, level-scaled AP wiring, and trailing whitespace.
+The unit suite covers stat formulas, progression overflow and caps, level-scaled AP boundaries, mood and affection thresholds, seeded mood dialogue variants, training grades, deterministic rankings, candidates, ranked and endless Boss battle resolution, AP-free Boss entry, arena immunity and damage, Boss growth and rewards, Mythic grants and batch upgrades, equipment, candy pricing, batch candy purchases, XP shop pricing and level-ups, savings deposits and withdrawals, rest interest, save repair, localization parity, and local audio assets. Static checks cover direct-open script structure, relative asset existence, offline restrictions, responsive/theme requirements, touch targets, local art, README structure, reduced-motion hooks, savings wiring, home notice placement, batch candy controls, XP shop wiring, Mythic inventory upgrade wiring, rank-one Boss loading, Boss BGM routing, level-scaled AP wiring, and trailing whitespace.
 
 Browser interaction is intentionally left to a short manual pass when no approved integrated browser is available: open `index.html`, start or continue a save, try all three training templates, browse shop categories and tiers, buy a candy when affordable, reach rank #1 to inspect the Boss Gate, switch language/theme/motion settings, and reload to confirm persistence.
 
@@ -343,6 +365,7 @@ Browser interaction is intentionally left to a short manual pass when no approve
 - 🏆 **固定シードの1,000人ランキング：** プレイヤー1人、AI 999人、固定位置の節目ライバル12人、BPが近い候補5人で構成されます。
 - 🚪 **1位で開く無限ボスの門：** 獅子・鰐・鷲のボスを選べ、能力は無限に上昇します。各挑戦は体力5・気分5だけを使い、80ラウンド戦の開始時に草原・沼地・空中からランダムな闘技場が初めて明かされます。
 - 🎁 **無限ボス報酬：** 勝利すると大量のコインと、最大レベル未満なら経験値を獲得し、決定的な1%の確率でランダムな能力キャンディも落とします。
+- 🏅 **チャンピオンの神話級装備：** 1位に到達すると神話の防具・飾り・紋章を自動獲得します。強化は所持品からのみ行い、最大999回をまとめて実行できます。各レベルはCRIT以外の表示能力を0.1ポイント加算し、紋章の攻撃CRITは20%に固定されます。
 - 🛍️ **4分類ショップ：** 6つのアリーナ段階に、永久装備36個、1試合用消耗品18種、永久成長用の能力キャンディ8種、経験値補給があります。
 - 🍬 **価格が成長する永久強化：** HPキャンディは+3、ほか7種は+1。基礎能力とペットLVが高いほど価格が上がり、一度に最大999個を購入できます。まとめ買いの合計は各キャンディの上昇価格を順番に計算し、決定的なキャンディフェスティバルでは現在価格が半額になります。
 - ✨ **経験値補給：** 1セット100経験値を最大999セットまでまとめて購入でき、セット価格はレベルに応じて上がりますが400コインで上限になります。キャンディフェスティバル中は40%オフです。
@@ -440,6 +463,25 @@ flowchart LR
 
 装備は防具、アクセサリ、エンブレムのいずれかに入り、一度購入すると永久所持します。バトルアイテムは99個まで持て、有効な決闘開始後にだけ消費されます。能力キャンディは購入時に即使用され、HPは+3、攻撃、命中、特殊攻撃、防御、特殊防御、機動、素早さは+1されます。
 
+#### 所持品から神話級装備を強化する
+
+ランキング1位に到達すると、次の3つの神話級装備を自動で獲得します。ショップ販売品ではなく、既に1位の旧セーブを修復した場合も不足分だけ補われるため、重複しません。
+
+| 部位       | 神話級の初期能力                      |
+| ---------- | ------------------------------------- |
+| 防具       | HP +18%、防御 +9%、特殊防御 +9%       |
+| アクセサリ | 攻撃 +9%、特殊攻撃 +9%、命中 +6%      |
+| 紋章       | 素早さ +7%、機動 +7.5%、攻撃CRIT +20% |
+
+所持品タブから神話級装備を強化できます。強化レベルはLV 0から始まり、1回の操作で最大999レベルまで指定できます。価格は基準価格に比例して上昇し、まとめ買いでは各レベルの価格を合計します。
+
+```text
+price(level) = ceil(10,000 × (1 + level × 0.10))
+batchPrice = sum(price(currentLevel + i), i = 0 ... quantity - 1)
+各レベル = その装備のCRIT以外の能力に+0.1ポイント
+神話の紋章の攻撃CRIT = 常に20%
+```
+
 キャンディ価格は10コイン単位で切り上げます。
 
 ```text
@@ -503,30 +545,30 @@ flowchart TD
 
 ### 📁 コード分類
 
-| パス                                                | 責務                                                           | 代表ファイル                                                        |
-| --------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------- |
-| `index.html`                                        | HTMLシェル、CSS登録、依存順クラシックスクリプト                | `index.html`                                                        |
-| `css/base/`, `css/layout/`                          | トークン、文字、アクセシビリティ基盤、アプリとシーン配置       | `variables.css`, `accessibility.css`, `scenes.css`                  |
-| `css/components/`, `css/responsive/`, `css/themes/` | 共通UI、ショップ・訓練演出、ブレークポイント、5テーマ          | `shop.css`, `training-effects.css`, `mobile.css`, `theme-night.css` |
-| `js/core/`                                          | 共有名前空間、イベント、現在状態、シーン寿命、起動             | `namespace.js`, `gameState.js`, `sceneManager.js`, `app.js`         |
-| `js/data/`                                          | 種族、装備、消耗品、キャンディ、ライバル、イベント定義         | `speciesData.js`, `abilityCandyData.js`, `rivalData.js`             |
-| `js/pet/`                                           | 能力、経験値、熟練、親密度、日常コスト、遊び、おでかけ         | `statCalculator.js`, `progression.js`, `dailyActions.js`            |
-| `js/training/`                                      | ミニゲーム採点と訓練精算                                       | `trainingManager.js`, `strengthGame.js`, `agilityGame.js`           |
-| `js/battle/`                                        | ダメージ、AI判断、一時効果、通常・無限ボスのラウンド解決、報酬 | `damageCalculator.js`, `bossManager.js`, `battleEngine.js`          |
-| `js/ranking/`                                       | 固定シード1,000人表、BP近似配対、順位交換                      | `rankingGenerator.js`, `matchmaking.js`                             |
-| `js/economy/`                                       | 装備、所持品、購入規則、能力キャンディ価格                     | `equipmentManager.js`, `abilityCandyManager.js`                     |
-| `js/storage/`, `js/i18n/`, `js/audio/`              | セーブ修復、3言語辞書、ローカルBGM・効果音                     | `saveManager.js`, `featureLocales.js`, `audioManager.js`            |
-| `js/ui/`                                            | メニュー、導入、ホーム、活動、戦闘、ショップ、説明、設定画面   | `trainingUI.js`, `shopUI.js`, `settingsUI.js`                       |
-| `assets/` と `bgm/`                                 | ローカル画像、SVG、BGM 7曲、効果音                             | `images/pets/`, `images/equipment/`, `audio/`, `bgm/`               |
-| `tests/`, `tools/`                                  | 決定的Nodeテストと素材生成ツール                               | `unit.test.js`, `static.test.js`, `generate-audio.js`               |
-| `.agents/skills/`                                   | プロジェクト専用Codexワークフロー                              | `pet-simulation-feature-workflow/`, `safe-browser-validation/`      |
+| パス                                                | 責務                                                               | 代表ファイル                                                        |
+| --------------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------- |
+| `index.html`                                        | HTMLシェル、CSS登録、依存順クラシックスクリプト                    | `index.html`                                                        |
+| `css/base/`, `css/layout/`                          | トークン、文字、アクセシビリティ基盤、アプリとシーン配置           | `variables.css`, `accessibility.css`, `scenes.css`                  |
+| `css/components/`, `css/responsive/`, `css/themes/` | 共通UI、ショップ・訓練演出、ブレークポイント、5テーマ              | `shop.css`, `training-effects.css`, `mobile.css`, `theme-night.css` |
+| `js/core/`                                          | 共有名前空間、イベント、現在状態、シーン寿命、起動                 | `namespace.js`, `gameState.js`, `sceneManager.js`, `app.js`         |
+| `js/data/`                                          | 種族、通常／神話級装備、消耗品、キャンディ、ライバル、イベント定義 | `speciesData.js`, `equipmentData.js`, `abilityCandyData.js`         |
+| `js/pet/`                                           | 能力、経験値、熟練、親密度、日常コスト、遊び、おでかけ             | `statCalculator.js`, `progression.js`, `dailyActions.js`            |
+| `js/training/`                                      | ミニゲーム採点と訓練精算                                           | `trainingManager.js`, `strengthGame.js`, `agilityGame.js`           |
+| `js/battle/`                                        | ダメージ、AI判断、一時効果、通常・無限ボスのラウンド解決、報酬     | `damageCalculator.js`, `bossManager.js`, `battleEngine.js`          |
+| `js/ranking/`                                       | 固定シード1,000人表、BP近似配対、順位交換                          | `rankingGenerator.js`, `matchmaking.js`                             |
+| `js/economy/`                                       | 装備所有・強化、所持品、購入規則、能力キャンディ価格               | `equipmentManager.js`, `abilityCandyManager.js`                     |
+| `js/storage/`, `js/i18n/`, `js/audio/`              | セーブ修復、3言語辞書、ローカルBGM・効果音                         | `saveManager.js`, `featureLocales.js`, `audioManager.js`            |
+| `js/ui/`                                            | メニュー、導入、ホーム、活動、戦闘、ショップ、説明、設定画面       | `trainingUI.js`, `shopUI.js`, `settingsUI.js`                       |
+| `assets/` と `bgm/`                                 | ローカル画像、SVG、BGM 7曲、効果音                                 | `images/pets/`, `images/equipment/`, `audio/`, `bgm/`               |
+| `tests/`, `tools/`                                  | 決定的Nodeテストと素材生成ツール                                   | `unit.test.js`, `static.test.js`, `generate-audio.js`               |
+| `.agents/skills/`                                   | プロジェクト専用Codexワークフロー                                  | `pet-simulation-feature-workflow/`, `safe-browser-validation/`      |
 
 <a id="ja-supporting-systems"></a>
 
 ### 💾 補助システム
 
 - 🌐 **多言語：** `zh-Hant`、`en`、`ja` の辞書が画面、イベント、装備、キャンディ、チュートリアル、設定を網羅し、ユニットテストでキー一致を確認します。
-- 💾 **永続化：** 重要な行動ごとに自動保存します。修復処理は不正範囲を制限し、旧セーブへ新しい任意項目を補い、1,000件ランキングを検証し、読込エラー時には可能なら元データを時刻付きバックアップキーへ残します。
+- 💾 **永続化：** 重要な行動ごとに自動保存します。修復処理は不正範囲を制限し、旧セーブへ新しい任意項目を補い、神話級強化レベルを復元し、1位到達済みの旧セーブへ不足する神話級装備を補完し、1,000件ランキングを検証し、読込エラー時には可能なら元データを時刻付きバックアップキーへ残します。
 - 🎵 **音声安全：** マスター、BGM、効果音、ミュートを設定できます。ブラウザの操作解禁を守り、単発ノードを再生後に切断し、BGMプリゲインをダイナミクスコンプレッサーへ接続します。`bgm_menu.mp3` はメニュー・導入・説明、`bgm_home.mp3` はホーム・ランキング・ショップ・ゲーム内設定、`bgm_training.mp3` は訓練、`bgm_outing.mp3` はおでかけ、`bgm_battle.mp3` は通常決闘、`bgm_bossbattle.mp3` はボス戦、`bgm_champion.mp3` は1位の結末またはボス勝利で使用します。
 - ♿ **アクセシビリティ：** 意味のあるボタンとダイアログ、フォーカス復元・トラップ、スキップリンク、キーボード訓練、最小48pxタッチ領域、100%/115%/130%文字倍率、標準・高速・動きを減らすモードを備えます。
 - 📱 **レスポンシブ：** モバイル、タブレット、デスクトップ、横向き専用CSSがセーフエリアに対応し、メニュー、戦闘、設定、ショップ、訓練を再配置します。
@@ -537,18 +579,20 @@ flowchart TD
 
 ### 🧪 テスト
 
-現在の実装は、**ユニットテスト61/61件**、**静的検証22/22件**、全JavaScript構文検査、空白検査を通過しています。
+現在の実装は、**ユニットテスト66/66件**、**静的検証22/22件**、**音声検証3/3件**、全JavaScript構文検査、空白検査を通過しています。
 
 プロジェクトルートで実行します。
 
 ```powershell
 node tests/unit.test.js
 node tests/static.test.js
+node tests/audio.test.js
 $files = rg --files js tests tools -g '*.js'; foreach ($file in $files) { node --check $file; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE } }
+npx prettier --check index.html js css tests README.md
 git diff --check
 ```
 
-ユニットテストは、能力計算、成長の繰り越しと上限、レベル連動APの境界、気分・親密度の境界、固定シードの気分会話、訓練評価、再現可能なランキング、候補相手、通常戦と無限ボス戦、APを消費しないボス入場、闘技場の免疫・ダメージ、ボス成長と報酬、装備、キャンディ価格、大量キャンディ購入、経験値ショップの価格とレベルアップ、貯金の預け入れ・引き出し、休息時の利息、セーブ修復、言語キーの一致、ローカル音声を確認します。静的検証は、直接起動用のスクリプト構造、相対素材の存在、オフライン制約、レスポンシブ／テーマ要件、タッチ領域、ローカルアート、README構造、低モーション設定のフック、貯金機能の接続、ホーム通知の位置、大量購入操作、経験値ショップと1位ボス門、ボスBGM、レベル連動APの接続、末尾空白を確認します。
+ユニットテストは、能力計算、成長の繰り越しと上限、レベル連動APの境界、気分・親密度の境界、固定シードの気分会話、訓練評価、再現可能なランキング、候補相手、通常戦と無限ボス戦、APを消費しないボス入場、闘技場の免疫・ダメージ、ボス成長と報酬、神話級装備の獲得と大量強化、装備、キャンディ価格、大量キャンディ購入、経験値ショップの価格とレベルアップ、貯金の預け入れ・引き出し、休息時の利息、セーブ修復、言語キーの一致、ローカル音声を確認します。静的検証は、直接起動用のスクリプト構造、相対素材の存在、オフライン制約、レスポンシブ／テーマ要件、タッチ領域、ローカルアート、README構造、低モーション設定のフック、貯金機能の接続、ホーム通知の位置、大量購入操作、経験値ショップ、神話級装備の所持品強化接続、1位ボス門、ボスBGM、レベル連動APの接続、末尾空白を確認します。
 
 承認済みの統合ブラウザがない場合、ブラウザ操作は短い手動確認を使います。`index.html` を開き、新規または継続セーブ、3種類の訓練、ショップ分類と段階、購入可能時のキャンディ、言語・テーマ・動き設定、再読み込み後の永続化を確認してください。
 
@@ -594,6 +638,7 @@ git diff --check
 - 🏆 **可重現的千名排行榜：** 玩家 1 名、固定種子 AI 999 名、12 名固定里程碑強敵，每次提供 5 名 BP 接近候選。
 - 🚪 **第一名開啟無限 Boss 門：** 可選擇獅子、鱷魚或鷹 Boss，能力值會無限提升；草原、沼澤與空中場地每次隨機，套用種族免疫及每回合最大 HP 3% 傷害，Boss 戰延長為 80 回合。
 - 🎁 **無限 Boss 獎勵：** 勝利後獲得大量金幣；未滿等時獲得經驗，並有固定 1% 機率掉落隨機能力糖果。
+- 🏅 **冠軍神話級裝備：** 登上第 1 名會自動獲得神話護具、神話飾品與神話徽記；只能在背包升級，一次最多 999 級。每升一級，該裝備的非 CRIT 能力增加 0.1 個百分點，而徽記的攻擊力 CRIT 永遠固定 20%。
 - 🛍️ **四分類商店：** 包含 36 件永久裝備、18 種單場消耗品、8 種永久能力糖果，以及經驗補給。
 - 🍬 **價格隨成長調整的永久強化：** HP 糖果 +3，其餘七種 +1；先天能力與寵物 LV 越高，價格越昂貴，一次最多可購買 999 顆，總價會依每顆逐步上升的價格計算；偶爾遇到糖果節時當日目前價格再打五折。
 - ✨ **經驗補給：** 每組提供 100 經驗，可一次購買最多 999 組；單組價格會隨等級上升但封頂 400 金幣，糖果節期間打 6 折（折扣 40%）。
@@ -676,7 +721,7 @@ flowchart LR
 
 #### 進入無限 Boss 門
 
-登上排行榜第 1 名後，可從排行榜開啟 Boss 門，選擇獅子、鱷魚或鷹 Boss。Boss 戰不消耗 AP，因此可以反覆挑戰；每次仍需要 25 點體力與 20 點心情。場地會依每次挑戰的固定種子決定，Boss 每次通關後能力值無限成長，並在最多 80 回合內分出勝負。打贏 Boss 會播放冠軍 BGM，並獲得大量金幣、可取得的經驗，以及固定種子的 1% 隨機能力糖果抽獎機會。
+登上排行榜第 1 名後，可從排行榜開啟 Boss 門，選擇獅子、鱷魚或鷹 Boss。Boss 戰不消耗 AP，因此可以反覆挑戰；每次只需要 5 點體力與 5 點心情。場地會依每次挑戰的固定種子決定，Boss 每次通關後能力值無限成長，並在最多 80 回合內分出勝負。打贏 Boss 會播放冠軍 BGM，並獲得大量金幣、可取得的經驗，以及固定種子的 1% 隨機能力糖果抽獎機會。
 
 #### 使用商店與永久成長
 
@@ -690,6 +735,25 @@ flowchart LR
 | VI 冠軍  |               25 |    6,000 |          800 |
 
 裝備會放入護具、飾品或徽記欄位，購買後永久持有。戰鬥道具最多持有 99 個，只有在有效決鬥真正開始後才會消耗。能力糖果購買後立即使用：HP +3；攻擊、命中、特殊攻擊、防禦、特殊防禦、機動或速度則 +1。
+
+#### 在背包升級神話級裝備
+
+登上排行榜第 1 名後會自動獲得以下三件神話級裝備。它們不會在商店販售；已經是第一名的舊存檔讀取或修復時，也只會補上缺少的裝備，不會重複發放。
+
+| 部位 | 神話級初始能力                           |
+| ---- | ---------------------------------------- |
+| 護具 | HP +18%、防禦力 +9%、特殊防禦力 +9%      |
+| 飾品 | 攻擊力 +9%、特殊攻擊力 +9%、命中 +6%     |
+| 徽記 | 速度 +7%、機動性 +7.5%、攻擊力 CRIT +20% |
+
+在背包選擇神話級裝備即可升級。升級等級從 LV 0 開始，一次最多可指定 999 級；批次價格會把每一級逐步增加的價格加總：
+
+```text
+price(level) = ceil(10,000 × (1 + level × 0.10))
+batchPrice = sum(price(currentLevel + i), i = 0 ... quantity - 1)
+每升一級 = 該裝備所有非 CRIT 能力 +0.1 個百分點
+神話徽記的攻擊力 CRIT = 永遠固定 20%
+```
 
 糖果價格會向上取整到十位數：
 
@@ -760,12 +824,12 @@ flowchart TD
 | `css/base/`, `css/layout/`                          | 設計 token、字體、無障礙基礎、應用程式與場景排版        | `variables.css`, `accessibility.css`, `scenes.css`                  |
 | `css/components/`, `css/responsive/`, `css/themes/` | 共用元件、商店與訓練效果、斷點、五套主題                | `shop.css`, `training-effects.css`, `mobile.css`, `theme-night.css` |
 | `js/core/`                                          | 共用命名空間、事件、目前狀態、場景生命週期、啟動        | `namespace.js`, `gameState.js`, `sceneManager.js`, `app.js`         |
-| `js/data/`                                          | 物種、裝備、消耗品、糖果、對手與事件目錄                | `speciesData.js`, `abilityCandyData.js`, `rivalData.js`             |
+| `js/data/`                                          | 物種、一般／神話級裝備、消耗品、糖果、對手與事件目錄    | `speciesData.js`, `equipmentData.js`, `abilityCandyData.js`         |
 | `js/pet/`                                           | 能力、經驗、熟練、親密、每日成本、玩耍與外出            | `statCalculator.js`, `progression.js`, `dailyActions.js`            |
 | `js/training/`                                      | 小遊戲計分與訓練結算                                    | `trainingManager.js`, `strengthGame.js`, `agilityGame.js`           |
 | `js/battle/`                                        | 傷害、AI 決策、暫時效果、一般與無限 Boss 回合處理及獎勵 | `damageCalculator.js`, `bossManager.js`, `battleEngine.js`          |
 | `js/ranking/`                                       | 固定種子千名榜、相近 BP 配對、排名交換                  | `rankingGenerator.js`, `matchmaking.js`                             |
-| `js/economy/`                                       | 裝備、背包、商店購買規則、能力糖果定價                  | `equipmentManager.js`, `abilityCandyManager.js`                     |
+| `js/economy/`                                       | 裝備持有與升級、背包、商店購買規則、能力糖果定價        | `equipmentManager.js`, `abilityCandyManager.js`                     |
 | `js/storage/`, `js/i18n/`, `js/audio/`              | 存檔修復、三語字典、本機音樂與音效                      | `saveManager.js`, `featureLocales.js`, `audioManager.js`            |
 | `js/ui/`                                            | 選單、引導、培養、活動、戰鬥、商店、說明與設定場景      | `trainingUI.js`, `shopUI.js`, `settingsUI.js`                       |
 | `assets/` 與 `bgm/`                                 | 本機夥伴圖片、SVG、七首 BGM 與音效                      | `images/pets/`, `images/equipment/`, `audio/`, `bgm/`               |
@@ -777,7 +841,7 @@ flowchart TD
 ### 💾 支援系統
 
 - 🌐 **多國語系：** `zh-Hant`、`en`、`ja` 字典涵蓋場景、事件、裝備、糖果、教學與設定，並由單元測試強制檢查鍵值一致。
-- 💾 **資料持久化：** 每項重要活動都會自動存檔。修復邏輯會限制異常數值、替舊存檔補上新選填欄位、驗證千名排行榜，讀檔錯誤時則盡可能把原始資料放入含時間戳記的備份鍵。
+- 💾 **資料持久化：** 每項重要活動都會自動存檔。修復邏輯會限制異常數值、替舊存檔補上新選填欄位、恢復神話級升級等級、替已登上第一名的舊存檔補齊神話級裝備、驗證千名排行榜，讀檔錯誤時則盡可能把原始資料放入含時間戳記的備份鍵。
 - 🎵 **音訊安全：** 可調整主音量、BGM、音效與靜音；遵守瀏覽器互動解鎖規則，單次音效播放後會斷開節點，BGM 前級增益後方也有動態壓縮器。`bgm_menu.mp3` 用於主畫面／新手教學／說明頁，`bgm_home.mp3` 用於遊戲主頁／排行榜／商店／遊戲內設定，`bgm_training.mp3` 用於訓練，`bgm_outing.mp3` 用於外出，`bgm_battle.mp3` 用於一般排行榜戰鬥，`bgm_bossbattle.mp3` 用於 Boss 戰，`bgm_champion.mp3` 用於第一名冠軍結局或打贏 Boss。
 - ♿ **無障礙：** 語意化按鈕與 dialog、焦點復原與陷阱、跳至內容連結、可用鍵盤操作的訓練、至少 48px 觸控區、100%／115%／130% 文字縮放，以及標準／快速／降低動態效果模式。
 - 📱 **響應式設計：** 手機、平板、桌面與橫向專用 CSS 支援安全區，並調整選單、戰鬥、設定、商店與訓練場地排版。
@@ -788,18 +852,20 @@ flowchart TD
 
 ### 🧪 測試
 
-目前實作已通過 **61/61 項單元測試**、**22/22 項靜態檢查**、全部 JavaScript 語法檢查及空白驗證。
+目前實作已通過 **66/66 項單元測試**、**22/22 項靜態檢查**、**3/3 項音訊檢查**、全部 JavaScript 語法檢查及空白驗證。
 
 請在專案根目錄執行：
 
 ```powershell
 node tests/unit.test.js
 node tests/static.test.js
+node tests/audio.test.js
 $files = rg --files js tests tools -g '*.js'; foreach ($file in $files) { node --check $file; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE } }
+npx prettier --check index.html js css tests README.md
 git diff --check
 ```
 
-單元測試涵蓋能力公式、成長溢位與上限、依等級提升的 AP 邊界、心情及親密度門檻、固定種子的心情對話、訓練評級、可重現排行榜、候選對手、一般戰鬥與無限 Boss 戰、Boss 不消耗 AP 的進場規則、場地免疫與傷害、Boss 成長與獎勵、裝備、糖果定價、糖果大量購買與持久化、存款存入與領出、休息利息、存檔修復、語系鍵值一致及本機音訊。靜態檢查涵蓋直接開啟的 script 結構、相對素材存在性、離線限制、響應式與主題要求、觸控尺寸、本機美術、README 結構、降低動態效果掛鉤、存款功能串接、主頁通知位置、大量購買操作、經驗商店、第一名 Boss 門、Boss BGM、依等級提升 AP 串接及尾端空白。
+單元測試涵蓋能力公式、成長溢位與上限、依等級提升的 AP 邊界、心情及親密度門檻、固定種子的心情對話、訓練評級、可重現排行榜、候選對手、一般戰鬥與無限 Boss 戰、Boss 不消耗 AP 的進場規則、場地免疫與傷害、Boss 成長與獎勵、神話級裝備獲得與大量升級、裝備、糖果定價、糖果大量購買與持久化、存款存入與領出、休息利息、存檔修復、語系鍵值一致及本機音訊。靜態檢查涵蓋直接開啟的 script 結構、相對素材存在性、離線限制、響應式與主題要求、觸控尺寸、本機美術、README 結構、降低動態效果掛鉤、存款功能串接、主頁通知位置、大量購買操作、經驗商店、神話級裝備背包升級串接、第一名 Boss 門、Boss BGM、依等級提升 AP 串接及尾端空白。
 
 若沒有經核准的整合式瀏覽器，可進行簡短人工驗證：開啟 `index.html`、開始或繼續存檔、遊玩三種訓練、瀏覽商店分類與階級、金幣足夠時購買糖果、切換語言／主題／動態設定，最後重新整理確認資料仍存在。
 

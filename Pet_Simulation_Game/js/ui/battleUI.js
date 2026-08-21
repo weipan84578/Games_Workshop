@@ -300,6 +300,18 @@
             t('boss.defeat', { stage: result.stage }) +
             '</p>'
         : '<h3 style="margin-top:1rem">' + t('battle.reward', { xp: result.xp.gained, coins: result.coins }) + '</h3>';
+      var mythicRewardHtml =
+        result.mythicEquipment && result.mythicEquipment.length
+          ? '<p class="tag tag--success">✨ ' +
+            t('ranking.mythicReward', {
+              items: result.mythicEquipment
+                .map(function (id) {
+                  return PSG.ui.common.itemName(PSG.data.equipmentById[id]);
+                })
+                .join(' · ')
+            }) +
+            '</p>'
+          : '';
       PSG.ui.common.modal({
         required: true,
         eyebrow:
@@ -313,6 +325,7 @@
           '</div>' +
           rewardHtml +
           (result.rank.changed ? '<p>' + t('battle.rankUp', { rank: result.rank.after }) + '</p>' : '') +
+          mythicRewardHtml +
           (result.firstMilestone
             ? '<blockquote class="card card--soft" style="margin-top:1rem">' +
               t('ranking.milestoneDefeat') +

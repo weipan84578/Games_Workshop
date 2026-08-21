@@ -347,7 +347,8 @@
       coins: coins,
       rank: rankResult,
       champion: rankResult.champion,
-      firstMilestone: won && firstMilestone
+      firstMilestone: won && firstMilestone,
+      mythicEquipment: rankResult.mythicEquipment
     };
     PSG.storage.save.write(save);
     return state.settled;
