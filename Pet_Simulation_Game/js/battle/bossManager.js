@@ -73,6 +73,7 @@
     return Math.round(
       stats.hp +
         4 * stats.attack +
+        3 * stats.accuracy +
         4.3 * stats.defense +
         3.2 * stats.mobility +
         4 * stats.spAttack +

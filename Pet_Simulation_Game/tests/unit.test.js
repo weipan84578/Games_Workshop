@@ -100,6 +100,7 @@ test('natural stats match the level 1, 50, and 100 formulas', () => {
   assert.deepEqual(PSG.pet.stats.natural('eagle', 1), {
     hp: 100,
     attack: 16,
+    accuracy: 16,
     defense: 10,
     mobility: 18,
     spAttack: 12,
@@ -110,6 +111,7 @@ test('natural stats match the level 1, 50, and 100 formulas', () => {
   assert.deepEqual(PSG.pet.stats.natural('crocodile', 100), {
     hp: 585,
     attack: 90,
+    accuracy: 64,
     defense: 122,
     mobility: 49,
     spAttack: 90,
@@ -120,6 +122,7 @@ test('natural stats match the level 1, 50, and 100 formulas', () => {
 
 test('species positioning is preserved at equal levels', () => {
   const all = ['eagle', 'lion', 'crocodile'].map((id) => PSG.pet.stats.natural(id, 70));
+  assert.ok(all[0].accuracy > all[1].accuracy && all[1].accuracy > all[2].accuracy);
   assert.ok(all[0].mobility > all[1].mobility && all[0].speed > all[1].speed);
   assert.ok(all[1].attack > all[0].attack && all[1].spAttack > all[0].spAttack);
   assert.ok(all[2].hp > all[1].hp && all[2].defense > all[1].defense && all[2].spDefense > all[1].spDefense);
@@ -218,6 +221,7 @@ test('training grade boundaries and score helpers are exact', () => {
   assert.equal(PSG.training.manager.feedbackFor(90).id, 'perfect');
   assert.equal(PSG.training.manager.feedbackFor(60).id, 'great');
   assert.equal(PSG.training.manager.feedbackFor(59).id, 'keep');
+  assert.equal(PSG.training.manager.templateFor('accuracy'), 'agility');
 });
 
 test('gold training settlement applies grade and mood multipliers', () => {
@@ -232,7 +236,7 @@ test('gold training settlement applies grade and mood multipliers', () => {
 test('equipment, consumable, and event catalog sizes match the specification', () => {
   assert.equal(PSG.data.equipment.length, 36);
   assert.equal(PSG.data.consumables.length, 18);
-  assert.equal(PSG.data.abilityCandies.length, 7);
+  assert.equal(PSG.data.abilityCandies.length, 8);
   assert.equal(PSG.data.events.length, 24);
   PSG.data.equipment
     .concat(PSG.data.consumables)
@@ -420,7 +424,7 @@ test('Boss battle entry and settlement persist the attempt and rewards', () => {
   });
   assert.equal(PSG.battle.engine.start(state).ok, true);
   assert.equal(save.day.actionPoints, 7);
-  assert.equal(save.pet.energy, 75);
+  assert.equal(save.pet.energy, 95);
   assert.equal(save.progression.bossAttempts, 1);
   state.ended = true;
   state.winnerId = 'player';
@@ -474,7 +478,7 @@ test('daily AP scales by level tiers and Boss battles do not spend AP', () => {
   });
   assert.equal(PSG.battle.engine.start(state).ok, true);
   assert.equal(save.day.actionPoints, 0);
-  assert.equal(save.pet.energy, 75);
+  assert.equal(save.pet.energy, 95);
   assert.equal(PSG.battle.engine.cancel(state).ok, true);
   assert.equal(save.day.actionPoints, 0);
   assert.equal(save.pet.energy, 100);
@@ -565,6 +569,15 @@ test('evasion follows the formula and never exceeds 40 percent', () => {
   assert.ok(Math.abs(PSG.battle.damage.evasion(12, 1, 0.5) - 0.09) < 1e-12);
 });
 
+test('accuracy counters mobility and guarantees a hit at double mobility', () => {
+  assert.equal(PSG.battle.damage.accuracyRatio(50, 50), 0.5);
+  assert.equal(PSG.battle.damage.accuracyRatio(100, 50), 1);
+  assert.ok(Math.abs(PSG.battle.damage.evasion(12, 1, 1, 0) - 0.18) < 1e-12);
+  assert.ok(Math.abs(PSG.battle.damage.evasion(12, 1, 1, 12) - 0.09) < 1e-12);
+  assert.equal(PSG.battle.damage.evasion(12, 1, 1, 24), 0);
+  assert.equal(PSG.battle.damage.hitChance(24, 12, 1), 1);
+});
+
 test('battle energy starts, gains, spends, and clamps correctly', () => {
   const save = fresh('lion');
   const ai = Object.assign({}, PSG.ranking.generator.getAI('ai_0999', save.ranking.rankingSeed, 'en'), { rank: 999 });
@@ -576,6 +589,18 @@ test('battle energy starts, gains, spends, and clamps correctly', () => {
   state.player.energy = 100;
   PSG.battle.engine.round(state, 'special');
   assert.ok(state.player.energy >= 0 && state.player.energy <= 10);
+});
+
+test('accuracy stat can guarantee a battle hit against mobility', () => {
+  const save = fresh('eagle');
+  const ai = Object.assign({}, PSG.ranking.generator.getAI('ai_0999', save.ranking.rankingSeed, 'en'), { rank: 999 });
+  const state = PSG.battle.engine.create(save, ai, null, 4);
+  state.player.stats.accuracy = state.enemy.stats.mobility * 2;
+  state.rng.next = () => 0.99;
+  const result = PSG.battle.engine.performAttack(state, state.player, state.enemy, 'normal');
+  assert.equal(result.dodged, false);
+  assert.equal(result.dodgeRate, 0);
+  assert.equal(result.hitRate, 1);
 });
 
 test('battle consumable is deducted only after a valid snapshot starts', () => {
@@ -594,8 +619,14 @@ test('Eagle special halves dodge and grants two future mobility actions on hit',
   const ai = Object.assign({}, PSG.ranking.generator.getAI('ai_0999', save.ranking.rankingSeed, 'en'), { rank: 999 });
   const state = PSG.battle.engine.create(save, ai, null, 1);
   state.player.energy = 100;
+  state.player.stats.accuracy = state.enemy.stats.mobility;
   state.rng.next = () => 0.99;
-  const expected = PSG.battle.damage.evasion(state.enemy.stats.mobility, state.enemy.level, 0.5);
+  const expected = PSG.battle.damage.evasion(
+    state.enemy.stats.mobility,
+    state.enemy.level,
+    0.5,
+    state.player.stats.accuracy
+  );
   const result = PSG.battle.engine.performAttack(state, state.player, state.enemy, 'special');
   assert.equal(result.dodged, false);
   assert.equal(result.dodgeRate, expected);
@@ -727,6 +758,16 @@ test('ability candy purchases immediately grant permanent stats and recalculate 
   assert.ok(result.nextPrice >= result.price);
 });
 
+test('accuracy candy permanently increases the accuracy stat', () => {
+  const save = fresh('eagle');
+  save.player.coins = 5000;
+  const before = PSG.pet.stats.effective(save).accuracy;
+  const result = PSG.economy.shop.purchaseCandy(save, 'candy_accuracy');
+  assert.equal(result.ok, true);
+  assert.equal(result.gain, 1);
+  assert.equal(PSG.pet.stats.effective(save).accuracy, before + 1);
+});
+
 test('HP candy grants three points and also extends current HP', () => {
   const save = fresh('crocodile');
   save.player.coins = 5000;
@@ -755,6 +796,7 @@ test('save repair clamps ranges and preserves a valid ranking', () => {
   save.day.actionPoints = 99;
   save.pet.candyBoosts.attack = -4;
   save.pet.candyBoosts.hp = 3.9;
+  delete save.pet.mastery.accuracy;
   delete save.progression.bossWins;
   delete save.progression.bossAttempts;
   delete save.stats.bossChallenges;
@@ -765,6 +807,7 @@ test('save repair clamps ranges and preserves a valid ranking', () => {
   assert.equal(repaired.day.actionPoints, 7);
   assert.equal(repaired.pet.candyBoosts.attack, 0);
   assert.equal(repaired.pet.candyBoosts.hp, 3);
+  assert.deepEqual(repaired.pet.mastery.accuracy, { level: 0, xp: 0 });
   assert.equal(repaired.economy.savings.balance, 0);
   assert.equal(repaired.progression.bossWins, 0);
   assert.equal(repaired.progression.bossAttempts, 0);

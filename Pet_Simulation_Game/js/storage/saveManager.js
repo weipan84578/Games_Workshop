@@ -47,6 +47,15 @@
     save.pet.energy = PSG.utils.math.clamp(Math.round(Number(save.pet.energy) || 0), 0, 100);
     save.pet.mood = PSG.utils.math.clamp(Math.round(Number(save.pet.mood) || 0), 0, 100);
     save.pet.affection = PSG.utils.math.clamp(Math.round(Number(save.pet.affection) || 0), 0, 100);
+    save.pet.mastery = save.pet.mastery || {};
+    PSG.constants.STAT_KEYS.forEach(function (key) {
+      var existing = save.pet.mastery[key] || {};
+      var level = PSG.utils.math.clamp(Math.round(Number(existing.level) || 0), 0, PSG.constants.MAX_MASTERY);
+      var xp = Math.max(0, Math.floor(Number(existing.xp) || 0));
+      if (level >= PSG.constants.MAX_MASTERY) xp = 0;
+      else xp = Math.min(xp, 50 + 25 * level - 1);
+      save.pet.mastery[key] = { level: level, xp: xp };
+    });
     save.pet.candyBoosts = save.pet.candyBoosts || {};
     PSG.constants.STAT_KEYS.forEach(function (key) {
       save.pet.candyBoosts[key] = PSG.utils.math.clamp(Math.floor(Number(save.pet.candyBoosts[key]) || 0), 0, 10000);

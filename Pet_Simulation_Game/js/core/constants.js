@@ -27,13 +27,13 @@
     MAX_RANK: 1000,
     MAX_BATTLE_ROUNDS: 20,
     BOSS_BATTLE_ROUNDS: 80,
-    STAT_KEYS: ['hp', 'attack', 'defense', 'mobility', 'spAttack', 'spDefense', 'speed'],
+    STAT_KEYS: ['hp', 'attack', 'accuracy', 'defense', 'mobility', 'spAttack', 'spDefense', 'speed'],
     ACTIONS: Object.freeze({
       training: { ap: 1, minEnergy: 20, energy: -20, mood: -5, affection: 1 },
       play: { ap: 1, minEnergy: 10, energy: -10, mood: 20, affection: 5 },
       outing: { ap: 1, minEnergy: 15, energy: -15, mood: 15, affection: 4 },
       battle: { ap: 2, minEnergy: 30, minMood: 20, energy: -25 },
-      bossBattle: { ap: 0, minEnergy: 25, minMood: 20, energy: -25 },
+      bossBattle: { ap: 0, minEnergy: 5, minMood: 5, energy: -5 },
       rest: { energy: 50, mood: 10 }
     }),
     AFFECTION_THRESHOLDS: [20, 40, 60, 80, 100]

@@ -60,6 +60,7 @@
     'species.crocodile.role': 'Steadfast Guardian',
     'stat.hp': 'HP',
     'stat.attack': 'Attack',
+    'stat.accuracy': 'Accuracy',
     'stat.defense': 'Defense',
     'stat.mobility': 'Mobility',
     'stat.spAttack': 'Sp. Attack',
@@ -211,7 +212,7 @@
     'help.title': 'Adventure Guide',
     'help.quick': 'Quick Start',
     'help.pets': 'Three Partners',
-    'help.stats': 'Seven Stats',
+    'help.stats': 'Eight Stats',
     'help.daily': 'Daily Loop',
     'help.training': 'Training',
     'help.battle': 'Duel Formulas',
@@ -223,7 +224,7 @@
     'help.quick.body':
       'Daily AP rises with your partner’s level: LV 1–30 gives 7, LV 31–50 gives 10, LV 51–75 gives 12, and LV 76–100 gives 15. Train to grow, play to lift mood, explore, then spend 2 AP on a ranked duel. Daily coins are 4× the original reward.',
     'help.stats.body':
-      'HP takes damage. ATK/DEF power normal attacks; SPA/SPD power specials. MOB controls dodge and SPE controls turn order.',
+      'HP takes damage. ATK/DEF power normal attacks; ACC improves hit chance; SPA/SPD power specials. MOB controls dodge and SPE controls turn order.',
     'help.battle.body':
       'Damage uses level, power, and attack/defense with only ±5% variance. Normal attacks add 30 energy; specials cost 100. Auto Battle repeats normal attacks and fires specials at full energy.',
     'help.ranking.body':
@@ -285,7 +286,7 @@
     'tutorial.2.title': 'Action Points Grow with Level',
     'tutorial.2.body':
       'Daily AP is 7, 10, 12, or 15 by level tier. Activities cost AP; rest ends the day and restores your partner.',
-    'tutorial.3.title': 'Train Seven Stats',
+    'tutorial.3.title': 'Train Eight Stats',
     'tutorial.3.body': 'Short challenges grant regular XP and mastery XP for the chosen stat.',
     'tutorial.4.title': 'Manage Three Gear Slots',
     'tutorial.4.body': 'Equip one armor, accessory, and emblem after previewing the BP change.',
@@ -301,6 +302,7 @@
     'help.point.mastery': 'Mastery LV 0–20, up to +10%',
     'help.point.damage': 'Damage = floor(base × 0.95–1.05 × critical)',
     'help.point.crit': 'Critical ×1.75; dodge never exceeds 40%',
+    'help.point.accuracy': 'Accuracy at least 2× target Mobility guarantees a hit; Mobility dodge caps at 40%',
     'help.point.rounds': 'Up to 20 rounds per duel',
     'help.point.ranking': '1 player + 999 seeded AI rivals',
     'help.point.candidates': 'Usually 3 higher + 2 lower candidates',

@@ -5,6 +5,7 @@
     var totals = {
       hp: 0,
       attack: 0,
+      accuracy: 0,
       defense: 0,
       mobility: 0,
       spAttack: 0,

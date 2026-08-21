@@ -120,7 +120,7 @@
     if (action === 'special') attacker.energy -= 100;
     var mobility = PSG.battle.effects.mobility(defender);
     var effectMultiplier = action === 'special' && attacker.speciesId === 'eagle' ? 0.5 : 1;
-    var dodgeRate = PSG.battle.damage.evasion(mobility, defender.level, effectMultiplier);
+    var dodgeRate = PSG.battle.damage.evasion(mobility, defender.level, effectMultiplier, attacker.stats.accuracy);
     // Resolution order is observable and tested: hit → critical → variance → shield → HP.
     var dodged = state.rng.next() < dodgeRate;
     var result = {
@@ -133,7 +133,8 @@
       damage: 0,
       hpDamage: 0,
       shieldAbsorbed: 0,
-      dodgeRate: dodgeRate
+      dodgeRate: dodgeRate,
+      hitRate: 1 - dodgeRate
     };
     if (dodged) {
       defender.energy = Math.min(100, defender.energy + 5);

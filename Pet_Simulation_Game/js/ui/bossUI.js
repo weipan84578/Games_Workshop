@@ -3,10 +3,6 @@
 
   var d = PSG.utils.dom;
 
-  function arenaName(arena) {
-    return PSG.i18n.t('boss.arena.' + arena.id);
-  }
-
   function render(root) {
     var save = PSG.core.gameState.get();
     if (!save) return PSG.core.scenes.go('menu');
@@ -17,8 +13,6 @@
       return PSG.core.scenes.go('ranking');
     }
     var canFight = PSG.pet.daily.can(save, 'bossBattle');
-    var arenaLabel = arenaName(plan.arena);
-    var safeSpecies = PSG.data.species[plan.arena.safeSpeciesId];
     var reason = canFight.ok ? '' : PSG.ui.common.actionReason(save, 'bossBattle');
     var cards = PSG.battle.boss
       .speciesIds()
@@ -67,15 +61,6 @@
       '</p><p class="muted">' +
       t('boss.growth') +
       '</p></div><div class="boss-intro__door" aria-hidden="true">🚪</div></section>' +
-      '<section class="card boss-arena-banner"><div><span class="eyebrow">' +
-      t('boss.nextArena', { arena: arenaLabel }) +
-      '</span><h3>' +
-      arenaLabel +
-      '</h3><p>' +
-      t('boss.arenaRule', { arena: arenaLabel, species: t(safeSpecies.nameKey) }) +
-      '</p></div><span class="boss-arena-banner__icon" aria-hidden="true">' +
-      (plan.arena.id === 'grassland' ? '🌾' : plan.arena.id === 'swamp' ? '🌿' : '☁️') +
-      '</span></section>' +
       '<p class="muted boss-cost">' +
       t('boss.cost') +
       (!canFight.ok ? ' ' + d.escape(reason) : '') +

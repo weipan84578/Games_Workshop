@@ -79,7 +79,16 @@
   }
 
   function statIcon(key) {
-    return { hp: '♥', attack: '⚔', defense: '🛡', mobility: '🪽', spAttack: '✦', spDefense: '◇', speed: '➤' }[key];
+    return {
+      hp: '♥',
+      attack: '⚔',
+      accuracy: '🎯',
+      defense: '🛡',
+      mobility: '🪽',
+      spAttack: '✦',
+      spDefense: '◇',
+      speed: '➤'
+    }[key];
   }
 
   function startGame(root, stat) {

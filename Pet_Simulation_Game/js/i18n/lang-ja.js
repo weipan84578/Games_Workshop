@@ -59,6 +59,7 @@
     'species.crocodile.role': '不動の守護者',
     'stat.hp': 'HP',
     'stat.attack': '攻撃',
+    'stat.accuracy': '命中',
     'stat.defense': '防御',
     'stat.mobility': '機動',
     'stat.spAttack': '特殊攻撃',
@@ -209,7 +210,7 @@
     'help.title': '冒険ガイド',
     'help.quick': 'クイックスタート',
     'help.pets': '3種の相棒',
-    'help.stats': '7つの能力',
+    'help.stats': '8つの能力',
     'help.daily': '一日の流れ',
     'help.training': '訓練操作',
     'help.battle': '決闘の計算',
@@ -220,7 +221,8 @@
     'help.replayTutorial': 'チュートリアルをもう一度見る',
     'help.quick.body':
       'APは相棒のレベルで増えます。LV 1～30は7、LV 31～50は10、LV 51～75は12、LV 76～100は15です。訓練で成長し、遊んで気分を回復し、おでかけを楽しみ、準備ができたら2 APでランキングに挑戦します。デイリーコインは元の4倍です。',
-    'help.stats.body': 'HPはダメージ、ATK/DEFは通常攻撃、SPA/SPDは特殊攻撃、MOBは回避、SPEは行動順に関係します。',
+    'help.stats.body':
+      'HPはダメージ、ATK/DEFは通常攻撃、ACCは命中率、SPA/SPDは特殊攻撃、MOBは回避、SPEは行動順に関係します。',
     'help.battle.body':
       'ダメージはレベル・威力・攻防比で計算し、変動は±5%のみ。通常攻撃で30エネルギー、100で特殊攻撃が使えます。オートバトルは通常攻撃を繰り返し、満タンで特殊攻撃を使います。',
     'help.ranking.body': 'BPの近い5人が候補。上位に勝つと順位交換、負けても順位は下がりません。',
@@ -280,7 +282,7 @@
     'tutorial.2.title': 'レベルで増えるアクションポイント',
     'tutorial.2.body':
       '毎日のAPはレベル帯に応じて7・10・12・15になります。活動にはAPが必要で、休むと一日が終わり状態が回復します。',
-    'tutorial.3.title': '7つの能力を訓練',
+    'tutorial.3.title': '8つの能力を訓練',
     'tutorial.3.body': 'ミニゲームで通常経験値と選んだ能力の熟練経験値を獲得します。',
     'tutorial.4.title': '3枠の装備を調整',
     'tutorial.4.body': '防具・アクセサリ・紋章を一つずつ装備し、BP差を確認できます。',
@@ -294,6 +296,7 @@
     'help.point.mastery': '熟練LV 0～20、最大+10%',
     'help.point.damage': 'ダメージ = floor（基礎 × 0.95～1.05 × クリティカル）',
     'help.point.crit': 'クリティカル×1.75、回避は最大40%',
+    'help.point.accuracy': '命中が相手の機動の2倍以上なら必中。回避の上限は40%',
     'help.point.rounds': '1試合は最大20ラウンド',
     'help.point.ranking': 'プレイヤー1人＋固定シードAI 999人',
     'help.point.candidates': '通常は上位3人＋下位2人',

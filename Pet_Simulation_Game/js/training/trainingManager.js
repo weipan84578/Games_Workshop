@@ -3,7 +3,7 @@
 
   function templateFor(stat) {
     if (stat === 'attack' || stat === 'spAttack') return 'strength';
-    if (stat === 'mobility' || stat === 'speed') return 'agility';
+    if (stat === 'accuracy' || stat === 'mobility' || stat === 'speed') return 'agility';
     return 'endurance';
   }
   function gradeFor(score) {

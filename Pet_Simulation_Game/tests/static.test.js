@@ -99,8 +99,20 @@ check('all 54 item icons and three outing backdrops are local', () => {
 
 check('ability candy modules load in dependency-safe order', () => {
   const scripts = [...index.matchAll(/<script[^>]+src="([^"]+)"/g)].map((match) => match[1]);
+  const constants = fs.readFileSync(path.join(root, 'js/core/constants.js'), 'utf8');
+  const species = fs.readFileSync(path.join(root, 'js/data/speciesData.js'), 'utf8');
+  const candyData = fs.readFileSync(path.join(root, 'js/data/abilityCandyData.js'), 'utf8');
   const candy = fs.readFileSync(path.join(root, 'js/economy/abilityCandyManager.js'), 'utf8');
+  const damage = fs.readFileSync(path.join(root, 'js/battle/damageCalculator.js'), 'utf8');
+  const battle = fs.readFileSync(path.join(root, 'js/battle/battleEngine.js'), 'utf8');
+  const training = fs.readFileSync(path.join(root, 'js/training/trainingManager.js'), 'utf8');
   const shop = fs.readFileSync(path.join(root, 'js/ui/shopUI.js'), 'utf8');
+  assert.match(constants, /STAT_KEYS:\s*\[[^\]]*'accuracy'/);
+  assert.match(species, /accuracy:\s*16/);
+  assert.match(candyData, /accuracy:/);
+  assert.match(damage, /function accuracyRatio\(accuracy, mobility\)/);
+  assert.match(battle, /attacker\.stats\.accuracy/);
+  assert.match(training, /stat === 'accuracy'.*return 'agility'/s);
   assert.ok(scripts.indexOf('js/data/abilityCandyData.js') > scripts.indexOf('js/data/speciesData.js'));
   assert.ok(scripts.indexOf('js/economy/abilityCandyManager.js') > scripts.indexOf('js/pet/statCalculator.js'));
   assert.ok(scripts.indexOf('js/economy/experienceManager.js') > scripts.indexOf('js/pet/progression.js'));
@@ -173,6 +185,7 @@ check('rank-one Boss gate loads safely and uses the endless battle rules', () =>
   assert.match(ranking, /data-scene="boss"/);
   assert.match(bossUi, /data-boss-species/);
   assert.match(bossUi, /bossBattle/);
+  assert.doesNotMatch(bossUi, /boss-arena-banner|boss\.nextArena|boss\.arenaRule/);
   assert.match(battle, /PSG\.battle\.boss\.arenaTick/);
   assert.match(battle, /state\.maxRounds/);
   assert.match(playlist, /bossbattle:\s*'bgm\/bgm_bossbattle\.mp3'/);
@@ -190,7 +203,7 @@ check('level-scaled daily AP and AP-free Boss battles are wired', () => {
   assert.match(constants, /maxLevel:\s*50,\s*ap:\s*10/);
   assert.match(constants, /maxLevel:\s*75,\s*ap:\s*12/);
   assert.match(constants, /maxLevel:\s*100,\s*ap:\s*15/);
-  assert.match(constants, /bossBattle:\s*\{\s*ap:\s*0/);
+  assert.match(constants, /bossBattle:\s*\{\s*ap:\s*0,\s*minEnergy:\s*5,\s*minMood:\s*5,\s*energy:\s*-5/);
   assert.match(daily, /function maxActionPoints\(saveOrLevel\)/);
   assert.match(daily, /actionPoints: save\.day\.actionPoints/);
   assert.match(saveManager, /actionPointsForLevel\(save\.pet\.level\)/);

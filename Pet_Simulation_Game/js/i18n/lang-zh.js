@@ -59,6 +59,7 @@
     'species.crocodile.role': '堅壁守護',
     'stat.hp': 'HP',
     'stat.attack': '攻擊力',
+    'stat.accuracy': '命中',
     'stat.defense': '防禦力',
     'stat.mobility': '機動性',
     'stat.spAttack': '特殊攻擊',
@@ -244,7 +245,7 @@
     'help.title': '冒險指南',
     'help.quick': '快速開始',
     'help.pets': '三種夥伴',
-    'help.stats': '七項屬性',
+    'help.stats': '八項屬性',
     'help.daily': '每日循環',
     'help.training': '訓練操作',
     'help.battle': '決鬥公式',
@@ -255,7 +256,8 @@
     'help.replayTutorial': '重新觀看教學',
     'help.quick.body':
       '每日 AP 會隨夥伴等級提升：LV 1–30 為 7、LV 31–50 為 10、LV 51–75 為 12、LV 76–100 為 15。訓練成長、玩耍恢復心情、外出探索；準備好後以 2 AP 挑戰排行榜。每日金幣是原始獎勵的 4 倍。',
-    'help.stats.body': 'HP 承受傷害；ATK/DEF 對應一般攻擊；SPA/SPD 對應特殊攻擊；MOB 決定迴避；SPE 決定先手。',
+    'help.stats.body':
+      'HP 承受傷害；ATK/DEF 對應一般攻擊；ACC 提高命中率；SPA/SPD 對應特殊攻擊；MOB 決定迴避；SPE 決定先手。',
     'help.battle.body':
       '傷害依等級、威力與攻防比計算，僅有 ±5% 浮動。一般攻擊累積 30 能量，100 能量可使用特殊攻擊；自動戰鬥會自動循環施放。',
     'help.ranking.body': '每次顯示五位 BP 接近的對手。擊敗高位對手交換名次；落敗不掉排名。',
@@ -266,6 +268,7 @@
     'help.point.mastery': '熟練 LV 0–20，最高 +10%',
     'help.point.damage': '傷害 = floor（基礎 × 0.95–1.05 × 爆擊）',
     'help.point.crit': '爆擊 ×1.75，迴避不超過 40%',
+    'help.point.accuracy': '命中達到對手機動性的 2 倍即可必中；機動性閃避上限 40%',
     'help.point.rounds': '每場最多 20 回合',
     'help.point.ranking': '玩家 1 名 + 固定種子 AI 999 名',
     'help.point.candidates': '通常為三名高位 + 兩名低位候選',
@@ -306,7 +309,7 @@
     'tutorial.1.body': '體力與心情會影響每天能做的事；親密度會帶來戰鬥加成。',
     'tutorial.2.title': '行動力會隨等級提升',
     'tutorial.2.body': '每日 AP 依夥伴等級為 7／10／12／15；一般活動會消耗 AP，休息會結束今天並恢復狀態。',
-    'tutorial.3.title': '訓練七項屬性',
+    'tutorial.3.title': '訓練八項屬性',
     'tutorial.3.body': '完成短篇互動可獲得一般 XP 與指定屬性的熟練 XP。',
     'tutorial.4.title': '調整三欄裝備',
     'tutorial.4.body': '護具、飾品與徽記各能裝一件；預覽 BP 差異後再套用。',

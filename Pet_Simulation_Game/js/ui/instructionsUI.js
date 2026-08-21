@@ -26,7 +26,7 @@
         id: 'stats',
         icon: '📊',
         body: t('help.stats.body'),
-        points: ['HP · ATK · DEF', 'MOB · SPA · SPD · SPE', t('help.point.mastery')]
+        points: ['HP · ATK · ACC · DEF', 'MOB · SPA · SPD · SPE', t('help.point.accuracy'), t('help.point.mastery')]
       },
       {
         id: 'daily',

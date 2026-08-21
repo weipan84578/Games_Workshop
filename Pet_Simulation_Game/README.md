@@ -10,15 +10,15 @@
 
 ### 🇬🇧 English
 
-Beast Bond Arena is a fully offline pet-raising and turn-based arena game. Choose one Giant Eagle, Lion, or Crocodile as your lifelong partner, build seven stats through daily activities, and rise from rank 1,000 to the championship while your bond changes both progression and battle strength.
+Beast Bond Arena is a fully offline pet-raising and turn-based arena game. Choose one Giant Eagle, Lion, or Crocodile as your lifelong partner, build eight stats through daily activities, and rise from rank 1,000 to the championship while your bond changes both progression and battle strength.
 
 ### 🇯🇵 日本語
 
-Beast Bond Arena（萌獸羈絆競技場）は、完全オフラインで遊べる育成・ターン制アリーナゲームです。オオワシ、ライオン、ワニから生涯の相棒を一体選び、毎日の行動で7つの能力を育て、絆による成長と戦闘ボーナスを活かしながら1,000位から王者を目指します。
+Beast Bond Arena（萌獸羈絆競技場）は、完全オフラインで遊べる育成・ターン制アリーナゲームです。オオワシ、ライオン、ワニから生涯の相棒を一体選び、毎日の行動で8つの能力を育て、絆による成長と戦闘ボーナスを活かしながら1,000位から王者を目指します。
 
 ### 🇹🇼 繁體中文
 
-《萌獸羈絆競技場》是一款可完全離線遊玩的寵物養成與回合制競技遊戲。玩家會從巨鷹、獅子、鱷魚中選擇唯一夥伴，透過每日活動培養七項能力，從第 1,000 名一路挑戰冠軍，而彼此的羈絆也會同時影響成長與戰鬥實力。
+《萌獸羈絆競技場》是一款可完全離線遊玩的寵物養成與回合制競技遊戲。玩家會從巨鷹、獅子、鱷魚中選擇唯一夥伴，透過每日活動培養八項能力，從第 1,000 名一路挑戰冠軍，而彼此的羈絆也會同時影響成長與戰鬥實力。
 
 <p align="center">
   <img src="assets/images/pets/eagle/portrait.png" width="30%" alt="Giant Eagle partner portrait">
@@ -80,7 +80,7 @@ There is no pet death or destructive game-over state. A defeat still grants redu
 ### ✨ Features
 
 - 🦅 **Three distinct partners:** the mobile Giant Eagle, explosive Lion, and defensive Crocodile each have unique growth and special-attack behavior.
-- 📊 **Seven battle stats:** HP, Attack, Defense, Mobility, Special Attack, Special Defense, and Speed.
+- 📊 **Eight battle stats:** HP, Attack, Accuracy, Defense, Mobility, Special Attack, Special Defense, and Speed.
 - ☀️ **Level-scaled daily AP:** the daily cap is 7 AP through LV 30, 10 through LV 50, 12 through LV 75, and 15 through LV 100.
 - 💰 **Boosted daily settlement:** the daily coin reward is four times the original amount, equivalent to a +300% increase.
 - 🏦 **Savings account:** deposit or withdraw coins from the home screen; each rest pays `floor(savedBalance × 0.01)` directly into available coins while preserving the saved principal.
@@ -90,10 +90,10 @@ There is no pet death or destructive game-over state. A defeat still grants redu
 - ⚔️ **Turn-based duels:** normal and special attacks, energy, dodge, critical hits, shields, initiative, species effects, and a 20-round ranked tiebreak.
 - 🎛️ **Battle convenience controls:** accelerated battle playback stays enabled by default and persists; Auto Battle repeats normal attacks and releases specials at 100 energy.
 - 🏆 **A deterministic 1,000-entry ranking:** one player, 999 seeded AI opponents, 12 fixed milestone rivals, and five BP-near candidates per refresh.
-- 🚪 **An endless Boss Gate at rank #1:** choose Lion, Crocodile, or Eagle bosses whose stats grow forever; random Grassland, Swamp, and Sky arenas apply species immunity and 3% max-HP damage each round across an 80-round battle.
+- 🚪 **An endless Boss Gate at rank #1:** choose Lion, Crocodile, or Eagle bosses whose stats grow forever; each attempt costs only 5 Energy and 5 Mood, then reveals a random Grassland, Swamp, or Sky arena when the 80-round battle begins.
 - 🎁 **Endless Boss rewards:** victories pay large coin and XP rewards while XP is available, plus a deterministic 1% chance at a random Ability Candy.
-- 🛍️ **A four-category shop:** 36 permanent equipment pieces, 18 one-battle consumables, seven permanent Ability Candies, and XP supplies.
-- 🍬 **Scaling permanent growth:** HP Candy grants +3; the other six candies grant +1 and become more expensive as intrinsic stats and pet level rise. Buy up to 999 candies at once, with batch totals following each candy’s escalating price. A deterministic Candy Festival occasionally halves the current price.
+- 🛍️ **A four-category shop:** 36 permanent equipment pieces, 18 one-battle consumables, eight permanent Ability Candies, and XP supplies.
+- 🍬 **Scaling permanent growth:** HP Candy grants +3; the other seven candies grant +1 and become more expensive as intrinsic stats and pet level rise. Buy up to 999 candies at once, with batch totals following each candy’s escalating price. A deterministic Candy Festival occasionally halves the current price.
 - ✨ **XP supplies:** buy 100 XP packs in batches up to 999; the per-pack price rises with level but caps at 400 coins, and Candy Festival cuts it by 40%.
 - 🌐 **Three complete locales:** Taiwan Traditional Chinese, English, and Japanese.
 - 🎨 **Five visual themes:** Candy Garden, Ocean Sky, Verdant Forest, Sunset Arena, and Moonlit Night.
@@ -106,21 +106,22 @@ There is no pet death or destructive game-over state. A defeat still grants redu
 
 #### Choose one partner
 
-| Partner | Primary identity | Special behavior |
-|---|---|---|
-| 🦅 Giant Eagle | Highest Mobility and Speed; swift physical lead | Sky Dive halves the target's dodge chance and grants two future actions with +20% Mobility after a hit |
-| 🦁 Lion | Highest Attack and Special Attack; burst damage | Royal Roar has +10 percentage points of critical chance, capped at 30% |
-| 🐊 Crocodile | Highest HP, Defense, and Special Defense; durable guard | Tidal Guard creates a shield equal to 12% of maximum HP for two own actions after a hit |
+| Partner        | Primary identity                                           | Special behavior                                                                                       |
+| -------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| 🦅 Giant Eagle | Highest Mobility, Accuracy, and Speed; swift physical lead | Sky Dive halves the target's dodge chance and grants two future actions with +20% Mobility after a hit |
+| 🦁 Lion        | Highest Attack and Special Attack; burst damage            | Royal Roar has +10 percentage points of critical chance, capped at 30%                                 |
+| 🐊 Crocodile   | Highest HP, Defense, and Special Defense; durable guard    | Tidal Guard creates a shield equal to 12% of maximum HP for two own actions after a hit                |
 
-#### Understand the seven stats
+#### Understand the eight stats
 
-| Stat | Role |
-|---|---|
-| HP | Maximum damage the partner can withstand |
-| Attack / Defense | Damage and mitigation for normal attacks |
-| Special Attack / Special Defense | Damage and mitigation for special attacks |
-| Mobility | Dodge chance, with a final cap of 40% |
-| Speed | Turn order; a seeded coin flip resolves exact ties |
+| Stat                             | Role                                                                       |
+| -------------------------------- | -------------------------------------------------------------------------- |
+| HP                               | Maximum damage the partner can withstand                                   |
+| Attack / Defense                 | Damage and mitigation for normal attacks                                   |
+| Accuracy                         | Improves hit chance; Accuracy at least 2× target Mobility guarantees a hit |
+| Special Attack / Special Defense | Damage and mitigation for special attacks                                  |
+| Mobility                         | Dodge chance, with a final cap of 40%                                      |
+| Speed                            | Turn order; a seeded coin flip resolves exact ties                         |
 
 Natural stats follow `round(base + growth × (level - 1))`. Mastery scales the growth gained after level 1 from 1× at LV 0 to 3× at LV 20; its separate intrinsic-stat bonus remains +0.5% per level (+10% at maximum), followed by affection and equipment rules. Level caps at 100.
 
@@ -142,23 +143,23 @@ flowchart LR
     Next --> Choose
 ```
 
-| Activity | Requirement and cost | Fixed impact |
-|---|---|---|
-| Training | 1 AP, at least 20 Energy | Energy −20, Mood −5, Affection +1 before mood scaling; XP and selected Mastery XP depend on score |
-| Play | 1 AP, at least 10 Energy | Energy −10, Mood +20, Affection +5 before mood scaling, plus XP |
-| Outing | 1 AP, at least 15 Energy | Energy −15, Mood +15, Affection +4 before mood scaling, plus a weighted event reward |
-| Ranked duel | 2 AP, at least 30 Energy and 20 Mood | Energy −25; a win gives Mood +8 and Affection +2, a loss gives Mood −8 and Affection +1 |
-| Rest | Ends the current day | Energy +50, Mood +10, restores the level-based AP cap and full battle HP on the next day |
+| Activity    | Requirement and cost                 | Fixed impact                                                                                      |
+| ----------- | ------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| Training    | 1 AP, at least 20 Energy             | Energy −20, Mood −5, Affection +1 before mood scaling; XP and selected Mastery XP depend on score |
+| Play        | 1 AP, at least 10 Energy             | Energy −10, Mood +20, Affection +5 before mood scaling, plus XP                                   |
+| Outing      | 1 AP, at least 15 Energy             | Energy −15, Mood +15, Affection +4 before mood scaling, plus a weighted event reward              |
+| Ranked duel | 2 AP, at least 30 Energy and 20 Mood | Energy −25; a win gives Mood +8 and Affection +2, a loss gives Mood −8 and Affection +1           |
+| Rest        | Ends the current day                 | Energy +50, Mood +10, restores the level-based AP cap and full battle HP on the next day          |
 
 Mood changes activity rewards: below 30 uses ×0.75, 30–69 uses ×1.00, and 70–100 uses ×1.10. Affection unlocks story scenes at 20, 40, 60, 80, and 100 and gives effective-stat bonuses of +1%, +2%, +3%, and finally +5% at 100.
 
 #### Master the training mini-games
 
-| Template | Assigned stats | Control | Goal |
-|---|---|---|---|
-| Power Rhythm | Attack, Special Attack | Click, tap, Enter, or Space on the action button | Stop the moving marker near the center five times |
-| Endurance Guard | HP, Defense, Special Defense | Hold pointer, Enter, or Space, then release | Release near the 72% safe zone four times |
-| Agility Chase | Mobility, Speed | Click or tap the moving target | Land up to ten hits within 15 seconds while avoiding misses |
+| Template        | Assigned stats               | Control                                          | Goal                                                        |
+| --------------- | ---------------------------- | ------------------------------------------------ | ----------------------------------------------------------- |
+| Power Rhythm    | Attack, Special Attack       | Click, tap, Enter, or Space on the action button | Stop the moving marker near the center five times           |
+| Endurance Guard | HP, Defense, Special Defense | Hold pointer, Enter, or Space, then release      | Release near the 72% safe zone four times                   |
+| Agility Chase   | Accuracy, Mobility, Speed    | Click or tap the moving target                   | Land up to ten hits within 15 seconds while avoiding misses |
 
 Scores of 85+ earn Gold, 60–84 earn Silver, and lower scores earn Bronze. Training pauses on window blur and resumes after a three-count, preventing background tabs from creating unfair misses.
 
@@ -167,26 +168,26 @@ Scores of 85+ earn Gold, 60–84 earn Silver, and lower scores earn Bronze. Trai
 1. Open the ranking screen and select one of five opponents closest to your Battle Power. The normal mid-table mix prefers three higher ranks and two lower ranks.
 2. Optionally equip one owned battle consumable: starting energy, a two-action starting shield, or added critical chance.
 3. Choose a normal attack to gain 30 energy or spend 100 energy on the partner's special attack. A defender gains 10 energy after being hit and 5 after dodging.
-4. Speed decides initiative. Damage uses level, move power, attacking and defending stats, ±5% variance, and a ×1.75 critical multiplier.
+4. Speed decides initiative. Accuracy reduces the target's Mobility-based dodge chance; Accuracy at least 2× target Mobility guarantees a hit. Damage uses level, move power, attacking and defending stats, ±5% variance, and a ×1.75 critical multiplier.
 5. A knockout ends the duel. At round 20, the engine compares HP ratio, effective damage, initial Speed, then a seeded 50/50 roll.
 6. Defeating a higher-ranked opponent swaps positions. Losing never lowers rank. Reaching rank 1 triggers the champion scene.
 
 #### Enter the endless Boss Gate
 
-After reaching rank #1, open the Boss Gate from the ranking screen and choose a Lion, Crocodile, or Eagle Boss. Boss battles consume no AP, so they can be attempted repeatedly; each attempt still checks 25 Energy and 20 Mood. The arena is seeded per attempt, Boss stats grow endlessly after each clear, and the battle lasts up to 80 rounds. A Boss victory plays the champion BGM and grants large coins, available XP, and a deterministic 1% random Ability Candy chance.
+After reaching rank #1, open the Boss Gate from the ranking screen and choose a Lion, Crocodile, or Eagle Boss. Boss battles consume no AP, so they can be attempted repeatedly; each attempt needs only 5 Energy and 5 Mood. The seeded random arena stays hidden until battle begins, then applies its species immunity and 3% max-HP damage rule. Boss stats grow endlessly after each clear, and the battle lasts up to 80 rounds. A Boss victory plays the champion BGM and grants large coins, available XP, and a deterministic 1% random Ability Candy chance.
 
 #### Use the shop and permanent growth
 
-| Tier | Best-rank requirement | Equipment price | Battle-item price |
-|---|---:|---:|---:|
-| I Sprout | 1,000 | 200 | 60 |
-| II Bronze | 750 | 600 | 120 |
-| III Silver | 500 | 1,200 | 200 |
-| IV Gold | 250 | 2,200 | 320 |
-| V Stellar | 100 | 3,800 | 500 |
-| VI Champion | 25 | 6,000 | 800 |
+| Tier        | Best-rank requirement | Equipment price | Battle-item price |
+| ----------- | --------------------: | --------------: | ----------------: |
+| I Sprout    |                 1,000 |             200 |                60 |
+| II Bronze   |                   750 |             600 |               120 |
+| III Silver  |                   500 |           1,200 |               200 |
+| IV Gold     |                   250 |           2,200 |               320 |
+| V Stellar   |                   100 |           3,800 |               500 |
+| VI Champion |                    25 |           6,000 |               800 |
 
-Equipment occupies Armor, Accessory, or Emblem slots and remains owned permanently. Battle items stack up to 99 and are consumed only after a valid duel starts. Ability Candy is used immediately: HP gains +3 and Attack, Special Attack, Defense, Special Defense, Mobility, or Speed gains +1.
+Equipment occupies Armor, Accessory, or Emblem slots and remains owned permanently. Battle items stack up to 99 and are consumed only after a valid duel starts. Ability Candy is used immediately: HP gains +3 and Attack, Accuracy, Special Attack, Defense, Special Defense, Mobility, or Speed gains +1.
 
 Candy prices are rounded upward to the next ten coins:
 
@@ -251,23 +252,23 @@ Key runtime characteristics:
 
 ### 📁 Code Organization
 
-| Path | Responsibility | Representative files |
-|---|---|---|
-| `index.html` | HTML shell, stylesheet registration, dependency-ordered classic scripts | `index.html` |
-| `css/base/`, `css/layout/` | Tokens, typography, accessibility foundations, app and scene layout | `variables.css`, `accessibility.css`, `scenes.css` |
-| `css/components/`, `css/responsive/`, `css/themes/` | Reusable controls, shop/training effects, breakpoints, five themes | `shop.css`, `training-effects.css`, `mobile.css`, `theme-night.css` |
-| `js/core/` | Shared namespace, events, current state, scene lifecycle, startup | `namespace.js`, `gameState.js`, `sceneManager.js`, `app.js` |
-| `js/data/` | Declarative species, equipment, consumable, candy, rival, and event catalogs | `speciesData.js`, `abilityCandyData.js`, `rivalData.js` |
-| `js/pet/` | Stats, XP, mastery, affection, daily costs, play, and outings | `statCalculator.js`, `progression.js`, `dailyActions.js` |
-| `js/training/` | Mini-game scoring and training settlement | `trainingManager.js`, `strengthGame.js`, `agilityGame.js` |
-| `js/battle/` | Damage, AI choices, temporary effects, ranked and endless Boss round resolution, rewards | `damageCalculator.js`, `bossManager.js`, `battleEngine.js` |
-| `js/ranking/` | Seeded 1,000-entry ladder, BP-near matching, rank swaps | `rankingGenerator.js`, `matchmaking.js` |
-| `js/economy/` | Equipment, inventory, shop purchase rules, Ability Candy pricing | `equipmentManager.js`, `abilityCandyManager.js` |
-| `js/storage/`, `js/i18n/`, `js/audio/` | Save repair, three-language dictionaries, local music and SFX | `saveManager.js`, `featureLocales.js`, `audioManager.js` |
-| `js/ui/` | Menu, onboarding, home, activity, battle, shop, help, and settings scenes | `trainingUI.js`, `shopUI.js`, `settingsUI.js` |
-| `assets/` and `bgm/` | Local portraits, SVG art, seven BGM tracks, and SFX | `images/pets/`, `images/equipment/`, `audio/`, `bgm/` |
-| `tests/`, `tools/` | Deterministic Node tests and asset-generation utilities | `unit.test.js`, `static.test.js`, `generate-audio.js` |
-| `.agents/skills/` | Project-specific Codex workflows | `pet-simulation-feature-workflow/`, `safe-browser-validation/` |
+| Path                                                | Responsibility                                                                           | Representative files                                                |
+| --------------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `index.html`                                        | HTML shell, stylesheet registration, dependency-ordered classic scripts                  | `index.html`                                                        |
+| `css/base/`, `css/layout/`                          | Tokens, typography, accessibility foundations, app and scene layout                      | `variables.css`, `accessibility.css`, `scenes.css`                  |
+| `css/components/`, `css/responsive/`, `css/themes/` | Reusable controls, shop/training effects, breakpoints, five themes                       | `shop.css`, `training-effects.css`, `mobile.css`, `theme-night.css` |
+| `js/core/`                                          | Shared namespace, events, current state, scene lifecycle, startup                        | `namespace.js`, `gameState.js`, `sceneManager.js`, `app.js`         |
+| `js/data/`                                          | Declarative species, equipment, consumable, candy, rival, and event catalogs             | `speciesData.js`, `abilityCandyData.js`, `rivalData.js`             |
+| `js/pet/`                                           | Stats, XP, mastery, affection, daily costs, play, and outings                            | `statCalculator.js`, `progression.js`, `dailyActions.js`            |
+| `js/training/`                                      | Mini-game scoring and training settlement                                                | `trainingManager.js`, `strengthGame.js`, `agilityGame.js`           |
+| `js/battle/`                                        | Damage, AI choices, temporary effects, ranked and endless Boss round resolution, rewards | `damageCalculator.js`, `bossManager.js`, `battleEngine.js`          |
+| `js/ranking/`                                       | Seeded 1,000-entry ladder, BP-near matching, rank swaps                                  | `rankingGenerator.js`, `matchmaking.js`                             |
+| `js/economy/`                                       | Equipment, inventory, shop purchase rules, Ability Candy pricing                         | `equipmentManager.js`, `abilityCandyManager.js`                     |
+| `js/storage/`, `js/i18n/`, `js/audio/`              | Save repair, three-language dictionaries, local music and SFX                            | `saveManager.js`, `featureLocales.js`, `audioManager.js`            |
+| `js/ui/`                                            | Menu, onboarding, home, activity, battle, shop, help, and settings scenes                | `trainingUI.js`, `shopUI.js`, `settingsUI.js`                       |
+| `assets/` and `bgm/`                                | Local portraits, SVG art, seven BGM tracks, and SFX                                      | `images/pets/`, `images/equipment/`, `audio/`, `bgm/`               |
+| `tests/`, `tools/`                                  | Deterministic Node tests and asset-generation utilities                                  | `unit.test.js`, `static.test.js`, `generate-audio.js`               |
+| `.agents/skills/`                                   | Project-specific Codex workflows                                                         | `pet-simulation-feature-workflow/`, `safe-browser-validation/`      |
 
 <a id="en-supporting-systems"></a>
 
@@ -330,7 +331,7 @@ Browser interaction is intentionally left to a short manual pass when no approve
 ### ✨ 主な機能
 
 - 🦅 **個性の異なる3体の相棒：** 機動型のオオワシ、爆発力のあるライオン、防御型のワニは、成長傾向と特殊攻撃の効果が異なります。
-- 📊 **7つの戦闘能力：** HP、攻撃、防御、機動、特殊攻撃、特殊防御、素早さ。
+- 📊 **8つの戦闘能力：** HP、攻撃、命中、防御、機動、特殊攻撃、特殊防御、素早さ。
 - ☀️ **レベル連動の毎日AP：** LV 30までは7 AP、LV 31～50は10、LV 51～75は12、LV 76～100は15です。
 - 💰 **強化されたデイリー報酬：** デイリーコインは元の4倍、つまり+300%増加します。
 - 🏦 **貯金口座：** ホーム画面からコインを預け入れ・引き出しでき、休息ごとに `floor(預金残高 × 0.01)` が利息として手持ちコインに加算され、預金元本は維持されます。
@@ -340,10 +341,10 @@ Browser interaction is intentionally left to a short manual pass when no approve
 - ⚔️ **ターン制決闘：** 通常・特殊攻撃、エネルギー、回避、クリティカル、シールド、行動順、種族効果、通常戦の20ラウンド判定を実装しています。
 - 🎛️ **決闘の便利機能：** 高速再生は初期オンで設定を保存し、オートバトルは通常攻撃を繰り返してエネルギー100で特殊攻撃を使います。
 - 🏆 **固定シードの1,000人ランキング：** プレイヤー1人、AI 999人、固定位置の節目ライバル12人、BPが近い候補5人で構成されます。
-- 🚪 **1位で開く無限ボスの門：** 獅子・鰐・鷲のボスを選べ、能力は無限に上昇します。草原・沼地・空中の闘技場が毎回変わり、種族免疫と毎ラウンド最大HP3%ダメージを80ラウンド戦で適用します。
+- 🚪 **1位で開く無限ボスの門：** 獅子・鰐・鷲のボスを選べ、能力は無限に上昇します。各挑戦は体力5・気分5だけを使い、80ラウンド戦の開始時に草原・沼地・空中からランダムな闘技場が初めて明かされます。
 - 🎁 **無限ボス報酬：** 勝利すると大量のコインと、最大レベル未満なら経験値を獲得し、決定的な1%の確率でランダムな能力キャンディも落とします。
-- 🛍️ **4分類ショップ：** 6つのアリーナ段階に、永久装備36個、1試合用消耗品18種、永久成長用の能力キャンディ7種、経験値補給があります。
-- 🍬 **価格が成長する永久強化：** HPキャンディは+3、ほか6種は+1。基礎能力とペットLVが高いほど価格が上がり、一度に最大999個を購入できます。まとめ買いの合計は各キャンディの上昇価格を順番に計算し、決定的なキャンディフェスティバルでは現在価格が半額になります。
+- 🛍️ **4分類ショップ：** 6つのアリーナ段階に、永久装備36個、1試合用消耗品18種、永久成長用の能力キャンディ8種、経験値補給があります。
+- 🍬 **価格が成長する永久強化：** HPキャンディは+3、ほか7種は+1。基礎能力とペットLVが高いほど価格が上がり、一度に最大999個を購入できます。まとめ買いの合計は各キャンディの上昇価格を順番に計算し、決定的なキャンディフェスティバルでは現在価格が半額になります。
 - ✨ **経験値補給：** 1セット100経験値を最大999セットまでまとめて購入でき、セット価格はレベルに応じて上がりますが400コインで上限になります。キャンディフェスティバル中は40%オフです。
 - 🌐 **3言語を完全収録：** 台湾繁體中文、English、日本語。
 - 🎨 **5つのテーマ：** キャンディガーデン、オーシャンスカイ、翠影の森、夕焼けアリーナ、星月夜。
@@ -356,21 +357,22 @@ Browser interaction is intentionally left to a short manual pass when no approve
 
 #### 一体の相棒を選ぶ
 
-| 相棒 | 主な役割 | 特殊効果 |
-|---|---|---|
-| 🦅 オオワシ | 機動と素早さが最も高い高速先鋒 | 天空ダイブは相手の回避率を半減し、命中後の自分の2行動だけ機動を20%上昇 |
-| 🦁 ライオン | 攻撃と特殊攻撃が最も高い爆発役 | ロイヤルロアはクリティカル率を10ポイント加算し、最大30% |
-| 🐊 ワニ | HP、防御、特殊防御が最も高い守護役 | タイダルガードは命中後、最大HPの12%分のシールドを自分の2行動分生成 |
+| 相棒        | 主な役割                             | 特殊効果                                                               |
+| ----------- | ------------------------------------ | ---------------------------------------------------------------------- |
+| 🦅 オオワシ | 機動、命中、素早さが最も高い高速先鋒 | 天空ダイブは相手の回避率を半減し、命中後の自分の2行動だけ機動を20%上昇 |
+| 🦁 ライオン | 攻撃と特殊攻撃が最も高い爆発役       | ロイヤルロアはクリティカル率を10ポイント加算し、最大30%                |
+| 🐊 ワニ     | HP、防御、特殊防御が最も高い守護役   | タイダルガードは命中後、最大HPの12%分のシールドを自分の2行動分生成     |
 
-#### 7つの能力を理解する
+#### 8つの能力を理解する
 
-| 能力 | 役割 |
-|---|---|
-| HP | 相棒が耐えられる最大ダメージ量 |
-| 攻撃 / 防御 | 通常攻撃のダメージと軽減 |
-| 特殊攻撃 / 特殊防御 | 特殊攻撃のダメージと軽減 |
-| 機動 | 回避率を決定し、最終上限は40% |
-| 素早さ | 行動順を決定し、同値なら固定シードの抽選で解決 |
+| 能力                | 役割                                           |
+| ------------------- | ---------------------------------------------- |
+| HP                  | 相棒が耐えられる最大ダメージ量                 |
+| 攻撃 / 防御         | 通常攻撃のダメージと軽減                       |
+| 命中                | 命中率を高め、相手の機動性の2倍以上なら必中    |
+| 特殊攻撃 / 特殊防御 | 特殊攻撃のダメージと軽減                       |
+| 機動                | 回避率を決定し、最終上限は40%                  |
+| 素早さ              | 行動順を決定し、同値なら固定シードの抽選で解決 |
 
 自然能力は `round(base + growth × (level - 1))` で求めます。熟練はレベル1以降の成長量をLV 0の1倍からLV 20の3倍まで高め、基礎能力には別途1レベルごとに+0.5%（最大+10%）を加算します。その後に装備と親密度を適用します。レベル上限は100です。
 
@@ -392,23 +394,23 @@ flowchart LR
     Next --> Choose
 ```
 
-| 行動 | 条件とコスト | 固定効果 |
-|---|---|---|
-| 訓練 | 1 AP、体力20以上 | 体力−20、気分−5、気分倍率適用前の親密度+1。成績に応じて経験値と選択能力の熟練経験値 |
-| 遊ぶ | 1 AP、体力10以上 | 体力−10、気分+20、気分倍率適用前の親密度+5、さらに経験値 |
-| おでかけ | 1 AP、体力15以上 | 体力−15、気分+15、気分倍率適用前の親密度+4、さらに重み付きイベント報酬 |
-| ランク決闘 | 2 AP、体力30以上、気分20以上 | 体力−25。勝利で気分+8・親密度+2、敗北で気分−8・親密度+1 |
-| 休む | 現在の日を終了 | 次の日に体力+50、気分+10、レベルに応じたAPへ、戦闘HPを全回復 |
+| 行動       | 条件とコスト                 | 固定効果                                                                            |
+| ---------- | ---------------------------- | ----------------------------------------------------------------------------------- |
+| 訓練       | 1 AP、体力20以上             | 体力−20、気分−5、気分倍率適用前の親密度+1。成績に応じて経験値と選択能力の熟練経験値 |
+| 遊ぶ       | 1 AP、体力10以上             | 体力−10、気分+20、気分倍率適用前の親密度+5、さらに経験値                            |
+| おでかけ   | 1 AP、体力15以上             | 体力−15、気分+15、気分倍率適用前の親密度+4、さらに重み付きイベント報酬              |
+| ランク決闘 | 2 AP、体力30以上、気分20以上 | 体力−25。勝利で気分+8・親密度+2、敗北で気分−8・親密度+1                             |
+| 休む       | 現在の日を終了               | 次の日に体力+50、気分+10、レベルに応じたAPへ、戦闘HPを全回復                        |
 
 気分による報酬倍率は30未満で×0.75、30～69で×1.00、70～100で×1.10です。親密度20、40、60、80、100で物語イベントが解放され、有効能力は順に+1%、+2%、+3%、最終的に100で+5%になります。
 
 #### 訓練ミニゲームを攻略する
 
-| テンプレート | 対象能力 | 操作 | 目標 |
-|---|---|---|---|
-| パワーリズム | 攻撃、特殊攻撃 | アクションボタンをクリック、タップ、Enter、Space | 動くマーカーを中央付近で5回止める |
-| ガードチャージ | HP、防御、特殊防御 | ポインター、Enter、Spaceを押し続けて離す | 4回、72%付近の安全エリアで離す |
-| クイックチェイス | 機動、素早さ | 動くターゲットをクリックまたはタップ | 15秒以内に最大10回命中し、ミスを避ける |
+| テンプレート     | 対象能力           | 操作                                             | 目標                                   |
+| ---------------- | ------------------ | ------------------------------------------------ | -------------------------------------- |
+| パワーリズム     | 攻撃、特殊攻撃     | アクションボタンをクリック、タップ、Enter、Space | 動くマーカーを中央付近で5回止める      |
+| ガードチャージ   | HP、防御、特殊防御 | ポインター、Enter、Spaceを押し続けて離す         | 4回、72%付近の安全エリアで離す         |
+| クイックチェイス | 命中、機動、素早さ | 動くターゲットをクリックまたはタップ             | 15秒以内に最大10回命中し、ミスを避ける |
 
 85点以上はゴールド、60～84点はシルバー、それ未満はブロンズです。ウィンドウが非アクティブになると訓練は停止し、戻った後に3カウントで再開するため、バックグラウンド移動による不公平なミスを防ぎます。
 
@@ -417,26 +419,26 @@ flowchart LR
 1. ランキング画面で、BPが近い5人から相手を選びます。中間順位では通常、上位3人と下位2人を優先します。
 2. 必要なら、開始エネルギー、2行動シールド、クリティカル率のいずれかを上げる所持済み消耗品を一つ選びます。
 3. 通常攻撃でエネルギーを30獲得するか、100を消費して特殊攻撃を使います。防御側は命中で10、回避で5のエネルギーを得ます。
-4. 素早さで先攻を決めます。ダメージはレベル、技威力、攻撃・防御能力、±5%の乱数、クリティカル時×1.75で計算します。
+4. 素早さで先攻を決めます。命中は相手の機動による回避率を下げ、相手の機動の2倍以上なら必中です。ダメージはレベル、技威力、攻撃・防御能力、±5%の乱数、クリティカル時×1.75で計算します。
 5. HPが0になると終了します。20ラウンド到達時はHP比率、有効ダメージ、初期素早さ、固定シードの50/50判定の順に勝者を決めます。
 6. 上位の相手に勝つと順位を交換し、負けても順位は下がりません。1位になるとチャンピオン演出が始まります。
 
 #### 無限ボスの門に挑戦する
 
-ランキング1位になるとランキング画面からボスの門を開き、ライオン・ワニ・オオワシのボスを選べます。ボス戦はAPを消費しないため何度でも挑戦でき、各挑戦には体力25と気分20が必要です。闘技場は挑戦ごとに固定シードで決まり、撃破するたびにボス能力が無限に上昇します。最大80ラウンドで決着し、勝利時はチャンピオンBGM、大量コイン、取得可能な経験値、決定的な1%の能力キャンディ抽選を得ます。
+ランキング1位になるとランキング画面からボスの門を開き、ライオン・ワニ・オオワシのボスを選べます。ボス戦はAPを消費せず、各挑戦は体力5と気分5だけで何度でも挑戦できます。闘技場は挑戦ごとに固定シードで決まりますが、戦闘開始まで明かされず、草原・沼地・空中のいずれかが種族免疫と毎ラウンド最大HP3%ダメージを適用します。撃破するたびにボス能力が無限に上昇し、最大80ラウンドで決着します。勝利時はチャンピオンBGM、大量コイン、取得可能な経験値、決定的な1%の能力キャンディ抽選を得ます。
 
 #### ショップと永久成長を使う
 
-| 段階 | 必要な最高順位 | 装備価格 | バトルアイテム価格 |
-|---|---:|---:|---:|
-| I 若葉 | 1,000 | 200 | 60 |
-| II ブロンズ | 750 | 600 | 120 |
-| III シルバー | 500 | 1,200 | 200 |
-| IV ゴールド | 250 | 2,200 | 320 |
-| V 星耀 | 100 | 3,800 | 500 |
-| VI チャンピオン | 25 | 6,000 | 800 |
+| 段階            | 必要な最高順位 | 装備価格 | バトルアイテム価格 |
+| --------------- | -------------: | -------: | -----------------: |
+| I 若葉          |          1,000 |      200 |                 60 |
+| II ブロンズ     |            750 |      600 |                120 |
+| III シルバー    |            500 |    1,200 |                200 |
+| IV ゴールド     |            250 |    2,200 |                320 |
+| V 星耀          |            100 |    3,800 |                500 |
+| VI チャンピオン |             25 |    6,000 |                800 |
 
-装備は防具、アクセサリ、エンブレムのいずれかに入り、一度購入すると永久所持します。バトルアイテムは99個まで持て、有効な決闘開始後にだけ消費されます。能力キャンディは購入時に即使用され、HPは+3、攻撃、特殊攻撃、防御、特殊防御、機動、素早さは+1されます。
+装備は防具、アクセサリ、エンブレムのいずれかに入り、一度購入すると永久所持します。バトルアイテムは99個まで持て、有効な決闘開始後にだけ消費されます。能力キャンディは購入時に即使用され、HPは+3、攻撃、命中、特殊攻撃、防御、特殊防御、機動、素早さは+1されます。
 
 キャンディ価格は10コイン単位で切り上げます。
 
@@ -501,23 +503,23 @@ flowchart TD
 
 ### 📁 コード分類
 
-| パス | 責務 | 代表ファイル |
-|---|---|---|
-| `index.html` | HTMLシェル、CSS登録、依存順クラシックスクリプト | `index.html` |
-| `css/base/`, `css/layout/` | トークン、文字、アクセシビリティ基盤、アプリとシーン配置 | `variables.css`, `accessibility.css`, `scenes.css` |
-| `css/components/`, `css/responsive/`, `css/themes/` | 共通UI、ショップ・訓練演出、ブレークポイント、5テーマ | `shop.css`, `training-effects.css`, `mobile.css`, `theme-night.css` |
-| `js/core/` | 共有名前空間、イベント、現在状態、シーン寿命、起動 | `namespace.js`, `gameState.js`, `sceneManager.js`, `app.js` |
-| `js/data/` | 種族、装備、消耗品、キャンディ、ライバル、イベント定義 | `speciesData.js`, `abilityCandyData.js`, `rivalData.js` |
-| `js/pet/` | 能力、経験値、熟練、親密度、日常コスト、遊び、おでかけ | `statCalculator.js`, `progression.js`, `dailyActions.js` |
-| `js/training/` | ミニゲーム採点と訓練精算 | `trainingManager.js`, `strengthGame.js`, `agilityGame.js` |
-| `js/battle/` | ダメージ、AI判断、一時効果、通常・無限ボスのラウンド解決、報酬 | `damageCalculator.js`, `bossManager.js`, `battleEngine.js` |
-| `js/ranking/` | 固定シード1,000人表、BP近似配対、順位交換 | `rankingGenerator.js`, `matchmaking.js` |
-| `js/economy/` | 装備、所持品、購入規則、能力キャンディ価格 | `equipmentManager.js`, `abilityCandyManager.js` |
-| `js/storage/`, `js/i18n/`, `js/audio/` | セーブ修復、3言語辞書、ローカルBGM・効果音 | `saveManager.js`, `featureLocales.js`, `audioManager.js` |
-| `js/ui/` | メニュー、導入、ホーム、活動、戦闘、ショップ、説明、設定画面 | `trainingUI.js`, `shopUI.js`, `settingsUI.js` |
-| `assets/` と `bgm/` | ローカル画像、SVG、BGM 7曲、効果音 | `images/pets/`, `images/equipment/`, `audio/`, `bgm/` |
-| `tests/`, `tools/` | 決定的Nodeテストと素材生成ツール | `unit.test.js`, `static.test.js`, `generate-audio.js` |
-| `.agents/skills/` | プロジェクト専用Codexワークフロー | `pet-simulation-feature-workflow/`, `safe-browser-validation/` |
+| パス                                                | 責務                                                           | 代表ファイル                                                        |
+| --------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `index.html`                                        | HTMLシェル、CSS登録、依存順クラシックスクリプト                | `index.html`                                                        |
+| `css/base/`, `css/layout/`                          | トークン、文字、アクセシビリティ基盤、アプリとシーン配置       | `variables.css`, `accessibility.css`, `scenes.css`                  |
+| `css/components/`, `css/responsive/`, `css/themes/` | 共通UI、ショップ・訓練演出、ブレークポイント、5テーマ          | `shop.css`, `training-effects.css`, `mobile.css`, `theme-night.css` |
+| `js/core/`                                          | 共有名前空間、イベント、現在状態、シーン寿命、起動             | `namespace.js`, `gameState.js`, `sceneManager.js`, `app.js`         |
+| `js/data/`                                          | 種族、装備、消耗品、キャンディ、ライバル、イベント定義         | `speciesData.js`, `abilityCandyData.js`, `rivalData.js`             |
+| `js/pet/`                                           | 能力、経験値、熟練、親密度、日常コスト、遊び、おでかけ         | `statCalculator.js`, `progression.js`, `dailyActions.js`            |
+| `js/training/`                                      | ミニゲーム採点と訓練精算                                       | `trainingManager.js`, `strengthGame.js`, `agilityGame.js`           |
+| `js/battle/`                                        | ダメージ、AI判断、一時効果、通常・無限ボスのラウンド解決、報酬 | `damageCalculator.js`, `bossManager.js`, `battleEngine.js`          |
+| `js/ranking/`                                       | 固定シード1,000人表、BP近似配対、順位交換                      | `rankingGenerator.js`, `matchmaking.js`                             |
+| `js/economy/`                                       | 装備、所持品、購入規則、能力キャンディ価格                     | `equipmentManager.js`, `abilityCandyManager.js`                     |
+| `js/storage/`, `js/i18n/`, `js/audio/`              | セーブ修復、3言語辞書、ローカルBGM・効果音                     | `saveManager.js`, `featureLocales.js`, `audioManager.js`            |
+| `js/ui/`                                            | メニュー、導入、ホーム、活動、戦闘、ショップ、説明、設定画面   | `trainingUI.js`, `shopUI.js`, `settingsUI.js`                       |
+| `assets/` と `bgm/`                                 | ローカル画像、SVG、BGM 7曲、効果音                             | `images/pets/`, `images/equipment/`, `audio/`, `bgm/`               |
+| `tests/`, `tools/`                                  | 決定的Nodeテストと素材生成ツール                               | `unit.test.js`, `static.test.js`, `generate-audio.js`               |
+| `.agents/skills/`                                   | プロジェクト専用Codexワークフロー                              | `pet-simulation-feature-workflow/`, `safe-browser-validation/`      |
 
 <a id="ja-supporting-systems"></a>
 
@@ -580,7 +582,7 @@ git diff --check
 ### ✨ 主要特色
 
 - 🦅 **三種定位鮮明的夥伴：** 高機動巨鷹、爆發型獅子與防守型鱷魚，各自擁有不同成長與特殊攻擊效果。
-- 📊 **七項戰鬥能力：** HP、攻擊、防禦、機動、特殊攻擊、特殊防禦與速度。
+- 📊 **八項戰鬥能力：** HP、攻擊、命中、防禦、機動、特殊攻擊、特殊防禦與速度。
 - ☀️ **隨等級提升的每日 AP：** LV 30 以下每日 7 AP、LV 31–50 為 10、LV 51–75 為 12、LV 76–100 為 15。
 - 💰 **強化每日結算：** 每日獲得的金幣是原本的 4 倍，也就是增加 300%。
 - 🏦 **存款帳戶：** 可在主頁設定存入或領出的金額；每次休息會將 `floor(存款餘額 × 0.01)` 的利息直接加入手上金幣，存款本金維持不變。
@@ -592,8 +594,8 @@ git diff --check
 - 🏆 **可重現的千名排行榜：** 玩家 1 名、固定種子 AI 999 名、12 名固定里程碑強敵，每次提供 5 名 BP 接近候選。
 - 🚪 **第一名開啟無限 Boss 門：** 可選擇獅子、鱷魚或鷹 Boss，能力值會無限提升；草原、沼澤與空中場地每次隨機，套用種族免疫及每回合最大 HP 3% 傷害，Boss 戰延長為 80 回合。
 - 🎁 **無限 Boss 獎勵：** 勝利後獲得大量金幣；未滿等時獲得經驗，並有固定 1% 機率掉落隨機能力糖果。
-- 🛍️ **四分類商店：** 包含 36 件永久裝備、18 種單場消耗品、7 種永久能力糖果，以及經驗補給。
-- 🍬 **價格隨成長調整的永久強化：** HP 糖果 +3，其餘六種 +1；先天能力與寵物 LV 越高，價格越昂貴，一次最多可購買 999 顆，總價會依每顆逐步上升的價格計算；偶爾遇到糖果節時當日目前價格再打五折。
+- 🛍️ **四分類商店：** 包含 36 件永久裝備、18 種單場消耗品、8 種永久能力糖果，以及經驗補給。
+- 🍬 **價格隨成長調整的永久強化：** HP 糖果 +3，其餘七種 +1；先天能力與寵物 LV 越高，價格越昂貴，一次最多可購買 999 顆，總價會依每顆逐步上升的價格計算；偶爾遇到糖果節時當日目前價格再打五折。
 - ✨ **經驗補給：** 每組提供 100 經驗，可一次購買最多 999 組；單組價格會隨等級上升但封頂 400 金幣，糖果節期間打 6 折（折扣 40%）。
 - 🌐 **三種完整語系：** 臺灣繁體中文、English、日本語。
 - 🎨 **五套視覺主題：** 糖果樂園、海洋晴空、翠影森林、夕陽競技與星夜月光。
@@ -606,21 +608,22 @@ git diff --check
 
 #### 選擇唯一夥伴
 
-| 夥伴 | 主要定位 | 特殊效果 |
-|---|---|---|
-| 🦅 巨鷹 | 機動與速度最高的迅捷先鋒 | 蒼穹俯衝將對手迴避率減半；命中後未來兩次自身行動的機動提高20% |
-| 🦁 獅子 | 攻擊與特殊攻擊最高的爆發王者 | 王者咆擊額外增加10個百分點爆擊率，上限30% |
-| 🐊 鱷魚 | HP、防禦與特殊防禦最高的堅壁守護 | 激流重鎧命中後產生最大HP 12%的護盾，持續自身兩次行動 |
+| 夥伴    | 主要定位                         | 特殊效果                                                      |
+| ------- | -------------------------------- | ------------------------------------------------------------- |
+| 🦅 巨鷹 | 機動、命中與速度最高的迅捷先鋒   | 蒼穹俯衝將對手迴避率減半；命中後未來兩次自身行動的機動提高20% |
+| 🦁 獅子 | 攻擊與特殊攻擊最高的爆發王者     | 王者咆擊額外增加10個百分點爆擊率，上限30%                     |
+| 🐊 鱷魚 | HP、防禦與特殊防禦最高的堅壁守護 | 激流重鎧命中後產生最大HP 12%的護盾，持續自身兩次行動          |
 
-#### 理解七項能力
+#### 理解八項能力
 
-| 能力 | 作用 |
-|---|---|
-| HP | 夥伴可承受的最大傷害量 |
-| 攻擊 / 防禦 | 一般攻擊的傷害與減傷 |
-| 特殊攻擊 / 特殊防禦 | 特殊攻擊的傷害與減傷 |
-| 機動 | 決定迴避率，最終上限為40% |
-| 速度 | 決定行動順序；完全相同時以固定種子抽籤 |
+| 能力                | 作用                                          |
+| ------------------- | --------------------------------------------- |
+| HP                  | 夥伴可承受的最大傷害量                        |
+| 攻擊 / 防禦         | 一般攻擊的傷害與減傷                          |
+| 命中                | 提高命中率；達到對手機動性的 2 倍以上即可必中 |
+| 特殊攻擊 / 特殊防禦 | 特殊攻擊的傷害與減傷                          |
+| 機動                | 決定迴避率，最終上限為40%                     |
+| 速度                | 決定行動順序；完全相同時以固定種子抽籤        |
 
 自然能力公式為 `round(base + growth × (level - 1))`。熟練會將 LV 1 之後的成長量由 LV 0 的 1 倍提高到 LV 20 的 3 倍；先天能力另套用每級 +0.5%（滿級共 +10%），再套用裝備與親密度。等級上限是 100。
 
@@ -642,23 +645,23 @@ flowchart LR
     Next --> Choose
 ```
 
-| 活動 | 條件與消耗 | 固定影響 |
-|---|---|---|
-| 訓練 | 1 AP、至少20體力 | 體力−20、心情−5、套用心情倍率前親密度+1；依成績給予經驗與指定能力熟練經驗 |
-| 玩耍 | 1 AP、至少10體力 | 體力−10、心情+20、套用心情倍率前親密度+5，另有經驗 |
-| 外出 | 1 AP、至少15體力 | 體力−15、心情+15、套用心情倍率前親密度+4，另有加權事件獎勵 |
-| 排名決鬥 | 2 AP、至少30體力且心情20以上 | 體力−25；勝利時心情+8、親密度+2，落敗時心情−8、親密度+1 |
-| 休息 | 結束當天 | 下一天體力+50、心情+10、AP依等級恢復、戰鬥HP全滿 |
+| 活動     | 條件與消耗                   | 固定影響                                                                  |
+| -------- | ---------------------------- | ------------------------------------------------------------------------- |
+| 訓練     | 1 AP、至少20體力             | 體力−20、心情−5、套用心情倍率前親密度+1；依成績給予經驗與指定能力熟練經驗 |
+| 玩耍     | 1 AP、至少10體力             | 體力−10、心情+20、套用心情倍率前親密度+5，另有經驗                        |
+| 外出     | 1 AP、至少15體力             | 體力−15、心情+15、套用心情倍率前親密度+4，另有加權事件獎勵                |
+| 排名決鬥 | 2 AP、至少30體力且心情20以上 | 體力−25；勝利時心情+8、親密度+2，落敗時心情−8、親密度+1                   |
+| 休息     | 結束當天                     | 下一天體力+50、心情+10、AP依等級恢復、戰鬥HP全滿                          |
 
 心情低於 30 時活動獎勵為 ×0.75，30～69 為 ×1.00，70～100 為 ×1.10。親密度達 20、40、60、80、100 時會解鎖故事事件；有效能力依序獲得 +1%、+2%、+3%，最後在 100 時提升至 +5%。
 
 #### 掌握訓練小遊戲
 
-| 模板 | 對應能力 | 操作 | 目標 |
-|---|---|---|---|
-| 力量節奏 | 攻擊、特殊攻擊 | 點擊、觸控、Enter 或 Space 操作按鈕 | 將移動指標停在中央附近，共5次 |
-| 耐力守護 | HP、防禦、特殊防禦 | 按住滑鼠、觸控、Enter 或 Space 後放開 | 共4次，在72%附近安全區放開 |
-| 敏捷追蹤 | 機動、速度 | 點擊或觸控移動目標 | 15秒內命中最多10次並避免誤觸 |
+| 模板     | 對應能力           | 操作                                  | 目標                          |
+| -------- | ------------------ | ------------------------------------- | ----------------------------- |
+| 力量節奏 | 攻擊、特殊攻擊     | 點擊、觸控、Enter 或 Space 操作按鈕   | 將移動指標停在中央附近，共5次 |
+| 耐力守護 | HP、防禦、特殊防禦 | 按住滑鼠、觸控、Enter 或 Space 後放開 | 共4次，在72%附近安全區放開    |
+| 敏捷追蹤 | 命中、機動、速度   | 點擊或觸控移動目標                    | 15秒內命中最多10次並避免誤觸  |
 
 85 分以上為金牌，60～84 分為銀牌，其餘為銅牌。視窗失焦時訓練會暫停，返回後經過三秒倒數才繼續，避免切到背景造成不公平的失誤。
 
@@ -667,7 +670,7 @@ flowchart LR
 1. 在排行榜中選擇五名 BP 接近對手之一；位於榜單中段時，通常優先提供三名高位與兩名低位對手。
 2. 可選擇一個已持有的戰鬥消耗品，增加起始能量、提供兩次行動護盾，或增加爆擊率。
 3. 使用一般攻擊累積 30 能量，或消耗 100 能量使用特殊攻擊。防守方被命中會得到 10 能量，成功迴避則得到 5 能量。
-4. 速度決定先手。傷害依等級、招式威力、攻防能力、±5%浮動及爆擊 ×1.75 計算。
+4. 速度決定先手。命中會降低對手機動性帶來的迴避率；我方命中達到對手機動性的 2 倍即可必中。傷害依等級、招式威力、攻防能力、±5%浮動及爆擊 ×1.75 計算。
 5. 任一方 HP 歸零即結束；到第20回合時，依序比較 HP 比例、有效傷害、初始速度，最後才以固定種子50/50決勝。
 6. 擊敗高位對手即可交換名次，戰敗不會掉排名；登上第1名後會觸發冠軍演出。
 
@@ -677,16 +680,16 @@ flowchart LR
 
 #### 使用商店與永久成長
 
-| 階級 | 所需歷史最佳排名 | 裝備價格 | 戰鬥道具價格 |
-|---|---:|---:|---:|
-| I 新芽 | 1,000 | 200 | 60 |
-| II 青銅 | 750 | 600 | 120 |
-| III 白銀 | 500 | 1,200 | 200 |
-| IV 黃金 | 250 | 2,200 | 320 |
-| V 星耀 | 100 | 3,800 | 500 |
-| VI 冠軍 | 25 | 6,000 | 800 |
+| 階級     | 所需歷史最佳排名 | 裝備價格 | 戰鬥道具價格 |
+| -------- | ---------------: | -------: | -----------: |
+| I 新芽   |            1,000 |      200 |           60 |
+| II 青銅  |              750 |      600 |          120 |
+| III 白銀 |              500 |    1,200 |          200 |
+| IV 黃金  |              250 |    2,200 |          320 |
+| V 星耀   |              100 |    3,800 |          500 |
+| VI 冠軍  |               25 |    6,000 |          800 |
 
-裝備會放入護具、飾品或徽記欄位，購買後永久持有。戰鬥道具最多持有 99 個，只有在有效決鬥真正開始後才會消耗。能力糖果購買後立即使用：HP +3；攻擊、特殊攻擊、防禦、特殊防禦、機動或速度則 +1。
+裝備會放入護具、飾品或徽記欄位，購買後永久持有。戰鬥道具最多持有 99 個，只有在有效決鬥真正開始後才會消耗。能力糖果購買後立即使用：HP +3；攻擊、命中、特殊攻擊、防禦、特殊防禦、機動或速度則 +1。
 
 糖果價格會向上取整到十位數：
 
@@ -751,23 +754,23 @@ flowchart TD
 
 ### 📁 程式碼分類
 
-| 路徑 | 責任 | 代表檔案 |
-|---|---|---|
-| `index.html` | HTML 外殼、CSS 註冊、依賴順序傳統 script | `index.html` |
-| `css/base/`, `css/layout/` | 設計 token、字體、無障礙基礎、應用程式與場景排版 | `variables.css`, `accessibility.css`, `scenes.css` |
-| `css/components/`, `css/responsive/`, `css/themes/` | 共用元件、商店與訓練效果、斷點、五套主題 | `shop.css`, `training-effects.css`, `mobile.css`, `theme-night.css` |
-| `js/core/` | 共用命名空間、事件、目前狀態、場景生命週期、啟動 | `namespace.js`, `gameState.js`, `sceneManager.js`, `app.js` |
-| `js/data/` | 物種、裝備、消耗品、糖果、對手與事件目錄 | `speciesData.js`, `abilityCandyData.js`, `rivalData.js` |
-| `js/pet/` | 能力、經驗、熟練、親密、每日成本、玩耍與外出 | `statCalculator.js`, `progression.js`, `dailyActions.js` |
-| `js/training/` | 小遊戲計分與訓練結算 | `trainingManager.js`, `strengthGame.js`, `agilityGame.js` |
-| `js/battle/` | 傷害、AI 決策、暫時效果、一般與無限 Boss 回合處理及獎勵 | `damageCalculator.js`, `bossManager.js`, `battleEngine.js` |
-| `js/ranking/` | 固定種子千名榜、相近 BP 配對、排名交換 | `rankingGenerator.js`, `matchmaking.js` |
-| `js/economy/` | 裝備、背包、商店購買規則、能力糖果定價 | `equipmentManager.js`, `abilityCandyManager.js` |
-| `js/storage/`, `js/i18n/`, `js/audio/` | 存檔修復、三語字典、本機音樂與音效 | `saveManager.js`, `featureLocales.js`, `audioManager.js` |
-| `js/ui/` | 選單、引導、培養、活動、戰鬥、商店、說明與設定場景 | `trainingUI.js`, `shopUI.js`, `settingsUI.js` |
-| `assets/` 與 `bgm/` | 本機夥伴圖片、SVG、七首 BGM 與音效 | `images/pets/`, `images/equipment/`, `audio/`, `bgm/` |
-| `tests/`, `tools/` | 可重現 Node 測試與素材生成工具 | `unit.test.js`, `static.test.js`, `generate-audio.js` |
-| `.agents/skills/` | 專案專用 Codex 工作流程 | `pet-simulation-feature-workflow/`, `safe-browser-validation/` |
+| 路徑                                                | 責任                                                    | 代表檔案                                                            |
+| --------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------- |
+| `index.html`                                        | HTML 外殼、CSS 註冊、依賴順序傳統 script                | `index.html`                                                        |
+| `css/base/`, `css/layout/`                          | 設計 token、字體、無障礙基礎、應用程式與場景排版        | `variables.css`, `accessibility.css`, `scenes.css`                  |
+| `css/components/`, `css/responsive/`, `css/themes/` | 共用元件、商店與訓練效果、斷點、五套主題                | `shop.css`, `training-effects.css`, `mobile.css`, `theme-night.css` |
+| `js/core/`                                          | 共用命名空間、事件、目前狀態、場景生命週期、啟動        | `namespace.js`, `gameState.js`, `sceneManager.js`, `app.js`         |
+| `js/data/`                                          | 物種、裝備、消耗品、糖果、對手與事件目錄                | `speciesData.js`, `abilityCandyData.js`, `rivalData.js`             |
+| `js/pet/`                                           | 能力、經驗、熟練、親密、每日成本、玩耍與外出            | `statCalculator.js`, `progression.js`, `dailyActions.js`            |
+| `js/training/`                                      | 小遊戲計分與訓練結算                                    | `trainingManager.js`, `strengthGame.js`, `agilityGame.js`           |
+| `js/battle/`                                        | 傷害、AI 決策、暫時效果、一般與無限 Boss 回合處理及獎勵 | `damageCalculator.js`, `bossManager.js`, `battleEngine.js`          |
+| `js/ranking/`                                       | 固定種子千名榜、相近 BP 配對、排名交換                  | `rankingGenerator.js`, `matchmaking.js`                             |
+| `js/economy/`                                       | 裝備、背包、商店購買規則、能力糖果定價                  | `equipmentManager.js`, `abilityCandyManager.js`                     |
+| `js/storage/`, `js/i18n/`, `js/audio/`              | 存檔修復、三語字典、本機音樂與音效                      | `saveManager.js`, `featureLocales.js`, `audioManager.js`            |
+| `js/ui/`                                            | 選單、引導、培養、活動、戰鬥、商店、說明與設定場景      | `trainingUI.js`, `shopUI.js`, `settingsUI.js`                       |
+| `assets/` 與 `bgm/`                                 | 本機夥伴圖片、SVG、七首 BGM 與音效                      | `images/pets/`, `images/equipment/`, `audio/`, `bgm/`               |
+| `tests/`, `tools/`                                  | 可重現 Node 測試與素材生成工具                          | `unit.test.js`, `static.test.js`, `generate-audio.js`               |
+| `.agents/skills/`                                   | 專案專用 Codex 工作流程                                 | `pet-simulation-feature-workflow/`, `safe-browser-validation/`      |
 
 <a id="zh-supporting-systems"></a>
 

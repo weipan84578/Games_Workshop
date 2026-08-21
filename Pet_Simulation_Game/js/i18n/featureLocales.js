@@ -69,6 +69,7 @@
     'bank.depositSuccess': '已存入 {amount} 金幣。',
     'bank.withdrawSuccess': '已領出 {amount} 金幣。',
     'candy.attack': '猛攻糖果',
+    'candy.accuracy': '命中糖果',
     'candy.spAttack': '靈能糖果',
     'candy.defense': '堅守糖果',
     'candy.spDefense': '心盾糖果',
@@ -76,7 +77,7 @@
     'candy.speed': '疾速糖果',
     'candy.hp': '生命糖果',
     'item.effect.candy': '永久提升 {stat} +{value}',
-    'help.point.candy': '七種能力糖果可永久提升先天能力，價格隨能力與 LV 成長'
+    'help.point.candy': '八種能力糖果可永久提升先天能力，價格隨能力與 LV 成長'
   });
 
   Object.assign(PSG.i18n.languages.en, {
@@ -149,6 +150,7 @@
     'bank.depositSuccess': 'Deposited {amount} coins.',
     'bank.withdrawSuccess': 'Withdrew {amount} coins.',
     'candy.attack': 'Power Candy',
+    'candy.accuracy': 'Accuracy Candy',
     'candy.spAttack': 'Arcane Candy',
     'candy.defense': 'Guard Candy',
     'candy.spDefense': 'Mindshield Candy',
@@ -156,7 +158,7 @@
     'candy.speed': 'Haste Candy',
     'candy.hp': 'Vital Candy',
     'item.effect.candy': 'Permanently increase {stat} by {value}',
-    'help.point.candy': 'Seven Ability Candies permanently raise intrinsic stats and scale in price with stat and LV'
+    'help.point.candy': 'Eight Ability Candies permanently raise intrinsic stats and scale in price with stat and LV'
   });
 
   Object.assign(PSG.i18n.languages.ja, {
@@ -228,6 +230,7 @@
     'bank.depositSuccess': '{amount}コインを預け入れました。',
     'bank.withdrawSuccess': '{amount}コインを引き出しました。',
     'candy.attack': '猛攻キャンディ',
+    'candy.accuracy': '命中キャンディ',
     'candy.spAttack': '霊力キャンディ',
     'candy.defense': '堅守キャンディ',
     'candy.spDefense': '心盾キャンディ',
@@ -235,6 +238,6 @@
     'candy.speed': '疾速キャンディ',
     'candy.hp': '生命キャンディ',
     'item.effect.candy': '{stat}を永久に+{value}アップ',
-    'help.point.candy': '7種類の能力キャンディで基礎能力が永久上昇し、能力とLVに応じて価格も上昇'
+    'help.point.candy': '8種類の能力キャンディで基礎能力が永久上昇し、能力とLVに応じて価格も上昇'
   });
 })(window.PSG);

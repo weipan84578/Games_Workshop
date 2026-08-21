@@ -29,7 +29,7 @@
       key: 'strike',
       slot: 'accessory',
       bonuses: function (b) {
-        return { attack: b * 0.006, speed: b * 0.004 };
+        return { attack: b * 0.006, accuracy: b * 0.004, speed: b * 0.004 };
       }
     },
     {

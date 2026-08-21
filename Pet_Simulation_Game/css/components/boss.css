@@ -35,8 +35,7 @@
   gap: 1rem;
 }
 
-.boss-intro,
-.boss-arena-banner {
+.boss-intro {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -47,20 +46,6 @@
   flex: 0 0 108px;
   width: 108px;
   height: 108px;
-}
-
-.boss-arena-banner {
-  border: 2px solid color-mix(in srgb, var(--primary) 48%, var(--border));
-  background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 14%, var(--surface)), var(--surface));
-}
-
-.boss-arena-banner h3 {
-  margin: 0.25rem 0;
-}
-
-.boss-arena-banner__icon {
-  flex: 0 0 auto;
-  font-size: 3rem;
 }
 
 .boss-cost {
@@ -110,8 +95,7 @@
     width: 100%;
   }
 
-  .boss-intro,
-  .boss-arena-banner {
+  .boss-intro {
     align-items: flex-start;
     flex-direction: column;
   }
