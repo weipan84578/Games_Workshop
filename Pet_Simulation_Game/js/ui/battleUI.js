@@ -93,11 +93,12 @@
     function paint() {
       var t = PSG.i18n.t;
       var bossBattle = state.mode === 'boss';
+      var mirrorBattle = bossBattle && state.bossChallenge && state.bossChallenge.mirror;
       var playerSpecies = PSG.data.species[state.player.speciesId];
       var enemySpecies = PSG.data.species[state.enemy.speciesId];
       root.innerHTML =
         '<section class="scene battle-layout"><header class="scene-header"><div class="scene-header__title"><img src="assets/images/ui/logo-mark.svg" alt=""><div><span class="eyebrow">' +
-        t(bossBattle ? 'boss.battleTitle' : 'battle.title') +
+        t(mirrorBattle ? 'boss.mirror.battleTitle' : bossBattle ? 'boss.battleTitle' : 'battle.title') +
         '</span><h2 id="round-label">' +
         t(bossBattle ? 'boss.round' : 'battle.round', {
           round: Math.max(1, state.round + (state.round ? 0 : 1))
@@ -277,8 +278,21 @@
       PSG.audio.manager.sfx(result.won ? 'victory' : 'defeat');
       if (result.champion || (result.boss && result.won)) PSG.audio.manager.play('champion');
       var bossBattle = result.boss;
-      var rewardHtml = bossBattle
-        ? result.won
+      var rewardHtml;
+      if (result.mirror) {
+        rewardHtml = result.won
+          ? '<h3 style="margin-top:1rem">' +
+            t('boss.mirror.victory') +
+            '</h3><p class="muted">' +
+            t('boss.mirror.noRewards') +
+            '</p>'
+          : '<h3 style="margin-top:1rem">' +
+            t('boss.mirror.defeat') +
+            '</h3><p class="muted">' +
+            t('boss.mirror.noRewards') +
+            '</p>';
+      } else if (bossBattle) {
+        rewardHtml = result.won
           ? '<h3 style="margin-top:1rem">' +
             t('boss.rewardStage', { stage: result.stage }) +
             '</h3><p>' +
@@ -298,8 +312,11 @@
             t('battle.defeat') +
             '</h3><p>' +
             t('boss.defeat', { stage: result.stage }) +
-            '</p>'
-        : '<h3 style="margin-top:1rem">' + t('battle.reward', { xp: result.xp.gained, coins: result.coins }) + '</h3>';
+            '</p>';
+      } else {
+        rewardHtml =
+          '<h3 style="margin-top:1rem">' + t('battle.reward', { xp: result.xp.gained, coins: result.coins }) + '</h3>';
+      }
       var mythicRewardHtml =
         result.mythicEquipment && result.mythicEquipment.length
           ? '<p class="tag tag--success">✨ ' +
@@ -317,7 +334,7 @@
         eyebrow:
           state.reason === 'turnLimit'
             ? t(bossBattle ? 'boss.turnLimit' : 'battle.turnLimit')
-            : t(bossBattle ? 'boss.battleTitle' : 'battle.title'),
+            : t(result.mirror ? 'boss.mirror.battleTitle' : bossBattle ? 'boss.battleTitle' : 'battle.title'),
         title: result.won ? t('battle.victory') : t('battle.defeat'),
         body:
           '<div class="event-art" style="min-height:180px;font-size:5rem">' +

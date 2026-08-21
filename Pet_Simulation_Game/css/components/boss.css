@@ -57,6 +57,26 @@
   gap: 0.75rem;
 }
 
+.boss-card--mirror {
+  border-color: color-mix(in srgb, var(--secondary) 58%, var(--border));
+  background: linear-gradient(145deg, color-mix(in srgb, var(--secondary) 12%, var(--surface)), var(--surface));
+}
+
+.boss-card--mirror .boss-card__species {
+  color: var(--secondary);
+}
+
+.boss-card__mirror-icon {
+  display: grid;
+  place-items: center;
+  width: 82px;
+  height: 82px;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--secondary) 20%, var(--background-art));
+  color: var(--secondary);
+  font-size: 2.5rem;
+}
+
 .boss-card__header {
   display: flex;
   gap: 0.75rem;

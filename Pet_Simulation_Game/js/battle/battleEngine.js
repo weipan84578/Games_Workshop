@@ -19,6 +19,10 @@
     };
   }
 
+  function isMirrorBattle(state) {
+    return Boolean(state && state.mode === 'boss' && state.bossChallenge && state.bossChallenge.mirror);
+  }
+
   function create(save, ai, consumableId, seed, options) {
     options = options || {};
     var mode = options.mode || (ai && ai.boss ? 'boss' : 'ranking');
@@ -29,7 +33,11 @@
     var battleSeed =
       seed ||
       (mode === 'boss'
-        ? PSG.utils.seedFrom(save.ranking.rankingSeed, 'boss-battle', bossChallenge && bossChallenge.attempt)
+        ? PSG.utils.seedFrom(
+            save.ranking.rankingSeed,
+            bossChallenge && bossChallenge.mirror ? 'mirror-boss-battle' : 'boss-battle',
+            bossChallenge && bossChallenge.attempt
+          )
         : PSG.utils.seedFrom(save.ranking.rankingSeed, ai.id, save.stats.battles));
     // Effective stats are snapshotted once; later UI/state changes cannot alter an active duel.
     var playerStats = PSG.pet.stats.effective(save);
@@ -80,16 +88,19 @@
   function start(state) {
     if (state.started) return { ok: true };
     var actionName = state.mode === 'boss' ? 'bossBattle' : 'battle';
-    var check = PSG.pet.daily.can(state.save, actionName);
-    if (!check.ok) return check;
-    if (state.consumableId && PSG.economy.inventory.count(state.save, state.consumableId) <= 0)
-      return { ok: false, reason: 'consumable' };
-    if (state.mode === 'boss') {
-      var bossStart = PSG.battle.boss.begin(state.save, state.bossChallenge);
-      if (!bossStart.ok) return bossStart;
+    var mirror = isMirrorBattle(state);
+    if (!mirror) {
+      var check = PSG.pet.daily.can(state.save, actionName);
+      if (!check.ok) return check;
+      if (state.consumableId && PSG.economy.inventory.count(state.save, state.consumableId) <= 0)
+        return { ok: false, reason: 'consumable' };
+      if (state.mode === 'boss') {
+        var bossStart = PSG.battle.boss.begin(state.save, state.bossChallenge);
+        if (!bossStart.ok) return bossStart;
+      }
+      PSG.pet.daily.beginBattle(state.save, actionName);
+      if (state.consumableId) PSG.economy.inventory.consume(state.save, state.consumableId);
     }
-    PSG.pet.daily.beginBattle(state.save, actionName);
-    if (state.consumableId) PSG.economy.inventory.consume(state.save, state.consumableId);
     state.started = true;
     PSG.storage.save.write(state.save);
     return { ok: true };
@@ -98,6 +109,10 @@
   function cancel(state) {
     if (!state.started || state.settled || state.cancelled) return { ok: false, reason: 'notActive' };
     var save = state.save;
+    if (isMirrorBattle(state)) {
+      state.cancelled = true;
+      return { ok: true };
+    }
     // An unfinished duel has no outcome, so return its entry costs and item.
     var action = PSG.constants.ACTIONS[state.mode === 'boss' ? 'bossBattle' : 'battle'];
     save.day.actionPoints = Math.min(
@@ -252,13 +267,16 @@
     if (!state.ended || state.settled) return null;
     var save = state.save;
     var won = state.winnerId === 'player';
+    var mirror = isMirrorBattle(state);
     var rank = PSG.ranking.matchmaking.playerRank(save);
-    var reward = PSG.battle.boss.settle(save, state.bossChallenge, won);
-    PSG.pet.daily.finishBattle(save, won);
+    var reward = mirror
+      ? PSG.battle.boss.settleMirror(save, state.bossChallenge, won)
+      : PSG.battle.boss.settle(save, state.bossChallenge, won);
+    if (!mirror) PSG.pet.daily.finishBattle(save, won);
     save.stats.battles += 1;
     save.stats[won ? 'wins' : 'losses'] += 1;
     save.stats.bossChallenges = (save.stats.bossChallenges || 0) + 1;
-    if (won) save.stats.bossWins = (save.stats.bossWins || 0) + 1;
+    if (won && !mirror) save.stats.bossWins = (save.stats.bossWins || 0) + 1;
     save.stats.criticalHits += state.logs.filter(function (log) {
       return log.attacker === 'player' && log.critical;
     }).length;
@@ -268,11 +286,11 @@
     save.ranking.battleHistory.push({
       time: new Date().toISOString(),
       opponentId: state.opponent.id,
-      bossStage: reward.stage,
+      bossStage: mirror ? null : reward.stage,
       arenaId: state.arena && state.arena.id,
       playerRankBefore: rank,
       opponentRankBefore: null,
-      result: won ? 'boss-win' : 'boss-loss',
+      result: mirror ? (won ? 'mirror-boss-win' : 'mirror-boss-loss') : won ? 'boss-win' : 'boss-loss',
       rounds: state.round,
       consumableId: state.consumableId,
       xp: reward.xp.gained,
@@ -280,11 +298,12 @@
       rankAfter: rank
     });
     save.ranking.battleHistory = save.ranking.battleHistory.slice(-50);
-    PSG.ranking.matchmaking.refresh(save);
+    if (!mirror) PSG.ranking.matchmaking.refresh(save);
     save.pet.currentHp = PSG.pet.stats.effective(save).hp;
     state.settled = {
       won: won,
       boss: true,
+      mirror: mirror,
       stage: reward.stage,
       arena: state.arena,
       xp: reward.xp,

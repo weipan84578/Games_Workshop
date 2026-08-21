@@ -47,6 +47,22 @@
         );
       })
       .join('');
+    var mirrorCard =
+      '<article class="card boss-card boss-card--mirror"><div class="boss-card__header"><div class="boss-card__mirror-icon" aria-hidden="true">🪞</div><div><span class="eyebrow">' +
+      t('boss.mirror.name') +
+      '</span><h3>' +
+      t('boss.mirror.name') +
+      '</h3><span class="boss-card__species">' +
+      t('boss.mirror.hiddenOpponent') +
+      '</span></div></div><p class="muted">' +
+      t('boss.mirror.description') +
+      '</p><p class="muted">' +
+      t('boss.mirror.range') +
+      '</p><p class="muted">' +
+      t('boss.mirror.cost') +
+      '</p><button class="button button--wide" type="button" data-mirror-boss="true">' +
+      t('boss.mirror.challenge') +
+      '</button></article>';
 
     root.innerHTML =
       '<section class="scene boss-scene">' +
@@ -66,6 +82,7 @@
       (!canFight.ok ? ' ' + d.escape(reason) : '') +
       '</p><div class="choice-grid boss-choice-grid">' +
       cards +
+      mirrorCard +
       '</div></section>';
 
     d.all('[data-boss-species]', root).forEach(function (button) {
@@ -82,6 +99,16 @@
         PSG.core.scenes.go('battle', { opponent: challenge.opponent, bossChallenge: challenge });
       });
     });
+    var mirrorButton = d.one('[data-mirror-boss]', root);
+    if (mirrorButton)
+      mirrorButton.addEventListener('click', function () {
+        var challenge = PSG.battle.boss.createMirror(save);
+        if (!challenge.ok) {
+          PSG.ui.common.toast(t('boss.locked'), 'warning');
+          return;
+        }
+        PSG.core.scenes.go('battle', { opponent: challenge.opponent, bossChallenge: challenge });
+      });
   }
 
   PSG.ui.boss = { render: render };

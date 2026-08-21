@@ -10,6 +10,8 @@
   var BASE_XP = 600;
   var XP_PER_STAGE = 120;
   var CANDY_DROP_RATE = 0.01;
+  var MIRROR_MIN_VARIANCE = 0.01;
+  var MIRROR_MAX_VARIANCE = 0.05;
   var ARENAS = [
     { id: 'grassland', safeSpeciesId: 'lion', damageRate: 0.03 },
     { id: 'swamp', safeSpeciesId: 'crocodile', damageRate: 0.03 },
@@ -40,9 +42,9 @@
     return BASE_STAT_MULTIPLIER + Math.max(0, stage - 1) * STAT_MULTIPLIER_STEP;
   }
 
-  function arenaFor(save) {
-    var attempt = attemptsFor(save) + 1;
-    var seed = PSG.utils.seedFrom(save.ranking.rankingSeed, 'boss-arena', attempt);
+  function arenaFor(save, attempt, seedKey) {
+    var safeAttempt = attempt || attemptsFor(save) + 1;
+    var seed = PSG.utils.seedFrom(save.ranking.rankingSeed, seedKey || 'boss-arena', safeAttempt);
     var arena = ARENAS[new PSG.utils.RNG(seed).int(0, ARENAS.length - 1)];
     return Object.assign({}, arena);
   }
@@ -88,6 +90,22 @@
     return 'normal';
   }
 
+  function mirrorAttemptsFor(save) {
+    return whole(save && save.stats && save.stats.bossChallenges);
+  }
+
+  function mirrorStatsFor(save, rng) {
+    var source = PSG.pet.stats.effective(save);
+    var stats = {};
+    var variations = {};
+    PSG.constants.STAT_KEYS.forEach(function (key) {
+      var percentage = rng.int(1, 5) / 100;
+      variations[key] = (rng.next() < 0.5 ? -1 : 1) * percentage;
+      stats[key] = Math.max(1, Math.round(source[key] * (1 + variations[key])));
+    });
+    return { stats: stats, variations: variations };
+  }
+
   function create(save, speciesId) {
     if (SPECIES_IDS.indexOf(speciesId) < 0) return { ok: false, reason: 'species' };
     var plan = preview(save);
@@ -126,6 +144,50 @@
       attempt: plan.attempt,
       arena: plan.arena,
       multiplier: plan.multiplier
+    };
+  }
+
+  function createMirror(save) {
+    if (!isUnlocked(save)) return { ok: false, reason: 'locked' };
+    var attempt = mirrorAttemptsFor(save) + 1;
+    var rng = new PSG.utils.RNG(PSG.utils.seedFrom(save.ranking.rankingSeed, 'mirror-boss', attempt));
+    var speciesId = rng.pick(SPECIES_IDS);
+    var species = PSG.data.species[speciesId];
+    var mirror = mirrorStatsFor(save, rng);
+    var name = PSG.i18n.t('boss.mirror.name');
+    var opponent = {
+      id: 'mirror_boss_' + attempt,
+      name: name,
+      nameKey: 'boss.mirror.name',
+      speciesId: speciesId,
+      level: save.pet.level,
+      tactic: tacticFor(speciesId),
+      equipmentStage: 6,
+      milestone: false,
+      boss: true,
+      mirrorBoss: true,
+      bossStage: 0,
+      stats: mirror.stats,
+      bp: battlePower(mirror.stats),
+      pet: {
+        name: name,
+        speciesId: speciesId,
+        level: save.pet.level,
+        xp: 0,
+        affection: 0,
+        mastery: {}
+      },
+      economy: { equipped: { armor: null, accessory: null, emblem: null } },
+      image: species.image
+    };
+    return {
+      ok: true,
+      mirror: true,
+      opponent: opponent,
+      stage: 0,
+      attempt: attempt,
+      arena: arenaFor(save, attempt, 'mirror-arena'),
+      variations: mirror.variations
     };
   }
 
@@ -200,6 +262,18 @@
     };
   }
 
+  function settleMirror(save, challenge, won) {
+    return {
+      won: Boolean(won),
+      mirror: true,
+      stage: 0,
+      attempt: challenge.attempt,
+      coins: 0,
+      xp: emptyXp(save),
+      candy: null
+    };
+  }
+
   PSG.battle.boss = {
     speciesIds: function () {
       return SPECIES_IDS.slice();
@@ -215,10 +289,14 @@
     multiplierFor: multiplierFor,
     preview: preview,
     create: create,
+    createMirror: createMirror,
     begin: begin,
     arenaTick: arenaTick,
     settle: settle,
+    settleMirror: settleMirror,
     candyDropRate: CANDY_DROP_RATE,
+    mirrorMinVariance: MIRROR_MIN_VARIANCE,
+    mirrorMaxVariance: MIRROR_MAX_VARIANCE,
     baseCoins: BASE_COINS,
     coinsPerStage: COINS_PER_STAGE,
     baseXp: BASE_XP,

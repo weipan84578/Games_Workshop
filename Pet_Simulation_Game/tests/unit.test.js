@@ -420,6 +420,70 @@ test('rank one unlocks all three endless Boss species with growing stats and ran
   assert.ok(stronger.opponent.stats.attack > bosses[0].opponent.stats.attack);
 });
 
+test('Mirror Boss uses seeded near-player stats and never consumes or awards resources', () => {
+  const save = movePlayerToRankOne(fresh('lion'));
+  save.pet.energy = 17;
+  save.pet.mood = 23;
+  save.day.actionPoints = 0;
+  save.player.coins = 321;
+  const before = {
+    energy: save.pet.energy,
+    mood: save.pet.mood,
+    actionPoints: save.day.actionPoints,
+    coins: save.player.coins
+  };
+  const challenge = PSG.battle.boss.createMirror(save);
+  const repeat = PSG.battle.boss.createMirror(save);
+  assert.equal(challenge.ok, true);
+  assert.equal(challenge.mirror, true);
+  assert.deepEqual(repeat.opponent, challenge.opponent);
+  assert.deepEqual(repeat.variations, challenge.variations);
+  assert.equal(challenge.opponent.boss, true);
+  assert.equal(challenge.opponent.mirrorBoss, true);
+  PSG.constants.STAT_KEYS.forEach((key) => {
+    const percentage = Math.abs(challenge.variations[key]);
+    assert.ok(percentage >= PSG.battle.boss.mirrorMinVariance);
+    assert.ok(percentage <= PSG.battle.boss.mirrorMaxVariance);
+  });
+
+  const state = PSG.battle.engine.create(save, challenge.opponent, null, 23, {
+    mode: 'boss',
+    arena: challenge.arena,
+    bossChallenge: challenge
+  });
+  assert.equal(state.maxRounds, 80);
+  assert.equal(PSG.battle.engine.start(state).ok, true);
+  assert.deepEqual(
+    {
+      energy: save.pet.energy,
+      mood: save.pet.mood,
+      actionPoints: save.day.actionPoints,
+      coins: save.player.coins
+    },
+    before
+  );
+  state.ended = true;
+  state.winnerId = 'player';
+  const result = PSG.battle.engine.settle(state);
+  assert.equal(result.mirror, true);
+  assert.equal(result.coins, 0);
+  assert.equal(result.xp.gained, 0);
+  assert.equal(result.candy, null);
+  assert.equal(save.progression.bossWins, 0);
+  assert.equal(save.progression.bossAttempts, 0);
+  assert.equal(save.stats.bossChallenges, 1);
+  assert.deepEqual(
+    {
+      energy: save.pet.energy,
+      mood: save.pet.mood,
+      actionPoints: save.day.actionPoints,
+      coins: save.player.coins
+    },
+    before
+  );
+  assert.equal(PSG.battle.boss.createMirror(save).attempt, 2);
+});
+
 test('Boss arenas protect their native species and damage others by three percent', () => {
   const arena = PSG.battle.boss.arenas().find((item) => item.id === 'grassland');
   const state = {
