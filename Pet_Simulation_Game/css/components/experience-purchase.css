@@ -1,0 +1,78 @@
+.experience-shop {
+  display: grid;
+  gap: 1rem;
+}
+
+.experience-shop__hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.experience-shop__hero h3 {
+  margin: 0.25rem 0;
+}
+
+.experience-shop__icon,
+.experience-card__icon {
+  display: grid;
+  flex: 0 0 58px;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--primary) 16%, var(--surface));
+  color: var(--primary);
+  font-size: 2rem;
+}
+
+.experience-shop__status {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.experience-shop__stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.experience-shop__stats > div {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.75rem;
+  border-radius: var(--radius-sm);
+  background: var(--background-art);
+}
+
+.experience-purchase-quantity {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.75rem;
+}
+
+.experience-purchase-quantity .text-input {
+  max-width: 9rem;
+}
+
+.experience-preview {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.experience-preview p {
+  margin: 0;
+}
+
+@media (max-width: 575px) {
+  .experience-shop__hero,
+  .experience-shop__stats {
+    grid-template-columns: 1fr;
+  }
+
+  .experience-shop__hero {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

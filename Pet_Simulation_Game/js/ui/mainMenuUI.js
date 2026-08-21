@@ -57,9 +57,9 @@
       t('app.title') +
       '</h1><p>' +
       t('app.subtitle') +
-      '</p><div class="menu-actions"><button class="button button--ghost" type="button" data-scene="instructions">? ' +
+      '</p><div class="menu-actions"><button class="button button--ghost" type="button" data-scene="instructions">❓ ' +
       t('menu.help') +
-      '</button><button class="button button--ghost" type="button" data-scene="settings">? ' +
+      '</button><button class="button button--ghost" type="button" data-scene="settings">⚙ ' +
       t('menu.settings') +
       '</button></div><span class="muted">' +
       t('app.version', { version: PSG.version }) +

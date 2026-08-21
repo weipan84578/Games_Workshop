@@ -37,11 +37,13 @@ const scripts = [
   'js/i18n/lang-en.js',
   'js/i18n/lang-ja.js',
   'js/i18n/featureLocales.js',
+  'js/i18n/bossLocales.js',
   'js/i18n/i18n.js',
   'js/economy/equipmentManager.js',
   'js/pet/statCalculator.js',
   'js/economy/abilityCandyManager.js',
   'js/pet/progression.js',
+  'js/economy/experienceManager.js',
   'js/pet/affection.js',
   'js/ranking/rankingGenerator.js',
   'js/ranking/matchmaking.js',
@@ -63,6 +65,7 @@ const scripts = [
   'js/battle/damageCalculator.js',
   'js/battle/effectManager.js',
   'js/battle/battleAI.js',
+  'js/battle/bossManager.js',
   'js/battle/battleEngine.js'
 ];
 scripts.forEach((file) => vm.runInThisContext(fs.readFileSync(path.join(root, file), 'utf8'), { filename: file }));
@@ -75,6 +78,14 @@ function fresh(species = 'lion') {
   memory.clear();
   const save = PSG.core.gameState.create('Trainer', 'Buddy', species, 123456789);
   PSG.core.gameState.set(save, 1);
+  return save;
+}
+function movePlayerToRankOne(save) {
+  const playerIndex = save.ranking.rankOrder.indexOf('player');
+  const topId = save.ranking.rankOrder[0];
+  save.ranking.rankOrder[playerIndex] = topId;
+  save.ranking.rankOrder[0] = 'player';
+  PSG.ranking.matchmaking.refresh(save);
   return save;
 }
 
@@ -178,7 +189,7 @@ test('daily activities reject insufficient AP, stamina, and mood', () => {
   const save = fresh();
   save.day.actionPoints = 0;
   assert.equal(PSG.pet.daily.can(save, 'training').reason, 'ap');
-  save.day.actionPoints = 5;
+  save.day.actionPoints = 7;
   save.pet.energy = 10;
   assert.equal(PSG.pet.daily.can(save, 'training').reason, 'energy');
   save.pet.energy = 80;
@@ -194,7 +205,7 @@ test('status values are clamped after activities and rest', () => {
   assert.equal(save.pet.mood, 100);
   assert.equal(save.pet.affection, 100);
   PSG.pet.daily.nextDay(save);
-  assert.equal(save.day.actionPoints, 5);
+  assert.equal(save.day.actionPoints, 7);
   assert.ok(save.pet.energy <= 100);
 });
 
@@ -214,7 +225,7 @@ test('gold training settlement applies grade and mood multipliers', () => {
   const result = PSG.training.manager.settle(save, 'attack', 100);
   assert.equal(result.xp.gained, 45);
   assert.equal(result.mastery.gained, 30);
-  assert.equal(save.day.actionPoints, 4);
+  assert.equal(save.day.actionPoints, 6);
   assert.equal(save.pet.energy, 60);
 });
 
@@ -323,6 +334,103 @@ test('mid-table candidate matching uses three higher and two lower ranks', () =>
   assert.ok(rows.every((row) => Math.abs(row.rank - 500) <= 12));
 });
 
+test('rank one unlocks all three endless Boss species with growing stats and random arenas', () => {
+  const save = fresh('lion');
+  assert.equal(PSG.battle.boss.isUnlocked(save), false);
+  movePlayerToRankOne(save);
+  assert.equal(PSG.battle.boss.isUnlocked(save), true);
+  const plan = PSG.battle.boss.preview(save);
+  assert.equal(plan.stage, 1);
+  assert.equal(plan.attempt, 1);
+  assert.ok(['grassland', 'swamp', 'sky'].includes(plan.arena.id));
+  const bosses = PSG.battle.boss.speciesIds().map((speciesId) => PSG.battle.boss.create(save, speciesId));
+  assert.deepEqual(
+    bosses.map((boss) => boss.opponent.speciesId),
+    ['lion', 'crocodile', 'eagle']
+  );
+  assert.ok(bosses.every((boss) => boss.opponent.boss && boss.opponent.level === 100));
+  assert.ok(bosses.every((boss) => boss.opponent.stats.hp > 800));
+
+  save.progression.bossWins = 4;
+  const stronger = PSG.battle.boss.create(save, 'lion');
+  assert.equal(stronger.stage, 5);
+  assert.ok(stronger.opponent.stats.attack > bosses[0].opponent.stats.attack);
+});
+
+test('Boss arenas protect their native species and damage others by three percent', () => {
+  const arena = PSG.battle.boss.arenas().find((item) => item.id === 'grassland');
+  const state = {
+    arena,
+    logs: [],
+    player: { id: 'player', speciesId: 'eagle', hp: 1000, maxHp: 1000 },
+    enemy: { id: 'boss', speciesId: 'lion', hp: 1000, maxHp: 1000 }
+  };
+  const events = PSG.battle.boss.arenaTick(state);
+  assert.equal(events.length, 1);
+  assert.equal(state.player.hp, 970);
+  assert.equal(state.enemy.hp, 1000);
+  assert.equal(events[0].damage, 30);
+});
+
+test('Boss victories award large rewards, advance the endless stage, and skip XP at max level', () => {
+  const save = movePlayerToRankOne(fresh('lion'));
+  const challenge = PSG.battle.boss.create(save, 'lion');
+  assert.equal(PSG.battle.boss.begin(save, challenge).ok, true);
+  const beforeCoins = save.player.coins;
+  const reward = PSG.battle.boss.settle(save, challenge, true);
+  assert.equal(reward.won, true);
+  assert.equal(reward.stage, 1);
+  assert.equal(reward.coins, 1200);
+  assert.ok(reward.xp.gained > 0);
+  assert.equal(save.progression.bossWins, 1);
+  assert.equal(save.progression.bossAttempts, 1);
+  assert.equal(save.player.coins, beforeCoins + 1200);
+
+  save.pet.level = 100;
+  const next = PSG.battle.boss.create(save, 'eagle');
+  const maxReward = PSG.battle.boss.settle(save, next, true);
+  assert.equal(maxReward.xp.gained, 0);
+  assert.equal(PSG.battle.boss.candyDropRate, 0.01);
+});
+
+test('Boss battle mode uses 80 rounds while ranked battles remain at 20', () => {
+  const save = movePlayerToRankOne(fresh('lion'));
+  const challenge = PSG.battle.boss.create(save, 'lion');
+  const bossState = PSG.battle.engine.create(save, challenge.opponent, null, 7, {
+    mode: 'boss',
+    arena: challenge.arena,
+    bossChallenge: challenge
+  });
+  const ranked = PSG.battle.engine.create(save, PSG.ranking.generator.getAI('ai_0999', save.ranking.rankingSeed, 'en'));
+  assert.equal(bossState.maxRounds, 80);
+  assert.equal(ranked.maxRounds, 20);
+  assert.equal(bossState.mode, 'boss');
+  assert.equal(bossState.arena.id, challenge.arena.id);
+});
+
+test('Boss battle entry and settlement persist the attempt and rewards', () => {
+  const save = movePlayerToRankOne(fresh('lion'));
+  save.pet.energy = 100;
+  save.pet.mood = 100;
+  const challenge = PSG.battle.boss.create(save, 'crocodile');
+  const state = PSG.battle.engine.create(save, challenge.opponent, null, 8, {
+    mode: 'boss',
+    arena: challenge.arena,
+    bossChallenge: challenge
+  });
+  assert.equal(PSG.battle.engine.start(state).ok, true);
+  assert.equal(save.day.actionPoints, 7);
+  assert.equal(save.pet.energy, 75);
+  assert.equal(save.progression.bossAttempts, 1);
+  state.ended = true;
+  state.winnerId = 'player';
+  const result = PSG.battle.engine.settle(state);
+  assert.equal(result.boss, true);
+  assert.equal(save.stats.bossChallenges, 1);
+  assert.equal(save.stats.bossWins, 1);
+  assert.equal(PSG.storage.save.read(1).progression.bossWins, 1);
+});
+
 test('daily coin income follows rank stages with the requested 300 percent increase', () => {
   const save = fresh();
   assert.equal(PSG.pet.daily.dailyCoins(save), 120);
@@ -338,6 +446,38 @@ test('daily coin income follows rank stages with the requested 300 percent incre
   const result = PSG.pet.daily.nextDay(save);
   assert.equal(result.coins, 720);
   assert.equal(save.player.coins, before + 720);
+});
+
+test('daily AP scales by level tiers and Boss battles do not spend AP', () => {
+  const save = fresh('lion');
+  [
+    [1, 7],
+    [30, 7],
+    [31, 10],
+    [50, 10],
+    [51, 12],
+    [75, 12],
+    [76, 15],
+    [100, 15]
+  ].forEach(([level, expected]) => assert.equal(PSG.pet.daily.maxActionPoints(level), expected));
+
+  movePlayerToRankOne(save);
+  save.pet.energy = 100;
+  save.pet.mood = 100;
+  save.pet.level = 50;
+  save.day.actionPoints = 0;
+  const challenge = PSG.battle.boss.create(save, 'lion');
+  const state = PSG.battle.engine.create(save, challenge.opponent, null, 22, {
+    mode: 'boss',
+    arena: challenge.arena,
+    bossChallenge: challenge
+  });
+  assert.equal(PSG.battle.engine.start(state).ok, true);
+  assert.equal(save.day.actionPoints, 0);
+  assert.equal(save.pet.energy, 75);
+  assert.equal(PSG.battle.engine.cancel(state).ok, true);
+  assert.equal(save.day.actionPoints, 0);
+  assert.equal(save.pet.energy, 100);
 });
 
 test('home mood dialogue uses seeded variants and preserves all mood states', () => {
@@ -516,6 +656,48 @@ test('ability candy price scales with intrinsic stat, candy growth, and level', 
   assert.equal(PSG.economy.candy.priceFor(save, attack), 850);
 });
 
+test('ability candy supports batch purchases up to 999 with escalating totals', () => {
+  const save = fresh('lion');
+  const attack = PSG.data.abilityCandyById.candy_attack;
+  const quantity = 3;
+  const totalPrice = PSG.economy.candy.totalPriceFor(save, attack, quantity, false);
+  assert.equal(PSG.economy.candy.quantityFor(999), 999);
+  assert.equal(PSG.economy.candy.quantityFor(1000), 0);
+  assert.ok(totalPrice > PSG.economy.candy.priceFor(save, attack, false) * quantity);
+  save.player.coins = totalPrice;
+  const result = PSG.economy.shop.purchaseCandy(save, attack.id, false, quantity);
+  assert.equal(result.ok, true);
+  assert.equal(result.quantity, quantity);
+  assert.equal(result.price, totalPrice);
+  assert.equal(result.gain, attack.gain * quantity);
+  assert.equal(save.pet.candyBoosts.attack, attack.gain * quantity);
+  assert.equal(save.player.coins, 0);
+});
+
+test('experience shop sells discounted batches, reports level ups, and caps price', () => {
+  const save = fresh('lion');
+  const plan = PSG.economy.experience.preview(save, 2, true);
+  assert.equal(PSG.economy.experience.quantityFor(999), 999);
+  assert.equal(plan.ok, true);
+  assert.equal(plan.xp, 200);
+  assert.equal(plan.levels, 1);
+  assert.equal(plan.price, 52);
+  save.player.coins = plan.price;
+  const result = PSG.economy.shop.purchaseExperience(save, true, 2);
+  assert.equal(result.ok, true);
+  assert.equal(result.quantity, 2);
+  assert.equal(result.levels, 1);
+  assert.equal(save.pet.level, 2);
+  assert.equal(save.pet.xp, 100);
+  assert.equal(save.player.coins, 0);
+
+  const capped = fresh();
+  capped.pet.level = 100;
+  assert.equal(PSG.economy.experience.priceFor(capped, false), 400);
+  assert.equal(PSG.economy.experience.priceFor(capped, true), 240);
+  assert.equal(PSG.economy.experience.preview(capped, 1, false).reason, 'maxLevel');
+});
+
 test('Candy Festival halves the current regular candy price', () => {
   const save = fresh('eagle');
   const attack = PSG.data.abilityCandyById.candy_attack;
@@ -573,13 +755,21 @@ test('save repair clamps ranges and preserves a valid ranking', () => {
   save.day.actionPoints = 99;
   save.pet.candyBoosts.attack = -4;
   save.pet.candyBoosts.hp = 3.9;
+  delete save.progression.bossWins;
+  delete save.progression.bossAttempts;
+  delete save.stats.bossChallenges;
+  delete save.stats.bossWins;
   const repaired = PSG.storage.save.repair(save);
   assert.equal(repaired.pet.energy, 0);
   assert.equal(repaired.pet.mood, 100);
-  assert.equal(repaired.day.actionPoints, 5);
+  assert.equal(repaired.day.actionPoints, 7);
   assert.equal(repaired.pet.candyBoosts.attack, 0);
   assert.equal(repaired.pet.candyBoosts.hp, 3);
   assert.equal(repaired.economy.savings.balance, 0);
+  assert.equal(repaired.progression.bossWins, 0);
+  assert.equal(repaired.progression.bossAttempts, 0);
+  assert.equal(repaired.stats.bossChallenges, 0);
+  assert.equal(repaired.stats.bossWins, 0);
   PSG.constants.STAT_KEYS.forEach((key) => assert.ok(Number.isInteger(repaired.pet.candyBoosts[key])));
 
   repaired.economy.savings.balance = -20.7;
@@ -633,14 +823,14 @@ test('cancelling an active battle refunds its entry cost and consumable', () => 
   const ai = Object.assign({}, PSG.ranking.generator.getAI('ai_0999', save.ranking.rankingSeed, 'en'), { rank: 999 });
   const state = PSG.battle.engine.create(save, ai, 'con_1_energy', 4);
   assert.equal(PSG.battle.engine.start(state).ok, true);
-  assert.equal(save.day.actionPoints, 3);
+  assert.equal(save.day.actionPoints, 5);
   assert.equal(save.pet.energy, 55);
   assert.equal(save.economy.consumables.con_1_energy, 0);
   assert.equal(PSG.battle.engine.cancel(state).ok, true);
-  assert.equal(save.day.actionPoints, 5);
+  assert.equal(save.day.actionPoints, 7);
   assert.equal(save.pet.energy, 80);
   assert.equal(save.economy.consumables.con_1_energy, 1);
-  assert.equal(PSG.storage.save.read(1).day.actionPoints, 5);
+  assert.equal(PSG.storage.save.read(1).day.actionPoints, 7);
 });
 
 test('all Traditional Chinese UI keys exist in English and Japanese dictionaries', () => {
@@ -652,8 +842,8 @@ test('all Traditional Chinese UI keys exist in English and Japanese dictionaries
 });
 
 test('all required local BGM and generated sound files exist', () => {
-  ['menu', 'home', 'training', 'outing', 'battle', 'champion'].forEach((name) =>
-    assert.ok(fs.statSync(path.join(root, `assets/audio/bgm/bgm_${name}.wav`)).size > 44)
+  ['menu', 'home', 'training', 'outing', 'battle', 'champion', 'bossbattle'].forEach((name) =>
+    assert.ok(fs.statSync(path.join(root, `bgm/bgm_${name}.mp3`)).size > 44)
   );
   assert.equal(fs.readdirSync(path.join(root, 'assets/audio/sfx')).filter((name) => name.endsWith('.wav')).length, 22);
 });

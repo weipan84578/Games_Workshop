@@ -8,6 +8,10 @@
   function moodMultiplier(mood) {
     return mood >= 70 ? 1.1 : mood >= 30 ? 1 : 0.75;
   }
+  function maxActionPoints(saveOrLevel) {
+    var level = saveOrLevel && typeof saveOrLevel === 'object' && saveOrLevel.pet ? saveOrLevel.pet.level : saveOrLevel;
+    return PSG.constants.actionPointsForLevel(level);
+  }
   function can(save, actionName) {
     var action = PSG.constants.ACTIONS[actionName];
     if (!action) return { ok: false, reason: 'unknown' };
@@ -49,18 +53,25 @@
     save.pet.energy = PSG.utils.math.clamp(save.pet.energy + 50, 0, 100);
     save.pet.mood = PSG.utils.math.clamp(save.pet.mood + 10, 0, 100);
     save.day.number += 1;
-    save.day.actionPoints = 5;
+    save.day.actionPoints = maxActionPoints(save);
     save.stats.daysPlayed = save.day.number;
     save.pet.currentHp = PSG.pet.stats.effective(save).hp;
     PSG.ranking.matchmaking.refresh(save);
     PSG.storage.save.write(save);
-    return { day: save.day.number, coins: reward, interest: interest.interest };
+    return {
+      day: save.day.number,
+      coins: reward,
+      interest: interest.interest,
+      actionPoints: save.day.actionPoints
+    };
   }
-  function beginBattle(save) {
-    var check = can(save, 'battle');
+  function beginBattle(save, actionName) {
+    actionName = actionName || 'battle';
+    var action = PSG.constants.ACTIONS[actionName];
+    var check = can(save, actionName);
     if (!check.ok) return check;
-    save.day.actionPoints -= 2;
-    save.pet.energy = PSG.utils.math.clamp(save.pet.energy - 25, 0, 100);
+    save.day.actionPoints -= action.ap || 0;
+    save.pet.energy = PSG.utils.math.clamp(save.pet.energy + (action.energy || 0), 0, 100);
     return { ok: true };
   }
   function finishBattle(save, won) {
@@ -69,6 +80,7 @@
   }
   PSG.pet.daily = {
     moodMultiplier: moodMultiplier,
+    maxActionPoints: maxActionPoints,
     can: can,
     applyFixed: applyFixed,
     dailyCoins: dailyCoins,

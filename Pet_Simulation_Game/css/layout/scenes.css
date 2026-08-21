@@ -278,12 +278,23 @@
   gap: 0.65rem;
   align-items: center;
 }
+.candidate-card__identity {
+  min-width: 0;
+}
 .candidate-card__avatar {
   width: 64px;
   height: 64px;
   border-radius: 18px;
   object-fit: cover;
   background: #21150f;
+}
+.candidate-card__species {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  color: var(--primary);
+  font-size: 0.88rem;
+  font-weight: 700;
 }
 .candidate-card__meta {
   display: flex;

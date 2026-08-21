@@ -1,0 +1,122 @@
+.boss-gate {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 1rem;
+  background:
+    radial-gradient(circle at 12% 20%, color-mix(in srgb, var(--warning) 24%, transparent), transparent 35%),
+    linear-gradient(135deg, color-mix(in srgb, var(--primary) 16%, var(--surface)), var(--surface));
+  border: 2px solid color-mix(in srgb, var(--warning) 55%, var(--border));
+}
+
+.boss-gate h2,
+.boss-intro h2 {
+  margin: 0.25rem 0;
+}
+
+.boss-gate__door,
+.boss-intro__door {
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--warning) 18%, var(--background-art));
+  color: var(--warning);
+  font-size: 3rem;
+}
+
+.boss-gate__door {
+  width: 74px;
+  height: 74px;
+}
+
+.boss-scene {
+  display: grid;
+  gap: 1rem;
+}
+
+.boss-intro,
+.boss-arena-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.boss-intro__door {
+  flex: 0 0 108px;
+  width: 108px;
+  height: 108px;
+}
+
+.boss-arena-banner {
+  border: 2px solid color-mix(in srgb, var(--primary) 48%, var(--border));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 14%, var(--surface)), var(--surface));
+}
+
+.boss-arena-banner h3 {
+  margin: 0.25rem 0;
+}
+
+.boss-arena-banner__icon {
+  flex: 0 0 auto;
+  font-size: 3rem;
+}
+
+.boss-cost {
+  margin: 0;
+}
+
+.boss-card {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.boss-card__header {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.boss-card__portrait {
+  width: 82px;
+  height: 82px;
+  border-radius: var(--radius);
+  object-fit: cover;
+  background: #21150f;
+}
+
+.boss-card__species {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.boss-card__stats {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.7rem;
+  border-radius: var(--radius-sm);
+  background: var(--background-art);
+}
+
+@media (max-width: 575px) {
+  .boss-gate {
+    grid-template-columns: auto 1fr;
+  }
+
+  .boss-gate .button {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .boss-intro,
+  .boss-arena-banner {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .boss-intro__door {
+    display: none;
+  }
+}

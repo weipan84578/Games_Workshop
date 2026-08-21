@@ -73,49 +73,193 @@
   }
 
   function bindPurchases(root, save, candyFestival) {
-    d.all('[data-buy-equipment],[data-buy-consumable],[data-buy-candy]', root).forEach(function (button) {
-      button.addEventListener('click', function () {
-        var id = button.dataset.buyEquipment || button.dataset.buyConsumable || button.dataset.buyCandy;
-        var item = PSG.data.equipmentById[id] || PSG.data.consumableById[id] || PSG.data.abilityCandyById[id];
-        openPurchaseDialog(root, save, item, candyFestival);
-      });
+    d.all('[data-buy-equipment],[data-buy-consumable],[data-buy-candy],[data-buy-experience]', root).forEach(
+      function (button) {
+        button.addEventListener('click', function () {
+          if (button.dataset.buyExperience) return openExperienceDialog(root, save, candyFestival);
+          var id = button.dataset.buyEquipment || button.dataset.buyConsumable || button.dataset.buyCandy;
+          var item = PSG.data.equipmentById[id] || PSG.data.consumableById[id] || PSG.data.abilityCandyById[id];
+          openPurchaseDialog(root, save, item, candyFestival);
+        });
+      }
+    );
+  }
+
+  function openExperienceDialog(root, save, candyFestival) {
+    var t = PSG.i18n.t;
+    var maxQuantity = Math.min(PSG.economy.experience.maxQuantity, PSG.economy.experience.maxQuantityFor(save));
+    var initialPlan = maxQuantity ? PSG.economy.experience.preview(save, 1, candyFestival) : null;
+    var initialSummary = initialPlan
+      ? t('shop.experienceConfirm', {
+          price: PSG.utils.formatter.number(initialPlan.price),
+          quantity: initialPlan.quantity,
+          xp: PSG.utils.formatter.number(initialPlan.xp)
+        })
+      : t('shop.experienceMaxLevel');
+    PSG.ui.common.modal({
+      title: t('shop.category.experience'),
+      body:
+        '<p data-experience-confirmation>' +
+        initialSummary +
+        '</p>' +
+        (maxQuantity
+          ? '<div class="experience-purchase-quantity"><label for="experience-quantity"><strong>' +
+            t('shop.quantity') +
+            '</strong></label><input class="text-input" id="experience-quantity" type="number" inputmode="numeric" min="1" max="' +
+            maxQuantity +
+            '" step="1" value="1"><p class="muted">' +
+            t('shop.experienceQuantityHint', { max: maxQuantity }) +
+            '</p></div>'
+          : '') +
+        '<div class="card card--soft purchase-preview" data-experience-preview>' +
+        experiencePreview(initialPlan) +
+        '</div>',
+      actions:
+        PSG.ui.common.button(t('common.cancel'), 'modal-close', 'ghost') +
+        PSG.ui.common.button(
+          t('common.confirm'),
+          'experience-confirm',
+          null,
+          initialPlan && initialPlan.price <= save.player.coins ? '' : 'disabled'
+        ),
+      onOpen: function (dialog) {
+        var quantityInput = d.one('#experience-quantity', dialog);
+        var confirmation = d.one('[data-experience-confirmation]', dialog);
+        var preview = d.one('[data-experience-preview]', dialog);
+        var confirmButton = d.one('[data-action="experience-confirm"]', dialog);
+        function refreshExperienceDialog() {
+          if (!quantityInput) return;
+          var quantity = Math.min(maxQuantity, Math.max(1, Math.floor(Number(quantityInput.value) || 1)));
+          quantityInput.value = quantity;
+          var plan = PSG.economy.experience.preview(save, quantity, candyFestival);
+          if (!plan.ok) {
+            confirmation.textContent = t('shop.experienceMaxLevel');
+            preview.innerHTML = experiencePreview(null);
+            confirmButton.disabled = true;
+            return;
+          }
+          confirmation.textContent = t('shop.experienceConfirm', {
+            price: PSG.utils.formatter.number(plan.price),
+            quantity: plan.quantity,
+            xp: PSG.utils.formatter.number(plan.xp)
+          });
+          preview.innerHTML = experiencePreview(plan);
+          confirmButton.disabled = plan.price > save.player.coins;
+        }
+        if (quantityInput) {
+          quantityInput.addEventListener('input', refreshExperienceDialog);
+          refreshExperienceDialog();
+        }
+        confirmButton.addEventListener('click', function () {
+          var quantity = quantityInput ? PSG.economy.experience.quantityFor(quantityInput.value) : 0;
+          var result = PSG.economy.shop.purchaseExperience(save, candyFestival, quantity);
+          if (!result.ok) {
+            var reason = result.reason === 'coins' ? t('shop.notEnough') : t('shop.experienceMaxLevel');
+            PSG.ui.common.toast(reason, 'warning');
+            return;
+          }
+          PSG.audio.manager.sfx('xp');
+          PSG.ui.common.closeModal();
+          PSG.ui.common.toast(
+            t(result.levels ? 'shop.experiencePurchasedLevel' : 'shop.experiencePurchased', {
+              quantity: result.quantity,
+              xp: result.xp,
+              levels: result.levels,
+              level: result.afterLevel
+            }),
+            'success'
+          );
+          render(root, { tab: activeTab, category: 'experience', stage: activeStage });
+        });
+      }
     });
   }
 
   function openPurchaseDialog(root, save, item, candyFestival) {
     var t = PSG.i18n.t;
-    var price = item.category === 'candy' ? PSG.economy.candy.priceFor(save, item, candyFestival) : item.price;
-    var detail =
-      item.category === 'candy'
-        ? candyPreview(save, item, candyFestival)
-        : '<strong>' + PSG.ui.common.itemEffect(item) + '</strong>';
+    var isCandy = item.category === 'candy';
+    var quantity = 1;
+    var price = isCandy ? PSG.economy.candy.totalPriceFor(save, item, quantity, candyFestival) : item.price;
+    var detail = isCandy
+      ? candyPreview(save, item, candyFestival, quantity)
+      : '<strong>' + PSG.ui.common.itemEffect(item) + '</strong>';
     PSG.ui.common.modal({
       title: t('shop.buy'),
       body:
-        '<p>' +
-        t('shop.confirm', { price: PSG.utils.formatter.number(price), item: PSG.ui.common.itemName(item) }) +
-        '</p><div class="card card--soft purchase-preview">' +
+        '<p data-purchase-confirmation>' +
+        t(isCandy ? 'shop.confirmQuantity' : 'shop.confirm', {
+          price: PSG.utils.formatter.number(price),
+          item: PSG.ui.common.itemName(item),
+          quantity: quantity
+        }) +
+        '</p>' +
+        (isCandy
+          ? '<div class="candy-purchase-quantity"><label for="candy-quantity"><strong>' +
+            t('shop.quantity') +
+            '</strong></label><input class="text-input" id="candy-quantity" type="number" inputmode="numeric" min="1" max="' +
+            PSG.economy.candy.maxQuantity +
+            '" step="1" value="1"><p class="muted">' +
+            t('shop.quantityHint', { max: PSG.economy.candy.maxQuantity }) +
+            '</p></div>'
+          : '') +
+        '<div class="card card--soft purchase-preview"' +
+        (isCandy ? ' data-candy-preview' : '') +
+        '>' +
         detail +
         '</div>',
       actions:
         PSG.ui.common.button(t('common.cancel'), 'modal-close', 'ghost') +
         PSG.ui.common.button(t('common.confirm'), 'shop-confirm'),
       onOpen: function (dialog) {
-        d.one('[data-action="shop-confirm"]', dialog).addEventListener('click', function () {
-          var result = purchase(save, item, candyFestival);
-          if (!result.ok) return;
+        var quantityInput = isCandy ? d.one('#candy-quantity', dialog) : null;
+        var confirmation = isCandy ? d.one('[data-purchase-confirmation]', dialog) : null;
+        var preview = isCandy ? d.one('[data-candy-preview]', dialog) : null;
+        var confirmButton = d.one('[data-action="shop-confirm"]', dialog);
+        function refreshCandyDialog() {
+          var nextQuantity = Math.min(
+            PSG.economy.candy.maxQuantity,
+            Math.max(1, Math.floor(Number(quantityInput.value) || 1))
+          );
+          quantityInput.value = nextQuantity;
+          var totalPrice = PSG.economy.candy.totalPriceFor(save, item, nextQuantity, candyFestival);
+          confirmation.textContent = t('shop.confirmQuantity', {
+            price: PSG.utils.formatter.number(totalPrice),
+            item: PSG.ui.common.itemName(item),
+            quantity: nextQuantity
+          });
+          preview.innerHTML = candyPreview(save, item, candyFestival, nextQuantity);
+          confirmButton.disabled = totalPrice > save.player.coins;
+        }
+        if (isCandy) {
+          quantityInput.addEventListener('input', refreshCandyDialog);
+          refreshCandyDialog();
+        }
+        confirmButton.addEventListener('click', function () {
+          var quantity = isCandy ? PSG.economy.candy.quantityFor(quantityInput.value) : 1;
+          var result = purchase(save, item, candyFestival, quantity);
+          if (!result.ok) {
+            PSG.ui.common.toast(result.reason === 'coins' ? t('shop.notEnough') : t('shop.invalidQuantity'), 'warning');
+            return;
+          }
           PSG.audio.manager.sfx(item.category === 'candy' ? 'level' : 'coin');
           PSG.ui.common.closeModal();
           if (item.category === 'candy')
-            PSG.ui.common.toast(t('shop.candyApplied', { stat: t('stat.' + item.stat), value: item.gain }), 'success');
+            PSG.ui.common.toast(
+              t(result.quantity > 1 ? 'shop.candyBatchApplied' : 'shop.candyApplied', {
+                stat: t('stat.' + item.stat),
+                value: result.gain,
+                quantity: result.quantity
+              }),
+              'success'
+            );
           render(root, { tab: activeTab, category: activeCategory, stage: activeStage });
         });
       }
     });
   }
 
-  function purchase(save, item, candyFestival) {
-    if (item.category === 'candy') return PSG.economy.shop.purchaseCandy(save, item.id, candyFestival);
+  function purchase(save, item, candyFestival, quantity) {
+    if (item.category === 'candy') return PSG.economy.shop.purchaseCandy(save, item.id, candyFestival, quantity);
     if (item.templateKey) return PSG.economy.shop.purchaseEquipment(save, item.id);
     return PSG.economy.shop.purchaseConsumable(save, item.id);
   }
@@ -142,7 +286,8 @@
     var categories = [
       { id: 'equipment', icon: '🛡', title: t('shop.category.equipment'), detail: t('shop.category.equipmentDesc') },
       { id: 'consumable', icon: '⚗', title: t('shop.category.consumable'), detail: t('shop.category.consumableDesc') },
-      { id: 'candy', icon: '🍬', title: t('shop.category.candy'), detail: t('shop.category.candyDesc') }
+      { id: 'candy', icon: '🍬', title: t('shop.category.candy'), detail: t('shop.category.candyDesc') },
+      { id: 'experience', icon: '✨', title: t('shop.category.experience'), detail: t('shop.category.experienceDesc') }
     ];
     var categoryNav =
       '<div class="shop-category-grid">' +
@@ -166,8 +311,71 @@
         })
         .join('') +
       '</div>';
-    var body = activeCategory === 'candy' ? candyShopHtml(save, candyFestival) : stagedShopHtml(save, activeCategory);
+    var body =
+      activeCategory === 'candy'
+        ? candyShopHtml(save, candyFestival)
+        : activeCategory === 'experience'
+          ? experienceShopHtml(save, candyFestival)
+          : stagedShopHtml(save, activeCategory);
     return categoryNav + body;
+  }
+
+  function experienceShopHtml(save, candyFestival) {
+    var t = PSG.i18n.t;
+    var nextXp =
+      save.pet.level >= PSG.constants.MAX_LEVEL
+        ? t('common.max')
+        : PSG.utils.formatter.number(PSG.pet.progression.xpToNext(save.pet.level));
+    var currentXp = PSG.utils.formatter.number(save.pet.xp);
+    var price = PSG.economy.experience.priceFor(save, candyFestival);
+    var maxQuantity = Math.min(PSG.economy.experience.maxQuantity, PSG.economy.experience.maxQuantityFor(save));
+    var disabled = !maxQuantity || save.player.coins < price;
+    var reason = !maxQuantity ? t('shop.experienceMaxLevel') : save.player.coins < price ? t('shop.notEnough') : '';
+    var festivalBanner = candyFestival
+      ? '<aside class="candy-festival-shop-banner" role="status"><strong>🍬 ' +
+        t('shop.candyFestival') +
+        '</strong><span>' +
+        t('shop.experienceFestivalDesc') +
+        '</span></aside>'
+      : '';
+    return (
+      '<section class="experience-shop">' +
+      festivalBanner +
+      '<header class="card experience-shop__hero"><div><span class="eyebrow">✨ ' +
+      t('shop.category.experience') +
+      '</span><h3>' +
+      t('shop.experienceTitle') +
+      '</h3><p>' +
+      t('shop.experienceDescription', { xp: PSG.utils.formatter.number(PSG.economy.experience.xpPerPurchase) }) +
+      '</p></div><span class="experience-shop__icon" aria-hidden="true">✦</span></header>' +
+      '<div class="card experience-shop__status"><div class="experience-shop__stats"><div><span class="eyebrow">' +
+      t('shop.experienceLevel', { level: save.pet.level }) +
+      '</span><strong>' +
+      t('shop.experienceCurrent', { xp: currentXp, next: nextXp }) +
+      '</strong></div><div><span class="eyebrow">' +
+      t('shop.experiencePrice', {
+        xp: PSG.utils.formatter.number(PSG.economy.experience.xpPerPurchase),
+        price: PSG.utils.formatter.number(price)
+      }) +
+      '</span><strong>' +
+      t('shop.experienceMaxPurchase', { max: maxQuantity }) +
+      '</strong></div></div></div>' +
+      '<article class="card shop-card experience-card"><div class="card__header"><span class="experience-card__icon" aria-hidden="true">✨</span><span class="tag tag--success">+' +
+      PSG.utils.formatter.number(PSG.economy.experience.xpPerPurchase) +
+      ' XP</span></div><div><span class="eyebrow">' +
+      t('shop.experienceType') +
+      '</span><h3>' +
+      t('shop.experienceTitle') +
+      '</h3></div><p>' +
+      t('shop.experienceDescription', { xp: PSG.utils.formatter.number(PSG.economy.experience.xpPerPurchase) }) +
+      '</p><div class="shop-card__footer"><strong class="shop-price">🪙 ' +
+      PSG.utils.formatter.number(price) +
+      '</strong><button class="button" type="button" data-buy-experience="experience" ' +
+      (disabled ? 'disabled title="' + d.escape(reason) + '"' : '') +
+      '>' +
+      t('shop.buy') +
+      '</button></div></article></section>'
+    );
   }
 
   function stagedShopHtml(save, category) {
@@ -337,18 +545,56 @@
     );
   }
 
-  function candyPreview(save, item, candyFestival) {
+  function experiencePreview(plan) {
     var t = PSG.i18n.t;
+    if (!plan) return '<p class="muted">' + t('shop.experienceMaxLevel') + '</p>';
+    var beforeNext =
+      plan.beforeLevel >= PSG.constants.MAX_LEVEL
+        ? t('common.max')
+        : PSG.utils.formatter.number(PSG.pet.progression.xpToNext(plan.beforeLevel));
+    var afterNext =
+      plan.afterLevel >= PSG.constants.MAX_LEVEL ? t('common.max') : PSG.utils.formatter.number(plan.nextXp);
+    return (
+      '<div class="experience-preview"><p>' +
+      t('shop.experienceBefore', {
+        level: plan.beforeLevel,
+        xp: PSG.utils.formatter.number(plan.beforeXp),
+        next: beforeNext
+      }) +
+      '</p><p>' +
+      t('shop.experienceGain', { xp: PSG.utils.formatter.number(plan.xp) }) +
+      '</p><p><strong>' +
+      t('shop.experienceAfter', {
+        level: plan.afterLevel,
+        xp: PSG.utils.formatter.number(plan.afterXp),
+        next: afterNext
+      }) +
+      '</strong></p><p class="muted">' +
+      (plan.levels
+        ? t('shop.experienceLevelUp', { levels: plan.levels, level: plan.afterLevel })
+        : t('shop.experienceNoLevel')) +
+      '</p><p class="muted">' +
+      t('shop.experienceTotalPrice', { price: PSG.utils.formatter.number(plan.price) }) +
+      '</p></div>'
+    );
+  }
+
+  function candyPreview(save, item, candyFestival, quantity) {
+    var t = PSG.i18n.t;
+    var totalGain = item.gain * quantity;
     var current = PSG.economy.candy.intrinsicValue(save, item);
     var nextSave = JSON.parse(JSON.stringify(save));
-    nextSave.pet.candyBoosts[item.stat] = (nextSave.pet.candyBoosts[item.stat] || 0) + item.gain;
+    nextSave.pet.candyBoosts[item.stat] = (nextSave.pet.candyBoosts[item.stat] || 0) + totalGain;
     var nextPrice = PSG.economy.candy.priceFor(nextSave, item, candyFestival);
+    var totalPrice = PSG.economy.candy.totalPriceFor(save, item, quantity, candyFestival);
     return (
       '<div class="purchase-preview__candy">' +
       PSG.ui.common.itemIcon(item) +
       '<div><strong>' +
-      t('shop.candyGrowth', { stat: t('stat.' + item.stat), before: current, after: current + item.gain }) +
+      t('shop.candyGrowth', { stat: t('stat.' + item.stat), before: current, after: current + totalGain }) +
       '</strong><p class="muted">' +
+      t('shop.candyTotalPrice', { price: PSG.utils.formatter.number(totalPrice) }) +
+      '</p><p class="muted">' +
       t('shop.candyNext', { price: PSG.utils.formatter.number(nextPrice) }) +
       '</p></div></div>'
     );

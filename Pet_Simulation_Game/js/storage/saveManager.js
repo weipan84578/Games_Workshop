@@ -51,7 +51,11 @@
     PSG.constants.STAT_KEYS.forEach(function (key) {
       save.pet.candyBoosts[key] = PSG.utils.math.clamp(Math.floor(Number(save.pet.candyBoosts[key]) || 0), 0, 10000);
     });
-    save.day.actionPoints = PSG.utils.math.clamp(Math.round(Number(save.day.actionPoints) || 0), 0, 5);
+    save.day.actionPoints = PSG.utils.math.clamp(
+      Math.round(Number(save.day.actionPoints) || 0),
+      0,
+      PSG.constants.actionPointsForLevel(save.pet.level)
+    );
     save.day.recentPlayIds = Array.isArray(save.day.recentPlayIds) ? save.day.recentPlayIds.slice(-2) : [];
     save.day.recentEventIds = Array.isArray(save.day.recentEventIds) ? save.day.recentEventIds.slice(-2) : [];
     save.day.rngCounter = Number(save.day.rngCounter) || 0;
@@ -62,9 +66,16 @@
         pendingAffectionEvents: [],
         defeatedRivals: [],
         championUnlocked: false,
+        bossWins: 0,
+        bossAttempts: 0,
         unlockedCosmetics: []
       },
       save.progression || {}
+    );
+    save.progression.bossWins = Math.max(0, Math.floor(Number(save.progression.bossWins) || 0));
+    save.progression.bossAttempts = Math.max(
+      save.progression.bossWins,
+      Math.floor(Number(save.progression.bossAttempts) || 0)
     );
     save.economy = Object.assign(
       {
@@ -84,9 +95,24 @@
     });
     save.ranking.battleHistory = Array.isArray(save.ranking.battleHistory) ? save.ranking.battleHistory.slice(-50) : [];
     save.stats = Object.assign(
-      { battles: 0, wins: 0, losses: 0, criticalHits: 0, dodges: 0, trainingGolds: 0, daysPlayed: 1 },
+      {
+        battles: 0,
+        wins: 0,
+        losses: 0,
+        bossChallenges: 0,
+        bossWins: 0,
+        criticalHits: 0,
+        dodges: 0,
+        trainingGolds: 0,
+        daysPlayed: 1
+      },
       save.stats || {}
     );
+    save.stats.battles = Math.max(0, Math.floor(Number(save.stats.battles) || 0));
+    save.stats.wins = Math.max(0, Math.floor(Number(save.stats.wins) || 0));
+    save.stats.losses = Math.max(0, Math.floor(Number(save.stats.losses) || 0));
+    save.stats.bossChallenges = Math.max(0, Math.floor(Number(save.stats.bossChallenges) || 0));
+    save.stats.bossWins = Math.max(0, Math.floor(Number(save.stats.bossWins) || 0));
     var maxHp = PSG.pet.stats.effective(save).hp;
     save.pet.currentHp = PSG.utils.math.clamp(Math.round(Number(save.pet.currentHp) || maxHp), 0, maxHp);
     return save;

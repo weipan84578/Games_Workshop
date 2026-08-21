@@ -1,11 +1,12 @@
 (function (PSG) {
   'use strict';
   PSG.audio.bgmTracks = {
-    menu: 'assets/audio/bgm/bgm_menu.wav',
-    home: 'assets/audio/bgm/bgm_home.wav',
-    training: 'assets/audio/bgm/bgm_training.wav',
-    outing: 'assets/audio/bgm/bgm_outing.wav',
-    battle: 'assets/audio/bgm/bgm_battle.wav',
-    champion: 'assets/audio/bgm/bgm_champion.wav'
+    menu: 'bgm/bgm_menu.mp3',
+    home: 'bgm/bgm_home.mp3',
+    training: 'bgm/bgm_training.mp3',
+    outing: 'bgm/bgm_outing.mp3',
+    battle: 'bgm/bgm_battle.mp3',
+    champion: 'bgm/bgm_champion.mp3',
+    bossbattle: 'bgm/bgm_bossbattle.mp3'
   };
 })(window.PSG);

@@ -89,7 +89,7 @@
     ];
     root.innerHTML =
       '<section class="scene">' +
-      PSG.ui.common.sceneHeader('?', t('help.title'), back) +
+      PSG.ui.common.sceneHeader('❓', t('help.title'), back) +
       '<div class="help-layout"><nav class="help-nav card" aria-label="' +
       t('help.title') +
       '">' +

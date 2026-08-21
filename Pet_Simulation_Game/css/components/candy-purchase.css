@@ -1,0 +1,9 @@
+.candy-purchase-quantity {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.75rem;
+}
+
+.candy-purchase-quantity .text-input {
+  max-width: 9rem;
+}

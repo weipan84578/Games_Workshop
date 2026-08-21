@@ -8,6 +8,18 @@
       rank = PSG.ranking.matchmaking.playerRank(save),
       playerBp = PSG.pet.stats.battlePower(save),
       rows = PSG.ranking.matchmaking.candidates(save);
+    var bossGate =
+      rank === 1
+        ? '<section class="card boss-gate"><div class="boss-gate__door" aria-hidden="true">🚪</div><div><span class="eyebrow">' +
+          t('ranking.bossGateTitle') +
+          '</span><h2>' +
+          t('boss.stage', { stage: PSG.battle.boss.winsFor(save) + 1 }) +
+          '</h2><p>' +
+          t('ranking.bossGateDescription') +
+          '</p></div><button class="button" type="button" data-scene="boss">' +
+          t('ranking.bossGateOpen') +
+          '</button></section>'
+        : '';
     root.innerHTML =
       '<section class="scene">' +
       PSG.ui.common.sceneHeader('🏆', t('ranking.title'), 'home') +
@@ -40,11 +52,15 @@
             species.image +
             '" alt="' +
             t(species.nameKey) +
-            '"><div style="min-width:0"><span class="eyebrow">' +
+            '"><div class="candidate-card__identity"><span class="eyebrow">' +
             (row.rank < rank ? t('ranking.higher') : t('ranking.lower')) +
             '</span><h3>' +
             d.escape(ai.name) +
-            '</h3></div></div><div class="candidate-card__meta"><strong>#' +
+            '</h3><span class="candidate-card__species">' +
+            species.icon +
+            ' ' +
+            t(species.nameKey) +
+            '</span></div></div><div class="candidate-card__meta"><strong>#' +
             row.rank +
             ' · LV ' +
             ai.level +
@@ -66,7 +82,9 @@
           );
         })
         .join('') +
-      '</div></section>';
+      '</div>' +
+      bossGate +
+      '</section>';
     d.all('[data-opponent]', root).forEach(function (button) {
       button.addEventListener('click', function () {
         var row = rows.filter(function (item) {

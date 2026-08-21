@@ -180,7 +180,7 @@
       d.bar(t('stat.energy'), save.pet.energy, 100, '⚡', 'energy') +
       d.bar(t('stat.mood'), save.pet.mood, 100, '☀', 'mood') +
       d.bar(t('stat.affection'), save.pet.affection, 100, '♥', 'bond') +
-      d.bar(t('stat.ap'), save.day.actionPoints, 5, '◆', 'primary') +
+      d.bar(t('stat.ap'), save.day.actionPoints, PSG.pet.daily.maxActionPoints(save), '◆', 'primary') +
       savingsPanel(save, t) +
       '</aside><section class="card action-panel"><div class="panel-title"><h3>' +
       t('home.day', { day: save.day.number }) +

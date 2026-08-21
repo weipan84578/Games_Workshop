@@ -181,6 +181,10 @@
     'shop.preview': 'Equip preview: BP {delta}',
     'shop.unlock': 'Reach best rank #{rank} to unlock',
     'shop.confirm': 'Buy {item} for {price} coins?',
+    'shop.confirmQuantity': 'Buy {quantity} × {item} for {price} coins?',
+    'shop.quantity': 'Quantity',
+    'shop.quantityHint': 'Buy up to {max} candies at once.',
+    'shop.invalidQuantity': 'Invalid purchase quantity.',
     'shop.full': 'Inventory limit is 99',
     'shop.notEnough': 'Not enough coins',
     'slot.armor': 'Armor',
@@ -217,7 +221,7 @@
     'help.faq': 'FAQ',
     'help.replayTutorial': 'Replay Tutorial',
     'help.quick.body':
-      'You have 5 AP each day. Train to grow, play to lift mood, explore, then spend 2 AP on a ranked duel. Daily coins are 4× the original reward.',
+      'Daily AP rises with your partner’s level: LV 1–30 gives 7, LV 31–50 gives 10, LV 51–75 gives 12, and LV 76–100 gives 15. Train to grow, play to lift mood, explore, then spend 2 AP on a ranked duel. Daily coins are 4× the original reward.',
     'help.stats.body':
       'HP takes damage. ATK/DEF power normal attacks; SPA/SPD power specials. MOB controls dodge and SPE controls turn order.',
     'help.battle.body':
@@ -259,7 +263,7 @@
       '{petName} leans closer. Familiar eyes no longer need words. A new chapter of your journey begins.',
     'affection.reward': 'Your bond reward has been added to the collection.',
     'day.summary':
-      'Rest complete! Day {day} begins with 5 AP, +{coins} daily coins (4× the original reward), and +{interest} interest coins added to your hand.',
+      'Rest complete! Day {day} begins with {ap} AP, +{coins} daily coins (4× the original reward), and +{interest} interest coins added to your hand.',
     'champion.title': 'Bond at the Summit',
     'champion.body':
       '{playerName} and {petName} stand together at rank #1. A true champion is never alone—it is the one who never let go along the way.',
@@ -278,8 +282,9 @@
     'play.crocodile.2': 'Stretch out in the warm sun',
     'tutorial.1.title': 'Read Your Partner’s Status',
     'tutorial.1.body': 'Stamina and mood shape each day; bond levels also boost battle stats.',
-    'tutorial.2.title': 'Five Action Points a Day',
-    'tutorial.2.body': 'Activities cost AP. Rest ends the day and restores your partner.',
+    'tutorial.2.title': 'Action Points Grow with Level',
+    'tutorial.2.body':
+      'Daily AP is 7, 10, 12, or 15 by level tier. Activities cost AP; rest ends the day and restores your partner.',
     'tutorial.3.title': 'Train Seven Stats',
     'tutorial.3.body': 'Short challenges grant regular XP and mastery XP for the chosen stat.',
     'tutorial.4.title': 'Manage Three Gear Slots',
@@ -290,7 +295,7 @@
       'Milestone rival: “Reaching me proves your bond is no accident. Show me everything you have!”',
     'ranking.milestoneDefeat':
       'The rival smiles: “This victory belongs to you both. Keep going—I will remember this duel.”',
-    'help.point.ap': 'A fixed 5 AP each day',
+    'help.point.ap': 'Daily AP: LV 1–30 = 7, LV 31–50 = 10, LV 51–75 = 12, LV 76–100 = 15',
     'help.point.loop': 'Train · Play · Explore',
     'help.point.duelCost': 'Ranked duels cost 2 AP',
     'help.point.mastery': 'Mastery LV 0–20, up to +10%',

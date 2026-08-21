@@ -99,9 +99,21 @@ check('all 54 item icons and three outing backdrops are local', () => {
 
 check('ability candy modules load in dependency-safe order', () => {
   const scripts = [...index.matchAll(/<script[^>]+src="([^"]+)"/g)].map((match) => match[1]);
+  const candy = fs.readFileSync(path.join(root, 'js/economy/abilityCandyManager.js'), 'utf8');
+  const shop = fs.readFileSync(path.join(root, 'js/ui/shopUI.js'), 'utf8');
   assert.ok(scripts.indexOf('js/data/abilityCandyData.js') > scripts.indexOf('js/data/speciesData.js'));
   assert.ok(scripts.indexOf('js/economy/abilityCandyManager.js') > scripts.indexOf('js/pet/statCalculator.js'));
+  assert.ok(scripts.indexOf('js/economy/experienceManager.js') > scripts.indexOf('js/pet/progression.js'));
+  assert.ok(scripts.indexOf('js/economy/experienceManager.js') < scripts.indexOf('js/economy/shopManager.js'));
   assert.ok(scripts.indexOf('js/ui/shopUI.js') > scripts.indexOf('js/economy/abilityCandyManager.js'));
+  assert.match(candy, /MAX_CANDY_PURCHASE\s*=\s*999/);
+  assert.match(candy, /function totalPriceFor\(save, itemOrId, quantityValue, festival\)/);
+  assert.match(shop, /id="candy-quantity"/);
+  assert.match(shop, /shop\.confirmQuantity/);
+  assert.match(shop, /data-buy-experience/);
+  assert.match(shop, /shop\.experienceType/);
+  assert.match(shop, /function experiencePreview\(plan\)/);
+  assert.match(shop, /experiencePreview\(plan\)/);
 });
 
 check('shop tiers and training effects include responsive and reduced-motion hooks', () => {
@@ -124,6 +136,10 @@ check('save slots, save-menu exits, persistent battle speed, and auto battle hoo
   assert.match(constants, /SAVE_SLOT_COUNT:\s*3/);
   assert.match(saveManager, /function list\(\)/);
   assert.match(menu, /data-slot-continue/);
+  assert.match(menu, /data-scene="instructions">❓/);
+  assert.match(menu, /data-scene="settings">⚙/);
+  const instructions = fs.readFileSync(path.join(root, 'js/ui/instructionsUI.js'), 'utf8');
+  assert.match(instructions, /sceneHeader\('❓'/);
   assert.match(common, /data-action="save-menu"/);
   assert.match(battle, /id="fast-battle"/);
   assert.match(battle, /battleFast/);
@@ -132,6 +148,54 @@ check('save slots, save-menu exits, persistent battle speed, and auto battle hoo
   assert.match(battle, /var exiting = false/);
   assert.match(battle, /if \(exiting\) return;/);
   assert.doesNotMatch(battle, /function next\(\) \{\s*if \(stopped\) return;/);
+});
+
+check('rank-one Boss gate loads safely and uses the endless battle rules', () => {
+  const scripts = [...index.matchAll(/<script[^>]+src="([^"]+)"/g)].map((match) => match[1]);
+  const constants = fs.readFileSync(path.join(root, 'js/core/constants.js'), 'utf8');
+  const boss = fs.readFileSync(path.join(root, 'js/battle/bossManager.js'), 'utf8');
+  const ranking = fs.readFileSync(path.join(root, 'js/ui/rankingUI.js'), 'utf8');
+  const bossUi = fs.readFileSync(path.join(root, 'js/ui/bossUI.js'), 'utf8');
+  const battle = fs.readFileSync(path.join(root, 'js/battle/battleEngine.js'), 'utf8');
+  const playlist = fs.readFileSync(path.join(root, 'js/audio/bgmPlaylist.js'), 'utf8');
+  const scenes = fs.readFileSync(path.join(root, 'js/core/sceneManager.js'), 'utf8');
+  const battleUi = fs.readFileSync(path.join(root, 'js/ui/battleUI.js'), 'utf8');
+  assert.ok(scripts.indexOf('js/i18n/bossLocales.js') > scripts.indexOf('js/i18n/featureLocales.js'));
+  assert.ok(scripts.indexOf('js/battle/bossManager.js') > scripts.indexOf('js/battle/battleAI.js'));
+  assert.ok(scripts.indexOf('js/battle/bossManager.js') < scripts.indexOf('js/battle/battleEngine.js'));
+  assert.ok(scripts.indexOf('js/ui/bossUI.js') > scripts.indexOf('js/ui/rankingUI.js'));
+  assert.match(index, /css\/components\/boss\.css/);
+  assert.match(constants, /BOSS_BATTLE_ROUNDS:\s*80/);
+  assert.match(boss, /CANDY_DROP_RATE\s*=\s*0\.01/);
+  assert.match(boss, /id:\s*'grassland'/);
+  assert.match(boss, /id:\s*'swamp'/);
+  assert.match(boss, /id:\s*'sky'/);
+  assert.match(ranking, /data-scene="boss"/);
+  assert.match(bossUi, /data-boss-species/);
+  assert.match(bossUi, /bossBattle/);
+  assert.match(battle, /PSG\.battle\.boss\.arenaTick/);
+  assert.match(battle, /state\.maxRounds/);
+  assert.match(playlist, /bossbattle:\s*'bgm\/bgm_bossbattle\.mp3'/);
+  assert.match(scenes, /payload && payload\.bossChallenge \? 'bossbattle' : 'battle'/);
+  assert.match(battleUi, /result\.boss && result\.won/);
+});
+
+check('level-scaled daily AP and AP-free Boss battles are wired', () => {
+  const constants = fs.readFileSync(path.join(root, 'js/core/constants.js'), 'utf8');
+  const daily = fs.readFileSync(path.join(root, 'js/pet/dailyActions.js'), 'utf8');
+  const saveManager = fs.readFileSync(path.join(root, 'js/storage/saveManager.js'), 'utf8');
+  const common = fs.readFileSync(path.join(root, 'js/ui/commonUI.js'), 'utf8');
+  const home = fs.readFileSync(path.join(root, 'js/ui/homeUI.js'), 'utf8');
+  assert.match(constants, /maxLevel:\s*30,\s*ap:\s*7/);
+  assert.match(constants, /maxLevel:\s*50,\s*ap:\s*10/);
+  assert.match(constants, /maxLevel:\s*75,\s*ap:\s*12/);
+  assert.match(constants, /maxLevel:\s*100,\s*ap:\s*15/);
+  assert.match(constants, /bossBattle:\s*\{\s*ap:\s*0/);
+  assert.match(daily, /function maxActionPoints\(saveOrLevel\)/);
+  assert.match(daily, /actionPoints: save\.day\.actionPoints/);
+  assert.match(saveManager, /actionPointsForLevel\(save\.pet\.level\)/);
+  assert.match(common, /maxActionPoints\(save\)/);
+  assert.match(home, /maxActionPoints\(save\)/);
 });
 
 check('savings account is loaded, repaired, and connected to rest settlement', () => {
@@ -182,10 +246,22 @@ check('Candy Festival messaging and daily coin boost are wired into the UI and e
 
 check('toast notifications overlap in one fixed bottom-right slot', () => {
   const toast = fs.readFileSync(path.join(root, 'css/components/toasts.css'), 'utf8');
+  const common = fs.readFileSync(path.join(root, 'js/ui/commonUI.js'), 'utf8');
   assert.match(toast, /position:\s*fixed/);
   assert.match(toast, /grid-area:\s*1\s*\/\s*1/);
   assert.match(toast, /\.toast \+ \.toast/);
   assert.match(toast, /height:\s*4\.4rem/);
+  assert.match(common, /function formatToastMessage\(message\)/);
+  assert.match(common, /replace\(\/\\d\{4,\}\/g/);
+});
+
+check('ranking candidates visibly label every rival species', () => {
+  const ranking = fs.readFileSync(path.join(root, 'js/ui/rankingUI.js'), 'utf8');
+  const scenes = fs.readFileSync(path.join(root, 'css/layout/scenes.css'), 'utf8');
+  assert.match(ranking, /candidate-card__species/);
+  assert.match(ranking, /species\.icon/);
+  assert.match(ranking, /t\(species\.nameKey\)/);
+  assert.match(scenes, /\.candidate-card__species/);
 });
 
 check('the project README is complete, trilingual, local, and internally linked', () => {
@@ -238,4 +314,4 @@ function walk(directory) {
     );
 }
 
-process.stdout.write(`\n${passed}/19 static checks passed.\n`);
+process.stdout.write(`\n${passed}/22 static checks passed.\n`);

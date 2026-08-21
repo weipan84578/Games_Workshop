@@ -27,8 +27,11 @@
       PSG.storage.save.write(save);
       return { ok: true };
     },
-    purchaseCandy: function (save, itemId, candyFestival) {
-      return PSG.economy.candy.purchase(save, itemId, candyFestival);
+    purchaseCandy: function (save, itemId, candyFestival, quantity) {
+      return PSG.economy.candy.purchase(save, itemId, candyFestival, quantity);
+    },
+    purchaseExperience: function (save, candyFestival, quantity) {
+      return PSG.economy.experience.purchase(save, quantity, candyFestival);
     }
   };
 })(window.PSG);

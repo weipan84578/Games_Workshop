@@ -81,20 +81,23 @@ There is no pet death or destructive game-over state. A defeat still grants redu
 
 - 🦅 **Three distinct partners:** the mobile Giant Eagle, explosive Lion, and defensive Crocodile each have unique growth and special-attack behavior.
 - 📊 **Seven battle stats:** HP, Attack, Defense, Mobility, Special Attack, Special Defense, and Speed.
-- ☀️ **A five-AP daily loop:** train, play, explore, duel, or rest to begin a new day.
+- ☀️ **Level-scaled daily AP:** the daily cap is 7 AP through LV 30, 10 through LV 50, 12 through LV 75, and 15 through LV 100.
 - 💰 **Boosted daily settlement:** the daily coin reward is four times the original amount, equivalent to a +300% increase.
 - 🏦 **Savings account:** deposit or withdraw coins from the home screen; each rest pays `floor(savedBalance × 0.01)` directly into available coins while preserving the saved principal.
 - 💬 **Varied mood dialogue:** each mood state has four localized lines, with a seeded daily pick that stays stable while the home screen rerenders.
 - 🎯 **Three training mini-games:** rhythm timing, hold-and-release endurance, and moving-target agility with ratings, combos, particles, pause protection, and reduced-motion support.
 - 🌳 **Three outing locations and 24 weighted events:** park, forest, and river encounters provide XP, affection, coins, or battle items.
-- ⚔️ **Turn-based duels:** normal and special attacks, energy, dodge, critical hits, shields, initiative, species effects, and a 20-round tiebreak.
+- ⚔️ **Turn-based duels:** normal and special attacks, energy, dodge, critical hits, shields, initiative, species effects, and a 20-round ranked tiebreak.
 - 🎛️ **Battle convenience controls:** accelerated battle playback stays enabled by default and persists; Auto Battle repeats normal attacks and releases specials at 100 energy.
 - 🏆 **A deterministic 1,000-entry ranking:** one player, 999 seeded AI opponents, 12 fixed milestone rivals, and five BP-near candidates per refresh.
-- 🛍️ **A three-part shop:** 36 permanent equipment pieces, 18 one-battle consumables, and seven permanent Ability Candies arranged through six arena tiers.
-- 🍬 **Scaling permanent growth:** HP Candy grants +3; the other six candies grant +1 and become more expensive as intrinsic stats and pet level rise. A deterministic Candy Festival occasionally halves the current price.
+- 🚪 **An endless Boss Gate at rank #1:** choose Lion, Crocodile, or Eagle bosses whose stats grow forever; random Grassland, Swamp, and Sky arenas apply species immunity and 3% max-HP damage each round across an 80-round battle.
+- 🎁 **Endless Boss rewards:** victories pay large coin and XP rewards while XP is available, plus a deterministic 1% chance at a random Ability Candy.
+- 🛍️ **A four-category shop:** 36 permanent equipment pieces, 18 one-battle consumables, seven permanent Ability Candies, and XP supplies.
+- 🍬 **Scaling permanent growth:** HP Candy grants +3; the other six candies grant +1 and become more expensive as intrinsic stats and pet level rise. Buy up to 999 candies at once, with batch totals following each candy’s escalating price. A deterministic Candy Festival occasionally halves the current price.
+- ✨ **XP supplies:** buy 100 XP packs in batches up to 999; the per-pack price rises with level but caps at 400 coins, and Candy Festival cuts it by 40%.
 - 🌐 **Three complete locales:** Taiwan Traditional Chinese, English, and Japanese.
 - 🎨 **Five visual themes:** Candy Garden, Ocean Sky, Verdant Forest, Sunset Arena, and Moonlit Night.
-- 🎵 **Local audiovisual package:** three partner portraits, 54 item SVGs, three outing backdrops, six BGM loops, and 22 sound effects.
+- 🎵 **Local audiovisual package:** three partner portraits, 54 item SVGs, three outing backdrops, seven BGM tracks, and 22 sound effects. Menu, home, training, outing, ranked battle, Boss battle, and champion moments each have their own track.
 - 💾 **Three local save slots:** save and return to the main menu at any time, keep three partners independent, and resume gameplay with preferences preserved.
 
 <a id="en-gameplay"></a>
@@ -125,7 +128,7 @@ Natural stats follow `round(base + growth × (level - 1))`. Mastery scales the g
 
 ```mermaid
 flowchart LR
-    Start[☀️ Start day<br>5 AP] --> Choose{Choose an activity}
+    Start[☀️ Start day<br>AP by level] --> Choose{Choose an activity}
     Choose --> Train[🎯 Train<br>Mastery + XP]
     Choose --> Play[🎾 Play<br>Mood + Bond + XP]
     Choose --> Outing[🌳 Outing<br>Event + Reward]
@@ -135,7 +138,7 @@ flowchart LR
     Outing --> Choose
     Duel --> Choose
     Choose --> Rest[🌙 Rest]
-    Rest --> Next[Next day<br>Energy +50 · Mood +10 · AP 5]
+    Rest --> Next[Next day<br>Energy +50 · Mood +10 · AP by level]
     Next --> Choose
 ```
 
@@ -145,7 +148,7 @@ flowchart LR
 | Play | 1 AP, at least 10 Energy | Energy −10, Mood +20, Affection +5 before mood scaling, plus XP |
 | Outing | 1 AP, at least 15 Energy | Energy −15, Mood +15, Affection +4 before mood scaling, plus a weighted event reward |
 | Ranked duel | 2 AP, at least 30 Energy and 20 Mood | Energy −25; a win gives Mood +8 and Affection +2, a loss gives Mood −8 and Affection +1 |
-| Rest | Ends the current day | Energy +50, Mood +10, restores 5 AP and full battle HP on the next day |
+| Rest | Ends the current day | Energy +50, Mood +10, restores the level-based AP cap and full battle HP on the next day |
 
 Mood changes activity rewards: below 30 uses ×0.75, 30–69 uses ×1.00, and 70–100 uses ×1.10. Affection unlocks story scenes at 20, 40, 60, 80, and 100 and gives effective-stat bonuses of +1%, +2%, +3%, and finally +5% at 100.
 
@@ -167,6 +170,10 @@ Scores of 85+ earn Gold, 60–84 earn Silver, and lower scores earn Bronze. Trai
 4. Speed decides initiative. Damage uses level, move power, attacking and defending stats, ±5% variance, and a ×1.75 critical multiplier.
 5. A knockout ends the duel. At round 20, the engine compares HP ratio, effective damage, initial Speed, then a seeded 50/50 roll.
 6. Defeating a higher-ranked opponent swaps positions. Losing never lowers rank. Reaching rank 1 triggers the champion scene.
+
+#### Enter the endless Boss Gate
+
+After reaching rank #1, open the Boss Gate from the ranking screen and choose a Lion, Crocodile, or Eagle Boss. Boss battles consume no AP, so they can be attempted repeatedly; each attempt still checks 25 Energy and 20 Mood. The arena is seeded per attempt, Boss stats grow endlessly after each clear, and the battle lasts up to 80 rounds. A Boss victory plays the champion BGM and grants large coins, available XP, and a deterministic 1% random Ability Candy chance.
 
 #### Use the shop and permanent growth
 
@@ -227,7 +234,7 @@ flowchart TD
     Domain --> Save[storage/saveManager.js<br>repair · validate · autosave]
     Save --> Local[(localStorage)]
     Domain --> UI
-    Audio[audio<br>local WAV + Web Audio safety chain] --> UI
+    Audio[audio<br>local MP3 BGM + WAV SFX] --> UI
     I18n[i18n<br>zh-Hant · en · ja] --> UI
 ```
 
@@ -237,7 +244,7 @@ Key runtime characteristics:
 - **Rendering:** DOM-based scene renderers; no framework or virtual DOM.
 - **State:** one in-memory save mirrored to `psg.save.v1`; independent settings use `psg.settings.v1`.
 - **Determinism:** seeded RNG drives AI identity, ranking composition, candidates, outings, play scenes, and battle resolution where applicable.
-- **Audio:** local WAV assets through Web Audio; BGM uses two alternating channels for a 600 ms crossfade and a compressor after the required 10× pre-gain.
+- **Audio:** seven local MP3 BGM tracks and local WAV SFX use two alternating BGM channels for a 600 ms crossfade; Web Audio adds the required 10× BGM pre-gain and compressor when supported, with a direct HTML-audio path for `file://` launches. Boss battles use `bgm_bossbattle.mp3`, and Boss victories switch to `bgm_champion.mp3`.
 - **Offline contract:** relative local paths only; no `fetch`, remote URL, dynamic import, package runtime, or backend.
 
 <a id="en-code-organization"></a>
@@ -253,12 +260,12 @@ Key runtime characteristics:
 | `js/data/` | Declarative species, equipment, consumable, candy, rival, and event catalogs | `speciesData.js`, `abilityCandyData.js`, `rivalData.js` |
 | `js/pet/` | Stats, XP, mastery, affection, daily costs, play, and outings | `statCalculator.js`, `progression.js`, `dailyActions.js` |
 | `js/training/` | Mini-game scoring and training settlement | `trainingManager.js`, `strengthGame.js`, `agilityGame.js` |
-| `js/battle/` | Damage, AI choices, temporary effects, round resolution, rewards | `damageCalculator.js`, `battleEngine.js` |
+| `js/battle/` | Damage, AI choices, temporary effects, ranked and endless Boss round resolution, rewards | `damageCalculator.js`, `bossManager.js`, `battleEngine.js` |
 | `js/ranking/` | Seeded 1,000-entry ladder, BP-near matching, rank swaps | `rankingGenerator.js`, `matchmaking.js` |
 | `js/economy/` | Equipment, inventory, shop purchase rules, Ability Candy pricing | `equipmentManager.js`, `abilityCandyManager.js` |
 | `js/storage/`, `js/i18n/`, `js/audio/` | Save repair, three-language dictionaries, local music and SFX | `saveManager.js`, `featureLocales.js`, `audioManager.js` |
 | `js/ui/` | Menu, onboarding, home, activity, battle, shop, help, and settings scenes | `trainingUI.js`, `shopUI.js`, `settingsUI.js` |
-| `assets/` | Local portraits, SVG art, BGM, and SFX | `images/pets/`, `images/equipment/`, `audio/` |
+| `assets/` and `bgm/` | Local portraits, SVG art, seven BGM tracks, and SFX | `images/pets/`, `images/equipment/`, `audio/`, `bgm/` |
 | `tests/`, `tools/` | Deterministic Node tests and asset-generation utilities | `unit.test.js`, `static.test.js`, `generate-audio.js` |
 | `.agents/skills/` | Project-specific Codex workflows | `pet-simulation-feature-workflow/`, `safe-browser-validation/` |
 
@@ -268,7 +275,7 @@ Key runtime characteristics:
 
 - 🌐 **Localization:** `zh-Hant`, `en`, and `ja` dictionaries cover scenes, events, equipment, candy, tutorials, and settings. Unit tests enforce key parity.
 - 💾 **Persistence:** every meaningful activity autosaves. Repair logic clamps invalid ranges, supplies optional fields for older saves, validates the 1,000-entry ranking, and preserves corrupted raw data under a timestamped backup key when possible.
-- 🎵 **Audio safety:** volume controls cover master, BGM, SFX, and mute. Browser gesture unlocking is respected, one-shot nodes disconnect after playback, and BGM pre-gain feeds a dynamics compressor.
+- 🎵 **Audio safety:** volume controls cover master, BGM, SFX, and mute. Browser gesture unlocking is respected, one-shot nodes disconnect after playback, and BGM pre-gain feeds a dynamics compressor. The playlist uses `bgm_menu.mp3` for menu/onboarding/instructions, `bgm_home.mp3` for home/ranking/shop/in-game settings, `bgm_training.mp3` for training, `bgm_outing.mp3` for outings, `bgm_battle.mp3` for ranked battles, `bgm_bossbattle.mp3` for Boss battles, and `bgm_champion.mp3` for the rank-1 ending or a Boss victory.
 - ♿ **Accessibility:** semantic buttons and dialog behavior, focus restoration, focus trapping, a skip link, keyboard-capable training controls, 48px minimum touch targets, text scaling at 100%/115%/130%, and standard/fast/reduced motion modes.
 - 📱 **Responsive layout:** dedicated mobile, tablet, desktop, and landscape styles use safe-area insets and adapt menus, battles, settings, shops, and training fields.
 - 🎨 **Themes:** appearance changes only CSS tokens, so the same interface and contrast structure remain across all five themes.
@@ -278,7 +285,7 @@ Key runtime characteristics:
 
 ### 🧪 Testing
 
-The current implementation was verified with **53/53 unit tests** and **19/19 static checks**, plus JavaScript syntax and whitespace validation.
+The current implementation was verified with **61/61 unit tests** and **22/22 static checks**, plus JavaScript syntax and whitespace validation.
 
 Run from the project root:
 
@@ -289,16 +296,16 @@ $files = rg --files js tests tools -g '*.js'; foreach ($file in $files) { node -
 git diff --check
 ```
 
-The unit suite covers stat formulas, progression overflow and caps, mood and affection thresholds, seeded mood dialogue variants, training grades, deterministic rankings, candidates, battle resolution, equipment, candy pricing and persistence, savings deposits and withdrawals, rest interest, save repair, localization parity, and local audio assets. Static checks cover direct-open script structure, relative asset existence, offline restrictions, responsive/theme requirements, touch targets, local art, README structure, reduced-motion hooks, savings wiring, home notice placement, and trailing whitespace.
+The unit suite covers stat formulas, progression overflow and caps, level-scaled AP boundaries, mood and affection thresholds, seeded mood dialogue variants, training grades, deterministic rankings, candidates, ranked and endless Boss battle resolution, AP-free Boss entry, arena immunity and damage, Boss growth and rewards, equipment, candy pricing, batch candy purchases, XP shop pricing and level-ups, savings deposits and withdrawals, rest interest, save repair, localization parity, and local audio assets. Static checks cover direct-open script structure, relative asset existence, offline restrictions, responsive/theme requirements, touch targets, local art, README structure, reduced-motion hooks, savings wiring, home notice placement, batch candy controls, XP shop wiring, rank-one Boss loading, Boss BGM routing, level-scaled AP wiring, and trailing whitespace.
 
-Browser interaction is intentionally left to a short manual pass when no approved integrated browser is available: open `index.html`, start or continue a save, try all three training templates, browse shop categories and tiers, buy a candy when affordable, switch language/theme/motion settings, and reload to confirm persistence.
+Browser interaction is intentionally left to a short manual pass when no approved integrated browser is available: open `index.html`, start or continue a save, try all three training templates, browse shop categories and tiers, buy a candy when affordable, reach rank #1 to inspect the Boss Gate, switch language/theme/motion settings, and reload to confirm persistence.
 
 <a id="en-status"></a>
 
 ### 📌 Status and Limitations
 
 - The core single-player journey from onboarding to rank-1 champion is implemented.
-- The project has one local save slot and no cloud synchronization, login, multiplayer, server, analytics, ads, or external service dependency.
+- The project has three independent local save slots and no cloud synchronization, login, multiplayer, server, analytics, ads, or external service dependency.
 - Browser storage is path- and browser-dependent; clearing it removes the active save unless the browser retains a backup entry created after a read error.
 - Audio cannot start before a user gesture because the game follows browser autoplay rules.
 - Automated browser driving through PowerShell CDP/WebSocket methods is prohibited by the project safety workflow; deterministic tests and manual browser checks are the supported fallback.
@@ -324,20 +331,23 @@ Browser interaction is intentionally left to a short manual pass when no approve
 
 - 🦅 **個性の異なる3体の相棒：** 機動型のオオワシ、爆発力のあるライオン、防御型のワニは、成長傾向と特殊攻撃の効果が異なります。
 - 📊 **7つの戦闘能力：** HP、攻撃、防御、機動、特殊攻撃、特殊防御、素早さ。
-- ☀️ **毎日5 APの行動ループ：** 訓練、遊ぶ、おでかけ、決闘、または休息で次の日へ進みます。
+- ☀️ **レベル連動の毎日AP：** LV 30までは7 AP、LV 31～50は10、LV 51～75は12、LV 76～100は15です。
 - 💰 **強化されたデイリー報酬：** デイリーコインは元の4倍、つまり+300%増加します。
 - 🏦 **貯金口座：** ホーム画面からコインを預け入れ・引き出しでき、休息ごとに `floor(預金残高 × 0.01)` が利息として手持ちコインに加算され、預金元本は維持されます。
 - 💬 **気分に合わせた会話：** 各気分に4種類のローカライズ台詞があり、固定シードで選ばれたその日の台詞がホーム画面の再描画後も安定して表示されます。
 - 🎯 **3種類の訓練ミニゲーム：** リズム、ホールド＆リリース、移動ターゲットを使い、評価、コンボ、パーティクル、一時停止保護、動きを減らす設定に対応します。
 - 🌳 **3つのおでかけ先と24イベント：** 公園、森、河岸の重み付きイベントで経験値、親密度、コイン、バトルアイテムを獲得します。
-- ⚔️ **ターン制決闘：** 通常・特殊攻撃、エネルギー、回避、クリティカル、シールド、行動順、種族効果、20ラウンド判定を実装しています。
+- ⚔️ **ターン制決闘：** 通常・特殊攻撃、エネルギー、回避、クリティカル、シールド、行動順、種族効果、通常戦の20ラウンド判定を実装しています。
 - 🎛️ **決闘の便利機能：** 高速再生は初期オンで設定を保存し、オートバトルは通常攻撃を繰り返してエネルギー100で特殊攻撃を使います。
 - 🏆 **固定シードの1,000人ランキング：** プレイヤー1人、AI 999人、固定位置の節目ライバル12人、BPが近い候補5人で構成されます。
-- 🛍️ **3分類ショップ：** 6つのアリーナ段階に、永久装備36個、1試合用消耗品18種、永久成長用の能力キャンディ7種があります。
-- 🍬 **価格が成長する永久強化：** HPキャンディは+3、ほか6種は+1。基礎能力とペットLVが高いほど次の価格が上がり、決定的なキャンディフェスティバルでは現在価格が半額になります。
+- 🚪 **1位で開く無限ボスの門：** 獅子・鰐・鷲のボスを選べ、能力は無限に上昇します。草原・沼地・空中の闘技場が毎回変わり、種族免疫と毎ラウンド最大HP3%ダメージを80ラウンド戦で適用します。
+- 🎁 **無限ボス報酬：** 勝利すると大量のコインと、最大レベル未満なら経験値を獲得し、決定的な1%の確率でランダムな能力キャンディも落とします。
+- 🛍️ **4分類ショップ：** 6つのアリーナ段階に、永久装備36個、1試合用消耗品18種、永久成長用の能力キャンディ7種、経験値補給があります。
+- 🍬 **価格が成長する永久強化：** HPキャンディは+3、ほか6種は+1。基礎能力とペットLVが高いほど価格が上がり、一度に最大999個を購入できます。まとめ買いの合計は各キャンディの上昇価格を順番に計算し、決定的なキャンディフェスティバルでは現在価格が半額になります。
+- ✨ **経験値補給：** 1セット100経験値を最大999セットまでまとめて購入でき、セット価格はレベルに応じて上がりますが400コインで上限になります。キャンディフェスティバル中は40%オフです。
 - 🌐 **3言語を完全収録：** 台湾繁體中文、English、日本語。
 - 🎨 **5つのテーマ：** キャンディガーデン、オーシャンスカイ、翠影の森、夕焼けアリーナ、星月夜。
-- 🎵 **ローカル素材一式：** 相棒画像3枚、アイテムSVG 54個、おでかけ背景3枚、BGM 6曲、効果音22種。
+- 🎵 **ローカル素材一式：** 相棒画像3枚、アイテムSVG 54個、おでかけ背景3枚、BGM 7曲、効果音22種。メニュー、ホーム、訓練、おでかけ、通常決闘、ボス戦、チャンピオン演出にそれぞれ専用曲があります。
 - 💾 **3つのローカルセーブ枠：** いつでも保存してメインメニューへ戻り、3体の相棒を独立して育成できます。ゲームと設定はローカルに保存されます。
 
 <a id="ja-gameplay"></a>
@@ -368,7 +378,7 @@ Browser interaction is intentionally left to a short manual pass when no approve
 
 ```mermaid
 flowchart LR
-    Start[☀️ 一日の開始<br>5 AP] --> Choose{行動を選ぶ}
+    Start[☀️ 一日の開始<br>レベル別AP] --> Choose{行動を選ぶ}
     Choose --> Train[🎯 訓練<br>熟練 + 経験値]
     Choose --> Play[🎾 遊ぶ<br>気分 + 絆 + 経験値]
     Choose --> Outing[🌳 おでかけ<br>イベント + 報酬]
@@ -378,7 +388,7 @@ flowchart LR
     Outing --> Choose
     Duel --> Choose
     Choose --> Rest[🌙 休む]
-    Rest --> Next[次の日<br>体力 +50 · 気分 +10 · AP 5]
+    Rest --> Next[次の日<br>体力 +50 · 気分 +10 · レベル別AP]
     Next --> Choose
 ```
 
@@ -388,7 +398,7 @@ flowchart LR
 | 遊ぶ | 1 AP、体力10以上 | 体力−10、気分+20、気分倍率適用前の親密度+5、さらに経験値 |
 | おでかけ | 1 AP、体力15以上 | 体力−15、気分+15、気分倍率適用前の親密度+4、さらに重み付きイベント報酬 |
 | ランク決闘 | 2 AP、体力30以上、気分20以上 | 体力−25。勝利で気分+8・親密度+2、敗北で気分−8・親密度+1 |
-| 休む | 現在の日を終了 | 次の日に体力+50、気分+10、APを5へ、戦闘HPを全回復 |
+| 休む | 現在の日を終了 | 次の日に体力+50、気分+10、レベルに応じたAPへ、戦闘HPを全回復 |
 
 気分による報酬倍率は30未満で×0.75、30～69で×1.00、70～100で×1.10です。親密度20、40、60、80、100で物語イベントが解放され、有効能力は順に+1%、+2%、+3%、最終的に100で+5%になります。
 
@@ -410,6 +420,10 @@ flowchart LR
 4. 素早さで先攻を決めます。ダメージはレベル、技威力、攻撃・防御能力、±5%の乱数、クリティカル時×1.75で計算します。
 5. HPが0になると終了します。20ラウンド到達時はHP比率、有効ダメージ、初期素早さ、固定シードの50/50判定の順に勝者を決めます。
 6. 上位の相手に勝つと順位を交換し、負けても順位は下がりません。1位になるとチャンピオン演出が始まります。
+
+#### 無限ボスの門に挑戦する
+
+ランキング1位になるとランキング画面からボスの門を開き、ライオン・ワニ・オオワシのボスを選べます。ボス戦はAPを消費しないため何度でも挑戦でき、各挑戦には体力25と気分20が必要です。闘技場は挑戦ごとに固定シードで決まり、撃破するたびにボス能力が無限に上昇します。最大80ラウンドで決着し、勝利時はチャンピオンBGM、大量コイン、取得可能な経験値、決定的な1%の能力キャンディ抽選を得ます。
 
 #### ショップと永久成長を使う
 
@@ -470,7 +484,7 @@ flowchart TD
     Domain --> Save[storage/saveManager.js<br>修復 · 検証 · 自動保存]
     Save --> Local[(localStorage)]
     Domain --> UI
-    Audio[audio<br>ローカルWAV + Web Audio安全チェーン] --> UI
+    Audio[audio<br>ローカルMP3 BGM + WAV効果音] --> UI
     I18n[i18n<br>zh-Hant · en · ja] --> UI
 ```
 
@@ -480,7 +494,7 @@ flowchart TD
 - **描画：** DOMベースのシーンレンダラーで、フレームワークや仮想DOMは使用しません。
 - **状態：** メモリ上の単一セーブを `psg.save.v1` へ同期し、設定は別の `psg.settings.v1` に保存します。
 - **決定性：** 固定シードRNGをAI名、ランキング構成、候補、おでかけ、遊び、必要な戦闘判定に使用します。
-- **音声：** ローカルWAVとWeb Audioを使用し、BGMは2チャンネル交互再生で600 msクロスフェードし、必須の10倍プリゲイン後にコンプレッサーを通します。
+- **音声：** ローカルMP3のBGM 7曲とWAV効果音を使用します。BGMは2チャンネル交互再生で600 msクロスフェードし、対応環境では10倍プリゲイン後にコンプレッサーを通し、`file://` では直接HTML音声へ切り替えます。ボス戦は `bgm_bossbattle.mp3`、ボス勝利は `bgm_champion.mp3` を再生します。
 - **オフライン契約：** 相対ローカルパスのみを使い、`fetch`、外部URL、動的import、パッケージ実行環境、バックエンドはありません。
 
 <a id="ja-code-organization"></a>
@@ -496,12 +510,12 @@ flowchart TD
 | `js/data/` | 種族、装備、消耗品、キャンディ、ライバル、イベント定義 | `speciesData.js`, `abilityCandyData.js`, `rivalData.js` |
 | `js/pet/` | 能力、経験値、熟練、親密度、日常コスト、遊び、おでかけ | `statCalculator.js`, `progression.js`, `dailyActions.js` |
 | `js/training/` | ミニゲーム採点と訓練精算 | `trainingManager.js`, `strengthGame.js`, `agilityGame.js` |
-| `js/battle/` | ダメージ、AI判断、一時効果、ラウンド解決、報酬 | `damageCalculator.js`, `battleEngine.js` |
+| `js/battle/` | ダメージ、AI判断、一時効果、通常・無限ボスのラウンド解決、報酬 | `damageCalculator.js`, `bossManager.js`, `battleEngine.js` |
 | `js/ranking/` | 固定シード1,000人表、BP近似配対、順位交換 | `rankingGenerator.js`, `matchmaking.js` |
 | `js/economy/` | 装備、所持品、購入規則、能力キャンディ価格 | `equipmentManager.js`, `abilityCandyManager.js` |
 | `js/storage/`, `js/i18n/`, `js/audio/` | セーブ修復、3言語辞書、ローカルBGM・効果音 | `saveManager.js`, `featureLocales.js`, `audioManager.js` |
 | `js/ui/` | メニュー、導入、ホーム、活動、戦闘、ショップ、説明、設定画面 | `trainingUI.js`, `shopUI.js`, `settingsUI.js` |
-| `assets/` | ローカル画像、SVG、BGM、効果音 | `images/pets/`, `images/equipment/`, `audio/` |
+| `assets/` と `bgm/` | ローカル画像、SVG、BGM 7曲、効果音 | `images/pets/`, `images/equipment/`, `audio/`, `bgm/` |
 | `tests/`, `tools/` | 決定的Nodeテストと素材生成ツール | `unit.test.js`, `static.test.js`, `generate-audio.js` |
 | `.agents/skills/` | プロジェクト専用Codexワークフロー | `pet-simulation-feature-workflow/`, `safe-browser-validation/` |
 
@@ -511,7 +525,7 @@ flowchart TD
 
 - 🌐 **多言語：** `zh-Hant`、`en`、`ja` の辞書が画面、イベント、装備、キャンディ、チュートリアル、設定を網羅し、ユニットテストでキー一致を確認します。
 - 💾 **永続化：** 重要な行動ごとに自動保存します。修復処理は不正範囲を制限し、旧セーブへ新しい任意項目を補い、1,000件ランキングを検証し、読込エラー時には可能なら元データを時刻付きバックアップキーへ残します。
-- 🎵 **音声安全：** マスター、BGM、効果音、ミュートを設定できます。ブラウザの操作解禁を守り、単発ノードを再生後に切断し、BGMプリゲインをダイナミクスコンプレッサーへ接続します。
+- 🎵 **音声安全：** マスター、BGM、効果音、ミュートを設定できます。ブラウザの操作解禁を守り、単発ノードを再生後に切断し、BGMプリゲインをダイナミクスコンプレッサーへ接続します。`bgm_menu.mp3` はメニュー・導入・説明、`bgm_home.mp3` はホーム・ランキング・ショップ・ゲーム内設定、`bgm_training.mp3` は訓練、`bgm_outing.mp3` はおでかけ、`bgm_battle.mp3` は通常決闘、`bgm_bossbattle.mp3` はボス戦、`bgm_champion.mp3` は1位の結末またはボス勝利で使用します。
 - ♿ **アクセシビリティ：** 意味のあるボタンとダイアログ、フォーカス復元・トラップ、スキップリンク、キーボード訓練、最小48pxタッチ領域、100%/115%/130%文字倍率、標準・高速・動きを減らすモードを備えます。
 - 📱 **レスポンシブ：** モバイル、タブレット、デスクトップ、横向き専用CSSがセーフエリアに対応し、メニュー、戦闘、設定、ショップ、訓練を再配置します。
 - 🎨 **テーマ：** 外観はCSSトークンのみを切り替え、5テーマで同じ情報構造とコントラスト設計を維持します。
@@ -521,7 +535,7 @@ flowchart TD
 
 ### 🧪 テスト
 
-現在の実装は、**ユニットテスト53/53件**、**静的検証19/19件**、全JavaScript構文検査、空白検査を通過しています。
+現在の実装は、**ユニットテスト61/61件**、**静的検証22/22件**、全JavaScript構文検査、空白検査を通過しています。
 
 プロジェクトルートで実行します。
 
@@ -532,7 +546,7 @@ $files = rg --files js tests tools -g '*.js'; foreach ($file in $files) { node -
 git diff --check
 ```
 
-ユニットテストは能力計算、成長の繰り越しと上限、気分・親密度境界、固定種子の気分対話、訓練評価、決定的ランキング、候補選出、戦闘解決、装備、キャンディ価格と永続化、貯金の預け入れ・引き出し、休息時の利息、セーブ修復、多言語キー一致、ローカル音声を確認します。静的検証は直接起動のスクリプト構造、相対素材の存在、オフライン制約、レスポンシブ・テーマ要件、タッチ領域、ローカル画像、README構造、動きを減らす設定、貯金機能の接続、ホーム通知位置、末尾空白を確認します。
+ユニットテストは、能力計算、成長の繰り越しと上限、レベル連動APの境界、気分・親密度の境界、固定シードの気分会話、訓練評価、再現可能なランキング、候補相手、通常戦と無限ボス戦、APを消費しないボス入場、闘技場の免疫・ダメージ、ボス成長と報酬、装備、キャンディ価格、大量キャンディ購入、経験値ショップの価格とレベルアップ、貯金の預け入れ・引き出し、休息時の利息、セーブ修復、言語キーの一致、ローカル音声を確認します。静的検証は、直接起動用のスクリプト構造、相対素材の存在、オフライン制約、レスポンシブ／テーマ要件、タッチ領域、ローカルアート、README構造、低モーション設定のフック、貯金機能の接続、ホーム通知の位置、大量購入操作、経験値ショップと1位ボス門、ボスBGM、レベル連動APの接続、末尾空白を確認します。
 
 承認済みの統合ブラウザがない場合、ブラウザ操作は短い手動確認を使います。`index.html` を開き、新規または継続セーブ、3種類の訓練、ショップ分類と段階、購入可能時のキャンディ、言語・テーマ・動き設定、再読み込み後の永続化を確認してください。
 
@@ -541,7 +555,7 @@ git diff --check
 ### 📌 状況と制限
 
 - 導入からランキング1位のチャンピオンまで、シングルプレイの主要進行は実装済みです。
-- ローカルセーブは1枠で、クラウド同期、ログイン、マルチプレイ、サーバー、分析、広告、外部サービス依存はありません。
+- ローカルセーブは独立した3枠で、クラウド同期、ログイン、マルチプレイ、サーバー、分析、広告、外部サービス依存はありません。
 - ブラウザ保存はパスとブラウザに依存し、データ消去後は、読込エラー時に作られたバックアップがブラウザに残っていない限り復元できません。
 - ブラウザの自動再生規則に従うため、ユーザー操作前に音声は開始できません。
 - プロジェクト安全手順によりPowerShell経由のCDP/WebSocket自動操作は禁止され、決定的テストと手動ブラウザ確認が代替手段です。
@@ -567,7 +581,7 @@ git diff --check
 
 - 🦅 **三種定位鮮明的夥伴：** 高機動巨鷹、爆發型獅子與防守型鱷魚，各自擁有不同成長與特殊攻擊效果。
 - 📊 **七項戰鬥能力：** HP、攻擊、防禦、機動、特殊攻擊、特殊防禦與速度。
-- ☀️ **每日五點 AP 循環：** 可選擇訓練、玩耍、外出、決鬥，或休息並進入下一天。
+- ☀️ **隨等級提升的每日 AP：** LV 30 以下每日 7 AP、LV 31–50 為 10、LV 51–75 為 12、LV 76–100 為 15。
 - 💰 **強化每日結算：** 每日獲得的金幣是原本的 4 倍，也就是增加 300%。
 - 🏦 **存款帳戶：** 可在主頁設定存入或領出的金額；每次休息會將 `floor(存款餘額 × 0.01)` 的利息直接加入手上金幣，存款本金維持不變。
 - 💬 **多變的心情對話：** 每種心情都有四句三語系台詞，依固定種子每日抽選，重新繪製主頁時仍會維持一致。
@@ -576,11 +590,14 @@ git diff --check
 - ⚔️ **回合制決鬥：** 一般與特殊攻擊、能量、迴避、爆擊、護盾、先手、種族效果及 20 回合判定。
 - 🎛️ **決鬥便利功能：** 加速播放預設開啟且會持續保存；自動戰鬥會重複一般攻擊，能量達 100 時自動施放特殊攻擊。
 - 🏆 **可重現的千名排行榜：** 玩家 1 名、固定種子 AI 999 名、12 名固定里程碑強敵，每次提供 5 名 BP 接近候選。
-- 🛍️ **三分類商店：** 六個競技階級中共有 36 件永久裝備、18 種單場消耗品及 7 種永久能力糖果。
-- 🍬 **價格隨成長調整的永久強化：** HP 糖果 +3，其餘六種 +1；先天能力與寵物 LV 越高，下一顆越昂貴，偶爾遇到糖果節時當日目前價格再打五折。
+- 🚪 **第一名開啟無限 Boss 門：** 可選擇獅子、鱷魚或鷹 Boss，能力值會無限提升；草原、沼澤與空中場地每次隨機，套用種族免疫及每回合最大 HP 3% 傷害，Boss 戰延長為 80 回合。
+- 🎁 **無限 Boss 獎勵：** 勝利後獲得大量金幣；未滿等時獲得經驗，並有固定 1% 機率掉落隨機能力糖果。
+- 🛍️ **四分類商店：** 包含 36 件永久裝備、18 種單場消耗品、7 種永久能力糖果，以及經驗補給。
+- 🍬 **價格隨成長調整的永久強化：** HP 糖果 +3，其餘六種 +1；先天能力與寵物 LV 越高，價格越昂貴，一次最多可購買 999 顆，總價會依每顆逐步上升的價格計算；偶爾遇到糖果節時當日目前價格再打五折。
+- ✨ **經驗補給：** 每組提供 100 經驗，可一次購買最多 999 組；單組價格會隨等級上升但封頂 400 金幣，糖果節期間打 6 折（折扣 40%）。
 - 🌐 **三種完整語系：** 臺灣繁體中文、English、日本語。
 - 🎨 **五套視覺主題：** 糖果樂園、海洋晴空、翠影森林、夕陽競技與星夜月光。
-- 🎵 **完整本機影音：** 三張夥伴圖像、54 個道具 SVG、三張外出背景、六首 BGM 及 22 種音效。
+- 🎵 **完整本機影音：** 三張夥伴圖像、54 個道具 SVG、三張外出背景、七首 BGM 及 22 種音效；主畫面、主頁、訓練、外出、一般戰鬥、Boss 戰與冠軍時刻各有專屬曲目。
 - 💾 **三個本機存檔格：** 可隨時存檔並回到主畫面，獨立培養三位夥伴；遊戲與偏好設定都保存在本機。
 
 <a id="zh-gameplay"></a>
@@ -611,7 +628,7 @@ git diff --check
 
 ```mermaid
 flowchart LR
-    Start[☀️ 一天開始<br>5 AP] --> Choose{選擇活動}
+    Start[☀️ 一天開始<br>依等級決定 AP] --> Choose{選擇活動}
     Choose --> Train[🎯 訓練<br>熟練 + 經驗]
     Choose --> Play[🎾 玩耍<br>心情 + 羈絆 + 經驗]
     Choose --> Outing[🌳 外出<br>事件 + 獎勵]
@@ -621,7 +638,7 @@ flowchart LR
     Outing --> Choose
     Duel --> Choose
     Choose --> Rest[🌙 休息]
-    Rest --> Next[下一天<br>體力 +50 · 心情 +10 · AP 5]
+    Rest --> Next[下一天<br>體力 +50 · 心情 +10 · 依等級恢復 AP]
     Next --> Choose
 ```
 
@@ -631,7 +648,7 @@ flowchart LR
 | 玩耍 | 1 AP、至少10體力 | 體力−10、心情+20、套用心情倍率前親密度+5，另有經驗 |
 | 外出 | 1 AP、至少15體力 | 體力−15、心情+15、套用心情倍率前親密度+4，另有加權事件獎勵 |
 | 排名決鬥 | 2 AP、至少30體力且心情20以上 | 體力−25；勝利時心情+8、親密度+2，落敗時心情−8、親密度+1 |
-| 休息 | 結束當天 | 下一天體力+50、心情+10、AP恢復5點、戰鬥HP全滿 |
+| 休息 | 結束當天 | 下一天體力+50、心情+10、AP依等級恢復、戰鬥HP全滿 |
 
 心情低於 30 時活動獎勵為 ×0.75，30～69 為 ×1.00，70～100 為 ×1.10。親密度達 20、40、60、80、100 時會解鎖故事事件；有效能力依序獲得 +1%、+2%、+3%，最後在 100 時提升至 +5%。
 
@@ -653,6 +670,10 @@ flowchart LR
 4. 速度決定先手。傷害依等級、招式威力、攻防能力、±5%浮動及爆擊 ×1.75 計算。
 5. 任一方 HP 歸零即結束；到第20回合時，依序比較 HP 比例、有效傷害、初始速度，最後才以固定種子50/50決勝。
 6. 擊敗高位對手即可交換名次，戰敗不會掉排名；登上第1名後會觸發冠軍演出。
+
+#### 進入無限 Boss 門
+
+登上排行榜第 1 名後，可從排行榜開啟 Boss 門，選擇獅子、鱷魚或鷹 Boss。Boss 戰不消耗 AP，因此可以反覆挑戰；每次仍需要 25 點體力與 20 點心情。場地會依每次挑戰的固定種子決定，Boss 每次通關後能力值無限成長，並在最多 80 回合內分出勝負。打贏 Boss 會播放冠軍 BGM，並獲得大量金幣、可取得的經驗，以及固定種子的 1% 隨機能力糖果抽獎機會。
 
 #### 使用商店與永久成長
 
@@ -713,7 +734,7 @@ flowchart TD
     Domain --> Save[storage/saveManager.js<br>修復 · 驗證 · 自動存檔]
     Save --> Local[(localStorage)]
     Domain --> UI
-    Audio[audio<br>本機WAV + Web Audio安全鏈] --> UI
+    Audio[audio<br>本機MP3 BGM + WAV音效] --> UI
     I18n[i18n<br>zh-Hant · en · ja] --> UI
 ```
 
@@ -723,7 +744,7 @@ flowchart TD
 - **畫面：** 使用 DOM 場景 renderer，不依賴前端框架或虛擬 DOM。
 - **狀態：** 單一記憶體存檔同步至 `psg.save.v1`；獨立設定使用 `psg.settings.v1`。
 - **可重現性：** AI 身分、排行榜組成、候選對手、外出、玩耍及相關戰鬥判定皆使用固定種子 RNG。
-- **音訊：** 使用本機 WAV 與 Web Audio；BGM 以兩個交替聲道完成 600 ms 淡入淡出，必要的 10 倍前級增益後方設有壓縮器。
+- **音訊：** 使用七首本機 MP3 BGM 與本機 WAV 音效；BGM 以兩個交替聲道完成 600 ms 淡入淡出，支援時套用必要的 10 倍前級增益與壓縮器，直接以 `file://` 開啟時則使用 HTML 音訊備援。Boss 戰播放 `bgm_bossbattle.mp3`，打贏 Boss 後切換 `bgm_champion.mp3`。
 - **離線契約：** 僅使用相對本機路徑，不含 `fetch`、外部 URL、動態 import、套件執行環境或後端。
 
 <a id="zh-code-organization"></a>
@@ -739,12 +760,12 @@ flowchart TD
 | `js/data/` | 物種、裝備、消耗品、糖果、對手與事件目錄 | `speciesData.js`, `abilityCandyData.js`, `rivalData.js` |
 | `js/pet/` | 能力、經驗、熟練、親密、每日成本、玩耍與外出 | `statCalculator.js`, `progression.js`, `dailyActions.js` |
 | `js/training/` | 小遊戲計分與訓練結算 | `trainingManager.js`, `strengthGame.js`, `agilityGame.js` |
-| `js/battle/` | 傷害、AI 決策、暫時效果、回合處理與獎勵 | `damageCalculator.js`, `battleEngine.js` |
+| `js/battle/` | 傷害、AI 決策、暫時效果、一般與無限 Boss 回合處理及獎勵 | `damageCalculator.js`, `bossManager.js`, `battleEngine.js` |
 | `js/ranking/` | 固定種子千名榜、相近 BP 配對、排名交換 | `rankingGenerator.js`, `matchmaking.js` |
 | `js/economy/` | 裝備、背包、商店購買規則、能力糖果定價 | `equipmentManager.js`, `abilityCandyManager.js` |
 | `js/storage/`, `js/i18n/`, `js/audio/` | 存檔修復、三語字典、本機音樂與音效 | `saveManager.js`, `featureLocales.js`, `audioManager.js` |
 | `js/ui/` | 選單、引導、培養、活動、戰鬥、商店、說明與設定場景 | `trainingUI.js`, `shopUI.js`, `settingsUI.js` |
-| `assets/` | 本機夥伴圖片、SVG、BGM 與音效 | `images/pets/`, `images/equipment/`, `audio/` |
+| `assets/` 與 `bgm/` | 本機夥伴圖片、SVG、七首 BGM 與音效 | `images/pets/`, `images/equipment/`, `audio/`, `bgm/` |
 | `tests/`, `tools/` | 可重現 Node 測試與素材生成工具 | `unit.test.js`, `static.test.js`, `generate-audio.js` |
 | `.agents/skills/` | 專案專用 Codex 工作流程 | `pet-simulation-feature-workflow/`, `safe-browser-validation/` |
 
@@ -754,7 +775,7 @@ flowchart TD
 
 - 🌐 **多國語系：** `zh-Hant`、`en`、`ja` 字典涵蓋場景、事件、裝備、糖果、教學與設定，並由單元測試強制檢查鍵值一致。
 - 💾 **資料持久化：** 每項重要活動都會自動存檔。修復邏輯會限制異常數值、替舊存檔補上新選填欄位、驗證千名排行榜，讀檔錯誤時則盡可能把原始資料放入含時間戳記的備份鍵。
-- 🎵 **音訊安全：** 可調整主音量、BGM、音效與靜音；遵守瀏覽器互動解鎖規則，單次音效播放後會斷開節點，BGM 前級增益後方也有動態壓縮器。
+- 🎵 **音訊安全：** 可調整主音量、BGM、音效與靜音；遵守瀏覽器互動解鎖規則，單次音效播放後會斷開節點，BGM 前級增益後方也有動態壓縮器。`bgm_menu.mp3` 用於主畫面／新手教學／說明頁，`bgm_home.mp3` 用於遊戲主頁／排行榜／商店／遊戲內設定，`bgm_training.mp3` 用於訓練，`bgm_outing.mp3` 用於外出，`bgm_battle.mp3` 用於一般排行榜戰鬥，`bgm_bossbattle.mp3` 用於 Boss 戰，`bgm_champion.mp3` 用於第一名冠軍結局或打贏 Boss。
 - ♿ **無障礙：** 語意化按鈕與 dialog、焦點復原與陷阱、跳至內容連結、可用鍵盤操作的訓練、至少 48px 觸控區、100%／115%／130% 文字縮放，以及標準／快速／降低動態效果模式。
 - 📱 **響應式設計：** 手機、平板、桌面與橫向專用 CSS 支援安全區，並調整選單、戰鬥、設定、商店與訓練場地排版。
 - 🎨 **主題：** 僅切換 CSS token，因此五套主題都會維持相同資訊結構與對比設計。
@@ -764,7 +785,7 @@ flowchart TD
 
 ### 🧪 測試
 
-目前實作已通過 **53/53 項單元測試**、**19/19 項靜態檢查**、全部 JavaScript 語法檢查及空白驗證。
+目前實作已通過 **61/61 項單元測試**、**22/22 項靜態檢查**、全部 JavaScript 語法檢查及空白驗證。
 
 請在專案根目錄執行：
 
@@ -775,7 +796,7 @@ $files = rg --files js tests tools -g '*.js'; foreach ($file in $files) { node -
 git diff --check
 ```
 
-單元測試涵蓋能力公式、成長溢位與上限、心情及親密度門檻、固定種子的心情對話、訓練評級、可重現排行榜、候選對手、戰鬥結算、裝備、糖果定價與持久化、存款存入與領出、休息利息、存檔修復、語系鍵值一致及本機音訊。靜態檢查涵蓋直接開啟的 script 結構、相對素材存在性、離線限制、響應式與主題要求、觸控尺寸、本機美術、README 結構、降低動態效果掛鉤、存款功能串接、主頁通知位置及尾端空白。
+單元測試涵蓋能力公式、成長溢位與上限、依等級提升的 AP 邊界、心情及親密度門檻、固定種子的心情對話、訓練評級、可重現排行榜、候選對手、一般戰鬥與無限 Boss 戰、Boss 不消耗 AP 的進場規則、場地免疫與傷害、Boss 成長與獎勵、裝備、糖果定價、糖果大量購買與持久化、存款存入與領出、休息利息、存檔修復、語系鍵值一致及本機音訊。靜態檢查涵蓋直接開啟的 script 結構、相對素材存在性、離線限制、響應式與主題要求、觸控尺寸、本機美術、README 結構、降低動態效果掛鉤、存款功能串接、主頁通知位置、大量購買操作、經驗商店、第一名 Boss 門、Boss BGM、依等級提升 AP 串接及尾端空白。
 
 若沒有經核准的整合式瀏覽器，可進行簡短人工驗證：開啟 `index.html`、開始或繼續存檔、遊玩三種訓練、瀏覽商店分類與階級、金幣足夠時購買糖果、切換語言／主題／動態設定，最後重新整理確認資料仍存在。
 
@@ -784,7 +805,7 @@ git diff --check
 ### 📌 狀態與限制
 
 - 從新手引導到排行榜第 1 名冠軍結局的單人核心流程已完整實作。
-- 專案只有一個本機存檔欄位，不包含雲端同步、登入、多人連線、伺服器、分析、廣告或外部服務依賴。
+- 專案提供三個彼此獨立的本機存檔格，不包含雲端同步、登入、多人連線、伺服器、分析、廣告或外部服務依賴。
 - 瀏覽器儲存與檔案路徑、瀏覽器本身相關；清除資料後，除非瀏覽器仍保留讀檔錯誤時建立的備份，否則無法恢復目前存檔。
 - 因遵循瀏覽器自動播放規則，使用者尚未互動前不會開始播放音訊。
 - 專案安全流程禁止透過 PowerShell CDP／WebSocket 自動操作瀏覽器；可重現測試與人工瀏覽器檢查是支援的替代方案。
@@ -803,5 +824,19 @@ Raise one partner at your own pace, learn how every stat and decision connects, 
 ### 🇹🇼 繁體中文
 
 依照自己的步調培養唯一夥伴，理解每項能力與決策如何彼此連動，並在沒有線上服務阻隔的情況下持續攀登。這份專案既適合想直接開啟冒險的玩家，也適合希望在可重現、具測試保障的模組上繼續擴充的開發者。
+
+## 🙏 BGM Credits
+
+### 🇬🇧 English
+
+Special thanks to ChatGPT for providing the BGM prompts, and to Suno for providing the music.
+
+### 🇯🇵 日本語
+
+BGMのプロンプトを提供してくれたChatGPTと、音楽を提供してくれたSunoに特別な感謝を捧げます。
+
+### 🇹🇼 繁體中文
+
+特別感謝 ChatGPT 提供 BGM Prompt，Suno 提供音樂。
 
 [⬆️ Back to top](#top)

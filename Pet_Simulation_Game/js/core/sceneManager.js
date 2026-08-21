@@ -30,10 +30,11 @@
       training: 'training',
       outing: 'outing',
       ranking: 'home',
+      boss: 'home',
       shop: 'home',
       instructions: 'menu',
       settings: previous === 'menu' ? 'menu' : 'home',
-      battle: 'battle'
+      battle: payload && payload.bossChallenge ? 'bossbattle' : 'battle'
     };
     if (PSG.audio.manager) PSG.audio.manager.play(tracks[name] || 'home');
   }

@@ -52,7 +52,9 @@
       PSG.utils.formatter.number(save.player.coins) +
       '</span><span class="topbar__pill">⚡ ' +
       save.day.actionPoints +
-      ' / 5 AP</span><span class="topbar__pill">🏆 #' +
+      ' / ' +
+      PSG.pet.daily.maxActionPoints(save) +
+      ' AP</span><span class="topbar__pill">🏆 #' +
       PSG.ranking.matchmaking.playerRank(save) +
       '</span></div><div class="topbar__actions"><button class="button button--small button--ghost" type="button" data-action="save-menu">💾 ' +
       t('menu.saveAndMenu') +
@@ -84,10 +86,15 @@
     if (dialog && dialog.open) dialog.close();
     if (lastFocus && document.contains(lastFocus)) lastFocus.focus();
   }
+  function formatToastMessage(message) {
+    return String(message).replace(/\d{4,}/g, function (value) {
+      return PSG.utils.formatter.number(Number(value));
+    });
+  }
   function toast(message, tone) {
     var node = document.createElement('div');
     node.className = 'toast toast--' + (tone || 'info');
-    node.textContent = message;
+    node.textContent = formatToastMessage(message);
     document.getElementById('toast-region').appendChild(node);
     window.setTimeout(function () {
       node.remove();
@@ -95,7 +102,14 @@
   }
   function completeDay(save) {
     var result = PSG.pet.daily.nextDay(save);
-    toast(t('day.summary', { day: result.day, coins: result.coins, interest: result.interest }));
+    toast(
+      t('day.summary', {
+        day: result.day,
+        coins: result.coins,
+        interest: result.interest,
+        ap: result.actionPoints
+      })
+    );
     return result;
   }
   function actionReason(save, action) {

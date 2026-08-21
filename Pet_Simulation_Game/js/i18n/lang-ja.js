@@ -179,6 +179,10 @@
     'shop.preview': '装備プレビュー：BP {delta}',
     'shop.unlock': '最高順位 {rank}位で解放',
     'shop.confirm': '{item}を{price}コインで購入しますか？',
+    'shop.confirmQuantity': '{item}を{quantity}個、{price}コインで購入しますか？',
+    'shop.quantity': '購入数',
+    'shop.quantityHint': '一度に最大{max}個まで購入できます。',
+    'shop.invalidQuantity': '購入数が無効です。',
     'shop.full': '所持上限は99個です',
     'shop.notEnough': 'コインが足りません',
     'slot.armor': '防具',
@@ -215,7 +219,7 @@
     'help.faq': 'よくある質問',
     'help.replayTutorial': 'チュートリアルをもう一度見る',
     'help.quick.body':
-      '毎日5 AP。訓練で成長し、遊んで気分を回復し、おでかけを楽しみ、準備ができたら2 APでランキングに挑戦します。デイリーコインは元の4倍です。',
+      'APは相棒のレベルで増えます。LV 1～30は7、LV 31～50は10、LV 51～75は12、LV 76～100は15です。訓練で成長し、遊んで気分を回復し、おでかけを楽しみ、準備ができたら2 APでランキングに挑戦します。デイリーコインは元の4倍です。',
     'help.stats.body': 'HPはダメージ、ATK/DEFは通常攻撃、SPA/SPDは特殊攻撃、MOBは回避、SPEは行動順に関係します。',
     'help.battle.body':
       'ダメージはレベル・威力・攻防比で計算し、変動は±5%のみ。通常攻撃で30エネルギー、100で特殊攻撃が使えます。オートバトルは通常攻撃を繰り返し、満タンで特殊攻撃を使います。',
@@ -254,7 +258,7 @@
     'affection.story': '{petName}がそっと近づきます。もう言葉がなくても分かり合える眼差し。旅は新しい章へ進みます。',
     'affection.reward': '絆の報酬をコレクションに追加しました。',
     'day.summary':
-      '休息完了！ {day}日目、APが5に回復し、元の4倍のデイリー報酬{coins}コインと預金利息{interest}コインが手持ちに加算されました。',
+      '休息完了！ {day}日目、APが{ap}に回復し、元の4倍のデイリー報酬{coins}コインと預金利息{interest}コインが手持ちに加算されました。',
     'champion.title': '頂点の絆',
     'champion.body':
       '{playerName}と{petName}は並んで1位に立ちました。本当の王者とは、一人で勝つ者ではなく、最後まで互いの手を離さなかった者です。',
@@ -273,8 +277,9 @@
     'play.crocodile.2': '暖かな日差しの下でゆったり伸びる',
     'tutorial.1.title': '相棒の状態を知ろう',
     'tutorial.1.body': '体力と気分は毎日の行動に影響し、親密度はバトル能力を高めます。',
-    'tutorial.2.title': '毎日5ポイントのAP',
-    'tutorial.2.body': '活動にはAPが必要です。休むと一日が終わり、状態が回復します。',
+    'tutorial.2.title': 'レベルで増えるアクションポイント',
+    'tutorial.2.body':
+      '毎日のAPはレベル帯に応じて7・10・12・15になります。活動にはAPが必要で、休むと一日が終わり状態が回復します。',
     'tutorial.3.title': '7つの能力を訓練',
     'tutorial.3.body': 'ミニゲームで通常経験値と選んだ能力の熟練経験値を獲得します。',
     'tutorial.4.title': '3枠の装備を調整',
@@ -283,7 +288,7 @@
     'tutorial.5.body': '実力の近い5人に挑み、上位に勝つと順位を交換します。',
     'ranking.milestoneIntro': '節目の強敵：「ここまで来たなら、その絆は偶然ではない。全力を見せてくれ！」',
     'ranking.milestoneDefeat': '相手は笑顔でうなずく。「この勝利は二人のものだ。進み続けろ。今日の決闘は忘れない」',
-    'help.point.ap': '毎日固定5 AP',
+    'help.point.ap': '毎日のAP：LV 1～30＝7、LV 31～50＝10、LV 51～75＝12、LV 76～100＝15',
     'help.point.loop': '訓練・遊ぶ・おでかけ',
     'help.point.duelCost': 'ランキング決闘は2 AP',
     'help.point.mastery': '熟練LV 0～20、最大+10%',

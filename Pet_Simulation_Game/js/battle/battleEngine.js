@@ -19,7 +19,18 @@
     };
   }
 
-  function create(save, ai, consumableId, seed) {
+  function create(save, ai, consumableId, seed, options) {
+    options = options || {};
+    var mode = options.mode || (ai && ai.boss ? 'boss' : 'ranking');
+    var bossChallenge = options.bossChallenge || null;
+    var arena = options.arena || null;
+    var maxRounds =
+      options.maxRounds || (mode === 'boss' ? PSG.constants.BOSS_BATTLE_ROUNDS : PSG.constants.MAX_BATTLE_ROUNDS);
+    var battleSeed =
+      seed ||
+      (mode === 'boss'
+        ? PSG.utils.seedFrom(save.ranking.rankingSeed, 'boss-battle', bossChallenge && bossChallenge.attempt)
+        : PSG.utils.seedFrom(save.ranking.rankingSeed, ai.id, save.stats.battles));
     // Effective stats are snapshotted once; later UI/state changes cannot alter an active duel.
     var playerStats = PSG.pet.stats.effective(save);
     var player = combatant(
@@ -50,7 +61,7 @@
       save: save,
       opponent: ai,
       consumableId: consumableId || null,
-      rng: new PSG.utils.RNG(seed || PSG.utils.seedFrom(save.ranking.rankingSeed, ai.id, save.stats.battles)),
+      rng: new PSG.utils.RNG(battleSeed),
       player: player,
       enemy: enemy,
       round: 0,
@@ -58,17 +69,26 @@
       winnerId: null,
       logs: [],
       reason: null,
-      started: false
+      started: false,
+      mode: mode,
+      arena: arena,
+      maxRounds: maxRounds,
+      bossChallenge: bossChallenge
     };
   }
 
   function start(state) {
     if (state.started) return { ok: true };
-    var check = PSG.pet.daily.can(state.save, 'battle');
+    var actionName = state.mode === 'boss' ? 'bossBattle' : 'battle';
+    var check = PSG.pet.daily.can(state.save, actionName);
     if (!check.ok) return check;
     if (state.consumableId && PSG.economy.inventory.count(state.save, state.consumableId) <= 0)
       return { ok: false, reason: 'consumable' };
-    PSG.pet.daily.beginBattle(state.save);
+    if (state.mode === 'boss') {
+      var bossStart = PSG.battle.boss.begin(state.save, state.bossChallenge);
+      if (!bossStart.ok) return bossStart;
+    }
+    PSG.pet.daily.beginBattle(state.save, actionName);
     if (state.consumableId) PSG.economy.inventory.consume(state.save, state.consumableId);
     state.started = true;
     PSG.storage.save.write(state.save);
@@ -79,8 +99,12 @@
     if (!state.started || state.settled || state.cancelled) return { ok: false, reason: 'notActive' };
     var save = state.save;
     // An unfinished duel has no outcome, so return its entry costs and item.
-    save.day.actionPoints = Math.min(5, save.day.actionPoints + PSG.constants.ACTIONS.battle.ap);
-    save.pet.energy = PSG.utils.math.clamp(save.pet.energy - PSG.constants.ACTIONS.battle.energy, 0, 100);
+    var action = PSG.constants.ACTIONS[state.mode === 'boss' ? 'bossBattle' : 'battle'];
+    save.day.actionPoints = Math.min(
+      PSG.constants.actionPointsForLevel(save.pet.level),
+      save.day.actionPoints + (action.ap || 0)
+    );
+    save.pet.energy = PSG.utils.math.clamp(save.pet.energy - action.energy, 0, 100);
     if (state.consumableId)
       save.economy.consumables[state.consumableId] = (save.economy.consumables[state.consumableId] || 0) + 1;
     state.cancelled = true;
@@ -205,7 +229,17 @@
         break;
       }
     }
-    if (!state.ended && state.round >= PSG.constants.MAX_BATTLE_ROUNDS) {
+    if (!state.ended && state.arena) {
+      events = events.concat(PSG.battle.boss.arenaTick(state));
+      var playerDown = state.player.hp <= 0;
+      var enemyDown = state.enemy.hp <= 0;
+      if (playerDown || enemyDown) {
+        state.ended = true;
+        state.winnerId = playerDown && enemyDown ? decideTurnLimit(state) : playerDown ? state.enemy.id : 'player';
+        state.reason = 'arena';
+      }
+    }
+    if (!state.ended && state.round >= state.maxRounds) {
       state.ended = true;
       state.winnerId = decideTurnLimit(state);
       state.reason = 'turnLimit';
@@ -213,8 +247,59 @@
     return { ok: true, events: events, ended: state.ended, winnerId: state.winnerId, reason: state.reason };
   }
 
+  function settleBoss(state) {
+    if (!state.ended || state.settled) return null;
+    var save = state.save;
+    var won = state.winnerId === 'player';
+    var rank = PSG.ranking.matchmaking.playerRank(save);
+    var reward = PSG.battle.boss.settle(save, state.bossChallenge, won);
+    PSG.pet.daily.finishBattle(save, won);
+    save.stats.battles += 1;
+    save.stats[won ? 'wins' : 'losses'] += 1;
+    save.stats.bossChallenges = (save.stats.bossChallenges || 0) + 1;
+    if (won) save.stats.bossWins = (save.stats.bossWins || 0) + 1;
+    save.stats.criticalHits += state.logs.filter(function (log) {
+      return log.attacker === 'player' && log.critical;
+    }).length;
+    save.stats.dodges += state.logs.filter(function (log) {
+      return log.defender === 'player' && log.dodged;
+    }).length;
+    save.ranking.battleHistory.push({
+      time: new Date().toISOString(),
+      opponentId: state.opponent.id,
+      bossStage: reward.stage,
+      arenaId: state.arena && state.arena.id,
+      playerRankBefore: rank,
+      opponentRankBefore: null,
+      result: won ? 'boss-win' : 'boss-loss',
+      rounds: state.round,
+      consumableId: state.consumableId,
+      xp: reward.xp.gained,
+      coins: reward.coins,
+      rankAfter: rank
+    });
+    save.ranking.battleHistory = save.ranking.battleHistory.slice(-50);
+    PSG.ranking.matchmaking.refresh(save);
+    save.pet.currentHp = PSG.pet.stats.effective(save).hp;
+    state.settled = {
+      won: won,
+      boss: true,
+      stage: reward.stage,
+      arena: state.arena,
+      xp: reward.xp,
+      coins: reward.coins,
+      candy: reward.candy,
+      rank: { changed: false, before: rank, after: rank, champion: false },
+      champion: false,
+      firstMilestone: false
+    };
+    PSG.storage.save.write(save);
+    return state.settled;
+  }
+
   function settle(state) {
     if (!state.ended || state.settled) return null;
+    if (state.mode === 'boss') return settleBoss(state);
     var save = state.save;
     var won = state.winnerId === 'player';
     var playerBp = PSG.pet.stats.battlePower(save);

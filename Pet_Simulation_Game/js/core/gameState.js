@@ -28,13 +28,21 @@
         mastery: masteryDefaults(),
         candyBoosts: {}
       },
-      day: { number: 1, actionPoints: 5, recentPlayIds: [], recentEventIds: [], rngCounter: 0 },
+      day: {
+        number: 1,
+        actionPoints: PSG.constants.actionPointsForLevel(1),
+        recentPlayIds: [],
+        recentEventIds: [],
+        rngCounter: 0
+      },
       progression: {
         tutorialCompleted: false,
         viewedAffectionEvents: [],
         pendingAffectionEvents: [],
         defeatedRivals: [],
         championUnlocked: false,
+        bossWins: 0,
+        bossAttempts: 0,
         unlockedCosmetics: []
       },
       economy: {
@@ -44,7 +52,17 @@
         savings: { balance: 0 }
       },
       ranking: { rankingSeed: (seed || Date.now()) >>> 0, rankOrder: [], candidateIds: [], battleHistory: [] },
-      stats: { battles: 0, wins: 0, losses: 0, criticalHits: 0, dodges: 0, trainingGolds: 0, daysPlayed: 1 }
+      stats: {
+        battles: 0,
+        wins: 0,
+        losses: 0,
+        bossChallenges: 0,
+        bossWins: 0,
+        criticalHits: 0,
+        dodges: 0,
+        trainingGolds: 0,
+        daysPlayed: 1
+      }
     };
     save.ranking.rankOrder = PSG.ranking.generator.createRankOrder(save.ranking.rankingSeed);
     PSG.ranking.matchmaking.refresh(save);

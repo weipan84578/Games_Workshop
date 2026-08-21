@@ -7,11 +7,25 @@
     var save = PSG.core.gameState.get();
     if (!save || !data.opponent) return PSG.core.scenes.go('ranking');
 
-    var state = PSG.battle.engine.create(save, data.opponent, data.consumableId);
+    var bossChallenge = data.bossChallenge || null;
+    var state = PSG.battle.engine.create(
+      save,
+      data.opponent,
+      data.consumableId,
+      null,
+      bossChallenge
+        ? {
+            mode: 'boss',
+            arena: bossChallenge.arena,
+            maxRounds: PSG.constants.BOSS_BATTLE_ROUNDS,
+            bossChallenge: bossChallenge
+          }
+        : {}
+    );
     var started = PSG.battle.engine.start(state);
     if (!started.ok) {
-      PSG.ui.common.toast(PSG.ui.common.actionReason(save, 'battle'), 'error');
-      return PSG.core.scenes.go('ranking');
+      PSG.ui.common.toast(PSG.ui.common.actionReason(save, bossChallenge ? 'bossBattle' : 'battle'), 'error');
+      return PSG.core.scenes.go(bossChallenge ? 'boss' : 'ranking');
     }
 
     var stopped = false;
@@ -22,6 +36,17 @@
 
     function logHtml(log) {
       var t = PSG.i18n.t;
+      if (log.type === 'arena') {
+        var arenaTarget = log.defender === 'player' ? state.player : state.enemy;
+        return (
+          '🌪️ ' +
+          t('boss.log.arena', {
+            target: d.escape(arenaTarget.name),
+            arena: t('boss.arena.' + log.arenaId),
+            damage: log.damage
+          })
+        );
+      }
       var attacker = log.attacker === 'player' ? state.player : state.enemy;
       var defender = log.defender === 'player' ? state.player : state.enemy;
       if (log.dodged)
@@ -67,13 +92,16 @@
 
     function paint() {
       var t = PSG.i18n.t;
+      var bossBattle = state.mode === 'boss';
       var playerSpecies = PSG.data.species[state.player.speciesId];
       var enemySpecies = PSG.data.species[state.enemy.speciesId];
       root.innerHTML =
         '<section class="scene battle-layout"><header class="scene-header"><div class="scene-header__title"><img src="assets/images/ui/logo-mark.svg" alt=""><div><span class="eyebrow">' +
-        t('battle.title') +
+        t(bossBattle ? 'boss.battleTitle' : 'battle.title') +
         '</span><h2 id="round-label">' +
-        t('battle.round', { round: Math.max(1, state.round + (state.round ? 0 : 1)) }) +
+        t(bossBattle ? 'boss.round' : 'battle.round', {
+          round: Math.max(1, state.round + (state.round ? 0 : 1))
+        }) +
         '</h2></div></div><div class="scene-actions"><label class="tag"><input id="fast-battle" type="checkbox" ' +
         (fastEnabled() ? 'checked' : '') +
         '> ' +
@@ -87,8 +115,12 @@
         '</button></div></header><div class="battle-arena">' +
         fighterHtml(state.player, playerSpecies, false) +
         '<div class="versus"><span>' +
-        t('battle.round', { round: Math.max(1, state.round) }) +
-        '</span><strong>VS</strong><span>20 MAX</span></div>' +
+        (bossBattle
+          ? t('boss.arenaLabel', { arena: t('boss.arena.' + state.arena.id) })
+          : t('battle.round', { round: Math.max(1, state.round) })) +
+        '</span><strong>VS</strong><span>' +
+        state.maxRounds +
+        ' MAX</span></div>' +
         fighterHtml(state.enemy, enemySpecies, true) +
         '</div><div class="battle-bottom"><div class="card battle-log" aria-live="polite"><ol reversed>' +
         state.logs
@@ -172,8 +204,22 @@
         if (exiting) return;
         if (index >= events.length) return done();
         var event = events[index++];
-        var attacker = d.one(event.attacker === 'player' ? '#player-fighter' : '#enemy-fighter', root);
         var defender = d.one(event.defender === 'player' ? '#player-fighter' : '#enemy-fighter', root);
+        if (event.type === 'arena') {
+          if (defender)
+            defender.animate(
+              [
+                { transform: 'translateY(0)', filter: 'brightness(1)' },
+                { transform: 'translateY(2%)', filter: 'brightness(1.7) saturate(.4)' },
+                { transform: 'translateY(0)', filter: 'brightness(1)' }
+              ],
+              { duration: delay }
+            );
+          PSG.audio.manager.sfx('hit');
+          timer = window.setTimeout(next, delay);
+          return;
+        }
+        var attacker = d.one(event.attacker === 'player' ? '#player-fighter' : '#enemy-fighter', root);
         if (attacker)
           attacker.animate(
             [
@@ -229,17 +275,43 @@
       if (!result) return;
       var t = PSG.i18n.t;
       PSG.audio.manager.sfx(result.won ? 'victory' : 'defeat');
-      if (result.champion) PSG.audio.manager.play('champion');
+      if (result.champion || (result.boss && result.won)) PSG.audio.manager.play('champion');
+      var bossBattle = result.boss;
+      var rewardHtml = bossBattle
+        ? result.won
+          ? '<h3 style="margin-top:1rem">' +
+            t('boss.rewardStage', { stage: result.stage }) +
+            '</h3><p>' +
+            t('boss.rewardCoins', { coins: result.coins }) +
+            '</p><p>' +
+            (result.xp.gained ? t('boss.rewardXp', { xp: result.xp.gained }) : t('boss.rewardMaxXp')) +
+            '</p>' +
+            (result.candy
+              ? '<p class="tag tag--success">' +
+                t('boss.rewardCandy', {
+                  candy: t('candy.' + result.candy.stat),
+                  value: result.candy.gain
+                }) +
+                '</p>'
+              : '<p class="muted">' + t('boss.rewardNone') + '</p>')
+          : '<h3 style="margin-top:1rem">' +
+            t('battle.defeat') +
+            '</h3><p>' +
+            t('boss.defeat', { stage: result.stage }) +
+            '</p>'
+        : '<h3 style="margin-top:1rem">' + t('battle.reward', { xp: result.xp.gained, coins: result.coins }) + '</h3>';
       PSG.ui.common.modal({
         required: true,
-        eyebrow: state.reason === 'turnLimit' ? t('battle.turnLimit') : t('battle.title'),
+        eyebrow:
+          state.reason === 'turnLimit'
+            ? t(bossBattle ? 'boss.turnLimit' : 'battle.turnLimit')
+            : t(bossBattle ? 'boss.battleTitle' : 'battle.title'),
         title: result.won ? t('battle.victory') : t('battle.defeat'),
         body:
           '<div class="event-art" style="min-height:180px;font-size:5rem">' +
           (result.won ? '&#127942; : &#128293;' : '&#128128;') +
-          '</div><h3 style="margin-top:1rem">' +
-          t('battle.reward', { xp: result.xp.gained, coins: result.coins }) +
-          '</h3>' +
+          '</div>' +
+          rewardHtml +
           (result.rank.changed ? '<p>' + t('battle.rankUp', { rank: result.rank.after }) + '</p>' : '') +
           (result.firstMilestone
             ? '<blockquote class="card card--soft" style="margin-top:1rem">' +
@@ -253,12 +325,12 @@
               t('champion.body', { playerName: d.escape(save.player.name), petName: d.escape(save.pet.name) }) +
               '</p></div>'
             : ''),
-        actions: PSG.ui.common.button(t('battle.return'), 'battle-finish'),
+        actions: PSG.ui.common.button(t(bossBattle ? 'boss.return' : 'battle.return'), 'battle-finish'),
         onOpen: function (dialog) {
           d.one('[data-action="battle-finish"]', dialog).addEventListener('click', function () {
             PSG.ui.common.closeModal();
-            if (save.day.actionPoints === 0) PSG.ui.common.completeDay(save);
-            PSG.core.scenes.go(result.champion ? 'home' : 'ranking');
+            if (!result.boss && save.day.actionPoints === 0) PSG.ui.common.completeDay(save);
+            PSG.core.scenes.go(result.boss ? 'boss' : result.champion ? 'home' : 'ranking');
           });
         }
       });
