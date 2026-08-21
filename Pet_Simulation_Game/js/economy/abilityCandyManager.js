@@ -4,7 +4,7 @@
   var REGULAR_CANDY_PRICE_FACTOR = 0.6;
   var FESTIVAL_PRICE_FACTOR = 0.5;
   var FESTIVAL_INTERVAL_DAYS = 5;
-  var MAX_CANDY_PURCHASE = 999;
+  var MAX_CANDY_PURCHASE = 9999;
 
   function boostFor(save, stat) {
     return Math.max(0, Math.floor(Number(save.pet.candyBoosts && save.pet.candyBoosts[stat]) || 0));

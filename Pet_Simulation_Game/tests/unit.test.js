@@ -291,7 +291,7 @@ test('reaching rank one grants the three Mythic items exactly once', () => {
   assert.deepEqual(PSG.economy.equipment.grantMythic(save), []);
 });
 
-test('Mythic gear supports escalating batch upgrades while CRIT stays fixed', () => {
+test('Mythic gear supports escalating batch upgrades up to 9999 while CRIT stays fixed', () => {
   const save = fresh('eagle');
   PSG.economy.equipment.grantMythic(save);
   save.player.coins = 100000;
@@ -302,7 +302,8 @@ test('Mythic gear supports escalating batch upgrades while CRIT stays fixed', ()
   assert.equal(preview.price, 33000);
   assert.equal(preview.afterLevel, 3);
   assert.equal(preview.nextPrice, 13000);
-  assert.equal(PSG.economy.equipment.upgradePreview(save, 'mythic_accessory', 1000).quantity, 999);
+  assert.equal(PSG.economy.equipment.maxUpgradeQuantity, 9999);
+  assert.equal(PSG.economy.equipment.upgradePreview(save, 'mythic_accessory', 10000).quantity, 9999);
   const result = PSG.economy.equipment.upgrade(save, 'mythic_accessory', 3);
   assert.equal(result.ok, true);
   assert.equal(save.player.coins, 67000);
@@ -745,13 +746,13 @@ test('ability candy price scales with intrinsic stat, candy growth, and level', 
   assert.equal(PSG.economy.candy.priceFor(save, attack), 850);
 });
 
-test('ability candy supports batch purchases up to 999 with escalating totals', () => {
+test('ability candy supports batch purchases up to 9999 with escalating totals', () => {
   const save = fresh('lion');
   const attack = PSG.data.abilityCandyById.candy_attack;
   const quantity = 3;
   const totalPrice = PSG.economy.candy.totalPriceFor(save, attack, quantity, false);
-  assert.equal(PSG.economy.candy.quantityFor(999), 999);
-  assert.equal(PSG.economy.candy.quantityFor(1000), 0);
+  assert.equal(PSG.economy.candy.quantityFor(9999), 9999);
+  assert.equal(PSG.economy.candy.quantityFor(10000), 0);
   assert.ok(totalPrice > PSG.economy.candy.priceFor(save, attack, false) * quantity);
   save.player.coins = totalPrice;
   const result = PSG.economy.shop.purchaseCandy(save, attack.id, false, quantity);
@@ -766,7 +767,7 @@ test('ability candy supports batch purchases up to 999 with escalating totals', 
 test('experience shop sells discounted batches, reports level ups, and caps price', () => {
   const save = fresh('lion');
   const plan = PSG.economy.experience.preview(save, 2, true);
-  assert.equal(PSG.economy.experience.quantityFor(999), 999);
+  assert.equal(PSG.economy.experience.quantityFor(9999), 9999);
   assert.equal(plan.ok, true);
   assert.equal(plan.xp, 200);
   assert.equal(plan.levels, 1);

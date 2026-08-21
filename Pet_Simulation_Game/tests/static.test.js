@@ -105,6 +105,7 @@ check('ability candy modules load in dependency-safe order', () => {
   const equipmentManager = fs.readFileSync(path.join(root, 'js/economy/equipmentManager.js'), 'utf8');
   const candyData = fs.readFileSync(path.join(root, 'js/data/abilityCandyData.js'), 'utf8');
   const candy = fs.readFileSync(path.join(root, 'js/economy/abilityCandyManager.js'), 'utf8');
+  const experience = fs.readFileSync(path.join(root, 'js/economy/experienceManager.js'), 'utf8');
   const damage = fs.readFileSync(path.join(root, 'js/battle/damageCalculator.js'), 'utf8');
   const battle = fs.readFileSync(path.join(root, 'js/battle/battleEngine.js'), 'utf8');
   const rankingManager = fs.readFileSync(path.join(root, 'js/ranking/rankingManager.js'), 'utf8');
@@ -129,7 +130,9 @@ check('ability candy modules load in dependency-safe order', () => {
   assert.ok(scripts.indexOf('js/economy/experienceManager.js') > scripts.indexOf('js/pet/progression.js'));
   assert.ok(scripts.indexOf('js/economy/experienceManager.js') < scripts.indexOf('js/economy/shopManager.js'));
   assert.ok(scripts.indexOf('js/ui/shopUI.js') > scripts.indexOf('js/economy/abilityCandyManager.js'));
-  assert.match(candy, /MAX_CANDY_PURCHASE\s*=\s*999/);
+  assert.match(equipmentManager, /MAX_UPGRADE_QUANTITY\s*=\s*9999/);
+  assert.match(candy, /MAX_CANDY_PURCHASE\s*=\s*9999/);
+  assert.match(experience, /MAX_EXPERIENCE_PURCHASE\s*=\s*9999/);
   assert.match(candy, /function totalPriceFor\(save, itemOrId, quantityValue, festival\)/);
   assert.match(shop, /id="candy-quantity"/);
   assert.match(shop, /shop\.confirmQuantity/);

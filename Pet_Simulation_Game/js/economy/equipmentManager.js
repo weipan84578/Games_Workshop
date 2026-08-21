@@ -1,7 +1,7 @@
 (function (PSG) {
   'use strict';
 
-  var MAX_UPGRADE_QUANTITY = 999;
+  var MAX_UPGRADE_QUANTITY = 9999;
 
   function whole(value) {
     var number = Number(value);
