@@ -288,7 +288,7 @@
 
   function openEquipmentUpgradeDialog(root, save, itemId) {
     var item = PSG.data.equipmentById[itemId];
-    if (!item || !item.mythic) return;
+    if (!item || !item.mythic || save.economy.equipped[item.slot] !== itemId) return;
     var t = PSG.i18n.t;
     var maxQuantity = PSG.economy.equipment.maxUpgradeQuantity;
     var initialPlan = PSG.economy.equipment.upgradePreview(save, itemId, 1);
@@ -697,6 +697,26 @@
     return PSG.i18n.t('shop.preview', { delta: (delta >= 0 ? '+' : '') + delta });
   }
 
+  function mythicUpgradePanelHtml(save, item) {
+    if (!item || !item.mythic || save.economy.equipped[item.slot] !== item.id) return '';
+    var t = PSG.i18n.t;
+    var level = PSG.economy.equipment.upgradeLevel(save, item.id);
+    var nextPrice = PSG.economy.equipment.upgradePrice(save, item.id);
+    return (
+      '<div class="mythic-upgrade-panel mythic-upgrade-panel--equipped"><div class="mythic-upgrade-panel__row"><span>' +
+      t('shop.mythicLevel', { level: level }) +
+      '</span><strong>🪙 ' +
+      t('shop.mythicNextPrice', { price: PSG.utils.formatter.number(nextPrice) }) +
+      '</strong></div><button class="button button--ghost button--small button--wide" data-upgrade-equipment="' +
+      item.id +
+      '" ' +
+      (save.player.coins < nextPrice ? 'disabled title="' + d.escape(t('shop.notEnough')) + '"' : '') +
+      '>' +
+      t('shop.mythicUpgrade') +
+      '</button></div>'
+    );
+  }
+
   function inventoryHtml(save) {
     var t = PSG.i18n.t;
     var slots = ['armor', 'accessory', 'emblem']
@@ -714,7 +734,9 @@
           (item
             ? '<p>' +
               PSG.ui.common.itemEffect(item, save) +
-              '</p><button class="button button--ghost button--small" data-unequip="' +
+              '</p>' +
+              mythicUpgradePanelHtml(save, item) +
+              '<button class="button button--ghost button--small button--wide" data-unequip="' +
               slot +
               '">' +
               t('shop.unequip') +
@@ -746,21 +768,6 @@
           if (!item) return null;
           var equipped = save.economy.equipped[item.slot] === id;
           var mythic = item.mythic === true;
-          var level = mythic ? PSG.economy.equipment.upgradeLevel(save, id) : 0;
-          var nextPrice = mythic ? PSG.economy.equipment.upgradePrice(save, id) : 0;
-          var upgradePanel = mythic
-            ? '<div class="mythic-upgrade-panel"><div class="mythic-upgrade-panel__row"><span>' +
-              t('shop.mythicLevel', { level: level }) +
-              '</span><strong>🪙 ' +
-              t('shop.mythicNextPrice', { price: PSG.utils.formatter.number(nextPrice) }) +
-              '</strong></div><button class="button button--ghost button--small" data-upgrade-equipment="' +
-              id +
-              '" ' +
-              (save.player.coins < nextPrice ? 'disabled title="' + d.escape(t('shop.notEnough')) + '"' : '') +
-              '>' +
-              t('shop.mythicUpgrade') +
-              '</button></div>'
-            : '';
           return (
             '<article class="card shop-card' +
             (mythic ? ' mythic-equipment-card' : '') +
@@ -775,7 +782,6 @@
             '</h3><p>' +
             PSG.ui.common.itemEffect(item, save) +
             '</p>' +
-            upgradePanel +
             '<button class="button button--wide" data-equip="' +
             id +
             '" ' +

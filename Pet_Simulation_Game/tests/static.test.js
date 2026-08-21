@@ -119,6 +119,7 @@ check('ability candy modules load in dependency-safe order', () => {
   assert.match(equipmentManager, /function upgradePreview\(save, itemId, quantity\)/);
   assert.match(equipmentManager, /function grantMythic\(save\)/);
   assert.match(equipmentManager, /key === 'crit'/);
+  assert.match(equipmentManager, /reason: 'notEquipped'/);
   assert.match(rankingManager, /grantMythic\(save\)/);
   assert.match(damage, /function accuracyRatio\(accuracy, mobility\)/);
   assert.match(battle, /attacker\.stats\.accuracy/);
@@ -135,6 +136,8 @@ check('ability candy modules load in dependency-safe order', () => {
   assert.match(shop, /data-buy-experience/);
   assert.match(shop, /data-upgrade-equipment/);
   assert.match(shop, /mythic-upgrade-quantity/);
+  assert.match(shop, /function mythicUpgradePanelHtml\(save, item\)/);
+  assert.match(shop, /mythic-upgrade-panel--equipped/);
   assert.match(shop, /function openEquipmentUpgradeDialog\(root, save, itemId\)/);
   assert.match(shop, /shop\.experienceType/);
   assert.match(shop, /function experiencePreview\(plan\)/);

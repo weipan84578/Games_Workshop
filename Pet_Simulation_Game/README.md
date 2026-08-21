@@ -92,7 +92,7 @@ There is no pet death or destructive game-over state. A defeat still grants redu
 - 🏆 **A deterministic 1,000-entry ranking:** one player, 999 seeded AI opponents, 12 fixed milestone rivals, and five BP-near candidates per refresh.
 - 🚪 **An endless Boss Gate at rank #1:** choose Lion, Crocodile, or Eagle bosses whose stats grow forever; each attempt costs only 5 Energy and 5 Mood, then reveals a random Grassland, Swamp, or Sky arena when the 80-round battle begins.
 - 🎁 **Endless Boss rewards:** victories pay large coin and XP rewards while XP is available, plus a deterministic 1% chance at a random Ability Candy.
-- 🏅 **Mythic champion gear:** reaching rank #1 grants Mythic Armor, Mythic Accessory, and Mythic Emblem automatically. Upgrade them only from the inventory, in batches up to 999; each level adds 0.1 percentage point to every listed non-CRIT ability while the Emblem's Attack CRIT stays at 20%.
+- 🏅 **Mythic champion gear:** reaching rank #1 grants Mythic Armor, Mythic Accessory, and Mythic Emblem automatically. Equip a Mythic item first, then upgrade it from the top equipped-gear panel in the Inventory scene, in batches up to 999; each level adds 0.1 percentage point to every listed non-CRIT ability while the Emblem's Attack CRIT stays at 20%.
 - 🛍️ **A four-category shop:** 36 permanent equipment pieces, 18 one-battle consumables, eight permanent Ability Candies, and XP supplies.
 - 🍬 **Scaling permanent growth:** HP Candy grants +3; the other seven candies grant +1 and become more expensive as intrinsic stats and pet level rise. Buy up to 999 candies at once, with batch totals following each candy’s escalating price. A deterministic Candy Festival occasionally halves the current price.
 - ✨ **XP supplies:** buy 100 XP packs in batches up to 999; the per-pack price rises with level but caps at 400 coins, and Candy Festival cuts it by 40%.
@@ -200,7 +200,7 @@ Reaching rank #1 automatically grants these three Mythic items. They are not sol
 | Accessory | Attack +9%, Special Attack +9%, Accuracy +6% |
 | Emblem    | Speed +7%, Mobility +7.5%, Attack CRIT +20%  |
 
-Open the Inventory tab to upgrade a Mythic item. The upgrade level starts at LV 0, one action can cover up to 999 levels, and the batch price is the sum of each level's escalating cost:
+Equip the Mythic item first, then use its upgrade panel in the top equipped-gear section of the Inventory tab. The lower owned-equipment list does not expose an upgrade action. The upgrade level starts at LV 0, one action can cover up to 999 levels, and the batch price is the sum of each level's escalating cost:
 
 ```text
 price(level) = ceil(10,000 × (1 + level × 0.10))
@@ -365,7 +365,7 @@ Browser interaction is intentionally left to a short manual pass when no approve
 - 🏆 **固定シードの1,000人ランキング：** プレイヤー1人、AI 999人、固定位置の節目ライバル12人、BPが近い候補5人で構成されます。
 - 🚪 **1位で開く無限ボスの門：** 獅子・鰐・鷲のボスを選べ、能力は無限に上昇します。各挑戦は体力5・気分5だけを使い、80ラウンド戦の開始時に草原・沼地・空中からランダムな闘技場が初めて明かされます。
 - 🎁 **無限ボス報酬：** 勝利すると大量のコインと、最大レベル未満なら経験値を獲得し、決定的な1%の確率でランダムな能力キャンディも落とします。
-- 🏅 **チャンピオンの神話級装備：** 1位に到達すると神話の防具・飾り・紋章を自動獲得します。強化は所持品からのみ行い、最大999回をまとめて実行できます。各レベルはCRIT以外の表示能力を0.1ポイント加算し、紋章の攻撃CRITは20%に固定されます。
+- 🏅 **チャンピオンの神話級装備：** 1位に到達すると神話の防具・飾り・紋章を自動獲得します。神話級装備を装着してから、所持品画面の上部にある装着中装備パネルでのみ強化できます。最大999回をまとめて実行でき、各レベルはCRIT以外の表示能力を0.1ポイント加算し、紋章の攻撃CRITは20%に固定されます。
 - 🛍️ **4分類ショップ：** 6つのアリーナ段階に、永久装備36個、1試合用消耗品18種、永久成長用の能力キャンディ8種、経験値補給があります。
 - 🍬 **価格が成長する永久強化：** HPキャンディは+3、ほか7種は+1。基礎能力とペットLVが高いほど価格が上がり、一度に最大999個を購入できます。まとめ買いの合計は各キャンディの上昇価格を順番に計算し、決定的なキャンディフェスティバルでは現在価格が半額になります。
 - ✨ **経験値補給：** 1セット100経験値を最大999セットまでまとめて購入でき、セット価格はレベルに応じて上がりますが400コインで上限になります。キャンディフェスティバル中は40%オフです。
@@ -473,7 +473,7 @@ flowchart LR
 | アクセサリ | 攻撃 +9%、特殊攻撃 +9%、命中 +6%      |
 | 紋章       | 素早さ +7%、機動 +7.5%、攻撃CRIT +20% |
 
-所持品タブから神話級装備を強化できます。強化レベルはLV 0から始まり、1回の操作で最大999レベルまで指定できます。価格は基準価格に比例して上昇し、まとめ買いでは各レベルの価格を合計します。
+神話級装備を装着してから、所持品画面上部の装着中装備パネルで強化できます。下の所持品一覧には強化操作を表示しません。強化レベルはLV 0から始まり、1回の操作で最大999レベルまで指定できます。価格は基準価格に比例して上昇し、まとめ買いでは各レベルの価格を合計します。
 
 ```text
 price(level) = ceil(10,000 × (1 + level × 0.10))
@@ -638,7 +638,7 @@ git diff --check
 - 🏆 **可重現的千名排行榜：** 玩家 1 名、固定種子 AI 999 名、12 名固定里程碑強敵，每次提供 5 名 BP 接近候選。
 - 🚪 **第一名開啟無限 Boss 門：** 可選擇獅子、鱷魚或鷹 Boss，能力值會無限提升；草原、沼澤與空中場地每次隨機，套用種族免疫及每回合最大 HP 3% 傷害，Boss 戰延長為 80 回合。
 - 🎁 **無限 Boss 獎勵：** 勝利後獲得大量金幣；未滿等時獲得經驗，並有固定 1% 機率掉落隨機能力糖果。
-- 🏅 **冠軍神話級裝備：** 登上第 1 名會自動獲得神話護具、神話飾品與神話徽記；只能在背包升級，一次最多 999 級。每升一級，該裝備的非 CRIT 能力增加 0.1 個百分點，而徽記的攻擊力 CRIT 永遠固定 20%。
+- 🏅 **冠軍神話級裝備：** 登上第 1 名會自動獲得神話護具、神話飾品與神話徽記；先穿上神話級裝備，再透過背包最上方的已穿戴裝備面板升級，一次最多 999 級。每升一級，該裝備的非 CRIT 能力增加 0.1 個百分點，而徽記的攻擊力 CRIT 永遠固定 20%。
 - 🛍️ **四分類商店：** 包含 36 件永久裝備、18 種單場消耗品、8 種永久能力糖果，以及經驗補給。
 - 🍬 **價格隨成長調整的永久強化：** HP 糖果 +3，其餘七種 +1；先天能力與寵物 LV 越高，價格越昂貴，一次最多可購買 999 顆，總價會依每顆逐步上升的價格計算；偶爾遇到糖果節時當日目前價格再打五折。
 - ✨ **經驗補給：** 每組提供 100 經驗，可一次購買最多 999 組；單組價格會隨等級上升但封頂 400 金幣，糖果節期間打 6 折（折扣 40%）。
@@ -746,7 +746,7 @@ flowchart LR
 | 飾品 | 攻擊力 +9%、特殊攻擊力 +9%、命中 +6%     |
 | 徽記 | 速度 +7%、機動性 +7.5%、攻擊力 CRIT +20% |
 
-在背包選擇神話級裝備即可升級。升級等級從 LV 0 開始，一次最多可指定 999 級；批次價格會把每一級逐步增加的價格加總：
+先在背包穿上神話級裝備，再從最上方的已穿戴裝備面板升級；下方持有清單不提供升級按鈕。升級等級從 LV 0 開始，一次最多可指定 999 級；批次價格會把每一級逐步增加的價格加總：
 
 ```text
 price(level) = ceil(10,000 × (1 + level × 0.10))

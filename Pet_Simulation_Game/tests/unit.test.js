@@ -295,6 +295,7 @@ test('Mythic gear supports escalating batch upgrades while CRIT stays fixed', ()
   const save = fresh('eagle');
   PSG.economy.equipment.grantMythic(save);
   save.player.coins = 100000;
+  assert.equal(PSG.economy.equipment.upgradePreview(save, 'mythic_accessory', 1).reason, 'notEquipped');
   save.economy.equipped.accessory = 'mythic_accessory';
   save.economy.equipped.emblem = 'mythic_emblem';
   const preview = PSG.economy.equipment.upgradePreview(save, 'mythic_accessory', 3);
@@ -320,6 +321,7 @@ test('Mythic gear supports escalating batch upgrades while CRIT stays fixed', ()
 
   const poor = fresh();
   PSG.economy.equipment.grantMythic(poor);
+  poor.economy.equipped.armor = 'mythic_armor';
   assert.equal(PSG.economy.equipment.upgrade(poor, 'mythic_armor', 1).reason, 'coins');
   assert.equal(PSG.economy.equipment.upgradeLevel(poor, 'mythic_armor'), 0);
 });

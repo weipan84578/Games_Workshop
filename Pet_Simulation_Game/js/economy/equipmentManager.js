@@ -82,6 +82,8 @@
     if (!item) return { ok: false, reason: 'missing' };
     if (!item.mythic) return { ok: false, reason: 'notMythic' };
     if (save.economy.ownedEquipment.indexOf(itemId) < 0) return { ok: false, reason: 'notOwned' };
+    if (!save.economy.equipped || save.economy.equipped[item.slot] !== itemId)
+      return { ok: false, reason: 'notEquipped' };
     var count = quantityFor(quantity);
     if (!count) return { ok: false, reason: 'quantity' };
     var beforeLevel = upgradeLevel(save, itemId);
