@@ -44,6 +44,7 @@
   function nextDay(save) {
     // Daily settlement is kept in the exact spec order before the single autosave below.
     var reward = dailyCoins(save);
+    var interest = PSG.economy.bank.settleInterest(save);
     save.player.coins = Math.max(0, Math.floor(Number(save.player.coins) || 0)) + reward;
     save.pet.energy = PSG.utils.math.clamp(save.pet.energy + 50, 0, 100);
     save.pet.mood = PSG.utils.math.clamp(save.pet.mood + 10, 0, 100);
@@ -53,7 +54,7 @@
     save.pet.currentHp = PSG.pet.stats.effective(save).hp;
     PSG.ranking.matchmaking.refresh(save);
     PSG.storage.save.write(save);
-    return { day: save.day.number, coins: reward };
+    return { day: save.day.number, coins: reward, interest: interest.interest };
   }
   function beginBattle(save) {
     var check = can(save, 'battle');

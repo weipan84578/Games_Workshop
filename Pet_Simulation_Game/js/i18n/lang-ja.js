@@ -241,7 +241,8 @@
     'affection.100': '真の絆',
     'affection.story': '{petName}がそっと近づきます。もう言葉がなくても分かり合える眼差し。旅は新しい章へ進みます。',
     'affection.reward': '絆の報酬をコレクションに追加しました。',
-    'day.summary': '休息完了！ {day}日目、APが5に回復し、元の4倍のデイリー報酬として{coins}コインを受け取りました。',
+    'day.summary':
+      '休息完了！ {day}日目、APが5に回復し、元の4倍のデイリー報酬{coins}コインと預金利息{interest}コインを受け取りました。',
     'champion.title': '頂点の絆',
     'champion.body':
       '{playerName}と{petName}は並んで1位に立ちました。本当の王者とは、一人で勝つ者ではなく、最後まで互いの手を離さなかった者です。',

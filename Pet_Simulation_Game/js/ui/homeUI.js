@@ -61,6 +61,77 @@
       '</p></div><span class="candy-festival-alert__sparkle" aria-hidden="true">✦</span></aside>'
     );
   }
+  function savingsPanel(save, t) {
+    var balance = PSG.economy.bank.balance(save);
+    return (
+      '<section class="savings-panel" aria-labelledby="savings-title"><div class="panel-title"><div><span class="eyebrow">🏦 ' +
+      t('bank.title') +
+      '</span><h3 id="savings-title">🪙 ' +
+      PSG.utils.formatter.number(balance) +
+      '</h3></div><span class="tag tag--success">' +
+      t('bank.rate') +
+      '</span></div><p class="muted">' +
+      t('bank.description') +
+      '</p><div class="savings-panel__actions"><button class="button button--small" type="button" data-savings-action="deposit">' +
+      t('bank.deposit') +
+      '</button><button class="button button--small button--ghost" type="button" data-savings-action="withdraw">' +
+      t('bank.withdraw') +
+      '</button></div></section>'
+    );
+  }
+  function savingsError(reason, t) {
+    if (reason === 'coins') return t('bank.notEnoughCoins');
+    if (reason === 'savings') return t('bank.notEnoughSavings');
+    return t('bank.invalidAmount');
+  }
+  function openSavingsModal(root, save, mode) {
+    var t = PSG.i18n.t;
+    var isDeposit = mode === 'deposit';
+    var available = isDeposit
+      ? Math.max(0, Math.floor(Number(save.player.coins) || 0))
+      : PSG.economy.bank.balance(save);
+    var actionKey = isDeposit ? 'bank.deposit' : 'bank.withdraw';
+    var hintKey = isDeposit ? 'bank.depositHint' : 'bank.withdrawHint';
+    PSG.ui.common.modal({
+      title: t(actionKey),
+      body:
+        '<p>' +
+        t('bank.balance', { balance: PSG.utils.formatter.number(PSG.economy.bank.balance(save)) }) +
+        '</p><label for="savings-amount"><strong>' +
+        t('bank.amount') +
+        '</strong></label><input class="text-input" id="savings-amount" type="number" inputmode="numeric" min="1" max="' +
+        available +
+        '" step="1" value="' +
+        (available ? available : '') +
+        '"><p class="muted">' +
+        t(hintKey, { amount: PSG.utils.formatter.number(available) }) +
+        '</p>',
+      actions:
+        PSG.ui.common.button(t('common.cancel'), 'modal-close', 'ghost') +
+        PSG.ui.common.button(t('common.confirm'), 'savings-confirm', null, available ? '' : 'disabled'),
+      onOpen: function (dialog) {
+        var input = d.one('#savings-amount', dialog);
+        d.one('[data-action="savings-confirm"]', dialog).addEventListener('click', function () {
+          var result = isDeposit
+            ? PSG.economy.bank.deposit(save, input.value)
+            : PSG.economy.bank.withdraw(save, input.value);
+          if (!result.ok) {
+            PSG.ui.common.toast(savingsError(result.reason, t), 'warning');
+            input.focus();
+            return;
+          }
+          PSG.ui.common.closeModal();
+          PSG.ui.common.toast(
+            t(isDeposit ? 'bank.depositSuccess' : 'bank.withdrawSuccess', {
+              amount: PSG.utils.formatter.number(result.amount)
+            }),
+            'success'
+          );
+          render(root);
+        });
+      }
+    });
+  }
   function render(root) {
     var save = PSG.core.gameState.get();
     if (!save) return PSG.core.scenes.go('menu');
@@ -118,6 +189,7 @@
       d.bar(t('stat.mood'), save.pet.mood, 100, '☀', 'mood') +
       d.bar(t('stat.affection'), save.pet.affection, 100, '♥', 'bond') +
       d.bar(t('stat.ap'), save.day.actionPoints, 5, '◆', 'primary') +
+      savingsPanel(save, t) +
       '</aside><section class="card action-panel"><div class="panel-title"><h3>' +
       t('home.day', { day: save.day.number }) +
       '</h3><span class="muted">' +
@@ -135,6 +207,11 @@
       actionButton(save, 'rest', '🌙', t('home.rest')) +
       '</div></section></div></section>';
     if (candyFestival) d.one('.scene', root).insertAdjacentHTML('afterbegin', festivalBanner(t));
+    d.all('[data-savings-action]', root).forEach(function (button) {
+      button.addEventListener('click', function () {
+        openSavingsModal(root, save, button.dataset.savingsAction);
+      });
+    });
     d.all('[data-target]', root).forEach(function (button) {
       button.addEventListener('click', function () {
         PSG.audio.manager.sfx('click');

@@ -246,7 +246,8 @@
     'affection.story':
       '{petName} leans closer. Familiar eyes no longer need words. A new chapter of your journey begins.',
     'affection.reward': 'Your bond reward has been added to the collection.',
-    'day.summary': 'Rest complete! Day {day} begins with 5 AP and +{coins} daily coins (4× the original reward).',
+    'day.summary':
+      'Rest complete! Day {day} begins with 5 AP, +{coins} daily coins (4× the original reward), and +{interest} savings interest.',
     'champion.title': 'Bond at the Summit',
     'champion.body':
       '{playerName} and {petName} stand together at rank #1. A true champion is never alone—it is the one who never let go along the way.',

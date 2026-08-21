@@ -67,10 +67,17 @@
       save.progression || {}
     );
     save.economy = Object.assign(
-      { ownedEquipment: [], consumables: {}, equipped: { armor: null, accessory: null, emblem: null } },
+      {
+        ownedEquipment: [],
+        consumables: {},
+        equipped: { armor: null, accessory: null, emblem: null },
+        savings: { balance: 0 }
+      },
       save.economy || {}
     );
     save.economy.equipped = Object.assign({ armor: null, accessory: null, emblem: null }, save.economy.equipped || {});
+    save.economy.savings = Object.assign({ balance: 0 }, save.economy.savings || {});
+    save.economy.savings.balance = Math.max(0, Math.floor(Number(save.economy.savings.balance) || 0));
     Object.keys(save.economy.equipped).forEach(function (slot) {
       var item = PSG.data.equipmentById[save.economy.equipped[slot]];
       if (!item || item.slot !== slot) save.economy.equipped[slot] = null;

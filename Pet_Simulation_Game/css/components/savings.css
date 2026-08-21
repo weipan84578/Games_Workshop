@@ -1,0 +1,32 @@
+.savings-panel {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.25rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.savings-panel h3 {
+  margin-top: 0.2rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.savings-panel__actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.savings-panel__actions .button {
+  min-width: 0;
+}
+
+.savings-panel + .action-panel {
+  margin-top: 0;
+}
+
+@media (max-width: 575px) {
+  .savings-panel__actions {
+    grid-template-columns: 1fr;
+  }
+}

@@ -51,6 +51,7 @@ const scripts = [
   'js/storage/saveManager.js',
   'js/economy/shopManager.js',
   'js/economy/inventoryManager.js',
+  'js/economy/bankManager.js',
   'js/pet/dailyActions.js',
   'js/pet/petModel.js',
   'js/pet/playManager.js',
@@ -339,6 +340,29 @@ test('daily coin income follows rank stages with the requested 300 percent incre
   assert.equal(save.player.coins, before + 720);
 });
 
+test('savings account deposits and withdrawals keep coins and balance in sync', () => {
+  const save = fresh();
+  save.player.coins = 1000;
+  assert.equal(PSG.economy.bank.deposit(save, 350).ok, true);
+  assert.equal(save.player.coins, 650);
+  assert.equal(PSG.economy.bank.balance(save), 350);
+  assert.equal(PSG.economy.bank.deposit(save, 700).reason, 'coins');
+  assert.equal(PSG.economy.bank.withdraw(save, 125).ok, true);
+  assert.equal(save.player.coins, 775);
+  assert.equal(PSG.economy.bank.balance(save), 225);
+  assert.equal(PSG.economy.bank.withdraw(save, 300).reason, 'savings');
+  assert.equal(PSG.economy.bank.deposit(save, 0).reason, 'amount');
+});
+
+test('rest settles savings interest once at the requested three percent rate', () => {
+  const save = fresh();
+  save.economy.savings.balance = 1000;
+  const result = PSG.pet.daily.nextDay(save);
+  assert.equal(result.interest, 30);
+  assert.equal(PSG.economy.bank.balance(save), 1030);
+  assert.equal(save.player.coins, 120);
+});
+
 test('winning against a higher rank swaps positions; losing does not', () => {
   const save = fresh();
   const opponent = save.ranking.rankOrder[998];
@@ -532,6 +556,7 @@ test('ability candy rejects insufficient coins without changing stats', () => {
 
 test('save repair clamps ranges and preserves a valid ranking', () => {
   const save = fresh();
+  delete save.economy.savings;
   save.pet.energy = -20;
   save.pet.mood = 150;
   save.day.actionPoints = 99;
@@ -543,7 +568,11 @@ test('save repair clamps ranges and preserves a valid ranking', () => {
   assert.equal(repaired.day.actionPoints, 5);
   assert.equal(repaired.pet.candyBoosts.attack, 0);
   assert.equal(repaired.pet.candyBoosts.hp, 3);
+  assert.equal(repaired.economy.savings.balance, 0);
   PSG.constants.STAT_KEYS.forEach((key) => assert.ok(Number.isInteger(repaired.pet.candyBoosts[key])));
+
+  repaired.economy.savings.balance = -20.7;
+  assert.equal(PSG.storage.save.repair(repaired).economy.savings.balance, 0);
 });
 
 test('validated saves round-trip through localStorage', () => {

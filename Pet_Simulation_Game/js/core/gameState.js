@@ -37,7 +37,12 @@
         championUnlocked: false,
         unlockedCosmetics: []
       },
-      economy: { ownedEquipment: [], consumables: {}, equipped: { armor: null, accessory: null, emblem: null } },
+      economy: {
+        ownedEquipment: [],
+        consumables: {},
+        equipped: { armor: null, accessory: null, emblem: null },
+        savings: { balance: 0 }
+      },
       ranking: { rankingSeed: (seed || Date.now()) >>> 0, rankOrder: [], candidateIds: [], battleHistory: [] },
       stats: { battles: 0, wins: 0, losses: 0, criticalHits: 0, dodges: 0, trainingGolds: 0, daysPlayed: 1 }
     };

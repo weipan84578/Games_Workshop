@@ -306,7 +306,8 @@
     'affection.story.lion': '{petName} 低下驕傲的鬃首，在你身旁安心坐下。那聲溫柔低吼，是只屬於你們的承諾。',
     'affection.story.crocodile': '{petName} 從水面游來，安靜地讓你倚著堅實背甲。沉默也能成為最可靠的回答。',
     'affection.reward': '羈絆獎勵已收入收藏。',
-    'day.summary': '休息完成！第 {day} 天開始，AP 已回復為 5，並獲得每日金幣 +{coins}（原始獎勵的 4 倍）。',
+    'day.summary':
+      '休息完成！第 {day} 天開始，AP 已回復為 5，並獲得每日金幣 +{coins}（原始獎勵的 4 倍），存款利息 +{interest}。',
     'champion.title': '巔峰羈絆',
     'champion.body': '{playerName} 與 {petName} 並肩站上第 1 名。真正的冠軍不是獨自勝利，而是一路都沒有放開彼此。',
     'error.title': '需要留意',

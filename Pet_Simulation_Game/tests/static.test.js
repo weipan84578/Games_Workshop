@@ -134,6 +134,24 @@ check('save slots, save-menu exits, persistent battle speed, and auto battle hoo
   assert.doesNotMatch(battle, /function next\(\) \{\s*if \(stopped\) return;/);
 });
 
+check('savings account is loaded, repaired, and connected to rest settlement', () => {
+  const scripts = [...index.matchAll(/<script[^>]+src="([^"]+)"/g)].map((match) => match[1]);
+  const bank = fs.readFileSync(path.join(root, 'js/economy/bankManager.js'), 'utf8');
+  const daily = fs.readFileSync(path.join(root, 'js/pet/dailyActions.js'), 'utf8');
+  const saveManager = fs.readFileSync(path.join(root, 'js/storage/saveManager.js'), 'utf8');
+  const home = fs.readFileSync(path.join(root, 'js/ui/homeUI.js'), 'utf8');
+  const locales = fs.readFileSync(path.join(root, 'js/i18n/featureLocales.js'), 'utf8');
+  assert.ok(scripts.indexOf('js/economy/bankManager.js') < scripts.indexOf('js/pet/dailyActions.js'));
+  assert.match(bank, /INTEREST_RATE\s*=\s*0\.03/);
+  assert.match(bank, /function deposit\(save, value\)/);
+  assert.match(bank, /function withdraw\(save, value\)/);
+  assert.match(daily, /PSG\.economy\.bank\.settleInterest\(save\)/);
+  assert.match(saveManager, /savings:\s*\{ balance: 0 \}/);
+  assert.match(home, /data-savings-action="deposit"/);
+  assert.match(home, /data-savings-action="withdraw"/);
+  assert.match(locales, /bank\.title/);
+});
+
 check('toast opacity and candy pricing presentation match the requested features', () => {
   const toast = fs.readFileSync(path.join(root, 'css/components/toasts.css'), 'utf8');
   const candy = fs.readFileSync(path.join(root, 'js/economy/abilityCandyManager.js'), 'utf8');
@@ -214,4 +232,4 @@ function walk(directory) {
     );
 }
 
-process.stdout.write(`\n${passed}/18 static checks passed.\n`);
+process.stdout.write(`\n${passed}/19 static checks passed.\n`);

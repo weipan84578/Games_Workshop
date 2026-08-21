@@ -95,7 +95,7 @@
   }
   function completeDay(save) {
     var result = PSG.pet.daily.nextDay(save);
-    toast(t('day.summary', { day: result.day, coins: result.coins }));
+    toast(t('day.summary', { day: result.day, coins: result.coins, interest: result.interest }));
     return result;
   }
   function actionReason(save, action) {
